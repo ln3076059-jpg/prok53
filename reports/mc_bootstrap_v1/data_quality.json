@@ -1,0 +1,59 @@
+{
+  "cross_split_near_pairs": [],
+  "dataset_status": "PROPOSAL_MODEL_ONLY_NOT_GOVERNED_FINAL_DATA",
+  "errors": [],
+  "manifest_samples": 18099,
+  "manifest_sha256": "339b4402a15aadcc703b2b8e8f9cbd03c4730e48a0f0d47c87c2220692b4f865",
+  "near_pairs": 118786,
+  "near_threshold": 4,
+  "overlaps": {
+    "base_group_id": [],
+    "effective_group_id": [],
+    "near_cluster_id": [],
+    "sha256": []
+  },
+  "policy": "PASS validates bootstrap integrity and isolation only; it does not mean human-approved ground truth.",
+  "splits": {
+    "test": {
+      "images": 1736,
+      "instances": {
+        "phone": 225,
+        "seatbelt_fastened": 322,
+        "seatbelt_unfastened": 302
+      },
+      "positive_images": {
+        "phone": 177,
+        "seatbelt_fastened": 320,
+        "seatbelt_unfastened": 301
+      }
+    },
+    "train": {
+      "images": 14581,
+      "instances": {
+        "phone": 2094,
+        "seatbelt_fastened": 5963,
+        "seatbelt_unfastened": 1219
+      },
+      "positive_images": {
+        "phone": 1857,
+        "seatbelt_fastened": 5903,
+        "seatbelt_unfastened": 1216
+      }
+    },
+    "val": {
+      "images": 1782,
+      "instances": {
+        "phone": 229,
+        "seatbelt_fastened": 361,
+        "seatbelt_unfastened": 284
+      },
+      "positive_images": {
+        "phone": 181,
+        "seatbelt_fastened": 359,
+        "seatbelt_unfastened": 284
+      }
+    }
+  },
+  "status": "PASS",
+  "warnings": []
+}

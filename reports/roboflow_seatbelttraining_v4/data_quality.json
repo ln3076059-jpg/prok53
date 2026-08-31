@@ -1,0 +1,32 @@
+{
+  "status": "REVIEW_REQUIRED",
+  "source_id": "roboflow_seatbelttraining_v4",
+  "raw_tree_sha256": "f93a14d1eb5f819685ef873dfd3102b70942cc82e1f6628271a9966a86095f79",
+  "downloaded_files": 16745,
+  "images": 8371,
+  "source_boxes": 8451,
+  "source_class_instances": {
+    "no-seatbelt": 1805,
+    "seatbelt": 6646
+  },
+  "canonical_proposals": {
+    "seatbelt_fastened": 6646,
+    "seatbelt_unfastened": 1805
+  },
+  "images_with_multiple_boxes": 73,
+  "images_without_boxes": 0,
+  "exact_duplicate_images": 0,
+  "invalid_label_images": 0,
+  "inferred_source_groups": 2750,
+  "largest_inferred_group_images": 183,
+  "published_split_group_overlap": 147,
+  "published_split_policy": "REJECT_AND_RESPLIT_AFTER_HUMAN_REVIEW",
+  "human_approved_images": 0,
+  "gates": [
+    "Every state box must be visually reviewed and reboxed when needed.",
+    "Unfastened requires positive visible evidence; ambiguity is UNCERTAIN.",
+    "Vehicle context and sample-/box-level occupant roles are mandatory.",
+    "All augmented/source-sequence variants remain in one effective group.",
+    "Near-duplicate clustering and subject isolation are rerun before final split."
+  ]
+}

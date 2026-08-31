@@ -1,0 +1,55 @@
+model_version: UNTRAINED
+weights: models/active/best.pt
+imgsz: 960
+class_names:
+  0: phone
+  1: seatbelt_fastened
+  2: seatbelt_unfastened
+thresholds:
+  phone: 0.40
+  seatbelt_fastened: 0.50
+  seatbelt_unfastened: 0.50
+threshold_status: PLACEHOLDER_REQUIRES_VALIDATION_CALIBRATION
+vehicle_context:
+  required: true
+  accepted_input_scope: VEHICLE_CABIN_CROP
+  traffic_scene_mode: NOT_IMPLEMENTED_REQUIRES_UPSTREAM_VEHICLE_DETECTION_AND_TRACKING
+  rule: No vehicle context means NO_EVENT for every class.
+occupant_rois:
+  calibration_status: PLACEHOLDER_PER_CAMERA_CALIBRATION_REQUIRED
+  regions:
+    - role: driver
+      normalized_xyxy: [0.0, 0.15, 0.56, 1.0]
+      enabled: true
+      min_overlap: 0.5
+    - role: front_passenger
+      normalized_xyxy: [0.44, 0.15, 1.0, 1.0]
+      enabled: true
+      min_overlap: 0.5
+    - role: rear_left
+      normalized_xyxy: [0.0, 0.2, 0.38, 1.0]
+      enabled: false
+      min_overlap: 0.5
+    - role: rear_center
+      normalized_xyxy: [0.3, 0.2, 0.7, 1.0]
+      enabled: false
+      min_overlap: 0.5
+    - role: rear_right
+      normalized_xyxy: [0.62, 0.2, 1.0, 1.0]
+      enabled: false
+      min_overlap: 0.5
+phone_policy:
+  violation_role: driver
+  mounted_or_static: NO_EVENT
+  unknown_context: NEEDS_REVIEW
+  handheld_context: PENDING
+  pose_gate_status: NOT_IMPLEMENTED_REQUIRES_VALIDATION
+seatbelt_policy:
+  violation_roles: [driver, front_passenger, rear_left, rear_center, rear_right]
+  invisible_or_occluded_belt: NO_AUTOMATIC_UNFASTENED_LABEL
+temporal:
+  window_seconds: 2.0
+  min_positive_seconds: 1.2
+  min_observations: 3
+  cooldown_seconds: 5.0
+tracker: bytetrack.yaml

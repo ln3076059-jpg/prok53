@@ -1,0 +1,16 @@
+canonical_classes:
+  0: phone
+  1: seatbelt_fastened
+  2: seatbelt_unfastened
+
+mappings:
+  no_seatbelt:
+    canonical: seatbelt_unfastened
+    requires_review: true
+    bbox_semantics: person_upper_body
+    reason: Source class 0 uses a person/upper-body region, but every box still requires visible no-belt evidence and vehicle/occupant-role review.
+  seatbelt:
+    canonical: seatbelt_fastened
+    requires_review: true
+    bbox_semantics: person_upper_body
+    reason: Source class 1 uses a person/upper-body region with a visible belt; every box still requires geometry, vehicle, and occupant-role review.

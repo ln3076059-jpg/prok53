@@ -1,0 +1,212 @@
+schema_version: 2
+policy:
+  raw_assets_immutable: true
+  explicit_license_acceptance_required: true
+  canonical_task: yolo_detection
+  canonical_classes: [phone, seatbelt_fastened, seatbelt_unfastened]
+  rules:
+    - Every positive training box must depict an occupant inside an associated vehicle/cabin crop.
+    - Phone or belt state outside a vehicle is a hard negative and never a violation.
+    - A missing or invisible belt is not evidence of seatbelt_unfastened.
+    - Behavior/action boxes are not physical-phone boxes.
+    - Thin belt-object boxes are not upper-body seatbelt-state boxes.
+    - Every imported annotation is human-reviewed before governance approval.
+
+sources:
+  - source_id: kaggle_habbas_dms_v1
+    priority: P1
+    source_name: DMS - Driver Monitoring System
+    source_url: https://www.kaggle.com/datasets/habbas11/dms-driver-monitoring-system
+    provider: Kaggle
+    version: 1
+    license: Apache-2.0
+    license_url: https://www.apache.org/licenses/LICENSE-2.0
+    status: CANDIDATE_REVIEW_REQUIRED
+    domain: in_cabin_images
+    download:
+      type: kaggle
+      slug: habbas11/dms-driver-monitoring-system
+    review_tasks: [PHYSICAL_PHONE_REVIEW, SEATBELT_UPPER_BODY_REBOX, HARD_NEGATIVE_REVIEW]
+    allowed_uses: [phone_box_candidate, belt_object_auxiliary, hard_negative_mining]
+    prohibited_automatic_mappings: [Seatbelt]
+    reason: Phone boxes may seed physical-phone review. Its bare Seatbelt class cannot prove wearing state and must be reboxed/relabelled as an upper-body state by a human.
+
+  - source_id: kaggle_driver_activity_v1
+    priority: DEFERRED
+    source_name: Driver Activity Dataset
+    source_url: https://www.kaggle.com/datasets/guanhualee/driver-activity-dataset
+    provider: Kaggle
+    version: 1
+    license: CC-BY-SA-4.0
+    license_url: https://creativecommons.org/licenses/by-sa/4.0/
+    status: DEFERRED_STORAGE_AND_MODALITY_GATE
+    domain: in_cabin_video_multimodal
+    download:
+      type: kaggle
+      slug: guanhualee/driver-activity-dataset
+    review_tasks: [PHONE_BEHAVIOR_EVENT_REVIEW, HARD_NEGATIVE_REVIEW]
+    allowed_uses: [temporal_event_validation, phone_hard_negatives, manual_frame_annotation]
+    prohibited_automatic_mappings: [checking_phone, picking_up_a_call]
+    reason: The archive is 16,600,925,334 bytes and is unnecessary for the first governed model. Four-second activity labels are not physical-phone boxes; use the smaller embedded-vision source plus project-specific temporal validation first.
+
+  - source_id: mendeley_driver_risk_behavior_v1
+    priority: P1
+    source_name: Driver Risk Behavior Dataset for Embedded Vision Applications
+    source_url: https://data.mendeley.com/datasets/562zj8n7xf/1
+    provider: Mendeley Data
+    version: 1
+    license: CC-BY-4.0
+    license_url: https://creativecommons.org/licenses/by/4.0/
+    status: CANDIDATE_REVIEW_REQUIRED
+    domain: in_cabin_images
+    download:
+      type: direct_zip
+      url: https://prod-dcd-datasets-public-files-eu-west-1.s3.eu-west-1.amazonaws.com/5b09726e-0b11-4800-9831-923a93120949
+      expected_bytes: 138325288
+      sha256: 87c1713ee9b036db542ebeb7cd5cf7618cc5b41e4e9286ec2741efd7985539bf
+      segments: 64
+    source_classes:
+      0: Neutral
+      1: Microsleep
+      2: Distraction
+      3: Cellphone Use
+    review_tasks: [PHONE_BEHAVIOR_EVENT_REVIEW, PHYSICAL_PHONE_REBOX, HARD_NEGATIVE_REVIEW, GROUP_REVIEW]
+    allowed_uses: [phone_behavior_candidate, manual_phone_annotation, in_vehicle_hard_negatives, embedded_vision_validation]
+    prohibited_automatic_mappings: [Neutral, Microsleep, Distraction, Cellphone Use]
+    reason: The 138 MB archive has 1920x1080 in-cabin images and YOLO behavior-region labels across multiple vehicles and lighting conditions. Cellphone Use is an action class, not a tight physical-phone box, so visible phones require manual reboxing and occupant/vehicle review.
+
+  - source_id: kaggle_sintes_seatbelt_v1
+    priority: P2
+    source_name: Seatbelt Detection Dataset - Real Car Photos
+    source_url: https://www.kaggle.com/datasets/alexandresintes/seatbelt-detection-dataset-real-car-photos
+    provider: Kaggle
+    version: 1
+    license: CC-BY-4.0
+    license_url: https://creativecommons.org/licenses/by/4.0/
+    status: CANDIDATE_REVIEW_REQUIRED
+    domain: in_cabin_images
+    download:
+      type: kaggle
+      slug: alexandresintes/seatbelt-detection-dataset-real-car-photos
+    review_tasks: [SEATBELT_UPPER_BODY_REBOX, DOMAIN_REVIEW]
+    allowed_uses: [seatbelt_fastened_candidate, manual_upper_body_annotation]
+    reason: Licensed real-car photos can support the fastened class after checking diversity and drawing comparable upper-body boxes; the source is small and largely one-person.
+
+  - source_id: roboflow_seatbelttraining_v4
+    priority: P2
+    source_name: seatbelt-detection
+    source_url: https://universe.roboflow.com/seatbelttraining-7yh0f/seatbelt-detection-lb1ec/dataset/4
+    provider: Roboflow Universe
+    version: 4
+    license: CC-BY-4.0
+    license_url: https://creativecommons.org/licenses/by/4.0/
+    status: DOWNLOADED_CANDIDATE_REVIEW_REQUIRED
+    domain: mixed_real_cabin_images_grayscale_augmented
+    download:
+      type: roboflow
+      workspace: seatbelttraining-7yh0f
+      project: seatbelt-detection-lb1ec
+      version: 4
+      format: yolov11
+    host_snapshot_2026_08_31:
+      generated_images: 8371
+      train_images: 7323
+      valid_images: 696
+      test_images: 352
+      preprocessing: [auto_orient, stretch_416x416, grayscale]
+      augmentation_outputs_per_example: 3
+    review_tasks: [SEATBELT_STATE_EVIDENCE_REVIEW, SEATBELT_UPPER_BODY_REBOX, OCCUPANT_ROLE_REVIEW, AUGMENTATION_LINEAGE_REVIEW, DOMAIN_REVIEW]
+    allowed_uses: [seatbelt_state_candidate, manual_upper_body_annotation]
+    reason: Downloaded and hash-manifested on 2026-08-31. The source contains 8,371 images and two person/upper-body state classes, no-seatbelt and seatbelt. Its published splits leak at least 147 inferred source groups, so they are discarded; all generated variants must stay grouped and all state/ROI semantics require human review.
+
+  - source_id: hf_anywaylabs_synthetic_dms
+    priority: P2
+    source_name: synthetic-driver-monitoring-detection
+    source_url: https://huggingface.co/datasets/anywaylabs/synthetic-driver-monitoring-detection
+    provider: Hugging Face
+    version: main
+    license: CC-BY-4.0
+    license_url: https://creativecommons.org/licenses/by/4.0/
+    status: CANDIDATE_REVIEW_REQUIRED
+    domain: synthetic_in_cabin_images
+    download:
+      type: huggingface
+      repo_id: anywaylabs/synthetic-driver-monitoring-detection
+      revision: main
+      max_workers: 2
+    review_tasks: [PHYSICAL_PHONE_REBOX, SYNTHETIC_DOMAIN_REVIEW, HARD_NEGATIVE_REVIEW]
+    allowed_uses: [auxiliary_robustness, manual_phone_annotation, pipeline_smoke_test]
+    prohibited_automatic_mappings: [calling, texting]
+    grouping_regex: '^(?P<clip>.+)_\d+$'
+    reason: The dataset has multiple camera fields of view, but its behavior boxes do not automatically become physical-phone boxes and synthetic-to-traffic-camera shift must be measured.
+
+  - source_id: hf_c3rl_seatbelt_v1
+    priority: P3
+    source_name: seatbelt-detection
+    source_url: https://huggingface.co/datasets/c3rl/seatbelt-detection
+    provider: Hugging Face
+    version: main
+    license: MIT
+    license_url: https://opensource.org/license/mit
+    status: AUXILIARY_SYNTHETIC_ONLY_PROVENANCE_REVIEW_REQUIRED
+    domain: synthetic_geometric_classification
+    download:
+      type: huggingface
+      repo_id: c3rl/seatbelt-detection
+      revision: main
+      max_workers: 2
+    review_tasks: [MEDIA_PROVENANCE_REVIEW, SYNTHETIC_DOMAIN_REVIEW]
+    allowed_uses: [synthetic_classifier_smoke_test, explicit_synthetic_ablation_only]
+    folder_classes:
+      seatbelt: seatbelt
+      no_seatbelt: no_seatbelt
+    reason: The card reports 5,000 classification images but provides almost no provenance. A 2026-08-31 visual spot audit across both folders found geometric synthetic scenes, not real cabin occupants. Exclude from governed real-camera training unless a separately reported synthetic ablation justifies use.
+
+  - source_id: roboflow_phone_wallet_v1
+    priority: P3
+    source_name: Phone and Wallet Object Detection
+    source_url: https://universe.roboflow.com/object-detections-w6nzd/my-first-project-uol4k
+    provider: Roboflow Universe
+    version: current
+    license: CC-BY-4.0
+    license_url: https://creativecommons.org/licenses/by/4.0/
+    status: CANDIDATE_LOW_PRIORITY_REVIEW_REQUIRED
+    domain: generic_object_images
+    download:
+      type: manual
+    review_tasks: [PHYSICAL_PHONE_REVIEW, DOMAIN_REVIEW]
+    allowed_uses: [phone_appearance_auxiliary, hard_negative_mining]
+    reason: Physical phone labels may help appearance coverage, but the domain is not traffic-camera or in-cabin imagery and must not dominate the governed data.
+
+  - source_id: roboflow_noriel_seatbelt_v1
+    priority: REJECTED
+    source_name: seatbelt-axfll
+    source_url: https://universe.roboflow.com/noriel-vlmtq/seatbelt-axfll/dataset/1
+    provider: Roboflow Universe
+    version: 1
+    license: UNKNOWN
+    license_url: null
+    status: REJECTED_LICENSE_GATE
+    reason: No explicit license was found on the version page. Roboflow states that a dataset without a specified license remains all-rights-reserved.
+
+  - source_id: kaggle_adms_unknown
+    priority: REJECTED
+    source_name: Advance Driver Monitoring System Dataset
+    source_url: https://www.kaggle.com/datasets/smartcity12/adms-dataset
+    provider: Kaggle
+    version: current
+    license: UNKNOWN
+    license_url: null
+    status: REJECTED_LICENSE_GATE
+    reason: Dataset license is unknown.
+
+  - source_id: kaggle_statefarm_competition
+    priority: REJECTED
+    source_name: State Farm Distracted Driver Detection
+    source_url: https://www.kaggle.com/competitions/state-farm-distracted-driver-detection/data
+    provider: Kaggle
+    version: competition
+    license: SUBJECT_TO_COMPETITION_RULES
+    license_url: https://www.kaggle.com/competitions/state-farm-distracted-driver-detection/rules
+    status: REJECTED_PENDING_LEGAL_REVIEW
+    reason: Competition access terms do not establish redistribution rights for this governed dataset, and the task lacks physical-phone boxes.

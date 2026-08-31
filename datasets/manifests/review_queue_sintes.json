@@ -1,0 +1,138 @@
+[
+  {
+    "annotations": [],
+    "excluded_source_annotations": [],
+    "image_path": "D:\\.idea\\projecy7\\datasets\\incoming\\sintes_v1\\d6f88fd1154653259d768236409c7200.jpg",
+    "license": "CC-BY-4.0",
+    "notes": "Confirm occupant is inside a vehicle; assign vehicle context and role evidence before approval.",
+    "review_tasks": [
+      "SEATBELT_UPPER_BODY_REBOX",
+      "DOMAIN_REVIEW"
+    ],
+    "sample_id": "d6f88fd1154653259d768236409c7200",
+    "source_asset_id": "alex_training_ia_640x640.jpg",
+    "source_group_id": "sintes:GROUP_REVIEW_REQUIRED:alex_training_ia_640x640",
+    "source_id": "kaggle_sintes_seatbelt_v1",
+    "vehicle_context_id": null,
+    "vehicle_context_required": true
+  },
+  {
+    "annotations": [],
+    "excluded_source_annotations": [],
+    "image_path": "D:\\.idea\\projecy7\\datasets\\incoming\\sintes_v1\\8cb4380782505037a3b0835491b93be6.jpeg",
+    "license": "CC-BY-4.0",
+    "notes": "Confirm occupant is inside a vehicle; assign vehicle context and role evidence before approval.",
+    "review_tasks": [
+      "SEATBELT_UPPER_BODY_REBOX",
+      "DOMAIN_REVIEW"
+    ],
+    "sample_id": "8cb4380782505037a3b0835491b93be6",
+    "source_asset_id": "IMG_8988_640x640.jpeg",
+    "source_group_id": "sintes:GROUP_REVIEW_REQUIRED:IMG_8988_640x640",
+    "source_id": "kaggle_sintes_seatbelt_v1",
+    "vehicle_context_id": null,
+    "vehicle_context_required": true
+  },
+  {
+    "annotations": [],
+    "excluded_source_annotations": [],
+    "image_path": "D:\\.idea\\projecy7\\datasets\\incoming\\sintes_v1\\0630c175ecea5b72a19a4ef848ddd0d9.jpeg",
+    "license": "CC-BY-4.0",
+    "notes": "Confirm occupant is inside a vehicle; assign vehicle context and role evidence before approval.",
+    "review_tasks": [
+      "SEATBELT_UPPER_BODY_REBOX",
+      "DOMAIN_REVIEW"
+    ],
+    "sample_id": "0630c175ecea5b72a19a4ef848ddd0d9",
+    "source_asset_id": "IMG_9380_resized_640x640.jpeg",
+    "source_group_id": "sintes:GROUP_REVIEW_REQUIRED:IMG_9380_resized_640x640",
+    "source_id": "kaggle_sintes_seatbelt_v1",
+    "vehicle_context_id": null,
+    "vehicle_context_required": true
+  },
+  {
+    "annotations": [],
+    "excluded_source_annotations": [],
+    "image_path": "D:\\.idea\\projecy7\\datasets\\incoming\\sintes_v1\\f08fae8f777e5e8daf0fb8630ddc002c.jpeg",
+    "license": "CC-BY-4.0",
+    "notes": "Confirm occupant is inside a vehicle; assign vehicle context and role evidence before approval.",
+    "review_tasks": [
+      "SEATBELT_UPPER_BODY_REBOX",
+      "DOMAIN_REVIEW"
+    ],
+    "sample_id": "f08fae8f777e5e8daf0fb8630ddc002c",
+    "source_asset_id": "IMG_9388_resized_640x640.jpeg",
+    "source_group_id": "sintes:GROUP_REVIEW_REQUIRED:IMG_9388_resized_640x640",
+    "source_id": "kaggle_sintes_seatbelt_v1",
+    "vehicle_context_id": null,
+    "vehicle_context_required": true
+  },
+  {
+    "annotations": [],
+    "excluded_source_annotations": [],
+    "image_path": "D:\\.idea\\projecy7\\datasets\\incoming\\sintes_v1\\9a1e9d9dbc9f5ec6b69f69b280a54c14.jpeg",
+    "license": "CC-BY-4.0",
+    "notes": "Confirm occupant is inside a vehicle; assign vehicle context and role evidence before approval.",
+    "review_tasks": [
+      "SEATBELT_UPPER_BODY_REBOX",
+      "DOMAIN_REVIEW"
+    ],
+    "sample_id": "9a1e9d9dbc9f5ec6b69f69b280a54c14",
+    "source_asset_id": "IMG_9397_resized_640x640.jpeg",
+    "source_group_id": "sintes:GROUP_REVIEW_REQUIRED:IMG_9397_resized_640x640",
+    "source_id": "kaggle_sintes_seatbelt_v1",
+    "vehicle_context_id": null,
+    "vehicle_context_required": true
+  },
+  {
+    "annotations": [],
+    "excluded_source_annotations": [],
+    "image_path": "D:\\.idea\\projecy7\\datasets\\incoming\\sintes_v1\\823d749a39635f389b46820cafbe3682.jpeg",
+    "license": "CC-BY-4.0",
+    "notes": "Confirm occupant is inside a vehicle; assign vehicle context and role evidence before approval.",
+    "review_tasks": [
+      "SEATBELT_UPPER_BODY_REBOX",
+      "DOMAIN_REVIEW"
+    ],
+    "sample_id": "823d749a39635f389b46820cafbe3682",
+    "source_asset_id": "IMG_9410_resized_640x640.jpeg",
+    "source_group_id": "sintes:GROUP_REVIEW_REQUIRED:IMG_9410_resized_640x640",
+    "source_id": "kaggle_sintes_seatbelt_v1",
+    "vehicle_context_id": null,
+    "vehicle_context_required": true
+  },
+  {
+    "annotations": [],
+    "excluded_source_annotations": [],
+    "image_path": "D:\\.idea\\projecy7\\datasets\\incoming\\sintes_v1\\6a8ce86dfe4a553b88e194fa72a8bb09.jpeg",
+    "license": "CC-BY-4.0",
+    "notes": "Confirm occupant is inside a vehicle; assign vehicle context and role evidence before approval.",
+    "review_tasks": [
+      "SEATBELT_UPPER_BODY_REBOX",
+      "DOMAIN_REVIEW"
+    ],
+    "sample_id": "6a8ce86dfe4a553b88e194fa72a8bb09",
+    "source_asset_id": "IMG_9418_resized_640x640.jpeg",
+    "source_group_id": "sintes:GROUP_REVIEW_REQUIRED:IMG_9418_resized_640x640",
+    "source_id": "kaggle_sintes_seatbelt_v1",
+    "vehicle_context_id": null,
+    "vehicle_context_required": true
+  },
+  {
+    "annotations": [],
+    "excluded_source_annotations": [],
+    "image_path": "D:\\.idea\\projecy7\\datasets\\incoming\\sintes_v1\\8b2d9f5f50545574a9f731d767d23b0a.jpeg",
+    "license": "CC-BY-4.0",
+    "notes": "Confirm occupant is inside a vehicle; assign vehicle context and role evidence before approval.",
+    "review_tasks": [
+      "SEATBELT_UPPER_BODY_REBOX",
+      "DOMAIN_REVIEW"
+    ],
+    "sample_id": "8b2d9f5f50545574a9f731d767d23b0a",
+    "source_asset_id": "IMG_9428_resized_640x640.jpeg",
+    "source_group_id": "sintes:GROUP_REVIEW_REQUIRED:IMG_9428_resized_640x640",
+    "source_id": "kaggle_sintes_seatbelt_v1",
+    "vehicle_context_id": null,
+    "vehicle_context_required": true
+  }
+]

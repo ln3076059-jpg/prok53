@@ -1,0 +1,70 @@
+canonical_classes:
+  0: phone
+  1: seatbelt_fastened
+  2: seatbelt_unfastened
+
+mappings:
+  phone:
+    canonical: phone
+    requires_review: false
+  cell_phone:
+    canonical: phone
+    requires_review: false
+  mobile:
+    canonical: phone
+    requires_review: true
+  mobile_phone:
+    canonical: phone
+    requires_review: false
+  using_phone:
+    canonical: null
+    requires_review: true
+    reason: An action label does not identify the visible physical phone box.
+  cellphone_use:
+    canonical: null
+    requires_review: true
+    reason: A driver-behavior region is not a tight physical-phone box.
+  calling:
+    canonical: null
+    requires_review: true
+    reason: A behavior-region box is not a physical-phone box.
+  texting:
+    canonical: null
+    requires_review: true
+    reason: A behavior-region box is not a physical-phone box.
+  checking_phone:
+    canonical: null
+    requires_review: true
+    reason: A clip-level activity is not a physical-phone box.
+  picking_up_a_call:
+    canonical: null
+    requires_review: true
+    reason: A clip-level activity is not a physical-phone box.
+  person_with_seatbelt:
+    canonical: seatbelt_fastened
+    requires_review: true
+    bbox_semantics: person_upper_body
+  with_seatbelt:
+    canonical: seatbelt_fastened
+    requires_review: true
+    bbox_semantics: person_upper_body
+  person_without_seatbelt:
+    canonical: seatbelt_unfastened
+    requires_review: true
+    bbox_semantics: person_upper_body
+  without_seatbelt:
+    canonical: seatbelt_unfastened
+    requires_review: true
+    bbox_semantics: person_upper_body
+  no_seatbelt:
+    canonical: seatbelt_unfastened
+    requires_review: true
+    bbox_semantics: person_upper_body
+  seatbelt:
+    canonical: null
+    requires_review: true
+    reason: Bare seatbelt labels do not prove wearing state or upper-body ROI semantics.
+  belt:
+    canonical: null
+    requires_review: true
+    reason: Thin belt-object boxes are excluded from the final state detector.

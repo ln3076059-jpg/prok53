@@ -1,0 +1,14 @@
+{
+  "id": "YOUR_KAGGLE_USERNAME/roadwatch-mc001-train",
+  "title": "Roadwatch MC001 Train",
+  "code_file": "../notebooks/kaggle_train_mc001.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": true,
+  "dataset_sources": ["YOUR_KAGGLE_USERNAME/mc001-bundle"],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}

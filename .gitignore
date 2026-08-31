@@ -1,0 +1,26 @@
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+node_modules/
+frontend/dist/
+datasets/raw/
+datasets/manifests/downloads/
+datasets/incoming/
+datasets/reviewed/
+datasets/governed/
+datasets/derived/
+datasets/quarantine/
+models/active/*.pt
+models/active/*.onnx
+models/candidates/*.pt
+experiments/MC_001/run/
+evidence/
+uploads/
+.impeccable/
+*.zip
+*.rar
+
+# Downloaded/pretrained model weights
+*.pt

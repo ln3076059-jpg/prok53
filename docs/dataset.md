@@ -1,0 +1,7 @@
+# Dataset governance
+
+Raw downloads are immutable. `training/download_source.py` requires exact license acceptance and records a SHA256 tree. `training/ingest_dataset.py` enforces the registry gate and records SHA256, pHash, source group, vehicle-context requirement, and provenance. `training/build_review_queue.py` maps only semantically safe proposals; behavior boxes and bare belts are excluded for manual reboxing. The reviewer records append-only decisions and blocks approval without vehicle context and resolved sample-/box-level occupant roles. `training/apply_review_decisions.py` revalidates those gates, preserves role evidence in the reviewed manifest, and creates canonical YOLO labels. `training/split_dataset.py` moves effective groups as units while balancing samples and class instances. `training/audit_dataset.py` fails exact or near-duplicate split overlap. `training/freeze_test.py` writes the frozen test manifest only after isolation passes.
+
+After governance, `training/augment_training_split.py` can create the deterministic train-only camera-condition derivative used by MC_001. All variants retain the parent effective group. `training/analyze_cv_quality.py` reports low light, blur, contrast, and tiny-object risks before the Kaggle bundle is built.
+
+No governed assets currently exist. Actual counts remain zero until licensed sources are downloaded and humans approve annotations.

@@ -1,0 +1,426 @@
+HƯỚNG DẪN TRAIN MC_BOOTSTRAP_001 TRÊN MÁY THUÊ RTX 5090
+=========================================================
+
+Cập nhật: 31/08/2026
+
+Mục tiêu
+--------
+
+- Train YOLO11s đủ 150 epoch ở ảnh 960 px.
+- Ba class theo đúng thứ tự:
+  0 phone
+  1 seatbelt_fastened
+  2 seatbelt_unfastened
+- Lưu checkpoint sau từng epoch: epoch0.pt ... epoch149.pt.
+- Sau mỗi epoch tạo/cập nhật bản khôi phục:
+  MC_BOOTSTRAP_001_LATEST_RESUME.zip
+- Nếu tiến trình hoặc máy bị ngắt, tiếp tục từ optimizer/model/epoch gần nhất,
+  không train lại từ đầu.
+- Đây vẫn là proposal/demo bootstrap. Không công bố đây là độ chính xác cuối
+  của MC_001 khi dữ liệu chưa được duyệt thủ công đầy đủ.
+
+
+1. CẤU HÌNH MÁY THUÊ
+--------------------
+
+GPU: 1x NVIDIA RTX 5090, VRAM 32 GB
+CPU: Intel Core i9-13900K, nhà cung cấp hiển thị 32 core/thread
+RAM: 116 GB
+SSD: 1.600 GB
+Network: 1 Gbps
+Vùng máy: no-nas / vn-03
+
+Giá do nhà cung cấp hiển thị:
+
+- Theo giờ: 21.000 đồng/giờ
+- Theo ngày: 480.000 đồng/ngày
+- Theo tuần: 2.968.000 đồng/tuần
+- Theo tháng: 11.720.000 đồng/tháng
+
+Không ước lượng thời gian 150 epoch trước khi chạy vì tốc độ còn phụ thuộc
+I/O, driver, nhiệt độ, cache và tốc độ validation. Hãy đo thời gian trung bình
+của 3-5 epoch đầu:
+
+  giờ còn lại = phút trung bình mỗi epoch x số epoch còn lại / 60
+  chi phí giờ  = giờ dự kiến x 21.000
+
+Mốc so sánh: 480.000 / 21.000 = khoảng 22,86 giờ. Nếu dự kiến chạy gần hoặc
+trên 23 giờ liên tục, gói ngày bắt đầu hợp lý hơn gói giờ. Chỉ thuê tuần/tháng
+khi còn nhiều thử nghiệm khác; một lần train chưa đủ cơ sở để chọn gói dài.
+
+"no-nas" nghĩa là không nên coi ổ đĩa máy thuê là bản sao lưu lâu dài. Phải
+tải resume về máy cá nhân định kỳ hoặc sao chép sang một nơi lưu trữ bền vững.
+
+
+2. FILE CẦN UPLOAD
+------------------
+
+File trên máy Windows:
+
+  D:\.idea\projecy7\kaggle\mc_bootstrap_001_kaggle_bundle.zip
+
+SHA-256 cuối cùng:
+
+  50b4356124081e5c50404a36d6dac7ecfc2f7ab65b52614c468a48c363f19e9a  mc_bootstrap_001_kaggle_bundle.zip
+
+Không sửa config.yaml, runner, manifest hoặc dataset bên trong ZIP. Runner có
+cơ chế fail-closed và sẽ dừng nếu hash thay đổi.
+
+Ví dụ upload từ PowerShell trên máy cá nhân. Thay IP_CUA_MAY bằng IP thật:
+
+  $TRAIN_SERVER = "root@IP_CUA_MAY"
+  scp D:\.idea\projecy7\kaggle\mc_bootstrap_001_kaggle_bundle.zip `
+      "${TRAIN_SERVER}:/workspace/"
+
+Nếu nhà cung cấp cấp user khác root, thay root bằng user được cấp.
+
+
+3. CHUẨN BỊ UBUNTU SERVER
+-------------------------
+
+SSH vào máy:
+
+  ssh root@IP_CUA_MAY
+
+Tạo vùng làm việc và kiểm tra phần cứng:
+
+  export TRAIN_ROOT=/workspace/driver-safety-mc150
+  mkdir -p "$TRAIN_ROOT" "$TRAIN_ROOT/output" "$TRAIN_ROOT/logs"
+  nvidia-smi
+  df -h /workspace
+  free -h
+  python3 --version
+
+Yêu cầu:
+
+- Python 3.9 trở lên; khuyến nghị Python 3.11.
+- nvidia-smi phải thấy đúng NVIDIA GeForce RTX 5090.
+- Nên còn tối thiểu 30 GB trống cho cache, 150 checkpoint và file kết quả.
+- Không chỉ dựa vào dòng "CUDA 24575" của trang thuê máy. Kết quả nvidia-smi
+  và bài test PyTorch bên dưới mới quyết định môi trường có hoạt động hay không.
+
+Cài công cụ hệ thống nếu image chưa có:
+
+  sudo apt-get update
+  sudo apt-get install -y python3-venv tmux unzip
+
+Tạo môi trường Python riêng:
+
+  python3 -m venv "$TRAIN_ROOT/venv"
+  source "$TRAIN_ROOT/venv/bin/activate"
+  python -m pip install --upgrade pip setuptools wheel
+
+
+4. CÀI PYTORCH CHO RTX 5090
+---------------------------
+
+RTX 5090 thuộc kiến trúc Blackwell/sm_120. Không dùng bản PyTorch CUDA cũ vì
+có thể gặp lỗi "CUDA capability sm_120 is not compatible". Hướng dẫn này ghim
+PyTorch 2.8.0 + wheel CUDA 12.8 để có môi trường tái lập và hỗ trợ RTX 5090:
+
+  python -m pip install torch==2.8.0 torchvision==0.23.0 \
+      --index-url https://download.pytorch.org/whl/cu128
+
+Không bắt buộc cài toàn bộ CUDA Toolkit vào virtualenv; wheel PyTorch mang theo
+CUDA runtime cần thiết. Driver NVIDIA của máy chủ vẫn phải đủ mới.
+
+Nguồn chính thức để kiểm tra khi phiên bản thay đổi:
+
+  https://pytorch.org/get-started/locally/
+  https://pytorch.org/get-started/previous-versions/
+
+Kiểm tra GPU và chạy phép tính CUDA thật:
+
+  python - <<'PY'
+  import torch
+
+  print("torch:", torch.__version__)
+  print("torch CUDA runtime:", torch.version.cuda)
+  print("CUDA available:", torch.cuda.is_available())
+  assert torch.cuda.is_available(), "PyTorch không nhìn thấy GPU"
+  print("GPU:", torch.cuda.get_device_name(0))
+  print("capability:", torch.cuda.get_device_capability(0))
+  print("compiled architectures:", torch.cuda.get_arch_list())
+  a = torch.randn((4096, 4096), device="cuda")
+  b = a @ a
+  torch.cuda.synchronize()
+  print("CUDA matrix test PASS:", float(b[0, 0]))
+  PY
+
+Kết quả cần có:
+
+- CUDA available: True
+- GPU: NVIDIA GeForce RTX 5090
+- capability thường là (12, 0)
+- Phép nhân ma trận kết thúc không có lỗi kernel/sm_120.
+
+Nếu gặp lỗi sm_120: xóa torch/torchvision trong đúng virtualenv rồi cài lại
+wheel cu128; không dùng wheel cu121/cu124 cũ:
+
+  python -m pip uninstall -y torch torchvision torchaudio
+  python -m pip cache purge
+  python -m pip install torch==2.8.0 torchvision==0.23.0 \
+      --index-url https://download.pytorch.org/whl/cu128
+
+
+5. GIẢI NÉN VÀ CÀI REQUIREMENTS
+-------------------------------
+
+Di chuyển bundle đã upload vào vùng làm việc và kiểm tra checksum trước:
+
+  mv /workspace/mc_bootstrap_001_kaggle_bundle.zip "$TRAIN_ROOT/"
+  cd "$TRAIN_ROOT"
+  echo "50b4356124081e5c50404a36d6dac7ecfc2f7ab65b52614c468a48c363f19e9a  mc_bootstrap_001_kaggle_bundle.zip" | sha256sum -c -
+
+Phải nhận được:
+
+  mc_bootstrap_001_kaggle_bundle.zip: OK
+
+Giải nén sang thư mục mới:
+
+  mkdir -p "$TRAIN_ROOT/bundle"
+  unzip -q "$TRAIN_ROOT/mc_bootstrap_001_kaggle_bundle.zip" -d "$TRAIN_ROOT/bundle"
+
+Cài đúng dependencies đã đóng gói:
+
+  source "$TRAIN_ROOT/venv/bin/activate"
+  python -m pip install -r "$TRAIN_ROOT/bundle/requirements-kaggle.txt"
+
+Kiểm tra phiên bản sau khi cài requirements để chắc chắn torch không bị thay:
+
+  python -c "import torch, ultralytics; print('torch', torch.__version__, 'CUDA', torch.version.cuda, 'ultralytics', ultralytics.__version__, 'GPU', torch.cuda.get_device_name(0))"
+
+
+6. PREFLIGHT DATASET TRƯỚC KHI TÍNH TIỀN TRAIN
+---------------------------------------------
+
+Chạy kiểm tra đầy đủ hash, ảnh, label, class và split:
+
+  source "$TRAIN_ROOT/venv/bin/activate"
+  python "$TRAIN_ROOT/bundle/mc_bootstrap_kaggle_runner.py" \
+      --bundle "$TRAIN_ROOT/bundle" \
+      --working "$TRAIN_ROOT/output" \
+      --preflight-only
+
+Kết quả mong đợi:
+
+- verified_files: 36206
+- manifest_samples: 18099
+- Train: 14581 ảnh
+- Validation: 1782 ảnh
+- Test độc lập: 1736 ảnh
+- Không có STOP hoặc traceback.
+
+Nếu preflight lỗi, không train và không sửa file trong bundle để lách kiểm tra.
+Upload lại đúng bundle hoặc kiểm tra SHA-256.
+
+
+7. BẮT ĐẦU TRAIN 150 EPOCH BẰNG TMUX
+------------------------------------
+
+Config hiện tại:
+
+- model: yolo11s.pt
+- imgsz: 960
+- epochs: 150
+- batch: 8
+- device: 0
+- workers: 4
+- AMP: bật
+- optimizer: AdamW
+- save_period: 1
+- patience: 150, vì vậy early stopping bình thường không cắt ngắn yêu cầu
+  150 epoch.
+
+Batch 8 là cấu hình an toàn/tái lập. RTX 5090 32 GB có thể còn VRAM dư nhưng
+không sửa config bên trong bundle vì sẽ làm sai hash. Chạy bản chuẩn trước;
+chỉ thử batch lớn hơn ở một experiment/bundle mới có audit và checksum mới.
+
+Mở tmux:
+
+  tmux new -s mc150
+
+Trong cửa sổ tmux, chạy:
+
+  export TRAIN_ROOT=/workspace/driver-safety-mc150
+  source "$TRAIN_ROOT/venv/bin/activate"
+  export PYTHONUNBUFFERED=1
+  set -o pipefail
+  python "$TRAIN_ROOT/bundle/mc_bootstrap_kaggle_runner.py" \
+      --bundle "$TRAIN_ROOT/bundle" \
+      --working "$TRAIN_ROOT/output" \
+      2>&1 | tee "$TRAIN_ROOT/logs/train_mc150.log"
+
+Để rời SSH mà train vẫn chạy: nhấn Ctrl+B, thả ra, sau đó nhấn D.
+
+Vào lại phiên train:
+
+  tmux attach -t mc150
+
+Không tắt/xóa máy thuê khi tiến trình chưa xong hoặc resume chưa được tải về.
+
+
+8. THEO DÕI GPU, LOG VÀ CHECKPOINT
+----------------------------------
+
+Mở một SSH terminal khác:
+
+  export TRAIN_ROOT=/workspace/driver-safety-mc150
+  watch -n 2 nvidia-smi
+
+Theo dõi log:
+
+  tail -f "$TRAIN_ROOT/logs/train_mc150.log"
+
+Kiểm tra checkpoint:
+
+  ls -lh "$TRAIN_ROOT/output/MC_BOOTSTRAP_001/weights/" | tail
+  du -sh "$TRAIN_ROOT/output/MC_BOOTSTRAP_001/weights/"
+  ls -lh "$TRAIN_ROOT/output/MC_BOOTSTRAP_001_LATEST_RESUME.zip"
+
+Ultralytics đánh số checkpoint từ 0:
+
+- epoch0.pt = đã hoàn thành epoch 1
+- epoch49.pt = đã hoàn thành epoch 50
+- epoch149.pt = đã hoàn thành epoch 150
+
+Nếu GPU gần như không sử dụng trong thời gian dài, xem log trước khi kết luận.
+Validation, đọc dữ liệu và tạo resume có thể làm mức sử dụng GPU giảm tạm thời.
+
+
+9. SAO LƯU RESUME ĐỊNH KỲ
+-------------------------
+
+Sau mỗi epoch, runner thay archive bằng thao tác atomic nên luôn ưu tiên giữ
+bản hoàn chỉnh gần nhất:
+
+  /workspace/driver-safety-mc150/output/MC_BOOTSTRAP_001_LATEST_RESUME.zip
+
+Từ PowerShell trên máy cá nhân, tải file này định kỳ. Có thể chạy lại cùng lệnh;
+file local sẽ được cập nhật:
+
+  $TRAIN_SERVER = "root@IP_CUA_MAY"
+  scp "${TRAIN_SERVER}:/workspace/driver-safety-mc150/output/MC_BOOTSTRAP_001_LATEST_RESUME.zip" `
+      D:\.idea\projecy7\
+
+Nên tải sau 5-10 epoch hoặc trước khi sắp hết thời gian thuê. Archive resume
+chứa last.pt còn optimizer, best.pt, results.csv, args.yaml, epoch đã hoàn thành
+và các SHA-256 provenance.
+
+
+10. RESUME KHI TIẾN TRÌNH BỊ DỪNG
+---------------------------------
+
+A. Còn nguyên cùng máy và cùng thư mục output
+
+Runner tự phát hiện latest resume trong --working. Chỉ cần mở tmux mới và chạy
+lại đúng lệnh train ở mục 7. Nó sẽ in dòng resume_from_completed_epoch rồi tiếp
+tục, không bắt đầu lại epoch 1.
+
+B. Máy cũ đã mất, tạo máy RTX 5090 mới
+
+1. Làm lại mục 3-6.
+2. Upload cả bundle gốc và file resume đã sao lưu.
+3. Chạy với --resume rõ ràng:
+
+  export TRAIN_ROOT=/workspace/driver-safety-mc150
+  source "$TRAIN_ROOT/venv/bin/activate"
+  python "$TRAIN_ROOT/bundle/mc_bootstrap_kaggle_runner.py" \
+      --bundle "$TRAIN_ROOT/bundle" \
+      --working "$TRAIN_ROOT/output" \
+      --resume "$TRAIN_ROOT/MC_BOOTSTRAP_001_LATEST_RESUME.zip" \
+      2>&1 | tee -a "$TRAIN_ROOT/logs/train_mc150.log"
+
+Runner sẽ từ chối resume nếu sai experiment, sai dataset/config, sai tổng số
+epoch, checksum last.pt/best.pt không khớp hoặc archive có đường dẫn nguy hiểm.
+
+Nếu archive đã hoàn thành epoch 150 nhưng máy dừng ở bước test/package, runner
+không train lại; nó khôi phục weights rồi chạy đánh giá test và đóng gói kết quả.
+
+
+11. KẾT QUẢ SAU KHI TRAIN XONG
+------------------------------
+
+File quan trọng:
+
+  $TRAIN_ROOT/output/MC_BOOTSTRAP_001_RECOVERY.zip
+  $TRAIN_ROOT/output/MC_BOOTSTRAP_001_LATEST_RESUME.zip
+  $TRAIN_ROOT/output/MC_BOOTSTRAP_001/weights/best.pt
+  $TRAIN_ROOT/output/MC_BOOTSTRAP_001/weights/last.pt
+  $TRAIN_ROOT/output/MC_BOOTSTRAP_001/weights/epoch0.pt ... epoch149.pt
+  $TRAIN_ROOT/output/MC_BOOTSTRAP_001/results.csv
+  $TRAIN_ROOT/output/MC_BOOTSTRAP_001/test_metrics.json
+  $TRAIN_ROOT/output/MC_BOOTSTRAP_001/run_metadata.json
+
+Tải recovery và resume về Windows:
+
+  $TRAIN_SERVER = "root@IP_CUA_MAY"
+  scp "${TRAIN_SERVER}:/workspace/driver-safety-mc150/output/MC_BOOTSTRAP_001_RECOVERY.zip" `
+      D:\.idea\projecy7\
+  scp "${TRAIN_SERVER}:/workspace/driver-safety-mc150/output/MC_BOOTSTRAP_001_LATEST_RESUME.zip" `
+      D:\.idea\projecy7\
+
+Nếu cần toàn bộ 150 checkpoint, nén chúng trên server rồi tải về. Chỉ thực hiện
+sau khi kiểm tra SSD còn đủ chỗ:
+
+  export TRAIN_ROOT=/workspace/driver-safety-mc150
+  df -h "$TRAIN_ROOT"
+  cd "$TRAIN_ROOT/output/MC_BOOTSTRAP_001"
+  zip -0 -r "$TRAIN_ROOT/output/MC_BOOTSTRAP_001_ALL_EPOCH_WEIGHTS.zip" weights/epoch*.pt
+
+Sau khi đã tải file về và xác minh mở được ZIP/checksum, mới tắt máy thuê để
+tránh tiếp tục bị tính phí.
+
+
+12. LỖI THƯỜNG GẶP
+------------------
+
+1. torch.cuda.is_available() = False
+   - Kiểm tra nvidia-smi.
+   - Kiểm tra đang activate đúng virtualenv.
+   - Cài lại torch cu128 theo mục 4.
+   - Nếu nvidia-smi cũng lỗi, đổi image/driver hoặc liên hệ nhà cung cấp.
+
+2. Lỗi sm_120 is not compatible
+   - Đang dùng PyTorch/CUDA wheel quá cũ.
+   - Gỡ torch và cài đúng wheel cu128 theo mục 4.
+
+3. CUDA out of memory
+   - Config batch 8 được chọn để giảm nguy cơ này.
+   - Kiểm tra nvidia-smi xem có process khác chiếm VRAM.
+   - Dừng process lạ thuộc phiên của mình; không kill process hệ thống/người khác.
+   - Không tự sửa bundle. Nếu vẫn OOM, tạo bundle mới với batch thấp hơn.
+
+4. STOP: bundle hash mismatch
+   - Bundle bị sửa hoặc giải nén/upload hỏng.
+   - So SHA-256 và upload lại file gốc.
+
+5. SSH mất kết nối
+   - Train vẫn chạy nếu đã chạy trong tmux.
+   - SSH lại và dùng tmux attach -t mc150.
+
+6. Process Python chết hoặc server reboot nhưng SSD còn
+   - Chạy lại lệnh mục 7; runner tự dùng latest resume trong output.
+
+7. Máy thuê bị xóa/no-nas mất dữ liệu
+   - Tạo máy mới và dùng resume đã tải về theo mục 10B.
+   - Nếu chưa từng sao lưu resume thì không thể khôi phục checkpoint đã mất.
+
+8. Ổ đĩa đầy
+   - Kiểm tra du -sh và df -h.
+   - Không xóa last.pt, best.pt, latest resume hay epoch mới nhất khi train đang chạy.
+   - 1.600 GB SSD của cấu hình này dư rộng, nhưng vẫn theo dõi vì mỗi epoch được lưu.
+
+
+CHECKLIST NGẮN TRƯỚC KHI BẤM TRAIN
+----------------------------------
+
+[ ] Đúng RTX 5090 trong nvidia-smi
+[ ] PyTorch CUDA available = True và matrix test PASS
+[ ] SHA-256 bundle = 50b4356124081e5c50404a36d6dac7ecfc2f7ab65b52614c468a48c363f19e9a
+[ ] Preflight verified_files = 36206
+[ ] /workspace còn tối thiểu 30 GB
+[ ] Đã chạy trong tmux
+[ ] Biết vị trí MC_BOOTSTRAP_001_LATEST_RESUME.zip
+[ ] Có lịch tải resume định kỳ
+[ ] Sau khi xong đã tải RECOVERY.zip rồi mới tắt máy
