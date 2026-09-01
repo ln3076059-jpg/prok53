@@ -1,426 +1,469 @@
-HƯỚNG DẪN TRAIN MC_BOOTSTRAP_001 TRÊN MÁY THUÊ RTX 5090
-=========================================================
+HUONG DAN TRAIN MULTIMODEL V2
+May dich: nas1 / vn-01, Windows, Intel Core i5-13400F 12 cores,
+          NVIDIA RTX 3090 24 GB, RAM 56 GB, SSD 1500 GB, Net 1 Gbps
+Cap nhat: 2026-09-01
 
-Cập nhật: 31/08/2026
+======================================================================
+1. PHAM VI CUA LAN TRAIN
+======================================================================
 
-Mục tiêu
---------
+Bundle hien hanh:
 
-- Train YOLO11s đủ 150 epoch ở ảnh 960 px.
-- Ba class theo đúng thứ tự:
-  0 phone
-  1 seatbelt_fastened
-  2 seatbelt_unfastened
-- Lưu checkpoint sau từng epoch: epoch0.pt ... epoch149.pt.
-- Sau mỗi epoch tạo/cập nhật bản khôi phục:
-  MC_BOOTSTRAP_001_LATEST_RESUME.zip
-- Nếu tiến trình hoặc máy bị ngắt, tiếp tục từ optimizer/model/epoch gần nhất,
-  không train lại từ đầu.
-- Đây vẫn là proposal/demo bootstrap. Không công bố đây là độ chính xác cuối
-  của MC_001 khi dữ liệu chưa được duyệt thủ công đầy đủ.
+  MULTIMODEL_V2_PRETRAIN_PENDING_APPROVAL_PORTABLE.zip
 
+SHA-256 bat buoc:
 
-1. CẤU HÌNH MÁY THUÊ
---------------------
+  87c3b4429215f57dd0bb2e7b8625f079bd58ce64f349c9e3c6d26977e0dc8b77
 
-GPU: 1x NVIDIA RTX 5090, VRAM 32 GB
-CPU: Intel Core i9-13900K, nhà cung cấp hiển thị 32 core/thread
-RAM: 116 GB
-SSD: 1.600 GB
-Network: 1 Gbps
-Vùng máy: no-nas / vn-03
+Bundle gom 3 model:
 
-Giá do nhà cung cấp hiển thị:
+  1. phone_detector
+     - YOLO11s detection
+     - 3.025 anh
+     - imgsz 960
+     - 100 epoch
 
-- Theo giờ: 21.000 đồng/giờ
-- Theo ngày: 480.000 đồng/ngày
-- Theo tuần: 2.968.000 đồng/tuần
-- Theo tháng: 11.720.000 đồng/tháng
+  2. seatbelt_detector
+     - YOLO11s detection occupant_upper_body ROI
+     - 4.845 anh
+     - imgsz 1280
+     - 160 epoch
 
-Không ước lượng thời gian 150 epoch trước khi chạy vì tốc độ còn phụ thuộc
-I/O, driver, nhiệt độ, cache và tốc độ validation. Hãy đo thời gian trung bình
-của 3-5 epoch đầu:
+  3. seatbelt_classifier
+     - YOLO11s classification
+     - 4.915 crop
+     - 3 class: seatbelt_fastened, seatbelt_unfastened,
+       uncertain_or_occluded
+     - uncertain train/val/test = 100/25/25
+     - imgsz 256
+     - 80 epoch
 
-  giờ còn lại = phút trung bình mỗi epoch x số epoch còn lại / 60
-  chi phí giờ  = giờ dự kiến x 21.000
+Day la lan train exploratory voi governance:
 
-Mốc so sánh: 480.000 / 21.000 = khoảng 22,86 giờ. Nếu dự kiến chạy gần hoặc
-trên 23 giờ liên tục, gói ngày bắt đầu hợp lý hơn gói giờ. Chỉ thuê tuần/tháng
-khi còn nhiều thử nghiệm khác; một lần train chưa đủ cơ sở để chọn gói dài.
+  MODEL_ASSISTED_PENDING_APPROVAL
 
-"no-nas" nghĩa là không nên coi ổ đĩa máy thuê là bản sao lưu lâu dài. Phải
-tải resume về máy cá nhân định kỳ hoặc sao chép sang một nơi lưu trữ bền vững.
+Khong duoc goi output la HUMAN_APPROVED, governed model hoac production-ready.
+Frozen test khong duoc dung trong luc train.
 
 
-2. FILE CẦN UPLOAD
-------------------
+======================================================================
+2. THOI GIAN VA CHI PHI DU KIEN TREN RTX 3090 24 GB
+======================================================================
 
-File trên máy Windows:
+  Preflight + smoke:       10-25 phut
+  Phone detector:           1-2 gio
+  Seatbelt detector:        5-9 gio
+  Seatbelt classifier:    0,5-1 gio
+  Tong:                     7-12 gio
 
-  D:\.idea\projecy7\kaggle\mc_bootstrap_001_kaggle_bundle.zip
+Gia thue theo gio: 9.000 VND/gio
 
-SHA-256 cuối cùng:
+   7 gio:  63.000 VND
+  10 gio:  90.000 VND
+  12 gio: 108.000 VND
 
-  50b4356124081e5c50404a36d6dac7ecfc2f7ab65b52614c468a48c363f19e9a  mc_bootstrap_001_kaggle_bundle.zip
+Voi uoc tinh nay, goi theo gio re hon goi ngay 197.000 VND. Chi chuyen sang
+goi ngay neu tong thoi gian thuc te du kien vuot khoang 21,9 gio.
 
-Không sửa config.yaml, runner, manifest hoặc dataset bên trong ZIP. Runner có
-cơ chế fail-closed và sẽ dừng nếu hash thay đổi.
+Seatbelt detector chiem phan lon thoi gian. Early stopping co the lam thoi
+gian ngan hon. Uoc tinh chi la moc khoi dau; sau epoch dau tien, lay thoi gian
+trung binh moi epoch nhan so epoch con lai de cap nhat ETA.
 
-Ví dụ upload từ PowerShell trên máy cá nhân. Thay IP_CUA_MAY bằng IP thật:
+Profile phai dung:
 
-  $TRAIN_SERVER = "root@IP_CUA_MAY"
-  scp D:\.idea\projecy7\kaggle\mc_bootstrap_001_kaggle_bundle.zip `
-      "${TRAIN_SERVER}:/workspace/"
+  rtx5060ti_16gb
 
-Nếu nhà cung cấp cấp user khác root, thay root bằng user được cấp.
+Ten profile giu nguyen vi no da nam trong bundle va duoc preflight/hash bao ve.
+Khong tu tao profile rtx3090 hoac sua config trong bundle. Profile 16 GB nay an
+toan tren RTX 3090 24 GB va dat batch:
 
-
-3. CHUẨN BỊ UBUNTU SERVER
--------------------------
-
-SSH vào máy:
-
-  ssh root@IP_CUA_MAY
-
-Tạo vùng làm việc và kiểm tra phần cứng:
-
-  export TRAIN_ROOT=/workspace/driver-safety-mc150
-  mkdir -p "$TRAIN_ROOT" "$TRAIN_ROOT/output" "$TRAIN_ROOT/logs"
-  nvidia-smi
-  df -h /workspace
-  free -h
-  python3 --version
-
-Yêu cầu:
-
-- Python 3.9 trở lên; khuyến nghị Python 3.11.
-- nvidia-smi phải thấy đúng NVIDIA GeForce RTX 5090.
-- Nên còn tối thiểu 30 GB trống cho cache, 150 checkpoint và file kết quả.
-- Không chỉ dựa vào dòng "CUDA 24575" của trang thuê máy. Kết quả nvidia-smi
-  và bài test PyTorch bên dưới mới quyết định môi trường có hoạt động hay không.
-
-Cài công cụ hệ thống nếu image chưa có:
-
-  sudo apt-get update
-  sudo apt-get install -y python3-venv tmux unzip
-
-Tạo môi trường Python riêng:
-
-  python3 -m venv "$TRAIN_ROOT/venv"
-  source "$TRAIN_ROOT/venv/bin/activate"
-  python -m pip install --upgrade pip setuptools wheel
+  phone_detector:       8
+  seatbelt_detector:    4
+  seatbelt_classifier: 32
+  multi_scale:      false
 
 
-4. CÀI PYTORCH CHO RTX 5090
----------------------------
+======================================================================
+3. FILE CAN COPY SANG MAY TRAIN
+======================================================================
 
-RTX 5090 thuộc kiến trúc Blackwell/sm_120. Không dùng bản PyTorch CUDA cũ vì
-có thể gặp lỗi "CUDA capability sm_120 is not compatible". Hướng dẫn này ghim
-PyTorch 2.8.0 + wheel CUDA 12.8 để có môi trường tái lập và hỗ trợ RTX 5090:
+Chi can copy 2 file sau:
 
-  python -m pip install torch==2.8.0 torchvision==0.23.0 \
-      --index-url https://download.pytorch.org/whl/cu128
+  MULTIMODEL_V2_PRETRAIN_PENDING_APPROVAL_PORTABLE.zip
+  MULTIMODEL_V2_PRETRAIN_PENDING_APPROVAL_PORTABLE.sha256
 
-Không bắt buộc cài toàn bộ CUDA Toolkit vào virtualenv; wheel PyTorch mang theo
-CUDA runtime cần thiết. Driver NVIDIA của máy chủ vẫn phải đủ mới.
+Tren may chuan bi, file nam tai:
 
-Nguồn chính thức để kiểm tra khi phiên bản thay đổi:
+  D:\.idea\project5542\projecy7\kaggle\
 
-  https://pytorch.org/get-started/locally/
-  https://pytorch.org/get-started/previous-versions/
+Tren may train, tao thu muc:
 
-Kiểm tra GPU và chạy phép tính CUDA thật:
+  C:\RoadWatchV2
 
-  python - <<'PY'
+Copy hai file vao C:\RoadWatchV2. Khong doi ten ZIP hoac file checksum.
+
+
+======================================================================
+4. KIEM TRA GPU
+======================================================================
+
+Mo Command Prompt hoac PowerShell va chay:
+
+  nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
+
+Ket qua can thay tren may nas1 / vn-01:
+
+  NVIDIA GeForce RTX 3090, khoang 24576 MiB
+
+Khong train neu nvidia-smi bao loi hoac GPU dang bi mot tien trinh khac chiem.
+
+
+======================================================================
+5. KIEM CHECKSUM VA GIAI NEN
+======================================================================
+
+Mo PowerShell, sau do chay nguyen khoi lenh:
+
+  $TrainRoot = "C:\RoadWatchV2"
+  $ZipPath = Join-Path $TrainRoot "MULTIMODEL_V2_PRETRAIN_PENDING_APPROVAL_PORTABLE.zip"
+  $ChecksumPath = Join-Path $TrainRoot "MULTIMODEL_V2_PRETRAIN_PENDING_APPROVAL_PORTABLE.sha256"
+  $BundleRoot = Join-Path $TrainRoot "bundle"
+  $Working = Join-Path $TrainRoot "runs\full"
+  $SmokeWorking = Join-Path $TrainRoot "runs\smoke"
+  $BackupRoot = Join-Path $TrainRoot "backup"
+
+  if (-not (Test-Path -LiteralPath $ZipPath)) { throw "Thieu ZIP: $ZipPath" }
+  if (-not (Test-Path -LiteralPath $ChecksumPath)) { throw "Thieu checksum" }
+
+  $Expected = ((Get-Content -LiteralPath $ChecksumPath -Raw).Trim() -split '\s+')[0].ToLowerInvariant()
+  $Actual = (Get-FileHash -LiteralPath $ZipPath -Algorithm SHA256).Hash.ToLowerInvariant()
+  Write-Host "Expected:" $Expected
+  Write-Host "Actual:  " $Actual
+  if ($Actual -ne $Expected) { throw "STOP: ZIP checksum mismatch" }
+
+  if (Test-Path -LiteralPath $BundleRoot) {
+      throw "BundleRoot da ton tai. Dung thu muc moi de tranh tron file cu."
+  }
+  Expand-Archive -LiteralPath $ZipPath -DestinationPath $BundleRoot
+  Write-Host "CHECKSUM VA GIAI NEN: PASS"
+
+Khong sua config, manifest, dataset hoac weights ben trong bundle. Preflight se
+tu choi neu bat ky file nao khong con dung SHA-256.
+
+
+======================================================================
+6. CAI PYTHON VA DEPENDENCIES
+======================================================================
+
+Yeu cau:
+
+  - Python 3.11 64-bit
+  - NVIDIA driver nhan RTX 3090
+  - Internet chi can cho buoc pip install
+  - Base weights da nam trong bundle, khong tai weights tu Internet
+
+Kiem tra Python:
+
+  py -3 --version
+
+Neu chua co Python, cai Python 3.11 64-bit va chon "Add Python to PATH".
+
+Cho phep script trong cua so PowerShell hien tai:
+
+  Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
+Di vao bundle va cai dependencies kem preflight:
+
+  Set-Location "C:\RoadWatchV2\bundle"
+  .\START_V2_PRETRAIN_REVIEW_TRAINING.ps1 `
+      -Mode preflight `
+      -Profile rtx5060ti_16gb `
+      -InstallDependencies
+
+Script cai dung cac ban:
+
+  torch==2.8.0 tu CUDA 12.8 index
+  torchvision==0.23.0
+  ultralytics==8.3.187
+  PyYAML==6.0.2
+  Pillow==11.3.0
+
+Kiem tra dependency sau khi cai:
+
+  py -3 -m pip check
+
+
+======================================================================
+7. TEST CUDA THAT
+======================================================================
+
+Chay trong PowerShell:
+
+  @'
   import torch
 
   print("torch:", torch.__version__)
   print("torch CUDA runtime:", torch.version.cuda)
   print("CUDA available:", torch.cuda.is_available())
-  assert torch.cuda.is_available(), "PyTorch không nhìn thấy GPU"
-  print("GPU:", torch.cuda.get_device_name(0))
-  print("capability:", torch.cuda.get_device_capability(0))
-  print("compiled architectures:", torch.cuda.get_arch_list())
-  a = torch.randn((4096, 4096), device="cuda")
+  assert torch.cuda.is_available(), "PyTorch khong nhin thay CUDA"
+
+  name = torch.cuda.get_device_name(0)
+  memory = torch.cuda.get_device_properties(0).total_memory / 1024**3
+  capability = torch.cuda.get_device_capability(0)
+  architectures = torch.cuda.get_arch_list()
+
+  print("GPU:", name)
+  print("VRAM GiB:", round(memory, 2))
+  print("capability:", capability)
+  print("architectures:", architectures)
+
+  assert "RTX 3090" in name, name
+  assert memory >= 23.0, memory
+  assert capability == (8, 6), capability
+  assert "sm_86" in architectures, architectures
+
+  a = torch.randn((4096, 4096), device="cuda", dtype=torch.float16)
   b = a @ a
   torch.cuda.synchronize()
-  print("CUDA matrix test PASS:", float(b[0, 0]))
-  PY
+  assert torch.isfinite(b).all().item()
+  print("CUDA MATRIX TEST: PASS")
+  '@ | py -3 -
 
-Kết quả cần có:
+Chi train khi CUDA available=True va CUDA MATRIX TEST=PASS.
 
-- CUDA available: True
-- GPU: NVIDIA GeForce RTX 5090
-- capability thường là (12, 0)
-- Phép nhân ma trận kết thúc không có lỗi kernel/sm_120.
 
-Nếu gặp lỗi sm_120: xóa torch/torchvision trong đúng virtualenv rồi cài lại
-wheel cu128; không dùng wheel cu121/cu124 cũ:
+======================================================================
+8. KET QUA PREFLIGHT DUNG
+======================================================================
 
-  python -m pip uninstall -y torch torchvision torchaudio
-  python -m pip cache purge
-  python -m pip install torch==2.8.0 torchvision==0.23.0 \
-      --index-url https://download.pytorch.org/whl/cu128
+Preflight phai co cac gia tri chinh:
 
+  verified_files: 20679
+  governance_level: MODEL_ASSISTED_PENDING_APPROVAL
+  human_verified: false
 
-5. GIẢI NÉN VÀ CÀI REQUIREMENTS
--------------------------------
+  phone_detector:
+    train: 2421 images / 1114 boxes
+    val:    302 images /  139 boxes
+    test:   302 images /  139 boxes
 
-Di chuyển bundle đã upload vào vùng làm việc và kiểm tra checksum trước:
+  seatbelt_detector:
+    train: 3595 images / 3650 boxes
+    val:    636 images /  638 boxes
+    test:   614 images /  617 boxes
 
-  mv /workspace/mc_bootstrap_001_kaggle_bundle.zip "$TRAIN_ROOT/"
-  cd "$TRAIN_ROOT"
-  echo "50b4356124081e5c50404a36d6dac7ecfc2f7ab65b52614c468a48c363f19e9a  mc_bootstrap_001_kaggle_bundle.zip" | sha256sum -c -
+  seatbelt_classifier:
+    train: fastened 2367 / unfastened 1186 / uncertain 100
+    val:   fastened  350 / unfastened  266 / uncertain  25
+    test:  fastened  307 / unfastened  289 / uncertain  25
 
-Phải nhận được:
+Neu co STOP, hash mismatch, class mismatch, missing weight hoac leakage thi khong
+train. Giai nen lai ZIP vao thu muc bundle moi; khong sua file de lach preflight.
 
-  mc_bootstrap_001_kaggle_bundle.zip: OK
 
-Giải nén sang thư mục mới:
+======================================================================
+9. CHAY SMOKE TEST 1 EPOCH
+======================================================================
 
-  mkdir -p "$TRAIN_ROOT/bundle"
-  unzip -q "$TRAIN_ROOT/mc_bootstrap_001_kaggle_bundle.zip" -d "$TRAIN_ROOT/bundle"
+Smoke chay 1 epoch cho ca 3 component de kiem CUDA, VRAM va dataloader:
 
-Cài đúng dependencies đã đóng gói:
+  Set-Location "C:\RoadWatchV2\bundle"
+  .\START_V2_PRETRAIN_REVIEW_TRAINING.ps1 `
+      -Mode smoke `
+      -Profile rtx5060ti_16gb `
+      -Working "C:\RoadWatchV2\runs\smoke"
 
-  source "$TRAIN_ROOT/venv/bin/activate"
-  python -m pip install -r "$TRAIN_ROOT/bundle/requirements-kaggle.txt"
+Trong luc smoke, mo mot cua so Command Prompt khac:
 
-Kiểm tra phiên bản sau khi cài requirements để chắc chắn torch không bị thay:
+  nvidia-smi -l 10
 
-  python -c "import torch, ultralytics; print('torch', torch.__version__, 'CUDA', torch.version.cuda, 'ultralytics', ultralytics.__version__, 'GPU', torch.cuda.get_device_name(0))"
+Smoke phai khong co:
 
+  CUDA out of memory
+  STOP_NONFINITE
+  NaN/Inf loss
+  dataloader crash
+  missing file/hash mismatch
 
-6. PREFLIGHT DATASET TRƯỚC KHI TÍNH TIỀN TRAIN
----------------------------------------------
+Neu smoke PASS thi chuyen sang full train.
 
-Chạy kiểm tra đầy đủ hash, ảnh, label, class và split:
 
-  source "$TRAIN_ROOT/venv/bin/activate"
-  python "$TRAIN_ROOT/bundle/mc_bootstrap_kaggle_runner.py" \
-      --bundle "$TRAIN_ROOT/bundle" \
-      --working "$TRAIN_ROOT/output" \
-      --preflight-only
+======================================================================
+10. FULL TRAIN CA 3 MODEL
+======================================================================
 
-Kết quả mong đợi:
+Vi smoke da chay rieng, dung -SkipSmoke de khong lap lai:
 
-- verified_files: 36206
-- manifest_samples: 18099
-- Train: 14581 ảnh
-- Validation: 1782 ảnh
-- Test độc lập: 1736 ảnh
-- Không có STOP hoặc traceback.
+  Set-Location "C:\RoadWatchV2\bundle"
+  .\START_V2_PRETRAIN_REVIEW_TRAINING.ps1 `
+      -Mode train `
+      -Profile rtx5060ti_16gb `
+      -Working "C:\RoadWatchV2\runs\full" `
+      -BackupDirectory "C:\RoadWatchV2\backup" `
+      -SkipSmoke
 
-Nếu preflight lỗi, không train và không sửa file trong bundle để lách kiểm tra.
-Upload lại đúng bundle hoặc kiểm tra SHA-256.
+Runner train lan luot:
 
+  phone_detector -> seatbelt_detector -> seatbelt_classifier
 
-7. BẮT ĐẦU TRAIN 150 EPOCH BẰNG TMUX
-------------------------------------
+Khong thay doi Profile, Working, config, batch hoac dataset sau khi da bat dau.
 
-Config hiện tại:
 
-- model: yolo11s.pt
-- imgsz: 960
-- epochs: 150
-- batch: 8
-- device: 0
-- workers: 4
-- AMP: bật
-- optimizer: AdamW
-- save_period: 1
-- patience: 150, vì vậy early stopping bình thường không cắt ngắn yêu cầu
-  150 epoch.
+======================================================================
+11. RESUME KHI BI NGAT
+======================================================================
 
-Batch 8 là cấu hình an toàn/tái lập. RTX 5090 32 GB có thể còn VRAM dư nhưng
-không sửa config bên trong bundle vì sẽ làm sai hash. Chạy bản chuẩn trước;
-chỉ thử batch lớn hơn ở một experiment/bundle mới có audit và checksum mới.
+Resume mac dinh da bat. Chay lai CHINH XAC lenh full train o muc 10:
 
-Mở tmux:
+  Set-Location "C:\RoadWatchV2\bundle"
+  .\START_V2_PRETRAIN_REVIEW_TRAINING.ps1 `
+      -Mode train `
+      -Profile rtx5060ti_16gb `
+      -Working "C:\RoadWatchV2\runs\full" `
+      -BackupDirectory "C:\RoadWatchV2\backup" `
+      -SkipSmoke
 
-  tmux new -s mc150
+Runner chi resume khi plan fingerprint trung va co optimizer-bearing last.pt.
+Khong dung -NoResume cho lan tiep tuc.
 
-Trong cửa sổ tmux, chạy:
+Neu thay "resume plan mismatch", khong xoa plan va khong sua fingerprint. Kiem tra
+lai dung Profile, Working, bundle va lenh ban dau.
 
-  export TRAIN_ROOT=/workspace/driver-safety-mc150
-  source "$TRAIN_ROOT/venv/bin/activate"
-  export PYTHONUNBUFFERED=1
-  set -o pipefail
-  python "$TRAIN_ROOT/bundle/mc_bootstrap_kaggle_runner.py" \
-      --bundle "$TRAIN_ROOT/bundle" \
-      --working "$TRAIN_ROOT/output" \
-      2>&1 | tee "$TRAIN_ROOT/logs/train_mc150.log"
 
-Để rời SSH mà train vẫn chạy: nhấn Ctrl+B, thả ra, sau đó nhấn D.
+======================================================================
+12. MAY NO-NAS VA SAO LUU
+======================================================================
 
-Vào lại phiên train:
+C:\RoadWatchV2\backup tren cung o local chi bao ve khoi viec xoa nham thu muc runs.
+No khong bao ve neu nha cung cap xoa VM hoac xoa toan bo disk.
 
-  tmux attach -t mc150
+Neu nas1 / vn-01 co persistent volume khac, doi BackupDirectory sang volume do,
+vi du:
 
-Không tắt/xóa máy thuê khi tiến trình chưa xong hoặc resume chưa được tải về.
+  -BackupDirectory "D:\RoadWatchV2-backup"
 
+Neu khong co persistent volume:
 
-8. THEO DÕI GPU, LOG VÀ CHECKPOINT
-----------------------------------
+  - Khong xoa VM trong luc train.
+  - Dinh ky tai thu muc backup ra may ca nhan/cloud.
+  - Chi copy checkpoint khi runner vua save xong.
+  - Toi thieu giu last.pt, best.pt, results.csv, args.yaml, plan.json va
+    resume_metadata.json.
 
-Mở một SSH terminal khác:
+save_period cua phone/seatbelt/classifier la 5 epoch, nen backup checkpoint duoc
+cap nhat theo chu ky save cua model.
 
-  export TRAIN_ROOT=/workspace/driver-safety-mc150
-  watch -n 2 nvidia-smi
 
-Theo dõi log:
+======================================================================
+13. TRAIN RIENG MOT COMPONENT (TUY CHON)
+======================================================================
 
-  tail -f "$TRAIN_ROOT/logs/train_mc150.log"
+Moi component phai co Working rieng.
 
-Kiểm tra checkpoint:
+Chi classifier:
 
-  ls -lh "$TRAIN_ROOT/output/MC_BOOTSTRAP_001/weights/" | tail
-  du -sh "$TRAIN_ROOT/output/MC_BOOTSTRAP_001/weights/"
-  ls -lh "$TRAIN_ROOT/output/MC_BOOTSTRAP_001_LATEST_RESUME.zip"
+  .\START_V2_PRETRAIN_REVIEW_TRAINING.ps1 `
+      -Mode train `
+      -Profile rtx5060ti_16gb `
+      -Only seatbelt_classifier `
+      -Working "C:\RoadWatchV2\runs\classifier" `
+      -BackupDirectory "C:\RoadWatchV2\backup-classifier"
 
-Ultralytics đánh số checkpoint từ 0:
+Chi phone detector:
 
-- epoch0.pt = đã hoàn thành epoch 1
-- epoch49.pt = đã hoàn thành epoch 50
-- epoch149.pt = đã hoàn thành epoch 150
+  .\START_V2_PRETRAIN_REVIEW_TRAINING.ps1 `
+      -Mode train `
+      -Profile rtx5060ti_16gb `
+      -Only phone_detector `
+      -Working "C:\RoadWatchV2\runs\phone" `
+      -BackupDirectory "C:\RoadWatchV2\backup-phone"
 
-Nếu GPU gần như không sử dụng trong thời gian dài, xem log trước khi kết luận.
-Validation, đọc dữ liệu và tạo resume có thể làm mức sử dụng GPU giảm tạm thời.
+Chi seatbelt detector:
 
+  .\START_V2_PRETRAIN_REVIEW_TRAINING.ps1 `
+      -Mode train `
+      -Profile rtx5060ti_16gb `
+      -Only seatbelt_detector `
+      -Working "C:\RoadWatchV2\runs\seatbelt" `
+      -BackupDirectory "C:\RoadWatchV2\backup-seatbelt"
 
-9. SAO LƯU RESUME ĐỊNH KỲ
--------------------------
+Lenh train rieng tu dong smoke truoc full train. Them -SkipSmoke chi khi component
+do da smoke PASS tren dung may va dung profile.
 
-Sau mỗi epoch, runner thay archive bằng thao tác atomic nên luôn ưu tiên giữ
-bản hoàn chỉnh gần nhất:
 
-  /workspace/driver-safety-mc150/output/MC_BOOTSTRAP_001_LATEST_RESUME.zip
+======================================================================
+14. OUTPUT SAU KHI TRAIN
+======================================================================
 
-Từ PowerShell trên máy cá nhân, tải file này định kỳ. Có thể chạy lại cùng lệnh;
-file local sẽ được cập nhật:
+Output chinh nam trong:
 
-  $TRAIN_SERVER = "root@IP_CUA_MAY"
-  scp "${TRAIN_SERVER}:/workspace/driver-safety-mc150/output/MC_BOOTSTRAP_001_LATEST_RESUME.zip" `
-      D:\.idea\projecy7\
+  C:\RoadWatchV2\runs\full
 
-Nên tải sau 5-10 epoch hoặc trước khi sắp hết thời gian thuê. Archive resume
-chứa last.pt còn optimizer, best.pt, results.csv, args.yaml, epoch đã hoàn thành
-và các SHA-256 provenance.
+Moi component co:
 
+  weights\best.pt
+  weights\last.pt
+  results.csv
+  args.yaml
+  v2_component_report.json
 
-10. RESUME KHI TIẾN TRÌNH BỊ DỪNG
----------------------------------
+Khi ca suite hoan tat, runner tao:
 
-A. Còn nguyên cùng máy và cùng thư mục output
+  *_MANIFEST.json
+  *_RECOVERY.zip
 
-Runner tự phát hiện latest resume trong --working. Chỉ cần mở tmux mới và chạy
-lại đúng lệnh train ở mục 7. Nó sẽ in dòng resume_from_completed_epoch rồi tiếp
-tục, không bắt đầu lại epoch 1.
+Can giu ca best.pt va last.pt:
 
-B. Máy cũ đã mất, tạo máy RTX 5090 mới
+  best.pt: dung de validation, calibration va chon model.
+  last.pt: dung de resume vi co optimizer state.
 
-1. Làm lại mục 3-6.
-2. Upload cả bundle gốc và file resume đã sao lưu.
-3. Chạy với --resume rõ ràng:
 
-  export TRAIN_ROOT=/workspace/driver-safety-mc150
-  source "$TRAIN_ROOT/venv/bin/activate"
-  python "$TRAIN_ROOT/bundle/mc_bootstrap_kaggle_runner.py" \
-      --bundle "$TRAIN_ROOT/bundle" \
-      --working "$TRAIN_ROOT/output" \
-      --resume "$TRAIN_ROOT/MC_BOOTSTRAP_001_LATEST_RESUME.zip" \
-      2>&1 | tee -a "$TRAIN_ROOT/logs/train_mc150.log"
+======================================================================
+15. SAU TRAIN CHUA DUOC PRODUCTION NGAY
+======================================================================
 
-Runner sẽ từ chối resume nếu sai experiment, sai dataset/config, sai tổng số
-epoch, checksum last.pt/best.pt không khớp hoặc archive có đường dẫn nguy hiểm.
+Sau khi train xong can tiep tuc:
 
-Nếu archive đã hoàn thành epoch 150 nhưng máy dừng ở bước test/package, runner
-không train lại; nó khôi phục weights rồi chạy đánh giá test và đóng gói kết quả.
+  1. Kiem tra validation metrics va per-class recall/precision.
+  2. Chon va hash best.pt cua tung component.
+  3. Calibrate confidence threshold tren validation.
+  4. Khoa model/config/dataset hash.
+  5. Mo frozen test dung mot lan sau khi model lock.
+  6. Calibrate camera ROI, fusion va temporal policy.
+  7. Human verification neu can governed/production claim.
+  8. Chi sau cac gate tren moi cai weights vao models/active/v2.
 
+Output cua lan train nay phai goi la:
 
-11. KẾT QUẢ SAU KHI TRAIN XONG
-------------------------------
+  exploratory / bootstrap / model-assisted pending-approval weights
 
-File quan trọng:
+Khong goi la production-ready model.
 
-  $TRAIN_ROOT/output/MC_BOOTSTRAP_001_RECOVERY.zip
-  $TRAIN_ROOT/output/MC_BOOTSTRAP_001_LATEST_RESUME.zip
-  $TRAIN_ROOT/output/MC_BOOTSTRAP_001/weights/best.pt
-  $TRAIN_ROOT/output/MC_BOOTSTRAP_001/weights/last.pt
-  $TRAIN_ROOT/output/MC_BOOTSTRAP_001/weights/epoch0.pt ... epoch149.pt
-  $TRAIN_ROOT/output/MC_BOOTSTRAP_001/results.csv
-  $TRAIN_ROOT/output/MC_BOOTSTRAP_001/test_metrics.json
-  $TRAIN_ROOT/output/MC_BOOTSTRAP_001/run_metadata.json
 
-Tải recovery và resume về Windows:
+======================================================================
+16. LENH NGAN GON
+======================================================================
 
-  $TRAIN_SERVER = "root@IP_CUA_MAY"
-  scp "${TRAIN_SERVER}:/workspace/driver-safety-mc150/output/MC_BOOTSTRAP_001_RECOVERY.zip" `
-      D:\.idea\projecy7\
-  scp "${TRAIN_SERVER}:/workspace/driver-safety-mc150/output/MC_BOOTSTRAP_001_LATEST_RESUME.zip" `
-      D:\.idea\projecy7\
+Lan dau, sau khi da copy va giai nen bundle:
 
-Nếu cần toàn bộ 150 checkpoint, nén chúng trên server rồi tải về. Chỉ thực hiện
-sau khi kiểm tra SSD còn đủ chỗ:
+  Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+  Set-Location "C:\RoadWatchV2\bundle"
 
-  export TRAIN_ROOT=/workspace/driver-safety-mc150
-  df -h "$TRAIN_ROOT"
-  cd "$TRAIN_ROOT/output/MC_BOOTSTRAP_001"
-  zip -0 -r "$TRAIN_ROOT/output/MC_BOOTSTRAP_001_ALL_EPOCH_WEIGHTS.zip" weights/epoch*.pt
+  .\START_V2_PRETRAIN_REVIEW_TRAINING.ps1 `
+      -Mode preflight `
+      -Profile rtx5060ti_16gb `
+      -InstallDependencies
 
-Sau khi đã tải file về và xác minh mở được ZIP/checksum, mới tắt máy thuê để
-tránh tiếp tục bị tính phí.
+  .\START_V2_PRETRAIN_REVIEW_TRAINING.ps1 `
+      -Mode smoke `
+      -Profile rtx5060ti_16gb `
+      -Working "C:\RoadWatchV2\runs\smoke"
 
+  .\START_V2_PRETRAIN_REVIEW_TRAINING.ps1 `
+      -Mode train `
+      -Profile rtx5060ti_16gb `
+      -Working "C:\RoadWatchV2\runs\full" `
+      -BackupDirectory "C:\RoadWatchV2\backup" `
+      -SkipSmoke
 
-12. LỖI THƯỜNG GẶP
-------------------
-
-1. torch.cuda.is_available() = False
-   - Kiểm tra nvidia-smi.
-   - Kiểm tra đang activate đúng virtualenv.
-   - Cài lại torch cu128 theo mục 4.
-   - Nếu nvidia-smi cũng lỗi, đổi image/driver hoặc liên hệ nhà cung cấp.
-
-2. Lỗi sm_120 is not compatible
-   - Đang dùng PyTorch/CUDA wheel quá cũ.
-   - Gỡ torch và cài đúng wheel cu128 theo mục 4.
-
-3. CUDA out of memory
-   - Config batch 8 được chọn để giảm nguy cơ này.
-   - Kiểm tra nvidia-smi xem có process khác chiếm VRAM.
-   - Dừng process lạ thuộc phiên của mình; không kill process hệ thống/người khác.
-   - Không tự sửa bundle. Nếu vẫn OOM, tạo bundle mới với batch thấp hơn.
-
-4. STOP: bundle hash mismatch
-   - Bundle bị sửa hoặc giải nén/upload hỏng.
-   - So SHA-256 và upload lại file gốc.
-
-5. SSH mất kết nối
-   - Train vẫn chạy nếu đã chạy trong tmux.
-   - SSH lại và dùng tmux attach -t mc150.
-
-6. Process Python chết hoặc server reboot nhưng SSD còn
-   - Chạy lại lệnh mục 7; runner tự dùng latest resume trong output.
-
-7. Máy thuê bị xóa/no-nas mất dữ liệu
-   - Tạo máy mới và dùng resume đã tải về theo mục 10B.
-   - Nếu chưa từng sao lưu resume thì không thể khôi phục checkpoint đã mất.
-
-8. Ổ đĩa đầy
-   - Kiểm tra du -sh và df -h.
-   - Không xóa last.pt, best.pt, latest resume hay epoch mới nhất khi train đang chạy.
-   - 1.600 GB SSD của cấu hình này dư rộng, nhưng vẫn theo dõi vì mỗi epoch được lưu.
-
-
-CHECKLIST NGẮN TRƯỚC KHI BẤM TRAIN
-----------------------------------
-
-[ ] Đúng RTX 5090 trong nvidia-smi
-[ ] PyTorch CUDA available = True và matrix test PASS
-[ ] SHA-256 bundle = 50b4356124081e5c50404a36d6dac7ecfc2f7ab65b52614c468a48c363f19e9a
-[ ] Preflight verified_files = 36206
-[ ] /workspace còn tối thiểu 30 GB
-[ ] Đã chạy trong tmux
-[ ] Biết vị trí MC_BOOTSTRAP_001_LATEST_RESUME.zip
-[ ] Có lịch tải resume định kỳ
-[ ] Sau khi xong đã tải RECOVERY.zip rồi mới tắt máy
+Khi bi ngat: chay lai nguyen lenh -Mode train cuoi cung.

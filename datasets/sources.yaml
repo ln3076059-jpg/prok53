@@ -162,6 +162,68 @@ sources:
       no_seatbelt: no_seatbelt
     reason: The card reports 5,000 classification images but provides almost no provenance. A 2026-08-31 visual spot audit across both folders found geometric synthetic scenes, not real cabin occupants. Exclude from governed real-camera training unless a separately reported synthetic ablation justifies use.
 
+  - source_id: hf_c3rl_seatbelt_v2
+    priority: P2
+    source_name: seatbelt-detection-v2
+    source_url: https://huggingface.co/datasets/c3rl/seatbelt-detection-v2
+    provider: Hugging Face
+    version: main
+    license: Apache-2.0
+    license_url: https://www.apache.org/licenses/LICENSE-2.0
+    status: CANDIDATE_INDEPENDENCE_AND_PROVENANCE_REVIEW_REQUIRED
+    domain: seatbelt_state_classification_1024px
+    download:
+      type: huggingface
+      repo_id: c3rl/seatbelt-detection-v2
+      revision: main
+      max_workers: 2
+    review_tasks: [MEDIA_PROVENANCE_REVIEW, SUBJECT_VEHICLE_CAMERA_GROUPING, SEATBELT_STATE_REVIEW, UNCERTAIN_OR_OCCLUDED_REVIEW]
+    allowed_uses: [manual_upper_body_annotation, human_reviewed_classifier_crop]
+    prohibited_automatic_mappings: [noseatbelt, seatbelt]
+    reason: The provider exposes 2,500 1024px classification rows and an Apache-2.0 tag, but the card is empty and only a train split is supplied. Do not train from folder labels until real occupants, independent capture groups, state visibility, and provenance are reviewed.
+
+  - source_id: roboflow_adt_seatbelt_v1
+    priority: P2
+    source_name: Seat_belt_detection
+    source_url: https://universe.roboflow.com/adt-ssket/seat_belt_detection-b1l02/dataset/1
+    provider: Roboflow Universe
+    version: 1
+    license: CC-BY-4.0
+    license_url: https://creativecommons.org/licenses/by/4.0/
+    status: DOWNLOADED_CANDIDATE_CLASS_AND_GROUP_REVIEW_REQUIRED
+    domain: mixed_traffic_and_occupant_detection
+    download:
+      type: roboflow
+      workspace: adt-ssket
+      project: seat_belt_detection-b1l02
+      version: 1
+      format: yolov11
+    review_tasks: [CLASS_SCHEMA_REVIEW, SUBJECT_VEHICLE_CAMERA_GROUPING, UPPER_BODY_REBOX, SEATBELT_STATE_REVIEW, HARD_NEGATIVE_REVIEW]
+    allowed_uses: [manual_upper_body_annotation, independent_vehicle_context, phone_hard_negative_review]
+    prohibited_automatic_mappings: [person-noseatbelt, person-seatbelt, mobile, seatbelt]
+    reason: Downloaded and hash-manifested. The source has 3,820 images, 2,704 inferred augmentation groups, 56 mobile boxes, 1,166 person-noseatbelt boxes, 1,639 person-seatbelt boxes, and 84 selected representatives with clipped source boxes. The generated review queue admits nothing automatically; every useful item requires class, grouping, ROI, state, and context review.
+
+  - source_id: roboflow_traffic_violations_seatbelt_v3
+    priority: P2
+    source_name: Seatbelt Detection
+    source_url: https://universe.roboflow.com/traffic-violations/seatbelt-detection-esut6/dataset/3
+    provider: Roboflow Universe
+    version: 3
+    license: CC-BY-4.0
+    license_url: https://creativecommons.org/licenses/by/4.0/
+    status: CANDIDATE_CLASS_AND_GROUP_REVIEW_REQUIRED
+    domain: traffic_camera_seatbelt_detection
+    download:
+      type: roboflow
+      workspace: traffic-violations
+      project: seatbelt-detection-esut6
+      version: 3
+      format: yolov11
+    review_tasks: [CLASS_SCHEMA_REVIEW, SUBJECT_VEHICLE_CAMERA_GROUPING, UPPER_BODY_REBOX, SEATBELT_STATE_REVIEW]
+    allowed_uses: [manual_upper_body_annotation, independent_camera_domain_review]
+    prohibited_automatic_mappings: [all_source_classes]
+    reason: The provider reports 5,433 images, CC BY 4.0, no generated augmentations, and a 640px traffic-camera export. Exact classes and original capture groups are not exposed on the public version page, so all mappings and splits require review.
+
   - source_id: roboflow_phone_wallet_v1
     priority: P3
     source_name: Phone and Wallet Object Detection

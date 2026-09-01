@@ -1,0 +1,402 @@
+[
+  {
+    "candidate_id": "f1d860d29f075f2a8829bbb1bbc0c0fc:box:0",
+    "effective_group_id": "near:c1cb4825d4ccbe9c7d29",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\f1d860d29f075f2a8829bbb1bbc0c0fc.jpg",
+    "index": 51,
+    "priority": 0.9999999750000007,
+    "sample_id": "f1d860d29f075f2a8829bbb1bbc0c0fc:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:img_337",
+    "split": "val",
+    "yolo": [
+      0.3449519230769231,
+      0.2812500005,
+      0.4627403846153847,
+      0.562499999
+    ]
+  },
+  {
+    "candidate_id": "11b3b127bf6456c58f13bd737466562d:box:0",
+    "effective_group_id": "near:1e430262f5710bcf6abf",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\11b3b127bf6456c58f13bd737466562d.jpg",
+    "index": 52,
+    "priority": 0.999999975,
+    "sample_id": "11b3b127bf6456c58f13bd737466562d:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8176_jpeg.rf.091c6d747cf8f9767bbb745e8a3fa971",
+    "split": "val",
+    "yolo": [
+      0.7319711538461539,
+      0.2379807697307692,
+      0.3365384615384615,
+      0.4759615374615384
+    ]
+  },
+  {
+    "candidate_id": "650d791f1c2b5412a25cacbb08307be2:box:0",
+    "effective_group_id": "near:fddbfc36b50748f12896",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\650d791f1c2b5412a25cacbb08307be2.jpg",
+    "index": 53,
+    "priority": 0.999999975,
+    "sample_id": "650d791f1c2b5412a25cacbb08307be2:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_20220806_154048_682",
+    "split": "val",
+    "yolo": [
+      0.4254807692307692,
+      0.2391826928076923,
+      0.2932692307692307,
+      0.4783653836153846
+    ]
+  },
+  {
+    "candidate_id": "6b1bc5251c6c561bb82b662c33249bcb:box:0",
+    "effective_group_id": "near:3541a58aa49d9bb624af",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\6b1bc5251c6c561bb82b662c33249bcb.jpg",
+    "index": 54,
+    "priority": 0.999999975,
+    "sample_id": "6b1bc5251c6c561bb82b662c33249bcb:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8300_jpeg.rf.ce85576bf6daaf42823660bda83b4b69",
+    "split": "val",
+    "yolo": [
+      0.5048076923076923,
+      0.2427884620384615,
+      0.2548076923076923,
+      0.485576922076923
+    ]
+  },
+  {
+    "candidate_id": "6f6985abe9a45ee68a8137bd0634c48d:box:0",
+    "effective_group_id": "near:1e430262f5710bcf6abf",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\6f6985abe9a45ee68a8137bd0634c48d.jpg",
+    "index": 55,
+    "priority": 0.999999975,
+    "sample_id": "6f6985abe9a45ee68a8137bd0634c48d:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8175_jpeg.rf.4a5a24d610c73077e5cd6e205d3736d8",
+    "split": "val",
+    "yolo": [
+      0.75,
+      0.2067307697307692,
+      0.375,
+      0.4134615374615384
+    ]
+  },
+  {
+    "candidate_id": "82668ff88f485014ab5a61bcdb0d0b20:box:0",
+    "effective_group_id": "near:c17971388c81a7c2f8a8",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\82668ff88f485014ab5a61bcdb0d0b20.jpg",
+    "index": 56,
+    "priority": 0.999999975,
+    "sample_id": "82668ff88f485014ab5a61bcdb0d0b20:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8069_jpeg.rf.defdf600a16099464e0d98905dc1554c",
+    "split": "val",
+    "yolo": [
+      0.1983173081923077,
+      0.2944711538461539,
+      0.3966346143846154,
+      0.4495192307692307
+    ]
+  },
+  {
+    "candidate_id": "84ac2a434bdf5283a125f2132d0bba1e:box:0",
+    "effective_group_id": "near:b193c14a8a0943de375f",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\84ac2a434bdf5283a125f2132d0bba1e.jpg",
+    "index": 57,
+    "priority": 0.999999975,
+    "sample_id": "84ac2a434bdf5283a125f2132d0bba1e:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8183_jpeg.rf.51db8ddac08a65aff68155fe27d4429c",
+    "split": "val",
+    "yolo": [
+      0.5865384615384616,
+      0.2307692312692308,
+      0.3629807692307692,
+      0.4615384605384616
+    ]
+  },
+  {
+    "candidate_id": "926ff9afb26c56d88fc4dc4242328528:box:0",
+    "effective_group_id": "near:b169dba05d48287323c9",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\926ff9afb26c56d88fc4dc4242328528.jpg",
+    "index": 58,
+    "priority": 0.999999975,
+    "sample_id": "926ff9afb26c56d88fc4dc4242328528:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8194_jpeg.rf.f10ac3cda4f08b9d66cf75bd85206c65",
+    "split": "val",
+    "yolo": [
+      0.7608173076923077,
+      0.2259615389615385,
+      0.3413461538461537,
+      0.451923075923077
+    ]
+  },
+  {
+    "candidate_id": "95944984b7715cee91d04402942e235a:box:0",
+    "effective_group_id": "near:792da435ac9601370462",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\95944984b7715cee91d04402942e235a.jpg",
+    "index": 59,
+    "priority": 0.999999975,
+    "sample_id": "95944984b7715cee91d04402942e235a:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_20220806_154411_537",
+    "split": "val",
+    "yolo": [
+      0.7872596153846154,
+      0.2367788466538461,
+      0.4014423076923077,
+      0.4735576913076922
+    ]
+  },
+  {
+    "candidate_id": "05d35c57575f536bb45ba6d4bf3ee107:box:0",
+    "effective_group_id": "near:aea1d9eceabb88ea99a1",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\05d35c57575f536bb45ba6d4bf3ee107.jpg",
+    "index": 60,
+    "priority": 0.9999999749999994,
+    "sample_id": "05d35c57575f536bb45ba6d4bf3ee107:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:396_png",
+    "split": "val",
+    "yolo": [
+      0.4699519230769231,
+      0.5793269225769231,
+      0.436298076923077,
+      0.8413461528461538
+    ]
+  },
+  {
+    "candidate_id": "0811cda8f57454c498e3f2b5c184463c:box:0",
+    "effective_group_id": "near:ad7119166cc24e09ce3e",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\0811cda8f57454c498e3f2b5c184463c.jpg",
+    "index": 61,
+    "priority": 0.9999999749999994,
+    "sample_id": "0811cda8f57454c498e3f2b5c184463c:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8263_jpeg.rf.234fbc73e890f9f4cfde2de88880d726",
+    "split": "val",
+    "yolo": [
+      0.6778846148846154,
+      0.8112980764230768,
+      0.6442307682307692,
+      0.3774038451538463
+    ]
+  },
+  {
+    "candidate_id": "0e4b698b057e5002be161baa5efc1a60:box:0",
+    "effective_group_id": "near:175d821441e6f1e9d654",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\0e4b698b057e5002be161baa5efc1a60.jpg",
+    "index": 62,
+    "priority": 0.9999999749999994,
+    "sample_id": "0e4b698b057e5002be161baa5efc1a60:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:545_png",
+    "split": "val",
+    "yolo": [
+      0.5480769230769231,
+      0.5216346148846154,
+      0.4723557692307692,
+      0.9567307682307692
+    ]
+  },
+  {
+    "candidate_id": "2614007eb945566c91cc05a6d4b48154:box:0",
+    "effective_group_id": "near:ee37e40cc9e9d9db8fd8",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\2614007eb945566c91cc05a6d4b48154.jpg",
+    "index": 63,
+    "priority": 0.9999999749999994,
+    "sample_id": "2614007eb945566c91cc05a6d4b48154:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8207_jpeg.rf.411d78b963e0e68f7997ebf75251aa60",
+    "split": "val",
+    "yolo": [
+      0.2824519235769231,
+      0.7055288461538461,
+      0.5649038451538462,
+      0.4278846153846154
+    ]
+  },
+  {
+    "candidate_id": "264399f62ce85a0a8c42acd307ce4367:box:0",
+    "effective_group_id": "near:9c011fd9bf44430768d8",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\264399f62ce85a0a8c42acd307ce4367.jpg",
+    "index": 64,
+    "priority": 0.9999999749999994,
+    "sample_id": "264399f62ce85a0a8c42acd307ce4367:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8188_jpeg.rf.c723b046884628c892e414e6cefc0471",
+    "split": "val",
+    "yolo": [
+      0.2031250005,
+      0.546875,
+      0.406249999,
+      0.4038461538461537
+    ]
+  },
+  {
+    "candidate_id": "2e76baa9636a5d8bb2e6568cc3a6c379:box:0",
+    "effective_group_id": "near:c316086f29b08ecb3616",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\2e76baa9636a5d8bb2e6568cc3a6c379.jpg",
+    "index": 65,
+    "priority": 0.9999999749999994,
+    "sample_id": "2e76baa9636a5d8bb2e6568cc3a6c379:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8057_jpeg.rf.aca7de55f365ca318f4a8261b11cf769",
+    "split": "val",
+    "yolo": [
+      0.3064903851153846,
+      0.3317307692307693,
+      0.6129807682307692,
+      0.3701923076923078
+    ]
+  },
+  {
+    "candidate_id": "3047ebd49c7e5cf0ab9f3149f64dbb27:box:0",
+    "effective_group_id": "near:de15262b7e097fde3c42",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\3047ebd49c7e5cf0ab9f3149f64dbb27.jpg",
+    "index": 66,
+    "priority": 0.9999999749999994,
+    "sample_id": "3047ebd49c7e5cf0ab9f3149f64dbb27:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_20220811_160954_910",
+    "split": "val",
+    "yolo": [
+      0.7391826918076922,
+      0.3822115384615384,
+      0.5216346143846154,
+      0.6670673076923077
+    ]
+  },
+  {
+    "candidate_id": "311b9fb75be1599e99bc83b5f376de80:box:0",
+    "effective_group_id": "near:9c011fd9bf44430768d8",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\311b9fb75be1599e99bc83b5f376de80.jpg",
+    "index": 67,
+    "priority": 0.9999999749999994,
+    "sample_id": "311b9fb75be1599e99bc83b5f376de80:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8188_jpeg.rf.c4cd28444181d8217eeab7db63e95dd7",
+    "split": "val",
+    "yolo": [
+      0.2031250005,
+      0.546875,
+      0.406249999,
+      0.4038461538461537
+    ]
+  },
+  {
+    "candidate_id": "46beb9e9b8da59c99adb69c9e70d7c58:box:0",
+    "effective_group_id": "near:039d16996ba56fd015a2",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\46beb9e9b8da59c99adb69c9e70d7c58.jpg",
+    "index": 68,
+    "priority": 0.9999999749999994,
+    "sample_id": "46beb9e9b8da59c99adb69c9e70d7c58:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8188_jpeg.rf.cfc73a2aa4f7a8752df6251358541153",
+    "split": "val",
+    "yolo": [
+      0.453125,
+      0.2031250005,
+      0.4038461538461537,
+      0.406249999
+    ]
+  },
+  {
+    "candidate_id": "4758a7ae2c97582884136c02fea955b1:box:0",
+    "effective_group_id": "near:c316086f29b08ecb3616",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\4758a7ae2c97582884136c02fea955b1.jpg",
+    "index": 69,
+    "priority": 0.9999999749999994,
+    "sample_id": "4758a7ae2c97582884136c02fea955b1:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8057_jpeg.rf.6976e96a8dd4cc202c4be7e972a1911b",
+    "split": "val",
+    "yolo": [
+      0.3064903851153846,
+      0.3317307692307693,
+      0.6129807682307692,
+      0.3701923076923078
+    ]
+  },
+  {
+    "candidate_id": "71203db70d815101a4fdf519286647d0:box:0",
+    "effective_group_id": "near:472232a72d8b5b41b4ca",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\71203db70d815101a4fdf519286647d0.jpg",
+    "index": 70,
+    "priority": 0.9999999749999994,
+    "sample_id": "71203db70d815101a4fdf519286647d0:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_20220806_154443_251",
+    "split": "val",
+    "yolo": [
+      0.40625,
+      0.2512019235769231,
+      0.4110576923076923,
+      0.5024038451538462
+    ]
+  },
+  {
+    "candidate_id": "7bcf0b71fc7652b79084b382af45c65f:box:0",
+    "effective_group_id": "near:5267d387f995a08da920",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\7bcf0b71fc7652b79084b382af45c65f.jpg",
+    "index": 71,
+    "priority": 0.9999999749999994,
+    "sample_id": "7bcf0b71fc7652b79084b382af45c65f:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8200_jpeg.rf.ba78d3893d88c478ece2d8e1e97f7725",
+    "split": "val",
+    "yolo": [
+      0.3004807692307692,
+      0.8737980764230768,
+      0.5600961538461539,
+      0.2524038451538463
+    ]
+  },
+  {
+    "candidate_id": "bfe8491fdeba52e9b76341123102ee9d:box:0",
+    "effective_group_id": "near:aea1d9eceabb88ea99a1",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\bfe8491fdeba52e9b76341123102ee9d.jpg",
+    "index": 72,
+    "priority": 0.9999999749999994,
+    "sample_id": "bfe8491fdeba52e9b76341123102ee9d:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:404_png",
+    "split": "val",
+    "yolo": [
+      0.5324519230769231,
+      0.5576923071923077,
+      0.3725961538461537,
+      0.8846153836153846
+    ]
+  },
+  {
+    "candidate_id": "d295c737ede559b9b7041c50ea78abb1:box:0",
+    "effective_group_id": "near:7a638a99bcc3d8202760",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\d295c737ede559b9b7041c50ea78abb1.jpg",
+    "index": 73,
+    "priority": 0.9999999749999994,
+    "sample_id": "d295c737ede559b9b7041c50ea78abb1:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8074_jpeg.rf.68c4f79806ef44733afb39dda8eb2b8d",
+    "split": "val",
+    "yolo": [
+      0.6730769225769231,
+      0.1838942307692308,
+      0.6538461528461538,
+      0.329326923076923
+    ]
+  },
+  {
+    "candidate_id": "d5b1c8b53aeb5e6a928d0d7b7abb30cb:box:0",
+    "effective_group_id": "near:4d5c05781ee2b590637a",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\d5b1c8b53aeb5e6a928d0d7b7abb30cb.jpg",
+    "index": 74,
+    "priority": 0.9999999749999994,
+    "sample_id": "d5b1c8b53aeb5e6a928d0d7b7abb30cb:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8064_jpeg.rf.c16533a18bce6d6a7c27104353c9c979",
+    "split": "val",
+    "yolo": [
+      0.6971153841153845,
+      0.4002403846153846,
+      0.6057692297692309,
+      0.389423076923077
+    ]
+  },
+  {
+    "candidate_id": "dc1254d1f2a354959c0559d135ebf03c:box:0",
+    "effective_group_id": "near:63734077985df9144f4d",
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\dc1254d1f2a354959c0559d135ebf03c.jpg",
+    "index": 75,
+    "priority": 0.9999999749999994,
+    "sample_id": "dc1254d1f2a354959c0559d135ebf03c:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:PXL_20220916_125456975",
+    "split": "val",
+    "yolo": [
+      0.8341346148846154,
+      0.4086538461538461,
+      0.3317307682307692,
+      0.4891826923076923
+    ]
+  }
+]

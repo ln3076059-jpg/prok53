@@ -1,0 +1,262 @@
+[
+  {
+    "proposal_confidence": 0.9,
+    "proposal_decision": "UNCERTAIN",
+    "proposal_tier": "UNCERTAIN",
+    "image": "0165491e47d65b5e88d88c7dbd6ca3b8_box_0.jpg",
+    "reasons": [
+      "candidate_selected_for_occlusion_or_visibility_review"
+    ],
+    "sample_id": "0165491e47d65b5e88d88c7dbd6ca3b8:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1095-_png",
+    "source_image": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\train\\0165491e47d65b5e88d88c7dbd6ca3b8.jpg",
+    "training_eligible": true
+  },
+  {
+    "proposal_confidence": 0.9,
+    "proposal_decision": "UNCERTAIN",
+    "proposal_tier": "UNCERTAIN",
+    "image": "cd7daf9c2c4b596682f4476cb320195a_box_0.jpg",
+    "reasons": [
+      "candidate_selected_for_occlusion_or_visibility_review"
+    ],
+    "sample_id": "cd7daf9c2c4b596682f4476cb320195a:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:peopleincars41_jpeg",
+    "source_image": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\cd7daf9c2c4b596682f4476cb320195a.jpg",
+    "training_eligible": true
+  },
+  {
+    "proposal_confidence": 0.9,
+    "proposal_decision": "UNCERTAIN",
+    "proposal_tier": "UNCERTAIN",
+    "image": "386b19ed6e795d8c986a758c3bf5d16c_box_0.jpg",
+    "reasons": [
+      "candidate_selected_for_occlusion_or_visibility_review"
+    ],
+    "sample_id": "386b19ed6e795d8c986a758c3bf5d16c:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_20220804_191516_940",
+    "source_image": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\train\\386b19ed6e795d8c986a758c3bf5d16c.jpg",
+    "training_eligible": true
+  },
+  {
+    "proposal_confidence": 0.9,
+    "proposal_decision": "UNCERTAIN",
+    "proposal_tier": "UNCERTAIN",
+    "image": "8bd39d28271b5784bfe6bc03e8592a2c_box_0.jpg",
+    "reasons": [
+      "candidate_selected_for_occlusion_or_visibility_review"
+    ],
+    "sample_id": "8bd39d28271b5784bfe6bc03e8592a2c:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-100-_png",
+    "source_image": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\train\\8bd39d28271b5784bfe6bc03e8592a2c.jpg",
+    "training_eligible": true
+  },
+  {
+    "proposal_confidence": 0.9,
+    "proposal_decision": "UNCERTAIN",
+    "proposal_tier": "UNCERTAIN",
+    "image": "59d6fd7a5ddb55bd9a9816862f491864_box_0.jpg",
+    "reasons": [
+      "candidate_selected_for_occlusion_or_visibility_review"
+    ],
+    "sample_id": "59d6fd7a5ddb55bd9a9816862f491864:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:7-MaleGlasses_mp4",
+    "source_image": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\train\\59d6fd7a5ddb55bd9a9816862f491864.jpg",
+    "training_eligible": true
+  },
+  {
+    "proposal_confidence": 0.9,
+    "proposal_decision": "UNCERTAIN",
+    "proposal_tier": "UNCERTAIN",
+    "image": "c81694a8bc745ffbacb9194d2bb204e9_box_0.jpg",
+    "reasons": [
+      "candidate_selected_for_occlusion_or_visibility_review"
+    ],
+    "sample_id": "c81694a8bc745ffbacb9194d2bb204e9:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8168_jpeg.rf.db0da20ad6a739b51a11fc35818bdcd4",
+    "source_image": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\train\\c81694a8bc745ffbacb9194d2bb204e9.jpg",
+    "training_eligible": true
+  },
+  {
+    "proposal_confidence": 0.9,
+    "proposal_decision": "UNCERTAIN",
+    "proposal_tier": "UNCERTAIN",
+    "image": "05499272ce60506a876afd1210d85671_box_0.jpg",
+    "reasons": [
+      "candidate_selected_for_occlusion_or_visibility_review"
+    ],
+    "sample_id": "05499272ce60506a876afd1210d85671:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:PXL_20220916_125456297",
+    "source_image": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\05499272ce60506a876afd1210d85671.jpg",
+    "training_eligible": true
+  },
+  {
+    "proposal_confidence": 0.9,
+    "proposal_decision": "UNCERTAIN",
+    "proposal_tier": "UNCERTAIN",
+    "image": "ec6355b2613757df93f6e35a18f03c39_box_0.jpg",
+    "reasons": [
+      "candidate_selected_for_occlusion_or_visibility_review"
+    ],
+    "sample_id": "ec6355b2613757df93f6e35a18f03c39:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-123-_png",
+    "source_image": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\train\\ec6355b2613757df93f6e35a18f03c39.jpg",
+    "training_eligible": true
+  },
+  {
+    "proposal_confidence": 0.9,
+    "proposal_decision": "UNCERTAIN",
+    "proposal_tier": "UNCERTAIN",
+    "image": "484d8f0d5ce45ca2a1f7c92ed94a8593_box_0.jpg",
+    "reasons": [
+      "candidate_selected_for_occlusion_or_visibility_review"
+    ],
+    "sample_id": "484d8f0d5ce45ca2a1f7c92ed94a8593:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:awake",
+    "source_image": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\train\\484d8f0d5ce45ca2a1f7c92ed94a8593.jpg",
+    "training_eligible": true
+  },
+  {
+    "proposal_confidence": 0.9,
+    "proposal_decision": "UNCERTAIN",
+    "proposal_tier": "UNCERTAIN",
+    "image": "17d8e755b68d5101918d741dda64fc94_box_0.jpg",
+    "reasons": [
+      "candidate_selected_for_occlusion_or_visibility_review"
+    ],
+    "sample_id": "17d8e755b68d5101918d741dda64fc94:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8067_jpeg.rf.f7b143b21db57410af38dd0e7e18c340",
+    "source_image": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\17d8e755b68d5101918d741dda64fc94.jpg",
+    "training_eligible": true
+  },
+  {
+    "proposal_confidence": 0.35,
+    "proposal_decision": "UNCERTAIN",
+    "proposal_tier": "UNCERTAIN",
+    "image": "e7a6487cc6c45205ac64c97a7c10b40d_box_0.jpg",
+    "reasons": [
+      "severe_visibility_or_tiny_object_risk"
+    ],
+    "sample_id": "e7a6487cc6c45205ac64c97a7c10b40d:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:PXL_20220916_122557517",
+    "source_image": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\test\\e7a6487cc6c45205ac64c97a7c10b40d.jpg",
+    "training_eligible": true
+  },
+  {
+    "proposal_confidence": 0.9,
+    "proposal_decision": "UNCERTAIN",
+    "proposal_tier": "UNCERTAIN",
+    "image": "d45ce171b9f15e8195c1a9b587ec0fd4_box_0.jpg",
+    "reasons": [
+      "candidate_selected_for_occlusion_or_visibility_review"
+    ],
+    "sample_id": "d45ce171b9f15e8195c1a9b587ec0fd4:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:PXL_20220916_125309050",
+    "source_image": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\test\\d45ce171b9f15e8195c1a9b587ec0fd4.jpg",
+    "training_eligible": true
+  },
+  {
+    "proposal_confidence": 0.9,
+    "proposal_decision": "UNCERTAIN",
+    "proposal_tier": "UNCERTAIN",
+    "image": "a46295f885ff5a0780f1cd0c00eb764d_box_0.jpg",
+    "reasons": [
+      "candidate_selected_for_occlusion_or_visibility_review"
+    ],
+    "sample_id": "a46295f885ff5a0780f1cd0c00eb764d:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:11-FemaleGlasses_avi_mp4",
+    "source_image": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\train\\a46295f885ff5a0780f1cd0c00eb764d.jpg",
+    "training_eligible": true
+  },
+  {
+    "proposal_confidence": 0.9,
+    "proposal_decision": "UNCERTAIN",
+    "proposal_tier": "UNCERTAIN",
+    "image": "ca47cf52925a59eca18b687ab092e581_box_0.jpg",
+    "reasons": [
+      "candidate_selected_for_occlusion_or_visibility_review"
+    ],
+    "sample_id": "ca47cf52925a59eca18b687ab092e581:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:seatbelt3_79",
+    "source_image": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\train\\ca47cf52925a59eca18b687ab092e581.jpg",
+    "training_eligible": true
+  },
+  {
+    "proposal_confidence": 0.9,
+    "proposal_decision": "UNCERTAIN",
+    "proposal_tier": "UNCERTAIN",
+    "image": "f2239856e6d05a8b92a3dd6d14967752_box_0.jpg",
+    "reasons": [
+      "candidate_selected_for_occlusion_or_visibility_review"
+    ],
+    "sample_id": "f2239856e6d05a8b92a3dd6d14967752:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:seatbelt76_jpeg",
+    "source_image": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\test\\f2239856e6d05a8b92a3dd6d14967752.jpg",
+    "training_eligible": true
+  },
+  {
+    "proposal_confidence": 0.9,
+    "proposal_decision": "UNCERTAIN",
+    "proposal_tier": "UNCERTAIN",
+    "image": "2e174c5b4ed55cc0b474c310d3354a00_box_0.jpg",
+    "reasons": [
+      "candidate_selected_for_occlusion_or_visibility_review"
+    ],
+    "sample_id": "2e174c5b4ed55cc0b474c310d3354a00:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8195_jpeg.rf.e6825b99a61ece0cba16a13ece98d8b7",
+    "source_image": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\train\\2e174c5b4ed55cc0b474c310d3354a00.jpg",
+    "training_eligible": true
+  },
+  {
+    "proposal_confidence": 0.9,
+    "proposal_decision": "UNCERTAIN",
+    "proposal_tier": "UNCERTAIN",
+    "image": "4758a7ae2c97582884136c02fea955b1_box_0.jpg",
+    "reasons": [
+      "candidate_selected_for_occlusion_or_visibility_review"
+    ],
+    "sample_id": "4758a7ae2c97582884136c02fea955b1:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8057_jpeg.rf.6976e96a8dd4cc202c4be7e972a1911b",
+    "source_image": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\val\\4758a7ae2c97582884136c02fea955b1.jpg",
+    "training_eligible": true
+  },
+  {
+    "proposal_confidence": 0.9,
+    "proposal_decision": "UNCERTAIN",
+    "proposal_tier": "UNCERTAIN",
+    "image": "0444ad8d2a7655c591d3f42770ca4d02_box_0.jpg",
+    "reasons": [
+      "candidate_selected_for_occlusion_or_visibility_review"
+    ],
+    "sample_id": "0444ad8d2a7655c591d3f42770ca4d02:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_52",
+    "source_image": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\train\\0444ad8d2a7655c591d3f42770ca4d02.jpg",
+    "training_eligible": true
+  },
+  {
+    "proposal_confidence": 0.9,
+    "proposal_decision": "UNCERTAIN",
+    "proposal_tier": "UNCERTAIN",
+    "image": "63c0e5a27bc050b797752e3ab5f95e8a_box_0.jpg",
+    "reasons": [
+      "candidate_selected_for_occlusion_or_visibility_review"
+    ],
+    "sample_id": "63c0e5a27bc050b797752e3ab5f95e8a:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:seatbelt3_77",
+    "source_image": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\train\\63c0e5a27bc050b797752e3ab5f95e8a.jpg",
+    "training_eligible": true
+  },
+  {
+    "proposal_confidence": 0.9,
+    "proposal_decision": "UNCERTAIN",
+    "proposal_tier": "UNCERTAIN",
+    "image": "55027a43ee0e5022a4690bdd89b6f9c0_box_0.jpg",
+    "reasons": [
+      "candidate_selected_for_occlusion_or_visibility_review"
+    ],
+    "sample_id": "55027a43ee0e5022a4690bdd89b6f9c0:box:0",
+    "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_37",
+    "source_image": "D:\\.idea\\project5542\\projecy7\\datasets\\derived\\seatbelt_v2_balanced\\images\\train\\55027a43ee0e5022a4690bdd89b6f9c0.jpg",
+    "training_eligible": true
+  }
+]

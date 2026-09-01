@@ -1,0 +1,80 @@
+model_version: MULTIMODEL_V2_UNTRAINED
+weights: models/active/best.pt
+imgsz: 1024
+class_names:
+  0: phone
+  1: seatbelt_fastened
+  2: seatbelt_unfastened
+thresholds:
+  phone: 0.35
+  seatbelt_fastened: 0.45
+  seatbelt_unfastened: 0.40
+threshold_status: PLACEHOLDER_REQUIRES_V2_VALIDATION_CALIBRATION
+specialized_detectors:
+  enabled: true
+  models:
+    - name: phone_detector
+      weights: models/active/v2/phone_detector.pt
+      class_map:
+        0: phone
+    - name: seatbelt_detector
+      weights: models/active/v2/seatbelt_detector.pt
+      threshold: 0.30
+      class_map:
+        0: occupant_upper_body
+auxiliary_models:
+  enabled: true
+  seatbelt_classifier_weights: models/active/v2/seatbelt_classifier.pt
+  pose_weights: models/auxiliary/yolo11n-pose.pt
+  pose_confidence: 0.25
+  fusion_artifact: models/fusion/no_seatbelt_v2.json
+  fusion_threshold: 0.50
+vehicle_context:
+  required: true
+  accepted_input_scopes: [VEHICLE_CABIN_CROP, TRAFFIC_SCENE_WITH_VEHICLE_ROIS]
+  traffic_scene_mode: OPTIONAL_REQUIRES_LOCAL_VEHICLE_WEIGHTS
+  vehicle_weights: models/auxiliary/yolo11n.pt
+  vehicle_confidence: 0.35
+occupant_rois:
+  calibration_status: PLACEHOLDER_PER_CAMERA_CALIBRATION_REQUIRED
+  regions:
+    - role: driver
+      normalized_xyxy: [0.0, 0.15, 0.56, 1.0]
+      enabled: true
+      min_overlap: 0.5
+    - role: front_passenger
+      normalized_xyxy: [0.44, 0.15, 1.0, 1.0]
+      enabled: true
+      min_overlap: 0.5
+    - role: rear_left
+      normalized_xyxy: [0.0, 0.2, 0.38, 1.0]
+      enabled: false
+      min_overlap: 0.5
+    - role: rear_center
+      normalized_xyxy: [0.3, 0.2, 0.7, 1.0]
+      enabled: false
+      min_overlap: 0.5
+    - role: rear_right
+      normalized_xyxy: [0.62, 0.2, 1.0, 1.0]
+      enabled: false
+      min_overlap: 0.5
+phone_policy:
+  violation_role: driver
+  mounted_or_static: NO_EVENT
+  unknown_context: NEEDS_REVIEW
+  handheld_context: PENDING
+  pose_gate_status: OPTIONAL_MODEL_ENABLED_WHEN_WEIGHTS_EXIST
+seatbelt_policy:
+  violation_roles: [driver, front_passenger, rear_left, rear_center, rear_right]
+  invisible_or_occluded_belt: NO_AUTOMATIC_UNFASTENED_LABEL
+  detector_classifier_disagreement: NEEDS_REVIEW
+  classifier_min_confidence: 0.60
+  classifier_min_margin: 0.15
+temporal:
+  window_seconds: 2.5
+  smoothing_alpha: 0.35
+  feature_positive_score: 0.5
+  min_positive_seconds: 1.2
+  min_observations: 4
+  cooldown_seconds: 5.0
+tracker: bytetrack.yaml

@@ -2,28 +2,34 @@ import hashlib
 import json
 import zipfile
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 import pytest
 import yaml
 from PIL import Image
-from unittest.mock import MagicMock, patch
 
 from backend.ai.association import associate_occupant, intersection_over_box
 from backend.ai.detector import NormalizedDetection
 from backend.ai.events import Observation, TemporalEventEngine
-from training.common import hamming_distance, parse_yolo_line
 from training.apply_review_decisions import apply as apply_review_decisions
+from training.build_mc_bootstrap import BKTree, clip_yolo_box, cluster, multi_index_near_pairs
+from training.build_phone_bootstrap import split_for_group
 from training.build_review_queue import map_suggestions, map_suggestions_from_label
-from training.ingest_dataset import read_source_labels, source_group_id, source_label_path
+from training.common import hamming_distance, parse_yolo_line
+from training.download_source import run_download
 from training.import_phone_bootstrap_recovery import EXPECTED_SPLITS, install_recovery
+from training.ingest_dataset import read_source_labels, source_group_id, source_label_path
 from training.kaggle_runner import preflight
+from training.mc_bootstrap_kaggle_runner import (
+    assert_finite_training_state,
+    inspect_resume_archive,
+    restore_resume_archive,
+    validate_label,
+)
 from training.merge_phone_proposals import merge
 from training.propose_phone_boxes import crop_xyxy_to_full_yolo, expanded_crop
-from training.build_phone_bootstrap import split_for_group
-from training.build_mc_bootstrap import BKTree, clip_yolo_box, cluster, multi_index_near_pairs
-from training.mc_bootstrap_kaggle_runner import inspect_resume_archive, restore_resume_archive
+from training.reduce_mc_bootstrap import select_with_coverage
 from training.split_dataset import assign_groups, validate_isolation
-from training.download_source import run_download
 
 
 def test_yolo_label_parser_accepts_canonical_box():
@@ -31,7 +37,9 @@ def test_yolo_label_parser_accepts_canonical_box():
     assert label.class_id == 0
 
 
-@pytest.mark.parametrize("line", ["3 0.5 0.5 0.2 0.2", "1 1.1 0.5 0.2 0.2", "2 0.5 0.5 0 0.2", "0 0.5"])
+@pytest.mark.parametrize(
+    "line", ["3 0.5 0.5 0.2 0.2", "1 1.1 0.5 0.2 0.2", "2 0.5 0.5 0 0.2", "0 0.5"]
+)
 def test_yolo_label_parser_rejects_invalid_lines(line):
     with pytest.raises(ValueError):
         parse_yolo_line(line)
@@ -119,6 +127,49 @@ def test_mc_bootstrap_clustering_merges_groups_and_near_hashes():
 
     assert len(set(component_ids.values())) == 1
     assert metadata["components"] == 1
+
+
+def test_mc_runner_rejects_nan_label_value(tmp_path):
+    label = tmp_path / "nan.txt"
+    label.write_text("0 nan 0.5 0.2 0.2\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="non-finite label value"):
+        validate_label(label)
+
+
+def test_mc_runner_stops_on_nonfinite_training_loss():
+    trainer = MagicMock()
+    trainer.loss = float("nan")
+    trainer.tloss = 1.0
+    trainer.epoch = 4
+
+    with pytest.raises(FloatingPointError, match="STOP_NONFINITE.*epoch 5"):
+        assert_finite_training_state(trainer)
+
+
+def test_reduced_mc_selector_preserves_group_representatives_and_hard_cases():
+    records = [
+        {
+            "sample_id": f"sample-{index}",
+            "difficulty_score": float(index),
+            "source_context": f"context-{index % 2}",
+            "source_group_id": f"group-{index % 3}",
+            "effective_group_id": f"near-{index % 2}",
+            "visual_context": f"visual-{index % 2}",
+        }
+        for index in range(8)
+    ]
+
+    selected = select_with_coverage(records, target=5, prefix="TEST")
+
+    selected_records = [item for item in records if item["sample_id"] in selected]
+    assert len(selected) == 5
+    assert {item["source_group_id"] for item in selected_records} == {
+        "group-0",
+        "group-1",
+        "group-2",
+    }
+    assert "sample-7" in selected
 
 
 def _mc_resume_archive(tmp_path: Path, epoch_completed: int = 17) -> tuple[Path, dict]:
@@ -231,8 +282,18 @@ def test_phone_recovery_rejects_path_traversal(tmp_path):
 
 def test_phone_proposals_merge_into_behavior_subset_without_auto_approval():
     queue = [
-        {"sample_id": "phone-frame", "source_asset_id": "a.jpg", "annotations": [], "review_tasks": []},
-        {"sample_id": "neutral-frame", "source_asset_id": "b.jpg", "annotations": [], "review_tasks": []},
+        {
+            "sample_id": "phone-frame",
+            "source_asset_id": "a.jpg",
+            "annotations": [],
+            "review_tasks": [],
+        },
+        {
+            "sample_id": "neutral-frame",
+            "source_asset_id": "b.jpg",
+            "annotations": [],
+            "review_tasks": [],
+        },
     ]
     report = {
         "generator": {"model": "models/proposals/phone_bootstrap_001/best.pt"},
@@ -241,7 +302,12 @@ def test_phone_proposals_merge_into_behavior_subset_without_auto_approval():
                 "sample_id": "phone-frame",
                 "source_asset_id": "a.jpg",
                 "proposals": [
-                    {"class_id": 0, "class_name": "phone", "confidence": 0.8, "yolo": [0.5, 0.5, 0.2, 0.2]}
+                    {
+                        "class_id": 0,
+                        "class_name": "phone",
+                        "confidence": 0.8,
+                        "yolo": [0.5, 0.5, 0.2, 0.2],
+                    }
                 ],
             }
         ],
@@ -267,8 +333,15 @@ def test_review_materialization_preserves_box_roles(tmp_path):
     }
     decision = {
         "sample_id": "sample-1",
+        "reviewer_id": "reviewer-1",
+        "reviewer_type": "HUMAN",
         "status": "APPROVED",
         "vehicle_context_id": "vehicle-1",
+        "video_id": "video-1",
+        "vehicle_id": "vehicle-1",
+        "person_id": "person-1",
+        "camera_id": "camera-1",
+        "conditions": ["daylight"],
         "occupant_role": "driver",
         "annotations": [
             {"class_id": 0, "yolo": [0.5, 0.5, 0.2, 0.2], "occupant_role": "front_passenger"}
@@ -289,14 +362,81 @@ def test_review_materialization_rejects_unresolved_box_role(tmp_path):
         "source_group_id": "source:clip-1",
     }
     decision = {
+        "reviewer_id": "reviewer-1",
+        "reviewer_type": "HUMAN",
         "status": "APPROVED",
         "vehicle_context_id": "vehicle-1",
+        "video_id": "video-1",
+        "vehicle_id": "vehicle-1",
+        "person_id": "person-1",
+        "camera_id": "camera-1",
+        "conditions": ["daylight"],
         "occupant_role": "driver",
         "annotations": [{"class_id": 0, "yolo": [0.5, 0.5, 0.2, 0.2], "occupant_role": "PENDING"}],
     }
 
     with pytest.raises(ValueError, match="unresolved annotation roles"):
         apply_review_decisions([record], {"sample-1": decision}, tmp_path / "reviewed")
+
+
+def test_review_materialization_supports_explicit_human_negative(tmp_path):
+    image = tmp_path / "incoming.jpg"
+    Image.new("RGB", (16, 16), "gray").save(image)
+    record = {
+        "sample_id": "negative-1",
+        "status": "PENDING",
+        "ingested_path": str(image),
+        "source_group_id": "source:negative-1",
+    }
+    decision = {
+        "reviewer_id": "reviewer-1",
+        "reviewer_type": "HUMAN",
+        "status": "APPROVED_NEGATIVE",
+        "vehicle_context_id": "vehicle-1",
+        "video_id": "video-1",
+        "vehicle_id": "vehicle-1",
+        "person_id": "person-1",
+        "camera_id": "camera-1",
+        "conditions": ["daylight"],
+        "occupant_role": "driver",
+        "annotations": [],
+    }
+
+    result = apply_review_decisions([record], {"negative-1": decision}, tmp_path / "reviewed")
+
+    assert result[0]["annotation_provenance"] == "human_reviewed_negative"
+    assert result[0]["class_counts"] == {}
+    assert Path(result[0]["label_path"]).read_text(encoding="utf-8") == ""
+
+
+def test_review_materialization_recovers_stale_ingested_path(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    image = tmp_path / "datasets" / "incoming" / "source" / "recovered-1.jpg"
+    image.parent.mkdir(parents=True)
+    Image.new("RGB", (16, 16), "gray").save(image)
+    record = {
+        "sample_id": "recovered-1",
+        "status": "PENDING",
+        "ingested_path": r"D:\stale\workspace\recovered-1.jpg",
+        "source_group_id": "source:recovered-1",
+    }
+    decision = {
+        "reviewer_id": "reviewer-1",
+        "reviewer_type": "HUMAN",
+        "status": "APPROVED_NEGATIVE",
+        "vehicle_context_id": "vehicle-1",
+        "video_id": "video-1",
+        "vehicle_id": "vehicle-1",
+        "person_id": "person-1",
+        "camera_id": "camera-1",
+        "conditions": ["daylight"],
+        "occupant_role": "driver",
+        "annotations": [],
+    }
+
+    result = apply_review_decisions([record], {"recovered-1": decision}, tmp_path / "reviewed")
+
+    assert Path(result[0]["reviewed_path"]).is_file()
 
 
 def test_roboflow_augmentation_pair_shares_a_group():
@@ -323,16 +463,21 @@ def test_custom_synthetic_grouping_keeps_scene_variants_together():
 
 
 def test_group_assignment_never_splits_group():
-    records = [{"sample_id": str(i), "review_status": "APPROVED", "source_group_id": f"g{i // 3}"} for i in range(30)]
+    records = [
+        {"sample_id": str(i), "review_status": "APPROVED", "source_group_id": f"g{i // 3}"}
+        for i in range(30)
+    ]
     assignments = assign_groups(records)
     assert set(assignments) == {f"g{i}" for i in range(10)}
 
 
 def test_isolation_reports_overlap():
-    report = validate_isolation([
-        {"split": "train", "sha256": "same", "effective_group_id": "a", "source_group_id": "a"},
-        {"split": "test", "sha256": "same", "effective_group_id": "b", "source_group_id": "b"},
-    ])
+    report = validate_isolation(
+        [
+            {"split": "train", "sha256": "same", "effective_group_id": "a", "source_group_id": "a"},
+            {"split": "test", "sha256": "same", "effective_group_id": "b", "source_group_id": "b"},
+        ]
+    )
     assert report["status"] == "FAIL"
 
 
@@ -350,7 +495,9 @@ def test_occupant_association_selects_best_region():
 
 
 def test_phone_requires_driver_association_and_temporal_persistence():
-    engine = TemporalEventEngine(window_seconds=2, min_positive_seconds=1, min_observations=3, cooldown_seconds=5)
+    engine = TemporalEventEngine(
+        window_seconds=2, min_positive_seconds=1, min_observations=3, cooldown_seconds=5
+    )
     assert engine.add(Observation(0, "phone", 0.8, 7, "front_passenger", "vehicle-1")) == []
     assert engine.add(Observation(0, "phone", 0.8, 7, "driver", "vehicle-1")) == []
     assert engine.add(Observation(0.5, "phone", 0.8, 7, "driver", "vehicle-1")) == []
@@ -360,32 +507,47 @@ def test_phone_requires_driver_association_and_temporal_persistence():
 
 
 def test_handheld_phone_context_can_be_pending_but_mounted_phone_is_ignored():
-    engine = TemporalEventEngine(window_seconds=2, min_positive_seconds=1, min_observations=2, cooldown_seconds=5)
-    assert engine.add(Observation(0, "phone", 0.8, 8, "driver", "vehicle-1", "MOUNTED_OR_STATIC")) == []
+    engine = TemporalEventEngine(
+        window_seconds=2, min_positive_seconds=1, min_observations=2, cooldown_seconds=5
+    )
+    assert (
+        engine.add(Observation(0, "phone", 0.8, 8, "driver", "vehicle-1", "MOUNTED_OR_STATIC"))
+        == []
+    )
     engine.add(Observation(0, "phone", 0.8, 9, "driver", "vehicle-1", "HANDHELD"))
     events = engine.add(Observation(1.1, "phone", 0.9, 9, "driver", "vehicle-1", "HANDHELD"))
     assert events[0].review_status == "PENDING"
 
 
 def test_conflicting_seatbelt_state_needs_review():
-    engine = TemporalEventEngine(window_seconds=2, min_positive_seconds=1, min_observations=2, cooldown_seconds=5)
+    engine = TemporalEventEngine(
+        window_seconds=2, min_positive_seconds=1, min_observations=2, cooldown_seconds=5
+    )
     for t in (0, 1.1):
         engine.add(Observation(t, "seatbelt_fastened", 0.8, 2, "front_passenger", "vehicle-1"))
     engine.add(Observation(0, "seatbelt_unfastened", 0.9, 2, "front_passenger", "vehicle-1"))
-    events = engine.add(Observation(1.1, "seatbelt_unfastened", 0.9, 2, "front_passenger", "vehicle-1"))
+    events = engine.add(
+        Observation(1.1, "seatbelt_unfastened", 0.9, 2, "front_passenger", "vehicle-1")
+    )
     assert events[0].review_status == "NEEDS_REVIEW"
     assert events[0].occupant_role == "front_passenger"
 
 
 def test_passenger_unfastened_is_a_violation():
-    engine = TemporalEventEngine(window_seconds=2, min_positive_seconds=1, min_observations=2, cooldown_seconds=5)
+    engine = TemporalEventEngine(
+        window_seconds=2, min_positive_seconds=1, min_observations=2, cooldown_seconds=5
+    )
     engine.add(Observation(0, "seatbelt_unfastened", 0.8, 12, "front_passenger", "vehicle-1"))
-    events = engine.add(Observation(1.1, "seatbelt_unfastened", 0.9, 12, "front_passenger", "vehicle-1"))
+    events = engine.add(
+        Observation(1.1, "seatbelt_unfastened", 0.9, 12, "front_passenger", "vehicle-1")
+    )
     assert events[0].event_type == "NO_SEATBELT"
 
 
 def test_person_outside_vehicle_never_creates_event():
-    engine = TemporalEventEngine(window_seconds=2, min_positive_seconds=1, min_observations=2, cooldown_seconds=5)
+    engine = TemporalEventEngine(
+        window_seconds=2, min_positive_seconds=1, min_observations=2, cooldown_seconds=5
+    )
     engine.add(Observation(0, "seatbelt_unfastened", 0.9, 21, "driver", None))
     assert engine.add(Observation(1.1, "seatbelt_unfastened", 0.9, 21, "driver", None)) == []
 
@@ -476,9 +638,7 @@ def test_roboflow_download_overwrites_only_private_staging_directory(tmp_path, m
     with patch("roboflow.Roboflow", return_value=client):
         run_download(source, destination)
 
-    version.download.assert_called_once_with(
-        "yolov11", location=str(destination), overwrite=True
-    )
+    version.download.assert_called_once_with("yolov11", location=str(destination), overwrite=True)
 
 
 def test_review_queue_maps_phone_from_separate_source_label_file(tmp_path):
@@ -492,7 +652,16 @@ def test_review_queue_maps_phone_from_separate_source_label_file(tmp_path):
 
     annotations, excluded = map_suggestions_from_label(label, {3: "Phone", 4: "Seatbelt"}, mappings)
 
-    assert annotations == [{"class_id": 0, "yolo": [0.5, 0.5, 0.1, 0.1], "occupant_role": "PENDING", "source_class_id": 3, "source_class_name": "Phone", "requires_review": True}]
+    assert annotations == [
+        {
+            "class_id": 0,
+            "yolo": [0.5, 0.5, 0.1, 0.1],
+            "occupant_role": "PENDING",
+            "source_class_id": 3,
+            "source_class_name": "Phone",
+            "requires_review": True,
+        }
+    ]
     assert excluded[0]["reason"] == "bare belt"
 
 
@@ -502,7 +671,9 @@ def test_source_group_id_keeps_frames_of_one_video_together():
 
 
 def test_source_group_id_marks_unparseable_file_for_review():
-    assert source_group_id(Path("_117842784_lg_jpg.rf.abc.jpg"), "dms").startswith("dms:GROUP_REVIEW_REQUIRED:")
+    assert source_group_id(Path("_117842784_lg_jpg.rf.abc.jpg"), "dms").startswith(
+        "dms:GROUP_REVIEW_REQUIRED:"
+    )
 
 
 def test_source_label_reader_accepts_noncanonical_source_class_for_review(tmp_path):

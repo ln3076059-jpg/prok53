@@ -4,10 +4,11 @@
 
 Upload `kaggle/mc_bootstrap_001_kaggle_bundle.zip` as a private Kaggle dataset and run `notebooks/kaggle_train_mc_bootstrap.ipynb` on a GPU. Expected output: `/kaggle/working/MC_BOOTSTRAP_001_RECOVERY.zip`.
 
-- Bundle SHA-256: `50b4356124081e5c50404a36d6dac7ecfc2f7ab65b52614c468a48c363f19e9a`
-- Images: 14,581 train / 1,782 validation / 1,736 isolated test
+- Bundle SHA-256: `b8f42ad0bcbf02a2a5ec461eb66c29204f49314d0f1715cd4d38655bed42564b`
+- Images: 6,500 selected train / 1,782 unchanged validation / 1,736 unchanged isolated test
 - Test instances: 225 phone / 322 fastened / 302 unfastened
-- Audit: 118,786 pHash-near pairs grouped with zero cross-split near pairs
+- Selection: all 1,857 phone-positive and 1,216 unfastened-positive train images retained; 2,400 fastened positives plus 1,039 hard negatives selected with all 3,288 source groups covered
+- Audit: 27,616 retained pHash-near pairs with zero cross-split near pairs
 - Status: `PROPOSAL_MODEL_ONLY_NOT_GOVERNED_FINAL_DATA`
 
 The runner performs full hash and image/label preflight before it requests a GPU. It trains YOLO11s for 150 epochs with transfer learning, 960-pixel multi-scale inputs, AMP, AdamW, cosine decay, mild geometry/color augmentation, and a fixed seed. It writes one Ultralytics checkpoint per epoch (`epoch0.pt` is completed epoch 1) and atomically refreshes `/kaggle/working/MC_BOOTSTRAP_001_LATEST_RESUME.zip` after every epoch.

@@ -1,0 +1,8 @@
+canonical_classes:
+  0: phone
+  1: seatbelt_fastened
+  2: seatbelt_unfastened
+
+# The public version page does not expose an authoritative class schema. Keep every source
+# annotation excluded until the downloaded data.yaml and representative boxes are audited.
+mappings: {}

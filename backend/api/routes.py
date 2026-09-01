@@ -77,8 +77,12 @@ def analyze_video(video_id: str, tasks: BackgroundTasks, db: Session = Depends(g
     video = db.get(Video, video_id)
     if not video:
         raise HTTPException(status_code=404, detail="Video not found")
-    if video.input_scope != InputScope.VEHICLE_CABIN_CROP:
-        raise HTTPException(status_code=422, detail="Raw traffic scenes require upstream vehicle detection/tracking ROIs, which are not configured. Supply a vehicle/cabin crop.")
+    analyzer = VideoAnalyzer(detector, settings.evidence_dir)
+    if not analyzer.supports_scope(video.input_scope):
+        raise HTTPException(
+            status_code=422,
+            detail="Raw traffic scenes require configured local vehicle detector weights.",
+        )
     job = AnalysisJob(video_id=video_id)
     db.add(job)
     db.commit()

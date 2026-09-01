@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "status": "DRAFT_PENDING_REVIEWER_ID_AND_METADATA",
+  "reviewer_type": "HUMAN",
+  "reviewer_id": null,
+  "governance_eligible": false,
+  "source": "USER_CHAT_REVIEW",
+  "policy": "These semantic observations came from a human user but are not HUMAN_APPROVED until reviewer identity and required metadata are recorded.",
+  "decisions": [
+    {
+      "sample_id": "f406f172c393557da12f07e800ab56e1",
+      "decision": "REJECTED_OUT_OF_DOMAIN",
+      "notes": "Phone image without a person or vehicle context."
+    },
+    {
+      "sample_id": "0c7a50ce97b155d8b377d0f4a32f5130",
+      "decision": "REJECTED_OUT_OF_DOMAIN",
+      "notes": "Phone image without a person or vehicle context."
+    },
+    {
+      "sample_id": "0e6ee9a6ad685ec695c8723fc87abece",
+      "decision": "REJECTED_OUT_OF_DOMAIN",
+      "notes": "Phone image without a person or vehicle context."
+    },
+    {
+      "sample_id": "2f1e47bb7b0b5f20b291858cf187d747",
+      "decision": "REJECTED_OUT_OF_DOMAIN",
+      "notes": "Person using a phone without a vehicle context."
+    },
+    {
+      "sample_id": "09246c143bbf56e48c87b42a92664350",
+      "decision": "APPROVED_NEGATIVE_PENDING_METADATA",
+      "notes": "Driver in a vehicle, seatbelt visible, no phone."
+    },
+    {
+      "sample_id": "041cba02031e568b9ad6436716c9e790",
+      "decision": "APPROVED_NEGATIVE_PENDING_METADATA",
+      "notes": "Driver in a vehicle, seatbelt visible, no phone."
+    },
+    {
+      "sample_id": "00a7321575915b4c871bef16ac9782a3",
+      "decision": "APPROVED_NEGATIVE_PENDING_METADATA",
+      "notes": "Driver in a vehicle, seatbelt visible, no phone."
+    },
+    {
+      "sample_id": "013902cfad22541f96262be4531192b0",
+      "decision": "APPROVED_NEGATIVE_PENDING_METADATA",
+      "notes": "Driver in a vehicle, seatbelt visible, no phone."
+    }
+  ]
+}

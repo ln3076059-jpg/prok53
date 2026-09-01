@@ -1,0 +1,44 @@
+schema_version: 1
+allowed_seatbelt_states:
+  - seatbelt_fastened
+  - seatbelt_unfastened
+  - uncertain_or_occluded
+allowed_splits: [train, val, test]
+required_fields:
+  - sample_id
+  - image_path
+  - sha256
+  - video_id
+  - vehicle_id
+  - person_id
+  - camera_id
+  - split
+  - seatbelt_state
+  - occupant_role
+  - conditions
+  - yolo
+forbidden_fields:
+  - derived_from_sample_id
+isolation_dimensions: [sha256, video_id, vehicle_id, person_id]
+minimum_independent_groups:
+  seatbelt_unfastened:
+    train: {video_id: 30, vehicle_id: 20, person_id: 30, camera_id: 3}
+    val: {video_id: 8, vehicle_id: 5, person_id: 8, camera_id: 2}
+    test: {video_id: 8, vehicle_id: 5, person_id: 8, camera_id: 2}
+  uncertain_or_occluded:
+    train: {video_id: 20, vehicle_id: 12, person_id: 20, camera_id: 3}
+    val: {video_id: 6, vehicle_id: 4, person_id: 6, camera_id: 2}
+    test: {video_id: 6, vehicle_id: 4, person_id: 6, camera_id: 2}
+required_condition_coverage:
+  - daylight
+  - low_light
+  - windshield_reflection
+  - motion_blur
+  - video_compression
+  - partial_occlusion
+  - oblique_view
+policy:
+  - Missing or invisible belt evidence is uncertain_or_occluded, never seatbelt_unfastened.
+  - Frames from the same video, vehicle, or person stay in exactly one split.
+  - Provider augmentations and near-duplicate frames do not count as independent groups.
+  - Every box covers a comparable occupant upper-body region, not a thin belt line.

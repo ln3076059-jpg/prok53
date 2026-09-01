@@ -13,6 +13,8 @@ class Observation:
     occupant_role: str | None
     vehicle_context_id: str | None
     phone_context: str = "UNKNOWN"
+    fusion_score: float | None = None
+    evidence_source: str = "DETECTOR_ONLY"
 
 
 @dataclass(frozen=True)
@@ -61,11 +63,24 @@ class TemporalEventEngine:
         phone = [item for item in window if item.class_name == "phone"]
         candidates: list[EventCandidate] = []
         if self._persistent(phone):
-            phone_status = "PENDING" if all(item.phone_context == "HANDHELD" for item in phone) else "NEEDS_REVIEW"
+            phone_status = (
+                "PENDING"
+                if all(item.phone_context == "HANDHELD" for item in phone)
+                and all(item.evidence_source != "FUSION_REJECTED" for item in phone)
+                else "NEEDS_REVIEW"
+            )
             candidates.append(self._candidate("PHONE", phone, current, phone_status))
         if self._persistent(unfastened):
             conflicting = self._persistent(fastened)
-            candidates.append(self._candidate("NO_SEATBELT", unfastened, current, "NEEDS_REVIEW" if conflicting else "PENDING"))
+            rejected = any(item.evidence_source == "FUSION_REJECTED" for item in unfastened)
+            candidates.append(
+                self._candidate(
+                    "NO_SEATBELT",
+                    unfastened,
+                    current,
+                    "NEEDS_REVIEW" if conflicting or rejected else "PENDING",
+                )
+            )
         return [item for item in candidates if self._cooldown_allows(item)]
 
     def _persistent(self, observations: list[Observation]) -> bool:
@@ -78,7 +93,11 @@ class TemporalEventEngine:
             raise ValueError("event candidate requires vehicle context and occupant role")
         return EventCandidate(
             event_type,
-            sum(item.confidence for item in observations) / len(observations),
+            sum(
+                item.fusion_score if item.fusion_score is not None else item.confidence
+                for item in observations
+            )
+            / len(observations),
             current.timestamp,
             current.track_id,
             status,

@@ -10,9 +10,11 @@ The deployable safety detector remains one YOLO11s model with three canonical cl
 - Mosaic is reduced by closing it for the last 15 epochs, allowing final fine-tuning on natural cabin composition.
 - Validation chooses thresholds per class. Test is frozen and opened only after model and thresholds are locked.
 
+V2 removes cross-source partial-label conflicts by training separate phone and upper-body ROI detectors. A three-state crop classifier handles belt state and explicitly represents `uncertain_or_occluded`. V2 offline data preparation never duplicates images to balance a class; new diversity must come from independent vehicles, people, cameras, videos, lighting, and viewpoints.
+
 ## Computer vision
 
-`training/augment_training_split.py` makes a derived train-only dataset with deterministic low-light, CLAHE, mild motion-blur, sensor-noise, and resolution-loss variants. These transforms keep box geometry unchanged. They are never applied to validation/test, and each derivative retains its parent and effective group.
+`training/augment_training_split.py` remains a V1 ablation tool. It is not used by V2. V2 uses only mild online augmentation and rejects strong transforms that can erase belt evidence. Real low-light, glare, blur, compression, and oblique views are captured as independent data and tracked by `datasets/v2_capture_policy.yaml`.
 
 `training/analyze_cv_quality.py` measures brightness, contrast, Laplacian blur, and per-class object short-side pixels. Flags trigger human inspection; they do not silently delete difficult data.
 

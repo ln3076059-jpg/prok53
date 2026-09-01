@@ -1,0 +1,106 @@
+{
+  "schema_version": 2,
+  "generated_at_utc": "2026-09-01T10:21:49.8651035Z",
+  "status": "READY_FOR_EXPLORATORY_THREE_COMPONENT_TRAINING",
+  "bundle": {
+    "path": "kaggle/MULTIMODEL_V2_PRETRAIN_PENDING_APPROVAL_PORTABLE.zip",
+    "checksum_path": "kaggle/MULTIMODEL_V2_PRETRAIN_PENDING_APPROVAL_PORTABLE.sha256",
+    "bytes": 514618511,
+    "size_mib": 490.78,
+    "sha256": "87c3b4429215f57dd0bb2e7b8625f079bd58ce64f349c9e3c6d26977e0dc8b77",
+    "verified_files_after_extraction": 20679
+  },
+  "readiness": {
+    "proposal_detector_training_ready": true,
+    "classifier_training_ready": true,
+    "exploratory_training_ready": true,
+    "training_blockers": []
+  },
+  "governance": {
+    "level": "MODEL_ASSISTED_PENDING_APPROVAL",
+    "human_verified": false,
+    "governed_training_ready": false,
+    "production_activation_ready": false
+  },
+  "trainable_components": {
+    "phone_detector": {
+      "samples": 3025,
+      "train_images": 2421,
+      "val_images": 302,
+      "test_images": 302
+    },
+    "seatbelt_detector": {
+      "samples": 4845,
+      "train_images": 3595,
+      "val_images": 636,
+      "test_images": 614,
+      "semantic_scope": "OCCUPANT_UPPER_BODY_ROI_ONLY"
+    },
+    "seatbelt_classifier": {
+      "samples": 4915,
+      "classes": [
+        "seatbelt_fastened",
+        "seatbelt_unfastened",
+        "uncertain_or_occluded"
+      ],
+      "counts": {
+        "train": {
+          "seatbelt_fastened": 2367,
+          "seatbelt_unfastened": 1186,
+          "uncertain_or_occluded": 100
+        },
+        "val": {
+          "seatbelt_fastened": 350,
+          "seatbelt_unfastened": 266,
+          "uncertain_or_occluded": 25
+        },
+        "test": {
+          "seatbelt_fastened": 307,
+          "seatbelt_unfastened": 289,
+          "uncertain_or_occluded": 25
+        }
+      },
+      "uncertainty_gate_met": true,
+      "source_box_conflicts": 0,
+      "cross_class_hash_conflicts": 0
+    }
+  },
+  "uncertainty_evidence": {
+    "selected": 150,
+    "newly_added": 140,
+    "manifest": "datasets/manifests/pretrain_pending_approval/v2_seatbelt_uncertain_visual_decisions.json",
+    "manifest_sha256": "74a3406724d58c1f7fac5a8db95416eda9d15b67c8beae9f9443527598dcb24b",
+    "source_group_cross_split_leaks": 0,
+    "effective_group_cross_split_leaks": 0,
+    "human_verified": false
+  },
+  "offline_base_weights": {
+    "detector": {
+      "path_in_bundle": "models/base/yolo11s.pt",
+      "bytes": 19313732,
+      "sha256": "85a76fe86dd8afe384648546b56a7a78580c7cb7b404fc595f97969322d502d5"
+    },
+    "classifier": {
+      "path_in_bundle": "models/base/yolo11s-cls.pt",
+      "bytes": 13630112,
+      "sha256": "e2b605d1c8c212b434a75a32759a6f7adf1d2b29c35f76bdccd4c794cb653cf2"
+    },
+    "internet_download_required": false
+  },
+  "target_machine_commands": {
+    "preflight": ".\\START_V2_PRETRAIN_REVIEW_TRAINING.ps1 -Mode preflight",
+    "install_and_train": ".\\START_V2_PRETRAIN_REVIEW_TRAINING.ps1 -InstallDependencies -BackupDirectory E:\\roadwatch-v2-pretrain-backup",
+    "resume": ".\\START_V2_PRETRAIN_REVIEW_TRAINING.ps1 -BackupDirectory E:\\roadwatch-v2-pretrain-backup",
+    "classifier_only": ".\\START_V2_PRETRAIN_REVIEW_TRAINING.ps1 -Only seatbelt_classifier -BackupDirectory E:\\roadwatch-v2-pretrain-backup"
+  },
+  "runtime_guards": {
+    "one_epoch_gpu_smoke_before_full_training": true,
+    "local_gpu_smoke_completed": false,
+    "local_gpu_smoke_note": "Preparation host has CPU-only PyTorch; launcher runs smoke on the target CUDA machine.",
+    "safe_auto_resume": true,
+    "external_checkpoint_backup_supported": true,
+    "detector_multi_scale": false,
+    "frozen_test_used_during_training": false,
+    "classifier_can_be_selected": true
+  }
+}

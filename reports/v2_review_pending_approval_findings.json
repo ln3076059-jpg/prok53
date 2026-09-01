@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "status": "REVIEW_COMPLETE_PENDING_APPROVAL_WITH_TRAINING_BLOCKER",
+  "reviewer_type": "MODEL_ASSISTED",
+  "reviewer_model": "yolo11s_coco_pretrain_review_plus_visual_audit",
+  "approval_status": "PENDING_HUMAN_APPROVAL",
+  "governance_eligible": false,
+  "admin_acknowledgement": {
+    "status": "ADMIN_ACKNOWLEDGED_REVIEW_PENDING_APPROVAL_BATCH",
+    "reviewer_type": "HUMAN",
+    "reviewer_id": "admin",
+    "acknowledged_samples": 3355,
+    "batches": 7,
+    "per_sample_human_inspection_claimed": false,
+    "human_approved": false,
+    "governance_eligible": false,
+    "artifact": "datasets/manifests/review_pending_approval_admin_acknowledgements.jsonl"
+  },
+  "images_checked": 3355,
+  "integrity_failures": 0,
+  "second_pass_decisions": {
+    "human_draft_takes_precedence": 8,
+    "phone_present_proposal": 566,
+    "phone_possible_review_required": 490,
+    "no_phone_detected_second_pass": 1653,
+    "phone_positive_second_model_agreement": 59,
+    "remains_uncertain_source_phone_only": 56,
+    "seatbelt_visual_review_still_required": 23,
+    "keep_uncertain_or_occluded_candidates": 500
+  },
+  "direct_visual_findings": [
+    "The general COCO model can confuse cigarettes with phones, so phone detections remain proposals.",
+    "Some source phone-positive images are product photos without a person or vehicle and are out-of-domain candidates.",
+    "All 23 severe seatbelt ROI images remain excluded because visibility is insufficient for ROI/state approval.",
+    "A deterministic random sample of 20/500 uncertainty candidates contained multiple clearly fastened or clearly unfastened occupants; queue membership alone cannot create an uncertainty label."
+  ],
+  "classifier_correction": {
+    "previous_uncertain_candidates": 500,
+    "uncertain_training_eligible_after_evidence_gate": {
+      "train": 3,
+      "val": 3,
+      "test": 4
+    },
+    "minimum_required": {
+      "train": 100,
+      "val": 25,
+      "test": 25
+    },
+    "exact_cross_class_hash_conflicts_before_fix": 486,
+    "exact_cross_class_hash_conflicts_after_fix": 0,
+    "source_roi_class_conflicts_after_fix": 0,
+    "classifier_training_ready": false
+  },
+  "readiness": {
+    "proposal_detector_training_ready": true,
+    "complete_exploratory_suite_training_ready": false,
+    "governed_training_ready": false,
+    "production_activation_ready": false
+  },
+  "blockers": [
+    "CLASSIFIER_UNCERTAIN_EVIDENCE_BELOW_MINIMUM"
+  ],
+  "artifacts": {
+    "row_level_review": "reports/v2_review_pending_approval.jsonl",
+    "review_summary": "reports/v2_review_pending_approval.summary.json",
+    "dataset_readiness": "reports/v2_pretrain_pending_approval_readiness.json",
+    "classifier_report": "datasets/derived/v2_pretrain_pending_approval/seatbelt_classifier/CLASSIFIER_DATASET_REPORT.json"
+  },
+  "policy": "This review remains PENDING_HUMAN_APPROVAL and is not HUMAN_APPROVED. The corrected gates prevent contradictory uncertainty labels from entering training."
+}

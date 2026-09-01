@@ -47,8 +47,8 @@ def build(dataset: Path, audit: Path, config: Path, output: Path) -> Path:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build private Kaggle three-class bootstrap bundle")
-    parser.add_argument("--dataset", type=Path, default=Path("datasets/derived/mc_bootstrap_v1"))
-    parser.add_argument("--audit", type=Path, default=Path("reports/mc_bootstrap_v1/data_quality.json"))
+    parser.add_argument("--dataset", type=Path, default=Path("datasets/derived/mc_bootstrap_v2_6500"))
+    parser.add_argument("--audit", type=Path, default=Path("reports/mc_bootstrap_v2_6500/data_quality.json"))
     parser.add_argument("--config", type=Path, default=Path("experiments/MC_BOOTSTRAP_001/config.yaml"))
     parser.add_argument("--output", type=Path, default=Path("kaggle/mc_bootstrap_001_kaggle_bundle.zip"))
     args = parser.parse_args()

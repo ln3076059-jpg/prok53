@@ -1,0 +1,25 @@
+canonical_classes:
+  0: phone
+  1: seatbelt_fastened
+  2: seatbelt_unfastened
+
+# No ADT source class is automatically admitted. The public project mixes twelve
+# inconsistent traffic, helmet, mobile, and belt classes; every useful object must be
+# reboxed/reviewed with vehicle, occupant role, upper-body geometry, and visible state.
+mappings:
+  person_noseatbelt:
+    canonical: null
+    requires_review: true
+    reason: Candidate no-seatbelt person region; rebox a comparable upper-body ROI and allow UNCERTAIN_OR_OCCLUDED.
+  person_seatbelt:
+    canonical: null
+    requires_review: true
+    reason: Candidate fastened person region; rebox a comparable upper-body ROI and verify visible belt evidence.
+  mobile:
+    canonical: null
+    requires_review: true
+    reason: Candidate physical phone; rebox the object and label driver/passenger/outside-vehicle context.
+  seatbelt:
+    canonical: null
+    requires_review: true
+    reason: A thin belt-object box is not an occupant upper-body state annotation.

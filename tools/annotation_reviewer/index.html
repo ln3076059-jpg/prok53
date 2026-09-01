@@ -1,5 +1,379 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Roadwatch Annotation Reviewer</title>
-<style>body{margin:0;font:14px system-ui;background:#f4f4f4;color:#161616}header{height:58px;background:#18201e;color:white;display:flex;align-items:center;padding:0 20px;justify-content:space-between}main{display:grid;grid-template-columns:1fr 360px;min-height:calc(100dvh - 58px)}#stage{overflow:auto;background:#2d3432;display:grid;place-items:center;padding:30px}canvas{background:#111;transform-origin:center;max-width:none}.panel{padding:20px;background:white;border-left:1px solid #aaa}.row{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap}button,input,select,textarea{font:inherit;padding:9px;border:1px solid #777;background:white;border-radius:4px;box-sizing:border-box}label{display:grid;gap:6px;margin-top:12px}input,select,textarea{width:100%}button{cursor:pointer}button.primary{background:#198038;color:white;border-color:#198038}textarea{min-height:90px}dl div{display:grid;grid-template-columns:90px 1fr;padding:8px 0;border-bottom:1px solid #ddd}dd{margin:0;overflow-wrap:anywhere}.boxes{max-height:240px;overflow:auto}.box{display:grid;grid-template-columns:1fr 1fr auto;gap:5px;padding:8px;border-bottom:1px solid #ddd}.box select{width:100%}.help{font-size:12px;color:#525252}@media(max-width:800px){main{grid-template-columns:1fr}.panel{border-left:0;border-top:1px solid #aaa}}</style></head>
-<body><header><strong>Roadwatch annotation review</strong><span id="position">0 / 0</span></header><main><section id="stage"><canvas id="canvas"></canvas></section><aside class="panel"><div class="row"><button id="prev">Previous</button><button id="next">Next</button><button id="zoomOut">Zoom -</button><button id="zoomIn">Zoom +</button></div><dl id="source"></dl><label>New box class<select id="class"><option value="0">phone</option><option value="1">seatbelt_fastened</option><option value="2">seatbelt_unfastened</option></select></label><p class="help">Drag on the image to add a box. Click a listed box to change its class or delete it.</p><div class="boxes" id="boxes"></div><label>Vehicle context ID<input id="vehicle" placeholder="vehicle / clip / cabin group" required></label><label>Occupant role<select id="role"><option value="PENDING">Pending</option><option value="driver">Driver</option><option value="front_passenger">Front passenger</option><option value="rear_left">Rear left</option><option value="rear_center">Rear center</option><option value="rear_right">Rear right</option><option value="other_occupant">Other occupant</option><option value="UNCERTAIN">Uncertain</option></select></label><p class="help">Approval requires both vehicle context and a resolved role. Passenger phone boxes remain valid labels; only driver phone use is a violation. Unfastened seatbelts apply to every occupant.</p><label>Notes<textarea id="notes" placeholder="Record visible evidence or ambiguity"></textarea></label><div class="row"><button class="primary" data-status="APPROVED">Approve</button><button data-status="UNCERTAIN">Uncertain</button><button data-status="REJECTED">Reject</button></div></aside></main>
-<script>const names=['phone','seatbelt_fastened','seatbelt_unfastened'],roles=['PENDING','driver','front_passenger','rear_left','rear_center','rear_right','other_occupant','UNCERTAIN'],colors=['#ff3b30','#38a169','#d97706'];let q=[],i=0,img=new Image(),scale=1,start=null;const c=document.querySelector('#canvas'),x=c.getContext('2d');fetch('/api/queue').then(r=>r.json()).then(v=>{q=v;load()});function load(){if(!q.length)return;const s=q[i];document.querySelector('#position').textContent=`${i+1} / ${q.length}`;document.querySelector('#notes').value=s.notes||'';document.querySelector('#vehicle').value=s.vehicle_context_id||'';document.querySelector('#role').value=s.occupant_role||'PENDING';document.querySelector('#source').innerHTML=`<div><dt>Source</dt><dd>${s.source_id||''}</dd></div><div><dt>Asset</dt><dd>${s.source_asset_id||''}</dd></div><div><dt>License</dt><dd>${s.license||''}</dd></div>`;img.onload=()=>{c.width=img.naturalWidth;c.height=img.naturalHeight;draw()};img.src=`/api/image/${s.sample_id}?v=${Date.now()}`;renderBoxes()}function draw(){x.drawImage(img,0,0);(q[i].annotations||[]).forEach((b,n)=>{const [cx,cy,w,h]=b.yolo;x.strokeStyle=colors[b.class_id];x.lineWidth=3;x.strokeRect((cx-w/2)*c.width,(cy-h/2)*c.height,w*c.width,h*c.height);x.fillStyle=colors[b.class_id];x.fillText(`${n+1} ${names[b.class_id]} / ${b.occupant_role||'PENDING'}`,(cx-w/2)*c.width+4,(cy-h/2)*c.height+15)});c.style.transform=`scale(${scale})`}function renderBoxes(){document.querySelector('#boxes').innerHTML=(q[i].annotations||[]).map((b,n)=>`<div class=box><select data-i=${n}>${names.map((v,j)=>`<option value=${j} ${j==b.class_id?'selected':''}>${v}</option>`).join('')}</select><select data-role-i=${n}>${roles.map(v=>`<option value=${v} ${v==(b.occupant_role||'PENDING')?'selected':''}>${v}</option>`).join('')}</select><button data-delete=${n}>Delete</button></div>`).join('');document.querySelectorAll('[data-i]').forEach(e=>e.onchange=()=>{q[i].annotations[e.dataset.i].class_id=+e.value;draw()});document.querySelectorAll('[data-role-i]').forEach(e=>e.onchange=()=>{q[i].annotations[e.dataset.roleI].occupant_role=e.value;draw()});document.querySelectorAll('[data-delete]').forEach(e=>e.onclick=()=>{q[i].annotations.splice(e.dataset.delete,1);renderBoxes();draw()})}c.onpointerdown=e=>{const r=c.getBoundingClientRect();start=[(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height]};c.onpointerup=e=>{if(!start)return;const r=c.getBoundingClientRect(),end=[(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height],x1=Math.min(start[0],end[0]),y1=Math.min(start[1],end[1]),w=Math.abs(start[0]-end[0]),h=Math.abs(start[1]-end[1]);if(w>.005&&h>.005){q[i].annotations=q[i].annotations||[];q[i].annotations.push({class_id:+document.querySelector('#class').value,occupant_role:document.querySelector('#role').value,yolo:[x1+w/2,y1+h/2,w,h]});renderBoxes();draw()}start=null};document.querySelector('#prev').onclick=()=>{i=Math.max(0,i-1);load()};document.querySelector('#next').onclick=()=>{i=Math.min(q.length-1,i+1);load()};document.querySelector('#zoomIn').onclick=()=>{scale=Math.min(3,scale+.25);draw()};document.querySelector('#zoomOut').onclick=()=>{scale=Math.max(.5,scale-.25);draw()};document.querySelectorAll('[data-status]').forEach(b=>b.onclick=async()=>{const response=await fetch('/api/decision',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({sample_id:q[i].sample_id,status:b.dataset.status,notes:document.querySelector('#notes').value,vehicle_context_id:document.querySelector('#vehicle').value,occupant_role:document.querySelector('#role').value,annotations:q[i].annotations||[]})});if(!response.ok){alert((await response.json()).detail||'Decision not saved');return}if(i<q.length-1){i++;load()}});</script></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roadwatch pretrain annotation review</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #fff;
+      --field: #f4f4f4;
+      --ink: #161616;
+      --muted: #525252;
+      --rule: #c6c6c6;
+      --strong-rule: #8d8d8d;
+      --green: #198038;
+      --green-dark: #0e6027;
+      --amber-field: #fcf4d6;
+      --amber-ink: #684e00;
+      --red: #da1e28;
+      --rail: #18201e;
+      --focus: #0f62fe;
+      font-family: "IBM Plex Sans", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--field); color: var(--ink); }
+    button, input, select, textarea { font: inherit; }
+    button, input, select, textarea { border-radius: 6px 6px 0 0; }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--focus); outline-offset: 2px;
+    }
+    header {
+      min-height: 64px; padding: 10px 22px; background: var(--rail); color: white;
+      display: flex; align-items: center; justify-content: space-between; gap: 18px;
+    }
+    header strong { font-family: "IBM Plex Sans Condensed", sans-serif; font-size: 21px; text-transform: uppercase; }
+    .header-status { display: flex; gap: 16px; align-items: center; font-variant-numeric: tabular-nums; }
+    main { display: grid; grid-template-columns: minmax(0, 1fr) 430px; min-height: calc(100dvh - 64px); }
+    #stage { min-width: 0; overflow: auto; background: #26302d; display: grid; place-items: center; padding: 30px; }
+    canvas { background: #111; transform-origin: center; max-width: none; }
+    .panel { min-width: 0; padding: 18px; background: var(--paper); border-inline-start: 1px solid var(--rule); overflow-y: auto; max-height: calc(100dvh - 64px); }
+    .toolbar, .actions, .batch-row { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 0 14px; }
+    button { min-height: 40px; padding: 8px 13px; border: 1px solid var(--strong-rule); background: white; color: var(--ink); cursor: pointer; border-radius: 6px; }
+    button:hover:not(:disabled) { background: var(--field); }
+    button:disabled { cursor: not-allowed; opacity: .55; }
+    button.primary { background: var(--green); color: white; border-color: var(--green); }
+    button.primary:hover:not(:disabled) { background: var(--green-dark); }
+    button.negative { background: var(--focus); color: white; border-color: var(--focus); }
+    button.danger { color: var(--red); border-color: var(--red); }
+    section.record { border-block-start: 1px solid var(--rule); padding-block: 16px; }
+    section.record:first-of-type { border-block-start: 0; padding-block-start: 0; }
+    h2 { margin: 0 0 10px; font: 600 21px/1.1 "IBM Plex Sans Condensed", sans-serif; text-transform: uppercase; letter-spacing: .01em; }
+    label { display: grid; gap: 6px; margin-block-start: 11px; color: var(--muted); font-size: 11px; letter-spacing: .04em; }
+    input, select, textarea { width: 100%; min-height: 42px; padding: 9px 11px; border: 1px solid var(--strong-rule); border-radius: 6px 6px 0 0; background: var(--field); color: var(--ink); }
+    textarea { min-height: 82px; resize: vertical; }
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; }
+    .help { margin: 8px 0 0; color: var(--muted); font-size: 1rem; line-height: 1.45; }
+    .notice { padding: 12px 14px; border: 1px solid var(--rule); border-radius: 6px; background: var(--field); line-height: 1.45; overflow-wrap: anywhere; }
+    .notice.warning { background: var(--amber-field); color: var(--amber-ink); }
+    .notice.error { background: var(--field); color: var(--red); border-color: var(--red); }
+    .notice.success { background: #a7f0ba; color: var(--green-dark); }
+    .tag { display: inline-flex; min-height: 24px; align-items: center; padding: 2px 8px; border-radius: 16px; background: var(--field); color: var(--ink); font-size: 11px; font-weight: 600; }
+    .tag.high { background: #a7f0ba; color: var(--green-dark); }
+    .tag.medium { background: var(--amber-field); color: var(--amber-ink); }
+    .tag.uncertain { background: var(--field); color: var(--red); border: 1px solid var(--red); }
+    dl { margin: 0; }
+    dl div { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 8px; padding: 7px 0; border-block-end: 1px solid var(--rule); }
+    dt { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+    dd { margin: 0; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+    .conditions { display: grid; grid-template-columns: 1fr 1fr; gap: 7px 10px; margin-block-start: 8px; }
+    .conditions label { display: flex; align-items: flex-start; gap: 7px; margin: 0; color: var(--ink); }
+    .conditions input { width: 16px; min-height: 16px; margin: 2px 0 0; }
+    .boxes { max-height: 250px; overflow: auto; border: 1px solid var(--rule); margin-block-start: 8px; }
+    .box { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: 5px; padding: 8px; border-block-end: 1px solid var(--rule); }
+    .box:last-child { border-block-end: 0; }
+    .box select { min-width: 0; }
+    #statusMessage { margin-block-end: 14px; }
+    [hidden] { display: none !important; }
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; }
+      .panel { max-height: none; border-inline-start: 0; border-block-start: 1px solid var(--rule); }
+      #stage { min-height: 55dvh; }
+    }
+    @media (max-width: 520px) {
+      header { align-items: flex-start; flex-direction: column; }
+      main { min-height: auto; }
+      .panel { padding: 15px; }
+      .field-grid, .conditions { grid-template-columns: 1fr; }
+      .box { grid-template-columns: 1fr; }
+      button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>Roadwatch annotation review</strong>
+    <div class="header-status"><span id="position">Loading queue…</span><span id="savedCount">0 decided</span></div>
+  </header>
+  <main>
+    <section id="stage" aria-label="Image annotation canvas"><canvas id="canvas"></canvas></section>
+    <aside class="panel" aria-label="Review controls">
+      <div id="statusMessage" class="notice" role="status" aria-live="polite">Loading review queue…</div>
+      <div class="toolbar">
+        <button id="prev" type="button">Previous</button>
+        <button id="next" type="button">Next</button>
+        <button id="zoomOut" type="button">Zoom −</button>
+        <button id="zoomIn" type="button">Zoom +</button>
+      </div>
+
+      <section class="record" aria-labelledby="aiHeading">
+        <h2 id="aiHeading">model-assisted review evidence</h2>
+        <div id="aiEmpty" class="notice warning">No model-assisted review is attached. Treat every proposal as unverified.</div>
+        <div id="aiEvidence" hidden>
+          <div class="batch-row"><span id="aiTier" class="tag">Pending</span><span id="aiDecision" class="tag">—</span></div>
+          <dl id="aiFacts"></dl>
+          <p id="aiReasons" class="help"></p>
+          <button id="batchConfirm" type="button">Acknowledge visible high-confidence proposals</button>
+          <p class="help">Batch confirmation supports exploratory model-assisted pending-approval training only. It never creates per-sample HUMAN_APPROVED records.</p>
+        </div>
+      </section>
+
+      <section class="record" aria-labelledby="sourceHeading">
+        <h2 id="sourceHeading">Source record</h2>
+        <dl id="source"></dl>
+      </section>
+
+      <section class="record" aria-labelledby="annotationHeading">
+        <h2 id="annotationHeading">Canonical annotations</h2>
+        <label>New box class
+          <select id="class">
+            <option value="0">phone</option>
+            <option value="1">seatbelt_fastened</option>
+            <option value="2">seatbelt_unfastened</option>
+          </select>
+        </label>
+        <p class="help">Drag on the image to add a box. Use the controls below to correct class, role, or delete a box.</p>
+        <div class="boxes" id="boxes"></div>
+      </section>
+
+      <section class="record" aria-labelledby="identityHeading">
+        <h2 id="identityHeading">Human review identity</h2>
+        <label>Reviewer ID
+          <input id="reviewer" maxlength="256" autocomplete="username" placeholder="name or organization email" required>
+        </label>
+        <label>Vehicle context ID
+          <input id="context" maxlength="256" placeholder="cabin / clip context" required>
+        </label>
+        <label>Occupant role
+          <select id="role">
+            <option value="PENDING">Pending</option>
+            <option value="driver">Driver</option>
+            <option value="front_passenger">Front passenger</option>
+            <option value="rear_left">Rear left</option>
+            <option value="rear_center">Rear center</option>
+            <option value="rear_right">Rear right</option>
+            <option value="other_occupant">Other occupant</option>
+            <option value="UNCERTAIN">Uncertain</option>
+          </select>
+        </label>
+        <div class="field-grid">
+          <label>Video ID<input id="video" maxlength="256" required></label>
+          <label>Vehicle ID<input id="vehicle" maxlength="256" required></label>
+          <label>Person ID<input id="person" maxlength="256" required></label>
+          <label>Camera ID<input id="camera" maxlength="256" required></label>
+        </div>
+        <fieldset>
+          <legend>Confirmed conditions</legend>
+          <div id="conditions" class="conditions"></div>
+        </fieldset>
+        <p id="conditionSuggestion" class="help"></p>
+        <label>Review notes
+          <textarea id="notes" maxlength="4000" placeholder="Visible evidence, corrections, or ambiguity"></textarea>
+        </label>
+      </section>
+
+      <section class="record" aria-labelledby="decisionHeading">
+        <h2 id="decisionHeading">Human decision</h2>
+        <div class="notice warning">Approval requires named human provenance, complete metadata, confirmed conditions, resolved roles, and valid boxes. Unclear belt evidence must remain uncertain.</div>
+        <div class="actions">
+          <button class="primary" data-status="APPROVED" type="button">Approve boxes</button>
+          <button class="negative" data-status="APPROVED_NEGATIVE" type="button">Approve negative</button>
+          <button data-status="UNCERTAIN" type="button">Mark uncertain</button>
+          <button class="danger" data-status="REJECTED" type="button">Reject sample</button>
+        </div>
+      </section>
+    </aside>
+  </main>
+  <script>
+    const names = ["phone", "seatbelt_fastened", "seatbelt_unfastened"];
+    const roles = ["PENDING", "driver", "front_passenger", "rear_left", "rear_center", "rear_right", "other_occupant", "UNCERTAIN"];
+    const colors = ["#ff3b30", "#198038", "#b28600"];
+    const conditionOptions = ["daylight", "low_light", "windshield_reflection", "motion_blur", "video_compression", "partial_occlusion", "oblique_view"];
+    let queue = [], index = 0, scale = 1, start = null, saving = false;
+    const image = new Image();
+    const canvas = document.querySelector("#canvas");
+    const context2d = canvas.getContext("2d");
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>'"]/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"})[character]);
+    }
+    function setStatus(message, kind = "") {
+      const node = document.querySelector("#statusMessage");
+      node.textContent = message;
+      node.className = `notice ${kind}`.trim();
+    }
+    function selectedConditions() {
+      return [...document.querySelectorAll("#conditions input:checked")].map(node => node.value);
+    }
+    function renderConditions(values = []) {
+      const selected = new Set(values);
+      document.querySelector("#conditions").innerHTML = conditionOptions.map(value =>
+        `<label><input type="checkbox" value="${value}" ${selected.has(value) ? "checked" : ""}>${value.replaceAll("_", " ")}</label>`
+      ).join("");
+    }
+    function renderFacts(target, facts) {
+      target.innerHTML = Object.entries(facts).map(([key, value]) =>
+        `<div><dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd></div>`
+      ).join("");
+    }
+    async function loadQueue() {
+      try {
+        const [queueResponse, statusResponse] = await Promise.all([fetch("/api/queue"), fetch("/api/status")]);
+        if (!queueResponse.ok || !statusResponse.ok) throw new Error("Reviewer API did not return a valid queue/status response.");
+        queue = await queueResponse.json();
+        const status = await statusResponse.json();
+        document.querySelector("#savedCount").textContent = `${status.decided} decided · ${status.proposal_samples_acknowledged} proposals acknowledged`;
+        if (!queue.length) {
+          document.querySelector("#position").textContent = "0 / 0";
+          setStatus("No pending samples in this queue.", "success");
+          return;
+        }
+        setStatus("Queue loaded. Inspect model evidence before making a human decision.");
+        loadSample();
+      } catch (error) {
+        setStatus(`${error.message} Check that app.py is running, then reload this page.`, "error");
+      }
+    }
+    function loadSample() {
+      if (!queue.length) return;
+      const sample = queue[index];
+      document.querySelector("#position").textContent = `${index + 1} / ${queue.length}`;
+      document.querySelector("#notes").value = sample.notes || "";
+      document.querySelector("#context").value = sample.vehicle_context_id || "";
+      document.querySelector("#role").value = sample.occupant_role || "PENDING";
+      document.querySelector("#reviewer").value = localStorage.getItem("roadwatchReviewerId") || "";
+      const suggestions = sample.proposal_review?.metadata_suggestions || {};
+      document.querySelector("#video").value = sample.video_id || suggestions.video_id || "";
+      document.querySelector("#vehicle").value = sample.vehicle_id || "";
+      document.querySelector("#person").value = sample.person_id || "";
+      document.querySelector("#camera").value = sample.camera_id || "";
+      renderConditions(sample.conditions || []);
+      document.querySelector("#conditionSuggestion").textContent = suggestions.conditions?.length
+        ? `Model suggestions (not approved): ${suggestions.conditions.join(", ")}`
+        : "No model condition suggestion; select only what is visibly supported.";
+      renderFacts(document.querySelector("#source"), {
+        source: sample.source_id || "—", asset: sample.source_asset_id || "—",
+        group: sample.source_group_id || "—", license: sample.license || "—"
+      });
+      renderAi(sample.proposal_review);
+      image.onload = () => { canvas.width = image.naturalWidth; canvas.height = image.naturalHeight; draw(); };
+      image.onerror = () => setStatus("Image failed to load. Verify the incoming dataset path and sample ID.", "error");
+      image.src = `/api/image/${encodeURIComponent(sample.sample_id)}?v=${Date.now()}`;
+      renderBoxes();
+      document.querySelector("#prev").disabled = index === 0;
+      document.querySelector("#next").disabled = index === queue.length - 1;
+    }
+    function renderAi(review) {
+      document.querySelector("#aiEmpty").hidden = Boolean(review);
+      document.querySelector("#aiEvidence").hidden = !review;
+      if (!review) return;
+      const tier = document.querySelector("#aiTier");
+      tier.textContent = review.tier || "UNKNOWN";
+      tier.className = `tag ${review.tier === "HIGH_CONFIDENCE" ? "high" : review.tier === "MEDIUM_CONFIDENCE" ? "medium" : "uncertain"}`;
+      document.querySelector("#aiDecision").textContent = review.decision || "—";
+      renderFacts(document.querySelector("#aiFacts"), {
+        confidence: Number(review.confidence || 0).toLocaleString(undefined, {style: "percent", maximumFractionDigits: 1}),
+        evidence: review.evidence_level || "—", model: review.reviewer_model || "—",
+        training: review.training_eligible ? "Pretrain proposal eligible" : "Escalate / exclude",
+        governance: review.governance_eligible ? "Eligible" : "Not human-approved"
+      });
+      document.querySelector("#aiReasons").textContent = `Reason: ${(review.reason || []).join("; ") || "No reason recorded"}`;
+      document.querySelector("#batchConfirm").disabled = !(review.tier === "HIGH_CONFIDENCE" && review.decision === "PASS");
+    }
+    function draw() {
+      context2d.drawImage(image, 0, 0);
+      (queue[index].annotations || []).forEach((box, boxIndex) => {
+        const [centerX, centerY, width, height] = box.yolo;
+        context2d.strokeStyle = colors[box.class_id]; context2d.lineWidth = 3;
+        context2d.strokeRect((centerX - width / 2) * canvas.width, (centerY - height / 2) * canvas.height, width * canvas.width, height * canvas.height);
+        context2d.fillStyle = colors[box.class_id]; context2d.font = "14px sans-serif";
+        context2d.fillText(`${boxIndex + 1} ${names[box.class_id]} / ${box.occupant_role || "PENDING"}`, (centerX - width / 2) * canvas.width + 4, (centerY - height / 2) * canvas.height + 16);
+      });
+      canvas.style.transform = `scale(${scale})`;
+    }
+    function renderBoxes() {
+      const boxes = queue[index].annotations || [];
+      document.querySelector("#boxes").innerHTML = boxes.length ? boxes.map((box, boxIndex) =>
+        `<div class="box"><select aria-label="Class for box ${boxIndex + 1}" data-class-index="${boxIndex}">${names.map((name, classIndex) => `<option value="${classIndex}" ${classIndex === box.class_id ? "selected" : ""}>${name}</option>`).join("")}</select><select aria-label="Role for box ${boxIndex + 1}" data-role-index="${boxIndex}">${roles.map(role => `<option value="${role}" ${role === (box.occupant_role || "PENDING") ? "selected" : ""}>${role}</option>`).join("")}</select><button type="button" data-delete="${boxIndex}">Delete</button></div>`
+      ).join("") : '<p class="help">No canonical boxes. Approve negative only after inspecting the complete image.</p>';
+      document.querySelectorAll("[data-class-index]").forEach(node => node.onchange = () => { queue[index].annotations[node.dataset.classIndex].class_id = Number(node.value); draw(); });
+      document.querySelectorAll("[data-role-index]").forEach(node => node.onchange = () => { queue[index].annotations[node.dataset.roleIndex].occupant_role = node.value; draw(); });
+      document.querySelectorAll("[data-delete]").forEach(node => node.onclick = () => { queue[index].annotations.splice(Number(node.dataset.delete), 1); renderBoxes(); draw(); });
+    }
+    canvas.onpointerdown = event => {
+      const rectangle = canvas.getBoundingClientRect();
+      start = [(event.clientX - rectangle.left) / rectangle.width, (event.clientY - rectangle.top) / rectangle.height];
+    };
+    canvas.onpointerup = event => {
+      if (!start) return;
+      const rectangle = canvas.getBoundingClientRect();
+      const end = [(event.clientX - rectangle.left) / rectangle.width, (event.clientY - rectangle.top) / rectangle.height];
+      const left = Math.min(start[0], end[0]), top = Math.min(start[1], end[1]);
+      const width = Math.abs(start[0] - end[0]), height = Math.abs(start[1] - end[1]);
+      if (width > .005 && height > .005) {
+        queue[index].annotations ||= [];
+        queue[index].annotations.push({class_id: Number(document.querySelector("#class").value), occupant_role: document.querySelector("#role").value, yolo: [left + width / 2, top + height / 2, width, height]});
+        renderBoxes(); draw();
+      }
+      start = null;
+    };
+    document.querySelector("#prev").onclick = () => { index = Math.max(0, index - 1); loadSample(); };
+    document.querySelector("#next").onclick = () => { index = Math.min(queue.length - 1, index + 1); loadSample(); };
+    document.querySelector("#zoomIn").onclick = () => { scale = Math.min(3, scale + .25); draw(); };
+    document.querySelector("#zoomOut").onclick = () => { scale = Math.max(.5, scale - .25); draw(); };
+    document.querySelector("#batchConfirm").onclick = async () => {
+      const reviewerId = document.querySelector("#reviewer").value.trim();
+      if (!reviewerId) { setStatus("Enter Reviewer ID before batch confirmation.", "error"); return; }
+      const candidates = queue.filter(sample => sample.proposal_review?.tier === "HIGH_CONFIDENCE" && sample.proposal_review?.decision === "PASS").slice(0, 500);
+      if (!candidates.length) { setStatus("No high-confidence model-assisted PASS samples are available in this queue.", "error"); return; }
+      if (!window.confirm(`Acknowledge proposals for ${candidates.length} samples? This is not governed HUMAN_APPROVED.`)) return;
+      await submit("/api/batch-acknowledgement", {reviewer_id: reviewerId, sample_ids: candidates.map(sample => sample.sample_id), notes: "Reviewer acknowledged visible high-confidence model proposals."}, `Acknowledged ${candidates.length} proposals for pretrain use.`);
+    };
+    async function submit(url, payload, successMessage) {
+      if (saving) return false;
+      saving = true;
+      document.querySelectorAll("button").forEach(button => button.disabled = true);
+      try {
+        const response = await fetch(url, {method: "POST", headers: {"content-type": "application/json"}, body: JSON.stringify(payload)});
+        if (!response.ok) {
+          const body = await response.json().catch(() => ({}));
+          const detail = Array.isArray(body.detail) ? body.detail.map(value => value.msg).join("; ") : body.detail;
+          throw new Error(detail || `Request failed with HTTP ${response.status}.`);
+        }
+        setStatus(successMessage, "success");
+        return true;
+      } catch (error) {
+        setStatus(`${error.message} Your edits remain on screen; correct the fields and retry.`, "error");
+        return false;
+      } finally {
+        saving = false;
+        document.querySelectorAll("button").forEach(button => button.disabled = false);
+        document.querySelector("#prev").disabled = index === 0;
+        document.querySelector("#next").disabled = index === queue.length - 1;
+        renderAi(queue[index]?.proposal_review);
+      }
+    }
+    document.querySelectorAll("[data-status]").forEach(button => button.onclick = async () => {
+      const reviewerId = document.querySelector("#reviewer").value.trim();
+      localStorage.setItem("roadwatchReviewerId", reviewerId);
+      const payload = {
+        sample_id: queue[index].sample_id, reviewer_id: reviewerId, reviewer_type: "HUMAN",
+        status: button.dataset.status, notes: document.querySelector("#notes").value,
+        vehicle_context_id: document.querySelector("#context").value,
+        occupant_role: document.querySelector("#role").value,
+        video_id: document.querySelector("#video").value,
+        vehicle_id: document.querySelector("#vehicle").value,
+        person_id: document.querySelector("#person").value,
+        camera_id: document.querySelector("#camera").value,
+        conditions: selectedConditions(), annotations: queue[index].annotations || []
+      };
+      if (await submit("/api/decision", payload, `Saved ${button.dataset.status} for ${queue[index].sample_id}.`)) {
+        if (index < queue.length - 1) { index += 1; loadSample(); }
+      }
+    });
+    renderConditions();
+    loadQueue();
+  </script>
+</body>
+</html>

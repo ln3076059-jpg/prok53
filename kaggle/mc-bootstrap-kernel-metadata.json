@@ -1,0 +1,14 @@
+{
+  "id": "longngoc11/roadwatch-mc6500-train-150-epochs",
+  "title": "Roadwatch MC6500 Train 150 Epochs",
+  "code_file": "kaggle_train_mc_bootstrap.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": true,
+  "dataset_sources": ["longngoc11/roadwatch-mc-bootstrap-6500-v1"],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}

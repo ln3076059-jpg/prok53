@@ -14,11 +14,29 @@ No source below is automatically part of the final dataset. Download permission,
 
 Rejected sources remain in `datasets/sources.yaml`. In particular, a Roboflow dataset without an explicit license is rejected because [Roboflow documents that unspecified-license datasets remain all-rights-reserved](https://docs.roboflow.com/universe/find-a-dataset-on-universe).
 
+For V2 external evaluation, the 334 Mendeley `Cellphone Use` frames are now isolated in
+`datasets/manifests/v2_phone_external_mendeley_review.json`. They span five inferred sequence
+groups and remain `EXTERNAL_TEST_ONLY_UNTIL_MODEL_LOCK`; the behavior-region labels are never
+treated as phone boxes, and every physical phone/negative requires manual review. The ADT queue
+uses the same frozen-candidate policy for seatbelt/phone evaluation.
+
 ## Seatbelt-source decision, 2026-08-31
 
 Roboflow `seatbelttraining` v4 is now downloaded with an immutable hash manifest. Its host/source data reports CC BY 4.0 and 8,371 generated images (7,323/696/352), including three augmented outputs per training example. The actual data contains `no-seatbelt` and `seatbelt` person/upper-body boxes, but at least 147 inferred groups leak across its published splits. Those splits are discarded; augmentation-lineage regrouping and human state/ROI review remain mandatory.
 
 DriverMVT was evaluated but deferred because Part 1 alone is 39.7 GB. The revised DMD corpus was also rejected for this project handoff: its official page describes roughly 25 TB raw and limits use to academic purposes under CC BY-NC-ND 4.0. Neither is a practical lightweight replacement for the already downloaded 138 MB Mendeley Driver Risk source.
+
+## V2 gap-source decision, 2026-09-01
+
+ADT `Seat_belt_detection` v1 is downloaded under `datasets/raw/roboflow_adt_seatbelt_v1/1`.
+The source contains 3,820 images but mixes twelve classes. Audit found 2,704 inferred
+augmentation-lineage groups, including 56 `mobile`, 1,166 `person-noseatbelt`, and 1,639
+`person-seatbelt` boxes; 84 selected representatives contain at least one source bbox that must
+be clipped for display. None is automatically admitted. Run `training.prepare_v2_data_gaps` to
+produce one review representative per inferred group, explicit phone-positive/negative queues,
+the 500-item uncertainty UI queue, and a machine-readable action plan.
+Reviewed ADT representatives are reserved as a source-disjoint external-test candidate. They
+must not enter training or threshold tuning before the model is locked.
 
 ## Event semantics versus detector labels
 

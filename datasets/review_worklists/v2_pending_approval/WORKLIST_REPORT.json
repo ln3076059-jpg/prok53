@@ -1,0 +1,71 @@
+{
+  "groups": {
+    "00_user_reviewed_pending_identity": {
+      "folder": "datasets\\review_worklists\\v2_pending_approval\\00_user_reviewed_pending_identity",
+      "images": 8,
+      "materialization": {
+        "hardlink": 8
+      }
+    },
+    "01_phone_negative_model_conflict": {
+      "folder": "datasets\\review_worklists\\v2_pending_approval\\01_phone_negative_model_conflict",
+      "images": 580,
+      "materialization": {
+        "hardlink": 580
+      }
+    },
+    "02_phone_negative_low_visibility": {
+      "folder": "datasets\\review_worklists\\v2_pending_approval\\02_phone_negative_low_visibility",
+      "images": 501,
+      "materialization": {
+        "hardlink": 501
+      }
+    },
+    "03_phone_positive_low_visibility": {
+      "folder": "datasets\\review_worklists\\v2_pending_approval\\03_phone_positive_low_visibility",
+      "images": 115,
+      "materialization": {
+        "hardlink": 115
+      }
+    },
+    "04_seatbelt_roi_low_visibility": {
+      "folder": "datasets\\review_worklists\\v2_pending_approval\\04_seatbelt_roi_low_visibility",
+      "images": 23,
+      "materialization": {
+        "hardlink": 23
+      }
+    },
+    "05_seatbelt_uncertain_classifier_candidates": {
+      "folder": "datasets\\review_worklists\\v2_pending_approval\\05_seatbelt_uncertain_classifier_candidates",
+      "images": 500,
+      "materialization": {
+        "hardlink": 500
+      }
+    },
+    "06_external_adt_uncertain": {
+      "folder": "datasets\\review_worklists\\v2_pending_approval\\06_external_adt_uncertain",
+      "images": 351,
+      "materialization": {
+        "hardlink": 351
+      }
+    },
+    "07_external_mendeley_uncertain": {
+      "folder": "datasets\\review_worklists\\v2_pending_approval\\07_external_mendeley_uncertain",
+      "images": 151,
+      "materialization": {
+        "hardlink": 151
+      }
+    },
+    "08_hard_examples_uncertain": {
+      "folder": "datasets\\review_worklists\\v2_pending_approval\\08_hard_examples_uncertain",
+      "images": 1126,
+      "materialization": {
+        "hardlink": 1126
+      }
+    }
+  },
+  "policy": "Folders 01-05 are core review work. Folders 06-08 are external/hard-example follow-up and are not required for model-assisted pending-approval exploratory training. Folder 00 still needs reviewer identity and required metadata before governance admission.",
+  "schema_version": 1,
+  "status": "EXPORTED",
+  "total_images": 3355
+}

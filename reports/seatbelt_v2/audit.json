@@ -1,0 +1,43 @@
+{
+  "errors": [],
+  "manifest_samples": 4868,
+  "manifest_sha256": "ef24c9af108970ea2ed4cc98ca8afc07871683616f91c36024a240f943f3e897",
+  "overlaps": {
+    "effective_group_id": [],
+    "near_cluster_id": [],
+    "sha256": [],
+    "source_group_id": []
+  },
+  "policy": "Integrity/isolation pass is not human semantic approval.",
+  "splits": {
+    "test": {
+      "images": 621,
+      "instances": {
+        "occupant_upper_body": 624
+      },
+      "positive_images": {
+        "occupant_upper_body": 621
+      }
+    },
+    "train": {
+      "images": 3604,
+      "instances": {
+        "occupant_upper_body": 3660
+      },
+      "positive_images": {
+        "occupant_upper_body": 3604
+      }
+    },
+    "val": {
+      "images": 643,
+      "instances": {
+        "occupant_upper_body": 645
+      },
+      "positive_images": {
+        "occupant_upper_body": 643
+      }
+    }
+  },
+  "status": "PASS",
+  "task": "OCCUPANT_UPPER_BODY_ROI_DETECTION"
+}

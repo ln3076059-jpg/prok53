@@ -1,0 +1,8 @@
+{
+  "artifact": "yolo11s-cls.pt",
+  "bytes": 13630112,
+  "provider": "Ultralytics",
+  "sha256": "e2b605d1c8c212b434a75a32759a6f7adf1d2b29c35f76bdccd4c794cb653cf2",
+  "source_url": "https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11s-cls.pt",
+  "verification": "HTTPS_OFFICIAL_RELEASE_DOWNLOAD_AND_LOCAL_TASK_LOAD"
+}

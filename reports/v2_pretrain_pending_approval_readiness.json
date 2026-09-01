@@ -1,0 +1,97 @@
+{
+  "base_weights": {
+    "classifier": {
+      "bytes": 13630112,
+      "path": "models\\base\\yolo11s-cls.pt",
+      "sha256": "e2b605d1c8c212b434a75a32759a6f7adf1d2b29c35f76bdccd4c794cb653cf2"
+    },
+    "detector": {
+      "bytes": 19313732,
+      "path": "models\\base\\yolo11s.pt",
+      "sha256": "85a76fe86dd8afe384648546b56a7a78580c7cb7b404fc595f97969322d502d5"
+    }
+  },
+  "datasets": {
+    "phone_detector": {
+      "boxes": {
+        "test": 139,
+        "train": 1114,
+        "val": 139
+      },
+      "images": {
+        "test": 302,
+        "train": 2421,
+        "val": 302
+      },
+      "isolation": {
+        "groups": 2337,
+        "leaking_groups": [],
+        "status": "PASS"
+      },
+      "manifest_sha256": "97db4e2015fbec8cdf13983098698748a3aaedce5439b40240bbf74513ff7200",
+      "samples": 3025
+    },
+    "seatbelt_classifier": {
+      "counts": {
+        "test": {
+          "seatbelt_fastened": 307,
+          "seatbelt_unfastened": 289,
+          "uncertain_or_occluded": 25
+        },
+        "train": {
+          "seatbelt_fastened": 2367,
+          "seatbelt_unfastened": 1186,
+          "uncertain_or_occluded": 100
+        },
+        "val": {
+          "seatbelt_fastened": 350,
+          "seatbelt_unfastened": 266,
+          "uncertain_or_occluded": 25
+        }
+      },
+      "hash_conflicts": [],
+      "isolation": {
+        "groups": 1826,
+        "leaking_groups": [],
+        "status": "PASS"
+      },
+      "manifest_sha256": "3e5cece466b5401dd7b9a2254e9a77248d4f936e4535b64af3c626f78c37e262",
+      "ready_for_exploratory_training": true,
+      "samples": 4915,
+      "source_box_conflicts": []
+    },
+    "seatbelt_detector": {
+      "boxes": {
+        "test": 617,
+        "train": 3650,
+        "val": 638
+      },
+      "images": {
+        "test": 614,
+        "train": 3595,
+        "val": 636
+      },
+      "isolation": {
+        "groups": 1821,
+        "leaking_groups": [],
+        "status": "PASS"
+      },
+      "manifest_sha256": "4d87e4c4b0a1c9a8b35845463f1544caab962273d0ef4a128dc8419755f0ab4a",
+      "samples": 4845
+    }
+  },
+  "errors": [],
+  "policy": "PASS means dataset integrity passed. Training requires the separate readiness flag. No result here means HUMAN_APPROVED, governed, production-ready, or externally tested.",
+  "readiness": {
+    "classifier_training_ready": true,
+    "exploratory_training_ready": true,
+    "governance_level": "MODEL_ASSISTED_PENDING_APPROVAL",
+    "governed_training_ready": false,
+    "human_verified": false,
+    "production_activation_ready": false,
+    "proposal_detector_training_ready": true
+  },
+  "schema_version": 1,
+  "status": "PASS",
+  "training_blockers": []
+}

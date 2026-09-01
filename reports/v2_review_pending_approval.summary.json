@@ -1,0 +1,23 @@
+{
+  "decision_counts": {
+    "HUMAN_DRAFT_TAKES_PRECEDENCE": 8,
+    "KEEP_UNCERTAIN_OR_OCCLUDED": 500,
+    "NO_PHONE_DETECTED_SECOND_PASS": 1653,
+    "PHONE_POSITIVE_SECOND_MODEL_AGREEMENT": 59,
+    "PHONE_POSSIBLE_REVIEW_REQUIRED": 490,
+    "PHONE_PRESENT_PROPOSAL": 566,
+    "REMAINS_UNCERTAIN_SOURCE_PHONE_ONLY": 56,
+    "SEATBELT_VISUAL_REVIEW_STILL_REQUIRED": 23
+  },
+  "governance_eligible": false,
+  "images_checked": 3355,
+  "integrity_failures": [],
+  "model_path": "models\\base\\yolo11s.pt",
+  "policy": "This is a model-assisted pretrain review pending human approval. Seatbelt semantic uncertainty is retained when the general COCO model cannot verify belt state.",
+  "approval_status": "PENDING_HUMAN_APPROVAL",
+  "reviewed_at_utc": "2026-09-01T08:44:08.136494+00:00",
+  "reviewer_model": "yolo11s_coco_pretrain_review",
+  "reviewer_type": "AUTOMATED",
+  "schema_version": 1,
+  "status": "INTEGRITY_PASS"
+}

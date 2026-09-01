@@ -1,0 +1,450 @@
+{
+  "blocker_codes": [
+    "PHONE_SEMANTIC_REVIEW_PENDING",
+    "PHONE_SOURCE_GROUP_REVIEW_REQUIRED",
+    "PHONE_SINGLE_SOURCE_DOMAIN",
+    "PHONE_NO_EXTERNAL_TEST_DOMAIN",
+    "PHONE_DIVERSITY_METADATA_INCOMPLETE",
+    "PHONE_CONDITION_COVERAGE_UNPROVEN",
+    "SEATBELT_SEMANTIC_REVIEW_PENDING",
+    "SEATBELT_SOURCE_GROUP_REVIEW_REQUIRED",
+    "SEATBELT_SINGLE_SOURCE_DOMAIN",
+    "SEATBELT_NO_EXTERNAL_TEST_DOMAIN",
+    "SEATBELT_DIVERSITY_METADATA_INCOMPLETE",
+    "SEATBELT_CONDITION_COVERAGE_UNPROVEN",
+    "PHONE_NEGATIVES_NOT_HUMAN_CONFIRMED",
+    "SEATBELT_ROI_HARD_NEGATIVES_MISSING",
+    "SEATBELT_CLASSIFIER_NOT_READY",
+    "PRODUCTION_CALIBRATION_INCOMPLETE"
+  ],
+  "blockers": [
+    {
+      "area": "phone",
+      "code": "PHONE_SEMANTIC_REVIEW_PENDING",
+      "message": "9728 samples are still PENDING.",
+      "remediation": "Apply append-only human review decisions; never promote proposals automatically.",
+      "severity": "BLOCKER"
+    },
+    {
+      "area": "phone",
+      "code": "PHONE_SOURCE_GROUP_REVIEW_REQUIRED",
+      "message": "4068 samples still use GROUP_REVIEW_REQUIRED source groups.",
+      "remediation": "Resolve video/vehicle/person grouping before governed split certification.",
+      "severity": "BLOCKER"
+    },
+    {
+      "area": "phone",
+      "code": "PHONE_SINGLE_SOURCE_DOMAIN",
+      "message": "All samples come from one provider/domain.",
+      "remediation": "Add a licensed, independently reviewed source with distinct cameras and vehicles.",
+      "severity": "BLOCKER"
+    },
+    {
+      "area": "phone",
+      "code": "PHONE_NO_EXTERNAL_TEST_DOMAIN",
+      "message": "The test split is not source-disjoint from training.",
+      "remediation": "Create a frozen external test set from an unseen provider/camera domain.",
+      "severity": "BLOCKER"
+    },
+    {
+      "area": "phone",
+      "code": "PHONE_DIVERSITY_METADATA_INCOMPLETE",
+      "message": "Required diversity fields are incomplete: video_id, vehicle_id, person_id, camera_id.",
+      "remediation": "Record real video, vehicle, person, and camera identifiers for every sample.",
+      "severity": "BLOCKER"
+    },
+    {
+      "area": "phone",
+      "code": "PHONE_CONDITION_COVERAGE_UNPROVEN",
+      "message": "Required adverse-condition coverage is not declared in the manifest.",
+      "remediation": "Capture and review every condition defined by datasets/v2_capture_policy.yaml.",
+      "severity": "BLOCKER"
+    },
+    {
+      "area": "seatbelt",
+      "code": "SEATBELT_SEMANTIC_REVIEW_PENDING",
+      "message": "4868 samples are still PENDING.",
+      "remediation": "Apply append-only human review decisions; never promote proposals automatically.",
+      "severity": "BLOCKER"
+    },
+    {
+      "area": "seatbelt",
+      "code": "SEATBELT_SOURCE_GROUP_REVIEW_REQUIRED",
+      "message": "4227 samples still use GROUP_REVIEW_REQUIRED source groups.",
+      "remediation": "Resolve video/vehicle/person grouping before governed split certification.",
+      "severity": "BLOCKER"
+    },
+    {
+      "area": "seatbelt",
+      "code": "SEATBELT_SINGLE_SOURCE_DOMAIN",
+      "message": "All samples come from one provider/domain.",
+      "remediation": "Add a licensed, independently reviewed source with distinct cameras and vehicles.",
+      "severity": "BLOCKER"
+    },
+    {
+      "area": "seatbelt",
+      "code": "SEATBELT_NO_EXTERNAL_TEST_DOMAIN",
+      "message": "The test split is not source-disjoint from training.",
+      "remediation": "Create a frozen external test set from an unseen provider/camera domain.",
+      "severity": "BLOCKER"
+    },
+    {
+      "area": "seatbelt",
+      "code": "SEATBELT_DIVERSITY_METADATA_INCOMPLETE",
+      "message": "Required diversity fields are incomplete: video_id, vehicle_id, person_id, camera_id.",
+      "remediation": "Record real video, vehicle, person, and camera identifiers for every sample.",
+      "severity": "BLOCKER"
+    },
+    {
+      "area": "seatbelt",
+      "code": "SEATBELT_CONDITION_COVERAGE_UNPROVEN",
+      "message": "Required adverse-condition coverage is not declared in the manifest.",
+      "remediation": "Capture and review every condition defined by datasets/v2_capture_policy.yaml.",
+      "severity": "BLOCKER"
+    },
+    {
+      "area": "phone",
+      "code": "PHONE_NEGATIVES_NOT_HUMAN_CONFIRMED",
+      "message": "7513 samples contain zero phone boxes but remain proposals.",
+      "remediation": "Review zero-box images so visible phones are not trained as background.",
+      "severity": "BLOCKER"
+    },
+    {
+      "area": "seatbelt",
+      "code": "SEATBELT_ROI_HARD_NEGATIVES_MISSING",
+      "message": "Every seatbelt-detector image contains an upper-body box.",
+      "remediation": "Add reviewed empty-cabin, seat, reflection, and non-occupant hard negatives.",
+      "severity": "BLOCKER"
+    },
+    {
+      "area": "classifier",
+      "code": "SEATBELT_CLASSIFIER_NOT_READY",
+      "message": "The three-state classifier is missing a reviewed class in one or more splits.",
+      "remediation": "Review independent UNCERTAIN_OR_OCCLUDED crops in train, val, and test.",
+      "severity": "BLOCKER"
+    },
+    {
+      "area": "deployment",
+      "code": "PRODUCTION_CALIBRATION_INCOMPLETE",
+      "message": "Model configuration still contains markers: UNTRAINED, PLACEHOLDER, PENDING.",
+      "remediation": "Calibrate thresholds/camera ROIs, lock weights, then run frozen test once.",
+      "severity": "BLOCKER"
+    }
+  ],
+  "candidate_external_sources": {
+    "mendeley_driver_risk_behavior_v1": {
+      "automatic_training_admission": false,
+      "inferred_sequence_groups": 5,
+      "license": "CC-BY-4.0",
+      "selected_phone_behavior_frames": 334,
+      "source_images": 1232,
+      "split_policy": "EXTERNAL_TEST_ONLY_UNTIL_MODEL_LOCK",
+      "task": "PHONE_DETECTION"
+    },
+    "roboflow_adt_seatbelt_v1": {
+      "automatic_training_admission": false,
+      "class_boxes": {
+        "1": 3,
+        "2": 3,
+        "No-helmet": 12,
+        "Np": 1629,
+        "bike": 3395,
+        "car": 1633,
+        "helmet": 1363,
+        "mobile": 56,
+        "no-helmet": 2207,
+        "person-noseatbelt": 1166,
+        "person-seatbelt": 1639,
+        "seatbelt": 1492
+      },
+      "class_images": {
+        "1": 3,
+        "2": 3,
+        "No-helmet": 11,
+        "Np": 820,
+        "bike": 1663,
+        "car": 924,
+        "helmet": 977,
+        "mobile": 54,
+        "no-helmet": 1255,
+        "person-noseatbelt": 993,
+        "person-seatbelt": 1244,
+        "seatbelt": 1127
+      },
+      "content_fingerprint": "3740d1a44e8c6e73cb2e98bf77ce9b0d8981ebe842802c2fde1b63ae06aae246",
+      "governed_split_policy": "EXTERNAL_TEST_ONLY_UNTIL_MODEL_LOCK",
+      "images_with_source_label_errors": 84,
+      "inferred_groups": 2704,
+      "ingest_manifest_sha256": "45322580e781d743d483bfc5d01335966467ed291f724050bbf6bdc73617ae41",
+      "license": "CC-BY-4.0",
+      "queue_sha256": "2ad3661b0e3ea9dcea431b3e23b94e11c5790b43f852a022842f54d5d1df6f0b",
+      "representatives_with_canonical_proposals": 966,
+      "review_representatives": 2704,
+      "schema_version": 1,
+      "selection_policy": "ONE_REPRESENTATIVE_PER_INFERRED_ROBOFLOW_AUGMENTATION_GROUP",
+      "source_id": "roboflow_adt_seatbelt_v1",
+      "source_images": 3820,
+      "status": "HUMAN_REVIEW_REQUIRED"
+    }
+  },
+  "data_gap_action_plan": {
+    "commands": {
+      "convert_uncertain_decisions": "py -m training.convert_uncertain_review_decisions datasets/manifests/v2_seatbelt_uncertain_ui_decisions.jsonl --reviewer <NAME>",
+      "materialize_adt_external": "py -m training.apply_review_decisions datasets/manifests/ingest_adt_seatbelt_v1.jsonl --decisions datasets/manifests/review_decisions_adt_seatbelt_v1.jsonl --output datasets/reviewed/adt_external --manifest datasets/manifests/reviewed_adt_external.jsonl",
+      "materialize_phone_external_mendeley": "py -m training.apply_review_decisions datasets/manifests/ingest_mendeley_driver_risk_v1.jsonl --decisions datasets/manifests/v2_phone_external_mendeley_decisions.jsonl --output datasets/reviewed/mendeley_phone_external --manifest datasets/manifests/reviewed_v2_phone_external_mendeley.jsonl",
+      "materialize_phone_negatives": "py -m training.apply_review_decisions datasets/manifests/ingest_dms.jsonl --decisions datasets/manifests/v2_phone_negative_decisions.jsonl --output datasets/reviewed/v2_phone --manifest datasets/manifests/reviewed_v2_phone_negative.jsonl",
+      "materialize_phone_positives": "py -m training.apply_review_decisions datasets/manifests/ingest_dms.jsonl --decisions datasets/manifests/v2_phone_positive_decisions.jsonl --output datasets/reviewed/v2_phone --manifest datasets/manifests/reviewed_v2_phone_positive.jsonl",
+      "materialize_seatbelt_roi_state": "py -m training.apply_review_decisions datasets/manifests/ingest_roboflow_seatbelttraining_v4.jsonl --decisions datasets/manifests/v2_seatbelt_roi_state_decisions.jsonl --output datasets/reviewed/v2_seatbelt --manifest datasets/manifests/reviewed_v2_seatbelt_roi_state.jsonl",
+      "materialize_uncertain": "py -m training.apply_uncertain_decisions datasets/manifests/seatbelt_uncertain_decisions_v2.jsonl",
+      "refresh_readiness": "py -m training.audit_v2_readiness",
+      "review_adt_external": "py tools/annotation_reviewer/app.py --manifest datasets/manifests/review_queue_adt_seatbelt_v1.json --decisions datasets/manifests/review_decisions_adt_seatbelt_v1.jsonl --pending-only",
+      "review_phone_external_mendeley": "py tools/annotation_reviewer/app.py --manifest datasets/manifests/v2_phone_external_mendeley_review.json --decisions datasets/manifests/v2_phone_external_mendeley_decisions.jsonl --pending-only",
+      "review_phone_negatives": "py tools/annotation_reviewer/app.py --manifest datasets/manifests/v2_phone_negative_review.json --decisions datasets/manifests/v2_phone_negative_decisions.jsonl --pending-only",
+      "review_phone_positives": "py tools/annotation_reviewer/app.py --manifest datasets/manifests/v2_phone_positive_review.json --decisions datasets/manifests/v2_phone_positive_decisions.jsonl --pending-only",
+      "review_seatbelt_roi_state": "py tools/annotation_reviewer/app.py --manifest datasets/manifests/v2_seatbelt_roi_state_review.json --decisions datasets/manifests/v2_seatbelt_roi_state_decisions.jsonl --pending-only",
+      "review_template": "py tools/annotation_reviewer/app.py --manifest <QUEUE.json> --decisions <DECISIONS.jsonl> --pending-only",
+      "review_uncertain_ui": "py tools/annotation_reviewer/app.py --manifest datasets/manifests/v2_seatbelt_uncertain_ui_review.json --decisions datasets/manifests/v2_seatbelt_uncertain_ui_decisions.jsonl --pending-only"
+    },
+    "external_candidates": {
+      "mendeley_driver_risk_behavior_v1": {
+        "automatic_training_admission": false,
+        "inferred_sequence_groups": 5,
+        "license": "CC-BY-4.0",
+        "selected_phone_behavior_frames": 334,
+        "source_images": 1232,
+        "split_policy": "EXTERNAL_TEST_ONLY_UNTIL_MODEL_LOCK",
+        "task": "PHONE_DETECTION"
+      },
+      "roboflow_adt_seatbelt_v1": {
+        "automatic_training_admission": false,
+        "inferred_groups": 2704,
+        "license": "CC-BY-4.0",
+        "source_images": 3820,
+        "split_policy": "EXTERNAL_TEST_ONLY_UNTIL_MODEL_LOCK",
+        "task": "SEATBELT_AND_PHONE_EXTERNAL_EVALUATION"
+      }
+    },
+    "external_test_policy": "Reviewed Mendeley phone frames and ADT representatives are reserved as source-disjoint external test candidates and must not tune hyperparameters or thresholds.",
+    "policy": "Only explicitly reviewed rows may enter a governed dataset. Group representatives reduce augmentation duplication but never approve unseen variants.",
+    "queues": {
+      "adt_external_group_representatives": {
+        "path": "datasets/manifests/review_queue_adt_seatbelt_v1.json",
+        "samples": 2704,
+        "sha256": "2ad3661b0e3ea9dcea431b3e23b94e11c5790b43f852a022842f54d5d1df6f0b"
+      },
+      "phone_external_mendeley_review": {
+        "path": "datasets\\manifests\\v2_phone_external_mendeley_review.json",
+        "samples": 334,
+        "sha256": "2ed8377c105585fb9ea1935a2348595517e75e4593f101a81f17a725f4320f28"
+      },
+      "phone_negative_group_representatives": {
+        "path": "datasets\\manifests\\v2_phone_negative_review.json",
+        "samples": 3013,
+        "sha256": "4cc1cfd8ccf4ea38c3eef78bb3933576b2d37fe09c89df0d6d4d8fc2148875d4"
+      },
+      "phone_positive_group_representatives": {
+        "path": "datasets\\manifests\\v2_phone_positive_review.json",
+        "samples": 1216,
+        "sha256": "14e9badf3db65f388701216c9e740b26912cf32f18f686bb74190006c9c87d0f"
+      },
+      "seatbelt_roi_state_all_selected": {
+        "path": "datasets\\manifests\\v2_seatbelt_roi_state_review.json",
+        "samples": 4868,
+        "sha256": "87e46dfb96ef477e55669229f9efd1ac136dd5c2d9add6e0dd5be7eff0c38b61"
+      },
+      "seatbelt_uncertain_ui": {
+        "path": "datasets\\manifests\\v2_seatbelt_uncertain_ui_review.json",
+        "samples": 500,
+        "sha256": "db4c7823b81ddd17771729d588def580ceb1fcabb0482e6928cb20540e00148d"
+      }
+    },
+    "review_order": [
+      "v2_seatbelt_uncertain_ui_review",
+      "v2_phone_negative_review",
+      "v2_phone_positive_review",
+      "v2_phone_external_mendeley_review",
+      "v2_seatbelt_roi_state_review",
+      "review_queue_adt_seatbelt_v1"
+    ],
+    "schema_version": 1,
+    "status": "HUMAN_ACTION_REQUIRED_BEFORE_GOVERNED_TRAINING"
+  },
+  "datasets": {
+    "classifier": {
+      "classes": {
+        "0": "seatbelt_fastened",
+        "1": "seatbelt_unfastened",
+        "2": "uncertain_or_occluded"
+      },
+      "counts": {
+        "test": {
+          "seatbelt_fastened": 322,
+          "seatbelt_unfastened": 302,
+          "uncertain_or_occluded": 0
+        },
+        "train": {
+          "seatbelt_fastened": 2441,
+          "seatbelt_unfastened": 1219,
+          "uncertain_or_occluded": 0
+        },
+        "val": {
+          "seatbelt_fastened": 361,
+          "seatbelt_unfastened": 284,
+          "uncertain_or_occluded": 0
+        }
+      },
+      "crop_manifest_sha256": "771e300b7f0d2813c265c7128dc81956a31132b0866133e50adaa45ae6695a89",
+      "human_review_status": "PENDING",
+      "padding": 0.08,
+      "ready_for_training": false,
+      "source_manifest_sha256": "ef24c9af108970ea2ed4cc98ca8afc07871683616f91c36024a240f943f3e897",
+      "split_inheritance": "SOURCE_SPLITS_PRESERVED",
+      "task": "SEATBELT_STATE_CLASSIFICATION",
+      "uncertain_manifest": null,
+      "uncertain_policy": "INVISIBLE_OR_OCCLUDED_IS_NOT_UNFASTENED"
+    },
+    "phone": {
+      "box_instances": 2548,
+      "condition_coverage": [],
+      "diversity_fields": {
+        "camera_id": {
+          "present_samples": 0,
+          "unique_values": 0
+        },
+        "person_id": {
+          "present_samples": 0,
+          "unique_values": 0
+        },
+        "vehicle_id": {
+          "present_samples": 0,
+          "unique_values": 0
+        },
+        "video_id": {
+          "present_samples": 0,
+          "unique_values": 0
+        }
+      },
+      "external_test_source_disjoint": false,
+      "group_review_required": 4068,
+      "missing_required_conditions": [
+        "daylight",
+        "low_light",
+        "motion_blur",
+        "oblique_view",
+        "partial_occlusion",
+        "video_compression",
+        "windshield_reflection"
+      ],
+      "review_statuses": {
+        "PENDING": 9728
+      },
+      "samples": 9728,
+      "sources": {
+        "kaggle_habbas_dms_v1": 9728
+      },
+      "split_sources": {
+        "test": [
+          "kaggle_habbas_dms_v1"
+        ],
+        "train": [
+          "kaggle_habbas_dms_v1"
+        ],
+        "val": [
+          "kaggle_habbas_dms_v1"
+        ]
+      },
+      "usage": {
+        "PROPOSAL_MODEL_ONLY": 9728
+      },
+      "zero_box_samples": 7513
+    },
+    "seatbelt": {
+      "box_instances": 4929,
+      "condition_coverage": [],
+      "diversity_fields": {
+        "camera_id": {
+          "present_samples": 0,
+          "unique_values": 0
+        },
+        "person_id": {
+          "present_samples": 0,
+          "unique_values": 0
+        },
+        "vehicle_id": {
+          "present_samples": 0,
+          "unique_values": 0
+        },
+        "video_id": {
+          "present_samples": 0,
+          "unique_values": 0
+        }
+      },
+      "external_test_source_disjoint": false,
+      "group_review_required": 4227,
+      "missing_required_conditions": [
+        "daylight",
+        "low_light",
+        "motion_blur",
+        "oblique_view",
+        "partial_occlusion",
+        "video_compression",
+        "windshield_reflection"
+      ],
+      "review_statuses": {
+        "PENDING": 4868
+      },
+      "samples": 4868,
+      "sources": {
+        "roboflow_seatbelttraining_v4": 4868
+      },
+      "split_sources": {
+        "test": [
+          "roboflow_seatbelttraining_v4"
+        ],
+        "train": [
+          "roboflow_seatbelttraining_v4"
+        ],
+        "val": [
+          "roboflow_seatbelttraining_v4"
+        ]
+      },
+      "usage": {
+        "PROPOSAL_MODEL_ONLY": 4868
+      },
+      "zero_box_samples": 0
+    }
+  },
+  "integrity": {
+    "base_weight_valid": true,
+    "phone": "PASS",
+    "seatbelt": "PASS"
+  },
+  "model_config_markers": [
+    "UNTRAINED",
+    "PLACEHOLDER",
+    "PENDING"
+  ],
+  "policy": "Proposal readiness permits detector bootstrap training only. Governed and production readiness require real review, diversity, external testing, and calibration.",
+  "schema_version": 1,
+  "status": {
+    "governed_training_ready": false,
+    "production_activation_ready": false,
+    "proposal_detector_training_ready": true
+  },
+  "warnings": [
+    {
+      "area": "classifier",
+      "code": "SEATBELT_CLASSIFIER_TRAIN_IMBALANCE",
+      "message": "Fastened/unfastened train ratio is 2.00:1.",
+      "remediation": "Use reviewed class balancing and report per-class recall; do not duplicate test data.",
+      "severity": "WARNING"
+    },
+    {
+      "area": "operations",
+      "code": "EXTERNAL_RESUME_BACKUP_REQUIRES_CONFIGURATION",
+      "message": "Automatic resume protects the working disk unless a second backup directory is supplied.",
+      "remediation": "Pass -BackupDirectory on the portable launcher and place it on another disk or sync target.",
+      "severity": "WARNING"
+    }
+  ]
+}

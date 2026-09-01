@@ -1,0 +1,121 @@
+{
+  "manifest": "datasets\\manifests\\pretrain_pending_approval\\v2_seatbelt_uncertain.json",
+  "schema_version": 1,
+  "splits": {
+    "test": {
+      "candidates": 100,
+      "pages": [
+        {
+          "image": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\test_page_01.jpg",
+          "items": 25,
+          "manifest": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\test_page_01.json"
+        },
+        {
+          "image": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\test_page_02.jpg",
+          "items": 25,
+          "manifest": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\test_page_02.json"
+        },
+        {
+          "image": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\test_page_03.jpg",
+          "items": 25,
+          "manifest": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\test_page_03.json"
+        },
+        {
+          "image": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\test_page_04.jpg",
+          "items": 25,
+          "manifest": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\test_page_04.json"
+        }
+      ]
+    },
+    "train": {
+      "candidates": 300,
+      "pages": [
+        {
+          "image": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_01.jpg",
+          "items": 25,
+          "manifest": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_01.json"
+        },
+        {
+          "image": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_02.jpg",
+          "items": 25,
+          "manifest": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_02.json"
+        },
+        {
+          "image": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_03.jpg",
+          "items": 25,
+          "manifest": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_03.json"
+        },
+        {
+          "image": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_04.jpg",
+          "items": 25,
+          "manifest": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_04.json"
+        },
+        {
+          "image": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_05.jpg",
+          "items": 25,
+          "manifest": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_05.json"
+        },
+        {
+          "image": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_06.jpg",
+          "items": 25,
+          "manifest": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_06.json"
+        },
+        {
+          "image": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_07.jpg",
+          "items": 25,
+          "manifest": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_07.json"
+        },
+        {
+          "image": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_08.jpg",
+          "items": 25,
+          "manifest": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_08.json"
+        },
+        {
+          "image": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_09.jpg",
+          "items": 25,
+          "manifest": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_09.json"
+        },
+        {
+          "image": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_10.jpg",
+          "items": 25,
+          "manifest": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_10.json"
+        },
+        {
+          "image": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_11.jpg",
+          "items": 25,
+          "manifest": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_11.json"
+        },
+        {
+          "image": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_12.jpg",
+          "items": 25,
+          "manifest": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\train_page_12.json"
+        }
+      ]
+    },
+    "val": {
+      "candidates": 100,
+      "pages": [
+        {
+          "image": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\val_page_01.jpg",
+          "items": 25,
+          "manifest": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\val_page_01.json"
+        },
+        {
+          "image": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\val_page_02.jpg",
+          "items": 25,
+          "manifest": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\val_page_02.json"
+        },
+        {
+          "image": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\val_page_03.jpg",
+          "items": 25,
+          "manifest": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\val_page_03.json"
+        },
+        {
+          "image": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\val_page_04.jpg",
+          "items": 25,
+          "manifest": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\val_page_04.json"
+        }
+      ]
+    }
+  }
+}

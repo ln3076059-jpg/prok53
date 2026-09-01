@@ -10,4 +10,14 @@
 - A passenger using a phone is allowed at event level, but the physical phone may still be annotated so the detector learns the object; occupant-role association suppresses the event.
 - An unfastened passenger is a violation when the upper-body evidence is visible and the passenger is associated with the vehicle.
 
-All imported seatbelt labels begin `PENDING`. Only a human `APPROVED` decision may enter the governed dataset.
+All imported seatbelt labels begin `PENDING`. Model-assisted review may promote a technically valid proposal
+to `MODEL_ASSISTED_PROPOSAL_PENDING_APPROVAL` for explicitly exploratory training, but it must retain
+`reviewer_type: AUTOMATED`, model identity, confidence, evidence, and
+`governance_eligible: false`.
+Only a real, named human decision with the required context metadata may create per-sample
+`HUMAN_APPROVED` state and enter the governed dataset.
+
+The reviewer UI shows the model-assisted proposal and evidence before the human form. A batch
+acknowledgement may record a visible set of high-confidence proposals, but it is stored as
+`ADMIN_ACKNOWLEDGED_MODEL_PROPOSAL_BATCH`; it is not equivalent to reviewing every sample and
+never sets governed readiness by itself.

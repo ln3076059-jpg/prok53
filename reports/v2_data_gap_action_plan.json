@@ -1,0 +1,102 @@
+{
+  "commands": {
+    "audit_pretrain_pending_datasets": "py -m training.audit_pretrain_pending_v2",
+    "build_pretrain_pending_bundle": "py -m training.build_v2_pretrain_bundle",
+    "build_pretrain_pending_datasets": "py -m training.build_pretrain_pending_v2",
+    "convert_uncertain_decisions": "py -m training.convert_uncertain_review_decisions datasets/manifests/v2_seatbelt_uncertain_ui_decisions.jsonl --reviewer <NAME>",
+    "materialize_adt_external": "py -m training.apply_review_decisions datasets/manifests/ingest_adt_seatbelt_v1.jsonl --decisions datasets/manifests/review_decisions_adt_seatbelt_v1.jsonl --output datasets/reviewed/adt_external --manifest datasets/manifests/reviewed_adt_external.jsonl",
+    "materialize_phone_external_mendeley": "py -m training.apply_review_decisions datasets/manifests/ingest_mendeley_driver_risk_v1.jsonl --decisions datasets/manifests/v2_phone_external_mendeley_decisions.jsonl --output datasets/reviewed/mendeley_phone_external --manifest datasets/manifests/reviewed_v2_phone_external_mendeley.jsonl",
+    "materialize_phone_negatives": "py -m training.apply_review_decisions datasets/manifests/ingest_dms.jsonl --decisions datasets/manifests/v2_phone_negative_decisions.jsonl --output datasets/reviewed/v2_phone --manifest datasets/manifests/reviewed_v2_phone_negative.jsonl",
+    "materialize_phone_positives": "py -m training.apply_review_decisions datasets/manifests/ingest_dms.jsonl --decisions datasets/manifests/v2_phone_positive_decisions.jsonl --output datasets/reviewed/v2_phone --manifest datasets/manifests/reviewed_v2_phone_positive.jsonl",
+    "materialize_seatbelt_roi_state": "py -m training.apply_review_decisions datasets/manifests/ingest_roboflow_seatbelttraining_v4.jsonl --decisions datasets/manifests/v2_seatbelt_roi_state_decisions.jsonl --output datasets/reviewed/v2_seatbelt --manifest datasets/manifests/reviewed_v2_seatbelt_roi_state.jsonl",
+    "materialize_uncertain": "py -m training.apply_uncertain_decisions datasets/manifests/seatbelt_uncertain_decisions_v2.jsonl",
+    "refresh_readiness": "py -m training.audit_v2_readiness",
+    "review_adt_external": "py tools/annotation_reviewer/app.py --manifest datasets/manifests/review_queue_adt_seatbelt_v1.json --decisions datasets/manifests/review_decisions_adt_seatbelt_v1.jsonl --pending-only",
+    "review_phone_external_mendeley": "py tools/annotation_reviewer/app.py --manifest datasets/manifests/v2_phone_external_mendeley_review.json --decisions datasets/manifests/v2_phone_external_mendeley_decisions.jsonl --pending-only",
+    "review_phone_negatives": "py tools/annotation_reviewer/app.py --manifest datasets/manifests/v2_phone_negative_review.json --decisions datasets/manifests/v2_phone_negative_decisions.jsonl --pending-only",
+    "review_phone_positives": "py tools/annotation_reviewer/app.py --manifest datasets/manifests/v2_phone_positive_review.json --decisions datasets/manifests/v2_phone_positive_decisions.jsonl --pending-only",
+    "review_seatbelt_roi_state": "py tools/annotation_reviewer/app.py --manifest datasets/manifests/v2_seatbelt_roi_state_review.json --decisions datasets/manifests/v2_seatbelt_roi_state_decisions.jsonl --pending-only",
+    "review_template": "py tools/annotation_reviewer/app.py --manifest <QUEUE.json> --decisions <DECISIONS.jsonl> --pending-only",
+    "review_uncertain_ui": "py tools/annotation_reviewer/app.py --manifest datasets/manifests/v2_seatbelt_uncertain_ui_review.json --decisions datasets/manifests/v2_seatbelt_uncertain_ui_decisions.jsonl --pending-only",
+    "run_proposal_review": "py -m training.prepare_v2_pretrain_review",
+    "train_pretrain_pending_bundle": ".\\START_V2_PRETRAIN_REVIEW_TRAINING.ps1"
+  },
+  "external_candidates": {
+    "mendeley_driver_risk_behavior_v1": {
+      "automatic_training_admission": false,
+      "inferred_sequence_groups": 5,
+      "license": "CC-BY-4.0",
+      "selected_phone_behavior_frames": 334,
+      "source_images": 1232,
+      "split_policy": "EXTERNAL_TEST_ONLY_UNTIL_MODEL_LOCK",
+      "task": "PHONE_DETECTION"
+    },
+    "roboflow_adt_seatbelt_v1": {
+      "automatic_training_admission": false,
+      "inferred_groups": 2704,
+      "license": "CC-BY-4.0",
+      "source_images": 3820,
+      "split_policy": "EXTERNAL_TEST_ONLY_UNTIL_MODEL_LOCK",
+      "task": "SEATBELT_AND_PHONE_EXTERNAL_EVALUATION"
+    }
+  },
+  "external_test_policy": "Reviewed Mendeley phone frames and ADT representatives are reserved as source-disjoint external test candidates and must not tune hyperparameters or thresholds.",
+  "policy": "Only explicitly reviewed rows may enter a governed dataset. Group representatives reduce augmentation duplication but never approve unseen variants.",
+  "queues": {
+    "adt_external_group_representatives": {
+      "path": "datasets/manifests/review_queue_adt_seatbelt_v1.json",
+      "samples": 2704,
+      "sha256": "2ad3661b0e3ea9dcea431b3e23b94e11c5790b43f852a022842f54d5d1df6f0b"
+    },
+    "phone_external_mendeley_review": {
+      "path": "datasets\\manifests\\v2_phone_external_mendeley_review.json",
+      "samples": 334,
+      "sha256": "2ed8377c105585fb9ea1935a2348595517e75e4593f101a81f17a725f4320f28"
+    },
+    "phone_negative_group_representatives": {
+      "path": "datasets\\manifests\\v2_phone_negative_review.json",
+      "samples": 3013,
+      "sha256": "4cc1cfd8ccf4ea38c3eef78bb3933576b2d37fe09c89df0d6d4d8fc2148875d4"
+    },
+    "phone_positive_group_representatives": {
+      "path": "datasets\\manifests\\v2_phone_positive_review.json",
+      "samples": 1216,
+      "sha256": "14e9badf3db65f388701216c9e740b26912cf32f18f686bb74190006c9c87d0f"
+    },
+    "seatbelt_roi_state_all_selected": {
+      "path": "datasets\\manifests\\v2_seatbelt_roi_state_review.json",
+      "samples": 4868,
+      "sha256": "87e46dfb96ef477e55669229f9efd1ac136dd5c2d9add6e0dd5be7eff0c38b61"
+    },
+    "seatbelt_uncertain_ui": {
+      "path": "datasets\\manifests\\v2_seatbelt_uncertain_ui_review.json",
+      "samples": 500,
+      "sha256": "db4c7823b81ddd17771729d588def580ceb1fcabb0482e6928cb20540e00148d"
+    }
+  },
+  "review_order": [
+    "v2_seatbelt_uncertain_ui_review",
+    "v2_phone_negative_review",
+    "v2_phone_positive_review",
+    "v2_phone_external_mendeley_review",
+    "v2_seatbelt_roi_state_review",
+    "review_queue_adt_seatbelt_v1"
+  ],
+  "schema_version": 1,
+  "status": "HUMAN_ACTION_REQUIRED_BEFORE_GOVERNED_TRAINING",
+  "training_lanes": {
+    "pretrain_pending_exploratory": {
+      "governance_level": "MODEL_ASSISTED_PENDING_APPROVAL",
+      "governed_training_ready": false,
+      "human_verified": false,
+      "production_activation_ready": false,
+      "readiness_report": "reports/v2_pretrain_pending_approval_readiness.json",
+      "training_ready": true
+    },
+    "human_verified_governed": {
+      "human_action_required": true,
+      "readiness_report": "reports/v2_training_readiness.json",
+      "training_ready": false
+    }
+  }
+}

@@ -1,0 +1,2896 @@
+{
+  "approval_status": "MODEL_ASSISTED_PENDING_APPROVAL",
+  "contact_sheet_report": "reports\\diagnostics\\seatbelt_uncertain_contact_sheets_v2\\CONTACT_SHEET_REPORT.json",
+  "contact_sheet_report_sha256": "f50e2ff68ad1490e959c33bd9ebd679035a1ec86049433883cf334c8605caad6",
+  "counts_by_split": {
+    "test": 25,
+    "train": 100,
+    "val": 25
+  },
+  "created_at_utc": "2026-09-01T10:07:58.638728+00:00",
+  "decision": "UNCERTAIN_OR_OCCLUDED",
+  "decisions": [
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "ff076f384a8e5cbe8cffe692af3a528d:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:ff076f384a8e5cbe8cffe692af3a528d:box:0",
+      "decision_sha256": "2f6cb1b26f6b5bb90c96d615797d7fb5ab85580ebd0e14254d62a5de73cda40e",
+      "effective_group_id": "near:79fcb36380b3feafd7bd",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "ff076f384a8e5cbe8cffe692af3a528d:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:peopleincars154_jpeg",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "2c996046e08957deba8325e58f32a007:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:2c996046e08957deba8325e58f32a007:box:0",
+      "decision_sha256": "7729d253c2115033d212493dfaa6730943fa1f83d24136b5623ccdb605ba6b39",
+      "effective_group_id": "near:53025197ea23aab3fb26",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "2c996046e08957deba8325e58f32a007:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:PXL_20220916_122604185-MP",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "67fbbc91621a586d8dd3b8fe290b25ad:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:67fbbc91621a586d8dd3b8fe290b25ad:box:0",
+      "decision_sha256": "77a377ab4f03df8ecdcd763dabc649cebe00a706bfaffa8f9b5f39221fc92682",
+      "effective_group_id": "near:db908f4b4fb38031dec5",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "67fbbc91621a586d8dd3b8fe290b25ad:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-109-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "456881c694805f0080c5ad636be7649f:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:456881c694805f0080c5ad636be7649f:box:0",
+      "decision_sha256": "28de636c4d62ca3ed003877933d26da3bb9b8904aff83f09842940f715bb820c",
+      "effective_group_id": "near:1bd144e92a63065d21b3",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "456881c694805f0080c5ad636be7649f:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:2-MaleGlasses_mp4",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "c88fbc3229dd537ba34230a9da46e6a8:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:c88fbc3229dd537ba34230a9da46e6a8:box:0",
+      "decision_sha256": "7255ba5835d8f2edcfc8257a5f7d2ab99acd99ecbe79115127e49e3005547a0c",
+      "effective_group_id": "near:b2fce6b2d5b6be634953",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "c88fbc3229dd537ba34230a9da46e6a8:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1281-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "522ce1d697095a24a3c591ee667efecd:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:522ce1d697095a24a3c591ee667efecd:box:0",
+      "decision_sha256": "3cbe302b26f529a31aaa534745659059142ae50a17da1ae4ccb9db6776510811",
+      "effective_group_id": "near:b2fce6b2d5b6be634953",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "522ce1d697095a24a3c591ee667efecd:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1302-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "9bc530e084525f05a23a4eff78f3b49b:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:9bc530e084525f05a23a4eff78f3b49b:box:0",
+      "decision_sha256": "27a375a3b5bcfb55d1ff9cba288a47d21358997436fdc312ac73e2a889823032",
+      "effective_group_id": "near:25baaf7bcc6ede2d7527",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "9bc530e084525f05a23a4eff78f3b49b:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:3-MaleGlasses_mp4",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "31798421ec9b58c6bf2c1becac103265:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:31798421ec9b58c6bf2c1becac103265:box:0",
+      "decision_sha256": "732d220e957f97f5e7e3fe7653a07cbcf21424aaa47761b7e4ac9c052e19d6fe",
+      "effective_group_id": "near:25baaf7bcc6ede2d7527",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "31798421ec9b58c6bf2c1becac103265:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-122-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "df520003327857e2a697d03399f1d74c:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:df520003327857e2a697d03399f1d74c:box:0",
+      "decision_sha256": "e379d52d80a93592cb8fbb136fa954a51cb348872bd27746062f04e78c470692",
+      "effective_group_id": "near:b2fce6b2d5b6be634953",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "df520003327857e2a697d03399f1d74c:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1293-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "0f3d903b0f355b6a8c51a1d0c85a70bf:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:0f3d903b0f355b6a8c51a1d0c85a70bf:box:0",
+      "decision_sha256": "bf79593c8e8fa328132be8cf24e971a1d8827c9ae26f4285b8bbb866d3434071",
+      "effective_group_id": "near:db908f4b4fb38031dec5",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "0f3d903b0f355b6a8c51a1d0c85a70bf:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-107-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "554c13ddd3e95c3b9bbb0004e558c6bc:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:554c13ddd3e95c3b9bbb0004e558c6bc:box:0",
+      "decision_sha256": "2e27c0bcc7831545cdd9ce77e810a07c7c2c735d22eea064a8d61f78083f734d",
+      "effective_group_id": "near:4db519ffcd1bc1e05b10",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "554c13ddd3e95c3b9bbb0004e558c6bc:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:seatbelt97_jpeg",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "c54889fec9f857d5b500b6f30dccca60:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:c54889fec9f857d5b500b6f30dccca60:box:0",
+      "decision_sha256": "5078d7dc48320c288399cdf21c289651a08753d361e68f31a6417a7d94b9fa42",
+      "effective_group_id": "near:db908f4b4fb38031dec5",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "c54889fec9f857d5b500b6f30dccca60:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-117-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "036ddfac15785a8480b10d5375166ace:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:036ddfac15785a8480b10d5375166ace:box:0",
+      "decision_sha256": "5653ea157bafadbb312a2c540dee14cdcf824597079cb5dd8293527fa3d3bf69",
+      "effective_group_id": "near:db908f4b4fb38031dec5",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "036ddfac15785a8480b10d5375166ace:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-113-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "ae67206c0cce59878cfd1d8fa384651c:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:ae67206c0cce59878cfd1d8fa384651c:box:0",
+      "decision_sha256": "9a0166d139cfa4641a0371de4ce6eab584984e39f896f4913e104dd33b7b2dd1",
+      "effective_group_id": "near:b2fce6b2d5b6be634953",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "ae67206c0cce59878cfd1d8fa384651c:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1278-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "fb94c898c08959409e433b971bd577aa:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:fb94c898c08959409e433b971bd577aa:box:0",
+      "decision_sha256": "c3fbb9d8eff21638a92a22c5eaeb9e9bd619266cdf84a624b2f95c6989ad1c9c",
+      "effective_group_id": "near:3284704cd7b1940bcebb",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "fb94c898c08959409e433b971bd577aa:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:drowsy",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "25d398dc04d45c869bd51eb05535b6f5:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:25d398dc04d45c869bd51eb05535b6f5:box:0",
+      "decision_sha256": "4b6afc67cc762c0efac93a150a2c4b36db4a10dfb008a7e58b901c328549dfae",
+      "effective_group_id": "near:548f5d40f879a7dc61e5",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "25d398dc04d45c869bd51eb05535b6f5:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:10-MaleGlasses_mp4",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "c81694a8bc745ffbacb9194d2bb204e9:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:c81694a8bc745ffbacb9194d2bb204e9:box:0",
+      "decision_sha256": "53c9d6a9b7b99a6fc9122a05adf04168b4d94f67cac29a75a44761e3e4a96a3f",
+      "effective_group_id": "near:258e66be5bb6222fbc1f",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "c81694a8bc745ffbacb9194d2bb204e9:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8168_jpeg.rf.db0da20ad6a739b51a11fc35818bdcd4",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "4fe5fc4d86f55db18f110a8ef6229c73:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:4fe5fc4d86f55db18f110a8ef6229c73:box:0",
+      "decision_sha256": "829bb972a2326135996547b187660631fa4764434e2eea36429ef241788b284c",
+      "effective_group_id": "near:b2fce6b2d5b6be634953",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "4fe5fc4d86f55db18f110a8ef6229c73:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1300-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "b1eb416fabdd5d1abe0402bed7e1ebf8:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:b1eb416fabdd5d1abe0402bed7e1ebf8:box:0",
+      "decision_sha256": "6c6a4fc686da29aa78b04875d9e1a034dda89229c2c8253ee55a7b3b38d2a14d",
+      "effective_group_id": "near:b2fce6b2d5b6be634953",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "b1eb416fabdd5d1abe0402bed7e1ebf8:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1262-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "abf7c0bc6cbf5cddb5c875cec5234a79:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:abf7c0bc6cbf5cddb5c875cec5234a79:box:0",
+      "decision_sha256": "cc8e7b2eae7d70b3d24ae207a56be891aec2c98a77e97398ecddb3f5c6365c25",
+      "effective_group_id": "near:d2c44cbc00f28b38d4b9",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "abf7c0bc6cbf5cddb5c875cec5234a79:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:524_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "8064905006065c50aa5eccfb8d3cf375:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:8064905006065c50aa5eccfb8d3cf375:box:0",
+      "decision_sha256": "449f471a93af382aac53d777df2e3c586b9de32e6b968bcdafbbb2f6e218b8aa",
+      "effective_group_id": "near:d6539dcb555e0006e73d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "8064905006065c50aa5eccfb8d3cf375:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1120-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "e94d414e33b255358e60c71b70dc14fe:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:e94d414e33b255358e60c71b70dc14fe:box:0",
+      "decision_sha256": "bc5f41ed9c09c975f194eb5368fbab1e9377ab4e04c7bcdba558400844cf8cdd",
+      "effective_group_id": "near:d6539dcb555e0006e73d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "e94d414e33b255358e60c71b70dc14fe:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1125-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "80c0c3f8d81d57e68fc89995e02c42c0:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:80c0c3f8d81d57e68fc89995e02c42c0:box:0",
+      "decision_sha256": "809b9ea9942a1dc296012c59bc639da0007b8def02e1d53fc069f83023cd4a96",
+      "effective_group_id": "near:1bd144e92a63065d21b3",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "80c0c3f8d81d57e68fc89995e02c42c0:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-105-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "a64823b4a34b5270b7f5cc6f8876fef5:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:a64823b4a34b5270b7f5cc6f8876fef5:box:0",
+      "decision_sha256": "3d9595fe881c7f84a9086e996eec559c79eace18d7ac5fac5ed670d99fc5bb2a",
+      "effective_group_id": "near:d6539dcb555e0006e73d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "a64823b4a34b5270b7f5cc6f8876fef5:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1087-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "44edc567946a55209f966182e7af3d9e:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:44edc567946a55209f966182e7af3d9e:box:0",
+      "decision_sha256": "ab58e63360d89bf5a80085a47694c2ed047aa77a498046fac01ca69123aa2412",
+      "effective_group_id": "near:3284704cd7b1940bcebb",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "44edc567946a55209f966182e7af3d9e:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:13-FemaleGlasses_avi_mp4",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "8ce5913b58385c9dbd04c6b5dffff3a9:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:8ce5913b58385c9dbd04c6b5dffff3a9:box:0",
+      "decision_sha256": "94960a0a5e84985b8844d5370c5144e8dfe65d94031ca02fd75bfa399043e35f",
+      "effective_group_id": "near:d6539dcb555e0006e73d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "8ce5913b58385c9dbd04c6b5dffff3a9:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1122-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "f81dd820497557479104499892721b8f:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:f81dd820497557479104499892721b8f:box:0",
+      "decision_sha256": "e83193b6ce76664ca311285b3849c2c2b32531e5128be0762d998750952b69ee",
+      "effective_group_id": "near:d6539dcb555e0006e73d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "f81dd820497557479104499892721b8f:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1131-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "87cd9b50cea953e78b07e2dfafebc344:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:87cd9b50cea953e78b07e2dfafebc344:box:0",
+      "decision_sha256": "10903494a6cf53a8392e5fdd1e88592a4ea0bf48c80161cbed71eaa616819901",
+      "effective_group_id": "near:4cce5e816fac25dbe49b",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "87cd9b50cea953e78b07e2dfafebc344:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:186",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "a6efef0bf400587fb86b07101b515c5a:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:a6efef0bf400587fb86b07101b515c5a:box:0",
+      "decision_sha256": "8c80234ac1b793e6f4405da46395ca1898fea4ecbacb2aa6c8973d30ecea952e",
+      "effective_group_id": "near:aa76e98d5ba88a7efb7c",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "a6efef0bf400587fb86b07101b515c5a:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1307-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "59fd3ed1e8af5029a411936ce79e8a06:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:59fd3ed1e8af5029a411936ce79e8a06:box:0",
+      "decision_sha256": "0d4d42770f7b43823245fe5aad615dc62a516cda9f63f4cd2075a71b08a8f89b",
+      "effective_group_id": "near:c8f904c1e7599429a013",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "59fd3ed1e8af5029a411936ce79e8a06:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1309-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "386ad5226f7f543bbde9d5dad6133948:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:386ad5226f7f543bbde9d5dad6133948:box:0",
+      "decision_sha256": "dfe3875d52ea05e065ecb1ca85806d0b237bdc93ef14c2ff6e2a5f68c3018b35",
+      "effective_group_id": "near:3284704cd7b1940bcebb",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "386ad5226f7f543bbde9d5dad6133948:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt1_20",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "5e00bf1acbd656868d318ae95db2e65a:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:5e00bf1acbd656868d318ae95db2e65a:box:0",
+      "decision_sha256": "7c338896cc88cc456b129cd096514ab4f968bad081d939c38837d8017db1712f",
+      "effective_group_id": "near:d6539dcb555e0006e73d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "5e00bf1acbd656868d318ae95db2e65a:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1098-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "fd78fa010164554d8e79795b21c04338:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:fd78fa010164554d8e79795b21c04338:box:0",
+      "decision_sha256": "e35ba15675fa2ca1268ec99406d188f31d8c647d3f50624e4215b480f816aef5",
+      "effective_group_id": "near:c6dfb15f0cdf4cc36d8b",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "fd78fa010164554d8e79795b21c04338:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:271",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "78975b6b8d4d5adcb40f9ca701b91d55:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:78975b6b8d4d5adcb40f9ca701b91d55:box:0",
+      "decision_sha256": "327905dedcbd7120d0e48a5b10a6b34768688bd2dcf4830a908ac9819f9b0afe",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "78975b6b8d4d5adcb40f9ca701b91d55:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_94",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "73cd456170f25053adc8a71679ea7d13:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:73cd456170f25053adc8a71679ea7d13:box:0",
+      "decision_sha256": "39277680fc749c77cd117d12cb4b97c09f2463bb7d9e2e0cbc9faf019eecc2c7",
+      "effective_group_id": "near:7c39f5f9fff38b4dfc59",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "73cd456170f25053adc8a71679ea7d13:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:34_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "5708628b7b9857c193e609b0e0d5bf84:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:5708628b7b9857c193e609b0e0d5bf84:box:0",
+      "decision_sha256": "81e1569a9787502224028d71a74d87d65f44766266e0825387def4d3e972b233",
+      "effective_group_id": "near:3284704cd7b1940bcebb",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "5708628b7b9857c193e609b0e0d5bf84:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt1_49",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "397389662dfd55d1b5a36c6b0a17ff88:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:397389662dfd55d1b5a36c6b0a17ff88:box:0",
+      "decision_sha256": "9d8f5e9d33ad784040d42c0c603dc6f793d0d96d593d94cdd45e6ff06cb9303e",
+      "effective_group_id": "near:d6539dcb555e0006e73d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "397389662dfd55d1b5a36c6b0a17ff88:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1099-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "6ce2fe9aa1255cb2bd038861cdaaff57:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:6ce2fe9aa1255cb2bd038861cdaaff57:box:0",
+      "decision_sha256": "899ca1c4136351aa46063d6457ae43283902e470766f6116902be1bab1f82660",
+      "effective_group_id": "near:b2fce6b2d5b6be634953",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "6ce2fe9aa1255cb2bd038861cdaaff57:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1304-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "f4083ab67eb15154abf55d6dc6338fb6:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:f4083ab67eb15154abf55d6dc6338fb6:box:0",
+      "decision_sha256": "b916803ed83d6daefa77525e69e44301639f5599b6bc08908cdba0e993dd2138",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "f4083ab67eb15154abf55d6dc6338fb6:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_30",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "268017977e2e5d269c3e5bebcf5adec4:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:268017977e2e5d269c3e5bebcf5adec4:box:0",
+      "decision_sha256": "b423cc8273f2fb7442eab1ca50d80cd6e5ce2f67b0332e7c9ec93a62098f7ae4",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "268017977e2e5d269c3e5bebcf5adec4:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_32",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "1a19d57b82b05408a013d66e8226757d:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:1a19d57b82b05408a013d66e8226757d:box:0",
+      "decision_sha256": "3767f2f88dace8675af84a5ceca09c5b09282ae3f77637c99d185d14a52a35e2",
+      "effective_group_id": "near:3284704cd7b1940bcebb",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "1a19d57b82b05408a013d66e8226757d:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt1_21",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "bb97c10b5a235c2c919175be885c3213:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:bb97c10b5a235c2c919175be885c3213:box:0",
+      "decision_sha256": "2bdc80935b5d76da43f3df8706aa960593a3bd75c55bbe517f15012821fc94e3",
+      "effective_group_id": "near:d6539dcb555e0006e73d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "bb97c10b5a235c2c919175be885c3213:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1091-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "4878decf398a5dbc912fdc5e00131130:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:4878decf398a5dbc912fdc5e00131130:box:0",
+      "decision_sha256": "c8708917bf9787204a6b30446899ea435caea5c9967a088bb0629a3740597ec6",
+      "effective_group_id": "near:d6539dcb555e0006e73d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "4878decf398a5dbc912fdc5e00131130:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1089-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "0af2a73ffc4c5173aea56d056a763825:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:0af2a73ffc4c5173aea56d056a763825:box:0",
+      "decision_sha256": "d0a9b44b89c06073dcad89ef36bdd9357c4ea79cb066db3da9f463b1a12813da",
+      "effective_group_id": "near:3284704cd7b1940bcebb",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "0af2a73ffc4c5173aea56d056a763825:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:99",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "7e520dd7fd4b520991d396e47f2f910d:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:7e520dd7fd4b520991d396e47f2f910d:box:0",
+      "decision_sha256": "4dd951a25cec69a440134d21765418e81185e4e78d352be6126eb6cea7bb6501",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "7e520dd7fd4b520991d396e47f2f910d:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_8",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "f75cc04f10415846afae2d2e4c5837fe:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:f75cc04f10415846afae2d2e4c5837fe:box:0",
+      "decision_sha256": "739830e703bccbba0c2e2815919518b0e79e5fc764d07eb52bad15b3ebbb2c43",
+      "effective_group_id": "near:d6539dcb555e0006e73d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "f75cc04f10415846afae2d2e4c5837fe:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1101-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "2bc4899d512c5332a85fd0e07a8bd96b:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:2bc4899d512c5332a85fd0e07a8bd96b:box:0",
+      "decision_sha256": "c94c2f766b35926e341d14a0652aa9b1b33b72985b7b1b9c4e63d7da4188a6bf",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "2bc4899d512c5332a85fd0e07a8bd96b:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_16",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "0165491e47d65b5e88d88c7dbd6ca3b8:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:0165491e47d65b5e88d88c7dbd6ca3b8:box:0",
+      "decision_sha256": "e41b1556d5397fb101119bda51e16deeb1fc228b936c53024a0cc70fa29e986c",
+      "effective_group_id": "near:d6539dcb555e0006e73d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "0165491e47d65b5e88d88c7dbd6ca3b8:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1095-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "15789d8330ca57ee8bfb3b249bc85d94:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:15789d8330ca57ee8bfb3b249bc85d94:box:0",
+      "decision_sha256": "33c73e00c6b3dc85ec0229fbf1705621f02841022e5ce7f421f5a20d89c8897f",
+      "effective_group_id": "near:3639adb32eb387262663",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "15789d8330ca57ee8bfb3b249bc85d94:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:seatbelt3_45",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "97947476d78e5845a8b04903b6a98bf5:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:97947476d78e5845a8b04903b6a98bf5:box:0",
+      "decision_sha256": "007a2b8a7459d597f44fff126b3026ce029b3128726fe507415bc91961fd5de3",
+      "effective_group_id": "near:d6539dcb555e0006e73d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "97947476d78e5845a8b04903b6a98bf5:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1118-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "7463f00fea8a59679589569e5420e321:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:7463f00fea8a59679589569e5420e321:box:0",
+      "decision_sha256": "d34f1e28a61292f6606b1c4e057ea94bab350fbfa36a8a163cab3eb3a8e4c3e5",
+      "effective_group_id": "near:19d2a963b73110b1d059",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "7463f00fea8a59679589569e5420e321:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:482_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "95a4531de4d25f738ba6746a7e2f3db9:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:95a4531de4d25f738ba6746a7e2f3db9:box:0",
+      "decision_sha256": "893e3b00f57443bcd83838159f9d7b83db7d16e95478ee70d1c751e7d17f9727",
+      "effective_group_id": "near:3a578404c23deddd5e60",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "95a4531de4d25f738ba6746a7e2f3db9:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1003-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "bd7f1072eeaf546aafbebc81c2f519b5:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:bd7f1072eeaf546aafbebc81c2f519b5:box:0",
+      "decision_sha256": "dbb9fc5210a4cf0e8f5c96bd8a8954c3990d3121cd14e7d21d09a5c3bc7dbf2e",
+      "effective_group_id": "near:d6539dcb555e0006e73d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "bd7f1072eeaf546aafbebc81c2f519b5:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1083-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "86fa90862ce35cdabc36d83f9d366887:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:86fa90862ce35cdabc36d83f9d366887:box:0",
+      "decision_sha256": "3d672957d6eb831c7a8ed7e943559722e25b387348a5dbab646e750c0982b5e0",
+      "effective_group_id": "near:c20a603c5ade3f1b3d5a",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "86fa90862ce35cdabc36d83f9d366887:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:seatbelt3_8",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "70965ee3209a5bd7adbff756badc11a5:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:70965ee3209a5bd7adbff756badc11a5:box:0",
+      "decision_sha256": "04359fd5afd95065a795d02aca6a94486494460cc17ef22124fcae875d9e77ef",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "70965ee3209a5bd7adbff756badc11a5:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_25",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "89b620c663365bb59909ce3e919e8fc4:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:89b620c663365bb59909ce3e919e8fc4:box:0",
+      "decision_sha256": "4d41c6489b4e97959979328b56dc2273864a8d91d7df3ed999a0c324e8b8bb5e",
+      "effective_group_id": "near:d6539dcb555e0006e73d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "89b620c663365bb59909ce3e919e8fc4:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1129-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "ac1047e41bf45b8ea7dcb50e260e0518:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:ac1047e41bf45b8ea7dcb50e260e0518:box:0",
+      "decision_sha256": "135e835b9815ce2070cbfd520e78e0f0efcc034d4c4b0a55376ca726140746be",
+      "effective_group_id": "near:3284704cd7b1940bcebb",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "ac1047e41bf45b8ea7dcb50e260e0518:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:51",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "9e6914f785c65bc49dd3b71cbb174c9a:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:9e6914f785c65bc49dd3b71cbb174c9a:box:0",
+      "decision_sha256": "7cdfd4e7626407484f88428cf87dc9dffacf85f28f09bdbf0c98265741c33505",
+      "effective_group_id": "near:d6539dcb555e0006e73d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "9e6914f785c65bc49dd3b71cbb174c9a:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1130-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "20c7aa4f48045883907753f083e662ab:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:20c7aa4f48045883907753f083e662ab:box:0",
+      "decision_sha256": "fac7f461ace4f5979ecdf87cf8d7173276e1563e6a0a463e0f6c903195efe7fe",
+      "effective_group_id": "near:d6539dcb555e0006e73d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "20c7aa4f48045883907753f083e662ab:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1124-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "6a081296073052c397b74fac80b7a6e5:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:6a081296073052c397b74fac80b7a6e5:box:0",
+      "decision_sha256": "3d2c0952ed60baa71426aa2c2564b4a429247e11bf8d607c2f2f3f9b49560889",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "6a081296073052c397b74fac80b7a6e5:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_80",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "d7df02b83cc855c5be273a6e2ca8c41f:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:d7df02b83cc855c5be273a6e2ca8c41f:box:0",
+      "decision_sha256": "0df54e27ac484a2b43a010bf58adb52d67ef49b2a3c877b7470441a62b484456",
+      "effective_group_id": "near:fa7e08d1ee93fe391961",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "d7df02b83cc855c5be273a6e2ca8c41f:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_20220806_154830_572",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "29698901937a5b23937bcb8de9a83803:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:29698901937a5b23937bcb8de9a83803:box:0",
+      "decision_sha256": "2c9a09d95f65fb232e51a66f89b57009cf3275747233ad07761755fca90a718a",
+      "effective_group_id": "near:d6539dcb555e0006e73d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "29698901937a5b23937bcb8de9a83803:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1084-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "8cb3e0ccd5db5bcdab7a02bf315b7432:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:8cb3e0ccd5db5bcdab7a02bf315b7432:box:0",
+      "decision_sha256": "1a40c59a310b62a2bdd9f7b0514a00ac9026a9d388c76dc6669eec0b31b731b0",
+      "effective_group_id": "near:8cbde23fb7e4047ddcdd",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "8cb3e0ccd5db5bcdab7a02bf315b7432:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:PXL_20220916_122608599-MP",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "1f468188ebb15ea991df5786baae22be:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:1f468188ebb15ea991df5786baae22be:box:0",
+      "decision_sha256": "84598f50e8ee430cae7d739a698feb6e8c6ce0a7f635a8970e8e0d756437b30a",
+      "effective_group_id": "near:a61557d531e729d65f7e",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "1f468188ebb15ea991df5786baae22be:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:437_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "d84e00a51a075426a9e9609726bb78f3:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:d84e00a51a075426a9e9609726bb78f3:box:0",
+      "decision_sha256": "0da6f9e2cca78d703092545ddcfcc3add6dc55aa64aa76f95a5fddfb17a5a389",
+      "effective_group_id": "near:3639adb32eb387262663",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "d84e00a51a075426a9e9609726bb78f3:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:seatbelt3_59",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "ec6355b2613757df93f6e35a18f03c39:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:ec6355b2613757df93f6e35a18f03c39:box:0",
+      "decision_sha256": "97fed65292d4127d8c6a189b3a5d59f33990ebc3c6e50a7bdc770ef423da3803",
+      "effective_group_id": "near:25baaf7bcc6ede2d7527",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "ec6355b2613757df93f6e35a18f03c39:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-123-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "9fc697c6dbe8513dbefa4d74a7d886bf:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:9fc697c6dbe8513dbefa4d74a7d886bf:box:0",
+      "decision_sha256": "96289808b7a9415c78065b9098a3519323805a7e53b8436ae88ddd0a5b49fd11",
+      "effective_group_id": "near:aced3959d5b56ca70a1d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "9fc697c6dbe8513dbefa4d74a7d886bf:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt3_27",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "ca47cf52925a59eca18b687ab092e581:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:ca47cf52925a59eca18b687ab092e581:box:0",
+      "decision_sha256": "e95b49cd409123ccf40facbb59354faddb4b47cb1c74fb9766b6624c5473a7bd",
+      "effective_group_id": "near:3639adb32eb387262663",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "ca47cf52925a59eca18b687ab092e581:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:seatbelt3_79",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "a56edc42386653bd8f9a795f0256e928:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:a56edc42386653bd8f9a795f0256e928:box:0",
+      "decision_sha256": "e318e340b4fe5433c067015ba1cf0b0fa8cd70c084f219b53118181c0c7aa6ba",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "a56edc42386653bd8f9a795f0256e928:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_38",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "09fbc2c47317527e9325c71f11f87977:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:09fbc2c47317527e9325c71f11f87977:box:0",
+      "decision_sha256": "88c93b5457214619ca852b3b44d85bfafb61c6bd6f038b5d840981c83ba1ae69",
+      "effective_group_id": "near:3639adb32eb387262663",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "09fbc2c47317527e9325c71f11f87977:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:seatbelt3_4",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "1c5ac50eaf6655e6af27976b055c51fc:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:1c5ac50eaf6655e6af27976b055c51fc:box:0",
+      "decision_sha256": "9a525ffbeb013a4b0676dc6202a1e3cbb2c8ebaa94217d57a85754d6cf31b6e0",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "1c5ac50eaf6655e6af27976b055c51fc:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_93",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "ffb4716a8e05574dabae3e4b513cd5f8:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:ffb4716a8e05574dabae3e4b513cd5f8:box:0",
+      "decision_sha256": "964af689fc81d3187c9205206fc4c823666fc326ac3cea961e8025f08c15298f",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "ffb4716a8e05574dabae3e4b513cd5f8:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_49",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "85a058c6f2cf53dd80761a85ae731d55:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:85a058c6f2cf53dd80761a85ae731d55:box:0",
+      "decision_sha256": "14383c190053ba75952aff5ba7e01d940cc02b00770aa14108824bb97997bf4a",
+      "effective_group_id": "near:6daee8f1ab468477500e",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "85a058c6f2cf53dd80761a85ae731d55:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:img_382",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "d6322aa14f6255c9913d0afa69833b14:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:d6322aa14f6255c9913d0afa69833b14:box:0",
+      "decision_sha256": "6df43f13cf52b52365cce5e14b8c3043a8cdcdfe3b9a19ef3607e352228d5573",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "d6322aa14f6255c9913d0afa69833b14:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_97",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "64af3ab3b7045de4bf15fcd070d83e11:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:64af3ab3b7045de4bf15fcd070d83e11:box:0",
+      "decision_sha256": "f7862bcac3c2796f3dda937171f9a82625c814827cfb20da9ce50741e2a96299",
+      "effective_group_id": "near:3639adb32eb387262663",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "64af3ab3b7045de4bf15fcd070d83e11:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:seatbelt3_51",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "e41e84a339a55c67b9168edb244fdcff:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:e41e84a339a55c67b9168edb244fdcff:box:0",
+      "decision_sha256": "4e489c8e5acb3395cf627edc423c19c5d0c05d8ea3b89e11f6fd3660f2c55221",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "e41e84a339a55c67b9168edb244fdcff:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_11",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "7dfa685f68e456a58d45fb6ef1a1e96d:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:7dfa685f68e456a58d45fb6ef1a1e96d:box:0",
+      "decision_sha256": "835bfd23fd566e48dc5e211cd5ef3d8a5110b0587af00aaaea736375c8b7001f",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "7dfa685f68e456a58d45fb6ef1a1e96d:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_7",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "cbe2ffe4fa3751b8ae8257c9a2662877:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:cbe2ffe4fa3751b8ae8257c9a2662877:box:0",
+      "decision_sha256": "03ea8a2d4cf4e6ecab4abab9782750695555433bc3edbeec53a78dadaeab663a",
+      "effective_group_id": "near:3284704cd7b1940bcebb",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "cbe2ffe4fa3751b8ae8257c9a2662877:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:58",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "6ddf27aab8fb5ea29d43fdddf01a3322:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:6ddf27aab8fb5ea29d43fdddf01a3322:box:0",
+      "decision_sha256": "68f3188e343f5f1ee23ca18d5939f72e1b6dfcbd0a210f5cba908548574e86e6",
+      "effective_group_id": "near:df627ce60ff68e0978cb",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "6ddf27aab8fb5ea29d43fdddf01a3322:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:img_3939",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "7d9889b3414b55d8961bbb6a6c5309f7:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:7d9889b3414b55d8961bbb6a6c5309f7:box:0",
+      "decision_sha256": "7b91adf689f291a55930b2daef9a4ec2e94a3bb7fa925641dfc439911ac5617b",
+      "effective_group_id": "near:3639adb32eb387262663",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "7d9889b3414b55d8961bbb6a6c5309f7:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:seatbelt3_63",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "9befc5ff548b59588081454496810ccd:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:9befc5ff548b59588081454496810ccd:box:0",
+      "decision_sha256": "bd0f48e39523f329697d0e3dd0a74cc1d1db2fe952010a9b1ac29132c044de2c",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "9befc5ff548b59588081454496810ccd:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_5",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "96814a0746fb551abc226ddb6ff15dfd:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:96814a0746fb551abc226ddb6ff15dfd:box:0",
+      "decision_sha256": "7fbaeebe956f16abddf8927596fc2c3e330872b5ec8750a50fa5c45ece36f578",
+      "effective_group_id": "near:1d153c6453b7175ed10c",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "96814a0746fb551abc226ddb6ff15dfd:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:299_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "55027a43ee0e5022a4690bdd89b6f9c0:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:55027a43ee0e5022a4690bdd89b6f9c0:box:0",
+      "decision_sha256": "bd6978f7f88009eba4e4855728f7e0f75aab46a75277fcad56c7e8928540bba3",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "55027a43ee0e5022a4690bdd89b6f9c0:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_37",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "fa273fd312755afe897d668c9859f181:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:fa273fd312755afe897d668c9859f181:box:0",
+      "decision_sha256": "e4be49c29689b91cef17f8609f8257bb103cafc6c06d174f8504d0644bce4744",
+      "effective_group_id": "near:3639adb32eb387262663",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "fa273fd312755afe897d668c9859f181:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:seatbelt3_26",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "1f1a4d8e0fa65d018c6145f3d016ca3a:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:1f1a4d8e0fa65d018c6145f3d016ca3a:box:0",
+      "decision_sha256": "cfbc4f85bb2173b6eeb83823c73c68950b87be98fc7a9ae116cebdce48831cfe",
+      "effective_group_id": "near:d6539dcb555e0006e73d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "1f1a4d8e0fa65d018c6145f3d016ca3a:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1115-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "c76f44068dfc516284cbb0a511ca769c:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:c76f44068dfc516284cbb0a511ca769c:box:0",
+      "decision_sha256": "5ac4d7d257917afde63e6022f3b9665717027f662a364221e55f7d5bb9a49f52",
+      "effective_group_id": "near:aced3959d5b56ca70a1d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "c76f44068dfc516284cbb0a511ca769c:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt3_0",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "d4d8cb7adf67594b8186ce46ad1855cf:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:d4d8cb7adf67594b8186ce46ad1855cf:box:0",
+      "decision_sha256": "2f3b50b0504b3732ce6923616053ddc82bd00af9e7bde5c1a76fd3a8f5214825",
+      "effective_group_id": "near:3639adb32eb387262663",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "d4d8cb7adf67594b8186ce46ad1855cf:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:seatbelt3_64",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "0e8adc04fbd55f9699633737a112ea85:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:0e8adc04fbd55f9699633737a112ea85:box:0",
+      "decision_sha256": "42da195137d33fb5a54bcd908092fec87b6ce314e6aeb2a31a19024a9fa68372",
+      "effective_group_id": "near:d6539dcb555e0006e73d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "0e8adc04fbd55f9699633737a112ea85:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:-1105-_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "b859f88e1be05601a676de5f8531c101:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:b859f88e1be05601a676de5f8531c101:box:0",
+      "decision_sha256": "f12d7af16958f7fa0aa243784eb81ffc4148ce84a286a8b1966adf8aaed0a0eb",
+      "effective_group_id": "near:8fa50a5703497ee13646",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "b859f88e1be05601a676de5f8531c101:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_20220804_191549_155",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "e1db278b3d795879acdb44c3b5389460:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:e1db278b3d795879acdb44c3b5389460:box:0",
+      "decision_sha256": "ef210600585b14bb76922c3e92fdfbcc7cfba4483bb62b478140ad34049201f5",
+      "effective_group_id": "near:3284704cd7b1940bcebb",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "e1db278b3d795879acdb44c3b5389460:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:269",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "9f80d670aec550368b3ae89184ffe08d:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:9f80d670aec550368b3ae89184ffe08d:box:0",
+      "decision_sha256": "57d3de624c9c861d1fb40f4476880705c59d7cd8f923261c566ea6e0cccf2cbd",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "9f80d670aec550368b3ae89184ffe08d:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_26",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "77b37cedf858534db0c981d680770f8b:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:77b37cedf858534db0c981d680770f8b:box:0",
+      "decision_sha256": "4ac1b9323c99f9982eb152435bb2f05e541f089fe93248dca4fd1afa33e460a5",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "77b37cedf858534db0c981d680770f8b:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_67",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "d47e1915fb49544799b44d3edc2287ff:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:d47e1915fb49544799b44d3edc2287ff:box:0",
+      "decision_sha256": "63203bb1fa401de99b31482ee5cd940e40ed2b1d480112a75d7a0ab50d17d0c2",
+      "effective_group_id": "near:3639adb32eb387262663",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "d47e1915fb49544799b44d3edc2287ff:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:seatbelt3_74",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "254a68986bc95ae8b738565b21301c52:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:254a68986bc95ae8b738565b21301c52:box:0",
+      "decision_sha256": "3ec4769f496ab95fecbf1344d7f618e5a311654f23479f5ae082d2296559f077",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "254a68986bc95ae8b738565b21301c52:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_64",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "e5a01173e630568299eeb06d9484a114:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:e5a01173e630568299eeb06d9484a114:box:0",
+      "decision_sha256": "794d8a6697163a3eeef71d2d42641bf5c1c3a3f8e5c961edc290d435e29058e4",
+      "effective_group_id": "near:3639adb32eb387262663",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "e5a01173e630568299eeb06d9484a114:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:seatbelt3_47",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "afb13bc9f7b353adace33776c4486fc0:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:afb13bc9f7b353adace33776c4486fc0:box:0",
+      "decision_sha256": "8e77c6fe394b4d26e3ff693c94325f0cc89c52cc57e534dd378403f90b3be8e6",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "afb13bc9f7b353adace33776c4486fc0:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_77",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "04df13383eb45a1eab7cbbace7029e54:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:04df13383eb45a1eab7cbbace7029e54:box:0",
+      "decision_sha256": "35fc91772f118004840821ffcf79ae3502bd5989e2781692725dfd912add45c5",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "04df13383eb45a1eab7cbbace7029e54:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_31",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "c04db49e6536547289c88cc3cda9cb09:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:c04db49e6536547289c88cc3cda9cb09:box:0",
+      "decision_sha256": "eebf35e68cc7b7a0b0df8154199305c2d09db430a54921e1b030d6b49481c6b4",
+      "effective_group_id": "near:40cd3f6ff66eac9b34c0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "c04db49e6536547289c88cc3cda9cb09:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:nonseatbelt2_43",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "ad35a726385359d9a2860d355c7650dc:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:ad35a726385359d9a2860d355c7650dc:box:0",
+      "decision_sha256": "3855eb559073a0d8b01e0b2cc8ec44cf46d96d01bf311feaf0d633691f539a91",
+      "effective_group_id": "near:3639adb32eb387262663",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "ad35a726385359d9a2860d355c7650dc:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:seatbelt3_15",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "e99701696fe1598898988eba8952b4ff:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:e99701696fe1598898988eba8952b4ff:box:0",
+      "decision_sha256": "ab85761475918896a70d3882d6f3ca5c26f8c8fdbee75f6d3caa1684afab1d74",
+      "effective_group_id": "near:5983c45544132e65dcd0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "e99701696fe1598898988eba8952b4ff:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:570_png",
+      "split": "train"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "21019f498da35084be9bdac343fe17f7:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:21019f498da35084be9bdac343fe17f7:box:0",
+      "decision_sha256": "d5ee2d285090aa05c3eaf9ad9a1113758ad5c39eddd5ab54dc36a472c56e7728",
+      "effective_group_id": "near:3ed969655ce8051dbc03",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "21019f498da35084be9bdac343fe17f7:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:PXL_20220916_123106889-MP",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "01ed39a1f6e050908ac03a2eb85d5762:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:01ed39a1f6e050908ac03a2eb85d5762:box:0",
+      "decision_sha256": "0b6fded2f0a08f79bbbb153f1cff745816b517a1f6f56955bc66254717a58d49",
+      "effective_group_id": "near:e5f24527bdbcc8f36abb",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "01ed39a1f6e050908ac03a2eb85d5762:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:PXL_20220916_123133642",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "44c3442be2cf5b5ca6f54e617c78442d:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:44c3442be2cf5b5ca6f54e617c78442d:box:0",
+      "decision_sha256": "1345b5865e35ac7f18b5474d31f29a84c37ab09f70ab8350ab446498ed7f3605",
+      "effective_group_id": "near:3b3e826bfab3309569f2",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "44c3442be2cf5b5ca6f54e617c78442d:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8483_jpeg.rf.c525eb03e8ac3f328f3a110fe5a5df14",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "5cf616e52d5051f5b2b9682cadb2995b:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:5cf616e52d5051f5b2b9682cadb2995b:box:0",
+      "decision_sha256": "992ecd164e464887e526394a86a7aa2cac165b10dfe5ac3df41b3a6bd71982a1",
+      "effective_group_id": "near:5e0d37b385141bc50ab7",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "5cf616e52d5051f5b2b9682cadb2995b:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:PXL_20220916_123253594",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "f7ed1b0eb39d5308a1fc7f11da31e665:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:f7ed1b0eb39d5308a1fc7f11da31e665:box:0",
+      "decision_sha256": "00cd830450547ec869fdc7d3e15256daac07c100106cadb5b6faf6b2eaad8f26",
+      "effective_group_id": "near:78228b86d94967061d71",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "f7ed1b0eb39d5308a1fc7f11da31e665:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8301_jpeg.rf.33ef21ac04ef66b765ad8341a046c7cd",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "d6e948ca1338584d8fefb5bc7ec0fda9:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:d6e948ca1338584d8fefb5bc7ec0fda9:box:0",
+      "decision_sha256": "8d5eb3cc2fa72646fe3eb2dc3097b916b3c3d8596b34292ae6c315fa94e59fa8",
+      "effective_group_id": "near:a30071cffd0fe115cd54",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "d6e948ca1338584d8fefb5bc7ec0fda9:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8261_jpeg.rf.76bc93e11c9d36ac0496329f6d28b9fc",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "2d0c5007b6e25b07933167109de2d118:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:2d0c5007b6e25b07933167109de2d118:box:0",
+      "decision_sha256": "f0b2736e98fa7a1aca5aa430f9e99d41dce944dd287e05852aab66188b60247a",
+      "effective_group_id": "near:e74fd95a0244b2987835",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "2d0c5007b6e25b07933167109de2d118:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:PXL_20220916_123112373",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "434eda4421aa588c96b6c989b5a2735e:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:434eda4421aa588c96b6c989b5a2735e:box:0",
+      "decision_sha256": "06b53d71aa719f32d606658a4572b49e68871f34b301f531fd37fd1ef42d0b0b",
+      "effective_group_id": "near:ab49be08ebc16beaf232",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "434eda4421aa588c96b6c989b5a2735e:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:220_png",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "651cfe02a76e5dcf9dcbd08d934da07c:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:651cfe02a76e5dcf9dcbd08d934da07c:box:0",
+      "decision_sha256": "6e1e93125c2ff4292c99e547322e1ef548356ea7e6b4d18031c51b4efd050f37",
+      "effective_group_id": "near:4c680eabc8cc0c07697f",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "651cfe02a76e5dcf9dcbd08d934da07c:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:386_png",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "bf71181aade554af84b31ae0886a3033:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:bf71181aade554af84b31ae0886a3033:box:0",
+      "decision_sha256": "d3c869d840912a6a0ce1b5e92e37bfb367f19c2014125b392c4e7fd939f0932b",
+      "effective_group_id": "near:89531da20ae1c144c56c",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "bf71181aade554af84b31ae0886a3033:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8181_jpeg.rf.7decd9f36aaaa02f011c4cd90a7eda6c",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "d99ea6071bec5cf69333c0391a1d6b30:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:d99ea6071bec5cf69333c0391a1d6b30:box:0",
+      "decision_sha256": "2c9f9a13c1da52864f52adb679d5404ac9f219fcf6cc29b52d3c26b959883c88",
+      "effective_group_id": "near:918c186b9474dba9ea98",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "d99ea6071bec5cf69333c0391a1d6b30:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8179_jpeg.rf.b5ca1c41e6ed65f3ccc3a831e972d26d",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "8b0833b50ba0531080df6714fd9a33f9:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:8b0833b50ba0531080df6714fd9a33f9:box:0",
+      "decision_sha256": "edf12a3cf71d95866acfa82fc158f8a8b563f20b110cf88efe5cea955fcfb13f",
+      "effective_group_id": "near:fa563ba7fe0ffde0ed2d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "8b0833b50ba0531080df6714fd9a33f9:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:713",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "84ac2a434bdf5283a125f2132d0bba1e:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:84ac2a434bdf5283a125f2132d0bba1e:box:0",
+      "decision_sha256": "e9eed8c0d1f3e3bcdaa688472a9698ae066c3c551f66a7ffdeef6c900789bdfb",
+      "effective_group_id": "near:b193c14a8a0943de375f",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "84ac2a434bdf5283a125f2132d0bba1e:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8183_jpeg.rf.51db8ddac08a65aff68155fe27d4429c",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "926ff9afb26c56d88fc4dc4242328528:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:926ff9afb26c56d88fc4dc4242328528:box:0",
+      "decision_sha256": "c96860c38767ac31c88352baad27bc683151763709f1a6316cf13b531fcaa0fe",
+      "effective_group_id": "near:b169dba05d48287323c9",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "926ff9afb26c56d88fc4dc4242328528:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8194_jpeg.rf.f10ac3cda4f08b9d66cf75bd85206c65",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "0e4b698b057e5002be161baa5efc1a60:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:0e4b698b057e5002be161baa5efc1a60:box:0",
+      "decision_sha256": "7ac1d30e0bdfa65e69204c066a4684e77f1416f59edf75d35827a0d56c01907e",
+      "effective_group_id": "near:175d821441e6f1e9d654",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "0e4b698b057e5002be161baa5efc1a60:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:545_png",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "264399f62ce85a0a8c42acd307ce4367:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:264399f62ce85a0a8c42acd307ce4367:box:0",
+      "decision_sha256": "36e9e2ea3cbbc0066b7ac31d3b1ddf873f989a01148baad9764c907752a16d9e",
+      "effective_group_id": "near:9c011fd9bf44430768d8",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "264399f62ce85a0a8c42acd307ce4367:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8188_jpeg.rf.c723b046884628c892e414e6cefc0471",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "2e76baa9636a5d8bb2e6568cc3a6c379:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:2e76baa9636a5d8bb2e6568cc3a6c379:box:0",
+      "decision_sha256": "298a17299f7ad4ce3f40e63b6e01520d1b49629839dd6a6bf06701325d1edccf",
+      "effective_group_id": "near:c316086f29b08ecb3616",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "2e76baa9636a5d8bb2e6568cc3a6c379:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8057_jpeg.rf.aca7de55f365ca318f4a8261b11cf769",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "311b9fb75be1599e99bc83b5f376de80:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:311b9fb75be1599e99bc83b5f376de80:box:0",
+      "decision_sha256": "78e88877fb1d30fe8c355c08ea8b6bec068ec445ea3e50e93f4d6fe0d9a2bbb4",
+      "effective_group_id": "near:9c011fd9bf44430768d8",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "311b9fb75be1599e99bc83b5f376de80:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8188_jpeg.rf.c4cd28444181d8217eeab7db63e95dd7",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "46beb9e9b8da59c99adb69c9e70d7c58:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:46beb9e9b8da59c99adb69c9e70d7c58:box:0",
+      "decision_sha256": "b0f29a6124982d69a47c7ab3bfa04e1cfd3a3cf38b4f3e64551013b1ae7f9356",
+      "effective_group_id": "near:039d16996ba56fd015a2",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "46beb9e9b8da59c99adb69c9e70d7c58:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8188_jpeg.rf.cfc73a2aa4f7a8752df6251358541153",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "bfe8491fdeba52e9b76341123102ee9d:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:bfe8491fdeba52e9b76341123102ee9d:box:0",
+      "decision_sha256": "e4bc6f8daff95c33a0f8f0dd19004b905e961071ab76146227c86def79019cb2",
+      "effective_group_id": "near:aea1d9eceabb88ea99a1",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "bfe8491fdeba52e9b76341123102ee9d:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:404_png",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "04c4c4ab75bf5321a9eb209e42bc8d90:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:04c4c4ab75bf5321a9eb209e42bc8d90:box:0",
+      "decision_sha256": "16df6e441af8c83b987cb04a9578f7dfad2a8e9e7f95934f294e7e0c801992c1",
+      "effective_group_id": "near:16f5ca98ad5d88bbd41a",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "04c4c4ab75bf5321a9eb209e42bc8d90:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8455_jpeg.rf.7f7b5207d72b1a9547957434642abd25",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "830a943159df574fb9b60fa5d59b2afe:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:830a943159df574fb9b60fa5d59b2afe:box:0",
+      "decision_sha256": "61f18f26ff875a01820e47922c9a381dae08caa63add24aaf5326216ccd52a84",
+      "effective_group_id": "near:313420b034c959fb4815",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "830a943159df574fb9b60fa5d59b2afe:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:575_png",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "3aca59bcd3475a97a993668bedcfa482:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:3aca59bcd3475a97a993668bedcfa482:box:0",
+      "decision_sha256": "2d9e71d37f6ace4f65eee67ff27e30540bab5bd721d7aa773cc65bb5eb8ac9dd",
+      "effective_group_id": "near:51fab6b75a8b2a8af017",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "3aca59bcd3475a97a993668bedcfa482:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8201_jpeg.rf.e7a373e674bdf3e700e2c86a30ab8808",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "60918a09b62155c6941f1ab4bcc5e304:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:60918a09b62155c6941f1ab4bcc5e304:box:0",
+      "decision_sha256": "9f86d139582d0337c38665dc378460924a377027a6f131b9cdabe7625c2b0020",
+      "effective_group_id": "near:141a6c5a99362df5939b",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "60918a09b62155c6941f1ab4bcc5e304:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8461_jpeg.rf.430644dd282cd19f6ae173c7f31ce0d8",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "8055763b664f53c1988bbc01b4d85d5e:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:8055763b664f53c1988bbc01b4d85d5e:box:0",
+      "decision_sha256": "c22f4f32485a5a3b1b67525d47cbb8ec034d46fa3ea795c900c80ee6b4bec2bf",
+      "effective_group_id": "near:af6a5c35b9ba3a836640",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "8055763b664f53c1988bbc01b4d85d5e:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8470_jpeg.rf.8c5970abbded58f813257b5e6bd93195",
+      "split": "val"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "1ecbf52aec9b555dbf06e5f1aec0db1d:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:1ecbf52aec9b555dbf06e5f1aec0db1d:box:0",
+      "decision_sha256": "61f70ead76505f52141ff5647f5a2c763d0f17eeec2ef627dd7671a2af135811",
+      "effective_group_id": "near:9def9950ae57f4551de3",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "1ecbf52aec9b555dbf06e5f1aec0db1d:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:PXL_20220916_125632222",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "230eedb0a3d457889a5ec74072fa74c1:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:230eedb0a3d457889a5ec74072fa74c1:box:0",
+      "decision_sha256": "c1cc18a48a27e2ef5c6f7bdfb355f5afbf0bc4661b6294afe050bb80cec00681",
+      "effective_group_id": "near:4a60670952df2588573e",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "230eedb0a3d457889a5ec74072fa74c1:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:PXL_20220916_123408097-MP",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "e7a6487cc6c45205ac64c97a7c10b40d:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:e7a6487cc6c45205ac64c97a7c10b40d:box:0",
+      "decision_sha256": "b56cc6df97af766d58cf6e85076ea2cddb9e6f9120e49e0df0a966e0b3507029",
+      "effective_group_id": "near:63e0574b90e05e7808de",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "e7a6487cc6c45205ac64c97a7c10b40d:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:PXL_20220916_122557517",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "16df19f46a5452c1a85443aaaf4385f3:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:16df19f46a5452c1a85443aaaf4385f3:box:0",
+      "decision_sha256": "d9cc3f53f8819f649c09ed788811c4a6437339056821a728c5df22a3872573d6",
+      "effective_group_id": "near:f2559fd0cec458ddeebd",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "16df19f46a5452c1a85443aaaf4385f3:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8301_jpeg.rf.3261d913dd5f81a5ada6f9aadbc67d82",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "9579b2efa13f51fab8e34fb53eb16824:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:9579b2efa13f51fab8e34fb53eb16824:box:0",
+      "decision_sha256": "4b411a550ca86a19fec08294ba266e9e93d7718979675b463db0a64e7a138390",
+      "effective_group_id": "near:7e014eac1b076e842ad6",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "9579b2efa13f51fab8e34fb53eb16824:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:PXL_20220916_123246072-MP",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "c0988226acb2565dabb38524a3149579:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:c0988226acb2565dabb38524a3149579:box:0",
+      "decision_sha256": "83c2116a46dd08c018e5cf50f3cdec9fcc7dd53acad2c22b50e35ce657fc7536",
+      "effective_group_id": "near:c46fd23d1a733233c597",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "c0988226acb2565dabb38524a3149579:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8199_jpeg.rf.d072308087e09057e5b8a6198adc8acd",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "a425b2d8e7c15e81968802dc2e174800:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:a425b2d8e7c15e81968802dc2e174800:box:0",
+      "decision_sha256": "b91e43c773bbd323d9c126b500fdb7f4628e57c016a528d633a8aa0b9ed09fa0",
+      "effective_group_id": "near:b05adc7ab7e31fc47aab",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "a425b2d8e7c15e81968802dc2e174800:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8261_jpeg.rf.34f3efa375c73163084a556231e2c9a0",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "cf8f13bdda4758ef98f52cdf2a74ea2c:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:cf8f13bdda4758ef98f52cdf2a74ea2c:box:0",
+      "decision_sha256": "3cdc2131cdd56d528afc5ba0bac94ec5d9bd9a44eb53908a6c6f48e980ac1293",
+      "effective_group_id": "near:b92899841c70eb536a3e",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "cf8f13bdda4758ef98f52cdf2a74ea2c:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8300_jpeg.rf.d2909cce2987c5c7879024419e134231",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "9a6a373a932352d69a49b29ad3467f8a:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:9a6a373a932352d69a49b29ad3467f8a:box:0",
+      "decision_sha256": "785f2c5dbadf612afa73c2fa7332d4ccf04722e699f70278e2d45b4b70fd73d5",
+      "effective_group_id": "near:748fa22c6c7141ad3b50",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "9a6a373a932352d69a49b29ad3467f8a:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8180_jpeg.rf.c4839cfa377f1080d52e04faafa69647",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "c5c607f992935e888ea092b3509791fe:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:c5c607f992935e888ea092b3509791fe:box:0",
+      "decision_sha256": "0b2e7880fcdbe5247a8e1c8b25db06660d0ee682c843fa399056db8821163e98",
+      "effective_group_id": "near:f61fd47f144223a91d71",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "c5c607f992935e888ea092b3509791fe:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8175_jpeg.rf.39ea1f2f607e5dadccd2c7c638996d0b",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "8b0829126a3b5dc5bb4088c422a1fbeb:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:8b0829126a3b5dc5bb4088c422a1fbeb:box:0",
+      "decision_sha256": "e0ce930610a134e07345d59f717394d4e87169010d5363b2953f49106332333e",
+      "effective_group_id": "near:61d5735a6eef025009a7",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "8b0829126a3b5dc5bb4088c422a1fbeb:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8195_jpeg.rf.1a9d959ec3fdd8e7441ed7f780a1bf02",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "6bf949f460d957c7a53f75a48e6e0452:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:6bf949f460d957c7a53f75a48e6e0452:box:0",
+      "decision_sha256": "ba8c2fa16f113272ddf45811e9d58dde15735686915681d40c34e5802d9b042a",
+      "effective_group_id": "near:81c834e03d60eba7ac35",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "6bf949f460d957c7a53f75a48e6e0452:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8210_jpeg.rf.410844a96be836b1f8d9e8eb92ca4e45",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "f65838a5adbf54769e2c2b1e94e06b0a:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:f65838a5adbf54769e2c2b1e94e06b0a:box:0",
+      "decision_sha256": "9244373a78871f25b776e0a11f3e2f472410161d6228b96cd70159f5f607fa12",
+      "effective_group_id": "near:fca59e3a2944215059b3",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "f65838a5adbf54769e2c2b1e94e06b0a:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8197_jpeg.rf.b8e363bb1f62568fc816826719a73493",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "f47808d50b235927b573353eea2f9d98:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:f47808d50b235927b573353eea2f9d98:box:0",
+      "decision_sha256": "428fce50c3d9b1b42a6871c62851e9346ca3707cf9485b8b74b7781bbf514c85",
+      "effective_group_id": "near:d7b1cce0e07bfe3ca863",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "f47808d50b235927b573353eea2f9d98:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:seatbelt3_9",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "7143424428ac5d70b03754e05cd7d6b0:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:7143424428ac5d70b03754e05cd7d6b0:box:0",
+      "decision_sha256": "c2b71a4bc19f90566f6af140f68717b80bccc6499a075c96cb80688d0f36766a",
+      "effective_group_id": "near:f61fd47f144223a91d71",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "7143424428ac5d70b03754e05cd7d6b0:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8177_jpeg.rf.9ea576545ab64f218152e7aa00c0d832",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "5ef8a3e30534531dbf76f5bfbc47f58c:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:5ef8a3e30534531dbf76f5bfbc47f58c:box:0",
+      "decision_sha256": "2ce37b224d78c09e58e8e09353b0a6d520442bdd6051f7da874a746f4b1eb5b3",
+      "effective_group_id": "near:e5cee8b3e787bdabd146",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "5ef8a3e30534531dbf76f5bfbc47f58c:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8262_jpeg.rf.a9aa90cd22b04a8a00919d7289402d43",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "c714fb53c1a85141800b4d026927c370:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:c714fb53c1a85141800b4d026927c370:box:0",
+      "decision_sha256": "2e0544ddf33549d9a566662033a19f595049066b268e70e0426f78ed9e8c9a97",
+      "effective_group_id": "near:acd3fd75bef4cc792a00",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "c714fb53c1a85141800b4d026927c370:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8461_jpeg.rf.f9735a984629c1071c11f3178c0ff320",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "acc641e41d655dc8b4ad78cadf0fc7ae:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:acc641e41d655dc8b4ad78cadf0fc7ae:box:0",
+      "decision_sha256": "bf7ec4521983bd6ba97f6e5173fd6e12a062613da6af8b7de0424d94361f8f1b",
+      "effective_group_id": "near:8a38c3ac4f9e39e6c3c4",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "acc641e41d655dc8b4ad78cadf0fc7ae:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:seatbelt153_jpeg",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "05de2021f7645a128ea438c406635225:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:05de2021f7645a128ea438c406635225:box:0",
+      "decision_sha256": "235ab6c1879aeb420d97171e99dc5690a8594832323cb24a43e652297668cd4e",
+      "effective_group_id": "near:cfdb2aca14869ae51593",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "05de2021f7645a128ea438c406635225:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8182_jpeg.rf.849f0a15cbadd9695255ea45dee0a4db",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "37b11a4ad7b453bfad8867c6a36d3c3c:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:37b11a4ad7b453bfad8867c6a36d3c3c:box:0",
+      "decision_sha256": "252ec8a07ab1e8f37bc353f750ba8f28007c610cbdd5bfcdfd0166ec8ba945c7",
+      "effective_group_id": "near:c4957534a0993f6c661d",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "37b11a4ad7b453bfad8867c6a36d3c3c:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8177_jpeg.rf.15d89bd4cb386d9cc8c3b287dfc89fab",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "60b570dc8e6f5837a065c37f467ed4ff:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:60b570dc8e6f5837a065c37f467ed4ff:box:0",
+      "decision_sha256": "340db52cc384bd2502f37715efe0997364ff8cfecc19a8e6167e91d1688f42e7",
+      "effective_group_id": "near:562552e70334fe980926",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "60b570dc8e6f5837a065c37f467ed4ff:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:485_png",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "868db74cf41b51ce8f19d5134866f0a0:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:868db74cf41b51ce8f19d5134866f0a0:box:0",
+      "decision_sha256": "1873dd5a4bd7d9e4b988da2c0cd67de6c72a6235778c5536b1c9d7401461a5e6",
+      "effective_group_id": "near:690daa993361234ff675",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "868db74cf41b51ce8f19d5134866f0a0:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8258_jpeg.rf.8c68f82f7b296aab06fe4dbe50fc8a8e",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "c503cb690aee57988dfcb61e7da8efb1:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:c503cb690aee57988dfcb61e7da8efb1:box:0",
+      "decision_sha256": "16bf1e23110a6c06e3e35a325b6c33ecf75b8cdcee98218e6923d1404196978d",
+      "effective_group_id": "near:013ae756571375cda75e",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "c503cb690aee57988dfcb61e7da8efb1:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:337_png",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "d5b537bc9f4a55919750d43fc9d70bac:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:d5b537bc9f4a55919750d43fc9d70bac:box:0",
+      "decision_sha256": "7e22b16a14ebb7ba6361d5296962c29e83d48c265782524338b553c04280f9fc",
+      "effective_group_id": "near:240b252f77ec29b2d4a0",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "d5b537bc9f4a55919750d43fc9d70bac:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:376",
+      "split": "test"
+    },
+    {
+      "approval_status": "PENDING_HUMAN_APPROVAL",
+      "candidate_id": "28ae6e3dd4735e6f8e7e0d6bce957fbc:box:0",
+      "decision": "UNCERTAIN_OR_OCCLUDED",
+      "decision_id": "uncertain-visual-v2:28ae6e3dd4735e6f8e7e0d6bce957fbc:box:0",
+      "decision_sha256": "b4a0b51c376e54dc125aea8cda9322fb10d36e28ce8f74e3b36b263497441193",
+      "effective_group_id": "near:bbd0c14f55c74585d375",
+      "evidence_level": "DIRECT_MODEL_ASSISTED_VISUAL_UNOBSERVABLE_BELT_PATH",
+      "governance_eligible": false,
+      "human_verified": false,
+      "reason": [
+        "belt_path_not_reliably_observable_in_classifier_roi"
+      ],
+      "reviewer_model": "roadwatch_visual_semantic_review_v2",
+      "reviewer_type": "MODEL_ASSISTED_VISUAL",
+      "sample_id": "28ae6e3dd4735e6f8e7e0d6bce957fbc:box:0",
+      "source_group_id": "roboflow-seatbelt-v4:GROUP_REVIEW_REQUIRED:IMG_8173_jpeg.rf.cb0b8736508dd44f4513a50c6c0a5b39",
+      "split": "test"
+    }
+  ],
+  "decisions_sha256": "fde16aa539915eb36c93e7f00a68b70192e80e16d7669eff4007080bbc95e75d",
+  "evidence_definition": "The classifier ROI does not expose a reliable seatbelt path because of crop, occlusion, severe darkness, blur, or contradictory visual evidence.",
+  "governance_eligible": false,
+  "group_isolation": {
+    "effective_group_id": {
+      "cross_split_leaks": [],
+      "status": "PASS",
+      "unique_groups": 79
+    },
+    "source_group_id": {
+      "cross_split_leaks": [],
+      "status": "PASS",
+      "unique_groups": 150
+    }
+  },
+  "human_verified": false,
+  "minimum_counts_by_split": {
+    "test": 25,
+    "train": 100,
+    "val": 25
+  },
+  "newly_training_eligible": 140,
+  "policy": "These decisions may open exploratory classifier training. They do not create HUMAN_APPROVED or governed ground truth.",
+  "previously_training_eligible": 10,
+  "review_method": "CONTACT_SHEET_VISUAL_SEMANTIC_REVIEW",
+  "reviewer_model": "roadwatch_visual_semantic_review_v2",
+  "reviewer_type": "MODEL_ASSISTED_VISUAL",
+  "schema_version": 1,
+  "source_review": "datasets\\manifests\\pretrain_pending_approval\\v2_seatbelt_uncertain.json",
+  "source_review_sha256": "60824fcce95dc19534779b11c2178fd52ae9e21ca92af3a8bce80fe27d937269",
+  "status": "PASS",
+  "total_selected": 150
+}

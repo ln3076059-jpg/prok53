@@ -1,0 +1,33 @@
+schema_version: 1
+auto_profile_vram_split_gib: 12.0
+profiles:
+  rtx5060ti_8gb:
+    min_vram_gib: 7.0
+    description: Conservative profile for the 8 GB RTX 5060 Ti.
+    components:
+      phone_detector:
+        batch: 2
+        workers: 2
+        multi_scale: false
+      seatbelt_detector:
+        batch: 1
+        workers: 2
+        multi_scale: false
+      seatbelt_classifier:
+        batch: 16
+        workers: 2
+  rtx5060ti_16gb:
+    min_vram_gib: 14.0
+    description: Stable profile for the 16 GB RTX 5060 Ti; avoids multi-scale VRAM spikes.
+    components:
+      phone_detector:
+        batch: 8
+        workers: 4
+        multi_scale: false
+      seatbelt_detector:
+        batch: 4
+        workers: 4
+        multi_scale: false
+      seatbelt_classifier:
+        batch: 32
+        workers: 4

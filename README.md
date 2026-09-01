@@ -1,4 +1,4 @@
-# Roadwatch Driver Safety AI
+# Roadwatch Driver Safety
 
 Greenfield, reproducible three-class driver-safety system built around one YOLO11s detector and one canonical Kaggle experiment.
 
@@ -62,3 +62,41 @@ Status: **NOT_RUN**. No independent human event ground truth exists. Detector mA
 - `docs/`: research, semantics, architecture, evaluation, API, and deployment
 
 Start with [dataset sources](docs/data-sources.md), [dataset governance](docs/dataset.md), [annotation semantics](docs/annotation-guide.md), [training strategy](docs/training-strategy.md), and [Kaggle training](docs/kaggle-training.md).
+
+The independent multi-model successor is documented in [V2 training](docs/v2-training.md). V2 separates phone detection from phone-use evidence and separates upper-body detection from three-state seatbelt classification; it does not modify the running V1 experiment.
+
+## V2 portable GPU handoff
+
+For the completed model-assisted pending-approval exploratory lane, transfer
+`kaggle/MULTIMODEL_V2_PRETRAIN_PENDING_APPROVAL_PORTABLE.zip` plus its `.sha256`, extract it, and run:
+
+```powershell
+.\START_V2_PRETRAIN_REVIEW_TRAINING.ps1 -Mode preflight
+.\START_V2_PRETRAIN_REVIEW_TRAINING.ps1 -InstallDependencies `
+  -BackupDirectory E:\roadwatch-v2-pretrain-backup
+```
+
+This build contains the phone detector, upper-body ROI detector, and three-state seatbelt
+classifier, plus verified offline `yolo11s.pt` and `yolo11s-cls.pt` base weights. The classifier
+uncertainty gate is met at 100/25/25 train/val/test samples and the extracted bundle preflight
+passes all 20,679 file hashes. Its audit state remains `MODEL_ASSISTED_PENDING_APPROVAL`:
+exploratory training is allowed, while human verification, governed training, frozen external
+testing, calibration, and production activation remain false until performed.
+
+The governed V2 builder and launcher remain in the repository for later use after human
+verification. Its old detector-only ZIP artifact was removed because the three-component
+pending-approval bundle above supersedes it. Regenerate a governed bundle when its data gate is
+actually satisfied, then run:
+
+```powershell
+.\START_V2_TRAINING.ps1 -InstallDependencies -BackupDirectory E:\roadwatch-v2-backup
+```
+
+After an interruption, repeat the same command without changing the working directory. The
+runner safely resumes only a matching plan with `last.pt`.
+The launcher runs a one-epoch GPU smoke test before full training and mirrors resumable
+checkpoints to the optional second-disk backup directory after every model-save event.
+The command above now requires governed readiness and intentionally blocks the current PENDING
+bundle. Use `-AllowProposalTraining` only for an explicitly named bootstrap experiment; it does
+not make the resulting weights production-ready. Run `py -m training.prepare_v2_data_gaps` to
+generate the review queues and remediation plan needed to clear the gate legitimately.

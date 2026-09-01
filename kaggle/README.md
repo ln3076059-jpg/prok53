@@ -1,14 +1,26 @@
 # Kaggle web handoff
 
+## Multi-model V2 portable Windows handoff
+
+The active ready-to-copy bundle is
+`kaggle/MULTIMODEL_V2_PRETRAIN_PENDING_APPROVAL_PORTABLE.zip` (514,618,511 bytes), SHA-256
+`87c3b4429215f57dd0bb2e7b8625f079bd58ce64f349c9e3c6d26977e0dc8b77`. It contains the phone
+detector, upper-body detector, three-state seatbelt classifier, both offline YOLO base weights,
+safe 8/16 GB profiles, and automatic resume/recovery code. After extracting it on the Windows
+GPU machine, run `.\START_V2_PRETRAIN_REVIEW_TRAINING.ps1 -Mode preflight`, then
+`.\START_V2_PRETRAIN_REVIEW_TRAINING.ps1 -InstallDependencies`. The artifact is explicitly
+`MODEL_ASSISTED_PENDING_APPROVAL`: it supports exploratory training but does not claim human
+verification, governed metrics, or production readiness.
+
 ## Train now: three-class proposal bootstrap
 
-The ready-to-upload file is `kaggle/mc_bootstrap_001_kaggle_bundle.zip` (649,498,615 bytes). Its SHA-256 is:
+The ready-to-upload file is `kaggle/mc_bootstrap_001_kaggle_bundle.zip` (374,903,639 bytes). Its SHA-256 is:
 
 ```text
-50b4356124081e5c50404a36d6dac7ecfc2f7ab65b52614c468a48c363f19e9a
+b8f42ad0bcbf02a2a5ec461eb66c29204f49314d0f1715cd4d38655bed42564b
 ```
 
-The bundle contains 18,099 images with the exact class order `phone`, `seatbelt_fastened`, `seatbelt_unfastened`. Local audit and an extracted-bundle Kaggle preflight both pass: 36,206 files verified, zero SHA/group/component/near-duplicate cross-split overlap, and every split contains all three classes.
+The bundle contains 10,018 images (6,500 selected train, 1,782 unchanged validation, 1,736 unchanged test) with the exact class order `phone`, `seatbelt_fastened`, `seatbelt_unfastened`. The reduced train split retains every phone-positive and unfastened-positive image, covers all 3,288 original source groups, and preferentially retains difficult fastened/hard-negative examples. Local audit passes with zero SHA/group/component/near-duplicate cross-split overlap and every split contains all three classes.
 
 Web workflow:
 

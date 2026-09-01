@@ -1,0 +1,243 @@
+{
+  "components": {
+    "adt_external": {
+      "decision_counts": {
+        "PASS": 2353,
+        "UNCERTAIN": 351
+      },
+      "errors": [],
+      "human_confirmation_required": 2208,
+      "phone_model": {
+        "device": "cpu",
+        "enabled": true,
+        "path": "models\\auxiliary\\yolo11n.pt",
+        "phone_class_ids": [
+          67
+        ],
+        "sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1"
+      },
+      "policy": "MODEL_ASSISTED_PENDING_APPROVAL is sufficient only for explicitly opted-in exploratory training. It is not HUMAN_APPROVED or governed ground truth.",
+      "queue": "datasets\\manifests\\review_queue_adt_seatbelt_v1.json",
+      "queue_samples": 2704,
+      "queue_sha256": "2ad3661b0e3ea9dcea431b3e23b94e11c5790b43f852a022842f54d5d1df6f0b",
+      "resume_status": "REUSED_VERIFIED_REPORT",
+      "reviewed_samples": 2704,
+      "reviewer_model": "roadwatch_pretrain_reviewer_v1",
+      "schema_version": 1,
+      "status": "PASS",
+      "tier_counts": {
+        "HIGH_CONFIDENCE": 496,
+        "MEDIUM_CONFIDENCE": 1857,
+        "UNCERTAIN": 351
+      },
+      "training_eligible": 2353
+    },
+    "hard_examples": {
+      "decision_counts": {
+        "PASS": 1147,
+        "UNCERTAIN": 1126
+      },
+      "errors": [],
+      "human_confirmation_required": 2273,
+      "phone_model": {
+        "device": "cpu",
+        "enabled": true,
+        "path": "models\\auxiliary\\yolo11n.pt",
+        "phone_class_ids": [
+          67
+        ],
+        "sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1"
+      },
+      "policy": "MODEL_ASSISTED_PENDING_APPROVAL is sufficient only for explicitly opted-in exploratory training. It is not HUMAN_APPROVED or governed ground truth.",
+      "queue": "datasets\\manifests\\v2_hard_review_queue.json",
+      "queue_samples": 2273,
+      "queue_sha256": "daeb3d302e1070db8fa14b6353862df70971f863453202981862be59be3a73a3",
+      "resume_status": "REUSED_VERIFIED_REPORT",
+      "reviewed_samples": 2273,
+      "reviewer_model": "roadwatch_pretrain_reviewer_v1",
+      "schema_version": 1,
+      "status": "PASS",
+      "tier_counts": {
+        "MEDIUM_CONFIDENCE": 1147,
+        "UNCERTAIN": 1126
+      },
+      "training_eligible": 1147
+    },
+    "phone_external_mendeley": {
+      "decision_counts": {
+        "PASS": 183,
+        "UNCERTAIN": 151
+      },
+      "errors": [],
+      "human_confirmation_required": 333,
+      "phone_model": {
+        "device": "cpu",
+        "enabled": true,
+        "path": "models\\auxiliary\\yolo11n.pt",
+        "phone_class_ids": [
+          67
+        ],
+        "sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1"
+      },
+      "policy": "MODEL_ASSISTED_PENDING_APPROVAL is sufficient only for explicitly opted-in exploratory training. It is not HUMAN_APPROVED or governed ground truth.",
+      "queue": "datasets\\manifests\\v2_phone_external_mendeley_review.json",
+      "queue_samples": 334,
+      "queue_sha256": "2ed8377c105585fb9ea1935a2348595517e75e4593f101a81f17a725f4320f28",
+      "resume_status": "REUSED_VERIFIED_REPORT",
+      "reviewed_samples": 334,
+      "reviewer_model": "roadwatch_pretrain_reviewer_v1",
+      "schema_version": 1,
+      "status": "PASS",
+      "tier_counts": {
+        "HIGH_CONFIDENCE": 1,
+        "MEDIUM_CONFIDENCE": 182,
+        "UNCERTAIN": 151
+      },
+      "training_eligible": 183
+    },
+    "phone_negative": {
+      "decision_counts": {
+        "PASS": 1928,
+        "UNCERTAIN": 1085
+      },
+      "errors": [],
+      "human_confirmation_required": 3013,
+      "phone_model": {
+        "device": "cpu",
+        "enabled": true,
+        "path": "models\\auxiliary\\yolo11n.pt",
+        "phone_class_ids": [
+          67
+        ],
+        "sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1"
+      },
+      "policy": "MODEL_ASSISTED_PENDING_APPROVAL is sufficient only for explicitly opted-in exploratory training. It is not HUMAN_APPROVED or governed ground truth.",
+      "queue": "datasets\\manifests\\v2_phone_negative_review.json",
+      "queue_samples": 3013,
+      "queue_sha256": "4cc1cfd8ccf4ea38c3eef78bb3933576b2d37fe09c89df0d6d4d8fc2148875d4",
+      "resume_status": "REUSED_VERIFIED_REPORT",
+      "reviewed_samples": 3013,
+      "reviewer_model": "roadwatch_pretrain_reviewer_v1",
+      "schema_version": 1,
+      "status": "PASS",
+      "tier_counts": {
+        "MEDIUM_CONFIDENCE": 1928,
+        "UNCERTAIN": 1085
+      },
+      "training_eligible": 1928
+    },
+    "phone_positive": {
+      "decision_counts": {
+        "PASS": 1097,
+        "UNCERTAIN": 119
+      },
+      "errors": [],
+      "human_confirmation_required": 659,
+      "phone_model": {
+        "device": "cpu",
+        "enabled": true,
+        "path": "models\\auxiliary\\yolo11n.pt",
+        "phone_class_ids": [
+          67
+        ],
+        "sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1"
+      },
+      "policy": "MODEL_ASSISTED_PENDING_APPROVAL is sufficient only for explicitly opted-in exploratory training. It is not HUMAN_APPROVED or governed ground truth.",
+      "queue": "datasets\\manifests\\v2_phone_positive_review.json",
+      "queue_samples": 1216,
+      "queue_sha256": "14e9badf3db65f388701216c9e740b26912cf32f18f686bb74190006c9c87d0f",
+      "resume_status": "REUSED_VERIFIED_REPORT",
+      "reviewed_samples": 1216,
+      "reviewer_model": "roadwatch_pretrain_reviewer_v1",
+      "schema_version": 1,
+      "status": "PASS",
+      "tier_counts": {
+        "HIGH_CONFIDENCE": 557,
+        "MEDIUM_CONFIDENCE": 540,
+        "UNCERTAIN": 119
+      },
+      "training_eligible": 1097
+    },
+    "seatbelt_roi_state": {
+      "decision_counts": {
+        "PASS": 4845,
+        "UNCERTAIN": 23
+      },
+      "errors": [],
+      "human_confirmation_required": 231,
+      "phone_model": {
+        "enabled": false
+      },
+      "policy": "MODEL_ASSISTED_PENDING_APPROVAL is sufficient only for explicitly opted-in exploratory training. It is not HUMAN_APPROVED or governed ground truth.",
+      "queue": "datasets\\manifests\\v2_seatbelt_roi_state_review.json",
+      "queue_samples": 4868,
+      "queue_sha256": "87e46dfb96ef477e55669229f9efd1ac136dd5c2d9add6e0dd5be7eff0c38b61",
+      "resume_status": "REUSED_VERIFIED_REPORT",
+      "reviewed_samples": 4868,
+      "reviewer_model": "roadwatch_pretrain_reviewer_v1",
+      "schema_version": 1,
+      "status": "PASS",
+      "tier_counts": {
+        "HIGH_CONFIDENCE": 4637,
+        "MEDIUM_CONFIDENCE": 208,
+        "UNCERTAIN": 23
+      },
+      "training_eligible": 4845
+    },
+    "seatbelt_uncertain": {
+      "decision_counts": {
+        "UNCERTAIN": 500
+      },
+      "errors": [],
+      "human_confirmation_required": 500,
+      "phone_model": {
+        "enabled": false
+      },
+      "policy": "MODEL_ASSISTED_PENDING_APPROVAL is sufficient only for explicitly opted-in exploratory training. It is not HUMAN_APPROVED or governed ground truth.",
+      "queue": "datasets\\manifests\\v2_seatbelt_uncertain_ui_review.json",
+      "queue_samples": 500,
+      "queue_sha256": "db4c7823b81ddd17771729d588def580ceb1fcabb0482e6928cb20540e00148d",
+      "resume_status": "REUSED_VERIFIED_REPORT",
+      "reviewed_samples": 500,
+      "reviewer_model": "roadwatch_pretrain_reviewer_v1",
+      "schema_version": 1,
+      "source_heuristic_training_eligible": 10,
+      "status": "PASS",
+      "tier_counts": {
+        "UNCERTAIN": 500
+      },
+      "training_eligible": 150,
+      "visual_semantic_overlay": {
+        "counts_by_split": {
+          "test": 25,
+          "train": 100,
+          "val": 25
+        },
+        "path": "datasets/manifests/pretrain_pending_approval/v2_seatbelt_uncertain_visual_decisions.json",
+        "selected": 150
+      }
+    }
+  },
+  "policy": "Exploratory training may consume only model-assisted PASS samples with explicit automated-review provenance. Human confirmation remains a separate append-only governance layer.",
+  "readiness": {
+    "classifier_training_ready": true,
+    "exploratory_training_ready": true,
+    "governed_training_ready": false,
+    "human_verified": false,
+    "minimum_uncertain_by_split": {
+      "test": 25,
+      "train": 100,
+      "val": 25
+    },
+    "pretrain_review_complete": true,
+    "proposal_detector_training_ready": true,
+    "uncertain_training_eligible_by_split": {
+      "test": 25,
+      "train": 100,
+      "val": 25
+    }
+  },
+  "reviewer_model": "roadwatch_pretrain_reviewer_v1",
+  "schema_version": 1,
+  "status": "PASS"
+}

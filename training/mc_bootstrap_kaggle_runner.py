@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
 import platform
 import shutil
@@ -32,7 +33,7 @@ RESUME_REQUIRED_MEMBERS = {
 RESUME_OPTIONAL_MEMBERS: set[str] = set()
 TRAIN_KEYS = {
     "task", "imgsz", "epochs", "patience", "batch", "device", "workers", "cache", "amp",
-    "optimizer", "cos_lr", "seed", "deterministic", "save", "save_period", "degrees",
+    "optimizer", "lr0", "lrf", "momentum", "cos_lr", "seed", "deterministic", "save", "save_period", "degrees",
     "translate", "scale", "hsv_h", "hsv_s", "hsv_v", "fliplr", "mosaic", "mixup",
     "classes", "close_mosaic", "multi_scale", "warmup_epochs", "weight_decay",
 }
@@ -97,6 +98,8 @@ def validate_label(path: Path) -> Counter:
         if class_id not in {0, 1, 2}:
             raise ValueError(f"STOP: noncanonical class {path}:{line_number}")
         x, y, width, height = (float(value) for value in parts[1:])
+        if not all(math.isfinite(value) for value in (x, y, width, height)):
+            raise ValueError(f"STOP: non-finite label value {path}:{line_number}")
         if width <= 0 or height <= 0 or x - width / 2 < 0 or x + width / 2 > 1:
             raise ValueError(f"STOP: invalid horizontal box {path}:{line_number}")
         if y - height / 2 < 0 or y + height / 2 > 1:
@@ -362,6 +365,36 @@ def write_resume_archive(trainer, working: Path, preflight_report: dict) -> Path
     return target
 
 
+def assert_finite_training_state(trainer, include_metrics: bool = False) -> None:
+    import torch
+
+    values = [("loss", getattr(trainer, "loss", None)), ("running_loss", getattr(trainer, "tloss", None))]
+    if include_metrics:
+        values.append(("fitness", getattr(trainer, "fitness", None)))
+        values.extend(
+            (f"metric:{name}", value)
+            for name, value in (getattr(trainer, "metrics", None) or {}).items()
+        )
+    for name, value in values:
+        if value is None:
+            continue
+        try:
+            tensor = torch.as_tensor(value)
+        except (TypeError, ValueError):
+            continue
+        if tensor.is_floating_point() and not bool(torch.isfinite(tensor).all()):
+            epoch = int(getattr(trainer, "epoch", -1)) + 1
+            raise FloatingPointError(
+                f"STOP_NONFINITE: {name} contains inf/nan at epoch {epoch}. "
+                "The latest verified resume archive remains at the previous completed epoch."
+            )
+
+
+def save_finite_resume(trainer, working: Path, preflight_report: dict) -> Path:
+    assert_finite_training_state(trainer, include_metrics=True)
+    return write_resume_archive(trainer, working, preflight_report)
+
+
 def environment(working: Path) -> dict:
     import torch
     import ultralytics
@@ -427,8 +460,9 @@ def train(
         )
         return run, test_metrics
     model = YOLO(resume_checkpoint if resume_checkpoint else model_name)
+    model.add_callback("on_train_batch_end", assert_finite_training_state)
     model.add_callback(
-        "on_model_save", lambda trainer: write_resume_archive(trainer, working, preflight_report)
+        "on_model_save", lambda trainer: save_finite_resume(trainer, working, preflight_report)
     )
     if resume_checkpoint:
         model.train(

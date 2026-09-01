@@ -35,12 +35,14 @@ class YoloLabel:
             raise ValueError("box exceeds vertical image bounds")
 
 
-def parse_yolo_line(line: str) -> YoloLabel:
+def parse_yolo_line(line: str, allowed_classes: set[int] | None = None) -> YoloLabel:
     parts = line.split()
     if len(parts) != 5:
         raise ValueError(f"expected 5 fields, received {len(parts)}")
     label = YoloLabel(int(parts[0]), *(float(value) for value in parts[1:]))
     label.validate()
+    if allowed_classes is not None and label.class_id not in allowed_classes:
+        raise ValueError(f"class id {label.class_id} not allowed in this dataset")
     return label
 
 
@@ -74,4 +76,3 @@ def stable_json_hash(value: object) -> str:
 
 def labels_to_dict(labels: Iterable[YoloLabel]) -> list[dict[str, object]]:
     return [asdict(label) for label in labels]
-
