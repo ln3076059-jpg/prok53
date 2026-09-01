@@ -635,7 +635,9 @@ def test_roboflow_download_overwrites_only_private_staging_directory(tmp_path, m
         },
     }
 
-    with patch("roboflow.Roboflow", return_value=client):
+    roboflow_module = MagicMock()
+    roboflow_module.Roboflow.return_value = client
+    with patch.dict("sys.modules", {"roboflow": roboflow_module}):
         run_download(source, destination)
 
     version.download.assert_called_once_with("yolov11", location=str(destination), overwrite=True)
