@@ -37,6 +37,9 @@ raw frame
 - A motorcycle can never produce `NO_SEATBELT`.
 - Missing required calibrated fusion reports a fail-closed result and remains visible on
   `/health`.
+- Production startup requires an ACTIVE, human-approved model lock whose experiment/config and
+  component weight hashes match the configured runtime. Development may start in a visibly
+  degraded state; production may not silently downgrade.
 
 ## Runtime components
 
@@ -63,12 +66,17 @@ the HTTP route.
 
 ## Evidence contract
 
-Every finalized evidence directory contains, when the codec is available:
+Every new finalized evidence directory contains, when the codec is available:
 
-- `original.jpg`
-- `annotated.jpg`
+- `original_keyframe.jpg`
+- `annotated_keyframe.jpg`
 - `evidence.mp4` with requested pre/post context
 - `trace.json` with vehicle, cabin, occupant, phone/pose/belt, fusion, temporal, model, threshold,
   timestamp, and per-file SHA-256 evidence
 
-Evidence endpoints require authentication. Review history is append-only in the `reviews` table.
+Legacy `original.jpg`/`annotated.jpg` packages remain readable. New evidence database records
+anchor a canonical package SHA-256 over both keyframes, the clip, and the trace. Legacy records
+anchored only to the original image remain inspectable but cannot be confirmed. Evidence
+endpoints require authentication. `CONFIRMED` is allowed only when required files, hashes, and
+complete post-event context pass server-side integrity checks. Review history is append-only in
+the `reviews` table.

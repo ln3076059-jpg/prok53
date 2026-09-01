@@ -16,6 +16,12 @@
 All event/evidence endpoints require a bearer token. Missing evidence returns `404`; the API does
 not substitute placeholder images or synthetic trace data.
 `PATCH /events/{event_id}/review` returns `422` when a reviewer attempts `CONFIRMED` without a
-persisted evidence record. `REJECTED` and `NEEDS_REVIEW` remain available for incomplete cases.
+complete temporal clip, canonical/legacy keyframes, readable trace, matching database path/hash,
+and matching declared SHA-256 values. `REJECTED` and `NEEDS_REVIEW` remain available for
+incomplete or altered cases.
+
+`evidence.integrity_anchor` distinguishes new `FULL_PACKAGE_SHA256` records from readable legacy
+records that anchor only the original image. Only the full-package state can become confirmation
+ready.
 
 FastAPI exposes login, video upload/detail/analysis, job status, event search/detail/review, statistics, and CSV export. OpenAPI documentation is available at `/docs`. All operational endpoints except health and login require a bearer token.

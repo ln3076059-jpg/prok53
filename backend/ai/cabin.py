@@ -53,7 +53,7 @@ class CabinLocalizer:
         camera_calibration: dict | None = None,
     ) -> CabinRegion:
         if vehicle_crop.size == 0:
-            return CabinRegion(None, 0.0, "NONE", "UNKNOWN_CABIN", "empty vehicle crop")
+            return CabinRegion(None, 0.0, "UNKNOWN", "UNKNOWN_CABIN", "empty vehicle crop")
 
         detected = self._detect(vehicle_crop)
         if detected is not None:
@@ -81,15 +81,13 @@ class CabinLocalizer:
         result = self._model.predict(crop, verbose=False)[0]
         boxes = getattr(result, "boxes", None)
         if boxes is None or len(boxes) == 0:
-            return CabinRegion(
-                None, 0.0, "CUSTOM_WINDSHIELD_DETECTOR", "UNKNOWN_CABIN", "no windshield detected"
-            )
+            return CabinRegion(None, 0.0, "CABIN_MODEL", "UNKNOWN_CABIN", "no windshield detected")
         rows = list(zip(boxes.xyxy.cpu().tolist(), boxes.conf.cpu().tolist(), strict=True))
         xyxy, confidence = max(rows, key=lambda row: float(row[1]))
         return CabinRegion(
             tuple(float(value) for value in xyxy),
             float(confidence),
-            "CUSTOM_WINDSHIELD_DETECTOR",
+            "CABIN_MODEL",
             "KNOWN_CABIN",
         )
 

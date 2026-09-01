@@ -24,6 +24,18 @@ Create an independent annotation file for:
 Report accuracy by camera, handedness, vehicle type, day/night, glare, blur, and occlusion. An
 `unknown` prediction is not silently counted as driver.
 
+Run the association/pose availability evaluator only on independently reviewed CSV rows:
+
+```powershell
+py -m training.evaluate_associations `
+  reports/v2_association_annotations.csv `
+  --output reports/v2_association_evaluation.json
+```
+
+Required columns are explicit truth/prediction pairs for vehicle context, cabin localization,
+occupant role, and phone-to-driver association, plus pose/wrist/face-keypoint availability. With
+no input, the checked-in report remains `NOT_RUN`.
+
 ## Level 3 — event metrics
 
 `training.evaluate_events` accepts frozen human truth and system prediction CSV files with:

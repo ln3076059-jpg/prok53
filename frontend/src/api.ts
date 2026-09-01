@@ -18,6 +18,12 @@ export interface SafetyEvent {
 
 export interface EvidenceLinks {
   available: boolean;
+  confirmation_ready: boolean;
+  integrity_status: string;
+  integrity_anchor: string;
+  package_sha256: string | null;
+  integrity_errors: string[];
+  confirmation_blockers: string[];
   original_url: string | null;
   annotated_url: string | null;
   clip_url: string | null;

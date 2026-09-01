@@ -36,6 +36,15 @@ def _validate_event_annotation(path: Path, sample_id: str) -> list[str]:
             continue
         if event["event_type"] not in {"PHONE", "NO_SEATBELT"}:
             errors.append(f"{location} has invalid event_type {event['event_type']}")
+        if event["occupant_role"] not in {
+            "driver",
+            "front_passenger",
+            "rear_left",
+            "rear_center",
+            "rear_right",
+            "unknown",
+        }:
+            errors.append(f"{location} has invalid occupant_role {event['occupant_role']}")
         try:
             start = float(event["start_seconds"])
             end = float(event["end_seconds"])
@@ -80,6 +89,9 @@ def freeze_external_test(
         if sample_id in seen_sample_ids:
             errors.append(f"duplicate sample_id: {sample_id}")
         seen_sample_ids.add(sample_id)
+        for dimension in ("source_id", "camera_id", "video_id", "vehicle_id", "person_id"):
+            if dimension in item and not str(item[dimension]).strip():
+                errors.append(f"{sample_id}: {dimension} must not be empty")
         for dimension in ("sha256", "video_id"):
             value = str(item[dimension])
             if value in seen_unique[dimension]:

@@ -2,9 +2,12 @@ schema_version: 1
 dataset_role: EXTERNAL_TEST
 required_fields:
   - sample_id
+  - dataset_role
   - source_id
   - camera_id
   - video_id
+  - vehicle_id
+  - person_id
   - video_path
   - sha256
   - annotation_path
@@ -15,21 +18,32 @@ required_fields:
   - reviewed_at
 required_condition_coverage:
   - daylight
+  - night
   - low_light
+  - rain
+  - glare
+  - reflection
   - windshield_reflection
   - motion_blur
   - video_compression
   - partial_occlusion
   - oblique_view
+  - dark_windshield
+  - different_camera_angle
+  - different_cabin_geometry
 disjoint_dimensions:
   - sha256
   - source_id
   - camera_id
   - video_id
+  - vehicle_id
+  - person_id
 minimum_independent_groups:
   source_id: 2
   camera_id: 3
   video_id: 12
+  vehicle_id: 8
+  person_id: 8
 policy:
   - Every video and annotation must be human-reviewed before freezing.
   - Each annotation is a JSON list of PHONE/NO_SEATBELT intervals with occupant roles.

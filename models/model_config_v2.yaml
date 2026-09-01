@@ -108,6 +108,7 @@ tracking:
   max_gap_frames: 12
   minimum_iou: 0.10
   maximum_center_distance: 0.25
+  cabin_signature_max_delta: 0.20
 evidence:
   pre_seconds: 2.0
   post_seconds: 2.5
@@ -120,5 +121,6 @@ performance:
 activation_policy:
   require_calibrated_fusion: true
   require_locked_model_record: true
+  model_lock_path: reports/model_lock_v2.json
   production_activation: BLOCKED_UNTRAINED_AND_UNCALIBRATED
 tracker: bytetrack.yaml

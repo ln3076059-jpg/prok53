@@ -69,6 +69,7 @@ class TemporalEventEngine:
         )
         self.last_event: dict[tuple[str, str, int | None, str], float] = {}
         self.smoothed: dict[tuple[str, int | None, str], float] = {}
+        self.active_events: set[tuple[str, str, int | None, str]] = set()
 
     def add(self, observation: Observation) -> list[EventCandidate]:
         if observation.vehicle_context_id is None:
@@ -77,6 +78,8 @@ class TemporalEventEngine:
         if observation.class_name == "phone" and role not in {"driver", "unknown"}:
             return []
         if observation.class_name == "phone" and observation.phone_context == "MOUNTED_OR_STATIC":
+            self._release("PHONE", observation)
+            self.windows.pop((observation.vehicle_context_id, observation.track_id, role), None)
             return []
         if (
             observation.class_name.startswith("seatbelt_")
@@ -87,6 +90,14 @@ class TemporalEventEngine:
             return []
         if observation.class_name in {"seatbelt_uncertain", "uncertain_or_occluded"}:
             return []
+        score = (
+            observation.fusion_score
+            if observation.fusion_score is not None
+            else observation.confidence
+        )
+        if score <= self.release_threshold:
+            event_type = "PHONE" if observation.class_name == "phone" else "NO_SEATBELT"
+            self._release(event_type, observation)
         # Belt classes describe the same occupant ROI but a class flip can receive a new
         # tracker ID. Group belt evidence by vehicle+seat so contradictions remain visible.
         window_track_id = observation.track_id if observation.class_name == "phone" else None
@@ -125,7 +136,9 @@ class TemporalEventEngine:
                     "NEEDS_REVIEW" if conflicting or rejected else "PENDING",
                 )
             )
-        return [item for item in candidates if self._cooldown_allows(item)]
+        if self._persistent(fastened):
+            self._release("NO_SEATBELT", current)
+        return [item for item in candidates if self._activation_allows(item)]
 
     def _persistent(self, observations: list[Observation]) -> bool:
         if len(observations) < self.min_observations:
@@ -181,16 +194,38 @@ class TemporalEventEngine:
         )
 
     def _cooldown_allows(self, candidate: EventCandidate) -> bool:
-        key = (
-            candidate.event_type,
-            candidate.vehicle_context_id,
-            candidate.track_id,
-            candidate.occupant_role,
-        )
+        key = self._candidate_key(candidate)
         if candidate.timestamp - self.last_event.get(key, float("-inf")) < self.cooldown_seconds:
             return False
         self.last_event[key] = candidate.timestamp
         return True
+
+    def _activation_allows(self, candidate: EventCandidate) -> bool:
+        key = self._candidate_key(candidate)
+        if key in self.active_events or not self._cooldown_allows(candidate):
+            return False
+        self.active_events.add(key)
+        return True
+
+    @staticmethod
+    def _candidate_key(candidate: EventCandidate) -> tuple[str, str, int | None, str]:
+        return (
+            candidate.event_type,
+            candidate.vehicle_context_id,
+            candidate.track_id if candidate.event_type == "PHONE" else None,
+            candidate.occupant_role,
+        )
+
+    def _release(self, event_type: str, observation: Observation) -> None:
+        if observation.vehicle_context_id is None:
+            return
+        key = (
+            event_type,
+            observation.vehicle_context_id,
+            observation.track_id if event_type == "PHONE" else None,
+            observation.occupant_role or "unknown",
+        )
+        self.active_events.discard(key)
 
     def reset_vehicle(self, vehicle_context_id: str) -> None:
         for key in [key for key in self.windows if key[0] == vehicle_context_id]:
@@ -198,6 +233,7 @@ class TemporalEventEngine:
             self.smoothed.pop(key, None)
         for key in [key for key in self.last_event if key[1] == vehicle_context_id]:
             del self.last_event[key]
+        self.active_events = {key for key in self.active_events if key[1] != vehicle_context_id}
 
     def expire(self, timestamp: float) -> None:
         """Remove stale state when a vehicle or behavior track disappears."""
@@ -210,3 +246,6 @@ class TemporalEventEngine:
         for key in stale:
             del self.windows[key]
             self.smoothed.pop(key, None)
+            vehicle_context_id, track_id, role = key
+            self.active_events.discard(("PHONE", vehicle_context_id, track_id, role))
+            self.active_events.discard(("NO_SEATBELT", vehicle_context_id, None, role))

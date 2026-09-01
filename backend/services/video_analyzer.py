@@ -19,7 +19,12 @@ from backend.ai.auxiliary import (
 from backend.ai.cabin import CabinLocalizer, crop_cabin
 from backend.ai.detector import NormalizedDetection, SafetyDetector
 from backend.ai.events import Observation, TemporalEventEngine
-from backend.ai.evidence import EventEvidenceBuffer, EvidenceArtifacts, annotate_frame
+from backend.ai.evidence import (
+    EventEvidenceBuffer,
+    EvidenceArtifacts,
+    annotate_frame,
+    evidence_package_sha256,
+)
 from backend.ai.fusion import FusionFeatures, LogisticFusion
 from backend.ai.sequence import TemporalFeatureBuffer
 from backend.ai.tracking import WithinVehicleTracker
@@ -44,14 +49,18 @@ class InferenceContext:
     offset: tuple[int, int]
     vehicle_track_id: int | None
     vehicle_type: str
+    vehicle_class_id: int
     vehicle_confidence: float
     cabin_confidence: float
     cabin_method: str
+    vehicle_bbox: tuple[float, float, float, float] | None = None
+    cabin_bbox: tuple[float, float, float, float] | None = None
 
 
 class VideoAnalyzer:
     def __init__(self, detector: SafetyDetector, evidence_root: Path):
         self.detector = detector
+        self.model_status = detector.status()
         self.evidence_root = evidence_root
         auxiliary = detector.config.get("auxiliary_models", {})
         pose_path = Path(auxiliary["pose_weights"]) if auxiliary.get("pose_weights") else None
@@ -100,6 +109,9 @@ class VideoAnalyzer:
             minimum_iou=float(tracking.get("minimum_iou", 0.10)),
             maximum_center_distance=float(tracking.get("maximum_center_distance", 0.25)),
         )
+        self.cabin_signature_max_delta = float(tracking.get("cabin_signature_max_delta", 0.20))
+        self._cabin_signatures: dict[str, tuple[str, tuple[float, ...]]] = {}
+        self._cabin_epochs: defaultdict[str, int] = defaultdict(int)
 
         temporal = detector.config.get("temporal", {})
         self.sequence = TemporalFeatureBuffer(
@@ -164,9 +176,12 @@ class VideoAnalyzer:
                     (0, 0),
                     None,
                     "unknown",
+                    -1,
                     1.0,
                     1.0,
                     "PROVIDED_CABIN_INPUT_SCOPE",
+                    None,
+                    (0.0, 0.0, float(frame.shape[1]), float(frame.shape[0])),
                 )
             ]
 
@@ -194,16 +209,48 @@ class VideoAnalyzer:
             cabin, cabin_offset = crop_cabin(vehicle_crop, cabin_region)
             if cabin.size == 0:
                 continue
+            base_context_id = f"video:{video.id}:{region.context_id}"
+            signature = (
+                cabin_region.method,
+                tuple(
+                    float(point) / max(float(scale), 1.0)
+                    for point, scale in zip(
+                        cabin_region.xyxy or (0.0, 0.0, 0.0, 0.0),
+                        (vehicle_crop.shape[1], vehicle_crop.shape[0]) * 2,
+                        strict=True,
+                    )
+                ),
+            )
+            previous_signature = self._cabin_signatures.get(base_context_id)
+            if previous_signature and (
+                previous_signature[0] != signature[0]
+                or max(
+                    abs(left - right)
+                    for left, right in zip(previous_signature[1], signature[1], strict=True)
+                )
+                > self.cabin_signature_max_delta
+            ):
+                self._cabin_epochs[base_context_id] += 1
+            self._cabin_signatures[base_context_id] = signature
+            context_id = f"{base_context_id}:cabin:{self._cabin_epochs[base_context_id]}"
             contexts.append(
                 InferenceContext(
-                    f"video:{video.id}:{region.context_id}",
+                    context_id,
                     cabin,
                     (x1 + cabin_offset[0], y1 + cabin_offset[1]),
                     region.track_id,
                     region.vehicle_class,
+                    region.vehicle_class_id,
                     region.confidence,
                     cabin_region.confidence,
                     cabin_region.method,
+                    (float(x1), float(y1), float(x2), float(y2)),
+                    (
+                        float(x1 + cabin_offset[0]),
+                        float(y1 + cabin_offset[1]),
+                        float(x1 + cabin_offset[0] + cabin.shape[1]),
+                        float(y1 + cabin_offset[1] + cabin.shape[0]),
+                    ),
                 )
             )
         return contexts
@@ -366,6 +413,8 @@ class VideoAnalyzer:
                         "face": [list(point) for point in pose.face_points],
                         "hands": [list(point) for point in pose.hand_points],
                     }
+                if assignment.role not in {"driver", "unknown"}:
+                    phone_state = "PASSENGER_PHONE"
 
             classifier_fastened = seatbelt_evidence.fastened if seatbelt_evidence else 0.0
             classifier_unfastened = seatbelt_evidence.unfastened if seatbelt_evidence else 0.0
@@ -461,9 +510,13 @@ class VideoAnalyzer:
                         "fusion_source": fusion_source,
                         "evidence_source": evidence_source,
                         "vehicle_type": context.vehicle_type,
+                        "vehicle_class_id": context.vehicle_class_id,
                         "vehicle_confidence": context.vehicle_confidence,
                         "cabin_confidence": context.cabin_confidence,
                         "cabin_method": context.cabin_method,
+                        "cabin_status": "KNOWN_CABIN",
+                        "vehicle_bbox": context.vehicle_bbox,
+                        "cabin_bbox": context.cabin_bbox,
                         "occupant_role_confidence": assignment.confidence,
                         "occupant_association_method": assignment.method,
                         "detector_class_before_classifier": detector_class_before_classifier,
@@ -523,25 +576,37 @@ class VideoAnalyzer:
                         "timestamp_seconds": timestamp,
                         "frame_number": frame_number,
                         "vehicle_id": context.context_id,
+                        "vehicle_track_id": context.vehicle_track_id,
                         "vehicle_type": context.vehicle_type,
+                        "vehicle_class_id": context.vehicle_class_id,
+                        "vehicle_bbox": context.vehicle_bbox,
                         "vehicle_confidence": context.vehicle_confidence,
+                        "cabin_bbox": context.cabin_bbox,
                         "cabin_confidence": context.cabin_confidence,
                         "cabin_method": context.cabin_method,
+                        "cabin_status": "KNOWN_CABIN",
                         "occupant_role": candidate.occupant_role,
                         "occupant_role_confidence": assignment.confidence,
                         "occupant_association_method": assignment.method,
                         "track_id": candidate.track_id,
+                        "behavior_track_id": candidate.track_id,
                         "phone_context": phone_state,
                         "phone_hand_proximity": hand_proximity,
                         "phone_face_proximity": face_proximity,
                         "pose_confidence": pose_confidence,
                         "seatbelt_probabilities": probabilities,
                         "fusion_score": fusion_score,
-                        "fusion_mode": self.fusion.status()["fusion_mode"],
+                        "fusion_mode": self.runtime_status()["fusion"]["fusion_mode"],
+                        "fusion_artifact_sha256": self.fusion.artifact_sha256,
+                        "fusion_threshold": self.fusion.threshold,
                         "temporal_score": candidate.temporal_score,
                         "model_version": self.detector.model_version,
+                        "weight_sha256": self.model_status["weights_sha256"]
+                        or self.model_status["specialist_weight_sha256"],
+                        "specialist_weight_sha256": self.model_status["specialist_weight_sha256"],
                         "model_config_sha256": self.detector.config_sha256,
                         "thresholds": self.detector.thresholds,
+                        "evidence_source": evidence_source,
                         "review_status_at_creation": candidate.review_status,
                         "temporal_observations": list(self._feature_history[sequence_key]),
                     },
@@ -613,6 +678,6 @@ class VideoAnalyzer:
                     event_id=item.event_id,
                     original_path=str(item.original_path),
                     annotated_path=str(item.annotated_path),
-                    sha256=item.hashes["original.jpg"],
+                    sha256=evidence_package_sha256(item.hashes),
                 )
             )

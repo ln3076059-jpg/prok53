@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 from dataclasses import dataclass
 from pathlib import Path
 from threading import Lock
@@ -20,6 +21,13 @@ class NormalizedDetection:
 
 class SafetyDetector:
     """Single process-wide YOLO instance. The model is never reloaded per frame."""
+
+    CANONICAL_EVENT_CLASSES = {
+        "phone",
+        "seatbelt_fastened",
+        "seatbelt_unfastened",
+    }
+    SPECIALIST_OUTPUT_CLASSES = CANONICAL_EVENT_CLASSES | {"occupant_upper_body"}
 
     def __init__(self, weights: Path, config_path: Path):
         self.weights = weights
@@ -41,6 +49,110 @@ class SafetyDetector:
         self.specialists = self.config.get("specialized_detectors", {})
         self._specialist_models: dict[str, object] = {}
         self._lock = Lock()
+        self._validate_config_contract()
+
+    def _validate_config_contract(self) -> None:
+        errors: list[str] = []
+        configured_classes = set(self.names.values())
+        if configured_classes != self.CANONICAL_EVENT_CLASSES:
+            errors.append(
+                "class_names must map exactly to phone, seatbelt_fastened, seatbelt_unfastened"
+            )
+        if set(self.thresholds) != self.CANONICAL_EVENT_CLASSES:
+            errors.append("threshold keys must exactly match canonical event classes")
+        for name, value in self.thresholds.items():
+            try:
+                threshold = float(value)
+            except (TypeError, ValueError):
+                errors.append(f"threshold for {name} is not numeric")
+                continue
+            if not 0.0 <= threshold <= 1.0:
+                errors.append(f"threshold for {name} is outside [0, 1]")
+
+        if self.specialists.get("enabled"):
+            entries = self.specialists.get("models", [])
+            names = [str(item.get("name", "")) for item in entries]
+            if not entries or any(not name for name in names) or len(names) != len(set(names)):
+                errors.append("specialized detector names must be present and unique")
+            for item in entries:
+                if not item.get("weights"):
+                    errors.append(f"specialist {item.get('name', '<unknown>')} has no weights path")
+                mapped = {str(value) for value in item.get("class_map", {}).values()}
+                if not mapped or not mapped <= self.SPECIALIST_OUTPUT_CLASSES:
+                    errors.append(
+                        f"specialist {item.get('name', '<unknown>')} has an invalid class_map"
+                    )
+        else:
+            configured_weights = self.config.get("weights")
+            if configured_weights and Path(configured_weights).resolve() != self.weights.resolve():
+                errors.append(
+                    "MODEL_PATH does not match the weights path declared by MODEL_CONFIG_PATH"
+                )
+        if errors:
+            raise ValueError("invalid model runtime contract:\n- " + "\n- ".join(errors))
+
+    def validate_runtime(self, app_env: str) -> dict:
+        """Validate artifact/approval gates, raising before a production server starts."""
+        mode = str(app_env).strip().lower()
+        if mode != "production":
+            return {
+                "status": "STRUCTURALLY_VALID",
+                "environment": mode or "development",
+                "activation_state": self.activation_state,
+            }
+
+        blockers: list[str] = []
+        if not self.available:
+            blockers.append("one or more configured model artifacts are missing")
+        if self.activation_state != "PRODUCTION_APPROVED":
+            blockers.append(f"model activation state is {self.activation_state}")
+        if self.config.get("threshold_status") != "CALIBRATED_ON_VALIDATION":
+            blockers.append("thresholds are not calibrated on validation data")
+
+        activation = self.config.get("activation_policy", {})
+        auxiliary = self.config.get("auxiliary_models", {})
+        if activation.get("require_calibrated_fusion"):
+            fusion_path = Path(str(auxiliary.get("fusion_artifact", "")))
+            if not fusion_path.is_file():
+                blockers.append("required calibrated fusion artifact is missing")
+        if activation.get("require_locked_model_record"):
+            lock_path = Path(activation.get("model_lock_path", "reports/model_lock_v2.json"))
+            blockers.extend(self._model_lock_blockers(lock_path))
+        if blockers:
+            raise RuntimeError("production runtime validation failed:\n- " + "\n- ".join(blockers))
+        return {
+            "status": "PRODUCTION_APPROVED",
+            "environment": "production",
+            "activation_state": self.activation_state,
+        }
+
+    def _model_lock_blockers(self, lock_path: Path) -> list[str]:
+        if not lock_path.is_file():
+            return [f"required model lock is missing: {lock_path}"]
+        try:
+            lock = json.loads(lock_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            return [f"model lock is unreadable: {exc}"]
+        blockers = []
+        if lock.get("production_approved") is not True:
+            blockers.append("model lock is not human production-approved")
+        if lock.get("activation_state") not in {"ACTIVE", "PRODUCTION_APPROVED"}:
+            blockers.append("model lock activation_state is not ACTIVE")
+        if lock.get("config_sha256") != self.config_sha256:
+            blockers.append("model lock config SHA-256 does not match runtime config")
+        expected_experiment = self.config.get("experiment_id")
+        if expected_experiment and lock.get("experiment_id") != expected_experiment:
+            blockers.append("model lock experiment_id does not match runtime config")
+        if self.specialists.get("enabled"):
+            expected = {
+                item["name"]: self._sha256(Path(item["weights"]))
+                for item in self.specialists.get("models", [])
+            }
+            if lock.get("component_weight_sha256") != expected:
+                blockers.append("model lock component weight hashes do not match runtime artifacts")
+        elif lock.get("weights_sha256") != self._sha256(self.weights):
+            blockers.append("model lock weight SHA-256 does not match runtime artifact")
+        return blockers
 
     @staticmethod
     def _sha256(path: Path) -> str | None:

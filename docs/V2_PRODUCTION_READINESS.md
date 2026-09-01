@@ -16,18 +16,20 @@ weights, calibration, external testing, and human approval remain mandatory.
 | Three-state belt fail-closed policy | IMPLEMENTED | uncertainty, confidence, margin, conflict gates |
 | Seatbelt hard negatives | BLOCKED_BY_DATA | governed examples missing |
 | Per-vehicle behavior tracking | IMPLEMENTED | IoU + center + class + continuity |
-| EMA/ratio/duration/gap/cooldown | IMPLEMENTED | temporal engine and tests |
+| EMA/ratio/duration/gap/hysteresis/cooldown | IMPLEMENTED | activation latch, release threshold, expiry/reset and tests |
 | Calibrated fusion | BLOCKED_BY_WEIGHTS | artifact absent; health exposes fallback/fail-closed |
-| Evidence clip and trace | IMPLEMENTED | protected files and SHA-256 |
+| Evidence clip and trace | IMPLEMENTED | canonical keyframes, protected clip/trace, full-package SHA-256 anchor and confirmation gate |
 | Human review provenance | IMPLEMENTED | append-only history exposed to UI |
 | Durable analysis queue | PARTIALLY_IMPLEMENTED | abstraction exists; demo adapter is not durable |
 | File source | IMPLEMENTED | `FileVideoSource` |
 | Webcam/RTSP production source | PARTIALLY_IMPLEMENTED | adapters experimental |
 | Event evaluator | IMPLEMENTED_TOOLING | measurements `NOT_RUN` |
+| Association/pose evaluator | IMPLEMENTED_TOOLING | measurements `NOT_RUN` |
 | Runtime benchmark | IMPLEMENTED_TOOLING | measurements `NOT_RUN` |
 | Governed V2 training | BLOCKED_BY_HUMAN_REVIEW | readiness report gates remain open |
 | External frozen test | IMPLEMENTED_TOOLING / BLOCKED_BY_DATA | freeze tool enforces reviewed source/camera/video-disjoint inputs; real set absent |
-| Production activation | BLOCKED | all scientific gates above must pass |
+| Production startup validation | IMPLEMENTED | refuses mismatched/unlocked/unapproved artifacts |
+| Production activation | BLOCKED | no ACTIVE human-approved matching model lock; all scientific gates above must pass |
 
 ## Required activation record
 

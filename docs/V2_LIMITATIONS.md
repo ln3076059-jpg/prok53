@@ -29,18 +29,21 @@ No component or event metric has been run for a final governed V2 model.
 - Local track-by-detection handles short gaps but does not solve long occlusion or cross-camera
   identity.
 - Evidence MP4 generation depends on the local OpenCV codec. A missing codec records
-  `CLIP_UNAVAILABLE`; it never fabricates a clip.
+  `CLIP_UNAVAILABLE`; it never fabricates a clip and confirmation remains blocked.
 - BackgroundTasks remains a non-durable demo queue. Process crashes can lose queued work.
 - Webcam/RTSP adapters are experimental and lack production reconnect/backpressure controls.
 - Database schema migration tooling is still required before production deployment.
+- Production startup validation is implemented, but no ACTIVE human-approved V2 model lock exists;
+  production therefore correctly refuses to start with the current artifacts.
 
 ## Evaluation limitations
 
 - Component metrics: `NOT_RUN` for final V2 weights.
-- Association metrics: `NOT_RUN`; no independent association ground truth exists.
+- Association and pose-availability metrics: `NOT_RUN`; tooling exists, but no independent
+  association ground truth exists.
 - Event metrics: `NOT_RUN`; no frozen human event ground truth exists.
 - External-domain test: `NOT_RUN` and not yet frozen.
-- Runtime benchmark: `NOT_RUN` until `tools/benchmark_runtime.py --video ...` runs on the target
+- Runtime benchmark: `NOT_RUN` until `py -m tools.benchmark_runtime --video ...` runs on the target
   hardware with installed weights.
 
 Changing YOLO size or increasing epochs does not clear any limitation above.

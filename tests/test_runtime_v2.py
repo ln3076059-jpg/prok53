@@ -1,4 +1,6 @@
 import json
+from collections import defaultdict
+from pathlib import Path
 from types import SimpleNamespace
 
 import numpy as np
@@ -10,12 +12,13 @@ from sqlalchemy.pool import StaticPool
 
 from backend.ai.association import OccupantAssociator
 from backend.ai.auxiliary import SeatbeltEvidence, VehicleRegion
-from backend.ai.cabin import CabinLocalizer, crop_cabin
-from backend.ai.detector import NormalizedDetection
+from backend.ai.cabin import CabinLocalizer, CabinRegion, crop_cabin
+from backend.ai.detector import NormalizedDetection, SafetyDetector
 from backend.ai.events import Observation, TemporalEventEngine
-from backend.ai.evidence import EventEvidenceBuffer
+from backend.ai.evidence import EventEvidenceBuffer, evidence_package_sha256
 from backend.ai.fusion import FusionFeatures, LogisticFusion
 from backend.ai.tracking import WithinVehicleTracker
+from backend.api import routes as api_routes
 from backend.api.routes import review_event
 from backend.database import Base
 from backend.models.entities import (
@@ -31,6 +34,7 @@ from backend.models.entities import (
 from backend.schemas import ReviewRequest
 from backend.services.video_analyzer import VideoAnalyzer
 from training.common import sha256_file
+from training.evaluate_associations import evaluate as evaluate_associations
 from training.evaluate_events import evaluate
 from training.freeze_external_test import freeze_external_test
 
@@ -150,6 +154,19 @@ def test_event_cooldown_blocks_duplicate_activation():
     assert runtime.add(Observation(1.5, "phone", 0.9, 12, "driver", "car-1", "HANDHELD_USE")) == []
 
 
+def test_hysteresis_blocks_continuous_duplicates_until_explicit_release():
+    runtime = engine(cooldown_seconds=2, release_threshold=0.35)
+    runtime.add(Observation(0, "phone", 0.9, 13, "driver", "car-1", "HANDHELD_USE"))
+    assert runtime.add(Observation(1.1, "phone", 0.9, 13, "driver", "car-1", "HANDHELD_USE"))
+    assert runtime.add(Observation(5.0, "phone", 0.9, 13, "driver", "car-1", "HANDHELD_USE")) == []
+    assert (
+        runtime.add(Observation(5.1, "phone", 0.9, 13, "driver", "car-1", "MOUNTED_OR_STATIC"))
+        == []
+    )
+    runtime.add(Observation(6.0, "phone", 0.9, 13, "driver", "car-1", "HANDHELD_USE"))
+    assert runtime.add(Observation(7.1, "phone", 0.9, 13, "driver", "car-1", "HANDHELD_USE"))
+
+
 def test_cabin_localization_failure_is_explicit():
     crop = np.zeros((100, 200, 3), dtype=np.uint8)
     localizer = CabinLocalizer(
@@ -201,7 +218,11 @@ def test_evidence_buffer_generates_images_clip_trace_and_hashes(tmp_path):
     assert artifact.clip_path is not None and artifact.clip_path.is_file()
     trace = json.loads(artifact.trace_path.read_text(encoding="utf-8"))
     assert trace["evidence_status"] == "COMPLETE"
-    assert set(trace["files"]) >= {"original.jpg", "annotated.jpg", "evidence.mp4"}
+    assert set(trace["files"]) >= {
+        "original_keyframe.jpg",
+        "annotated_keyframe.jpg",
+        "evidence.mp4",
+    }
 
 
 def test_fusion_fallback_status_is_operator_visible_and_can_fail_closed():
@@ -283,7 +304,32 @@ def test_event_evaluator_reports_false_missed_duplicate_and_delay():
     assert round(metrics["mean_time_to_detection_seconds"], 3) == 0.2
 
 
-def test_review_confirmation_requires_persisted_evidence():
+def test_association_evaluator_separates_context_role_and_pose_metrics():
+    report = evaluate_associations(
+        [
+            {
+                "vehicle_context_truth": "true",
+                "vehicle_context_predicted": "true",
+                "cabin_localized_truth": "true",
+                "cabin_localized_predicted": "false",
+                "occupant_role_truth": "driver",
+                "occupant_role_predicted": "driver",
+                "phone_to_driver_truth": "true",
+                "phone_to_driver_predicted": "true",
+                "pose_available": "true",
+                "wrist_available": "false",
+                "face_keypoints_available": "true",
+            }
+        ]
+    )
+    assert report["association_metrics"]["vehicle_context"]["accuracy"] == 1.0
+    assert report["association_metrics"]["cabin_localization"]["accuracy"] == 0.0
+    assert report["association_metrics"]["occupant_role"]["accuracy"] == 1.0
+    assert report["pose_availability"]["wrist_rate"] == 0.0
+
+
+def test_review_confirmation_requires_complete_integrity_checked_evidence(tmp_path, monkeypatch):
+    monkeypatch.setattr(api_routes.settings, "evidence_dir", tmp_path)
     database = create_engine(
         "sqlite://",
         connect_args={"check_same_thread": False},
@@ -328,15 +374,51 @@ def test_review_confirmation_requires_persisted_evidence():
         assert blocked.value.status_code == 422
         assert session.get(Event, event.id).review_status == ReviewStatus.PENDING
 
+        event_root = tmp_path / event.id
+        event_root.mkdir()
+        original_path = event_root / "original_keyframe.jpg"
+        annotated_path = event_root / "annotated_keyframe.jpg"
+        clip_path = event_root / "evidence.mp4"
+        original_path.write_bytes(b"original")
+        annotated_path.write_bytes(b"annotated")
+        clip_path.write_bytes(b"temporal-clip")
+        trace = {
+            "evidence_status": "COMPLETE",
+            "files": {
+                "original_keyframe.jpg": sha256_file(original_path),
+                "annotated_keyframe.jpg": sha256_file(annotated_path),
+                "evidence.mp4": sha256_file(clip_path),
+            },
+        }
+        (event_root / "trace.json").write_text(json.dumps(trace), encoding="utf-8")
+        actual_hashes = {
+            "original_keyframe.jpg": sha256_file(original_path),
+            "annotated_keyframe.jpg": sha256_file(annotated_path),
+            "evidence.mp4": sha256_file(clip_path),
+            "trace.json": sha256_file(event_root / "trace.json"),
+        }
         session.add(
             Evidence(
                 event_id=event.id,
-                original_path="original.jpg",
-                annotated_path="annotated.jpg",
-                sha256="1" * 64,
+                original_path=str(original_path),
+                annotated_path=str(annotated_path),
+                sha256=evidence_package_sha256(actual_hashes),
             )
         )
         session.commit()
+
+        trace["files"]["annotated_keyframe.jpg"] = "f" * 64
+        (event_root / "trace.json").write_text(json.dumps(trace), encoding="utf-8")
+        with pytest.raises(HTTPException, match="complete, integrity-checked"):
+            review_event(
+                event.id,
+                ReviewRequest(status=ReviewStatus.CONFIRMED),
+                session,
+                user,
+            )
+
+        trace["files"]["annotated_keyframe.jpg"] = sha256_file(annotated_path)
+        (event_root / "trace.json").write_text(json.dumps(trace), encoding="utf-8")
         reviewed = review_event(
             event.id,
             ReviewRequest(status=ReviewStatus.CONFIRMED, notes="Visible phone in hand"),
@@ -369,6 +451,59 @@ def test_raw_traffic_context_skips_untracked_vehicle_regions():
     frame = np.zeros((24, 24, 3), dtype=np.uint8)
     video = SimpleNamespace(id="v", input_scope=InputScope.TRAFFIC_SCENE_WITH_VEHICLE_ROIS)
     assert analyzer._frame_contexts(frame, video, 0) == []
+
+
+def test_raw_traffic_context_preserves_vehicle_and_cabin_boxes():
+    analyzer = VideoAnalyzer.__new__(VideoAnalyzer)
+    analyzer.vehicle_interval = 1
+    analyzer._vehicle_region_cache = []
+    analyzer.cabin_signature_max_delta = 0.2
+    analyzer._cabin_signatures = {}
+    analyzer._cabin_epochs = defaultdict(int)
+    analyzer.vehicle_detector = SimpleNamespace(
+        predict=lambda _: [VehicleRegion("vehicle:4", 0.9, (2, 3, 22, 23), 4, 2, "car")]
+    )
+    analyzer.cabin_localizer = SimpleNamespace(
+        locate=lambda *_: CabinRegion((2, 1, 18, 11), 0.95, "CAMERA_CALIBRATION", "KNOWN_CABIN")
+    )
+    analyzer.camera_cabin_calibration = None
+    frame = np.zeros((30, 30, 3), dtype=np.uint8)
+    video = SimpleNamespace(id="v", input_scope=InputScope.TRAFFIC_SCENE_WITH_VEHICLE_ROIS)
+    context = analyzer._frame_contexts(frame, video, 0)[0]
+    assert context.vehicle_bbox == (2.0, 3.0, 22.0, 23.0)
+    assert context.cabin_bbox == (4.0, 4.0, 20.0, 14.0)
+    assert context.vehicle_track_id == 4
+
+
+def test_cabin_geometry_change_rotates_context_identity():
+    analyzer = VideoAnalyzer.__new__(VideoAnalyzer)
+    analyzer.vehicle_interval = 1
+    analyzer._vehicle_region_cache = []
+    analyzer.cabin_signature_max_delta = 0.1
+    analyzer._cabin_signatures = {}
+    analyzer._cabin_epochs = defaultdict(int)
+    analyzer.vehicle_detector = SimpleNamespace(
+        predict=lambda _: [VehicleRegion("vehicle:4", 0.9, (0, 0, 20, 20), 4, 2, "car")]
+    )
+    regions = iter(
+        [
+            CabinRegion((1, 1, 19, 12), 0.95, "CAMERA_CALIBRATION", "KNOWN_CABIN"),
+            CabinRegion((5, 5, 15, 19), 0.95, "CAMERA_CALIBRATION", "KNOWN_CABIN"),
+        ]
+    )
+    analyzer.cabin_localizer = SimpleNamespace(locate=lambda *_: next(regions))
+    analyzer.camera_cabin_calibration = None
+    frame = np.zeros((24, 24, 3), dtype=np.uint8)
+    video = SimpleNamespace(id="v", input_scope=InputScope.TRAFFIC_SCENE_WITH_VEHICLE_ROIS)
+    first = analyzer._frame_contexts(frame, video, 0)[0]
+    second = analyzer._frame_contexts(frame, video, 1)[0]
+    assert first.context_id != second.context_id
+
+
+def test_production_runtime_refuses_untrained_unlocked_v2():
+    detector = SafetyDetector(Path("models/active/best.pt"), Path("models/model_config_v2.yaml"))
+    with pytest.raises(RuntimeError, match="production runtime validation failed"):
+        detector.validate_runtime("production")
 
 
 def test_seatbelt_classifier_interval_reuses_track_evidence():
@@ -450,6 +585,12 @@ minimum_independent_groups: {source_id: 1, camera_id: 1, video_id: 1}
     assert frozen["status"] == "FROZEN_EXTERNAL_TEST"
     assert frozen["human_review_status"] == "ALL_APPROVED"
 
+    item["human_review_status"] = "PENDING"
+    manifest_path.write_text(json.dumps(item) + "\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="human review is not APPROVED"):
+        freeze_external_test(manifest_path, development_path, policy_path, output_path)
+
+    item["human_review_status"] = "APPROVED"
     item["camera_id"] = "development-camera"
     manifest_path.write_text(json.dumps(item) + "\n", encoding="utf-8")
     with pytest.raises(ValueError, match="camera_id overlaps development data"):

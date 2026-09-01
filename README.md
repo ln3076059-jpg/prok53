@@ -77,6 +77,20 @@ Current V2 status is **UNTRAINED / NOT APPROVED / NOT PRODUCTION READY**. See th
 [production readiness](docs/V2_PRODUCTION_READINESS.md), and
 [event evaluation contract](docs/EVENT_EVALUATION.md).
 
+Useful V2 audit commands remain evidence-bound:
+
+```powershell
+# Produces NOT_RUN until a real target-hardware video and weights are supplied.
+py -m tools.benchmark_runtime --config models/model_config_v2.yaml
+
+# Produces NOT_RUN until independently reviewed association annotations are supplied.
+py -m training.evaluate_associations
+```
+
+Set `APP_ENV=production` only after producing an ACTIVE, human-approved lock whose config and
+component hashes match the runtime. The current untrained V2 configuration intentionally aborts
+production startup.
+
 ## V2 portable GPU handoff
 
 For the completed model-assisted pending-approval exploratory lane, transfer

@@ -5,6 +5,7 @@ import io
 import json
 import uuid
 from datetime import date, datetime
+from pathlib import Path
 
 from fastapi import (
     APIRouter,
@@ -22,6 +23,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from backend.ai.detector import SafetyDetector
+from backend.ai.evidence import evidence_package_sha256, sha256_file
 from backend.api.dependencies import current_user
 from backend.core.config import get_settings
 from backend.core.security import create_access_token, verify_password
@@ -56,6 +58,83 @@ router = APIRouter()
 settings = get_settings()
 detector = SafetyDetector(settings.model_path, settings.model_config_path)
 worker = InferenceWorker(SessionLocal, detector, settings.evidence_dir)
+
+
+def _read_evidence_trace(event_id: str) -> tuple[dict, Path]:
+    trace_path = settings.evidence_dir / event_id / "trace.json"
+    if not trace_path.is_file():
+        return {}, trace_path
+    try:
+        return json.loads(trace_path.read_text(encoding="utf-8")), trace_path
+    except (OSError, json.JSONDecodeError):
+        return {"evidence_status": "TRACE_UNREADABLE"}, trace_path
+
+
+def _evidence_integrity(event_id: str, evidence: Evidence | None, trace: dict) -> dict:
+    root = (settings.evidence_dir / event_id).resolve()
+    original = (
+        root / "original_keyframe.jpg"
+        if (root / "original_keyframe.jpg").is_file()
+        else root / "original.jpg"
+    )
+    annotated = (
+        root / "annotated_keyframe.jpg"
+        if (root / "annotated_keyframe.jpg").is_file()
+        else root / "annotated.jpg"
+    )
+    expected = {
+        original.name: original,
+        annotated.name: annotated,
+        "evidence.mp4": root / "evidence.mp4",
+        "trace.json": root / "trace.json",
+    }
+    errors: list[str] = []
+    hashes = {name: sha256_file(path) for name, path in expected.items() if path.is_file()}
+    integrity_anchor = "MISSING"
+    package_sha256 = evidence_package_sha256(hashes)
+    if evidence is None:
+        errors.append("evidence database record is missing")
+    else:
+        if Path(evidence.original_path).resolve() != original:
+            errors.append("original evidence path does not match the event directory")
+        if Path(evidence.annotated_path).resolve() != annotated:
+            errors.append("annotated evidence path does not match the event directory")
+        if evidence.sha256 == package_sha256:
+            integrity_anchor = "FULL_PACKAGE_SHA256"
+        elif hashes.get(original.name) == evidence.sha256:
+            integrity_anchor = "LEGACY_ORIGINAL_ONLY"
+        else:
+            integrity_anchor = "INVALID"
+            errors.append("evidence package SHA-256 does not match the database record")
+    for name, path in (("original keyframe", original), ("annotated keyframe", annotated)):
+        if not path.is_file():
+            errors.append(f"required evidence file is missing: {name}")
+    if "trace.json" not in hashes:
+        errors.append("required evidence file is missing: trace.json")
+    for name, declared_hash in trace.get("files", {}).items():
+        if name in hashes and hashes[name] != declared_hash:
+            errors.append(f"evidence SHA-256 mismatch: {name}")
+
+    available = not errors
+    confirmation_blockers = list(errors)
+    if integrity_anchor != "FULL_PACKAGE_SHA256":
+        confirmation_blockers.append("evidence package is not anchored by a full package SHA-256")
+    if trace.get("evidence_status") != "COMPLETE":
+        confirmation_blockers.append("temporal evidence clip is not complete")
+    if "evidence.mp4" not in hashes:
+        confirmation_blockers.append("temporal evidence clip is missing")
+    return {
+        "available": available,
+        "confirmation_ready": available and not confirmation_blockers,
+        "integrity_status": (
+            "MISSING" if evidence is None else "VALID" if not errors else "INVALID"
+        ),
+        "integrity_anchor": integrity_anchor,
+        "package_sha256": package_sha256,
+        "integrity_errors": errors,
+        "confirmation_blockers": confirmation_blockers,
+        "hashes": hashes,
+    }
 
 
 @router.post("/auth/login", response_model=TokenResponse, tags=["auth"])
@@ -169,23 +248,26 @@ def event_detail(event_id: str, db: Session = Depends(get_db), _: User = Depends
     if not (event := db.get(Event, event_id)):
         raise HTTPException(status_code=404, detail="Event not found")
     evidence = db.scalar(select(Evidence).where(Evidence.event_id == event_id))
-    trace_path = settings.evidence_dir / event_id / "trace.json"
-    trace = {}
-    if trace_path.is_file():
-        try:
-            trace = json.loads(trace_path.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError):
-            trace = {"evidence_status": "TRACE_UNREADABLE"}
+    trace, trace_path = _read_evidence_trace(event_id)
+    integrity = _evidence_integrity(event_id, evidence, trace)
     root_url = f"/events/{event_id}/evidence"
+    event_root = settings.evidence_dir / event_id
+    original_path = (
+        event_root / "original_keyframe.jpg"
+        if (event_root / "original_keyframe.jpg").is_file()
+        else event_root / "original.jpg"
+    )
+    annotated_path = (
+        event_root / "annotated_keyframe.jpg"
+        if (event_root / "annotated_keyframe.jpg").is_file()
+        else event_root / "annotated.jpg"
+    )
     evidence_payload = {
-        "available": evidence is not None,
-        "original_url": f"{root_url}/original" if evidence else None,
-        "annotated_url": f"{root_url}/annotated" if evidence else None,
-        "clip_url": f"{root_url}/clip"
-        if (settings.evidence_dir / event_id / "evidence.mp4").is_file()
-        else None,
+        **integrity,
+        "original_url": f"{root_url}/original" if original_path.is_file() else None,
+        "annotated_url": f"{root_url}/annotated" if annotated_path.is_file() else None,
+        "clip_url": f"{root_url}/clip" if (event_root / "evidence.mp4").is_file() else None,
         "trace_url": f"{root_url}/trace" if trace_path.is_file() else None,
-        "hashes": trace.get("files", {}),
     }
     history = [
         {
@@ -223,8 +305,18 @@ def event_evidence(
     if not db.get(Event, event_id):
         raise HTTPException(status_code=404, detail="Event not found")
     names = {
-        "original": ("original.jpg", "image/jpeg"),
-        "annotated": ("annotated.jpg", "image/jpeg"),
+        "original": (
+            "original_keyframe.jpg"
+            if (settings.evidence_dir / event_id / "original_keyframe.jpg").is_file()
+            else "original.jpg",
+            "image/jpeg",
+        ),
+        "annotated": (
+            "annotated_keyframe.jpg"
+            if (settings.evidence_dir / event_id / "annotated_keyframe.jpg").is_file()
+            else "annotated.jpg",
+            "image/jpeg",
+        ),
         "clip": ("evidence.mp4", "video/mp4"),
         "trace": ("trace.json", "application/json"),
     }
@@ -249,13 +341,18 @@ def review_event(
         raise HTTPException(status_code=422, detail="A review cannot return an event to PENDING")
     if not (event := db.get(Event, event_id)):
         raise HTTPException(status_code=404, detail="Event not found")
-    if payload.status == ReviewStatus.CONFIRMED and not db.scalar(
-        select(Evidence).where(Evidence.event_id == event.id)
-    ):
-        raise HTTPException(
-            status_code=422,
-            detail="An event cannot be confirmed without persisted evidence",
-        )
+    if payload.status == ReviewStatus.CONFIRMED:
+        evidence = db.scalar(select(Evidence).where(Evidence.event_id == event.id))
+        trace, _ = _read_evidence_trace(event.id)
+        integrity = _evidence_integrity(event.id, evidence, trace)
+        if not integrity["confirmation_ready"]:
+            raise HTTPException(
+                status_code=422,
+                detail=(
+                    "An event cannot be confirmed without complete, integrity-checked "
+                    f"temporal evidence: {', '.join(integrity['confirmation_blockers'])}"
+                ),
+            )
     db.add(
         Review(
             event_id=event.id,

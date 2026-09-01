@@ -18,6 +18,11 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def evidence_package_sha256(hashes: dict[str, str]) -> str:
+    payload = json.dumps(hashes, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
 @dataclass(frozen=True)
 class EvidenceArtifacts:
     event_id: str
@@ -94,8 +99,8 @@ class EventEvidenceBuffer:
 
     def _write(self, item: _PendingEvidence) -> EvidenceArtifacts:
         item.root.mkdir(parents=True, exist_ok=False)
-        original = item.root / "original.jpg"
-        annotated = item.root / "annotated.jpg"
+        original = item.root / "original_keyframe.jpg"
+        annotated = item.root / "annotated_keyframe.jpg"
         if not cv2.imwrite(str(original), item.key_frame):
             raise OSError(f"failed to write {original}")
         if not cv2.imwrite(str(annotated), item.annotated_frame):
@@ -104,8 +109,8 @@ class EventEvidenceBuffer:
         clip = item.root / "evidence.mp4"
         clip_path: Path | None = clip if self._write_clip(clip, item.frames) else None
         hashes = {
-            "original.jpg": sha256_file(original),
-            "annotated.jpg": sha256_file(annotated),
+            original.name: sha256_file(original),
+            annotated.name: sha256_file(annotated),
         }
         if clip_path:
             hashes[clip_path.name] = sha256_file(clip_path)

@@ -17,6 +17,10 @@ class VehicleRegion:
     vehicle_class_id: int = -1
     vehicle_class: str = "unknown"
 
+    @property
+    def vehicle_class_name(self) -> str:
+        return self.vehicle_class
+
 
 @dataclass(frozen=True)
 class PoseEvidence:

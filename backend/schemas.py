@@ -55,6 +55,12 @@ class EventResponse(BaseModel):
 
 class EvidenceLinks(BaseModel):
     available: bool = False
+    confirmation_ready: bool = False
+    integrity_status: str = "MISSING"
+    integrity_anchor: str = "MISSING"
+    package_sha256: str | None = None
+    integrity_errors: list[str] = Field(default_factory=list)
+    confirmation_blockers: list[str] = Field(default_factory=list)
     original_url: str | None = None
     annotated_url: str | None = None
     clip_url: str | None = None

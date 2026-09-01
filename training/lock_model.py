@@ -53,6 +53,16 @@ def main() -> None:
         if args.calibration_artifact and args.calibration_artifact.is_file()
         else {"path": None, "sha256": None, "status": "NOT_PROVIDED"}
     )
+    if args.activation_state == "ACTIVE" and calibration["sha256"] is None:
+        raise ValueError("ACTIVE model lock requires a threshold calibration artifact")
+    component_weight_sha256 = {}
+    specialists = config.get("specialized_detectors", {})
+    if specialists.get("enabled"):
+        for item in specialists.get("models", []):
+            component_path = Path(item["weights"])
+            if not component_path.is_file():
+                raise ValueError(f"specialist weight is missing: {component_path}")
+            component_weight_sha256[item["name"]] = sha256_file(component_path)
     lock = {
         "record_schema": "ROADWATCH_MODEL_VERSION_V2",
         "experiment_id": args.experiment_id or config.get("experiment_id", "UNSPECIFIED"),
@@ -60,6 +70,7 @@ def main() -> None:
         "locked_at": datetime.now(UTC).isoformat(),
         "activation_state": args.activation_state,
         "weights_sha256": sha256_file(args.weights),
+        "component_weight_sha256": component_weight_sha256,
         "config_sha256": sha256_file(args.config),
         "training_data_manifest_sha256": frozen["manifest_sha256"],
         "dataset_sha256": frozen["dataset_sha256"],

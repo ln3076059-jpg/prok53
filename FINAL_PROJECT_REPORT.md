@@ -24,7 +24,9 @@ Phone, fastened, and unfastened P/R/F1/AP50/AP50-95: `NOT_RUN`. Macro F1, mAP50,
 
 ## F. Performance
 
-Model load time, p50/p95 latency, FPS, and memory: `NOT_RUN`. No real-time claim is made.
+Decode FPS; vehicle, cabin, behavior, pose, seatbelt-classifier and fusion latency; total p50/p95;
+GPU VRAM; and CPU RAM: `NOT_RUN`. The benchmark tooling is implemented, but no target-hardware
+video run has been supplied. No real-time claim is made.
 
 ## G. System
 
@@ -33,7 +35,9 @@ Implemented: FastAPI endpoints, central model service, MySQL-compatible schema, 
 ## H. Event evaluation
 
 PHONE metrics: `NOT_RUN`. NO_SEATBELT metrics: `NOT_RUN`. Independent human event ground truth is required.
+Vehicle/cabin/occupant/phone association accuracy and pose availability: `NOT_RUN`. The evaluator
+is implemented, but independently reviewed association annotations are required.
 
 ## I. Limitations
 
-The primary blockers are human physical-phone reboxing, seatbelt upper-body semantic review, trustworthy subject/vehicle metadata, the Kaggle GPU runs, threshold calibration, frozen-test execution, and independent event ground truth. Generic COCO YOLO found phones in only 3 of 334 Mendeley cellphone-use frames at low confidence, confirming that domain-specific pretraining is necessary. Raw traffic scenes still require an upstream vehicle detector/tracker that yields cabin ROIs; the current safe runtime accepts vehicle/cabin crops and fails closed otherwise. Ambiguous belt visibility, mounted phones, passenger/driver association, cabin-camera geometry, low light, and cross-domain generalization remain material risks.
+The primary blockers are human physical-phone reboxing, seatbelt upper-body semantic review, trustworthy subject/vehicle metadata, the Kaggle GPU runs, threshold calibration, frozen-test execution, and independent event ground truth. Generic COCO YOLO found phones in only 3 of 334 Mendeley cellphone-use frames at low confidence, confirming that domain-specific pretraining is necessary. Raw traffic support now performs vehicle tracking followed by explicit cabin localization; it fails closed when the vehicle is untracked or the cabin is unknown. Ambiguous belt visibility, mounted phones, passenger/driver association, cabin-camera geometry, low light, and cross-domain generalization remain material risks.
