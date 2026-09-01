@@ -20,9 +20,9 @@ jobs:
       DATABASE_URL: sqlite://
       APP_ENV: development
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
           cache: pip
@@ -38,12 +38,21 @@ jobs:
         run: python -m compileall -q backend training tests tools
 
       - name: Python tests
-        run: python -m pytest -q
+        shell: bash
+        run: |
+          set +e
+          python -m pytest -q 2>&1 | tee pytest.log
+          status=${PIPESTATUS[0]}
+          if [ "$status" -ne 0 ]; then
+            message=$(tail -n 120 pytest.log | sed ':a;N;$!ba;s/%/%25/g;s/\r/%0D/g;s/\n/%0A/g')
+            echo "::error title=Pytest failure::$message"
+          fi
+          exit "$status"
 
       - name: FastAPI import smoke
         run: python -c "from backend.main import app; assert app.title == 'Driver Safety AI'"
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: "20"
           cache: npm
