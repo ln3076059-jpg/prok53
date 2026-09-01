@@ -13,6 +13,8 @@ No component or event metric has been run for a final governed V2 model.
 - Phone negatives are not human-confirmed.
 - Seatbelt ROI data lacks reviewed empty cabin/seat, reflection, steering wheel, clothing fold,
   bag/strap, non-occupant, and partial-occupant hard negatives.
+- The hard-negative queue builder validates proposals and preserves human-review gates, but it
+  cannot supply the missing independent captures or approve them.
 - Governed uncertain/occluded examples are missing from one or more classifier splits.
 - Model-assisted pending-approval data remains exploratory and cannot be promoted automatically.
 

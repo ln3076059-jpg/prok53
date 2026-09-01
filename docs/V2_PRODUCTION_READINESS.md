@@ -14,7 +14,7 @@ weights, calibration, external testing, and human approval remain mandatory.
 | Production occupant association accuracy | NOT_RUN | requires labeled camera-specific association set |
 | Phone-use temporal policy | PARTIALLY_IMPLEMENTED | rule-based; learned action model blocked by data |
 | Three-state belt fail-closed policy | IMPLEMENTED | uncertainty, confidence, margin, conflict gates |
-| Seatbelt hard negatives | BLOCKED_BY_DATA | governed examples missing |
+| Seatbelt hard negatives | IMPLEMENTED_TOOLING / BLOCKED_BY_DATA | proposal-only queue enforces hashes, group diversity, scenario coverage, and human PENDING state; governed captures missing |
 | Per-vehicle behavior tracking | IMPLEMENTED | IoU + center + class + continuity |
 | EMA/ratio/duration/gap/hysteresis/cooldown | IMPLEMENTED | activation latch, release threshold, expiry/reset and tests |
 | Calibrated fusion | BLOCKED_BY_WEIGHTS | artifact absent; health exposes fallback/fail-closed |

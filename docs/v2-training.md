@@ -90,6 +90,21 @@ Validate a capture manifest before ingestion:
 py -m training.validate_v2_capture datasets/manifests/v2_capture.jsonl
 ```
 
+Seatbelt ROI hard negatives use a separate proposal-only queue because an empty model output is
+not a trustworthy negative label. Capture the scenarios in
+`datasets/v2_seatbelt_hard_negative_policy.yaml`, then build the review queue with:
+
+```powershell
+py -m training.build_seatbelt_hard_negative_queue `
+  datasets/manifests/v2_seatbelt_hard_negative_capture.jsonl `
+  --require-complete-coverage
+```
+
+The builder verifies file hashes, rejects automatic approval/training labels and duplicate image
+bytes, limits repeated source groups, and reports missing scenario coverage. Every emitted item
+remains `PENDING`; a human must decide whether it is a true hard negative, contains an occupant
+that needs re-annotation, is uncertain, or must be rejected.
+
 The validator fails when the same video, vehicle, person, or byte-identical image crosses
 splits, when group-diversity minimums are not met, when required adverse conditions are absent,
 or when a derived/duplicated sample is declared.

@@ -30,7 +30,7 @@ separate architecture designed to remove that cross-task label conflict.
 | HIGH | Occupant role is fixed-ROI-only | Association returns the largest overlap with static regions | Camera angle, handedness, and seat layout changes cause role errors | `backend/ai/association.py` | Add geometry, handedness, confidence, calibrated fallback and unknown role | IMPLEMENTED |
 | HIGH | Behavior identities use a pseudo ID | Missing IDs are synthesized from vehicle id and class id | Different people/phones of the same class collapse into one temporal track | `backend/services/video_analyzer.py` | Add per-vehicle track-by-detection using IoU, center distance, class and continuity | IMPLEMENTED |
 | HIGH | Phone detection is too close to phone-use semantics | Context uses only sparse keypoint-to-phone geometry and old labels | Mounted phones and ambiguous phone observations can become unstable | `backend/ai/auxiliary.py`, `backend/ai/events.py` | Normalize by occupant scale, retain explicit context states, require persistence | IMPLEMENTED_WITH_RULE_BASED_LIMITATION |
-| HIGH | Seatbelt hard negatives are missing | Every current ROI detector image contains an upper-body box | Empty seats, reflections and straps can trigger false positives | `reports/v2_training_readiness.md` | Add independently captured and human-reviewed hard negatives | BLOCKED_BY_DATA |
+| HIGH | Seatbelt hard negatives are missing | Every current ROI detector image contains an upper-body box | Empty seats, reflections and straps can trigger false positives | `reports/v2_training_readiness.md` | Use the governed proposal-only hard-negative queue, then independently capture and human-review every required scenario | IMPLEMENTED_TOOLING; BLOCKED_BY_DATA |
 | HIGH | Uncertain belt ground truth is not governed-ready | Model-assisted uncertainty is exploratory and pending approval | A three-state production classifier cannot be claimed | `docs/v2-training.md`, pending manifests | Keep uncertainty distinct and fail closed on low confidence/margin | BLOCKED_BY_HUMAN_REVIEW |
 | HIGH | No source-disjoint external test | Current splits share provider/domain | Generalization to traffic cameras is unknown | `reports/v2_training_readiness.md` | Freeze a new camera/provider test set before final model selection | BLOCKED_BY_DATA |
 | MEDIUM | Temporal logic lacked an activation latch | Cooldown alone did not use the configured release threshold | A continuous violation could reactivate after cooldown without negative evidence | `backend/ai/events.py`, `backend/ai/sequence.py` | Add event-scoped hysteresis latch, explicit release, expiry and vehicle reset | IMPLEMENTED |
@@ -62,7 +62,7 @@ Verification performed on 2026-09-02 against the working tree described above:
 | Check | Result |
 |---|---|
 | V1 scientific baseline diff | PASS — `experiments/MC_BOOTSTRAP_001/config.yaml` unchanged |
-| Python test suite | PASS — 96/96 tests |
+| Python test suite | PASS — 99/99 tests |
 | Ruff checks and Python compilation | PASS |
 | Frontend production build | PASS |
 | FastAPI in-memory startup and `/health` smoke test | PASS — HTTP 200, deliberately `degraded` without approved V2 artifacts |

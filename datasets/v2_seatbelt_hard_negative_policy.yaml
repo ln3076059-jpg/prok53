@@ -1,0 +1,31 @@
+schema_version: 1
+required_fields:
+  - sample_id
+  - image_path
+  - sha256
+  - source_id
+  - source_asset_id
+  - source_group_id
+  - camera_id
+  - scenario
+  - conditions
+  - captured_at
+  - review_status
+required_scenarios:
+  - empty_cabin
+  - empty_seat
+  - reflection
+  - steering_wheel
+  - clothing_folds
+  - bag_or_strap
+  - seat_pattern
+  - non_occupant_upper_body_like
+  - partial_occupant
+  - windshield_glare
+allowed_review_statuses:
+  - PENDING
+policy:
+  - Every input is a proposal and remains PENDING until a human decision is appended.
+  - No empty annotation list is eligible for training merely because a model found no occupant.
+  - Byte-identical images and repeated source groups do not count as independent coverage.
+  - Visible or ambiguous occupants must be re-annotated or marked UNCERTAIN, never forced negative.
