@@ -72,7 +72,7 @@ Verification performed on 2026-09-02 against the working tree described above:
 | FastAPI in-memory startup and `/health` smoke test | PASS — HTTP 200, deliberately `degraded` without approved V2 artifacts |
 | Production fail-closed startup contract | PASS — refused missing/unapproved/uncalibrated artifacts |
 | Review UI mechanical quality detector | COMPLETED — flagged one color-token advisory and type-hierarchy warning; both corrected, detector not rerun per bounded-pass policy |
-| CI workflow | IMPLEMENTED — fatal Ruff, compile, tests, FastAPI import and frontend build; first remote run pending push |
+| CI workflow | PASS — Ubuntu GitHub Actions verified fatal Ruff, compile, 102 tests plus one local-data skip, FastAPI import and frontend build |
 | Runtime benchmark | NOT_RUN — no production video/model artifacts supplied |
 | Association and event-level scientific evaluation | NOT_RUN — no frozen human ground truth supplied |
 
