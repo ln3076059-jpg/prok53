@@ -247,13 +247,17 @@ threshold, camera ROI, and fusion artifact is locked.
 Create validation score CSVs and calibrate per class:
 
 ```powershell
-py -m training.calibrate_thresholds reports/v2_validation_scores.csv
+py -m training.calibrate_thresholds reports/v2_validation_scores.csv `
+  --model models/candidates/v2/phone_detector.pt `
+  --validation-manifest datasets/manifests/v2_validation.jsonl `
+  --output reports/v2_threshold_calibration.json
 ```
 
 Train the portable balanced logistic fusion model from event-level train/validation features:
 
 ```powershell
 py -m training.train_fusion reports/v2_fusion_features.csv `
+  --development-manifest datasets/manifests/v2_event_features_development.jsonl `
   --output models/fusion/no_seatbelt_v2.json `
   --target NO_SEATBELT --minimum-recall 0.75
 ```

@@ -6,6 +6,14 @@ Status: **ENGINEERING BASELINE COMPLETE; EXTERNAL SCIENTIFIC GATES OPEN**
 
 Candidate and rejected sources are recorded with displayed licenses in `datasets/sources.yaml`. Downloaded candidate images: 25,851 (DMS 9,884; Sintes 8; Mendeley Driver Risk 1,232; AnywayLabs synthetic DMS 1,356; c3rl 5,000; Roboflow seatbelttraining v4 8,371). Every raw source has an immutable SHA-256 manifest. Human-approved images: 0. DMS contributes 2,548 unreviewed physical-phone boxes; Mendeley contributes 334 cellphone-behavior regions; AnywayLabs contributes 659 calling/texting behavior regions. Roboflow contributes 6,646 fastened and 1,805 unfastened upper-body/person proposals, but its published split leaks 147 inferred groups and is discarded. The c3rl 2,500/2,500 folder hints were visually downgraded to synthetic smoke-test/ablation only after samples from both classes showed geometric scenes rather than real occupants. Behavior regions, source state boxes, and folder hints are not governed ground truth before human review.
 
+The machine-readable V2 diversity audit measures 9,728 phone proposal samples (one provider,
+3,616 declared source groups), 4,868 upper-body proposal samples (one provider, 2,750 groups), and
+4,929 classifier crops. Camera, video, vehicle, and person identities are absent from all three
+proposal manifests; subject-disjoint status is `NOT_PROVABLE`. Image dimensions were measured from
+the available files, while semantic conditions were not inferred. The prioritized phone-negative
+queue contains 3,013 `PENDING` rows (679 priority-1, 1,329 priority-2, 1,005 priority-4) and zero
+human approvals. All ten seatbelt hard-negative capture scenarios remain absent.
+
 ## B. Split
 
 Canonical human-approved three-class train/validation/test: not created. A reduced three-class proposal-only `mc_bootstrap_v2_6500` now exists with 6,500/1,782/1,736 images. It retains every phone-positive and unfastened-positive train image, selects difficult/context-diverse fastened and negative frames, and preserves all 3,288 original train source groups. It contains 2,548 phone, 3,124 fastened-seatbelt, and 1,805 unfastened-seatbelt instances in total. Audit passes with 27,616 retained pHash-near pairs and zero SHA, source/base group, component, or near-duplicate cross-split overlap. The full `mc_bootstrap_v1` and separate phone-only bootstrap remain available. These auxiliary splits must not be reported as final ground truth. Subject isolation remains `NOT_PROVABLE` until trusted metadata exists.
@@ -41,3 +49,7 @@ is implemented, but independently reviewed association annotations are required.
 ## I. Limitations
 
 The primary blockers are human physical-phone reboxing, seatbelt upper-body semantic review, trustworthy subject/vehicle metadata, the Kaggle GPU runs, threshold calibration, frozen-test execution, and independent event ground truth. Generic COCO YOLO found phones in only 3 of 334 Mendeley cellphone-use frames at low confidence, confirming that domain-specific pretraining is necessary. Raw traffic support now performs vehicle tracking followed by explicit cabin localization; it fails closed when the vehicle is untracked or the cabin is unknown. Ambiguous belt visibility, mounted phones, passenger/driver association, cabin-camera geometry, low light, and cross-domain generalization remain material risks.
+
+CI now checks Ruff, Python compilation, tests, FastAPI import, and the frontend build without GPU
+training or dataset/model downloads. CI correctness does not supply model accuracy or clear any
+scientific gate.

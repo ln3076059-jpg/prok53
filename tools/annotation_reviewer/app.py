@@ -9,7 +9,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
-from training.common import YoloLabel, sha256_file
+from training.common import YoloLabel, sha256_file, stable_json_hash
 
 app = FastAPI(title="Roadwatch Annotation Reviewer")
 manifest_path = Path("datasets/manifests/review_queue.json")
@@ -19,6 +19,7 @@ pending_only = False
 
 
 class Annotation(BaseModel):
+    box_id: str | None = Field(default=None, max_length=256)
     class_id: int = Field(ge=0, le=2)
     yolo: tuple[float, float, float, float]
     occupant_role: str = Field(
@@ -35,6 +36,16 @@ class Decision(BaseModel):
     reviewer_id: str = Field(min_length=2, max_length=256)
     reviewer_type: str = Field(default="HUMAN", pattern="^HUMAN$")
     status: str = Field(pattern="^(APPROVED|APPROVED_NEGATIVE|REJECTED|UNCERTAIN)$")
+    decision_reason: str = Field(
+        min_length=3,
+        max_length=128,
+        pattern=(
+            "^(PHYSICAL_PHONE_CONFIRMED|PHONE_FALSE_POSITIVE|PHONE_MISSING_LABEL|"
+            "PHONE_AMBIGUOUS|MOUNTED_OR_STATIC_PHONE|UPPER_BODY_ROI_CONFIRMED|"
+            "SEATBELT_STATE_CONFIRMED|UNCERTAIN_OR_OCCLUDED|HARD_NEGATIVE_CONFIRMED|"
+            "INSUFFICIENT_EVIDENCE|OTHER_DOCUMENTED_IN_NOTES)$"
+        ),
+    )
     notes: str = Field(default="", max_length=4000)
     annotations: list[Annotation]
     vehicle_context_id: str | None = Field(default=None, max_length=256)
@@ -49,6 +60,8 @@ class Decision(BaseModel):
     )
 
     def model_post_init(self, __context) -> None:
+        if self.decision_reason == "OTHER_DOCUMENTED_IN_NOTES" and not self.notes.strip():
+            raise ValueError("OTHER_DOCUMENTED_IN_NOTES requires review notes")
         approved = self.status in {"APPROVED", "APPROVED_NEGATIVE"}
         if approved and not (self.vehicle_context_id or "").strip():
             raise ValueError("approved samples require a vehicle_context_id")
@@ -171,15 +184,30 @@ def decision(payload: Decision):
     )
     if queue_item is None:
         raise HTTPException(404, "Sample not found in the active queue")
+    previous = load_latest_decisions().get(payload.sample_id)
     decisions_path.parent.mkdir(parents=True, exist_ok=True)
     with decisions_path.open("a", encoding="utf-8") as handle:
         record = payload.model_dump()
+        for index, annotation in enumerate(record["annotations"]):
+            annotation["box_id"] = annotation.get("box_id") or (f"{payload.sample_id}:box:{index}")
+        record["schema_version"] = 2
+        record["previous_status"] = (
+            previous.get("new_status") or previous.get("status") if previous else "PENDING"
+        )
+        record["new_status"] = payload.status
         record["reviewed_at_utc"] = datetime.now(UTC).isoformat()
         record["proposal_review_snapshot"] = queue_item.get("proposal_review")
         record["source_sha256"] = queue_item.get("sha256")
         record["source_group_id"] = queue_item.get("source_group_id")
+        record["source"] = {
+            "queue_path": str(manifest_path),
+            "queue_sha256": sha256_file(manifest_path),
+            "source_id": queue_item.get("source_id"),
+            "source_asset_id": queue_item.get("source_asset_id"),
+        }
+        record["decision_id"] = stable_json_hash(record)
         handle.write(json.dumps(record, sort_keys=True) + "\n")
-    return {"saved": True}
+    return {"saved": True, "decision_id": record["decision_id"]}
 
 
 @app.post("/api/batch-acknowledgement")

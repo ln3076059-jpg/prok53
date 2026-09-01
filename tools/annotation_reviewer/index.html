@@ -15,6 +15,7 @@
       --strong-rule: #8d8d8d;
       --green: #198038;
       --green-dark: #0e6027;
+      --confirmed: #a7f0ba;
       --amber-field: #fcf4d6;
       --amber-ink: #684e00;
       --red: #da1e28;
@@ -33,7 +34,7 @@
       min-height: 64px; padding: 10px 22px; background: var(--rail); color: white;
       display: flex; align-items: center; justify-content: space-between; gap: 18px;
     }
-    header strong { font-family: "IBM Plex Sans Condensed", sans-serif; font-size: 21px; text-transform: uppercase; }
+    header strong { font-family: "IBM Plex Sans Condensed", sans-serif; font-size: 28px; line-height: 1; text-transform: uppercase; }
     .header-status { display: flex; gap: 16px; align-items: center; font-variant-numeric: tabular-nums; }
     main { display: grid; grid-template-columns: minmax(0, 1fr) 430px; min-height: calc(100dvh - 64px); }
     #stage { min-width: 0; overflow: auto; background: #26302d; display: grid; place-items: center; padding: 30px; }
@@ -58,9 +59,9 @@
     .notice { padding: 12px 14px; border: 1px solid var(--rule); border-radius: 6px; background: var(--field); line-height: 1.45; overflow-wrap: anywhere; }
     .notice.warning { background: var(--amber-field); color: var(--amber-ink); }
     .notice.error { background: var(--field); color: var(--red); border-color: var(--red); }
-    .notice.success { background: #a7f0ba; color: var(--green-dark); }
+    .notice.success { background: var(--confirmed); color: var(--green-dark); }
     .tag { display: inline-flex; min-height: 24px; align-items: center; padding: 2px 8px; border-radius: 16px; background: var(--field); color: var(--ink); font-size: 11px; font-weight: 600; }
-    .tag.high { background: #a7f0ba; color: var(--green-dark); }
+    .tag.high { background: var(--confirmed); color: var(--green-dark); }
     .tag.medium { background: var(--amber-field); color: var(--amber-ink); }
     .tag.uncertain { background: var(--field); color: var(--red); border: 1px solid var(--red); }
     dl { margin: 0; }
@@ -168,6 +169,22 @@
           <div id="conditions" class="conditions"></div>
         </fieldset>
         <p id="conditionSuggestion" class="help"></p>
+        <label>Decision reason
+          <select id="decisionReason" required>
+            <option value="">Select the visible evidence</option>
+            <option value="PHYSICAL_PHONE_CONFIRMED">Physical phone confirmed</option>
+            <option value="PHONE_FALSE_POSITIVE">Phone false positive</option>
+            <option value="PHONE_MISSING_LABEL">Visible phone missing from labels</option>
+            <option value="PHONE_AMBIGUOUS">Phone evidence ambiguous</option>
+            <option value="MOUNTED_OR_STATIC_PHONE">Mounted or static phone</option>
+            <option value="UPPER_BODY_ROI_CONFIRMED">Upper-body ROI confirmed</option>
+            <option value="SEATBELT_STATE_CONFIRMED">Seatbelt state confirmed</option>
+            <option value="UNCERTAIN_OR_OCCLUDED">Uncertain or occluded belt</option>
+            <option value="HARD_NEGATIVE_CONFIRMED">Hard negative confirmed</option>
+            <option value="INSUFFICIENT_EVIDENCE">Insufficient evidence</option>
+            <option value="OTHER_DOCUMENTED_IN_NOTES">Other — explained in notes</option>
+          </select>
+        </label>
         <label>Review notes
           <textarea id="notes" maxlength="4000" placeholder="Visible evidence, corrections, or ambiguity"></textarea>
         </label>
@@ -189,7 +206,7 @@
     const names = ["phone", "seatbelt_fastened", "seatbelt_unfastened"];
     const roles = ["PENDING", "driver", "front_passenger", "rear_left", "rear_center", "rear_right", "other_occupant", "UNCERTAIN"];
     const colors = ["#ff3b30", "#198038", "#b28600"];
-    const conditionOptions = ["daylight", "low_light", "windshield_reflection", "motion_blur", "video_compression", "partial_occlusion", "oblique_view"];
+    const conditionOptions = ["daylight", "night", "low_light", "rain", "glare", "reflection", "windshield_reflection", "motion_blur", "video_compression", "partial_occlusion", "dark_windshield", "oblique_view"];
     let queue = [], index = 0, scale = 1, start = null, saving = false;
     const image = new Image();
     const canvas = document.querySelector("#canvas");
@@ -240,6 +257,7 @@
       const sample = queue[index];
       document.querySelector("#position").textContent = `${index + 1} / ${queue.length}`;
       document.querySelector("#notes").value = sample.notes || "";
+      document.querySelector("#decisionReason").value = "";
       document.querySelector("#context").value = sample.vehicle_context_id || "";
       document.querySelector("#role").value = sample.occupant_role || "PENDING";
       document.querySelector("#reviewer").value = localStorage.getItem("roadwatchReviewerId") || "";
@@ -313,7 +331,7 @@
       const width = Math.abs(start[0] - end[0]), height = Math.abs(start[1] - end[1]);
       if (width > .005 && height > .005) {
         queue[index].annotations ||= [];
-        queue[index].annotations.push({class_id: Number(document.querySelector("#class").value), occupant_role: document.querySelector("#role").value, yolo: [left + width / 2, top + height / 2, width, height]});
+        queue[index].annotations.push({box_id: `${queue[index].sample_id}:draft:${Date.now()}`, class_id: Number(document.querySelector("#class").value), occupant_role: document.querySelector("#role").value, yolo: [left + width / 2, top + height / 2, width, height]});
         renderBoxes(); draw();
       }
       start = null;
@@ -356,10 +374,12 @@
     }
     document.querySelectorAll("[data-status]").forEach(button => button.onclick = async () => {
       const reviewerId = document.querySelector("#reviewer").value.trim();
+      const decisionReason = document.querySelector("#decisionReason").value;
+      if (!decisionReason) { setStatus("Select a decision reason tied to visible evidence.", "error"); return; }
       localStorage.setItem("roadwatchReviewerId", reviewerId);
       const payload = {
         sample_id: queue[index].sample_id, reviewer_id: reviewerId, reviewer_type: "HUMAN",
-        status: button.dataset.status, notes: document.querySelector("#notes").value,
+        status: button.dataset.status, decision_reason: decisionReason, notes: document.querySelector("#notes").value,
         vehicle_context_id: document.querySelector("#context").value,
         occupant_role: document.querySelector("#role").value,
         video_id: document.querySelector("#video").value,

@@ -1,0 +1,25 @@
+{
+  "human_approved": 0,
+  "output_queue": "datasets\\manifests\\v2_phone_negative_priority_review.json",
+  "output_queue_sha256": "7b432a9cbf29b569c625a90ce6d03320407d467da9e257b672b57558e3b5e061",
+  "policy": "Priority is model-assisted triage only; every final decision remains human.",
+  "priority_counts": {
+    "1": 679,
+    "2": 1329,
+    "4": 1005
+  },
+  "priority_reason_counts": {
+    "ADVERSE_VISIBILITY_REQUIRES_HUMAN_CHECK": 355,
+    "MODEL_ASSISTED_REVIEW_UNCERTAIN": 1085,
+    "MODEL_PREDICTS_PHONE_WITHOUT_SOURCE_PHONE_BOX": 679,
+    "PHONE_LIKE_OBJECT_OR_ACTION": 1825,
+    "ZERO_BOX_NEGATIVE_REQUIRES_HUMAN_CONFIRMATION": 1005
+  },
+  "samples": 3013,
+  "schema_version": 1,
+  "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+  "source_queue_sha256": "4cc1cfd8ccf4ea38c3eef78bb3933576b2d37fe09c89df0d6d4d8fc2148875d4",
+  "source_report": "datasets\\manifests\\pretrain_pending_approval\\v2_phone_negative.json",
+  "source_report_sha256": "78a7e08fa8bc69b6192c10d0b0b9a4ce919c3b76fdd4f42863c96a5a525e32df",
+  "status": "HUMAN_REVIEW_REQUIRED"
+}

@@ -33,3 +33,7 @@ py tools/annotation_reviewer/app.py `
 `GET /api/status` reports the latest decision per sample while the JSONL file retains every
 revision. Add `--pending-only` when resuming a large queue. The reviewer hides every sample that
 already has an append-only decision; omit the flag when intentionally revising earlier work.
+
+Decision records use schema version 2. Each append records the previous/new status, a required
+evidence reason, named human identity, UTC timestamp, queue/source hashes, stable box IDs and a
+decision hash. Revising a sample creates another line; it never rewrites the earlier decision.

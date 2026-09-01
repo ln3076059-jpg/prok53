@@ -85,7 +85,22 @@ py -m tools.benchmark_runtime --config models/model_config_v2.yaml
 
 # Produces NOT_RUN until independently reviewed association annotations are supplied.
 py -m training.evaluate_associations
+
+# Measures actual manifest metadata/resolutions; missing identities remain UNKNOWN.
+py -m training.audit_v2_diversity
+
+# Rebuilds the model-assisted priority order; all 3,013 rows remain PENDING.
+py -m training.prioritize_phone_negative_review
 ```
+
+The current diversity audit is `NOT_GOVERNED`: phone and upper-body proposal data each use one
+provider and do not declare camera, video, vehicle or person identity. Subject-disjoint status is
+therefore `NOT_PROVABLE`. See [the diversity audit](reports/V2_DATA_DIVERSITY_AUDIT.md),
+[human review plan](docs/V2_HUMAN_REVIEW_PLAN.md),
+[external-test protocol](docs/V2_EXTERNAL_TEST_PROTOCOL.md),
+[calibration protocol](docs/V2_CALIBRATION_PROTOCOL.md),
+[model-lock protocol](docs/V2_MODEL_LOCK_PROTOCOL.md), and
+[event ground-truth protocol](docs/V2_EVENT_GROUND_TRUTH_PROTOCOL.md).
 
 Set `APP_ENV=production` only after producing an ACTIVE, human-approved lock whose config and
 component hashes match the runtime. The current untrained V2 configuration intentionally aborts

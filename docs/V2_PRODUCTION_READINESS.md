@@ -15,6 +15,9 @@ weights, calibration, external testing, and human approval remain mandatory.
 | Phone-use temporal policy | PARTIALLY_IMPLEMENTED | rule-based; learned action model blocked by data |
 | Three-state belt fail-closed policy | IMPLEMENTED | uncertainty, confidence, margin, conflict gates |
 | Seatbelt hard negatives | IMPLEMENTED_TOOLING / BLOCKED_BY_DATA | proposal-only queue enforces hashes, group diversity, scenario coverage, and human PENDING state; governed captures missing |
+| Human review audit trail | IMPLEMENTED_TOOLING / BLOCKED_BY_HUMAN_REVIEW | schema v2 appends transitions, reason, source hash, reviewer provenance and box identity; no governed decisions exist |
+| Phone negative review | IMPLEMENTED_TOOLING / BLOCKED_BY_HUMAN_REVIEW | exact 3,013-row priority queue; 679 priority-1; zero human approvals |
+| Data diversity | AUDITED / NOT_GOVERNED | one provider per detector proposal dataset; camera/video/vehicle/person metadata absent; subject isolation NOT_PROVABLE |
 | Per-vehicle behavior tracking | IMPLEMENTED | IoU + center + class + continuity |
 | EMA/ratio/duration/gap/hysteresis/cooldown | IMPLEMENTED | activation latch, release threshold, expiry/reset and tests |
 | Calibrated fusion | BLOCKED_BY_WEIGHTS | artifact absent; health exposes fallback/fail-closed |
@@ -30,6 +33,7 @@ weights, calibration, external testing, and human approval remain mandatory.
 | External frozen test | IMPLEMENTED_TOOLING / BLOCKED_BY_DATA | freeze tool enforces reviewed source/camera/video-disjoint inputs; real set absent |
 | Production startup validation | IMPLEMENTED | refuses mismatched/unlocked/unapproved artifacts |
 | Production activation | BLOCKED | no ACTIVE human-approved matching model lock; all scientific gates above must pass |
+| Deterministic CI | IMPLEMENTED | Ruff, compile, tests, FastAPI import and frontend build; no training/model/data downloads |
 
 ## Required activation record
 

@@ -15,6 +15,12 @@ No component or event metric has been run for a final governed V2 model.
   bag/strap, non-occupant, and partial-occupant hard negatives.
 - The hard-negative queue builder validates proposals and preserves human-review gates, but it
   cannot supply the missing independent captures or approve them.
+- The exact hard-negative capture manifest is absent: all 10 required seatbelt scenarios have zero
+  captured review candidates and remain `BLOCKED_BY_DATA`.
+- The diversity audit found one provider in each detector proposal dataset and no declared camera,
+  video, vehicle, or person identities. Subject-disjoint status is `NOT_PROVABLE`.
+- The prioritized 3,013-row phone-negative queue is model-assisted triage only; all rows remain
+  `PENDING` and human-approved count is zero.
 - Governed uncertain/occluded examples are missing from one or more classifier splits.
 - Model-assisted pending-approval data remains exploratory and cannot be promoted automatically.
 

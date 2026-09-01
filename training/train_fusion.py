@@ -3,11 +3,13 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+from datetime import UTC, datetime
 from pathlib import Path
 
 import numpy as np
 
 from backend.ai.fusion import FEATURE_NAMES
+from training.common import sha256_file, stable_json_hash
 
 
 def _load(path: Path) -> list[dict[str, str]]:
@@ -70,7 +72,9 @@ def fit_balanced_logistic(
     return weights, intercept, means, scales, losses
 
 
-def binary_metrics(labels: np.ndarray, scores: np.ndarray, threshold: float) -> dict[str, float | int]:
+def binary_metrics(
+    labels: np.ndarray, scores: np.ndarray, threshold: float
+) -> dict[str, float | int]:
     predicted = scores >= threshold
     truth = labels == 1
     tp = int(np.logical_and(predicted, truth).sum())
@@ -114,10 +118,13 @@ def train(
     csv_path: Path,
     output: Path,
     target: str,
+    development_manifest: Path,
     minimum_recall: float = 0.75,
     learning_rate: float = 0.03,
     epochs: int = 3000,
 ) -> dict:
+    if not development_manifest.is_file():
+        raise ValueError(f"development manifest is missing: {development_manifest}")
     rows = _load(csv_path)
     train_rows = [row for row in rows if row["split"].lower() == "train"]
     val_rows = [row for row in rows if row["split"].lower() == "val"]
@@ -131,10 +138,18 @@ def train(
     val_scores = _sigmoid(((x_val - means) / scales) @ weights + intercept)
     threshold_report = choose_threshold(y_val, val_scores, minimum_recall)
     artifact = {
-        "schema_version": 1,
+        "schema_version": 2,
+        "status": "CALIBRATED_ON_DEVELOPMENT_TRAIN_VALIDATION",
+        "created_at": datetime.now(UTC).isoformat(),
         "model_type": "BALANCED_LOGISTIC_REGRESSION",
         "target": target,
         "feature_names": list(FEATURE_NAMES),
+        "feature_schema_sha256": stable_json_hash(list(FEATURE_NAMES)),
+        "development_manifest": {
+            "path": str(development_manifest),
+            "sha256": sha256_file(development_manifest),
+        },
+        "feature_csv": {"path": str(csv_path), "sha256": sha256_file(csv_path)},
         "means": {name: float(means[index]) for index, name in enumerate(FEATURE_NAMES)},
         "scales": {name: float(scales[index]) for index, name in enumerate(FEATURE_NAMES)},
         "weights": {name: float(weights[index]) for index, name in enumerate(FEATURE_NAMES)},
@@ -159,6 +174,7 @@ def train(
 def main() -> None:
     parser = argparse.ArgumentParser(description="Train dependency-free V2 logistic fusion")
     parser.add_argument("csv", type=Path)
+    parser.add_argument("--development-manifest", type=Path, required=True)
     parser.add_argument("--output", type=Path, default=Path("models/fusion/no_seatbelt_v2.json"))
     parser.add_argument("--target", default="NO_SEATBELT")
     parser.add_argument("--minimum-recall", type=float, default=0.75)
@@ -171,6 +187,7 @@ def main() -> None:
                 args.csv,
                 args.output,
                 args.target,
+                args.development_manifest,
                 args.minimum_recall,
                 args.learning_rate,
                 args.epochs,

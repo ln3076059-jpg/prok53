@@ -23,7 +23,7 @@ from training.audit_v2_readiness import audit as audit_readiness
 from training.build_adt_review_queue import build as build_adt_review_queue
 from training.build_seatbelt_classifier import build as build_classifier
 from training.build_seatbelt_v2 import build as build_seatbelt
-from training.common import perceptual_hash
+from training.common import perceptual_hash, sha256_file
 from training.convert_uncertain_review_decisions import convert as convert_uncertain_decisions
 from training.evaluate_v2 import classification_report
 from training.pretrain_review_v2 import review_item as pretrain_review_item
@@ -263,8 +263,16 @@ def test_fusion_training_uses_validation_only_for_threshold(tmp_path):
                     }
                 )
     output = tmp_path / "fusion.json"
+    development_manifest = tmp_path / "development.jsonl"
+    development_manifest.write_text('{"video_id":"development-1"}\n', encoding="utf-8")
 
-    artifact = train_fusion(path, output, "NO_SEATBELT", epochs=300)
+    artifact = train_fusion(
+        path,
+        output,
+        "NO_SEATBELT",
+        development_manifest,
+        epochs=300,
+    )
     runtime = LogisticFusion(output)
     result = runtime.predict(
         FusionFeatures(
@@ -278,6 +286,7 @@ def test_fusion_training_uses_validation_only_for_threshold(tmp_path):
     )
 
     assert artifact["test_rows_used"] == 0
+    assert artifact["development_manifest"]["sha256"] == sha256_file(development_manifest)
     assert artifact["validation"]["f1"] == 1.0
     assert runtime.available is True
     assert result.decision is True
@@ -487,6 +496,10 @@ def test_uncertain_reviewer_conversion_preserves_audit_identity(tmp_path):
     assert row["reviewer"] == "reviewer@example.org"
 
 
+@pytest.mark.skipif(
+    not Path("datasets/derived/phone_bootstrap_v2/manifest.jsonl").is_file(),
+    reason="requires local ignored V2 proposal datasets",
+)
 def test_current_v2_readiness_distinguishes_proposal_from_governed_training():
     report = audit_readiness()
     assert report["status"] == {
