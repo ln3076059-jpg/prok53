@@ -14,6 +14,8 @@ class VehicleRegion:
     confidence: float
     xyxy: tuple[float, float, float, float]
     track_id: int | None
+    vehicle_class_id: int = -1
+    vehicle_class: str = "unknown"
 
 
 @dataclass(frozen=True)
@@ -33,15 +35,37 @@ class SeatbeltEvidence:
 
 
 def _point_box_proximity(
-    points: tuple[tuple[float, float], ...], box: tuple[float, float, float, float]
+    points: tuple[tuple[float, float], ...],
+    box: tuple[float, float, float, float],
+    reference_box: tuple[float, float, float, float] | None = None,
 ) -> float:
     if not points:
         return 0.0
     x1, y1, x2, y2 = box
-    diagonal = max(((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5, 1.0)
+    scale_box = reference_box or box
+    diagonal = max(
+        ((scale_box[2] - scale_box[0]) ** 2 + (scale_box[3] - scale_box[1]) ** 2) ** 0.5,
+        1.0,
+    )
     center_x, center_y = (x1 + x2) / 2, (y1 + y2) / 2
     distance = min(((x - center_x) ** 2 + (y - center_y) ** 2) ** 0.5 for x, y in points)
-    return max(0.0, min(1.0, 1.0 - distance / (2.5 * diagonal)))
+    return max(0.0, min(1.0, 1.0 - distance / (0.50 * diagonal)))
+
+
+def classify_phone_context(
+    detection: NormalizedDetection,
+    pose: PoseEvidence | None,
+    hand_threshold: float = 0.55,
+    face_threshold: float = 0.55,
+) -> tuple[str, float, float]:
+    """Classify phone geometry without equating phone detection with phone use."""
+    if not pose or (not pose.hand_points and not pose.face_points):
+        return "UNKNOWN_PHONE_CONTEXT", 0.0, 0.0
+    hand = _point_box_proximity(pose.hand_points, detection.xyxy, pose.xyxy)
+    face = _point_box_proximity(pose.face_points, detection.xyxy, pose.xyxy)
+    if hand >= hand_threshold or face >= face_threshold:
+        return "HANDHELD_USE", hand, face
+    return "MOUNTED_OR_STATIC", hand, face
 
 
 def phone_context(
@@ -50,17 +74,18 @@ def phone_context(
     hand_threshold: float = 0.55,
     face_threshold: float = 0.55,
 ) -> tuple[str, float, float]:
-    if not pose or (not pose.hand_points and not pose.face_points):
-        return "UNKNOWN", 0.0, 0.0
-    hand = _point_box_proximity(pose.hand_points, detection.xyxy)
-    face = _point_box_proximity(pose.face_points, detection.xyxy)
-    if hand >= hand_threshold or face >= face_threshold:
-        return "HANDHELD", hand, face
-    return "MOUNTED_OR_STATIC", hand, face
+    """Backward-compatible adapter for the V1/V2 bootstrap tests and stored traces."""
+    context, hand, face = classify_phone_context(detection, pose, hand_threshold, face_threshold)
+    legacy = {
+        "HANDHELD_USE": "HANDHELD",
+        "UNKNOWN_PHONE_CONTEXT": "UNKNOWN",
+    }
+    return legacy.get(context, context), hand, face
 
 
 class VehicleDetector:
     COCO_VEHICLE_CLASSES = {2, 3, 5, 7}
+    COCO_CLASS_NAMES = {2: "car", 3: "motorcycle", 5: "bus", 7: "truck"}
 
     def __init__(self, weights: Path | None, confidence: float = 0.35):
         self.weights = weights
@@ -93,17 +118,31 @@ class VehicleDetector:
             return []
         ids = boxes.id.cpu().tolist() if boxes.id is not None else [None] * len(boxes)
         regions = []
-        for index, (xyxy, confidence, track_id) in enumerate(
-            zip(boxes.xyxy.cpu().tolist(), boxes.conf.cpu().tolist(), ids, strict=True)
+        for index, (xyxy, confidence, class_id, track_id) in enumerate(
+            zip(
+                boxes.xyxy.cpu().tolist(),
+                boxes.conf.cpu().tolist(),
+                boxes.cls.cpu().tolist(),
+                ids,
+                strict=True,
+            )
         ):
             normalized_id = int(track_id) if track_id is not None else None
-            context_id = f"vehicle:{normalized_id}" if normalized_id is not None else f"vehicle:frame:{index}"
+            normalized_class_id = int(class_id)
+            vehicle_class = self.COCO_CLASS_NAMES.get(normalized_class_id, "unknown")
+            context_id = (
+                f"vehicle:{normalized_id}"
+                if normalized_id is not None
+                else f"vehicle:untracked:{vehicle_class}:{index}"
+            )
             regions.append(
                 VehicleRegion(
                     context_id,
                     float(confidence),
                     tuple(float(value) for value in xyxy),
                     normalized_id,
+                    normalized_class_id,
+                    vehicle_class,
                 )
             )
         return regions
@@ -151,9 +190,8 @@ class PoseEstimator:
             else [[1.0] * len(row) for row in xy_rows]
         )
         evidence = []
-        for points, confidences, pose_box in zip(
-            xy_rows, confidence_rows, pose_boxes, strict=True
-        ):
+        for points, confidences, pose_box in zip(xy_rows, confidence_rows, pose_boxes, strict=True):
+
             def selected(
                 indices: tuple[int, ...],
                 row_points=points,
@@ -162,8 +200,7 @@ class PoseEstimator:
                 return tuple(
                     (float(row_points[index][0]), float(row_points[index][1]))
                     for index in indices
-                    if index < len(row_points)
-                    and float(row_confidences[index]) >= self.confidence
+                    if index < len(row_points) and float(row_confidences[index]) >= self.confidence
                 )
 
             valid = [float(value) for value in confidences if float(value) >= self.confidence]
@@ -216,7 +253,9 @@ class SeatbeltClassifier:
         )
 
 
-def crop_box(frame: np.ndarray, xyxy: tuple[float, float, float, float], padding: float = 0.08) -> np.ndarray:
+def crop_box(
+    frame: np.ndarray, xyxy: tuple[float, float, float, float], padding: float = 0.08
+) -> np.ndarray:
     height, width = frame.shape[:2]
     x1, y1, x2, y2 = xyxy
     pad_x, pad_y = (x2 - x1) * padding, (y2 - y1) * padding

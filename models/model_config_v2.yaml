@@ -1,3 +1,4 @@
+experiment_id: MULTIMODEL_V2
 model_version: MULTIMODEL_V2_UNTRAINED
 weights: models/active/best.pt
 imgsz: 1024
@@ -35,6 +36,25 @@ vehicle_context:
   traffic_scene_mode: OPTIONAL_REQUIRES_LOCAL_VEHICLE_WEIGHTS
   vehicle_weights: models/auxiliary/yolo11n.pt
   vehicle_confidence: 0.35
+  cabin_localizer:
+    weights: models/active/v2/windshield_detector.pt
+    minimum_confidence: 0.60
+    geometry_confidence: 0.45
+    geometry_rois:
+      car: [0.12, 0.05, 0.88, 0.58]
+      truck: [0.08, 0.03, 0.92, 0.62]
+      bus: [0.05, 0.02, 0.95, 0.58]
+    fallback_policy: UNKNOWN_CABIN
+  camera_cabin_calibration:
+    approved: false
+    status: PENDING_PER_CAMERA_CALIBRATION
+    normalized_xyxy: [0.12, 0.05, 0.88, 0.58]
+    confidence: 0.0
+occupant_association:
+  image_driver_side: left
+  minimum_confidence: 0.55
+  rear_seats_enabled: true
+  low_confidence_role: unknown
 occupant_rois:
   calibration_status: PLACEHOLDER_PER_CAMERA_CALIBRATION_REQUIRED
   regions:
@@ -77,4 +97,28 @@ temporal:
   min_positive_seconds: 1.2
   min_observations: 4
   cooldown_seconds: 5.0
+  positive_ratio: 0.60
+  gap_tolerance_seconds: 0.75
+  candidate_threshold: 0.45
+  activation_threshold: 0.55
+  release_threshold: 0.35
+tracking:
+  vehicle: BYTE_TRACK
+  occupants_and_phone: TRACK_BY_DETECTION
+  max_gap_frames: 12
+  minimum_iou: 0.10
+  maximum_center_distance: 0.25
+evidence:
+  pre_seconds: 2.0
+  post_seconds: 2.5
+  trace_sha256: true
+performance:
+  vehicle_detector_every_n_frames: 1
+  behavior_detector_every_n_frames: 1
+  pose_every_n_frames: 2
+  seatbelt_classifier_every_n_frames: 1
+activation_policy:
+  require_calibrated_fusion: true
+  require_locked_model_record: true
+  production_activation: BLOCKED_UNTRAINED_AND_UNCALIBRATED
 tracker: bytetrack.yaml

@@ -15,6 +15,13 @@ class Observation:
     phone_context: str = "UNKNOWN"
     fusion_score: float | None = None
     evidence_source: str = "DETECTOR_ONLY"
+    vehicle_type: str = "unknown"
+    occupant_role_confidence: float = 0.0
+    vehicle_context_confidence: float = 0.0
+    phone_hand_proximity: float = 0.0
+    phone_face_proximity: float = 0.0
+    pose_confidence: float = 0.0
+    seatbelt_probabilities: tuple[float, float, float] | None = None
 
 
 @dataclass(frozen=True)
@@ -26,32 +33,64 @@ class EventCandidate:
     review_status: str
     occupant_role: str
     vehicle_context_id: str
+    vehicle_type: str = "unknown"
+    temporal_score: float = 0.0
 
 
 class TemporalEventEngine:
-    def __init__(self, window_seconds: float = 2.0, min_positive_seconds: float = 1.2, min_observations: int = 3, cooldown_seconds: float = 5.0):
-        self.window_seconds = window_seconds
-        self.min_positive_seconds = min_positive_seconds
-        self.min_observations = min_observations
-        self.cooldown_seconds = cooldown_seconds
-        self.windows: defaultdict[tuple[str, int | None, str], deque[Observation]] = defaultdict(deque)
+    def __init__(
+        self,
+        window_seconds: float = 2.0,
+        min_positive_seconds: float = 1.2,
+        min_observations: int = 3,
+        cooldown_seconds: float = 5.0,
+        smoothing_alpha: float = 0.35,
+        feature_positive_score: float = 0.5,
+        positive_ratio: float = 0.60,
+        gap_tolerance_seconds: float | None = None,
+        candidate_threshold: float = 0.45,
+        activation_threshold: float = 0.55,
+        release_threshold: float = 0.35,
+        **_: object,
+    ):
+        self.window_seconds = float(window_seconds)
+        self.min_positive_seconds = float(min_positive_seconds)
+        self.min_observations = int(min_observations)
+        self.cooldown_seconds = float(cooldown_seconds)
+        self.smoothing_alpha = float(smoothing_alpha)
+        self.feature_positive_score = float(feature_positive_score)
+        self.minimum_positive_ratio = float(positive_ratio)
+        self.gap_tolerance_seconds = float(gap_tolerance_seconds or window_seconds)
+        self.candidate_threshold = float(candidate_threshold)
+        self.activation_threshold = float(activation_threshold)
+        self.release_threshold = float(release_threshold)
+        self.windows: defaultdict[tuple[str, int | None, str], deque[Observation]] = defaultdict(
+            deque
+        )
         self.last_event: dict[tuple[str, str, int | None, str], float] = {}
+        self.smoothed: dict[tuple[str, int | None, str], float] = {}
 
     def add(self, observation: Observation) -> list[EventCandidate]:
         if observation.vehicle_context_id is None:
             return []
-        if observation.occupant_role is None:
-            return []
-        if observation.class_name == "phone" and observation.occupant_role != "driver":
+        role = observation.occupant_role or "unknown"
+        if observation.class_name == "phone" and role not in {"driver", "unknown"}:
             return []
         if observation.class_name == "phone" and observation.phone_context == "MOUNTED_OR_STATIC":
+            return []
+        if (
+            observation.class_name.startswith("seatbelt_")
+            and observation.vehicle_type == "motorcycle"
+        ):
+            return []
+        if observation.class_name.startswith("seatbelt_") and role == "unknown":
+            return []
+        if observation.class_name in {"seatbelt_uncertain", "uncertain_or_occluded"}:
             return []
         # Belt classes describe the same occupant ROI but a class flip can receive a new
         # tracker ID. Group belt evidence by vehicle+seat so contradictions remain visible.
         window_track_id = observation.track_id if observation.class_name == "phone" else None
-        window = self.windows[
-            (observation.vehicle_context_id, window_track_id, observation.occupant_role)
-        ]
+        window = self.windows[(observation.vehicle_context_id, window_track_id, role)]
         window.append(observation)
         while window and observation.timestamp - window[0].timestamp > self.window_seconds:
             window.popleft()
@@ -63,16 +102,21 @@ class TemporalEventEngine:
         phone = [item for item in window if item.class_name == "phone"]
         candidates: list[EventCandidate] = []
         if self._persistent(phone):
+            role = current.occupant_role or "unknown"
             phone_status = (
                 "PENDING"
-                if all(item.phone_context == "HANDHELD" for item in phone)
+                if role == "driver"
+                and all(item.phone_context in {"HANDHELD", "HANDHELD_USE"} for item in phone)
                 and all(item.evidence_source != "FUSION_REJECTED" for item in phone)
                 else "NEEDS_REVIEW"
             )
             candidates.append(self._candidate("PHONE", phone, current, phone_status))
         if self._persistent(unfastened):
             conflicting = self._persistent(fastened)
-            rejected = any(item.evidence_source == "FUSION_REJECTED" for item in unfastened)
+            rejected = any(
+                item.evidence_source in {"FUSION_REJECTED", "DETECTOR_CLASSIFIER_CONFLICT"}
+                for item in unfastened
+            )
             candidates.append(
                 self._candidate(
                     "NO_SEATBELT",
@@ -86,23 +130,54 @@ class TemporalEventEngine:
     def _persistent(self, observations: list[Observation]) -> bool:
         if len(observations) < self.min_observations:
             return False
-        return observations[-1].timestamp - observations[0].timestamp >= self.min_positive_seconds
+        if observations[-1].timestamp - observations[0].timestamp < self.min_positive_seconds:
+            return False
+        if any(
+            right.timestamp - left.timestamp > self.gap_tolerance_seconds
+            for left, right in zip(observations, observations[1:], strict=False)
+        ):
+            return False
+        scores = [
+            item.fusion_score if item.fusion_score is not None else item.confidence
+            for item in observations
+        ]
+        positive_ratio = sum(score >= self.feature_positive_score for score in scores) / len(scores)
+        if positive_ratio < self.minimum_positive_ratio:
+            return False
+        key = (
+            observations[-1].vehicle_context_id or "",
+            observations[-1].track_id,
+            observations[-1].occupant_role or "unknown",
+        )
+        previous = self.smoothed.get(key, scores[0])
+        for score in scores[1:]:
+            previous = self.smoothing_alpha * score + (1.0 - self.smoothing_alpha) * previous
+        self.smoothed[key] = previous
+        return (
+            previous >= self.activation_threshold
+            and sum(scores) / len(scores) >= self.candidate_threshold
+        )
 
-    def _candidate(self, event_type: str, observations: list[Observation], current: Observation, status: str) -> EventCandidate:
-        if current.occupant_role is None or current.vehicle_context_id is None:
-            raise ValueError("event candidate requires vehicle context and occupant role")
+    def _candidate(
+        self, event_type: str, observations: list[Observation], current: Observation, status: str
+    ) -> EventCandidate:
+        if current.vehicle_context_id is None:
+            raise ValueError("event candidate requires vehicle context")
+        role = current.occupant_role or "unknown"
+        scores = [
+            item.fusion_score if item.fusion_score is not None else item.confidence
+            for item in observations
+        ]
         return EventCandidate(
             event_type,
-            sum(
-                item.fusion_score if item.fusion_score is not None else item.confidence
-                for item in observations
-            )
-            / len(observations),
+            sum(scores) / len(scores),
             current.timestamp,
             current.track_id,
             status,
-            current.occupant_role,
+            role,
             current.vehicle_context_id,
+            current.vehicle_type,
+            self.smoothed.get((current.vehicle_context_id, current.track_id, role), scores[-1]),
         )
 
     def _cooldown_allows(self, candidate: EventCandidate) -> bool:
@@ -116,3 +191,22 @@ class TemporalEventEngine:
             return False
         self.last_event[key] = candidate.timestamp
         return True
+
+    def reset_vehicle(self, vehicle_context_id: str) -> None:
+        for key in [key for key in self.windows if key[0] == vehicle_context_id]:
+            del self.windows[key]
+            self.smoothed.pop(key, None)
+        for key in [key for key in self.last_event if key[1] == vehicle_context_id]:
+            del self.last_event[key]
+
+    def expire(self, timestamp: float) -> None:
+        """Remove stale state when a vehicle or behavior track disappears."""
+        stale: list[tuple[str, int | None, str]] = []
+        for key, window in self.windows.items():
+            while window and timestamp - window[0].timestamp > self.window_seconds:
+                window.popleft()
+            if not window:
+                stale.append(key)
+        for key in stale:
+            del self.windows[key]
+            self.smoothed.pop(key, None)

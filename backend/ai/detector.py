@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 from dataclasses import dataclass
 from pathlib import Path
 from threading import Lock
@@ -23,7 +24,16 @@ class SafetyDetector:
     def __init__(self, weights: Path, config_path: Path):
         self.weights = weights
         self.config_path = config_path
-        self.config = yaml.safe_load(config_path.read_text())
+        if not config_path.is_file():
+            raise FileNotFoundError(f"model config not found: {config_path}")
+        self._config_bytes = config_path.read_bytes()
+        self.config_sha256 = hashlib.sha256(self._config_bytes).hexdigest()
+        self.config = yaml.safe_load(self._config_bytes.decode("utf-8"))
+        if not isinstance(self.config, dict):
+            raise ValueError("model config must be a YAML mapping")
+        for required in ("class_names", "thresholds", "vehicle_context", "temporal"):
+            if required not in self.config:
+                raise ValueError(f"model config missing required section: {required}")
         self.names = {int(key): value for key, value in self.config["class_names"].items()}
         self.thresholds = self.config["thresholds"]
         self.model_version = self.config.get("model_version", "UNKNOWN")
@@ -31,6 +41,27 @@ class SafetyDetector:
         self.specialists = self.config.get("specialized_detectors", {})
         self._specialist_models: dict[str, object] = {}
         self._lock = Lock()
+
+    @staticmethod
+    def _sha256(path: Path) -> str | None:
+        if not path.is_file():
+            return None
+        digest = hashlib.sha256()
+        with path.open("rb") as handle:
+            for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                digest.update(chunk)
+        return digest.hexdigest()
+
+    @property
+    def activation_state(self) -> str:
+        serialized = yaml.safe_dump(self.config).upper()
+        if "UNTRAINED" in serialized:
+            return "UNTRAINED"
+        if not self.available:
+            return "ARTIFACTS_MISSING"
+        if any(marker in serialized for marker in ("PLACEHOLDER", "PENDING", "NOT_APPROVED")):
+            return "NOT_CALIBRATED"
+        return str(self.config.get("activation_state", "CANDIDATE_NOT_PRODUCTION_APPROVED"))
 
     @property
     def available(self) -> bool:
@@ -65,20 +96,26 @@ class SafetyDetector:
             return self._predict_specialists(frame, track)
         minimum = min(self.thresholds.values())
         if track:
-            results = self._model.track(frame, persist=True, tracker=self.config.get("tracker", "bytetrack.yaml"), conf=minimum, verbose=False)
+            results = self._model.track(
+                frame,
+                persist=True,
+                tracker=self.config.get("tracker", "bytetrack.yaml"),
+                conf=minimum,
+                verbose=False,
+            )
         else:
             results = self._model.predict(frame, conf=minimum, verbose=False)
         return self.normalize(results[0])
 
-    def _predict_specialists(
-        self, frame: np.ndarray, track: bool
-    ) -> list[NormalizedDetection]:
+    def _predict_specialists(self, frame: np.ndarray, track: bool) -> list[NormalizedDetection]:
         output: list[NormalizedDetection] = []
         for model_index, item in enumerate(self.specialists["models"]):
             model = self._specialist_models[item["name"]]
             source_map = {int(key): value for key, value in item["class_map"].items()}
             mapped_thresholds = [
-                float(self.thresholds[name]) for name in source_map.values() if name in self.thresholds
+                float(self.thresholds[name])
+                for name in source_map.values()
+                if name in self.thresholds
             ]
             minimum = float(item.get("threshold", min(mapped_thresholds, default=0.25)))
             if track:
@@ -104,9 +141,7 @@ class SafetyDetector:
                 threshold = float(self.thresholds.get(class_name, item.get("threshold", 0.25)))
                 if class_name is None or float(raw_conf) < threshold:
                     continue
-                class_id = next(
-                    (key for key, name in self.names.items() if name == class_name), -1
-                )
+                class_id = next((key for key, name in self.names.items() if name == class_name), -1)
                 track_id = None
                 if raw_track_id is not None:
                     track_id = model_index * 1_000_000 + int(raw_track_id)
@@ -126,23 +161,51 @@ class SafetyDetector:
         boxes = getattr(result, "boxes", None)
         if boxes is None:
             return output
-        ids = boxes.id.cpu().tolist() if getattr(boxes, "id", None) is not None else [None] * len(boxes)
-        for raw_box, raw_conf, raw_class, track_id in zip(boxes.xyxy.cpu().tolist(), boxes.conf.cpu().tolist(), boxes.cls.cpu().tolist(), ids, strict=True):
+        ids = (
+            boxes.id.cpu().tolist()
+            if getattr(boxes, "id", None) is not None
+            else [None] * len(boxes)
+        )
+        for raw_box, raw_conf, raw_class, track_id in zip(
+            boxes.xyxy.cpu().tolist(),
+            boxes.conf.cpu().tolist(),
+            boxes.cls.cpu().tolist(),
+            ids,
+            strict=True,
+        ):
             class_id = int(raw_class)
             class_name = self.names.get(class_id)
             if class_name is None or float(raw_conf) < float(self.thresholds[class_name]):
                 continue
-            output.append(NormalizedDetection(class_id, class_name, float(raw_conf), tuple(float(value) for value in raw_box), int(track_id) if track_id is not None else None))
+            output.append(
+                NormalizedDetection(
+                    class_id,
+                    class_name,
+                    float(raw_conf),
+                    tuple(float(value) for value in raw_box),
+                    int(track_id) if track_id is not None else None,
+                )
+            )
         return output
 
     def status(self) -> dict:
         auxiliary = self.config.get("auxiliary_models", {})
         vehicle = self.config.get("vehicle_context", {})
+        specialist_hashes = {
+            item.get("name", "unknown"): self._sha256(Path(item["weights"]))
+            for item in self.specialists.get("models", [])
+            if item.get("weights")
+        }
         return {
             "available": self.available,
             "loaded": self._model is not None or bool(self._specialist_models),
             "model_version": self.model_version,
             "weights": str(self.weights),
+            "weights_sha256": self._sha256(self.weights),
+            "specialist_weight_sha256": specialist_hashes,
+            "config": str(self.config_path),
+            "config_sha256": self.config_sha256,
+            "activation_state": self.activation_state,
             "threshold_status": self.config.get("threshold_status"),
             "specialized_detectors": {
                 "enabled": bool(self.specialists.get("enabled")),
@@ -162,8 +225,7 @@ class SafetyDetector:
                     and Path(auxiliary["fusion_artifact"]).is_file()
                 ),
                 "vehicle_detector_available": bool(
-                    vehicle.get("vehicle_weights")
-                    and Path(vehicle["vehicle_weights"]).is_file()
+                    vehicle.get("vehicle_weights") and Path(vehicle["vehicle_weights"]).is_file()
                 ),
             },
         }

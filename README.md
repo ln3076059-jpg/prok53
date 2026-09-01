@@ -1,6 +1,7 @@
 # Roadwatch Driver Safety
 
-Greenfield, reproducible three-class driver-safety system built around one YOLO11s detector and one canonical Kaggle experiment.
+Evidence-first driver-safety research system with an immutable single-detector V1 baseline and an
+independent fail-closed V2 multi-stage architecture.
 
 Canonical classes:
 
@@ -10,7 +11,9 @@ Canonical classes:
 2 seatbelt_unfastened
 ```
 
-The repository provides the full governed workflow and runnable application scaffold. It does **not** contain approved data, trained weights, human review decisions, or invented metrics.
+The repository provides the governed workflow, runtime boundaries, review UI, evaluation tools,
+and runnable application scaffold. It does **not** claim governed V2 data, final trained V2
+weights, external-test results, event accuracy, human approval, or production readiness.
 
 ## Quick start
 
@@ -63,7 +66,16 @@ Status: **NOT_RUN**. No independent human event ground truth exists. Detector mA
 
 Start with [dataset sources](docs/data-sources.md), [dataset governance](docs/dataset.md), [annotation semantics](docs/annotation-guide.md), [training strategy](docs/training-strategy.md), and [Kaggle training](docs/kaggle-training.md).
 
-The independent multi-model successor is documented in [V2 training](docs/v2-training.md). V2 separates phone detection from phone-use evidence and separates upper-body detection from three-state seatbelt classification; it does not modify the running V1 experiment.
+The independent multi-model successor is documented in [V2 training](docs/v2-training.md) and
+[V2 architecture](docs/V2_ARCHITECTURE.md). V2 adds vehicle type/tracking, explicit windshield
+or cabin localization, confidence-bearing occupant association, per-vehicle behavior tracking,
+three-state belt classification, temporal fusion, evidence clips/traces, and append-only review.
+It does not modify the running V1 experiment.
+
+Current V2 status is **UNTRAINED / NOT APPROVED / NOT PRODUCTION READY**. See the
+[senior AI audit](docs/SENIOR_AI_AUDIT.md), [limitations](docs/V2_LIMITATIONS.md),
+[production readiness](docs/V2_PRODUCTION_READINESS.md), and
+[event evaluation contract](docs/EVENT_EVALUATION.md).
 
 ## V2 portable GPU handoff
 

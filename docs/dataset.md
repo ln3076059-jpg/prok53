@@ -4,4 +4,9 @@ Raw downloads are immutable. `training/download_source.py` requires exact licens
 
 After governance, `training/augment_training_split.py` can create the deterministic train-only camera-condition derivative used by MC_001. All variants retain the parent effective group. `training/analyze_cv_quality.py` reports low light, blur, contrast, and tiny-object risks before the Kaggle bundle is built.
 
+The V2 external event test is governed separately by `training/freeze_external_test.py` and
+`datasets/v2_external_test_policy.yaml`. Freezing requires human-approved annotations, matching
+file hashes, declared condition coverage, and source/camera/video/hash disjointness from the
+development manifest. The lock records integrity and isolation, not accuracy.
+
 No governed assets currently exist. Actual counts remain zero until licensed sources are downloaded and humans approve annotations.

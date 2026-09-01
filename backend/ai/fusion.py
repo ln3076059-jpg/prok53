@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 from dataclasses import dataclass
@@ -44,15 +45,24 @@ class FusionResult:
 class LogisticFusion:
     """Small, dependency-free inference wrapper for an offline-trained logistic model."""
 
-    def __init__(self, artifact: Path | None, threshold: float = 0.5):
+    def __init__(
+        self,
+        artifact: Path | None,
+        threshold: float = 0.5,
+        require_calibrated: bool = False,
+    ):
         self.artifact = artifact
         self.threshold = float(threshold)
+        self.require_calibrated = bool(require_calibrated)
         self.model: dict | None = None
+        self.artifact_sha256: str | None = None
         if artifact and artifact.is_file():
-            payload = json.loads(artifact.read_text(encoding="utf-8"))
+            raw = artifact.read_bytes()
+            payload = json.loads(raw.decode("utf-8"))
             if payload.get("feature_names") != list(FEATURE_NAMES):
                 raise ValueError("fusion artifact feature schema mismatch")
             self.model = payload
+            self.artifact_sha256 = hashlib.sha256(raw).hexdigest()
             self.threshold = float(payload.get("threshold", threshold))
 
     @property
@@ -62,13 +72,15 @@ class LogisticFusion:
     def predict(self, features: FusionFeatures) -> FusionResult:
         values = features.as_dict()
         if not self.model:
+            if self.require_calibrated:
+                return FusionResult(0.0, False, "CALIBRATED_MODEL_REQUIRED")
             # Conservative fallback: context is mandatory and contradictions reduce confidence.
             score = values["detector_confidence"] * values["vehicle_context"]
             if values["classifier_unfastened"] or values["classifier_fastened"]:
                 agreement = values["classifier_unfastened"]
                 contradiction = values["classifier_fastened"]
                 score *= max(0.0, min(1.0, 0.5 + 0.5 * agreement - 0.5 * contradiction))
-            return FusionResult(score, score >= self.threshold, "CONSERVATIVE_RULE_FALLBACK")
+            return FusionResult(score, score >= self.threshold, "RULE_FALLBACK")
 
         means = self.model["means"]
         scales = self.model["scales"]
@@ -80,12 +92,15 @@ class LogisticFusion:
             logit += standardized * float(weights[name])
         logit = max(-60.0, min(60.0, logit))
         score = 1.0 / (1.0 + math.exp(-logit))
-        return FusionResult(score, score >= self.threshold, "LOGISTIC_FUSION")
+        return FusionResult(score, score >= self.threshold, "CALIBRATED_MODEL")
 
     def status(self) -> dict:
         return {
-            "available": self.available,
-            "artifact": str(self.artifact) if self.artifact else None,
-            "threshold": self.threshold,
-            "mode": "LOGISTIC_FUSION" if self.available else "CONSERVATIVE_RULE_FALLBACK",
+            "fusion_available": self.available,
+            "fusion_artifact": str(self.artifact) if self.artifact else None,
+            "fusion_artifact_sha256": self.artifact_sha256,
+            "fusion_threshold": self.threshold,
+            "fusion_mode": "CALIBRATED_MODEL" if self.available else "RULE_FALLBACK",
+            "fusion_required": self.require_calibrated,
+            "fusion_fail_closed": self.require_calibrated and not self.available,
         }

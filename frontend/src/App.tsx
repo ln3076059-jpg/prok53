@@ -28,13 +28,14 @@ import {
   WarningAlt,
 } from "@carbon/icons-react";
 import { Link, Navigate, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
-import { api, type ReviewStatus, type SafetyEvent, type Statistics } from "./api";
+import { api, type EventDetail, type ReviewStatus, type SafetyEvent, type Statistics } from "./api";
 
 const emptyStats: Statistics = {
   analyzed_videos: 0,
   events_by_type: { PHONE: 0, NO_SEATBELT: 0 },
   events_by_review_status: { PENDING: 0, CONFIRMED: 0, REJECTED: 0, NEEDS_REVIEW: 0 },
   model: { available: false, loaded: false, model_version: "UNTRAINED", weights: "models/active/best.pt" },
+  runtime: { fusion: { fusion_enabled: false, fusion_mode: "DISABLED", fusion_available: false, fusion_fail_closed: false, fusion_artifact_sha256: null, fusion_threshold: 0.5 } },
   event_metrics_status: "NOT_RUN",
 };
 
@@ -53,6 +54,48 @@ function StatusTag({ status }: { status: ReviewStatus }) {
     NEEDS_REVIEW: "warm-gray",
   };
   return <Tag type={types[status]}>{status.replace("_", " ")}</Tag>;
+}
+
+function useEvidenceAssets(event: EventDetail | null) {
+  const [assets, setAssets] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    const controller = new AbortController();
+    const objectUrls: string[] = [];
+    let active = true;
+    if (!event?.evidence.available) {
+      setAssets({});
+      setLoading(false);
+      setError("");
+      return () => controller.abort();
+    }
+    const entries = [
+      ["original", event.evidence.original_url],
+      ["annotated", event.evidence.annotated_url],
+      ["clip", event.evidence.clip_url],
+    ].filter((entry): entry is [string, string] => Boolean(entry[1]));
+    setLoading(true);
+    setError("");
+    Promise.all(entries.map(async ([key, path]) => {
+      const blob = await api.evidenceBlob(path, controller.signal);
+      const url = URL.createObjectURL(blob);
+      objectUrls.push(url);
+      return [key, url] as const;
+    }))
+      .then((rows) => { if (active) setAssets(Object.fromEntries(rows)); })
+      .catch((reason) => {
+        if (reason instanceof DOMException && reason.name === "AbortError") return;
+        if (active) setError(reason instanceof Error ? reason.message : "Evidence could not be loaded");
+      })
+      .finally(() => { if (active) setLoading(false); });
+    return () => {
+      active = false;
+      controller.abort();
+      objectUrls.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [event]);
+  return { assets, loading, error };
 }
 
 function LoginPage() {
@@ -216,7 +259,7 @@ function DashboardPage() {
       <section className="record-panel recent-panel"><div className="panel-heading"><div><h2>Recent events</h2><p>Latest reviewable detections</p></div><Button kind="ghost" size="sm" as={Link} to="/events">View all</Button></div><EventTable events={events.slice(0, 5)} compact /></section>
       <section className="record-panel queue-panel"><div className="panel-heading"><div><h2>Review queue</h2><p>Next item requiring inspection</p></div></div>{events.find((event) => ["PENDING", "NEEDS_REVIEW"].includes(event.review_status)) ? <QueueItem event={events.find((event) => ["PENDING", "NEEDS_REVIEW"].includes(event.review_status))!} /> : <EmptyState title="Queue is clear" copy="No events currently require review." />}</section>
       <section className="record-panel distribution"><div className="panel-heading"><div><h2>Event distribution</h2><p>Recorded system events, not model accuracy</p></div></div><Distribution stats={stats} /></section>
-      <section className="record-panel provenance"><div className="panel-heading"><div><h2>Model provenance</h2><p>Current scientific artifact state</p></div></div><dl><div><dt>Model</dt><dd>{stats.model.model_version}</dd></div><div><dt>Weights</dt><dd>{stats.model.available ? "Installed" : "Not installed"}</dd></div><div><dt>Thresholds</dt><dd>{stats.model.threshold_status ?? "Awaiting validation"}</dd></div><div><dt>Event metrics</dt><dd>{stats.event_metrics_status}</dd></div></dl></section>
+      <section className="record-panel provenance"><div className="panel-heading"><div><h2>Model provenance</h2><p>Current scientific artifact state</p></div></div><dl><div><dt>Model</dt><dd>{stats.model.model_version}</dd></div><div><dt>Weights</dt><dd>{stats.model.available ? "Installed" : "Not installed"}</dd></div><div><dt>Thresholds</dt><dd>{stats.model.threshold_status ?? "Awaiting validation"}</dd></div><div><dt>Fusion mode</dt><dd>{stats.runtime.fusion.fusion_mode}</dd></div><div><dt>Fusion gate</dt><dd>{stats.runtime.fusion.fusion_fail_closed ? "FAIL_CLOSED" : stats.runtime.fusion.fusion_available ? "ACTIVE" : stats.runtime.fusion.fusion_enabled ? "RULE_FALLBACK" : "DISABLED"}</dd></div><div><dt>Event metrics</dt><dd>{stats.event_metrics_status}</dd></div></dl></section>
     </div></>}
   </main></Shell>;
 }
@@ -235,17 +278,18 @@ function Distribution({ stats }: { stats: Statistics }) {
 
 function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
+  const [inputScope, setInputScope] = useState<"VEHICLE_CABIN_CROP" | "TRAFFIC_SCENE_WITH_VEHICLE_ROIS">("VEHICLE_CABIN_CROP");
   const [state, setState] = useState<"idle" | "uploading" | "complete" | "error">("idle");
   const [message, setMessage] = useState("");
   async function start() {
     if (!file) return;
     setState("uploading");
-    try { const video = await api.upload(file); const job = await api.analyze(video.id); setMessage(`Analysis job ${job.id.slice(0, 8)} was queued.`); setState("complete"); }
+    try { const video = await api.upload(file, inputScope); const job = await api.analyze(video.id); setMessage(`Analysis job ${job.id.slice(0, 8)} was queued.`); setState("complete"); }
     catch (reason) { setMessage(reason instanceof Error ? reason.message : "Upload failed"); setState("error"); }
   }
   return <Shell><main><PageHeader title="Upload and analyze" description="Submit one supported video for the locked model pipeline." />
-    <section className="upload-layout"><div className="drop-sheet"><FileUploaderDropContainer accept={["video/mp4", "video/quicktime", "video/x-msvideo", "video/webm", "video/x-matroska"]} labelText="Drop a video here or select a file" multiple={false} onAddFiles={(_, data) => setFile(data.addedFiles[0] ?? null)} /><p>MP4, MOV, AVI, MKV, or WebM. The server applies the configured size limit.</p>{file && <div className="selected-file"><Video size={24} /><span><strong>{file.name}</strong><small>{(file.size / 1024 / 1024).toFixed(1)} MB</small></span></div>}<Button onClick={start} disabled={!file || state === "uploading"} renderIcon={Play}>{state === "uploading" ? "Starting analysis" : "Analyze video"}</Button>{state === "uploading" && <InlineLoading description="Uploading and creating job" />}{state === "complete" && <InlineNotification kind="success" title="Analysis queued" subtitle={message} lowContrast hideCloseButton />}{state === "error" && <InlineNotification kind="error" title="Analysis could not start" subtitle={message} lowContrast hideCloseButton />}</div>
-      <aside className="process-sheet"><h2>Before analysis</h2><ol><li><strong>Vehicle/cabin crop</strong><span>The upload must follow one tracked vehicle. Raw traffic scenes require upstream vehicle ROIs.</span></li><li><strong>Locked model</strong><span>A verified best.pt must be installed.</span></li><li><strong>Occupant regions</strong><span>Calibrate driver and passenger geometry for this camera.</span></li><li><strong>Human review</strong><span>Events remain decisions for an authorized reviewer.</span></li></ol></aside></section>
+    <section className="upload-layout"><div className="drop-sheet"><Select id="input-scope" labelText="Input scope" value={inputScope} onChange={(event) => setInputScope(event.target.value as typeof inputScope)}><SelectItem value="VEHICLE_CABIN_CROP" text="Validated vehicle cabin crop" /><SelectItem value="TRAFFIC_SCENE_WITH_VEHICLE_ROIS" text="Raw traffic scene (requires vehicle + cabin models)" /></Select><FileUploaderDropContainer accept={["video/mp4", "video/quicktime", "video/x-msvideo", "video/webm", "video/x-matroska"]} labelText="Drop a video here or select a file" multiple={false} onAddFiles={(_, data) => setFile(data.addedFiles[0] ?? null)} /><p>MP4, MOV, AVI, MKV, or WebM. The server applies the configured size limit.</p>{file && <div className="selected-file"><Video size={24} /><span><strong>{file.name}</strong><small>{(file.size / 1024 / 1024).toFixed(1)} MB</small></span></div>}<Button onClick={start} disabled={!file || state === "uploading"} renderIcon={Play}>{state === "uploading" ? "Starting analysis" : "Analyze video"}</Button>{state === "uploading" && <InlineLoading description="Uploading and creating job" />}{state === "complete" && <InlineNotification kind="success" title="Analysis queued" subtitle={message} lowContrast hideCloseButton />}{state === "error" && <InlineNotification kind="error" title="Analysis could not start" subtitle={message} lowContrast hideCloseButton />}</div>
+      <aside className="process-sheet"><h2>Before analysis</h2><ol><li><strong>Cabin context</strong><span>Raw traffic scenes fail closed unless a tracked vehicle has a confident windshield/cabin ROI.</span></li><li><strong>Locked V2 artifacts</strong><span>Specialist weights, calibrated thresholds, and required fusion artifacts must be installed.</span></li><li><strong>Seat geometry</strong><span>Camera handedness and cabin geometry determine occupant roles; ambiguous roles stay unknown.</span></li><li><strong>Human review</strong><span>Events remain candidates until an authorized reviewer checks the evidence.</span></li></ol></aside></section>
   </main></Shell>;
 }
 
@@ -259,15 +303,46 @@ function EventsPage() {
 }
 
 function EventDetailPage() {
-  const { id = "" } = useParams(); const [event, setEvent] = useState<SafetyEvent | null>(null); const [error, setError] = useState(""); const [notes, setNotes] = useState("");
-  useEffect(() => { api.event(id).then(setEvent).catch((reason) => setError(reason.message)); }, [id]);
-  async function review(status: ReviewStatus) { if (!event) return; try { setEvent(await api.review(event.id, status, notes)); } catch (reason) { setError(reason instanceof Error ? reason.message : "Review failed"); } }
-  return <Shell><main><PageHeader title="Event inspection" description="Compare the recorded event with source evidence before deciding." />{error && <><InlineNotification kind="error" title="Event unavailable" subtitle={error} lowContrast hideCloseButton /><Button className="recovery-action" kind="tertiary" as={Link} to="/events">Return to events</Button></>}{!event && !error ? <InlineLoading description="Loading event" /> : event ? <div className="inspection-layout"><section className="evidence-sheet"><div className="evidence-placeholder"><Video size={48} /><strong>Evidence frame</strong><span>Evidence access is served by the protected backend in deployment.</span></div><div className="frame-meta"><span>Frame {event.frame_number}</span><span>{formatTimestamp(event.timestamp_seconds)}</span><span>Track {event.track_id ?? "Not assigned"}</span></div></section><aside className="decision-sheet"><h2>Inspection record</h2><dl><div><dt>Event</dt><dd>{event.event_type.replace("_", " ")}</dd></div><div><dt>Occupant</dt><dd>{event.occupant_role.replaceAll("_", " ")}</dd></div><div><dt>Vehicle context</dt><dd>{event.vehicle_context_id}</dd></div><div><dt>Confidence</dt><dd>{Math.round(event.confidence * 100)}%</dd></div><div><dt>Model</dt><dd>{event.model_version}</dd></div><div><dt>Current state</dt><dd><StatusTag status={event.review_status} /></dd></div></dl><TextArea id="review-notes" labelText="Review notes" helperText="Record visible evidence and ambiguity. Do not infer unseen belt state." value={notes} onChange={(event) => setNotes(event.target.value)} /><div className="decision-actions"><Button size="sm" onClick={() => review("CONFIRMED")}>Confirm</Button><Button size="sm" kind="secondary" onClick={() => review("NEEDS_REVIEW")}>Needs review</Button><Button size="sm" kind="danger--tertiary" onClick={() => review("REJECTED")}>Reject</Button></div></aside></div> : null}</main></Shell>;
+  const { id = "" } = useParams();
+  const [event, setEvent] = useState<EventDetail | null>(null);
+  const [loadError, setLoadError] = useState("");
+  const [reviewError, setReviewError] = useState("");
+  const [notes, setNotes] = useState("");
+  const [saving, setSaving] = useState(false);
+  const { assets, loading: evidenceLoading, error: evidenceError } = useEvidenceAssets(event);
+  useEffect(() => { setLoadError(""); api.event(id).then(setEvent).catch((reason) => setLoadError(reason instanceof Error ? reason.message : "Event could not be loaded")); }, [id]);
+  async function review(status: ReviewStatus) {
+    if (!event || saving) return;
+    setSaving(true); setReviewError("");
+    try { await api.review(event.id, status, notes); setEvent(await api.event(event.id)); setNotes(""); }
+    catch (reason) { setReviewError(reason instanceof Error ? reason.message : "Review decision could not be saved"); }
+    finally { setSaving(false); }
+  }
+  return <Shell><main><PageHeader title="Event inspection" description="Compare the multi-frame evidence, model trace, and review provenance before deciding." />
+    {loadError && <><InlineNotification kind="error" title="Event unavailable" subtitle={`${loadError}. Return to the event ledger and try again.`} lowContrast hideCloseButton /><Button className="recovery-action" kind="tertiary" as={Link} to="/events">Return to events</Button></>}
+    {!event && !loadError ? <InlineLoading description="Loading event record" /> : event ? <>
+      {event.review_status === "NEEDS_REVIEW" && <InlineNotification className="readiness-alert" kind="warning" title="Ambiguous evidence" subtitle="The runtime could not establish every required context confidently. Review the trace and preserve uncertainty when evidence is unclear." lowContrast hideCloseButton />}
+      <div className="inspection-layout"><section className="evidence-sheet" aria-labelledby="evidence-heading"><div className="panel-heading"><div><h2 id="evidence-heading">Recorded evidence</h2><p>Protected files generated for this event</p></div></div>
+        {evidenceLoading && <div className="evidence-loading"><InlineLoading description="Loading protected evidence" /></div>}
+        {evidenceError && <InlineNotification kind="error" title="Evidence unavailable" subtitle={`${evidenceError}. The event record remains available; retry by reloading this page.`} lowContrast hideCloseButton />}
+        {!evidenceLoading && !evidenceError && !event.evidence.available && <div className="evidence-placeholder"><Video size={48} /><strong>No evidence package</strong><span>This event has no persisted evidence files. Do not confirm it without independently verifiable evidence.</span></div>}
+        {!evidenceLoading && assets.original && <div className="evidence-frames"><figure><img src={assets.original} alt="Original event key frame" /><figcaption>Original key frame</figcaption></figure>{assets.annotated && <figure><img src={assets.annotated} alt="Annotated event key frame showing the recorded detection" /><figcaption>Annotated key frame</figcaption></figure>}</div>}
+        {!evidenceLoading && assets.clip && <div className="evidence-clip"><h3>Temporal evidence clip</h3><video controls preload="metadata" src={assets.clip}>Your browser cannot play this evidence clip.</video></div>}
+        <div className="frame-meta"><span>Frame {event.frame_number}</span><span>{formatTimestamp(event.timestamp_seconds)}</span><span>Track {event.track_id ?? "Not assigned"}</span></div></section>
+        <aside className="decision-sheet"><h2>Inspection record</h2><dl><div><dt>Event</dt><dd>{event.event_type.replace("_", " ")}</dd></div><div><dt>Occupant</dt><dd>{event.occupant_role.replaceAll("_", " ")}</dd></div><div><dt>Vehicle</dt><dd>{event.vehicle_type.replaceAll("_", " ")}</dd></div><div><dt>Vehicle context</dt><dd>{event.vehicle_context_id}</dd></div><div><dt>Event score</dt><dd>{Math.round(event.confidence * 100)}%</dd></div><div><dt>Fusion score</dt><dd>{event.fusion_score == null ? "NOT_AVAILABLE" : `${Math.round(event.fusion_score * 100)}%`}</dd></div><div><dt>Model</dt><dd>{event.model_version}</dd></div><div><dt>Current state</dt><dd><StatusTag status={event.review_status} /></dd></div></dl>
+          {reviewError && <InlineNotification kind="error" title="Decision not saved" subtitle={reviewError} lowContrast hideCloseButton />}
+          <TextArea id="review-notes" labelText="Review notes" helperText={`${notes.length}/2000 characters. Record visible evidence and ambiguity; never infer an unseen belt state.`} maxLength={2000} value={notes} onChange={(event) => setNotes(event.target.value)} />
+          <div className="decision-actions"><Button size="sm" disabled={saving || !event.evidence.available} onClick={() => review("CONFIRMED")}>{saving ? "Saving" : "Confirm"}</Button><Button size="sm" kind="secondary" disabled={saving} onClick={() => review("NEEDS_REVIEW")}>Needs review</Button><Button size="sm" kind="danger--tertiary" disabled={saving} onClick={() => review("REJECTED")}>Reject</Button></div>
+          {!event.evidence.available && <p className="decision-guard">Confirmation is disabled because no evidence package is available.</p>}
+        </aside></div>
+      <section className="audit-grid"><div className="record-panel trace-panel"><div className="panel-heading"><div><h2>Decision trace</h2><p>Context and temporal evidence recorded at event creation</p></div></div><dl>{Object.entries(event.evidence_trace).filter(([key]) => ["cabin_method", "cabin_confidence", "occupant_association_method", "occupant_role_confidence", "phone_context", "pose_confidence", "fusion_mode", "temporal_score", "evidence_status"].includes(key)).map(([key, value]) => <div key={key}><dt>{key.replaceAll("_", " ")}</dt><dd>{typeof value === "number" ? value.toFixed(3) : String(value)}</dd></div>)}</dl></div>
+        <div className="record-panel history-panel"><div className="panel-heading"><div><h2>Review history</h2><p>Append-only reviewer provenance</p></div></div>{event.review_history.length ? <ol>{event.review_history.map((record, index) => <li key={`${record.created_at}-${index}`}><div><strong>{record.previous_status} → {record.new_status}</strong><time dateTime={record.created_at}>{new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(new Date(record.created_at))}</time></div><p>{record.notes || "No notes recorded."}</p><small>Reviewer {record.reviewer_id}</small></li>)}</ol> : <div className="history-empty">No human review decision has been recorded.</div>}</div></section>
+    </> : null}</main></Shell>;
 }
 
-function StatisticsPage() { const { stats, loading, error } = useDashboardData(); return <Shell><main><PageHeader title="Statistics" description="Operational counts are separated from scientific model and event metrics." />{error && <InlineNotification kind="error" title="Statistics unavailable" subtitle={error} lowContrast hideCloseButton />}{loading ? <InlineLoading description="Loading statistics" /> : !error && stats ? <><MetricStrip stats={stats} /><div className="statistics-grid"><section className="record-panel"><h2>Recorded events</h2><Distribution stats={stats} /></section><section className="record-panel"><h2>Metric status</h2><dl className="metric-status"><div><dt>Detection validation</dt><dd>NOT_RUN</dd></div><div><dt>Frozen test</dt><dd>NOT_RUN</dd></div><div><dt>Human event evaluation</dt><dd>{stats.event_metrics_status}</dd></div></dl><p className="scientific-note">Event counts are not accuracy. Metrics appear only after governed evaluation artifacts exist.</p></section></div></> : null}</main></Shell>; }
+function StatisticsPage() { const { stats, loading, error } = useDashboardData(); return <Shell><main><PageHeader title="Statistics" description="Operational counts are separated from scientific model and event metrics." />{error && <InlineNotification kind="error" title="Statistics unavailable" subtitle={error} lowContrast hideCloseButton />}{loading ? <InlineLoading description="Loading statistics" /> : !error && stats ? <><MetricStrip stats={stats} /><div className="statistics-grid"><section className="record-panel"><h2>Recorded events</h2><Distribution stats={stats} /></section><section className="record-panel"><h2>Metric status</h2><dl className="metric-status"><div><dt>Detection validation</dt><dd>NOT_RUN</dd></div><div><dt>Frozen test</dt><dd>NOT_RUN</dd></div><div><dt>Human event evaluation</dt><dd>{stats.event_metrics_status}</dd></div><div><dt>Fusion runtime</dt><dd>{stats.runtime.fusion.fusion_mode}{stats.runtime.fusion.fusion_fail_closed ? " / FAIL_CLOSED" : stats.runtime.fusion.fusion_available ? " / ACTIVE" : ""}</dd></div></dl><p className="scientific-note">Event counts are not accuracy. Metrics appear only after governed evaluation artifacts exist.</p></section></div></> : null}</main></Shell>; }
 
-function ModelsPage() { return <Shell><main><PageHeader title="Models and methodology" description="One detector, one experiment, and explicit scientific gates." /><section className="model-sheet"><div><h2>MC_001</h2><p>YOLO11s object detector with three canonical classes.</p></div><dl><div><dt>Classes</dt><dd>phone, seatbelt_fastened, seatbelt_unfastened</dd></div><div><dt>Image size</dt><dd>960, multi-scale</dd></div><div><dt>Training</dt><dd>Transfer learning; one canonical Kaggle GPU run</dd></div><div><dt>Current state</dt><dd><Tag type="warm-gray">PRE-TRAINING</Tag></dd></div></dl><InlineNotification kind="info" title="Detection is not behavior" subtitle="An observation needs vehicle context, occupant-role association, temporal persistence, and human-review policy before it becomes a violation." lowContrast hideCloseButton /></section></main></Shell>; }
+function ModelsPage() { return <Shell><main><PageHeader title="Models and methodology" description="The immutable V1 baseline and independent fail-closed V2 pipeline." /><section className="model-sheet"><div><h2>MC_BOOTSTRAP_001 — V1 baseline</h2><p>Single YOLO11s detector retained unchanged to measure partial-label conflict.</p></div><dl><div><dt>Classes</dt><dd>phone, seatbelt_fastened, seatbelt_unfastened</dd></div><div><dt>Training</dt><dd>150 epochs; scientific baseline only</dd></div><div><dt>V2 architecture</dt><dd>Vehicle → cabin → occupant → phone/seatbelt specialists → temporal fusion</dd></div><div><dt>Current V2 state</dt><dd><Tag type="warm-gray">UNTRAINED / NOT APPROVED</Tag></dd></div></dl><InlineNotification kind="info" title="Detection is not behavior" subtitle="A candidate requires confident vehicle and cabin context, occupant association, temporal persistence, explicit fusion mode, and human review. Component AP is not event accuracy." lowContrast hideCloseButton /></section></main></Shell>; }
 
 function SettingsPage() { return <Shell><main><PageHeader title="Settings" description="Camera geometry and temporal rules are deployment configuration." /><section className="settings-sheet"><Select id="driver-side" labelText="Driver side" defaultValue="left"><SelectItem value="left" text="Left-hand drive" /><SelectItem value="right" text="Right-hand drive" /></Select><TextInput id="window-seconds" labelText="Confirmation window (seconds)" defaultValue="2.0" helperText="Tune on validation video only." /><TextInput id="positive-seconds" labelText="Minimum positive duration (seconds)" defaultValue="1.2" helperText="Frozen test video must not be used for tuning." /><InlineNotification kind="warning" title="Configuration preview" subtitle="This screen documents expected settings. Persist camera-specific changes through the authenticated API before production use." lowContrast hideCloseButton /><Button disabled>Save deployment settings</Button></section></main></Shell>; }
 

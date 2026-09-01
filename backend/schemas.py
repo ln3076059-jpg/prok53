@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -50,6 +51,32 @@ class EventResponse(BaseModel):
     model_version: str
     review_status: ReviewStatus
     created_at: datetime
+
+
+class EvidenceLinks(BaseModel):
+    available: bool = False
+    original_url: str | None = None
+    annotated_url: str | None = None
+    clip_url: str | None = None
+    trace_url: str | None = None
+    hashes: dict[str, str] = Field(default_factory=dict)
+
+
+class ReviewHistoryResponse(BaseModel):
+    previous_status: str
+    new_status: str
+    notes: str | None
+    reviewer_id: str
+    created_at: datetime
+
+
+class EventDetailResponse(EventResponse):
+    vehicle_type: str = "unknown"
+    fusion_score: float | None = None
+    temporal_score: float | None = None
+    evidence: EvidenceLinks = Field(default_factory=EvidenceLinks)
+    evidence_trace: dict[str, Any] = Field(default_factory=dict)
+    review_history: list[ReviewHistoryResponse] = Field(default_factory=list)
 
 
 class ReviewRequest(BaseModel):

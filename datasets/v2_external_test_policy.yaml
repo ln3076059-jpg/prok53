@@ -1,0 +1,37 @@
+schema_version: 1
+dataset_role: EXTERNAL_TEST
+required_fields:
+  - sample_id
+  - source_id
+  - camera_id
+  - video_id
+  - video_path
+  - sha256
+  - annotation_path
+  - annotation_sha256
+  - conditions
+  - human_review_status
+  - reviewer_id
+  - reviewed_at
+required_condition_coverage:
+  - daylight
+  - low_light
+  - windshield_reflection
+  - motion_blur
+  - video_compression
+  - partial_occlusion
+  - oblique_view
+disjoint_dimensions:
+  - sha256
+  - source_id
+  - camera_id
+  - video_id
+minimum_independent_groups:
+  source_id: 2
+  camera_id: 3
+  video_id: 12
+policy:
+  - Every video and annotation must be human-reviewed before freezing.
+  - Each annotation is a JSON list of PHONE/NO_SEATBELT intervals with occupant roles.
+  - External sources and cameras must not appear in training, validation, or calibration data.
+  - A frozen artifact records integrity and isolation; it does not claim model accuracy.
