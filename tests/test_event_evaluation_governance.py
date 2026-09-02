@@ -114,8 +114,8 @@ def test_frozen_event_evaluation_requires_active_model_and_preserves_result(tmp_
     model_lock_path.write_text(json.dumps(model_lock), encoding="utf-8")
     output_path = tmp_path / "event-evaluation.json"
 
-    external_lock_original = external_lock_path.read_text(encoding="utf-8")
-    external_lock_path.write_text(external_lock_original + "\n", encoding="utf-8")
+    external_lock_original = external_lock_path.read_bytes()
+    external_lock_path.write_bytes(external_lock_original + b"mutation")
     with pytest.raises(ValueError, match="external-test artifact SHA256 mismatch"):
         evaluate_frozen(
             truth_path,
@@ -125,7 +125,7 @@ def test_frozen_event_evaluation_requires_active_model_and_preserves_result(tmp_
             output_path,
             video_minutes=1.0,
         )
-    external_lock_path.write_text(external_lock_original, encoding="utf-8")
+    external_lock_path.write_bytes(external_lock_original)
 
     with pytest.raises(ValueError, match="ACTIVE model lock"):
         evaluate_frozen(
@@ -165,11 +165,11 @@ def test_frozen_event_evaluation_requires_active_model_and_preserves_result(tmp_
             video_minutes=1.0,
         )
 
-    predictions_original = predictions_path.read_text(encoding="utf-8")
-    predictions_path.write_text(predictions_original + "\n", encoding="utf-8")
+    predictions_original = predictions_path.read_bytes()
+    predictions_path.write_bytes(predictions_original + b"mutation")
     with pytest.raises(ValueError, match="predictions SHA256 changed"):
         verify_evaluation_integrity(output_path)
-    predictions_path.write_text(predictions_original, encoding="utf-8")
+    predictions_path.write_bytes(predictions_original)
 
     model_lock_path.write_text(
         json.dumps({**model_lock, "code_commit": "changed"}), encoding="utf-8"
