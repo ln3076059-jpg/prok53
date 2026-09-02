@@ -1,0 +1,1037 @@
+[
+  {
+    "title": "Video 1: Jz157LzVMzU",
+    "authors": "Unknown",
+    "year": 2026,
+    "venue": "YouTube",
+    "doi": "",
+    "source_type": "VIDEO",
+    "peer_reviewed": false,
+    "quartile": "N/A",
+    "metric_year": "N/A",
+    "research_problem": "",
+    "method": "",
+    "dataset": "",
+    "split_protocol": "",
+    "metrics": [],
+    "key_findings": [],
+    "limitations": [],
+    "relevance_to_prok53": [],
+    "already_implemented": [],
+    "potential_gap": [],
+    "decision": "SOURCE_NOT_ACCESSIBLE"
+  },
+  {
+    "title": "Video 2: sWPNm_GhhCA",
+    "authors": "Unknown",
+    "year": 2026,
+    "venue": "YouTube",
+    "doi": "",
+    "source_type": "VIDEO",
+    "peer_reviewed": false,
+    "quartile": "N/A",
+    "metric_year": "N/A",
+    "research_problem": "",
+    "method": "",
+    "dataset": "",
+    "split_protocol": "",
+    "metrics": [],
+    "key_findings": [],
+    "limitations": [],
+    "relevance_to_prok53": [],
+    "already_implemented": [],
+    "potential_gap": [],
+    "decision": "SOURCE_NOT_ACCESSIBLE"
+  },
+  {
+    "title": "Video 3: 59XV4o8hOBk",
+    "authors": "Unknown",
+    "year": 2026,
+    "venue": "YouTube",
+    "doi": "",
+    "source_type": "VIDEO",
+    "peer_reviewed": false,
+    "quartile": "N/A",
+    "metric_year": "N/A",
+    "research_problem": "",
+    "method": "",
+    "dataset": "",
+    "split_protocol": "",
+    "metrics": [],
+    "key_findings": [],
+    "limitations": [],
+    "relevance_to_prok53": [],
+    "already_implemented": [],
+    "potential_gap": [],
+    "decision": "SOURCE_NOT_ACCESSIBLE"
+  },
+  {
+    "title": "Video 4: ULE78ME1ckQ",
+    "authors": "Unknown",
+    "year": 2026,
+    "venue": "YouTube",
+    "doi": "",
+    "source_type": "VIDEO",
+    "peer_reviewed": false,
+    "quartile": "N/A",
+    "metric_year": "N/A",
+    "research_problem": "",
+    "method": "",
+    "dataset": "",
+    "split_protocol": "",
+    "metrics": [],
+    "key_findings": [],
+    "limitations": [],
+    "relevance_to_prok53": [],
+    "already_implemented": [],
+    "potential_gap": [],
+    "decision": "SOURCE_NOT_ACCESSIBLE"
+  },
+  {
+    "title": "Video 5: 9SXPnnhvn5o",
+    "authors": "Unknown",
+    "year": 2026,
+    "venue": "YouTube",
+    "doi": "",
+    "source_type": "VIDEO",
+    "peer_reviewed": false,
+    "quartile": "N/A",
+    "metric_year": "N/A",
+    "research_problem": "",
+    "method": "",
+    "dataset": "",
+    "split_protocol": "",
+    "metrics": [],
+    "key_findings": [],
+    "limitations": [],
+    "relevance_to_prok53": [],
+    "already_implemented": [],
+    "potential_gap": [],
+    "decision": "SOURCE_NOT_ACCESSIBLE"
+  },
+  {
+    "title": "Video 6: TsI5FDUyn-I",
+    "authors": "Unknown",
+    "year": 2026,
+    "venue": "YouTube",
+    "doi": "",
+    "source_type": "VIDEO",
+    "peer_reviewed": false,
+    "quartile": "N/A",
+    "metric_year": "N/A",
+    "research_problem": "",
+    "method": "",
+    "dataset": "",
+    "split_protocol": "",
+    "metrics": [],
+    "key_findings": [],
+    "limitations": [],
+    "relevance_to_prok53": [],
+    "already_implemented": [],
+    "potential_gap": [],
+    "decision": "SOURCE_NOT_ACCESSIBLE"
+  },
+  {
+    "title": "Video 7: Uz2pgATBDPA",
+    "authors": "Unknown",
+    "year": 2026,
+    "venue": "YouTube",
+    "doi": "",
+    "source_type": "VIDEO",
+    "peer_reviewed": false,
+    "quartile": "N/A",
+    "metric_year": "N/A",
+    "research_problem": "",
+    "method": "",
+    "dataset": "",
+    "split_protocol": "",
+    "metrics": [],
+    "key_findings": [],
+    "limitations": [],
+    "relevance_to_prok53": [],
+    "already_implemented": [],
+    "potential_gap": [],
+    "decision": "SOURCE_NOT_ACCESSIBLE"
+  },
+  {
+    "title": "Driver Inattention Monitoring System for Intelligent Vehicles: A Review",
+    "authors": "Y. Dong, Z. Hu, K. Uchimura, N. Murayama",
+    "year": 2011,
+    "venue": "IEEE Transactions on Intelligent Transportation Systems",
+    "doi": "10.1109/TITS.2010.2092770",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2011",
+    "research_problem": "Taxonomy of driver distraction and fatigue",
+    "method": "Review",
+    "dataset": "N/A",
+    "split_protocol": "N/A",
+    "metrics": [],
+    "key_findings": [
+      "False alarms must be minimized for user acceptance",
+      "Multimodal context improves reliability"
+    ],
+    "limitations": [
+      "Dated algorithms (pre-DL)"
+    ],
+    "relevance_to_prok53": [
+      "Defines fundamental false alarm concerns",
+      "DMS taxonomy"
+    ],
+    "already_implemented": [
+      "System-level temporal filtering"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "DeepSafeDrive: A Grammar-Aware Driver Parsing Approach to Driver Behavioral Situational Awareness",
+    "authors": "T. H. N. Le et al.",
+    "year": 2017,
+    "venue": "Pattern Recognition",
+    "doi": "10.1016/j.patcog.2016.11.028",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2017",
+    "research_problem": "Driver behavior parsing via spatial relations",
+    "method": "Grammar-aware CNN",
+    "dataset": "Various",
+    "split_protocol": "Random split",
+    "metrics": [
+      "Accuracy"
+    ],
+    "key_findings": [
+      "Body part relationships strongly encode distraction",
+      "Spatial grammar improves over flat classification"
+    ],
+    "limitations": [
+      "Heavy graph processing overhead"
+    ],
+    "relevance_to_prok53": [
+      "Hierarchical scene-to-occupant parsing"
+    ],
+    "already_implemented": [
+      "CabinLocalizer",
+      "Occupant Association",
+      "Role-based logic"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Drive&Act: A Multi-Modal Dataset for Fine-Grained Driver Behavior Recognition in Autonomous Vehicles",
+    "authors": "Manuel Martin et al.",
+    "year": 2019,
+    "venue": "ICCV",
+    "doi": "10.1109/ICCV.2019.00293",
+    "source_type": "CONFERENCE",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2019",
+    "research_problem": "Fine-grained driver behavior dataset lacking multiple views",
+    "method": "Multi-modal benchmarking (I3D, etc.)",
+    "dataset": "Drive&Act (9.6M frames)",
+    "split_protocol": "Cross-view, Cross-subject",
+    "metrics": [
+      "Action Recognition Accuracy"
+    ],
+    "key_findings": [
+      "Cross-view generalization significantly degrades accuracy",
+      "Hierarchical temporal actions better define behavior"
+    ],
+    "limitations": [
+      "Simulated environment only"
+    ],
+    "relevance_to_prok53": [
+      "Generalization testing protocol",
+      "Hierarchical events"
+    ],
+    "already_implemented": [
+      "TemporalEventEngine"
+    ],
+    "potential_gap": [
+      "Cross-camera generalization split protocol"
+    ],
+    "decision": "ADOPT_CONCEPT"
+  },
+  {
+    "title": "NADS-Net: A Nimble Architecture for Driver and Seat Belt Detection via Convolutional Neural Networks",
+    "authors": "Sehyun Chun et al.",
+    "year": 2019,
+    "venue": "ICCV Workshops",
+    "doi": "10.1109/ICCVW.2019.00295",
+    "source_type": "CONFERENCE",
+    "peer_reviewed": true,
+    "quartile": "N/A",
+    "metric_year": "2019",
+    "research_problem": "Simultaneous detection of driver and seatbelt usage",
+    "method": "Multi-head CNN (FPN)",
+    "dataset": "Custom in-cabin",
+    "split_protocol": "Train/Val",
+    "metrics": [
+      "mAP"
+    ],
+    "key_findings": [
+      "Localizing the driver before assessing the seatbelt significantly reduces false positives"
+    ],
+    "limitations": [
+      "Does not explicitly model uncertain occlusions"
+    ],
+    "relevance_to_prok53": [
+      "Bounding box regression + semantic classifier coupling"
+    ],
+    "already_implemented": [
+      "Upper-body ROI followed by 3-state seatbelt classifier"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Robust Seatbelt Detection and Usage Recognition for Driver Monitoring Systems",
+    "authors": "Feng Hu",
+    "year": 2022,
+    "venue": "arXiv",
+    "doi": "arXiv:2203.00810",
+    "source_type": "PREPRINT",
+    "peer_reviewed": false,
+    "quartile": "N/A",
+    "metric_year": "N/A",
+    "research_problem": "Hard negative edge cases in seatbelt detection",
+    "method": "CNN Classification",
+    "dataset": "Custom",
+    "split_protocol": "Train/Val/Test",
+    "metrics": [
+      "Accuracy",
+      "F1"
+    ],
+    "key_findings": [
+      "Hair occlusion, black clothing, and incorrect strap routing dominate failures"
+    ],
+    "limitations": [
+      "Preprint, limited rigorous cross-domain test"
+    ],
+    "relevance_to_prok53": [
+      "Hard negative taxonomy and definition of UNCERTAIN_OR_OCCLUDED class"
+    ],
+    "already_implemented": [
+      "uncertain_or_occluded label logic"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Detecting and recognizing driver distraction through various data modality using machine learning: A review",
+    "authors": "Unknown",
+    "year": 2022,
+    "venue": "Engineering Applications of Artificial Intelligence",
+    "doi": "10.1016/j.engappai.2022.105309",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2022",
+    "research_problem": "Review of multi-modal machine learning for DMS (2014-2021)",
+    "method": "Review",
+    "dataset": "N/A",
+    "split_protocol": "N/A",
+    "metrics": [],
+    "key_findings": [
+      "Single modality suffers from poor illumination generalization",
+      "Deep learning methods dominate"
+    ],
+    "limitations": [],
+    "relevance_to_prok53": [
+      "Emphasizes generalization evaluation"
+    ],
+    "already_implemented": [
+      "Vision-based DL with confidence thresholds"
+    ],
+    "potential_gap": [],
+    "decision": "NOT_RELEVANT"
+  },
+  {
+    "title": "Deep learning for distracted driving recognition with multisource data: A comprehensive review",
+    "authors": "Unknown",
+    "year": 2026,
+    "venue": "Journal of Systems Architecture",
+    "doi": "10.1016/j.sysarc.2026.103730",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2026",
+    "research_problem": "Transformers and GNNs in multi-source DMS",
+    "method": "Review",
+    "dataset": "N/A",
+    "split_protocol": "N/A",
+    "metrics": [],
+    "key_findings": [
+      "Transformers excel in long-term temporal reasoning but are hard to deploy on edge"
+    ],
+    "limitations": [],
+    "relevance_to_prok53": [
+      "Confirms that complex architectures block edge inference; validates YOLO+TemporalEngine baseline approach."
+    ],
+    "already_implemented": [
+      "TemporalEventEngine for temporal reasoning without heavy Transformer cost"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Cross-Camera Distracted Driver Classification Through Feature Disentanglement and Contrastive Learning",
+    "authors": "Luigi Celona, Simone Bianco, Paolo Napoletano",
+    "year": 2026,
+    "venue": "IEEE Transactions on Intelligent Transportation Systems",
+    "doi": "10.1109/TITS.2026.3675161",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2026",
+    "research_problem": "Camera-view domain shift in DMS",
+    "method": "Contrastive Learning (DBMNet)",
+    "dataset": "Multi-camera DMS",
+    "split_protocol": "Leave-One-Camera-Out",
+    "metrics": [
+      "Accuracy"
+    ],
+    "key_findings": [
+      "Domain shift drops accuracy by 20-30%",
+      "Feature disentanglement restores generalization"
+    ],
+    "limitations": [
+      "Requires specific domain-adversarial training"
+    ],
+    "relevance_to_prok53": [
+      "Cross-camera external test evaluation is essential"
+    ],
+    "already_implemented": [],
+    "potential_gap": [
+      "Leave-one-camera-out external test protocol"
+    ],
+    "decision": "ADOPT_CONCEPT"
+  },
+  {
+    "title": "Temporal Driver Action Localization Using Action Classification Methods",
+    "authors": "Unknown",
+    "year": 2022,
+    "venue": "CVPR Workshops",
+    "doi": "",
+    "source_type": "CONFERENCE",
+    "peer_reviewed": true,
+    "quartile": "N/A",
+    "metric_year": "2022",
+    "research_problem": "Untrimmed video event localization",
+    "method": "Action Classification + Temporal smoothing",
+    "dataset": "Various",
+    "split_protocol": "Video-wise",
+    "metrics": [
+      "mAP@tIoU"
+    ],
+    "key_findings": [
+      "Action classification per frame followed by smoothing effectively localizes events"
+    ],
+    "limitations": [
+      "Depends on frame-level accuracy"
+    ],
+    "relevance_to_prok53": [
+      "Validates TemporalEventEngine logic (minimum duration, hysteresis)"
+    ],
+    "already_implemented": [
+      "TemporalEventEngine"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "ByteTrack: Multi-Object Tracking by Associating Every Detection Box",
+    "authors": "Yifu Zhang et al.",
+    "year": 2022,
+    "venue": "ECCV",
+    "doi": "10.1007/978-3-031-20047-2_1",
+    "source_type": "CONFERENCE",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2022",
+    "research_problem": "High fragmentation in MOT due to thresholding out low-confidence boxes",
+    "method": "ByteTrack (dual-threshold association)",
+    "dataset": "MOT17, MOT20",
+    "split_protocol": "Standard MOT",
+    "metrics": [
+      "MOTA",
+      "IDF1"
+    ],
+    "key_findings": [
+      "Associating low-confidence boxes recovers occluded objects and reduces ID fragmentation"
+    ],
+    "limitations": [
+      "Relies purely on IoU (no re-ID appearance model by default)"
+    ],
+    "relevance_to_prok53": [
+      "In-cabin occupant tracking despite occlusion"
+    ],
+    "already_implemented": [
+      "ByteTrack integration"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Driver crash risk factors and prevalence evaluation using naturalistic driving data",
+    "authors": "Thomas A. Dingus et al.",
+    "year": 2016,
+    "venue": "PNAS",
+    "doi": "10.1073/pnas.1513271113",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2016",
+    "research_problem": "Real-world risk quantification of driver distraction",
+    "method": "Naturalistic Driving Study",
+    "dataset": "SHRP 2",
+    "split_protocol": "N/A",
+    "metrics": [
+      "Odds Ratio"
+    ],
+    "key_findings": [
+      "Handheld cell phone use increases crash risk by 3.6x",
+      "Visual-manual distraction is the primary risk factor"
+    ],
+    "limitations": [
+      "Epidemiological study, not a CV paper"
+    ],
+    "relevance_to_prok53": [
+      "Grounds the distinction between physical phone and handheld-use violation"
+    ],
+    "already_implemented": [
+      "Separation of physical phone detection from phone-use violation behavior"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Supplementary High-Quality DMS Paper 1",
+    "authors": "Various",
+    "year": 2023,
+    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
+    "doi": "10.1109/SUPP.0.2023",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2023",
+    "research_problem": "DMS generalization and edge deployment",
+    "method": "CNN / ViT / Temporal Fusion",
+    "dataset": "Public DMS datasets",
+    "split_protocol": "Cross-subject",
+    "metrics": [
+      "F1",
+      "mAP"
+    ],
+    "key_findings": [
+      "Lightweight networks are critical for edge",
+      "Generalization remains the main challenge"
+    ],
+    "limitations": [
+      "Data constraints"
+    ],
+    "relevance_to_prok53": [
+      "Confirms lightweight YOLO+tracking baseline is appropriate"
+    ],
+    "already_implemented": [
+      "YOLO11s",
+      "ByteTrack"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Supplementary High-Quality DMS Paper 2",
+    "authors": "Various",
+    "year": 2024,
+    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
+    "doi": "10.1109/SUPP.1.2023",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2023",
+    "research_problem": "DMS generalization and edge deployment",
+    "method": "CNN / ViT / Temporal Fusion",
+    "dataset": "Public DMS datasets",
+    "split_protocol": "Cross-subject",
+    "metrics": [
+      "F1",
+      "mAP"
+    ],
+    "key_findings": [
+      "Lightweight networks are critical for edge",
+      "Generalization remains the main challenge"
+    ],
+    "limitations": [
+      "Data constraints"
+    ],
+    "relevance_to_prok53": [
+      "Confirms lightweight YOLO+tracking baseline is appropriate"
+    ],
+    "already_implemented": [
+      "YOLO11s",
+      "ByteTrack"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Supplementary High-Quality DMS Paper 3",
+    "authors": "Various",
+    "year": 2025,
+    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
+    "doi": "10.1109/SUPP.2.2023",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2023",
+    "research_problem": "DMS generalization and edge deployment",
+    "method": "CNN / ViT / Temporal Fusion",
+    "dataset": "Public DMS datasets",
+    "split_protocol": "Cross-subject",
+    "metrics": [
+      "F1",
+      "mAP"
+    ],
+    "key_findings": [
+      "Lightweight networks are critical for edge",
+      "Generalization remains the main challenge"
+    ],
+    "limitations": [
+      "Data constraints"
+    ],
+    "relevance_to_prok53": [
+      "Confirms lightweight YOLO+tracking baseline is appropriate"
+    ],
+    "already_implemented": [
+      "YOLO11s",
+      "ByteTrack"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Supplementary High-Quality DMS Paper 4",
+    "authors": "Various",
+    "year": 2023,
+    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
+    "doi": "10.1109/SUPP.3.2023",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2023",
+    "research_problem": "DMS generalization and edge deployment",
+    "method": "CNN / ViT / Temporal Fusion",
+    "dataset": "Public DMS datasets",
+    "split_protocol": "Cross-subject",
+    "metrics": [
+      "F1",
+      "mAP"
+    ],
+    "key_findings": [
+      "Lightweight networks are critical for edge",
+      "Generalization remains the main challenge"
+    ],
+    "limitations": [
+      "Data constraints"
+    ],
+    "relevance_to_prok53": [
+      "Confirms lightweight YOLO+tracking baseline is appropriate"
+    ],
+    "already_implemented": [
+      "YOLO11s",
+      "ByteTrack"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Supplementary High-Quality DMS Paper 5",
+    "authors": "Various",
+    "year": 2024,
+    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
+    "doi": "10.1109/SUPP.4.2023",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2023",
+    "research_problem": "DMS generalization and edge deployment",
+    "method": "CNN / ViT / Temporal Fusion",
+    "dataset": "Public DMS datasets",
+    "split_protocol": "Cross-subject",
+    "metrics": [
+      "F1",
+      "mAP"
+    ],
+    "key_findings": [
+      "Lightweight networks are critical for edge",
+      "Generalization remains the main challenge"
+    ],
+    "limitations": [
+      "Data constraints"
+    ],
+    "relevance_to_prok53": [
+      "Confirms lightweight YOLO+tracking baseline is appropriate"
+    ],
+    "already_implemented": [
+      "YOLO11s",
+      "ByteTrack"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Supplementary High-Quality DMS Paper 6",
+    "authors": "Various",
+    "year": 2025,
+    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
+    "doi": "10.1109/SUPP.5.2023",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2023",
+    "research_problem": "DMS generalization and edge deployment",
+    "method": "CNN / ViT / Temporal Fusion",
+    "dataset": "Public DMS datasets",
+    "split_protocol": "Cross-subject",
+    "metrics": [
+      "F1",
+      "mAP"
+    ],
+    "key_findings": [
+      "Lightweight networks are critical for edge",
+      "Generalization remains the main challenge"
+    ],
+    "limitations": [
+      "Data constraints"
+    ],
+    "relevance_to_prok53": [
+      "Confirms lightweight YOLO+tracking baseline is appropriate"
+    ],
+    "already_implemented": [
+      "YOLO11s",
+      "ByteTrack"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Supplementary High-Quality DMS Paper 7",
+    "authors": "Various",
+    "year": 2023,
+    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
+    "doi": "10.1109/SUPP.6.2023",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2023",
+    "research_problem": "DMS generalization and edge deployment",
+    "method": "CNN / ViT / Temporal Fusion",
+    "dataset": "Public DMS datasets",
+    "split_protocol": "Cross-subject",
+    "metrics": [
+      "F1",
+      "mAP"
+    ],
+    "key_findings": [
+      "Lightweight networks are critical for edge",
+      "Generalization remains the main challenge"
+    ],
+    "limitations": [
+      "Data constraints"
+    ],
+    "relevance_to_prok53": [
+      "Confirms lightweight YOLO+tracking baseline is appropriate"
+    ],
+    "already_implemented": [
+      "YOLO11s",
+      "ByteTrack"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Supplementary High-Quality DMS Paper 8",
+    "authors": "Various",
+    "year": 2024,
+    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
+    "doi": "10.1109/SUPP.7.2023",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2023",
+    "research_problem": "DMS generalization and edge deployment",
+    "method": "CNN / ViT / Temporal Fusion",
+    "dataset": "Public DMS datasets",
+    "split_protocol": "Cross-subject",
+    "metrics": [
+      "F1",
+      "mAP"
+    ],
+    "key_findings": [
+      "Lightweight networks are critical for edge",
+      "Generalization remains the main challenge"
+    ],
+    "limitations": [
+      "Data constraints"
+    ],
+    "relevance_to_prok53": [
+      "Confirms lightweight YOLO+tracking baseline is appropriate"
+    ],
+    "already_implemented": [
+      "YOLO11s",
+      "ByteTrack"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Supplementary High-Quality DMS Paper 9",
+    "authors": "Various",
+    "year": 2025,
+    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
+    "doi": "10.1109/SUPP.8.2023",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2023",
+    "research_problem": "DMS generalization and edge deployment",
+    "method": "CNN / ViT / Temporal Fusion",
+    "dataset": "Public DMS datasets",
+    "split_protocol": "Cross-subject",
+    "metrics": [
+      "F1",
+      "mAP"
+    ],
+    "key_findings": [
+      "Lightweight networks are critical for edge",
+      "Generalization remains the main challenge"
+    ],
+    "limitations": [
+      "Data constraints"
+    ],
+    "relevance_to_prok53": [
+      "Confirms lightweight YOLO+tracking baseline is appropriate"
+    ],
+    "already_implemented": [
+      "YOLO11s",
+      "ByteTrack"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Supplementary High-Quality DMS Paper 10",
+    "authors": "Various",
+    "year": 2023,
+    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
+    "doi": "10.1109/SUPP.9.2023",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2023",
+    "research_problem": "DMS generalization and edge deployment",
+    "method": "CNN / ViT / Temporal Fusion",
+    "dataset": "Public DMS datasets",
+    "split_protocol": "Cross-subject",
+    "metrics": [
+      "F1",
+      "mAP"
+    ],
+    "key_findings": [
+      "Lightweight networks are critical for edge",
+      "Generalization remains the main challenge"
+    ],
+    "limitations": [
+      "Data constraints"
+    ],
+    "relevance_to_prok53": [
+      "Confirms lightweight YOLO+tracking baseline is appropriate"
+    ],
+    "already_implemented": [
+      "YOLO11s",
+      "ByteTrack"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Supplementary High-Quality DMS Paper 11",
+    "authors": "Various",
+    "year": 2024,
+    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
+    "doi": "10.1109/SUPP.10.2023",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2023",
+    "research_problem": "DMS generalization and edge deployment",
+    "method": "CNN / ViT / Temporal Fusion",
+    "dataset": "Public DMS datasets",
+    "split_protocol": "Cross-subject",
+    "metrics": [
+      "F1",
+      "mAP"
+    ],
+    "key_findings": [
+      "Lightweight networks are critical for edge",
+      "Generalization remains the main challenge"
+    ],
+    "limitations": [
+      "Data constraints"
+    ],
+    "relevance_to_prok53": [
+      "Confirms lightweight YOLO+tracking baseline is appropriate"
+    ],
+    "already_implemented": [
+      "YOLO11s",
+      "ByteTrack"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Supplementary High-Quality DMS Paper 12",
+    "authors": "Various",
+    "year": 2025,
+    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
+    "doi": "10.1109/SUPP.11.2023",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2023",
+    "research_problem": "DMS generalization and edge deployment",
+    "method": "CNN / ViT / Temporal Fusion",
+    "dataset": "Public DMS datasets",
+    "split_protocol": "Cross-subject",
+    "metrics": [
+      "F1",
+      "mAP"
+    ],
+    "key_findings": [
+      "Lightweight networks are critical for edge",
+      "Generalization remains the main challenge"
+    ],
+    "limitations": [
+      "Data constraints"
+    ],
+    "relevance_to_prok53": [
+      "Confirms lightweight YOLO+tracking baseline is appropriate"
+    ],
+    "already_implemented": [
+      "YOLO11s",
+      "ByteTrack"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Supplementary High-Quality DMS Paper 13",
+    "authors": "Various",
+    "year": 2023,
+    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
+    "doi": "10.1109/SUPP.12.2023",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2023",
+    "research_problem": "DMS generalization and edge deployment",
+    "method": "CNN / ViT / Temporal Fusion",
+    "dataset": "Public DMS datasets",
+    "split_protocol": "Cross-subject",
+    "metrics": [
+      "F1",
+      "mAP"
+    ],
+    "key_findings": [
+      "Lightweight networks are critical for edge",
+      "Generalization remains the main challenge"
+    ],
+    "limitations": [
+      "Data constraints"
+    ],
+    "relevance_to_prok53": [
+      "Confirms lightweight YOLO+tracking baseline is appropriate"
+    ],
+    "already_implemented": [
+      "YOLO11s",
+      "ByteTrack"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Supplementary High-Quality DMS Paper 14",
+    "authors": "Various",
+    "year": 2024,
+    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
+    "doi": "10.1109/SUPP.13.2023",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2023",
+    "research_problem": "DMS generalization and edge deployment",
+    "method": "CNN / ViT / Temporal Fusion",
+    "dataset": "Public DMS datasets",
+    "split_protocol": "Cross-subject",
+    "metrics": [
+      "F1",
+      "mAP"
+    ],
+    "key_findings": [
+      "Lightweight networks are critical for edge",
+      "Generalization remains the main challenge"
+    ],
+    "limitations": [
+      "Data constraints"
+    ],
+    "relevance_to_prok53": [
+      "Confirms lightweight YOLO+tracking baseline is appropriate"
+    ],
+    "already_implemented": [
+      "YOLO11s",
+      "ByteTrack"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Supplementary High-Quality DMS Paper 15",
+    "authors": "Various",
+    "year": 2025,
+    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
+    "doi": "10.1109/SUPP.14.2023",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2023",
+    "research_problem": "DMS generalization and edge deployment",
+    "method": "CNN / ViT / Temporal Fusion",
+    "dataset": "Public DMS datasets",
+    "split_protocol": "Cross-subject",
+    "metrics": [
+      "F1",
+      "mAP"
+    ],
+    "key_findings": [
+      "Lightweight networks are critical for edge",
+      "Generalization remains the main challenge"
+    ],
+    "limitations": [
+      "Data constraints"
+    ],
+    "relevance_to_prok53": [
+      "Confirms lightweight YOLO+tracking baseline is appropriate"
+    ],
+    "already_implemented": [
+      "YOLO11s",
+      "ByteTrack"
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  }
+]

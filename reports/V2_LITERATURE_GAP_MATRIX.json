@@ -1,0 +1,35 @@
+{
+  "columns": [
+    "CURRENT_IMPLEMENTATION",
+    "SUPPORTING_PAPERS",
+    "GAP",
+    "RISK",
+    "ACTION",
+    "PRIORITY"
+  ],
+  "rows": [
+    {
+      "topic": "PHONE OBJECT DETECTION",
+      "current": "YOLO11s (physical phone only)",
+      "papers": [
+        "Dingus et al."
+      ],
+      "gap": "None",
+      "risk": "None",
+      "action": "Proceed with baseline",
+      "priority": "BASELINE_FIRST_THEN_ABLATE"
+    },
+    {
+      "topic": "CAMERA GENERALIZATION",
+      "current": "No strict camera splitting yet",
+      "papers": [
+        "Drive&Act",
+        "Celona et al."
+      ],
+      "gap": "Leakage risk across views",
+      "risk": "High",
+      "action": "Audit camera overlap (NOT_PROVABLE if no metadata)",
+      "priority": "MUST_FIX_BEFORE_TRAIN"
+    }
+  ]
+}
