@@ -12,7 +12,7 @@
 - DOI: 
 - Decision: `EDUCATIONAL_ONLY`
 
-## YOLO Object Detection (59XV4o8hOBk)
+## Machine Learning general overview (59XV4o8hOBk)
 - Authors: Unknown
 - Venue: YouTube (2022)
 - DOI: 

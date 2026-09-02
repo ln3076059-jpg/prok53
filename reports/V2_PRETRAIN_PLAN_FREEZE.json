@@ -1,9 +1,9 @@
 {
   "experiment_id": "MULTIMODEL_V2_PRETRAIN_PENDING_APPROVAL",
-  "repository_source_sha": "14bace80d472624407d4b92065e73145eac54f3c",
+  "repository_source_sha": "ad2a776bf96923e9a5fe74780fcd591350fb65af",
   "config_sha": "0ac6ce22cb0a9c7ebc817f763e74bb53934fda5b07b00eb1c3c42d8dc7e49b23",
   "data_yaml_sha": "95b4fe4dbcaaf1bc0b10a3fd33c02d82e78d69defaa0b0d710982cfec8cc1d83",
-  "dataset_manifest_sha": "NOT_REQUIRED_YET",
+  "dataset_manifest_sha": "855794ae8542467fde45712b6c8ba56947f4b43bc1354f589445a8f024a605b2",
   "split_hashes": {},
   "base_weights_sha": {
     "yolo11s.pt": "85a76fe86dd8afe384648546b56a7a78580c7cb7b404fc595f97969322d502d5",
@@ -40,5 +40,5 @@
   ],
   "amp": true,
   "seed": 42,
-  "training_plan_fingerprint": "efe5e589416611e433fcd8d0eacfc8226a53c53f0d4694aa48c6b0322d95153d"
+  "training_plan_fingerprint": "072f5c7184e4259b0703daf944091dbfd1cf2ddabc6caeb66a6b4a9060a0f4be"
 }
