@@ -6,7 +6,7 @@
 - DOI: 
 - Decision: `EDUCATIONAL_ONLY`
 
-## Driver Distraction Detection Tutorial (sWPNm_GhhCA)
+## All about Neural Network in 12 minutes (sWPNm_GhhCA)
 - Authors: Unknown
 - Venue: YouTube (2021)
 - DOI: 
@@ -18,7 +18,7 @@
 - DOI: 
 - Decision: `ALREADY_IMPLEMENTED`
 
-## Seatbelt Detection OpenCV/YOLO (ULE78ME1ckQ)
+## All Machine Learning Algorithms in 23 Minutes (ULE78ME1ckQ)
 - Authors: Unknown
 - Venue: YouTube (2021)
 - DOI: 

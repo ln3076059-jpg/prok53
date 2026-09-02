@@ -1,10 +1,21 @@
 {
-  "experiment_id": "MULTIMODEL_V2_PRETRAIN",
-  "repository_source_sha": "f3c39866bd1aaecb0b48db458b63632c6c568b17",
+  "experiment_id": "MULTIMODEL_V2_PRETRAIN_PENDING_APPROVAL",
+  "repository_source_sha": "14bace80d472624407d4b92065e73145eac54f3c",
+  "config_sha": "0ac6ce22cb0a9c7ebc817f763e74bb53934fda5b07b00eb1c3c42d8dc7e49b23",
+  "data_yaml_sha": "95b4fe4dbcaaf1bc0b10a3fd33c02d82e78d69defaa0b0d710982cfec8cc1d83",
+  "dataset_manifest_sha": "NOT_REQUIRED_YET",
+  "split_hashes": {},
+  "base_weights_sha": {
+    "yolo11s.pt": "85a76fe86dd8afe384648546b56a7a78580c7cb7b404fc595f97969322d502d5",
+    "yolo11s-cls.pt": "e2b605d1c8c212b434a75a32759a6f7adf1d2b29c35f76bdccd4c794cb653cf2"
+  },
+  "learning_rate": 0.001,
+  "workers": 8,
+  "augmentation": "default",
   "components": [
     {
       "name": "phone_detector",
-      "model": "yolo11s.pt",
+      "model": "models/base/yolo11s.pt",
       "imgsz": 960,
       "epochs": 100,
       "batch_strategy": "auto",
@@ -12,7 +23,7 @@
     },
     {
       "name": "seatbelt_detector",
-      "model": "yolo11s.pt",
+      "model": "models/base/yolo11s.pt",
       "imgsz": 1280,
       "epochs": 160,
       "batch_strategy": "auto",
@@ -20,7 +31,7 @@
     },
     {
       "name": "seatbelt_classifier",
-      "model": "yolo11s-cls.pt",
+      "model": "models/base/yolo11s-cls.pt",
       "imgsz": 256,
       "epochs": 80,
       "batch_strategy": "auto",
@@ -29,5 +40,5 @@
   ],
   "amp": true,
   "seed": 42,
-  "training_plan_fingerprint": "b3d78ae661f69f3db88186ad06e778a2295da9d2d8782242723012a1b4e7a0e8"
+  "training_plan_fingerprint": "efe5e589416611e433fcd8d0eacfc8226a53c53f0d4694aa48c6b0322d95153d"
 }
