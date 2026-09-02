@@ -189,6 +189,9 @@
   },
   "data_gap_action_plan": {
     "commands": {
+      "audit_pretrain_pending_datasets": "py -m training.audit_pretrain_pending_v2",
+      "build_pretrain_pending_bundle": "py -m training.build_v2_pretrain_bundle",
+      "build_pretrain_pending_datasets": "py -m training.build_pretrain_pending_v2",
       "convert_uncertain_decisions": "py -m training.convert_uncertain_review_decisions datasets/manifests/v2_seatbelt_uncertain_ui_decisions.jsonl --reviewer <NAME>",
       "materialize_adt_external": "py -m training.apply_review_decisions datasets/manifests/ingest_adt_seatbelt_v1.jsonl --decisions datasets/manifests/review_decisions_adt_seatbelt_v1.jsonl --output datasets/reviewed/adt_external --manifest datasets/manifests/reviewed_adt_external.jsonl",
       "materialize_phone_external_mendeley": "py -m training.apply_review_decisions datasets/manifests/ingest_mendeley_driver_risk_v1.jsonl --decisions datasets/manifests/v2_phone_external_mendeley_decisions.jsonl --output datasets/reviewed/mendeley_phone_external --manifest datasets/manifests/reviewed_v2_phone_external_mendeley.jsonl",
@@ -203,7 +206,9 @@
       "review_phone_positives": "py tools/annotation_reviewer/app.py --manifest datasets/manifests/v2_phone_positive_review.json --decisions datasets/manifests/v2_phone_positive_decisions.jsonl --pending-only",
       "review_seatbelt_roi_state": "py tools/annotation_reviewer/app.py --manifest datasets/manifests/v2_seatbelt_roi_state_review.json --decisions datasets/manifests/v2_seatbelt_roi_state_decisions.jsonl --pending-only",
       "review_template": "py tools/annotation_reviewer/app.py --manifest <QUEUE.json> --decisions <DECISIONS.jsonl> --pending-only",
-      "review_uncertain_ui": "py tools/annotation_reviewer/app.py --manifest datasets/manifests/v2_seatbelt_uncertain_ui_review.json --decisions datasets/manifests/v2_seatbelt_uncertain_ui_decisions.jsonl --pending-only"
+      "review_uncertain_ui": "py tools/annotation_reviewer/app.py --manifest datasets/manifests/v2_seatbelt_uncertain_ui_review.json --decisions datasets/manifests/v2_seatbelt_uncertain_ui_decisions.jsonl --pending-only",
+      "run_proposal_review": "py -m training.prepare_v2_pretrain_review",
+      "train_pretrain_pending_bundle": ".\\START_V2_PRETRAIN_REVIEW_TRAINING.ps1"
     },
     "external_candidates": {
       "mendeley_driver_risk_behavior_v1": {
@@ -267,7 +272,22 @@
       "review_queue_adt_seatbelt_v1"
     ],
     "schema_version": 1,
-    "status": "HUMAN_ACTION_REQUIRED_BEFORE_GOVERNED_TRAINING"
+    "status": "HUMAN_ACTION_REQUIRED_BEFORE_GOVERNED_TRAINING",
+    "training_lanes": {
+      "human_verified_governed": {
+        "human_action_required": true,
+        "readiness_report": "reports/v2_training_readiness.json",
+        "training_ready": false
+      },
+      "pretrain_pending_exploratory": {
+        "governance_level": "MODEL_ASSISTED_PENDING_APPROVAL",
+        "governed_training_ready": false,
+        "human_verified": false,
+        "production_activation_ready": false,
+        "readiness_report": "reports/v2_pretrain_pending_approval_readiness.json",
+        "training_ready": true
+      }
+    }
   },
   "datasets": {
     "classifier": {

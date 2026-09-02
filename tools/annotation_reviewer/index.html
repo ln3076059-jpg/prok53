@@ -40,7 +40,7 @@
     #stage { min-width: 0; overflow: auto; background: #26302d; display: grid; place-items: center; padding: 30px; }
     canvas { background: #111; transform-origin: center; max-width: none; }
     .panel { min-width: 0; padding: 18px; background: var(--paper); border-inline-start: 1px solid var(--rule); overflow-y: auto; max-height: calc(100dvh - 64px); }
-    .toolbar, .actions, .batch-row { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 0 14px; }
+    .toolbar, .actions, .batch-row, .queue-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 0 14px; }
     button { min-height: 40px; padding: 8px 13px; border: 1px solid var(--strong-rule); background: white; color: var(--ink); cursor: pointer; border-radius: 6px; }
     button:hover:not(:disabled) { background: var(--field); }
     button:disabled { cursor: not-allowed; opacity: .55; }
@@ -76,6 +76,12 @@
     .box:last-child { border-block-end: 0; }
     .box select { min-width: 0; }
     #statusMessage { margin-block-end: 14px; }
+    .queue-controls { align-items: end; }
+    .queue-controls label { flex: 1 1 210px; margin: 0; }
+    .select-current { display: flex; align-items: center; gap: 8px; min-height: 42px; color: var(--ink); font-size: 1rem; }
+    .select-current input { width: 18px; min-height: 18px; margin: 0; }
+    .admin-confirm { display: grid; gap: 10px; }
+    .admin-confirm code { overflow-wrap: anywhere; }
     [hidden] { display: none !important; }
     @media (max-width: 900px) {
       main { grid-template-columns: 1fr; }
@@ -108,15 +114,44 @@
         <button id="zoomIn" type="button">Phóng to +</button>
       </div>
 
-      <section class="record" aria-labelledby="aiHeading">
-        <h2 id="aiHeading">Bằng chứng rà soát do mô hình hỗ trợ</h2>
-        <div id="aiEmpty" class="notice warning">Không có dữ liệu rà soát từ mô hình. Hãy xem mọi đề xuất là chưa được xác minh.</div>
-        <div id="aiEvidence" hidden>
-          <div class="batch-row"><span id="aiTier" class="tag">Đang chờ</span><span id="aiDecision" class="tag">—</span></div>
-          <dl id="aiFacts"></dl>
-          <p id="aiReasons" class="help"></p>
-          <button id="batchConfirm" type="button">Xác nhận đã xem các đề xuất độ tin cậy cao</button>
+      <section class="record" aria-labelledby="queueHeading">
+        <h2 id="queueHeading">Hàng đợi Review 1</h2>
+        <div class="queue-controls">
+          <label>Lọc trạng thái
+            <select id="queueFilter">
+              <option value="ALL">Tất cả mẫu</option>
+              <option value="REVIEW1_HIGH">Review 1 — độ tin cậy cao</option>
+              <option value="REVIEW1_CORRECTIONS">Review 1 — đề xuất sửa nhãn</option>
+              <option value="REVIEW1_REJECTS">Review 1 — đề xuất loại</option>
+              <option value="UNCERTAIN">Không chắc chắn</option>
+              <option value="NEEDS_HUMAN_REVIEW">Cần con người rà soát</option>
+            </select>
+          </label>
+          <label class="select-current"><input id="selectCurrent" type="checkbox">Chọn mẫu hiện tại để admin xem xét</label>
+        </div>
+        <p id="selectedCount" class="help">Chưa chọn mẫu nào.</p>
+      </section>
+
+      <section class="record" aria-labelledby="review1Heading">
+        <h2 id="review1Heading">Bằng chứng do Review 1 hỗ trợ</h2>
+        <div id="review1Empty" class="notice warning">Không có dữ liệu Review 1. Hãy xem mọi đề xuất là chưa được xác minh.</div>
+        <div id="review1Evidence" hidden>
+          <div class="batch-row"><span id="review1Tier" class="tag">Đang chờ</span><span id="review1Decision" class="tag">—</span></div>
+          <dl id="review1Facts"></dl>
+          <p id="review1Reasons" class="help"></p>
+          <button id="proposalAck" type="button">Xác nhận đã xem các đề xuất độ tin cậy cao</button>
           <p class="help">Xác nhận theo lô chỉ phục vụ huấn luyện thăm dò với đề xuất từ mô hình đang chờ duyệt. Thao tác này không tạo bản ghi HUMAN_APPROVED cho từng mẫu.</p>
+        </div>
+      </section>
+
+      <section class="record" aria-labelledby="adminHeading">
+        <h2 id="adminHeading">Admin xác nhận đề xuất Review 1</h2>
+        <div class="admin-confirm">
+          <div class="notice warning">Bạn đang xác nhận các đề xuất do Review 1 rà soát với tư cách admin. Chỉ mẫu Tier A có metadata, điều kiện và vai trò đầy đủ mới được chấp nhận. Thao tác sẽ tạo bản ghi HUMAN mới; không sửa bản ghi Review 1.</div>
+          <label>Nhập chính xác để xác nhận
+            <input id="adminConfirmationText" autocomplete="off" placeholder="CONFIRM_REVIEW1_PROPOSALS_AS_ADMIN">
+          </label>
+          <button id="adminConfirm" class="primary" type="button" disabled>Xác nhận các mẫu đã chọn với tư cách admin</button>
         </div>
       </section>
 
@@ -232,7 +267,8 @@
     const reasonLabels = {
       phone_detector_found_candidate_in_proposed_negative: "Bộ phát hiện tìm thấy điện thoại trong mẫu âm đề xuất"
     };
-    let queue = [], index = 0, scale = 1, start = null, saving = false;
+    let allQueue = [], queue = [], index = 0, scale = 1, start = null, saving = false;
+    const selectedSamples = new Set();
     const image = new Image();
     const canvas = document.querySelector("#canvas");
     const context2d = canvas.getContext("2d");
@@ -259,19 +295,64 @@
         `<div><dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd></div>`
       ).join("");
     }
+    function matchesFilter(sample, filter) {
+      const latest = sample.latest_review_decision || {};
+      const status = latest.new_status || latest.status || "PENDING";
+      if (filter === "ALL") return true;
+      if (filter === "REVIEW1_HIGH") return status === "REVIEW1_APPROVED_UNDER_ADMIN_DELEGATION";
+      if (filter === "REVIEW1_CORRECTIONS") return status === "REVIEW1_CORRECTION_PROPOSAL";
+      if (filter === "REVIEW1_REJECTS") return status === "REVIEW1_REJECTED_PROPOSAL";
+      if (filter === "UNCERTAIN") return ["UNCERTAIN", "REVIEW1_UNCERTAIN"].includes(status);
+      return status === filter;
+    }
+    function applyQueueFilter() {
+      const currentId = queue[index]?.sample_id;
+      const filter = document.querySelector("#queueFilter").value;
+      queue = allQueue.filter(sample => matchesFilter(sample, filter));
+      const retainedIndex = queue.findIndex(sample => sample.sample_id === currentId);
+      index = retainedIndex >= 0 ? retainedIndex : 0;
+      if (!queue.length) {
+        document.querySelector("#position").textContent = "0 / 0";
+        context2d.clearRect(0, 0, canvas.width, canvas.height);
+        setStatus("Không có mẫu phù hợp với bộ lọc hiện tại. Hãy chọn bộ lọc khác.", "warning");
+        renderSelectionState();
+        return;
+      }
+      loadSample();
+    }
+    function review1TierA(sample) {
+      const latest = sample?.latest_review_decision || {};
+      return latest.reviewer_id === "review1" && latest.reviewer_type === "AI" &&
+        (latest.new_status || latest.status) === "REVIEW1_APPROVED_UNDER_ADMIN_DELEGATION";
+    }
+    function renderSelectionState() {
+      const current = queue[index];
+      const checkbox = document.querySelector("#selectCurrent");
+      const eligible = review1TierA(current);
+      checkbox.disabled = !eligible || saving;
+      checkbox.checked = Boolean(current && selectedSamples.has(current.sample_id));
+      const count = selectedSamples.size;
+      document.querySelector("#selectedCount").textContent = count
+        ? `Đã chọn ${count} mẫu Tier A để admin xác nhận.`
+        : "Chưa chọn mẫu Tier A nào.";
+      const exact = document.querySelector("#adminConfirmationText").value === "CONFIRM_REVIEW1_PROPOSALS_AS_ADMIN";
+      document.querySelector("#adminConfirm").disabled = saving || !count || !exact;
+    }
     async function loadQueue() {
       try {
         const [queueResponse, statusResponse] = await Promise.all([fetch("/api/queue"), fetch("/api/status")]);
         if (!queueResponse.ok || !statusResponse.ok) throw new Error("API rà soát không trả về hàng đợi hoặc trạng thái hợp lệ.");
-        queue = await queueResponse.json();
+        allQueue = await queueResponse.json();
+        queue = allQueue.filter(sample => matchesFilter(sample, document.querySelector("#queueFilter").value));
+        index = 0;
         const status = await statusResponse.json();
-        document.querySelector("#savedCount").textContent = `${status.decided} quyết định · ${status.proposal_samples_acknowledged} đề xuất đã xác nhận xem`;
+        document.querySelector("#savedCount").textContent = `${status.review1_decided} Review 1 · ${status.human_confirmed} HUMAN · ${status.proposal_samples_acknowledged} đã xác nhận xem`;
         if (!queue.length) {
           document.querySelector("#position").textContent = "0 / 0";
           setStatus("Hàng đợi không còn mẫu nào đang chờ rà soát.", "success");
           return;
         }
-        setStatus("Đã tải hàng đợi. Hãy kiểm tra bằng chứng của mô hình trước khi đưa ra quyết định của con người.");
+        setStatus("Đã tải hàng đợi. Hãy kiểm tra bằng chứng Review 1 trước khi đưa ra quyết định của con người.");
         loadSample();
       } catch (error) {
         setStatus(`${error.message} Hãy kiểm tra ứng dụng rà soát đang chạy, sau đó tải lại trang.`, "error");
@@ -299,31 +380,38 @@
         "Nguồn": sample.source_id || "—", "Tài nguyên": sample.source_asset_id || "—",
         "Nhóm": sample.source_group_id || "—", "Giấy phép": sample.license || "—"
       });
-      renderAi(sample.proposal_review);
+      renderReview1(sample.proposal_review, sample.latest_review_decision);
       image.onload = () => { canvas.width = image.naturalWidth; canvas.height = image.naturalHeight; draw(); };
       image.onerror = () => setStatus("Không tải được ảnh. Hãy kiểm tra đường dẫn tập dữ liệu và mã mẫu.", "error");
       image.src = `/api/image/${encodeURIComponent(sample.sample_id)}?v=${Date.now()}`;
       renderBoxes();
       document.querySelector("#prev").disabled = index === 0;
       document.querySelector("#next").disabled = index === queue.length - 1;
+      renderSelectionState();
     }
-    function renderAi(review) {
-      document.querySelector("#aiEmpty").hidden = Boolean(review);
-      document.querySelector("#aiEvidence").hidden = !review;
-      if (!review) return;
-      const tier = document.querySelector("#aiTier");
+    function renderReview1(review, latestDecision) {
+      review ||= {};
+      const hasEvidence = Boolean(Object.keys(review).length || latestDecision?.reviewer_id === "review1");
+      document.querySelector("#review1Empty").hidden = hasEvidence;
+      document.querySelector("#review1Evidence").hidden = !hasEvidence;
+      if (!hasEvidence) return;
+      const tier = document.querySelector("#review1Tier");
       tier.textContent = tierLabels[review.tier] || review.tier || tierLabels.UNKNOWN;
       tier.className = `tag ${review.tier === "HIGH_CONFIDENCE" ? "high" : review.tier === "MEDIUM_CONFIDENCE" ? "medium" : "uncertain"}`;
-      document.querySelector("#aiDecision").textContent = decisionLabels[review.decision] || review.decision || "—";
-      renderFacts(document.querySelector("#aiFacts"), {
+      document.querySelector("#review1Decision").textContent = latestDecision?.new_status || decisionLabels[review?.decision] || review?.decision || "—";
+      renderFacts(document.querySelector("#review1Facts"), {
         "Độ tin cậy": Number(review.confidence || 0).toLocaleString("vi-VN", {style: "percent", maximumFractionDigits: 1}),
         "Bằng chứng": evidenceLabels[review.evidence_level] || review.evidence_level || "—",
         "Mô hình": review.reviewer_model || "—",
+        "Người rà soát": latestDecision?.reviewer_id || "—",
+        "Loại provenance": latestDecision?.reviewer_type || "—",
+        "Trạng thái mới nhất": latestDecision?.new_status || latestDecision?.status || "PENDING",
+        "Nhãn gốc / đã rà soát": latestDecision ? `${(latestDecision.original_annotations || []).length} / ${(latestDecision.reviewed_annotations || []).length}` : "—",
         "Huấn luyện": review.training_eligible ? "Đủ điều kiện làm đề xuất tiền huấn luyện" : "Chuyển cấp xử lý hoặc loại",
         "Quản trị dữ liệu": review.governance_eligible ? "Đủ điều kiện" : "Chưa được con người phê duyệt"
       });
-      document.querySelector("#aiReasons").textContent = `Lý do: ${(review.reason || []).map(value => reasonLabels[value] || value).join("; ") || "Không có lý do được ghi nhận"}`;
-      document.querySelector("#batchConfirm").disabled = !(review.tier === "HIGH_CONFIDENCE" && review.decision === "PASS");
+      document.querySelector("#review1Reasons").textContent = `Lý do: ${(review?.reason || []).map(value => reasonLabels[value] || value).join("; ") || latestDecision?.decision_reason || "Không có lý do được ghi nhận"}`;
+      document.querySelector("#proposalAck").disabled = !(review?.tier === "HIGH_CONFIDENCE" && review?.decision === "PASS");
     }
     function draw() {
       context2d.drawImage(image, 0, 0);
@@ -368,13 +456,45 @@
     document.querySelector("#next").onclick = () => { index = Math.min(queue.length - 1, index + 1); loadSample(); };
     document.querySelector("#zoomIn").onclick = () => { scale = Math.min(3, scale + .25); draw(); };
     document.querySelector("#zoomOut").onclick = () => { scale = Math.max(.5, scale - .25); draw(); };
-    document.querySelector("#batchConfirm").onclick = async () => {
+    document.querySelector("#proposalAck").onclick = async () => {
       const reviewerId = document.querySelector("#reviewer").value.trim();
       if (!reviewerId) { setStatus("Hãy nhập mã người rà soát trước khi xác nhận theo lô.", "error"); return; }
-      const candidates = queue.filter(sample => sample.proposal_review?.tier === "HIGH_CONFIDENCE" && sample.proposal_review?.decision === "PASS").slice(0, 500);
+      const candidates = allQueue.filter(sample => sample.proposal_review?.tier === "HIGH_CONFIDENCE" && sample.proposal_review?.decision === "PASS").slice(0, 500);
       if (!candidates.length) { setStatus("Hàng đợi không có mẫu đạt nào từ mô hình với độ tin cậy cao.", "error"); return; }
       if (!window.confirm(`Xác nhận đã xem đề xuất của ${candidates.length} mẫu? Thao tác này không phải phê duyệt HUMAN_APPROVED theo quy trình quản trị.`)) return;
       await submit("/api/batch-acknowledgement", {reviewer_id: reviewerId, reviewer_type: "HUMAN", sample_ids: candidates.map(sample => sample.sample_id), notes: "Reviewer acknowledged visible high-confidence model proposals."}, `Đã xác nhận xem đề xuất của ${candidates.length} mẫu dùng cho tiền huấn luyện.`);
+    };
+    document.querySelector("#queueFilter").onchange = applyQueueFilter;
+    document.querySelector("#selectCurrent").onchange = event => {
+      const current = queue[index];
+      if (!review1TierA(current)) return;
+      if (event.target.checked) selectedSamples.add(current.sample_id);
+      else selectedSamples.delete(current.sample_id);
+      renderSelectionState();
+    };
+    document.querySelector("#adminConfirmationText").oninput = renderSelectionState;
+    document.querySelector("#adminConfirm").onclick = async () => {
+      const confirmationText = document.querySelector("#adminConfirmationText").value;
+      if (confirmationText !== "CONFIRM_REVIEW1_PROPOSALS_AS_ADMIN") {
+        setStatus("Chuỗi xác nhận admin chưa chính xác.", "error");
+        return;
+      }
+      const sampleIds = [...selectedSamples].slice(0, 500);
+      if (!sampleIds.length) {
+        setStatus("Hãy chọn ít nhất một đề xuất Review 1 Tier A.", "error");
+        return;
+      }
+      const accepted = window.confirm(`Bạn đang xác nhận ${sampleIds.length} đề xuất do Review 1 rà soát với tư cách admin. Tiếp tục?`);
+      if (!accepted) return;
+      const saved = await submit("/api/admin-batch-confirm", {
+        admin_actor_id: "admin", reviewer_type: "HUMAN", sample_ids: sampleIds,
+        confirmation_text: confirmationText
+      }, `Admin đã xác nhận ${sampleIds.length} đề xuất Review 1 bằng bản ghi HUMAN riêng.`);
+      if (saved) {
+        selectedSamples.clear();
+        document.querySelector("#adminConfirmationText").value = "";
+        await loadQueue();
+      }
     };
     async function submit(url, payload, successMessage) {
       if (saving) return false;
@@ -397,7 +517,8 @@
         document.querySelectorAll("button").forEach(button => button.disabled = false);
         document.querySelector("#prev").disabled = index === 0;
         document.querySelector("#next").disabled = index === queue.length - 1;
-        renderAi(queue[index]?.proposal_review);
+        if (queue[index]) renderReview1(queue[index].proposal_review, queue[index].latest_review_decision);
+        renderSelectionState();
       }
     }
     document.querySelectorAll("[data-status]").forEach(button => button.onclick = async () => {
@@ -423,6 +544,11 @@
       if (await submit("/api/decision", payload, `Đã lưu quyết định ${savedStatus} cho mẫu ${queue[index].sample_id}.`)) {
         if (index < queue.length - 1) { index += 1; loadSample(); }
       }
+    });
+    document.addEventListener("keydown", event => {
+      if (["INPUT", "SELECT", "TEXTAREA"].includes(event.target.tagName)) return;
+      if (event.key === "ArrowLeft" && index > 0) { index -= 1; loadSample(); }
+      if (event.key === "ArrowRight" && index < queue.length - 1) { index += 1; loadSample(); }
     });
     renderConditions();
     loadQueue();

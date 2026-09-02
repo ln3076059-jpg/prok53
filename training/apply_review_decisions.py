@@ -41,6 +41,15 @@ def resolve_ingested_image(record: dict, incoming_root: Path = Path("datasets/in
     image = Path(record["ingested_path"])
     if image.is_file():
         return image
+    parts = image.parts
+    incoming_index = next(
+        (index for index, value in enumerate(parts) if value.lower() == "incoming"),
+        None,
+    )
+    if incoming_index is not None:
+        relocated = incoming_root.joinpath(*parts[incoming_index + 1 :])
+        if relocated.is_file():
+            return relocated
     sample_id = record["sample_id"]
     matches = [path for path in incoming_root.rglob(f"{sample_id}.*") if path.is_file()]
     if len(matches) != 1:

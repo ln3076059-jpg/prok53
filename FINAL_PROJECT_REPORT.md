@@ -14,6 +14,14 @@ the available files, while semantic conditions were not inferred. The prioritize
 queue contains 3,013 `PENDING` rows (679 priority-1, 1,329 priority-2, 1,005 priority-4) and zero
 human approvals. All ten seatbelt hard-negative capture scenarios remain absent.
 
+An append-only Review 1 lane has now visually inspected the first 100 phone-negative candidates.
+It records 56 `REVIEW1_ACCEPTED_PROPOSAL` Tier-B decisions and 44
+`REVIEW1_REJECTED_PROPOSAL` Tier-C decisions, with source/image evidence hashes and admin
+delegation provenance. This reduces the immediate hard-case/manual-attention queue to 2,957 but
+does not convert any record to HUMAN approval. The derived bootstrap lane is explicitly
+`MODEL_ASSISTED`, `ADMIN_DELEGATED`, `NOT_HUMAN_APPROVED`, and `NOT_GOVERNED`; the governed lane
+contains zero records.
+
 ## B. Split
 
 Canonical human-approved three-class train/validation/test: not created. A reduced three-class proposal-only `mc_bootstrap_v2_6500` now exists with 6,500/1,782/1,736 images. It retains every phone-positive and unfastened-positive train image, selects difficult/context-diverse fastened and negative frames, and preserves all 3,288 original train source groups. It contains 2,548 phone, 3,124 fastened-seatbelt, and 1,805 unfastened-seatbelt instances in total. Audit passes with 27,616 retained pHash-near pairs and zero SHA, source/base group, component, or near-duplicate cross-split overlap. The full `mc_bootstrap_v1` and separate phone-only bootstrap remain available. These auxiliary splits must not be reported as final ground truth. Subject isolation remains `NOT_PROVABLE` until trusted metadata exists.

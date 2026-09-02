@@ -14,7 +14,7 @@ def test_reviewer_interface_is_vietnamese_without_changing_governance_values():
     page = Path("tools/annotation_reviewer/index.html").read_text(encoding="utf-8")
 
     assert '<html lang="vi">' in page
-    assert "Bằng chứng rà soát do mô hình hỗ trợ" in page
+    assert "Bằng chứng do Review 1 hỗ trợ" in page
     assert "Quyết định của người rà soát" in page
     assert "Phê duyệt mẫu âm" in page
     assert "Đánh dấu không chắc chắn" in page
@@ -38,6 +38,8 @@ def test_reviewer_documented_module_launcher_imports_from_repository_root():
 def test_reviewer_appends_transition_reason_source_and_stable_box_id(tmp_path, monkeypatch):
     manifest = tmp_path / "queue.json"
     decisions = tmp_path / "decisions.jsonl"
+    image = tmp_path / "sample-1.jpg"
+    image.write_bytes(b"review-image")
     manifest.write_text(
         json.dumps(
             [
@@ -46,7 +48,8 @@ def test_reviewer_appends_transition_reason_source_and_stable_box_id(tmp_path, m
                     "source_id": "source-1",
                     "source_asset_id": "asset-1",
                     "source_group_id": "group-1",
-                    "sha256": "a" * 64,
+                    "sha256": reviewer.sha256_file(image),
+                    "image_path": str(image),
                 }
             ]
         ),
@@ -54,6 +57,7 @@ def test_reviewer_appends_transition_reason_source_and_stable_box_id(tmp_path, m
     )
     monkeypatch.setattr(reviewer, "manifest_path", manifest)
     monkeypatch.setattr(reviewer, "decisions_path", decisions)
+    monkeypatch.setattr(reviewer, "datasets_root", tmp_path)
 
     first = reviewer.Decision(
         sample_id="sample-1",

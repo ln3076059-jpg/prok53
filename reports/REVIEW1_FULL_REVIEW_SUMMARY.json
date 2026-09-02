@@ -1,0 +1,23 @@
+{
+  "head_sha": "3b7863c754c4558c19f54ab3f40b602510001915",
+  "total_queue": 3013,
+  "review1_reviewed": 100,
+  "tier_a": 0,
+  "tier_b": 56,
+  "tier_c": 44,
+  "review1_accepted": 56,
+  "review1_rejected": 44,
+  "review1_corrections": 0,
+  "missing_phone_labels": 0,
+  "bbox_corrections": 0,
+  "class_corrections": 0,
+  "uncertain_seatbelt": 0,
+  "unknown_occupant": 44,
+  "bad_metadata": 100,
+  "admin_acknowledged": 3355,
+  "admin_acknowledged_unique_samples": 2398,
+  "human_confirmed": 0,
+  "remaining_human_attention": 2957,
+  "manual_review_reduction_percent": 1.86,
+  "governed_ready": false
+}

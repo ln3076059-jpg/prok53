@@ -2,6 +2,19 @@
 
 Status: **BLOCKED_BY_HUMAN_REVIEW**. Model-assisted review is proposal triage, not ground truth.
 
+## Review 1 delegated lane
+
+Review 1 decisions use `reviewer_id: review1`, `reviewer_type: AI`, `delegated_by: admin`, and
+`REVIEW1_*` statuses. The first direct visual batch covers 100 phone-negative candidates: 56 Tier B
+accepted proposals and 44 Tier C rejection proposals. The remaining human-attention queue contains
+2,957 items. The earlier administrative acknowledgement covers 3,355 worklist references (2,398
+unique samples), but it is not per-sample visual approval. Actual HUMAN confirmations remain zero.
+
+The UI offers Review 1 filters, batch selection and an explicit admin confirmation control. The
+admin must type `CONFIRM_REVIEW1_PROPOSALS_AS_ADMIN`; the API then rechecks source hashes, complete
+metadata, conditions and resolved roles before appending a separate HUMAN record. It never rewrites
+the Review 1 record or confirms automatically.
+
 ## Decision contract
 
 Every reviewer action is appended to JSONL. Schema version 2 records `sample_id`, optional stable

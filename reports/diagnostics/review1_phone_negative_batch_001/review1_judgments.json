@@ -1,0 +1,21 @@
+{
+  "reviewer_id": "review1",
+  "reviewer_type": "AI",
+  "delegated_by": "admin",
+  "visual_method": "CONTACT_SHEET_IMAGE_INSPECTION",
+  "accepted_indexes": [
+    1, 2, 3, 4, 7, 9, 10, 11, 13, 14, 16, 17, 18, 19,
+    21, 22, 23, 24, 26, 27, 30, 32, 33, 34, 35, 36, 37,
+    42, 44, 45, 46, 47, 48, 50, 51, 53, 56, 57, 59,
+    63, 64, 67, 68, 71, 72, 76, 77, 80,
+    81, 82, 83, 85, 88, 91, 96, 98
+  ],
+  "rejected_indexes": [
+    5, 6, 8, 12, 15, 20,
+    25, 28, 29, 31, 38, 39, 40,
+    41, 43, 49, 52, 54, 55, 58, 60,
+    61, 62, 65, 66, 69, 70, 73, 74, 75, 78, 79,
+    84, 86, 87, 89, 90, 92, 93, 94, 95, 97, 99, 100
+  ],
+  "notes": "Every displayed full-frame tile was visually inspected. In-vehicle phone negatives were retained as Tier B Review 1 proposals; out-of-vehicle or invalid occupant contexts were rejected from this lane."
+}
