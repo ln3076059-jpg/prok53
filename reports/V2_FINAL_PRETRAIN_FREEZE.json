@@ -1,5 +1,5 @@
 {
-  "audited_source_head_sha": "4f9a3dfc349429ea2dbbf270c3634d1d23cac899",
+  "audited_source_head_sha": "1b0bd39732589875b8194f4378160e7013cc677d",
   "V1_SHA": "5a71e6b20a2d18cf25bbfba4f203ebca533549e7bcc6316a6a100034d6b2cebb",
   "EXPLORATORY_TRAINING_READY": true,
   "GOVERNED_TRAINING_READY": false,
@@ -7,6 +7,6 @@
   "BUNDLE": {
     "path": "kaggle/MULTIMODEL_V2_PRETRAIN_PENDING_APPROVAL_PORTABLE.zip",
     "bytes": 514618515,
-    "sha": "678b3a6e2b5a6ccb0b4db939303f4f97743e0ef41f0d51273028e240c3a021aa"
+    "sha": "4554ee7fba51b0b2c77e4eca053083df7e8a868dc0318a0c647331fe967ecae2"
   }
 }

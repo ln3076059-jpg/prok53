@@ -1,16 +1,18 @@
-# V2 Attention Triage Audit
+# V2 Detailed Attention Triage Audit
 
 - **ADMIN_CONFIRM_READY**: 0
 - **AUTO_EXCLUDE**: 3900
 - **CORRECTION_MANUAL**: 0
 - **TOTAL**: 3900
-- **Duplicates**: 0
-- **Reconciliation Pass**: True
 
 ## Reason Distribution
-- OTHER_DOCUMENTED_IN_NOTES: 3900
+- GROUP_REVIEW_REQUIRED_SOURCE: 986
+- OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT: 2914
 
-## Spot Check
-- Samples spot-checked: 100
-- Spot Check Pass: True
-- Ambiguous Moved: 0
+## Source Distribution
+- datasets\manifests\v2_phone_positive_review.json: 986
+- datasets\manifests\v2_phone_negative_review.json: 2777
+- datasets\manifests\v2_phone_negative_priority_review.json: 137
+
+## Spot Check (Seed 42)
+- 100 samples checked, all PASS mapping to AUTO_EXCLUDE.

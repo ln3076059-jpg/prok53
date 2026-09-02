@@ -9,7 +9,8 @@
     "reconciliation_pass": true
   },
   "reason_distribution": {
-    "OTHER_DOCUMENTED_IN_NOTES": 3900
+    "GROUP_REVIEW_REQUIRED_SOURCE": 986,
+    "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT": 2914
   },
   "source_distribution": {
     "datasets\\manifests\\v2_phone_positive_review.json": 986,
@@ -17,9 +18,811 @@
     "datasets\\manifests\\v2_phone_negative_priority_review.json": 137
   },
   "spot_check": {
+    "sampling_seed": 42,
     "count_sampled": 100,
     "spot_check_pass": true,
     "ambiguous_samples_moved_back_to_manual": 0,
-    "note": "Spot check verified the AI reasons like PRODUCT_PHOTO_OR_NON_VEHICLE_CONTEXT correctly map to AUTO_EXCLUDE."
+    "records": [
+      {
+        "sample_id": "ac6b03e8435056749688e8fd8c12218f",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "1ee62fb4eb8c5486b32b858cf3639165",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "06ef50f379215cf2b3046d881fdb4f5c",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "c6381d3589815a1295a15dd11bcf4b37",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "4c2d20b88b89586d93cb9ceac62299dc",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "434047cfbf3d505cad241086a0e7e4b1",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "3c6c9f5ed4d650bea2fd97eaa5909e28",
+        "source_queue": "datasets\\manifests\\v2_phone_positive_review.json",
+        "parsed_reason": "GROUP_REVIEW_REQUIRED_SOURCE",
+        "original_notes": "Rejected: phone-positive sample appears to be a product photo or non-vehicle frame (GROUP_REVIEW_REQUIRED source group, asset name matches product photo patterns). Phone object may be real but context is invalid for driver-monitoring training.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "27707540befd519ab192c2f88ae66df6",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "c4e5f706ae015e1f815b320e56d3c532",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "1bc6f9e340bc510fb469357e6a316929",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "b626f75300405ce99f54b5c006bad503",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "c5e4065437215300a4699955e6794fd7",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "f0daa337c7fd50aaacf6d9cee12c5698",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "93ce14b25c485a97a8a9810f6b626f80",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "17848a6941455a21915c56208f97ede3",
+        "source_queue": "datasets\\manifests\\v2_phone_positive_review.json",
+        "parsed_reason": "GROUP_REVIEW_REQUIRED_SOURCE",
+        "original_notes": "Rejected: phone-positive sample appears to be a product photo or non-vehicle frame (GROUP_REVIEW_REQUIRED source group, asset name matches product photo patterns). Phone object may be real but context is invalid for driver-monitoring training.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "9f8322e8c6c257939fe515b769f80d38",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "7282910fb9985e30afe858c7c5fed9e7",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "089471cd22475a58915ddb4d2e86bf16",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "07d4bf021b785c18b99b2f868e318b2c",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_priority_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from the driver-cabin phone-negative lane: the visible scene is outside a valid in-vehicle occupant context or contains no usable occupant.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "191060016fec515894d5d59f77a2deb1",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "3bbb761eef0f554199c57fa75ff90b08",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "3ef5edba289452b792f8af03eb835329",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "88d0f0dd949f5767a9ea664ca38ed781",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "a2f850d6508a5d9586f4358c383d8014",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "071bb5e7088650e8b76a7b2019598b4f",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "97a300f9004a5286a6544db55a80af30",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "360c130bf9815f3799d51e3afaaf46db",
+        "source_queue": "datasets\\manifests\\v2_phone_positive_review.json",
+        "parsed_reason": "GROUP_REVIEW_REQUIRED_SOURCE",
+        "original_notes": "Rejected: phone-positive sample appears to be a product photo or non-vehicle frame (GROUP_REVIEW_REQUIRED source group, asset name matches product photo patterns). Phone object may be real but context is invalid for driver-monitoring training.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "bfa3aa37d58e5696a8d112357bbf40fc",
+        "source_queue": "datasets\\manifests\\v2_phone_positive_review.json",
+        "parsed_reason": "GROUP_REVIEW_REQUIRED_SOURCE",
+        "original_notes": "Rejected: phone-positive sample appears to be a product photo or non-vehicle frame (GROUP_REVIEW_REQUIRED source group, asset name matches product photo patterns). Phone object may be real but context is invalid for driver-monitoring training.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "af4fbeec89d05dcca1917e657385d5cc",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "bc713c53c611513087532d10b7926b7e",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "938ea78995045aea905da43f4b321296",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "71a0ef9deaf25c10ae279822a8dbba0c",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "3bfaad4a7b5356559fde8165d82c4bec",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "79ab8ddd91a85f9e92d9a77b010582f1",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "9f6205582ab9524096ac6ad950ded724",
+        "source_queue": "datasets\\manifests\\v2_phone_positive_review.json",
+        "parsed_reason": "GROUP_REVIEW_REQUIRED_SOURCE",
+        "original_notes": "Rejected: phone-positive sample appears to be a product photo or non-vehicle frame (GROUP_REVIEW_REQUIRED source group, asset name matches product photo patterns). Phone object may be real but context is invalid for driver-monitoring training.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "4cd593e0e3af5e9e83de0af0dbb553d9",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "d9e5c62b77f45f4f938ceeab24d4b296",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "eb1a66f29deb5d09be119ca20e846bbd",
+        "source_queue": "datasets\\manifests\\v2_phone_positive_review.json",
+        "parsed_reason": "GROUP_REVIEW_REQUIRED_SOURCE",
+        "original_notes": "Rejected: phone-positive sample appears to be a product photo or non-vehicle frame (GROUP_REVIEW_REQUIRED source group, asset name matches product photo patterns). Phone object may be real but context is invalid for driver-monitoring training.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "0192e7738eb65f7bb020c510a60479c7",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "cb59cedf058e54058a8dd6d0ed14fb9f",
+        "source_queue": "datasets\\manifests\\v2_phone_positive_review.json",
+        "parsed_reason": "GROUP_REVIEW_REQUIRED_SOURCE",
+        "original_notes": "Rejected: phone-positive sample appears to be a product photo or non-vehicle frame (GROUP_REVIEW_REQUIRED source group, asset name matches product photo patterns). Phone object may be real but context is invalid for driver-monitoring training.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "d912cb79b84458c3bfd3a880de732492",
+        "source_queue": "datasets\\manifests\\v2_phone_positive_review.json",
+        "parsed_reason": "GROUP_REVIEW_REQUIRED_SOURCE",
+        "original_notes": "Rejected: phone-positive sample appears to be a product photo or non-vehicle frame (GROUP_REVIEW_REQUIRED source group, asset name matches product photo patterns). Phone object may be real but context is invalid for driver-monitoring training.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "2d5e54a4b04f5fa4b6da3f443ddf8712",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "bbc99a8ce6de5c67bdf6076bf92110a1",
+        "source_queue": "datasets\\manifests\\v2_phone_positive_review.json",
+        "parsed_reason": "GROUP_REVIEW_REQUIRED_SOURCE",
+        "original_notes": "Rejected: phone-positive sample appears to be a product photo or non-vehicle frame (GROUP_REVIEW_REQUIRED source group, asset name matches product photo patterns). Phone object may be real but context is invalid for driver-monitoring training.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "72e0cbd7f8ae56108b881eb75697e379",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "5c20ecb575825deba27fc0b8bc81469b",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "4cc604beeb13525ab5f2a9ee9e8fbb39",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "2c241a7fa01b5d34bacb4ef3bb35f421",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "3b19f82d81455b178b121feae3446009",
+        "source_queue": "datasets\\manifests\\v2_phone_positive_review.json",
+        "parsed_reason": "GROUP_REVIEW_REQUIRED_SOURCE",
+        "original_notes": "Rejected: phone-positive sample appears to be a product photo or non-vehicle frame (GROUP_REVIEW_REQUIRED source group, asset name matches product photo patterns). Phone object may be real but context is invalid for driver-monitoring training.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "cc5e09f33e7058a2892ca66bd00a4a24",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "5a912dc7964d58699b30c4faa6b7c138",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "1bbdeb773bc550ec8a8d0965ca623357",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_priority_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from the driver-cabin phone-negative lane: the visible scene is outside a valid in-vehicle occupant context or contains no usable occupant.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "18ea0816f0615d5b8bdda4fba2f62249",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "6750f478616c5cb282cb9ce5f4fa44fc",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "19cbc7e8486755f6b4ee32c9f8959195",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "61d8163de4d959dcacd4ffe0a1c1615f",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from the driver-cabin phone-negative lane: the visible scene is outside a valid in-vehicle occupant context or contains no usable occupant.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "e548bae7048d5b22a0a0a0e726d37e95",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "5d336b6ae508583d99eca76372d5b088",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "a3668306a44158f3a030d5f9f8d45d13",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "49035bfe0dbe5aa08ab1d33d40ea3852",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "d945ea5155fa599f8eaf971fd650ae44",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "0be281b051b25d69a8422ee3075df0df",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_priority_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from the driver-cabin phone-negative lane: the visible scene is outside a valid in-vehicle occupant context or contains no usable occupant.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "c364e457a51e57fea2b8a88dde074e09",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "7c61d4cae65f5ba5b44661725875cae1",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "90c71b2e7d3b5454bc13d12094b109f6",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "238e99cf24065676b8f352736037dfa1",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_priority_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from the driver-cabin phone-negative lane: the visible scene is outside a valid in-vehicle occupant context or contains no usable occupant.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "f744321462d656a0867aa5ee48bdf149",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "6715206c044d5fceacded24291f21ecf",
+        "source_queue": "datasets\\manifests\\v2_phone_positive_review.json",
+        "parsed_reason": "GROUP_REVIEW_REQUIRED_SOURCE",
+        "original_notes": "Rejected: phone-positive sample appears to be a product photo or non-vehicle frame (GROUP_REVIEW_REQUIRED source group, asset name matches product photo patterns). Phone object may be real but context is invalid for driver-monitoring training.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "15290203c3d457a4a5ef0eef4a2b53af",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "955015351869535cad1485103a3038ec",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "5134d326475c5e8abef16b81d6e917f2",
+        "source_queue": "datasets\\manifests\\v2_phone_positive_review.json",
+        "parsed_reason": "GROUP_REVIEW_REQUIRED_SOURCE",
+        "original_notes": "Rejected: phone-positive sample appears to be a product photo or non-vehicle frame (GROUP_REVIEW_REQUIRED source group, asset name matches product photo patterns). Phone object may be real but context is invalid for driver-monitoring training.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "e0197dd1dd45505c895a913bd454f026",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "aa4492a660fd5001837f9ac7e253a6ad",
+        "source_queue": "datasets\\manifests\\v2_phone_positive_review.json",
+        "parsed_reason": "GROUP_REVIEW_REQUIRED_SOURCE",
+        "original_notes": "Rejected: phone-positive sample appears to be a product photo or non-vehicle frame (GROUP_REVIEW_REQUIRED source group, asset name matches product photo patterns). Phone object may be real but context is invalid for driver-monitoring training.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "a7f2d142f5b353b383677cd77ff0c87c",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "ef2937f60d045ad58ce7a3d6c5b960ae",
+        "source_queue": "datasets\\manifests\\v2_phone_positive_review.json",
+        "parsed_reason": "GROUP_REVIEW_REQUIRED_SOURCE",
+        "original_notes": "Rejected: phone-positive sample appears to be a product photo or non-vehicle frame (GROUP_REVIEW_REQUIRED source group, asset name matches product photo patterns). Phone object may be real but context is invalid for driver-monitoring training.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "e9346971733d500fbf633557dcb9f36b",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "62d6f3cf612357cc97c1e40199dbdd5a",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "9c1c1cb3d012549cb147ecdeab8476c3",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "348c2cbd36645bc1ab5e984c40a7694d",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "bd57b53f32555cd9b4e1c9b5d4dc907f",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "1234cc3691fb5ab583dcc69fe88a3e66",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "0c7a50ce97b155d8b377d0f4a32f5130",
+        "source_queue": "datasets\\manifests\\v2_phone_positive_review.json",
+        "parsed_reason": "GROUP_REVIEW_REQUIRED_SOURCE",
+        "original_notes": "Rejected: phone-positive sample appears to be a product photo or non-vehicle frame (GROUP_REVIEW_REQUIRED source group, asset name matches product photo patterns). Phone object may be real but context is invalid for driver-monitoring training.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "b2167d3e76855f6c95fae0bfdff17162",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "3dd997eba9fc553faf7f19b5fb96d9df",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "cf348a74b3415b758000f9344e7fa4a8",
+        "source_queue": "datasets\\manifests\\v2_phone_positive_review.json",
+        "parsed_reason": "GROUP_REVIEW_REQUIRED_SOURCE",
+        "original_notes": "Rejected: phone-positive sample appears to be a product photo or non-vehicle frame (GROUP_REVIEW_REQUIRED source group, asset name matches product photo patterns). Phone object may be real but context is invalid for driver-monitoring training.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "502113149fe95f9ab7a2b516415ea70d",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "153e73602d765cd6a7ed302f9485391e",
+        "source_queue": "datasets\\manifests\\v2_phone_positive_review.json",
+        "parsed_reason": "GROUP_REVIEW_REQUIRED_SOURCE",
+        "original_notes": "Rejected: phone-positive sample appears to be a product photo or non-vehicle frame (GROUP_REVIEW_REQUIRED source group, asset name matches product photo patterns). Phone object may be real but context is invalid for driver-monitoring training.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "e73912a98d415bea8625153d24852f4a",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "3ef65fd78565586baaef16022ff02da1",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "eaaf298eb5335bf5ab873824f75ecb4c",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "1b570c25eedf57ad9f8f0a7d9a22ef7b",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "7a7bb1acd4ed574a9f487d5cee52ec6b",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "abe6de1989f958d993396815877d1f80",
+        "source_queue": "datasets\\manifests\\v2_phone_positive_review.json",
+        "parsed_reason": "GROUP_REVIEW_REQUIRED_SOURCE",
+        "original_notes": "Rejected: phone-positive sample appears to be a product photo or non-vehicle frame (GROUP_REVIEW_REQUIRED source group, asset name matches product photo patterns). Phone object may be real but context is invalid for driver-monitoring training.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "e17b53ef953e548c986c13f770094f09",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "6380dffa3a355204b8228819a96afbad",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "2de3b23423a1513c9f881967030cd710",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "64c5d073923b580ba18f362d85e97742",
+        "source_queue": "datasets\\manifests\\v2_phone_positive_review.json",
+        "parsed_reason": "GROUP_REVIEW_REQUIRED_SOURCE",
+        "original_notes": "Rejected: phone-positive sample appears to be a product photo or non-vehicle frame (GROUP_REVIEW_REQUIRED source group, asset name matches product photo patterns). Phone object may be real but context is invalid for driver-monitoring training.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "60bc86ec77095572b05411dcc900619e",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "392b1bea8275599b98bb563286da0119",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "b43cee3987e7561f86adeaa990a1d356",
+        "source_queue": "datasets\\manifests\\v2_phone_negative_review.json",
+        "parsed_reason": "OUT_OF_VEHICLE_OR_INVALID_OCCUPANT_CONTEXT",
+        "original_notes": "Rejected from driver-cabin phone-negative lane: scene is outside valid in-vehicle occupant context or contains no usable occupant. Source group_id='GROUP_REVIEW_REQUIRED' indicates this was flagged as requiring special human attention by the source dataset provider.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      },
+      {
+        "sample_id": "49da42d49adc5154ae655c49b197b528",
+        "source_queue": "datasets\\manifests\\v2_phone_positive_review.json",
+        "parsed_reason": "GROUP_REVIEW_REQUIRED_SOURCE",
+        "original_notes": "Rejected: phone-positive sample appears to be a product photo or non-vehicle frame (GROUP_REVIEW_REQUIRED source group, asset name matches product photo patterns). Phone object may be real but context is invalid for driver-monitoring training.",
+        "action": "AUTO_EXCLUDE",
+        "audit_pass": true
+      }
+    ]
   }
 }
