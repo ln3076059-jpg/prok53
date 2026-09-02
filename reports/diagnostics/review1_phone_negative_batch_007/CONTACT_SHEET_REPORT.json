@@ -1,0 +1,134 @@
+{
+  "pages": [
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_001.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_001.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_002.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_002.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_003.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_003.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_004.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_004.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_005.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_005.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_006.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_006.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_007.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_007.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_008.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_008.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_009.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_009.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_010.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_010.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_011.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_011.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_012.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_012.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_013.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_013.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_014.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_014.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_015.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_015.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_016.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_016.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_017.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_017.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_018.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_018.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_019.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_019.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_020.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_020.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_021.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_021.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_022.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_022.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_023.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_023.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_024.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_024.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_025.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_007\\page_025.json"
+    }
+  ],
+  "schema_version": 1,
+  "selected": 500,
+  "selection_offset": 1787,
+  "selection_reason": null,
+  "source_manifest": "datasets\\manifests\\v2_phone_negative_review.json"
+}

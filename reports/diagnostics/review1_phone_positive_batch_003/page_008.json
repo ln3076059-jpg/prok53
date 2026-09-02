@@ -1,0 +1,462 @@
+[
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4578125,
+          0.6296875,
+          0.20625,
+          0.1375
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\f7dd7025707e5b90a25766addcb6c3ff.jpg",
+    "index": 141,
+    "sample_id": "f7dd7025707e5b90a25766addcb6c3ff",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:smartphone-on-nightstand-near-bed-in-hotel-room-modern-interior-picture-id1360007462_jpg.rf.a70c45c24e9eec45d0c1dd7aa8b61514"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4734375,
+          0.4953125,
+          0.271875,
+          0.378125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\63f8d1c71b00576a84da5b26eb4523eb.jpg",
+    "index": 142,
+    "sample_id": "63f8d1c71b00576a84da5b26eb4523eb",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:smartphone-turned-off_jpeg_jpg.rf.bb769b6ddc8b0beb7f7534ba516c111b"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.303125,
+          0.5,
+          0.33125,
+          0.8890625
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.6703125,
+          0.5,
+          0.3828125,
+          0.8828125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\f3c162c9d14b5623b2c317bc04cafbae.jpg",
+    "index": 143,
+    "sample_id": "f3c162c9d14b5623b2c317bc04cafbae",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:starry-silver_png_jpg.rf.8593dcc4cbc8a4288f219d2a25fe5e9a"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.34375,
+          0.453125,
+          0.525,
+          0.5046875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\d2f0169401c754f4b78060022bfeced1.jpg",
+    "index": 144,
+    "sample_id": "d2f0169401c754f4b78060022bfeced1",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:table-1100248__340_jpg.rf.03cf6a6b1de623ff542e969cdd8b6556"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.653125,
+          0.66875,
+          0.209375,
+          0.3515625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\24094a9a6fdc54aa997bec4b13d1d5f3.jpg",
+    "index": 145,
+    "sample_id": "24094a9a6fdc54aa997bec4b13d1d5f3",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:table-stand-with-recharge-function-for-iphone-with-lightning-connector_jpg.rf.8a63225537a881f3344981bf4fd7daac"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5640625,
+          0.4359375,
+          0.3921875,
+          0.43125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\bace43eb19365392bc5c441497f69094.jpg",
+    "index": 146,
+    "sample_id": "bace43eb19365392bc5c441497f69094",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:top-view-mockup-telephone-device-screen-on-a-wooden-table-picture-id1197082378_jpg.rf.f2feef05c6343470c1d34a109025eacc"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4796875,
+          0.5390625,
+          0.209375,
+          0.4171875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\98a9394ce36c56389f2d9c27ff09009c.jpg",
+    "index": 147,
+    "sample_id": "98a9394ce36c56389f2d9c27ff09009c",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:top-view-of-modern-technology-smart-phone-mobile-on-blue-background-picture-id1195362220_jpg.rf.f0f95f0cff6731c1352f1ff8be32bbab"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5015625,
+          0.4984375,
+          0.275,
+          0.5953125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\40f67a93bb9b50208bb8712366bd10e7.jpg",
+    "index": 148,
+    "sample_id": "40f67a93bb9b50208bb8712366bd10e7",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:top-view-of-phone-screen-on-wooden-table-free-photo_jpeg_jpg.rf.f348933613c6b87742726aa57ce3d6fa"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.6,
+          0.4828125,
+          0.2578125,
+          0.3515625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\1b00d80a8f485b21917c6538f0880cfa.jpg",
+    "index": 149,
+    "sample_id": "1b00d80a8f485b21917c6538f0880cfa",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:top-view-of-trendy-wooden-office-desk-with-keyboard-white-earphones-picture-id1127701757_jpg.rf.ff999c937f7d549e4856e67c067396c0"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.6875,
+          0.5,
+          0.434375,
+          0.6515625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\18768b501f0357fdb30be5a78ae32a2d.jpg",
+    "index": 150,
+    "sample_id": "18768b501f0357fdb30be5a78ae32a2d",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:top-view-smartphone-with-blank-screen-and-hot-coffee-cup-cactus-on-picture-id1335005802_jpg.rf.fee3d186ae9c1a528eabce75d3815871"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5453125,
+          0.640625,
+          0.5265625,
+          0.2796875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\ebd5e2b3f384578eb01c9fb9a84a7665.jpg",
+    "index": 151,
+    "sample_id": "ebd5e2b3f384578eb01c9fb9a84a7665",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:use-mobile-phone-for-all-time-picture-id536878815_jpg.rf.8357a7d18ca4a5eb3355584696587028"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4296875,
+          0.5578125,
+          0.090625,
+          0.096875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\b6dd4072a83b5a368d48a38b400656cf.jpg",
+    "index": 152,
+    "sample_id": "b6dd4072a83b5a368d48a38b400656cf",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:when-the-wifis-good-the-days-going-to-be-good-picture-id1185838696_jpg.rf.0f0357d93c9d8e3f0688161359e068ea"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.28125,
+          0.5,
+          0.3359375,
+          0.5609375
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.51875,
+          0.4015625,
+          0.2546875,
+          0.56875
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.73125,
+          0.5640625,
+          0.34375,
+          0.590625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\f325d0cb9e3051b78f5fa3b818287b8a.jpg",
+    "index": 153,
+    "sample_id": "f325d0cb9e3051b78f5fa3b818287b8a",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:xiaomi_phones_a3-global_1x_png_jpg.rf.810702fc4d1a42dc1adab68034616b52"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.403125,
+          0.5,
+          0.1484375,
+          0.4171875
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5703125,
+          0.5,
+          0.1953125,
+          0.4171875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\f6a0a25a1ad65629bdfd3b0c15295e40.jpg",
+    "index": 154,
+    "sample_id": "f6a0a25a1ad65629bdfd3b0c15295e40",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:y6p-purple_png_jpg.rf.2116e143832cef4dd0303cef6ebc146f"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5375,
+          0.515625,
+          0.3890625,
+          0.8828125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\4a29b40b43eb53e4a93115f63326fb7a.jpg",
+    "index": 155,
+    "sample_id": "4a29b40b43eb53e4a93115f63326fb7a",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:zenfone_9__2_sq_jpg.rf.6e0466760198cc0d891071a86f9f57c6"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5046875,
+          0.490625,
+          0.18125,
+          0.3734375
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\53d856b3c80052eb82cc95855ed29a58.jpg",
+    "index": 156,
+    "sample_id": "53d856b3c80052eb82cc95855ed29a58",
+    "source_group_id": "dms:Mobile-phone-mockup-on-wooden-table-1-Graphics-4677346"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.403125,
+          0.49375,
+          0.20625,
+          0.4578125
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.621875,
+          0.49375,
+          0.1953125,
+          0.4140625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\317292b61e8f5648ae5e78b0d8483d25.jpg",
+    "index": 157,
+    "sample_id": "317292b61e8f5648ae5e78b0d8483d25",
+    "source_group_id": "dms:TSmXzSpWAsV8kzXJy3RKnR-320"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5796875,
+          0.5203125,
+          0.83125,
+          0.51875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\492dc0c312445f16880de5ca34a6f7e6.jpg",
+    "index": 158,
+    "sample_id": "492dc0c312445f16880de5ca34a6f7e6",
+    "source_group_id": "dms:Ur9u6j6qbwYT4JCeZZWUHf-480"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.3328125,
+          0.5984703632887189,
+          0.0625,
+          0.3365200764818356
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\026c34ffea955493bf13f897575d5723.jpg",
+    "index": 159,
+    "sample_id": "026c34ffea955493bf13f897575d5723",
+    "source_group_id": "dms:_-11-_mp4"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.3171875,
+          0.5908221797323135,
+          0.0453125,
+          0.2944550669216061
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\037aa1c95ce5500a9c92d6a77643d325.jpg",
+    "index": 160,
+    "sample_id": "037aa1c95ce5500a9c92d6a77643d325",
+    "source_group_id": "dms:_-12-_mp4"
+  }
+]

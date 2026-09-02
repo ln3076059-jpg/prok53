@@ -1,0 +1,486 @@
+[
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.484375,
+          0.521875,
+          0.9625,
+          0.515625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\438ff48f6f0c5305b2df287c4c6683cb.jpg",
+    "index": 261,
+    "sample_id": "438ff48f6f0c5305b2df287c4c6683cb",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:LWScq9yhVvTHdoPkzK9bMG_jpg.rf.3372205ebd67b9806f4f1f8fccbe6e92"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5,
+          0.5,
+          0.93125,
+          1.0
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\0e6ee9a6ad685ec695c8723fc87abece.jpg",
+    "index": 262,
+    "sample_id": "0e6ee9a6ad685ec695c8723fc87abece",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:M01-Phone-GlowOn-becbdffc_png_jpg.rf.6bf0d0548d67ceaa6d2215baf3f16003"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5046875,
+          0.5046875,
+          0.378125,
+          0.8578125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\36b5da020da35c6dba01e2bbd375a003.jpg",
+    "index": 263,
+    "sample_id": "36b5da020da35c6dba01e2bbd375a003",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:MP_UnlockedPhones_3_jpg.rf.7e882ff0f65924e878fb27a7748d20c0"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.46875,
+          0.3703125,
+          0.7671875,
+          0.3703125
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4984375,
+          0.5734375,
+          0.734375,
+          0.3921875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\ec64d20e79df54869a48b68dd4f7a111.jpg",
+    "index": 264,
+    "sample_id": "ec64d20e79df54869a48b68dd4f7a111",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:Mobile-2_2021-10-20-155734_vspa_png_jpg.rf.f9ef3f7982b125d01cf0f1a1f12803be"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5,
+          0.5,
+          0.4203125,
+          0.915625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\c1b63a621419514aa57021113419dbb0.jpg",
+    "index": 265,
+    "sample_id": "c1b63a621419514aa57021113419dbb0",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:Motorola-moto-g-5G-2022-Moonlight-Gray-thumbnail_png_jpg.rf.2f0780b73e9d8884f247506185ac0a00"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4703125,
+          0.465625,
+          0.6546875,
+          0.5171875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\422df40f903d5d8980ca050289a4a5f9.jpg",
+    "index": 266,
+    "sample_id": "422df40f903d5d8980ca050289a4a5f9",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:PeKCcdfnV9j2qeox4FQ4aj_jpeg_jpg.rf.71b50933d340ef384f58e2548710b514"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.559375,
+          0.5515625,
+          0.5953125,
+          0.3671875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\c0d87080ce1a56b8b1df16606c761f8f.jpg",
+    "index": 267,
+    "sample_id": "c0d87080ce1a56b8b1df16606c761f8f",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:Pn3JL6Dvj374auve6Vac3n_jpg.rf.9ac8f1c94b692aaf83fb9901f978f8b8"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.6734375,
+          0.6,
+          0.203125,
+          0.3734375
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5109375,
+          0.6,
+          0.11875,
+          0.3734375
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.3953125,
+          0.6,
+          0.1125,
+          0.3734375
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.2796875,
+          0.6,
+          0.115625,
+          0.3734375
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\d8a288f468435207a22cf7eff3dbe64d.jpg",
+    "index": 268,
+    "sample_id": "d8a288f468435207a22cf7eff3dbe64d",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:Redmi-Note-11S-5G_png_jpg.rf.35c862c1e170a8467552f6c71d5c9fb6"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.284375,
+          0.496875,
+          0.178125,
+          0.3890625
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.490625,
+          0.4828125,
+          0.1890625,
+          0.3953125
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.690625,
+          0.471875,
+          0.178125,
+          0.4
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\2cc7b2f9311b5c98a81a323a7b12383f.jpg",
+    "index": 269,
+    "sample_id": "2cc7b2f9311b5c98a81a323a7b12383f",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:Samsungs-US-Galaxy-S22-Android-13-rollout-expands-from-Verizon-to-T-Mobile_jpg.rf.6e1ac99feab95c3f57a95e2cb1f083db"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4265625,
+          0.5421875,
+          0.315625,
+          0.909375
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.7203125,
+          0.5796875,
+          0.3671875,
+          0.840625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\db9c99caccb4565aa107b9d6726011a4.jpg",
+    "index": 270,
+    "sample_id": "db9c99caccb4565aa107b9d6726011a4",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:TCLWebsiteHero_30Series_Mobile_jpg.rf.b9ee31291315bfd70528d9486568571e"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5203125,
+          0.4953125,
+          0.9015625,
+          0.4
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\960c1793b1155cc8b0fdf89d55659e5c.jpg",
+    "index": 271,
+    "sample_id": "960c1793b1155cc8b0fdf89d55659e5c",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:Untitled1_jpg.rf.3ff73861cbeccdbbebac796d65c5d783"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.3078125,
+          0.575,
+          0.1578125,
+          0.48055555555555557
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\c1184e1157c45e359454ce6fa7975442.jpg",
+    "index": 272,
+    "sample_id": "c1184e1157c45e359454ce6fa7975442",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:WIN_20220418_10_22_43_Pro_jpg.rf.29b6edf7aa22182421d3497700a1437f"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.26875,
+          0.4361111111111111,
+          0.10625,
+          0.4583333333333333
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\aba5b1ccb83150558bb1487a902cee02.jpg",
+    "index": 273,
+    "sample_id": "aba5b1ccb83150558bb1487a902cee02",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:WIN_20220418_10_22_46_Pro_jpg.rf.b8d5bf2fe7bfcf301d5bc0548e1bf092"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.3796875,
+          0.3611111111111111,
+          0.1421875,
+          0.46111111111111114
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\eaf94a7cec015690a9c2c27af5d2fb15.jpg",
+    "index": 274,
+    "sample_id": "eaf94a7cec015690a9c2c27af5d2fb15",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:WIN_20220418_10_22_48_Pro_jpg.rf.22b479f61e5cd148773caadbc7263518"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.284375,
+          0.7138888888888889,
+          0.1640625,
+          0.3888888888888889
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\26a4bb16458f59648601e70b452e3a99.jpg",
+    "index": 275,
+    "sample_id": "26a4bb16458f59648601e70b452e3a99",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:WIN_20220418_10_22_51_Pro_jpg.rf.063b01870740c96c817f73d0ba82446b"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.19375,
+          0.5694444444444444,
+          0.159375,
+          0.5833333333333334
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\488517781df45819a30bec5351ecce82.jpg",
+    "index": 276,
+    "sample_id": "488517781df45819a30bec5351ecce82",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:WIN_20220418_10_22_58_Pro_jpg.rf.a647eccca6d30ec3d88da2c8c30f8fc1"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.19375,
+          0.5166666666666667,
+          0.1984375,
+          0.7694444444444445
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\fa34ecea23aa5f17a702747eebcf69af.jpg",
+    "index": 277,
+    "sample_id": "fa34ecea23aa5f17a702747eebcf69af",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:WIN_20220418_10_23_01_Pro_jpg.rf.46b8336c3724dcbb4f550241629e0af3"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4375,
+          0.5055555555555555,
+          0.0859375,
+          0.23055555555555557
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\7d8b03df660d56ae89bede2dc1bb938f.jpg",
+    "index": 278,
+    "sample_id": "7d8b03df660d56ae89bede2dc1bb938f",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:WIN_20220418_10_23_11_Pro_jpg.rf.61d111b2512b182e4e7bf931d481e020"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4359375,
+          0.5722222222222222,
+          0.0859375,
+          0.28888888888888886
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\f88af74a37ad5729bd46d1617639076b.jpg",
+    "index": 279,
+    "sample_id": "f88af74a37ad5729bd46d1617639076b",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:WIN_20220418_10_23_17_Pro_jpg.rf.b3fba40c103047d5aef0bbcf2bd9df50"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4578125,
+          0.4777777777777778,
+          0.084375,
+          0.22777777777777777
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\a80563a589045f7a8f5a2b12f7ed86a3.jpg",
+    "index": 280,
+    "sample_id": "a80563a589045f7a8f5a2b12f7ed86a3",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:WIN_20220418_10_23_20_Pro_jpg.rf.06de8c5fbe71fd71068636bea12d2706"
+  }
+]

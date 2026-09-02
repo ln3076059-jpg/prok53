@@ -1,0 +1,450 @@
+[
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5015625,
+          0.5078125,
+          0.2140625,
+          0.4390625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\b5a2ee0ab9235c35b8c211a4410c22ae.jpg",
+    "index": 181,
+    "sample_id": "b5a2ee0ab9235c35b8c211a4410c22ae",
+    "source_group_id": "dms:apple-iphone-13-pro"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.7234375,
+          0.69375,
+          0.5109375,
+          0.1703125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\d44f9b88d6b550f4a491caa83a9beb56.jpg",
+    "index": 182,
+    "sample_id": "d44f9b88d6b550f4a491caa83a9beb56",
+    "source_group_id": "dms:black-charging-mobile-phone-on-260nw"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.496875,
+          0.5609375,
+          0.45,
+          0.309375
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\2560ff67b4e55894954bf4337edc8014.jpg",
+    "index": 183,
+    "sample_id": "2560ff67b4e55894954bf4337edc8014",
+    "source_group_id": "dms:black-smartphone-lying-on-wooden-260nw"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5390625,
+          0.55,
+          0.859375,
+          0.34375
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\1975b589273d58568514c743f7704ef4.jpg",
+    "index": 184,
+    "sample_id": "1975b589273d58568514c743f7704ef4",
+    "source_group_id": "dms:cell-phone-table-office-light-reflection"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4140625,
+          0.49375,
+          0.2359375,
+          0.4140625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\d2f5f0ecb3775e36885eb2144d219d06.jpg",
+    "index": 185,
+    "sample_id": "d2f5f0ecb3775e36885eb2144d219d06",
+    "source_group_id": "dms:clear-case-iphone-12-pro-mockup-table_698054"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5015625,
+          0.453125,
+          0.80625,
+          0.4890625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\b39923ba74415d06859b83e5f08b8a10.jpg",
+    "index": 186,
+    "sample_id": "b39923ba74415d06859b83e5f08b8a10",
+    "source_group_id": "dms:e-material-wooden-portable-communications-device-communication-device"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5296875,
+          0.515625,
+          0.8484375,
+          0.4265625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\fd3daa9ff0fa5a0498445f12c14a830a.jpg",
+    "index": 187,
+    "sample_id": "fd3daa9ff0fa5a0498445f12c14a830a",
+    "source_group_id": "dms:electronic-device-portable-communications-device-communication-device"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5015625,
+          0.4796875,
+          0.6359375,
+          0.3890625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\dabec051ac0a5c13b09a9bddbd34390e.jpg",
+    "index": 188,
+    "sample_id": "dabec051ac0a5c13b09a9bddbd34390e",
+    "source_group_id": "dms:front-black-iphone-xr-wooden-table-image-showing-lying-brown-screen"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.596875,
+          0.5890625,
+          0.4203125,
+          0.09375
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\079ef18af1ba52ac86b87cb5b82f3220.jpg",
+    "index": 189,
+    "sample_id": "079ef18af1ba52ac86b87cb5b82f3220",
+    "source_group_id": "dms:hand-grabbing-picking-up-mobile-phone-table"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4953125,
+          0.4921875,
+          0.2421875,
+          0.453125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\b8f13381a181518d8182189063114a53.jpg",
+    "index": 190,
+    "sample_id": "b8f13381a181518d8182189063114a53",
+    "source_group_id": "dms:iPhone-12-Pro-Max-1654166880"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.509375,
+          0.5109375,
+          0.23125,
+          0.4796875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\bf9d381f323f5d3ea7e40bbd22928f8c.jpg",
+    "index": 191,
+    "sample_id": "bf9d381f323f5d3ea7e40bbd22928f8c",
+    "source_group_id": "dms:iphone-12-projpg"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.7375,
+          0.5359375,
+          0.2609375,
+          0.4359375
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.3265625,
+          0.45625,
+          0.490625,
+          0.4203125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\5fd1b9bf7bab5a368166c9ef5d485467.jpg",
+    "index": 192,
+    "sample_id": "5fd1b9bf7bab5a368166c9ef5d485467",
+    "source_group_id": "dms:iphone-13-13-pro"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.7859375,
+          0.6265625,
+          0.26875,
+          0.409375
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5640625,
+          0.5671875,
+          0.1703125,
+          0.5265625
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.375,
+          0.56875,
+          0.1953125,
+          0.5265625
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.1703125,
+          0.515625,
+          0.203125,
+          0.63125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\fcc506b6f0f25545b5f0ecb2dd4a0135.jpg",
+    "index": 193,
+    "sample_id": "fcc506b6f0f25545b5f0ecb2dd4a0135",
+    "source_group_id": "dms:iphone-13-details"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.534375,
+          0.4796875,
+          0.65,
+          0.4765625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\230ecc7ed749545bbadd365681a14043.jpg",
+    "index": 194,
+    "sample_id": "230ecc7ed749545bbadd365681a14043",
+    "source_group_id": "dms:iphone-s-lying-table-home-screen-new"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5703125,
+          0.5375,
+          0.3671875,
+          0.40625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\999b9ece813e562f89e8b5587707be4c.jpg",
+    "index": 195,
+    "sample_id": "999b9ece813e562f89e8b5587707be4c",
+    "source_group_id": "dms:iphone-xs-clear-case-mockup-table_698054"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4546875,
+          0.4546875,
+          0.3296875,
+          0.384375
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\ac08b49269225e5e8c9c50c70f76e8aa.jpg",
+    "index": 196,
+    "sample_id": "ac08b49269225e5e8c9c50c70f76e8aa",
+    "source_group_id": "dms:istockphoto-1359638443-612x612"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.6046875,
+          0.48125,
+          0.75,
+          0.6359375
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\b691353ee3535402b608f13008d7f85c.jpg",
+    "index": 197,
+    "sample_id": "b691353ee3535402b608f13008d7f85c",
+    "source_group_id": "dms:lus-smart-mockup-portable-communications-device-communication-device"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.3453125,
+          0.490625,
+          0.23125,
+          0.475
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\3e0e341795085c718cb8760674b9a4ea.jpg",
+    "index": 198,
+    "sample_id": "3e0e341795085c718cb8760674b9a4ea",
+    "source_group_id": "dms:man-hand-hold-phone-with-white-screen-over-black-walnut-table-background-400"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.38125,
+          0.49375,
+          0.4390625,
+          0.2421875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\8010c5b21e1e546581efd3ae8f5d030e.jpg",
+    "index": 199,
+    "sample_id": "8010c5b21e1e546581efd3ae8f5d030e",
+    "source_group_id": "dms:martphone-texting-womans-hands-typing-smartphone-wooden-brown-table_1391"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5046875,
+          0.4953125,
+          0.43125,
+          0.9359375
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\356df549545556a8880de5eda0f9f0d8.jpg",
+    "index": 200,
+    "sample_id": "356df549545556a8880de5eda0f9f0d8",
+    "source_group_id": "dms:micromax-in-2b-1-414x800"
+  }
+]

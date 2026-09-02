@@ -1,0 +1,64 @@
+{
+  "pages": [
+    {
+      "image": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_001.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_001.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_002.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_002.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_003.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_003.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_004.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_004.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_005.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_005.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_006.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_006.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_007.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_007.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_008.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_008.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_009.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_009.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_010.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_010.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_011.jpg",
+      "items": 16,
+      "manifest": "reports\\diagnostics\\review1_phone_positive_batch_003\\page_011.json"
+    }
+  ],
+  "schema_version": 1,
+  "selected": 216,
+  "selection_offset": 1000,
+  "selection_reason": null,
+  "source_manifest": "datasets\\manifests\\v2_phone_positive_review.json"
+}

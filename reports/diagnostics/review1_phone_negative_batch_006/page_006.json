@@ -1,0 +1,142 @@
+[
+  {
+    "annotations": [],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\99ef25b299ba50ff90ba8328e78d3ff9.jpg",
+    "index": 101,
+    "sample_id": "99ef25b299ba50ff90ba8328e78d3ff9",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:380_jpg.rf.36a1b320a1c9770c9458fb247f2bd4eb"
+  },
+  {
+    "annotations": [],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\aca305b662665d57a5bc699ee6b7a21d.jpg",
+    "index": 102,
+    "sample_id": "aca305b662665d57a5bc699ee6b7a21d",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:383_jpg.rf.3d7022f9e579686b83ac215f3571e98b"
+  },
+  {
+    "annotations": [],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\bafacfa84fa75185932e55ba0003250b.jpg",
+    "index": 103,
+    "sample_id": "bafacfa84fa75185932e55ba0003250b",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:384_jpg.rf.10a4b55136c0daf74b75004d79d54a40"
+  },
+  {
+    "annotations": [],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\51550cb027e75056a8293594c9409ddd.jpg",
+    "index": 104,
+    "sample_id": "51550cb027e75056a8293594c9409ddd",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:385_jpg.rf.2ad413f3b004b4712bfbdbcfa8b56871"
+  },
+  {
+    "annotations": [],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\54a023f78d505d2fa70b8bc5a24c6ff3.jpg",
+    "index": 105,
+    "sample_id": "54a023f78d505d2fa70b8bc5a24c6ff3",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:386_jpg.rf.88f923a1140cdba39157cf6a549fc2ed"
+  },
+  {
+    "annotations": [],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\eae8cfddcdad5c08974388950ca2777b.jpg",
+    "index": 106,
+    "sample_id": "eae8cfddcdad5c08974388950ca2777b",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:387_jpg.rf.e92be83ad9d288a678eeebf496bb3725"
+  },
+  {
+    "annotations": [],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\954cfb7aecf5563899dc00f7196d66b5.jpg",
+    "index": 107,
+    "sample_id": "954cfb7aecf5563899dc00f7196d66b5",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:389_jpg.rf.37f7a98513e5ceaa4c512b4369f171f8"
+  },
+  {
+    "annotations": [],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\0473e29cfed8535989fbd56fc6fe53e0.jpg",
+    "index": 108,
+    "sample_id": "0473e29cfed8535989fbd56fc6fe53e0",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:390_jpg.rf.f3b65d54ec4ba5c6acbe9d07e18c192a"
+  },
+  {
+    "annotations": [],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\7fb611b9b1f25d0caf74d4f3f8788f76.jpg",
+    "index": 109,
+    "sample_id": "7fb611b9b1f25d0caf74d4f3f8788f76",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:394_jpg.rf.da601f0836909b999bd28586eb47b660"
+  },
+  {
+    "annotations": [],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\9e248e2978495b958418a19f6cf84c77.jpg",
+    "index": 110,
+    "sample_id": "9e248e2978495b958418a19f6cf84c77",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:397_jpg.rf.056e1ceb62541f6e8f13558e35b2bbc7"
+  },
+  {
+    "annotations": [],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\b78be623db975b66afa37f495909c605.jpg",
+    "index": 111,
+    "sample_id": "b78be623db975b66afa37f495909c605",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:398_jpg.rf.989966c815b66a5f337e96befbdb67ed"
+  },
+  {
+    "annotations": [],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\3071fae4878a5e5d87b9f25d5c9a5fd3.jpg",
+    "index": 112,
+    "sample_id": "3071fae4878a5e5d87b9f25d5c9a5fd3",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:399_jpg.rf.ce2b1ff7a069ce0a7c2e963e5694f5fa"
+  },
+  {
+    "annotations": [],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\26bdc2b4a6235940b2990d9518569674.jpg",
+    "index": 113,
+    "sample_id": "26bdc2b4a6235940b2990d9518569674",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:39ed160b8641404b_jpg.rf.d03003ec8afb8888b388c34e9209eef6"
+  },
+  {
+    "annotations": [],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\72e0cbd7f8ae56108b881eb75697e379.jpg",
+    "index": 114,
+    "sample_id": "72e0cbd7f8ae56108b881eb75697e379",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:3a369fb0bb89b003_jpg.rf.59818a7a84dcdf83b320e7988ac42238"
+  },
+  {
+    "annotations": [],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\77a689ba9aef53ca97201bed2afdf6ab.jpg",
+    "index": 115,
+    "sample_id": "77a689ba9aef53ca97201bed2afdf6ab",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:3aa4bfdbd7a11c16_jpg.rf.b900bcb347fb162762d1b84fe2a86f3a"
+  },
+  {
+    "annotations": [],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\4a9392bf18455607b5d5f9e03bb6838b.jpg",
+    "index": 116,
+    "sample_id": "4a9392bf18455607b5d5f9e03bb6838b",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:3ac6925efffb82dd_jpg.rf.2c50a7e4372d1b96aee79c019e670168"
+  },
+  {
+    "annotations": [],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\aa6b599398b259ae9cbb00fd43ed090f.jpg",
+    "index": 117,
+    "sample_id": "aa6b599398b259ae9cbb00fd43ed090f",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:3af00aee462fb6fa_jpg.rf.66ff14453fbcaebb063712d4d0049b1c"
+  },
+  {
+    "annotations": [],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\0f501fac98c85591ada497a4ebdf805b.jpg",
+    "index": 118,
+    "sample_id": "0f501fac98c85591ada497a4ebdf805b",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:3c23642c55868782_jpg.rf.030eeeeabbc2e71234b3c9a4e206d8c1"
+  },
+  {
+    "annotations": [],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\8666794966e254d0b670f8bb27f93882.jpg",
+    "index": 119,
+    "sample_id": "8666794966e254d0b670f8bb27f93882",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:3d5e0ed15085a893_jpg.rf.58aee7bd706ee16bebc7b18ca48df4c9"
+  },
+  {
+    "annotations": [],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\8341ff70e3255967bad9817b8c53ec07.jpg",
+    "index": 120,
+    "sample_id": "8341ff70e3255967bad9817b8c53ec07",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:3d6409b6b6bf67d0_jpg.rf.c4c97a6d546fd8c3b3d161ce967399c0"
+  }
+]

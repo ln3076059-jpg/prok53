@@ -1,0 +1,486 @@
+[
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.265625,
+          0.9,
+          0.075,
+          0.06388888888888888
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.2234375,
+          0.9277777777777778,
+          0.0671875,
+          0.075
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\7a6db7246a195ec68d96dc178fa6f3e5.jpg",
+    "index": 21,
+    "sample_id": "7a6db7246a195ec68d96dc178fa6f3e5",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:012291302267_221212153259-02_jpeg.rf.063cfcd459c5fdd52b8b4716e6e4f5cb"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.69375,
+          0.3388888888888889,
+          0.11875,
+          0.2111111111111111
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\827b992ff7d45de99f5b9436dedf899d.jpg",
+    "index": 22,
+    "sample_id": "827b992ff7d45de99f5b9436dedf899d",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:012291302267_221212162301-02_jpeg.rf.6e4e24676bd47875c7cf75603e943a6b"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.1765625,
+          0.8333333333333334,
+          0.15,
+          0.33055555555555555
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\b3034211692d555b975f0aa58c36f4ba.jpg",
+    "index": 23,
+    "sample_id": "b3034211692d555b975f0aa58c36f4ba",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:012291302267_221212171304-02_jpeg.rf.6ad257d3bef0f6187d8e72f444fa80c5"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4546875,
+          0.7805555555555556,
+          0.090625,
+          0.14166666666666666
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\d03457f787e75edebc6398d190a5be38.jpg",
+    "index": 24,
+    "sample_id": "d03457f787e75edebc6398d190a5be38",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:012291302267_221213125017-02_jpeg.rf.738cc684fb4ad5300a262074c198d305"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.3921875,
+          0.8694444444444445,
+          0.1171875,
+          0.10833333333333334
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\6377dab6ceb15d5bac0dc133f269faac.jpg",
+    "index": 25,
+    "sample_id": "6377dab6ceb15d5bac0dc133f269faac",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:012291302267_221213132016-02_jpeg.rf.9e25c4700791f5f012c5272963ae863f"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.2625,
+          0.8972222222222223,
+          0.06875,
+          0.06944444444444445
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\2573f4491b8556beac98db5eecf182a0.jpg",
+    "index": 26,
+    "sample_id": "2573f4491b8556beac98db5eecf182a0",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:012291302267_221213161017-02_jpeg.rf.f8275cfe2c12e16f2230fd5eb4960495"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.75625,
+          0.4111111111111111,
+          0.0890625,
+          0.15833333333333333
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.2640625,
+          0.8805555555555555,
+          0.078125,
+          0.05
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\c15c996ec6195a97aa092ad1bd19ac7d.jpg",
+    "index": 27,
+    "sample_id": "c15c996ec6195a97aa092ad1bd19ac7d",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:012291302267_221213162016-02_jpeg.rf.c9a10fd05b7327c79c7e13eec4d052eb"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.24375,
+          0.9111111111111111,
+          0.075,
+          0.06944444444444445
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\2d54162af4f957bb8153218ae8ccfb1f.jpg",
+    "index": 28,
+    "sample_id": "2d54162af4f957bb8153218ae8ccfb1f",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:012291302267_221213163019-02_jpeg.rf.efadabd7d848057843cc46f449447563"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.265625,
+          0.8944444444444445,
+          0.053125,
+          0.07777777777777778
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\966db64f9fb655f98e6b22c39a4222cb.jpg",
+    "index": 29,
+    "sample_id": "966db64f9fb655f98e6b22c39a4222cb",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:012291302267_221213170035-02_jpeg.rf.23efa0c48c5e2312d101fd3f7195900a"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.203125,
+          0.9444444444444444,
+          0.1671875,
+          0.10833333333333334
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\1a1416f1badf595fb2c5bba2af9dd78d.jpg",
+    "index": 30,
+    "sample_id": "1a1416f1badf595fb2c5bba2af9dd78d",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:012291302267_221213173016-02_jpeg.rf.39be0291ad73af324ff0ac8fa9034844"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.8125,
+          0.4027777777777778,
+          0.1609375,
+          0.1638888888888889
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\5f8e6ff6d55b5e6f8123d186d035fd5f.jpg",
+    "index": 31,
+    "sample_id": "5f8e6ff6d55b5e6f8123d186d035fd5f",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:012291302267_221214082004-02_jpeg.rf.0f3be179b6bcf2ebd320d1af68b131db"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.275,
+          0.8027777777777778,
+          0.1625,
+          0.25277777777777777
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\9ab366ed77545230b6a250e29add2397.jpg",
+    "index": 32,
+    "sample_id": "9ab366ed77545230b6a250e29add2397",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:012291302267_221214103441-02_jpeg.rf.003b12e63428b0f6552707777c21f6d2"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.2671875,
+          0.8777777777777778,
+          0.071875,
+          0.06388888888888888
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\42471424b67c5b5cb44b9c9292a9c4f5.jpg",
+    "index": 33,
+    "sample_id": "42471424b67c5b5cb44b9c9292a9c4f5",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:012291302267_221214105313-02_jpeg.rf.9700cd50d1a4a8c7b13c75f66d85c5b7"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.2796875,
+          0.8805555555555555,
+          0.0734375,
+          0.06944444444444445
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.234375,
+          0.9222222222222223,
+          0.0796875,
+          0.06666666666666667
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\d9332d8387295bfaadd899d8bd040e06.jpg",
+    "index": 34,
+    "sample_id": "d9332d8387295bfaadd899d8bd040e06",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:012291302267_221214111323-02_jpeg.rf.2cf3f4c28c251355ae3387f72855c799"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.3609375,
+          0.425,
+          0.1546875,
+          0.11666666666666667
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.284375,
+          0.8666666666666667,
+          0.0703125,
+          0.06666666666666667
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\fd89e307c75356d096e6ededaa2900d0.jpg",
+    "index": 35,
+    "sample_id": "fd89e307c75356d096e6ededaa2900d0",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:012291302267_221214112312-02_jpeg.rf.cc5f77541ac290b58ef9d08d3ed57b35"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.6359375,
+          0.3527777777777778,
+          0.1234375,
+          0.2222222222222222
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\e756887610435b03a132d48cfd84cf64.jpg",
+    "index": 36,
+    "sample_id": "e756887610435b03a132d48cfd84cf64",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:012291302267_221214113313-02_jpeg.rf.e5628170f9be886d753312443c5fd9a3"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.2859375,
+          0.8694444444444445,
+          0.0734375,
+          0.06666666666666667
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.2359375,
+          0.9111111111111111,
+          0.06875,
+          0.06666666666666667
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\909482556cb65a1a8e1d9d96fb5a82e8.jpg",
+    "index": 37,
+    "sample_id": "909482556cb65a1a8e1d9d96fb5a82e8",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:012291302267_221214115312-02_jpeg.rf.03082aaccc0fe49229bab4aefc0da92c"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.7578125,
+          0.3888888888888889,
+          0.1078125,
+          0.13333333333333333
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.2296875,
+          0.9222222222222223,
+          0.0625,
+          0.07777777777777778
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\280409f154cb537b9c94091abb0bfa53.jpg",
+    "index": 38,
+    "sample_id": "280409f154cb537b9c94091abb0bfa53",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:012291302267_221214121312-02_jpeg.rf.14316bc9039994a52c8b11fc0b0c2f5e"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.1859375,
+          0.8555555555555555,
+          0.134375,
+          0.18888888888888888
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\307b8a1c9c745a4fb15bc052ac2f0db0.jpg",
+    "index": 39,
+    "sample_id": "307b8a1c9c745a4fb15bc052ac2f0db0",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:012291302267_221214124312-02_jpeg.rf.14c18f4f167170f50f5994e0be41161f"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.2875,
+          0.8722222222222222,
+          0.065625,
+          0.058333333333333334
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.2515625,
+          0.9027777777777778,
+          0.046875,
+          0.07777777777777778
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\c826a890838854b585e352005809c7b0.jpg",
+    "index": 40,
+    "sample_id": "c826a890838854b585e352005809c7b0",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:012291302267_221214125328-02_jpeg.rf.cf22a7eaa8220ea6b9337062f73019ab"
+  }
+]

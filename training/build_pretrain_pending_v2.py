@@ -100,6 +100,23 @@ def _balanced_splits(rows: list[dict], source: dict[str, dict]) -> dict[str, str
     return assignments
 
 
+def _resolve_source_image(path_str: str) -> Path:
+    p = Path(path_str)
+    if p.is_file():
+        return p
+    parts = p.parts
+    di = next((i for i, part in enumerate(parts) if part.lower() == "datasets"), None)
+    if di is not None:
+        candidate = Path("datasets").joinpath(*parts[di + 1 :])
+        if candidate.is_file():
+            return candidate
+    stem = p.stem
+    matches = [m for m in Path("datasets").rglob(f"{stem}.*") if m.is_file()]
+    if len(matches) == 1:
+        return matches[0]
+    raise FileNotFoundError(f"Could not resolve image path: {path_str}")
+
+
 def _detection_dataset(
     rows: list[dict],
     output: Path,
@@ -119,9 +136,7 @@ def _detection_dataset(
         split = splits.get(sample_id)
         if split not in SPLITS:
             raise ValueError(f"reviewed sample lacks inherited split: {sample_id}")
-        source_image = Path(item["image_path"])
-        if not source_image.is_file():
-            raise FileNotFoundError(source_image)
+        source_image = _resolve_source_image(item["image_path"])
         target_image = output / "images" / split / f"{sample_id}{source_image.suffix.lower()}"
         target_label = output / "labels" / split / f"{sample_id}.txt"
         shutil.copy2(source_image, target_image)
@@ -229,7 +244,7 @@ def _classifier_dataset(
         source_key = str(item.get("source_sample_id", sample_id))
         safe_sample_id = source_key.replace(":", "_").replace("/", "_").replace("\\", "_")
         crop_id = f"{safe_sample_id}_box_{box_index}"
-        source_image = Path(item["image_path"])
+        source_image = _resolve_source_image(item["image_path"])
         with Image.open(source_image) as image:
             crop = _crop(image, annotation["yolo"], padding)
         target = output / split / CLASSIFIER_NAMES[class_id] / f"{crop_id}.jpg"

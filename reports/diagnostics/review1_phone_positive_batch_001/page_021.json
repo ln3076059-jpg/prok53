@@ -1,0 +1,498 @@
+[
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4984375,
+          0.496875,
+          0.253125,
+          0.5015625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\61e43bf9122b57d3a18d6fdb64855942.jpg",
+    "index": 401,
+    "sample_id": "61e43bf9122b57d3a18d6fdb64855942",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:apple-iphone-11-128gb_1_thumbnail_jpg.rf.3546574594e8fe766f838ede8aee0220"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4796875,
+          0.4640625,
+          0.2640625,
+          0.4
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\ef27eba99d1256cb8144f815eaf482a0.jpg",
+    "index": 402,
+    "sample_id": "ef27eba99d1256cb8144f815eaf482a0",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:apple-iphone-13-unboxing_00_jpg.rf.244810127bb42e01068dc142173b12f1"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4953125,
+          0.5390625,
+          0.1125,
+          0.2171875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\82fd82708d9756e1a1217f6de0fddf78.jpg",
+    "index": 403,
+    "sample_id": "82fd82708d9756e1a1217f6de0fddf78",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:back-to-school-a-neat-flat-lay-minimalistic-still-life-composition-of-picture-id1264532867_jpg.rf.5343c52ca41a6ca7cb736a0e5a0ac4b6"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.8328125,
+          0.5015625,
+          0.228125,
+          0.5015625
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.6296875,
+          0.5015625,
+          0.1671875,
+          0.49375
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.375,
+          0.4984375,
+          0.1625,
+          0.5078125
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.175,
+          0.4984375,
+          0.25,
+          0.515625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\3b79dba4ce0259a2aee4c20739e24cbe.jpg",
+    "index": 404,
+    "sample_id": "3b79dba4ce0259a2aee4c20739e24cbe",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:best-phone-2022-920x613_jpg.rf.d00a601a1e56b23f3e425b4b4c4ea08f"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.509375,
+          0.5,
+          0.5375,
+          0.4578125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\73387de6a8de58429d78cdcd6c4054a9.jpg",
+    "index": 405,
+    "sample_id": "73387de6a8de58429d78cdcd6c4054a9",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:best_android_phone_uk_2022_smartphones_jpg.rf.34fcfc3ea44e18e066785694773c4001"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4875,
+          0.5,
+          0.2578125,
+          0.5453125
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.8328125,
+          0.5046875,
+          0.2859375,
+          0.5484375
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.15625,
+          0.4890625,
+          0.271875,
+          0.5015625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\3c6c9f5ed4d650bea2fd97eaa5909e28.jpg",
+    "index": 406,
+    "sample_id": "3c6c9f5ed4d650bea2fd97eaa5909e28",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:best_big_phone_2022_hero_mk1_jpg.rf.85d845af0ec0842ac1c64adf4616e04f"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.484375,
+          0.5046875,
+          0.5453125,
+          0.4859375
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\011644f9fe7d59228454fe4706748243.jpg",
+    "index": 407,
+    "sample_id": "011644f9fe7d59228454fe4706748243",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:best_smartphone_2022_uk_phones_samsung_galaxy_s22_ultra_jpg.rf.a17133c19b6889871b4c136296d8e3d4"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.771875,
+          0.46875,
+          0.196875,
+          0.390625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\c1274a14984b5a9ba39d671a0a349481.jpg",
+    "index": 408,
+    "sample_id": "c1274a14984b5a9ba39d671a0a349481",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:blank-screen-phone-on-table-wood-background-with-space-H3J2GW_jpg.rf.9661d36369660f0701e53ba181756c1f"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5046875,
+          0.5,
+          0.4671875,
+          0.9890625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\1ffdd517c4bf51098e2893d5f6e2cbbb.jpg",
+    "index": 409,
+    "sample_id": "1ffdd517c4bf51098e2893d5f6e2cbbb",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:bora-purple-hero-zoom_png_jpg.rf.d1823f5d5c269760374e7e3d2758e833"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4984375,
+          0.490625,
+          0.2140625,
+          0.475
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\0b7f2869798c5aa6ba71bb1a463abc40.jpg",
+    "index": 410,
+    "sample_id": "0b7f2869798c5aa6ba71bb1a463abc40",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:budget-android-phone-2048px-nord-front_jpg.rf.fdd027e35fe692ea85d9ee6302869e3c"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.2359375,
+          0.5203125,
+          0.3953125,
+          0.515625
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.71875,
+          0.5296875,
+          0.43125,
+          0.5046875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\4c328f6e52db57a0884d23d7379ab6f0.jpg",
+    "index": 411,
+    "sample_id": "4c328f6e52db57a0884d23d7379ab6f0",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:buhw0qjrcfzblxi8_1653121322_jpeg_jpg.rf.6f07f2d8e2bfcb8bcf9ff66fd72af3dd"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.9046875,
+          0.684375,
+          0.1296875,
+          0.1921875
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.7265625,
+          0.5765625,
+          0.246875,
+          0.31875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\3fd910e7335e50c78fde57149f23200e.jpg",
+    "index": 412,
+    "sample_id": "3fd910e7335e50c78fde57149f23200e",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:business-desk-picture-id478536966_jpg.rf.d7e18dbc92cba8e8335caaedc8b9a58d"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.484375,
+          0.5625,
+          0.4890625,
+          0.6890625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\a0d4531644df5bec85635482b1943588.jpg",
+    "index": 413,
+    "sample_id": "a0d4531644df5bec85635482b1943588",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:ca9571c5546fa8b888ff49b6fed26cab_jpg.rf.8393c9830453761c5064972d0fcdf271"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4328125,
+          0.609375,
+          0.18125,
+          0.378125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\4a13898c257355c786cf89b9641c97ef.jpg",
+    "index": 414,
+    "sample_id": "4a13898c257355c786cf89b9641c97ef",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:cellphone-on-table_jpg.rf.942de4658d09b7722b237aebc9e11666"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.359375,
+          0.534375,
+          0.1734375,
+          0.2609375
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\8ef8a04c7e7f5d6587aef1211716a8dd.jpg",
+    "index": 415,
+    "sample_id": "8ef8a04c7e7f5d6587aef1211716a8dd",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:checking-in-on-texts-from-clients-picture-id915254256_jpg.rf.48d4e7f4e44ccee04e7e94a8e7900f55"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.515625,
+          0.4921875,
+          0.3171875,
+          0.5421875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\0b2767d233455f80ac468da9d13d1bb7.jpg",
+    "index": 416,
+    "sample_id": "0b2767d233455f80ac468da9d13d1bb7",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:csm_tables_f6cf95dfb2_png_jpg.rf.bcc5bb68fb8dfec631ea3943eddda3cb"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.46875,
+          0.55625,
+          0.5515625,
+          0.4359375
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.7125,
+          0.4359375,
+          0.4640625,
+          0.425
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\bebe55b9c57e55c0ab991573648cbfcf.jpg",
+    "index": 417,
+    "sample_id": "bebe55b9c57e55c0ab991573648cbfcf",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:d5b54a6ccfdb407fe0f04be8df9e08f6_jpg.rf.8e2d956f95e298cbd18da7e69afc1384"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.69375,
+          0.515625,
+          0.296875,
+          0.2234375
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\57cf3584119555df9a5e82edf044cf35.jpg",
+    "index": 418,
+    "sample_id": "57cf3584119555df9a5e82edf044cf35",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:dad2c94fb06c0455f29a533fa9340ae4_jpg.rf.df93061923b4e98a9481c362dcaed5f4"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.625,
+          0.49375,
+          0.5265625,
+          0.3015625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\f3157d7b8f935ae18eb713640153ccac.jpg",
+    "index": 419,
+    "sample_id": "f3157d7b8f935ae18eb713640153ccac",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:depositphotos_56418533-stock-photo-smartphone-on-wooden-table-with_jpg.rf.bb126718443b516356d3cf7570d632ac"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.75625,
+          0.3859375,
+          0.31875,
+          0.409375
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\5a84099af132593793edf1f110a8fb32.jpg",
+    "index": 420,
+    "sample_id": "5a84099af132593793edf1f110a8fb32",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:depositphotos_64772535-stock-photo-hands-of-woman-with-pen_jpg.rf.a27c048a9afa532d795c5317a49827ff"
+  }
+]

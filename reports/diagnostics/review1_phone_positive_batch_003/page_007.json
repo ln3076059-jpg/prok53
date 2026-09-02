@@ -1,0 +1,618 @@
+[
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.3,
+          0.5265625,
+          0.1203125,
+          0.225
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\c97974a4b3d55eb5aa0cba3e4a457532.jpg",
+    "index": 121,
+    "sample_id": "c97974a4b3d55eb5aa0cba3e4a457532",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:photo-1574915960598-2f3696e8556b_jpg.rf.4aed3862b830e99f35b219c96a98cdad"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.484375,
+          0.41875,
+          0.515625,
+          0.4171875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\c321b4bbb1da5dd38e29b2c7a9d0a8ff.jpg",
+    "index": 122,
+    "sample_id": "c321b4bbb1da5dd38e29b2c7a9d0a8ff",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:photo-1580650487485-7f3a88a39499_jpg.rf.46762bdd9fd984bf5e5bc445a2f962ff"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4796875,
+          0.5375,
+          0.23125,
+          0.315625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\813b35fd775d5d518d3dbb07f14cf05d.jpg",
+    "index": 123,
+    "sample_id": "813b35fd775d5d518d3dbb07f14cf05d",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:photo-1587517495424-978e0364ae20_jpg.rf.7e1dd509af42c17187ecdb682e3fdba2"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.721875,
+          0.5046875,
+          0.55625,
+          0.7421875
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.2734375,
+          0.4765625,
+          0.5453125,
+          0.6984375
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\5ce624b6961258a79f46f8625df883d9.jpg",
+    "index": 124,
+    "sample_id": "5ce624b6961258a79f46f8625df883d9",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:photo_jpg.rf.76fd30f9e97ca8c81d44d52125046d0e"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.328125,
+          0.5046875,
+          0.403125,
+          0.7421875
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.6125,
+          0.5671875,
+          0.16875,
+          0.615625
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.7546875,
+          0.615625,
+          0.10625,
+          0.5203125
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.8609375,
+          0.6421875,
+          0.0984375,
+          0.465625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\4c3cd0222e175ddf8ae1efa89997d560.jpg",
+    "index": 125,
+    "sample_id": "4c3cd0222e175ddf8ae1efa89997d560",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:pic_jpg.rf.33a570eb92729ac9bbfa41da2e9f2924"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.509375,
+          0.5015625,
+          0.5625,
+          0.6171875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\b44f159d3f5b50eeae2d6a11fba0cd13.jpg",
+    "index": 126,
+    "sample_id": "b44f159d3f5b50eeae2d6a11fba0cd13",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:picography-white-iphone-on-wooden-table-768x512_jpg.rf.40827cae1f7ce13124fe4bc4059855cf"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5703125,
+          0.5,
+          0.1234375,
+          0.253125
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4734375,
+          0.5,
+          0.0828125,
+          0.25
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.403125,
+          0.503125,
+          0.053125,
+          0.2421875
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.3484375,
+          0.5140625,
+          0.046875,
+          0.225
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\bf79b69d8b8a5f01a0c9c1cb7aaa1612.jpg",
+    "index": 127,
+    "sample_id": "bf79b69d8b8a5f01a0c9c1cb7aaa1612",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:pm1-MMT-593442-sm-221003_DER-76842a70-2667-4ffc-aa64-6e75e53e003a_jpg.rf.01e95edf0e23c5548964b59377470962"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.603125,
+          0.471875,
+          0.3703125,
+          0.3078125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\64e1648dfdb0538bbee00a43edfacb38.jpg",
+    "index": 128,
+    "sample_id": "64e1648dfdb0538bbee00a43edfacb38",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:premium_photo-1661673915957-56e4c4af1a69_jpg.rf.4f5b1c796e6020734a7d20d1ec5d3b0d"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.6140625,
+          0.8109375,
+          0.1375,
+          0.0171875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\8040978617815a81a2b19242ba87abb2.jpg",
+    "index": 129,
+    "sample_id": "8040978617815a81a2b19242ba87abb2",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:premium_photo-1664297674798-b5a47c24f34a_jpg.rf.5c805f5448a6c3485de3793ac0fe2467"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.1921875,
+          0.6296875,
+          0.29375,
+          0.1953125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\48839296a27d5d7e9719021b96d4bf09.jpg",
+    "index": 130,
+    "sample_id": "48839296a27d5d7e9719021b96d4bf09",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:ratio3x2_1800_jpg.rf.253f72713fe8a993f5d14f2bb6f0af87"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.7234375,
+          0.4546875,
+          0.290625,
+          0.2828125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\9eb9d5f1e0785107889612080d4aaaaa.jpg",
+    "index": 131,
+    "sample_id": "9eb9d5f1e0785107889612080d4aaaaa",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:rw-phone-cam-as-webcam-cover_png_jpg.rf.c52b5509a2d0e1c76f2da91d8685687b"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.221875,
+          0.4984375,
+          0.2140625,
+          0.425
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5125,
+          0.4953125,
+          0.2,
+          0.425
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.7890625,
+          0.4984375,
+          0.1953125,
+          0.425
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\87d6233adefd5369b607b764a3262109.jpg",
+    "index": 132,
+    "sample_id": "87d6233adefd5369b607b764a3262109",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:s-l640_jpg.rf.52ddaca6fc58a12abc41c0201e9dfa1b"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.2953125,
+          0.5,
+          0.315625,
+          0.9203125
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.6578125,
+          0.4953125,
+          0.415625,
+          0.9203125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\e1c4d720341758cebf2a608d530bd533.jpg",
+    "index": 133,
+    "sample_id": "e1c4d720341758cebf2a608d530bd533",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:samsung-galaxy-a33-blue-front-m_jpg.rf.28540076e8bd0f5f7276f8729fd0b060"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4765625,
+          0.49375,
+          0.4390625,
+          0.46875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\f5e64bb442c75bdb8a0d6dafc4d99c13.jpg",
+    "index": 134,
+    "sample_id": "f5e64bb442c75bdb8a0d6dafc4d99c13",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:samsung-phone-on-table_jpg.rf.b9fa08a51f3298dac3c9308089a53e9e"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4984375,
+          0.53125,
+          0.3015625,
+          0.23125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\eae06bfa71425207bc0b6949c0db20e3.jpg",
+    "index": 135,
+    "sample_id": "eae06bfa71425207bc0b6949c0db20e3",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:shutterstock_790394446_jpg.rf.27d3494325ff66f1ebc0685091f11423"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.2046875,
+          0.665625,
+          0.1265625,
+          0.228125
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5234375,
+          0.665625,
+          0.115625,
+          0.228125
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.840625,
+          0.6640625,
+          0.11875,
+          0.23125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\f38a0c30448a59459e376ec90ebc1050.jpg",
+    "index": 136,
+    "sample_id": "f38a0c30448a59459e376ec90ebc1050",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:skynews-smartphones-science_4553308_jpg.rf.22f22a6cc9b3ac2d2cd488b0e8841da9"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.375,
+          0.4984375,
+          0.18125,
+          0.51875
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5921875,
+          0.5015625,
+          0.2421875,
+          0.515625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\e29606b6463f5762932680206d93ee5d.jpg",
+    "index": 137,
+    "sample_id": "e29606b6463f5762932680206d93ee5d",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:sm-s901_galaxys22_front_phantomwhite_jpg.rf.b1397aec5ab09d10b7fb97cf95993e71"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.6109375,
+          0.5203125,
+          0.3375,
+          0.1453125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\36e274e774cf5602b19ea46b042d95eb.jpg",
+    "index": 138,
+    "sample_id": "36e274e774cf5602b19ea46b042d95eb",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:smart-phone-place-on-wooden-table-in-coffee-shop-concept-forget-lost-picture-id944879504_jpg.rf.e03f7efbfb9712ebd8fb3a713ec8edbf"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.490625,
+          0.5046875,
+          0.225,
+          0.453125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\e5405b27c9cf5679879fbc13d93f01bf.jpg",
+    "index": 139,
+    "sample_id": "e5405b27c9cf5679879fbc13d93f01bf",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:smart-phone-place-table-wood-footage-127404166_iconl_jpeg_jpg.rf.6671c0fff97f4ef0972c3a5eee543c4a"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.8578125,
+          0.63125,
+          0.2171875,
+          0.2796875
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.6,
+          0.60625,
+          0.20625,
+          0.3125
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.2875,
+          0.6390625,
+          0.3234375,
+          0.209375
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.44375,
+          0.3796875,
+          0.275,
+          0.140625
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.15625,
+          0.4234375,
+          0.2359375,
+          0.3484375
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.7890625,
+          0.340625,
+          0.3125,
+          0.203125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\000bce8c220d5795b3350d273698d156.jpg",
+    "index": 140,
+    "sample_id": "000bce8c220d5795b3350d273698d156",
+    "source_group_id": "dms:GROUP_REVIEW_REQUIRED:smartphone-composite1-getty-images-Neil-Godwin_jpg.rf.0c0191845cb6b1fe4d6b72892293c0d0"
+  }
+]

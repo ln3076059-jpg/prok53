@@ -1,0 +1,346 @@
+[
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5234375,
+          0.496875,
+          0.4796875,
+          0.1203125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\e40e0a72ce135c7fa998fca60a07d0b5.jpg",
+    "index": 201,
+    "sample_id": "e40e0a72ce135c7fa998fca60a07d0b5",
+    "source_group_id": "dms:mobile-phone-on-wooden-table-260nw"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5015625,
+          0.4359375,
+          0.225,
+          0.4625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\abd1613145795ed8bff276eb20d232b7.jpg",
+    "index": 202,
+    "sample_id": "abd1613145795ed8bff276eb20d232b7",
+    "source_group_id": "dms:moscow-russia-2020-january-23-260nw"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4953125,
+          0.4953125,
+          0.415625,
+          0.8890625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\a4627daf21dc545daf53f60993900375.jpg",
+    "index": 203,
+    "sample_id": "a4627daf21dc545daf53f60993900375",
+    "source_group_id": "dms:moto-db-709x800"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5046875,
+          0.4796875,
+          0.3890625,
+          0.8359375
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\1ed50ef9b6995928bc5efd8395643362.jpg",
+    "index": 204,
+    "sample_id": "1ed50ef9b6995928bc5efd8395643362",
+    "source_group_id": "dms:moto-g52-db-709x800"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.6578125,
+          0.5734375,
+          0.5,
+          0.83125
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.309375,
+          0.4203125,
+          0.4359375,
+          0.8203125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\d8a40a92ea9f531cb516c64433d95d05.jpg",
+    "index": 205,
+    "sample_id": "d8a40a92ea9f531cb516c64433d95d05",
+    "source_group_id": "dms:motorola-edge-30-pro-657x800"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.378125,
+          0.46875,
+          0.203125,
+          0.365625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\2220b6b36d135305a1ecd3335db1527f.jpg",
+    "index": 206,
+    "sample_id": "2220b6b36d135305a1ecd3335db1527f",
+    "source_group_id": "dms:multiple-android-applications-menu-wroclaw-poland-march-huawei-p-device-desk-concept"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.6234375,
+          0.534375,
+          0.375,
+          0.3671875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\c8a453f509a85938b75cd61fc5c3ef0d.jpg",
+    "index": 207,
+    "sample_id": "c8a453f509a85938b75cd61fc5c3ef0d",
+    "source_group_id": "dms:ne-december-modern-iphone-space-gray-notebook-and-laptop-on-table"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.553125,
+          0.471875,
+          0.35625,
+          0.1890625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\97f6b266e74b5965886858a58bb0a006.jpg",
+    "index": 208,
+    "sample_id": "97f6b266e74b5965886858a58bb0a006",
+    "source_group_id": "dms:new-delhi-india-july-25-260nw"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5421875,
+          0.58125,
+          0.2171875,
+          0.4390625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\7b196eda90755c4586600df62b3d9afc.jpg",
+    "index": 209,
+    "sample_id": "7b196eda90755c4586600df62b3d9afc",
+    "source_group_id": "dms:ontent-creator-environment-with-keyboard-camera-mic-green-screen_442713"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.596875,
+          0.55625,
+          0.690625,
+          0.6125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\b9ce005ff97153b5a1b4f3e3a2dc60c7.jpg",
+    "index": 210,
+    "sample_id": "b9ce005ff97153b5a1b4f3e3a2dc60c7",
+    "source_group_id": "dms:phone-on-table-running-android"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4109375,
+          0.578125,
+          0.66875,
+          0.4421875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\a94fda84b9685ed59dc436c453abd554.jpg",
+    "index": 211,
+    "sample_id": "a94fda84b9685ed59dc436c453abd554",
+    "source_group_id": "dms:phone-table"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.796875,
+          0.51875,
+          0.2421875,
+          0.3703125
+        ]
+      },
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.21875,
+          0.5328125,
+          0.1453125,
+          0.2828125
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\684db44fb94e561688a71548a27a54cf.jpg",
+    "index": 212,
+    "sample_id": "684db44fb94e561688a71548a27a54cf",
+    "source_group_id": "dms:pjimage-5"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.3859375,
+          0.5265625,
+          0.2359375,
+          0.4796875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\49dcf19bddf053b3b76d6f89c68617ab.jpg",
+    "index": 213,
+    "sample_id": "49dcf19bddf053b3b76d6f89c68617ab",
+    "source_group_id": "dms:screen-wooden-table-with-other-accessories-top-view-green-screen_442713"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.3875,
+          0.53125,
+          0.7703125,
+          0.5421875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\75c9fe71826e516e9278a7b500c4aa4b.jpg",
+    "index": 214,
+    "sample_id": "75c9fe71826e516e9278a7b500c4aa4b",
+    "source_group_id": "dms:showing-table-bangkok-thailand-oct-iphone-pro-max-space-gray-color"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.5015625,
+          0.509375,
+          0.2421875,
+          0.5265625
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\55eb3e9d393e5be99bfcd8bd422caccd.jpg",
+    "index": 215,
+    "sample_id": "55eb3e9d393e5be99bfcd8bd422caccd",
+    "source_group_id": "dms:smartphone-mockup_1310"
+  },
+  {
+    "annotations": [
+      {
+        "class_id": 0,
+        "requires_review": true,
+        "source_class_id": 3,
+        "source_class_name": "Phone",
+        "yolo": [
+          0.4953125,
+          0.64375,
+          0.1484375,
+          0.3046875
+        ]
+      }
+    ],
+    "image_path": "D:\\.idea\\project5542\\projecy7\\datasets\\incoming\\dms_v2\\7059475a8e725b73b94c83df990dcb4e.jpg",
+    "index": 216,
+    "sample_id": "7059475a8e725b73b94c83df990dcb4e",
+    "source_group_id": "dms:white-office-desk-table-with-lot-things-it-top-view-with-copy-space_219766"
+  }
+]
