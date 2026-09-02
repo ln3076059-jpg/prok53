@@ -1,0 +1,9 @@
+{
+  "id": "YOUR_KAGGLE_USERNAME/roadwatch-v2-training-kernel",
+  "title": "Roadwatch V2 Training Kernel",
+  "code_file": "notebooks/kaggle_train_v2_pretrain_pending_approval.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true"
+}

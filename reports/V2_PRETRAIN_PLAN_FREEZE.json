@@ -1,0 +1,33 @@
+{
+  "experiment_id": "MULTIMODEL_V2_PRETRAIN",
+  "repository_source_sha": "f3c39866bd1aaecb0b48db458b63632c6c568b17",
+  "components": [
+    {
+      "name": "phone_detector",
+      "model": "yolo11s.pt",
+      "imgsz": 960,
+      "epochs": 100,
+      "batch_strategy": "auto",
+      "optimizer": "AdamW"
+    },
+    {
+      "name": "seatbelt_detector",
+      "model": "yolo11s.pt",
+      "imgsz": 1280,
+      "epochs": 160,
+      "batch_strategy": "auto",
+      "optimizer": "AdamW"
+    },
+    {
+      "name": "seatbelt_classifier",
+      "model": "yolo11s-cls.pt",
+      "imgsz": 256,
+      "epochs": 80,
+      "batch_strategy": "auto",
+      "optimizer": "AdamW"
+    }
+  ],
+  "amp": true,
+  "seed": 42,
+  "training_plan_fingerprint": "b3d78ae661f69f3db88186ad06e778a2295da9d2d8782242723012a1b4e7a0e8"
+}
