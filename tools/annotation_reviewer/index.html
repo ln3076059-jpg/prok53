@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Roadwatch pretrain annotation review</title>
+  <title>Roadwatch — rà soát nhãn tiền huấn luyện</title>
   <style>
     :root {
       color-scheme: light;
@@ -94,119 +94,144 @@
 </head>
 <body>
   <header>
-    <strong>Roadwatch annotation review</strong>
-    <div class="header-status"><span id="position">Loading queue…</span><span id="savedCount">0 decided</span></div>
+    <strong>Roadwatch — rà soát nhãn</strong>
+    <div class="header-status"><span id="position">Đang tải hàng đợi…</span><span id="savedCount">0 quyết định</span></div>
   </header>
   <main>
-    <section id="stage" aria-label="Image annotation canvas"><canvas id="canvas"></canvas></section>
-    <aside class="panel" aria-label="Review controls">
-      <div id="statusMessage" class="notice" role="status" aria-live="polite">Loading review queue…</div>
+    <section id="stage" aria-label="Vùng vẽ nhãn trên ảnh"><canvas id="canvas"></canvas></section>
+    <aside class="panel" aria-label="Các điều khiển rà soát">
+      <div id="statusMessage" class="notice" role="status" aria-live="polite">Đang tải hàng đợi rà soát…</div>
       <div class="toolbar">
-        <button id="prev" type="button">Previous</button>
-        <button id="next" type="button">Next</button>
-        <button id="zoomOut" type="button">Zoom −</button>
-        <button id="zoomIn" type="button">Zoom +</button>
+        <button id="prev" type="button">Mẫu trước</button>
+        <button id="next" type="button">Mẫu tiếp theo</button>
+        <button id="zoomOut" type="button">Thu nhỏ −</button>
+        <button id="zoomIn" type="button">Phóng to +</button>
       </div>
 
       <section class="record" aria-labelledby="aiHeading">
-        <h2 id="aiHeading">model-assisted review evidence</h2>
-        <div id="aiEmpty" class="notice warning">No model-assisted review is attached. Treat every proposal as unverified.</div>
+        <h2 id="aiHeading">Bằng chứng rà soát do mô hình hỗ trợ</h2>
+        <div id="aiEmpty" class="notice warning">Không có dữ liệu rà soát từ mô hình. Hãy xem mọi đề xuất là chưa được xác minh.</div>
         <div id="aiEvidence" hidden>
-          <div class="batch-row"><span id="aiTier" class="tag">Pending</span><span id="aiDecision" class="tag">—</span></div>
+          <div class="batch-row"><span id="aiTier" class="tag">Đang chờ</span><span id="aiDecision" class="tag">—</span></div>
           <dl id="aiFacts"></dl>
           <p id="aiReasons" class="help"></p>
-          <button id="batchConfirm" type="button">Acknowledge visible high-confidence proposals</button>
-          <p class="help">Batch confirmation supports exploratory model-assisted pending-approval training only. It never creates per-sample HUMAN_APPROVED records.</p>
+          <button id="batchConfirm" type="button">Xác nhận đã xem các đề xuất độ tin cậy cao</button>
+          <p class="help">Xác nhận theo lô chỉ phục vụ huấn luyện thăm dò với đề xuất từ mô hình đang chờ duyệt. Thao tác này không tạo bản ghi HUMAN_APPROVED cho từng mẫu.</p>
         </div>
       </section>
 
       <section class="record" aria-labelledby="sourceHeading">
-        <h2 id="sourceHeading">Source record</h2>
+        <h2 id="sourceHeading">Thông tin nguồn</h2>
         <dl id="source"></dl>
       </section>
 
       <section class="record" aria-labelledby="annotationHeading">
-        <h2 id="annotationHeading">Canonical annotations</h2>
-        <label>New box class
+        <h2 id="annotationHeading">Nhãn chuẩn</h2>
+        <label>Lớp của khung mới
           <select id="class">
-            <option value="0">phone</option>
-            <option value="1">seatbelt_fastened</option>
-            <option value="2">seatbelt_unfastened</option>
+            <option value="0">Điện thoại</option>
+            <option value="1">Đã thắt dây an toàn</option>
+            <option value="2">Chưa thắt dây an toàn</option>
           </select>
         </label>
-        <p class="help">Drag on the image to add a box. Use the controls below to correct class, role, or delete a box.</p>
+        <p class="help">Kéo chuột trên ảnh để thêm khung. Dùng các điều khiển bên dưới để sửa lớp, vai trò hoặc xóa khung.</p>
         <div class="boxes" id="boxes"></div>
       </section>
 
       <section class="record" aria-labelledby="identityHeading">
-        <h2 id="identityHeading">Human review identity</h2>
-        <label>Reviewer ID
-          <input id="reviewer" maxlength="256" autocomplete="username" placeholder="name or organization email" required>
+        <h2 id="identityHeading">Danh tính người rà soát</h2>
+        <label>Mã người rà soát
+          <input id="reviewer" maxlength="256" autocomplete="username" placeholder="Tên hoặc email tổ chức" required>
         </label>
-        <label>Vehicle context ID
-          <input id="context" maxlength="256" placeholder="cabin / clip context" required>
+        <label>Mã ngữ cảnh phương tiện
+          <input id="context" maxlength="256" placeholder="Khoang xe hoặc ngữ cảnh đoạn video" required>
         </label>
-        <label>Occupant role
+        <label>Vai trò người ngồi trong xe
           <select id="role">
-            <option value="PENDING">Pending</option>
-            <option value="driver">Driver</option>
-            <option value="front_passenger">Front passenger</option>
-            <option value="rear_left">Rear left</option>
-            <option value="rear_center">Rear center</option>
-            <option value="rear_right">Rear right</option>
-            <option value="other_occupant">Other occupant</option>
-            <option value="UNCERTAIN">Uncertain</option>
+            <option value="PENDING">Đang chờ xác định</option>
+            <option value="driver">Tài xế</option>
+            <option value="front_passenger">Hành khách phía trước</option>
+            <option value="rear_left">Hàng sau bên trái</option>
+            <option value="rear_center">Hàng sau ở giữa</option>
+            <option value="rear_right">Hàng sau bên phải</option>
+            <option value="other_occupant">Người ngồi vị trí khác</option>
+            <option value="UNCERTAIN">Không chắc chắn</option>
           </select>
         </label>
         <div class="field-grid">
-          <label>Video ID<input id="video" maxlength="256" required></label>
-          <label>Vehicle ID<input id="vehicle" maxlength="256" required></label>
-          <label>Person ID<input id="person" maxlength="256" required></label>
-          <label>Camera ID<input id="camera" maxlength="256" required></label>
+          <label>Mã video<input id="video" maxlength="256" required></label>
+          <label>Mã phương tiện<input id="vehicle" maxlength="256" required></label>
+          <label>Mã người<input id="person" maxlength="256" required></label>
+          <label>Mã camera<input id="camera" maxlength="256" required></label>
         </div>
         <fieldset>
-          <legend>Confirmed conditions</legend>
+          <legend>Điều kiện đã xác nhận</legend>
           <div id="conditions" class="conditions"></div>
         </fieldset>
         <p id="conditionSuggestion" class="help"></p>
-        <label>Decision reason
+        <label>Lý do quyết định
           <select id="decisionReason" required>
-            <option value="">Select the visible evidence</option>
-            <option value="PHYSICAL_PHONE_CONFIRMED">Physical phone confirmed</option>
-            <option value="PHONE_FALSE_POSITIVE">Phone false positive</option>
-            <option value="PHONE_MISSING_LABEL">Visible phone missing from labels</option>
-            <option value="PHONE_AMBIGUOUS">Phone evidence ambiguous</option>
-            <option value="MOUNTED_OR_STATIC_PHONE">Mounted or static phone</option>
-            <option value="UPPER_BODY_ROI_CONFIRMED">Upper-body ROI confirmed</option>
-            <option value="SEATBELT_STATE_CONFIRMED">Seatbelt state confirmed</option>
-            <option value="UNCERTAIN_OR_OCCLUDED">Uncertain or occluded belt</option>
-            <option value="HARD_NEGATIVE_CONFIRMED">Hard negative confirmed</option>
-            <option value="INSUFFICIENT_EVIDENCE">Insufficient evidence</option>
-            <option value="OTHER_DOCUMENTED_IN_NOTES">Other — explained in notes</option>
+            <option value="">Chọn bằng chứng quan sát được</option>
+            <option value="PHYSICAL_PHONE_CONFIRMED">Xác nhận có điện thoại thật</option>
+            <option value="PHONE_FALSE_POSITIVE">Phát hiện điện thoại là dương tính giả</option>
+            <option value="PHONE_MISSING_LABEL">Có điện thoại nhưng bị thiếu nhãn</option>
+            <option value="PHONE_AMBIGUOUS">Bằng chứng về điện thoại chưa rõ</option>
+            <option value="MOUNTED_OR_STATIC_PHONE">Điện thoại được gắn cố định hoặc đứng yên</option>
+            <option value="UPPER_BODY_ROI_CONFIRMED">Xác nhận vùng thân trên</option>
+            <option value="SEATBELT_STATE_CONFIRMED">Xác nhận trạng thái dây an toàn</option>
+            <option value="UNCERTAIN_OR_OCCLUDED">Dây an toàn không rõ hoặc bị che khuất</option>
+            <option value="HARD_NEGATIVE_CONFIRMED">Xác nhận mẫu âm khó</option>
+            <option value="INSUFFICIENT_EVIDENCE">Không đủ bằng chứng</option>
+            <option value="OTHER_DOCUMENTED_IN_NOTES">Lý do khác — giải thích trong ghi chú</option>
           </select>
         </label>
-        <label>Review notes
-          <textarea id="notes" maxlength="4000" placeholder="Visible evidence, corrections, or ambiguity"></textarea>
+        <label>Ghi chú rà soát
+          <textarea id="notes" maxlength="4000" placeholder="Bằng chứng quan sát được, nội dung chỉnh sửa hoặc điểm chưa rõ"></textarea>
         </label>
       </section>
 
       <section class="record" aria-labelledby="decisionHeading">
-        <h2 id="decisionHeading">Human decision</h2>
-        <div class="notice warning">Approval requires named human provenance, complete metadata, confirmed conditions, resolved roles, and valid boxes. Unclear belt evidence must remain uncertain.</div>
+        <h2 id="decisionHeading">Quyết định của người rà soát</h2>
+        <div class="notice warning">Phê duyệt yêu cầu danh tính người rà soát, metadata đầy đủ, điều kiện đã xác nhận, vai trò đã xác định và khung hợp lệ. Bằng chứng dây an toàn không rõ phải giữ trạng thái không chắc chắn.</div>
         <div class="actions">
-          <button class="primary" data-status="APPROVED" type="button">Approve boxes</button>
-          <button class="negative" data-status="APPROVED_NEGATIVE" type="button">Approve negative</button>
-          <button data-status="UNCERTAIN" type="button">Mark uncertain</button>
-          <button class="danger" data-status="REJECTED" type="button">Reject sample</button>
+          <button class="primary" data-status="APPROVED" type="button">Phê duyệt các khung</button>
+          <button class="negative" data-status="APPROVED_NEGATIVE" type="button">Phê duyệt mẫu âm</button>
+          <button data-status="UNCERTAIN" type="button">Đánh dấu không chắc chắn</button>
+          <button class="danger" data-status="REJECTED" type="button">Loại mẫu</button>
         </div>
       </section>
     </aside>
   </main>
   <script>
     const names = ["phone", "seatbelt_fastened", "seatbelt_unfastened"];
+    const nameLabels = ["Điện thoại", "Đã thắt dây an toàn", "Chưa thắt dây an toàn"];
     const roles = ["PENDING", "driver", "front_passenger", "rear_left", "rear_center", "rear_right", "other_occupant", "UNCERTAIN"];
+    const roleLabels = {
+      PENDING: "Đang chờ xác định", driver: "Tài xế", front_passenger: "Hành khách phía trước",
+      rear_left: "Hàng sau bên trái", rear_center: "Hàng sau ở giữa", rear_right: "Hàng sau bên phải",
+      other_occupant: "Người ngồi vị trí khác", UNCERTAIN: "Không chắc chắn"
+    };
     const colors = ["#ff3b30", "#198038", "#b28600"];
     const conditionOptions = ["daylight", "night", "low_light", "rain", "glare", "reflection", "windshield_reflection", "motion_blur", "video_compression", "partial_occlusion", "dark_windshield", "oblique_view"];
+    const conditionLabels = {
+      daylight: "Ban ngày", night: "Ban đêm", low_light: "Ánh sáng yếu", rain: "Mưa",
+      glare: "Chói sáng", reflection: "Phản chiếu", windshield_reflection: "Phản chiếu trên kính chắn gió",
+      motion_blur: "Nhòe chuyển động", video_compression: "Nén video", partial_occlusion: "Che khuất một phần",
+      dark_windshield: "Kính chắn gió tối", oblique_view: "Góc nhìn xiên"
+    };
+    const tierLabels = {
+      HIGH_CONFIDENCE: "Độ tin cậy cao", MEDIUM_CONFIDENCE: "Độ tin cậy trung bình",
+      UNCERTAIN: "Không chắc chắn", UNKNOWN: "Chưa xác định"
+    };
+    const decisionLabels = {
+      PASS: "Đạt", UNCERTAIN: "Không chắc chắn", REJECT: "Loại", REJECTED: "Đã loại"
+    };
+    const evidenceLabels = {
+      POSSIBLE_MISSING_PHONE_LABEL: "Có thể thiếu nhãn điện thoại"
+    };
+    const reasonLabels = {
+      phone_detector_found_candidate_in_proposed_negative: "Bộ phát hiện tìm thấy điện thoại trong mẫu âm đề xuất"
+    };
     let queue = [], index = 0, scale = 1, start = null, saving = false;
     const image = new Image();
     const canvas = document.querySelector("#canvas");
@@ -226,7 +251,7 @@
     function renderConditions(values = []) {
       const selected = new Set(values);
       document.querySelector("#conditions").innerHTML = conditionOptions.map(value =>
-        `<label><input type="checkbox" value="${value}" ${selected.has(value) ? "checked" : ""}>${value.replaceAll("_", " ")}</label>`
+        `<label><input type="checkbox" value="${value}" ${selected.has(value) ? "checked" : ""}>${conditionLabels[value] || value}</label>`
       ).join("");
     }
     function renderFacts(target, facts) {
@@ -237,19 +262,19 @@
     async function loadQueue() {
       try {
         const [queueResponse, statusResponse] = await Promise.all([fetch("/api/queue"), fetch("/api/status")]);
-        if (!queueResponse.ok || !statusResponse.ok) throw new Error("Reviewer API did not return a valid queue/status response.");
+        if (!queueResponse.ok || !statusResponse.ok) throw new Error("API rà soát không trả về hàng đợi hoặc trạng thái hợp lệ.");
         queue = await queueResponse.json();
         const status = await statusResponse.json();
-        document.querySelector("#savedCount").textContent = `${status.decided} decided · ${status.proposal_samples_acknowledged} proposals acknowledged`;
+        document.querySelector("#savedCount").textContent = `${status.decided} quyết định · ${status.proposal_samples_acknowledged} đề xuất đã xác nhận xem`;
         if (!queue.length) {
           document.querySelector("#position").textContent = "0 / 0";
-          setStatus("No pending samples in this queue.", "success");
+          setStatus("Hàng đợi không còn mẫu nào đang chờ rà soát.", "success");
           return;
         }
-        setStatus("Queue loaded. Inspect model evidence before making a human decision.");
+        setStatus("Đã tải hàng đợi. Hãy kiểm tra bằng chứng của mô hình trước khi đưa ra quyết định của con người.");
         loadSample();
       } catch (error) {
-        setStatus(`${error.message} Check that app.py is running, then reload this page.`, "error");
+        setStatus(`${error.message} Hãy kiểm tra ứng dụng rà soát đang chạy, sau đó tải lại trang.`, "error");
       }
     }
     function loadSample() {
@@ -268,15 +293,15 @@
       document.querySelector("#camera").value = sample.camera_id || "";
       renderConditions(sample.conditions || []);
       document.querySelector("#conditionSuggestion").textContent = suggestions.conditions?.length
-        ? `Model suggestions (not approved): ${suggestions.conditions.join(", ")}`
-        : "No model condition suggestion; select only what is visibly supported.";
+        ? `Gợi ý của mô hình (chưa được phê duyệt): ${suggestions.conditions.map(value => conditionLabels[value] || value).join(", ")}`
+        : "Mô hình không gợi ý điều kiện nào; chỉ chọn những điều kiện quan sát được rõ ràng.";
       renderFacts(document.querySelector("#source"), {
-        source: sample.source_id || "—", asset: sample.source_asset_id || "—",
-        group: sample.source_group_id || "—", license: sample.license || "—"
+        "Nguồn": sample.source_id || "—", "Tài nguyên": sample.source_asset_id || "—",
+        "Nhóm": sample.source_group_id || "—", "Giấy phép": sample.license || "—"
       });
       renderAi(sample.proposal_review);
       image.onload = () => { canvas.width = image.naturalWidth; canvas.height = image.naturalHeight; draw(); };
-      image.onerror = () => setStatus("Image failed to load. Verify the incoming dataset path and sample ID.", "error");
+      image.onerror = () => setStatus("Không tải được ảnh. Hãy kiểm tra đường dẫn tập dữ liệu và mã mẫu.", "error");
       image.src = `/api/image/${encodeURIComponent(sample.sample_id)}?v=${Date.now()}`;
       renderBoxes();
       document.querySelector("#prev").disabled = index === 0;
@@ -287,16 +312,17 @@
       document.querySelector("#aiEvidence").hidden = !review;
       if (!review) return;
       const tier = document.querySelector("#aiTier");
-      tier.textContent = review.tier || "UNKNOWN";
+      tier.textContent = tierLabels[review.tier] || review.tier || tierLabels.UNKNOWN;
       tier.className = `tag ${review.tier === "HIGH_CONFIDENCE" ? "high" : review.tier === "MEDIUM_CONFIDENCE" ? "medium" : "uncertain"}`;
-      document.querySelector("#aiDecision").textContent = review.decision || "—";
+      document.querySelector("#aiDecision").textContent = decisionLabels[review.decision] || review.decision || "—";
       renderFacts(document.querySelector("#aiFacts"), {
-        confidence: Number(review.confidence || 0).toLocaleString(undefined, {style: "percent", maximumFractionDigits: 1}),
-        evidence: review.evidence_level || "—", model: review.reviewer_model || "—",
-        training: review.training_eligible ? "Pretrain proposal eligible" : "Escalate / exclude",
-        governance: review.governance_eligible ? "Eligible" : "Not human-approved"
+        "Độ tin cậy": Number(review.confidence || 0).toLocaleString("vi-VN", {style: "percent", maximumFractionDigits: 1}),
+        "Bằng chứng": evidenceLabels[review.evidence_level] || review.evidence_level || "—",
+        "Mô hình": review.reviewer_model || "—",
+        "Huấn luyện": review.training_eligible ? "Đủ điều kiện làm đề xuất tiền huấn luyện" : "Chuyển cấp xử lý hoặc loại",
+        "Quản trị dữ liệu": review.governance_eligible ? "Đủ điều kiện" : "Chưa được con người phê duyệt"
       });
-      document.querySelector("#aiReasons").textContent = `Reason: ${(review.reason || []).join("; ") || "No reason recorded"}`;
+      document.querySelector("#aiReasons").textContent = `Lý do: ${(review.reason || []).map(value => reasonLabels[value] || value).join("; ") || "Không có lý do được ghi nhận"}`;
       document.querySelector("#batchConfirm").disabled = !(review.tier === "HIGH_CONFIDENCE" && review.decision === "PASS");
     }
     function draw() {
@@ -306,15 +332,17 @@
         context2d.strokeStyle = colors[box.class_id]; context2d.lineWidth = 3;
         context2d.strokeRect((centerX - width / 2) * canvas.width, (centerY - height / 2) * canvas.height, width * canvas.width, height * canvas.height);
         context2d.fillStyle = colors[box.class_id]; context2d.font = "14px sans-serif";
-        context2d.fillText(`${boxIndex + 1} ${names[box.class_id]} / ${box.occupant_role || "PENDING"}`, (centerX - width / 2) * canvas.width + 4, (centerY - height / 2) * canvas.height + 16);
+        const classLabel = nameLabels[box.class_id] || names[box.class_id] || "Chưa xác định";
+        const roleValue = box.occupant_role || "PENDING";
+        context2d.fillText(`${boxIndex + 1} ${classLabel} / ${roleLabels[roleValue] || roleValue}`, (centerX - width / 2) * canvas.width + 4, (centerY - height / 2) * canvas.height + 16);
       });
       canvas.style.transform = `scale(${scale})`;
     }
     function renderBoxes() {
       const boxes = queue[index].annotations || [];
       document.querySelector("#boxes").innerHTML = boxes.length ? boxes.map((box, boxIndex) =>
-        `<div class="box"><select aria-label="Class for box ${boxIndex + 1}" data-class-index="${boxIndex}">${names.map((name, classIndex) => `<option value="${classIndex}" ${classIndex === box.class_id ? "selected" : ""}>${name}</option>`).join("")}</select><select aria-label="Role for box ${boxIndex + 1}" data-role-index="${boxIndex}">${roles.map(role => `<option value="${role}" ${role === (box.occupant_role || "PENDING") ? "selected" : ""}>${role}</option>`).join("")}</select><button type="button" data-delete="${boxIndex}">Delete</button></div>`
-      ).join("") : '<p class="help">No canonical boxes. Approve negative only after inspecting the complete image.</p>';
+        `<div class="box"><select aria-label="Lớp của khung ${boxIndex + 1}" data-class-index="${boxIndex}">${names.map((name, classIndex) => `<option value="${classIndex}" ${classIndex === box.class_id ? "selected" : ""}>${nameLabels[classIndex]}</option>`).join("")}</select><select aria-label="Vai trò trong khung ${boxIndex + 1}" data-role-index="${boxIndex}">${roles.map(role => `<option value="${role}" ${role === (box.occupant_role || "PENDING") ? "selected" : ""}>${roleLabels[role]}</option>`).join("")}</select><button type="button" data-delete="${boxIndex}">Xóa</button></div>`
+      ).join("") : '<p class="help">Chưa có khung nhãn chuẩn. Chỉ phê duyệt mẫu âm sau khi đã kiểm tra toàn bộ ảnh.</p>';
       document.querySelectorAll("[data-class-index]").forEach(node => node.onchange = () => { queue[index].annotations[node.dataset.classIndex].class_id = Number(node.value); draw(); });
       document.querySelectorAll("[data-role-index]").forEach(node => node.onchange = () => { queue[index].annotations[node.dataset.roleIndex].occupant_role = node.value; draw(); });
       document.querySelectorAll("[data-delete]").forEach(node => node.onclick = () => { queue[index].annotations.splice(Number(node.dataset.delete), 1); renderBoxes(); draw(); });
@@ -342,11 +370,11 @@
     document.querySelector("#zoomOut").onclick = () => { scale = Math.max(.5, scale - .25); draw(); };
     document.querySelector("#batchConfirm").onclick = async () => {
       const reviewerId = document.querySelector("#reviewer").value.trim();
-      if (!reviewerId) { setStatus("Enter Reviewer ID before batch confirmation.", "error"); return; }
+      if (!reviewerId) { setStatus("Hãy nhập mã người rà soát trước khi xác nhận theo lô.", "error"); return; }
       const candidates = queue.filter(sample => sample.proposal_review?.tier === "HIGH_CONFIDENCE" && sample.proposal_review?.decision === "PASS").slice(0, 500);
-      if (!candidates.length) { setStatus("No high-confidence model-assisted PASS samples are available in this queue.", "error"); return; }
-      if (!window.confirm(`Acknowledge proposals for ${candidates.length} samples? This is not governed HUMAN_APPROVED.`)) return;
-      await submit("/api/batch-acknowledgement", {reviewer_id: reviewerId, reviewer_type: "HUMAN", sample_ids: candidates.map(sample => sample.sample_id), notes: "Reviewer acknowledged visible high-confidence model proposals."}, `Acknowledged ${candidates.length} proposals for pretrain use.`);
+      if (!candidates.length) { setStatus("Hàng đợi không có mẫu đạt nào từ mô hình với độ tin cậy cao.", "error"); return; }
+      if (!window.confirm(`Xác nhận đã xem đề xuất của ${candidates.length} mẫu? Thao tác này không phải phê duyệt HUMAN_APPROVED theo quy trình quản trị.`)) return;
+      await submit("/api/batch-acknowledgement", {reviewer_id: reviewerId, reviewer_type: "HUMAN", sample_ids: candidates.map(sample => sample.sample_id), notes: "Reviewer acknowledged visible high-confidence model proposals."}, `Đã xác nhận xem đề xuất của ${candidates.length} mẫu dùng cho tiền huấn luyện.`);
     };
     async function submit(url, payload, successMessage) {
       if (saving) return false;
@@ -357,12 +385,12 @@
         if (!response.ok) {
           const body = await response.json().catch(() => ({}));
           const detail = Array.isArray(body.detail) ? body.detail.map(value => value.msg).join("; ") : body.detail;
-          throw new Error(detail || `Request failed with HTTP ${response.status}.`);
+          throw new Error(detail || `Yêu cầu thất bại với mã HTTP ${response.status}.`);
         }
         setStatus(successMessage, "success");
         return true;
       } catch (error) {
-        setStatus(`${error.message} Your edits remain on screen; correct the fields and retry.`, "error");
+        setStatus(`${error.message} Các chỉnh sửa vẫn được giữ trên màn hình; hãy sửa trường chưa hợp lệ rồi thử lại.`, "error");
         return false;
       } finally {
         saving = false;
@@ -375,7 +403,7 @@
     document.querySelectorAll("[data-status]").forEach(button => button.onclick = async () => {
       const reviewerId = document.querySelector("#reviewer").value.trim();
       const decisionReason = document.querySelector("#decisionReason").value;
-      if (!decisionReason) { setStatus("Select a decision reason tied to visible evidence.", "error"); return; }
+      if (!decisionReason) { setStatus("Hãy chọn lý do quyết định dựa trên bằng chứng quan sát được.", "error"); return; }
       localStorage.setItem("roadwatchReviewerId", reviewerId);
       const payload = {
         sample_id: queue[index].sample_id, reviewer_id: reviewerId, reviewer_type: "HUMAN",
@@ -388,7 +416,11 @@
         camera_id: document.querySelector("#camera").value,
         conditions: selectedConditions(), annotations: queue[index].annotations || []
       };
-      if (await submit("/api/decision", payload, `Saved ${button.dataset.status} for ${queue[index].sample_id}.`)) {
+      const savedStatus = {
+        APPROVED: "phê duyệt các khung", APPROVED_NEGATIVE: "phê duyệt mẫu âm",
+        UNCERTAIN: "đánh dấu không chắc chắn", REJECTED: "loại mẫu"
+      }[button.dataset.status] || button.dataset.status;
+      if (await submit("/api/decision", payload, `Đã lưu quyết định ${savedStatus} cho mẫu ${queue[index].sample_id}.`)) {
         if (index < queue.length - 1) { index += 1; loadSample(); }
       }
     });

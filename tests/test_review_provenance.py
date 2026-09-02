@@ -3,10 +3,23 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
+from pathlib import Path
 
 import pytest
 
 from tools.annotation_reviewer import app as reviewer
+
+
+def test_reviewer_interface_is_vietnamese_without_changing_governance_values():
+    page = Path("tools/annotation_reviewer/index.html").read_text(encoding="utf-8")
+
+    assert '<html lang="vi">' in page
+    assert "Bằng chứng rà soát do mô hình hỗ trợ" in page
+    assert "Quyết định của người rà soát" in page
+    assert "Phê duyệt mẫu âm" in page
+    assert "Đánh dấu không chắc chắn" in page
+    assert 'data-status="APPROVED_NEGATIVE"' in page
+    assert 'reviewer_type: "HUMAN"' in page
 
 
 def test_reviewer_documented_module_launcher_imports_from_repository_root():
