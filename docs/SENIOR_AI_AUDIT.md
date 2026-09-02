@@ -55,6 +55,7 @@ separate architecture designed to remove that cross-task label conflict.
 | MEDIUM | Frozen-result hashes could not be re-verified after evaluation | The report recorded hashes but exposed no verification command | Later prediction/model-lock replacement was detectable only manually | `training/evaluate_events.py` | Add machine verification for truth, prediction, external, ground-truth and model-lock artifacts | IMPLEMENTED_TOOLING; NOT_RUN |
 | MEDIUM | Experimental sources leaked a failed OpenCV handle and accepted malformed identifiers | Failed open did not release capture; RTSP/webcam constructors had no input contract | Resource leakage and unclear failure behavior | `backend/services/video_source.py` | Release on failed open and validate RTSP/webcam inputs while retaining experimental status | IMPLEMENTED; EXPERIMENTAL |
 | MEDIUM | Security basics had avoidable unsafe defaults | Production accepted the public development JWT secret; CSV formulas and loose MIME prefix matching were possible | Credential forgery or unsafe downstream file handling | `backend/core/config.py`, `backend/api/routes.py`, `backend/services/uploads.py` | Reject the default production secret, escape spreadsheet formula cells and require exact MIME policy | IMPLEMENTED |
+| MEDIUM | The documented reviewer command was not launchable from the repository root | Direct script execution placed only the tool directory on `sys.path`, so `training.common` could not be imported | Human review could not start using the prescribed handoff command | `docs/V2_HUMAN_REVIEW_PLAN.md`, `tools/annotation_reviewer/README.md` | Use Python module execution and regression-test the CLI import path | IMPLEMENTED_TOOLING |
 | MEDIUM | `main` is not protected | GitHub branch metadata reports `protected=false` | CI can be bypassed by a direct or force push | GitHub repository settings | Require PR, up-to-date `CI / verify`, and block force push | BLOCKED_BY_GITHUB_SETTINGS |
 
 ## Production gates that remain closed
@@ -76,13 +77,13 @@ Verification performed on 2026-09-02 against the working tree described above:
 | Check | Result |
 |---|---|
 | V1 scientific baseline diff | PASS — `experiments/MC_BOOTSTRAP_001/config.yaml` unchanged |
-| Python test suite | PASS — baseline 106/106; final 124/124 tests locally |
+| Python test suite | PASS — baseline 106/106; final 125/125 tests locally |
 | Ruff checks and Python compilation | PASS |
 | Frontend production build | PASS |
 | FastAPI in-memory startup and `/health` smoke test | PASS — HTTP 200, deliberately `degraded` without approved V2 artifacts |
 | Production fail-closed startup contract | PASS — refused missing/unapproved/uncalibrated artifacts |
 | Review UI mechanical quality detector | COMPLETED — flagged one color-token advisory and type-hierarchy warning; both corrected, detector not rerun per bounded-pass policy |
-| CI workflow | PASS — Ubuntu GitHub Actions run [`33589082514`](https://github.com/ln3076059-jpg/prok53/actions/runs/33589082514) verified fatal Ruff, compile, 124 Python tests, FastAPI import and frontend build for commit `1ae0451` |
+| CI workflow | PASS — Ubuntu GitHub Actions run [`33591019254`](https://github.com/ln3076059-jpg/prok53/actions/runs/33591019254) verified fatal Ruff, compile, 125 Python tests, FastAPI import and frontend build for commit `1638654` |
 | Runtime benchmark | NOT_RUN — no production video/model artifacts supplied |
 | Association and event-level scientific evaluation | NOT_RUN — no frozen human ground truth supplied |
 

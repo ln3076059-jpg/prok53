@@ -1,8 +1,8 @@
 {
   "audit_base_head": "40561ce2dea49169bc26152b08d54049fea83e63",
-  "audit_timestamp": "2026-09-02T03:44:13.1084455Z",
-  "code_solvable_issues_fixed": 9,
-  "code_solvable_issues_found": 9,
+  "audit_timestamp": "2026-09-02T04:33:12.8945168Z",
+  "code_solvable_issues_fixed": 10,
+  "code_solvable_issues_found": 10,
   "code_status": {
     "api_smoke": {
       "http_status": 200,
@@ -11,9 +11,9 @@
     },
     "ci": {
       "result": "PASS",
-      "run_id": 33589082514,
-      "run_url": "https://github.com/ln3076059-jpg/prok53/actions/runs/33589082514",
-      "verified_commit": "1ae045155fc9571e643f1ee75d40d0d271508afa"
+      "run_id": 33591019254,
+      "run_url": "https://github.com/ln3076059-jpg/prok53/actions/runs/33591019254",
+      "verified_commit": "1638654f954e6d2f0337bb33921a83cf0641be57"
     },
     "compile": "PASS",
     "frontend": "PASS",
@@ -21,8 +21,8 @@
     "tests": {
       "baseline_passed": 106,
       "baseline_total": 106,
-      "final_passed": 124,
-      "final_total": 124,
+      "final_passed": 125,
+      "final_total": 125,
       "meaning": "TOOLING_TESTED_NOT_MODEL_EVALUATED"
     }
   },
@@ -61,7 +61,7 @@
   "ready_for_governed_training": false,
   "ready_for_human_review": true,
   "ready_for_production": false,
-  "repository_head": "1ae045155fc9571e643f1ee75d40d0d271508afa",
+  "repository_head": "1638654f954e6d2f0337bb33921a83cf0641be57",
   "status": "ENGINEERING_PRE_TRAINING_FREEZE_REACHED",
   "v1_baseline": {
     "path": "experiments/MC_BOOTSTRAP_001/config.yaml",

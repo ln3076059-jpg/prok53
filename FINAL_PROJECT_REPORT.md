@@ -57,16 +57,17 @@ The primary blockers are human physical-phone reboxing, seatbelt upper-body sema
 CI now checks Ruff, Python compilation, tests, FastAPI import, and the frontend build without GPU
 training or dataset/model downloads. CI correctness does not supply model accuracy or clear any
 scientific gate. GitHub Actions run
-[`33589082514`](https://github.com/ln3076059-jpg/prok53/actions/runs/33589082514) passed for
-the verified code commit `1ae0451`.
+[`33591019254`](https://github.com/ln3076059-jpg/prok53/actions/runs/33591019254) passed for
+the verified code commit `1638654`.
 
 ## J. Pre-training engineering freeze
 
-The final code audit found and fixed nine engineering issue groups: single-process inference
+The final code audit found and fixed ten engineering issue groups: single-process inference
 serialization, failed-source cleanup/input validation, evidence-root containment, explicit and
 idempotent human-review provenance, calibration-to-model/threshold binding, complete configured
 component locking, post-evaluation hash verification, production secret safety, and CSV/MIME
-hardening. Local verification passes 124/124 tests; these are tooling checks, not model metrics.
+hardening, plus a repository-root-safe reviewer launcher. Local verification passes 125/125
+tests; these are tooling checks, not model metrics.
 
 The repository is ready to begin controlled human review, but governed training and production
 remain false. Durable multi-process queuing, production RTSP behavior and target-hardware

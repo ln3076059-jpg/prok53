@@ -1,8 +1,8 @@
 # Pre-train Engineering Freeze
 
 Audit base HEAD: `40561ce2dea49169bc26152b08d54049fea83e63`  
-Verified code HEAD: `1ae045155fc9571e643f1ee75d40d0d271508afa`
-Audit timestamp: `2026-09-02T03:44:13.1084455Z`  
+Verified code HEAD: `1638654f954e6d2f0337bb33921a83cf0641be57`
+Audit timestamp: `2026-09-02T04:33:12.8945168Z`
 Status: **ENGINEERING PRE-TRAINING FREEZE REACHED**
 
 ## Code verification
@@ -11,18 +11,18 @@ Status: **ENGINEERING PRE-TRAINING FREEZE REACHED**
 |---|---|
 | V1 baseline | UNCHANGED — SHA-256 `5A71E6B20A2D18CF25BBFBA4F203EBCA533549E7BCC6316A6A100034D6B2CEBB` |
 | Test baseline | PASS — 106/106 |
-| Test final | PASS — 124/124 |
+| Test final | PASS — 125/125 |
 | Ruff fatal / changed-code checks | PASS |
 | Python compile | PASS |
 | Frontend build | PASS |
 | FastAPI smoke | PASS — HTTP 200, intentionally `degraded` |
-| GitHub CI | PASS — run [`33589082514`](https://github.com/ln3076059-jpg/prok53/actions/runs/33589082514) verified code HEAD `1ae0451` |
+| GitHub CI | PASS — run [`33591019254`](https://github.com/ln3076059-jpg/prok53/actions/runs/33591019254) verified code HEAD `1638654` |
 
 The tests exercise tooling and refusal paths. Status is `TOOLING_TESTED`, not `MODEL_EVALUATED`.
 
 ## Code-solvable issues closed
 
-Nine issue groups were found and fixed:
+Ten issue groups were found and fixed:
 
 1. Concurrent BackgroundTask jobs now serialize the complete single-process inference pipeline.
 2. Failed OpenCV sources release resources; RTSP/webcam identifiers are validated.
@@ -33,6 +33,8 @@ Nine issue groups were found and fixed:
 7. Frozen evaluation can re-verify truth, predictions and every referenced lock after creation.
 8. Production rejects the public development JWT secret.
 9. CSV formula cells and loose upload MIME matching are hardened; duplicate event-state reviews fail.
+10. The documented reviewer launcher now uses module execution from the repository root and has a
+    CLI regression test.
 
 No remaining high-value engineering issue can be completed entirely in code without moving into
 human review, real capture, training/calibration, frozen evaluation, hardware validation or
