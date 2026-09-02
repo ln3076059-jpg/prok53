@@ -16,8 +16,8 @@ and runnable application scaffold. It does **not** claim governed V2 data, final
 weights, external-test results, event accuracy, human approval, or production readiness.
 
 Review 1 now provides an append-only AI-assisted review lane under explicit `admin` delegation.
-Its first visually inspected phone-negative batch contains 100 decisions: 56 Tier-B accepted
-proposals and 44 Tier-C rejection proposals. These records retain `reviewer_type: AI`, are
+Its first two visually inspected phone-negative batches contain 200 decisions: 63 Tier-B accepted
+proposals and 137 Tier-C rejection proposals. These records retain `reviewer_type: AI`, are
 `NOT_HUMAN_APPROVED` and `NOT_GOVERNED`, and do not change the zero HUMAN-approved count. The
 reviewer exposes separate model-proposal acknowledgement and explicit admin confirmation actions;
 only the latter can append a new HUMAN record after all governed metadata gates pass. See

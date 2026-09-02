@@ -50,6 +50,7 @@ def build(
     output: Path,
     *,
     reason: str | None,
+    offset: int,
     limit: int,
     per_page: int,
     columns: int,
@@ -65,11 +66,12 @@ def build(
         if isinstance(payload, list)
         else payload.get("samples", payload.get("selected", []))
     )
-    selected = [
+    candidates = [
         item
         for item in queue
         if reason is None or reason in item.get("proposal_review", {}).get("reason", [])
-    ][:limit]
+    ]
+    selected = candidates[offset : offset + limit]
     output.mkdir(parents=True, exist_ok=True)
     pages = []
     for start in range(0, len(selected), per_page):
@@ -77,15 +79,18 @@ def build(
         current = selected[start : start + per_page]
         rows = (len(current) + columns - 1) // columns
         sheet = Image.new("RGB", (columns * tile_width, rows * tile_height), "#07100d")
-        for offset, raw_item in enumerate(current):
+        for page_offset, raw_item in enumerate(current):
             item = dict(raw_item)
             resolved = _resolve_image(item, datasets_root)
             item["resolved_image_path"] = str(resolved)
-            position = start + offset + 1
+            position = start + page_offset + 1
             tile = _tile(item, position, tile_width, tile_height)
             sheet.paste(
                 tile,
-                ((offset % columns) * tile_width, (offset // columns) * tile_height),
+                (
+                    (page_offset % columns) * tile_width,
+                    (page_offset // columns) * tile_height,
+                ),
             )
             page_items.append(
                 {
@@ -110,6 +115,7 @@ def build(
         "schema_version": 1,
         "source_manifest": str(manifest),
         "selection_reason": reason,
+        "selection_offset": offset,
         "selected": len(selected),
         "pages": pages,
     }
@@ -124,6 +130,7 @@ def main() -> None:
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--reason")
+    parser.add_argument("--offset", type=int, default=0)
     parser.add_argument("--limit", type=int, default=100)
     parser.add_argument("--per-page", type=int, default=20)
     parser.add_argument("--columns", type=int, default=4)
@@ -135,6 +142,7 @@ def main() -> None:
         args.manifest,
         args.output,
         reason=args.reason,
+        offset=args.offset,
         limit=args.limit,
         per_page=args.per_page,
         columns=args.columns,

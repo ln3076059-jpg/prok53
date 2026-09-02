@@ -14,10 +14,10 @@ the available files, while semantic conditions were not inferred. The prioritize
 queue contains 3,013 `PENDING` rows (679 priority-1, 1,329 priority-2, 1,005 priority-4) and zero
 human approvals. All ten seatbelt hard-negative capture scenarios remain absent.
 
-An append-only Review 1 lane has now visually inspected the first 100 phone-negative candidates.
-It records 56 `REVIEW1_ACCEPTED_PROPOSAL` Tier-B decisions and 44
+An append-only Review 1 lane has now visually inspected the first 200 phone-negative candidates.
+It records 63 `REVIEW1_ACCEPTED_PROPOSAL` Tier-B decisions and 137
 `REVIEW1_REJECTED_PROPOSAL` Tier-C decisions, with source/image evidence hashes and admin
-delegation provenance. This reduces the immediate hard-case/manual-attention queue to 2,957 but
+delegation provenance. This reduces the immediate hard-case/manual-attention queue to 2,950 but
 does not convert any record to HUMAN approval. The derived bootstrap lane is explicitly
 `MODEL_ASSISTED`, `ADMIN_DELEGATED`, `NOT_HUMAN_APPROVED`, and `NOT_GOVERNED`; the governed lane
 contains zero records.

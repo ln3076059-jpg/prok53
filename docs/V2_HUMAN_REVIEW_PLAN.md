@@ -5,9 +5,9 @@ Status: **BLOCKED_BY_HUMAN_REVIEW**. Model-assisted review is proposal triage, n
 ## Review 1 delegated lane
 
 Review 1 decisions use `reviewer_id: review1`, `reviewer_type: AI`, `delegated_by: admin`, and
-`REVIEW1_*` statuses. The first direct visual batch covers 100 phone-negative candidates: 56 Tier B
-accepted proposals and 44 Tier C rejection proposals. The remaining human-attention queue contains
-2,957 items. The earlier administrative acknowledgement covers 3,355 worklist references (2,398
+`REVIEW1_*` statuses. The first two direct visual batches cover 200 phone-negative candidates: 63
+Tier B accepted proposals and 137 Tier C rejection proposals. The remaining human-attention queue
+contains 2,950 items. The earlier administrative acknowledgement covers 3,355 worklist references (2,398
 unique samples), but it is not per-sample visual approval. Actual HUMAN confirmations remain zero.
 
 The UI offers Review 1 filters, batch selection and an explicit admin confirmation control. The

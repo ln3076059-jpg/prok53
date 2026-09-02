@@ -89,11 +89,18 @@ def materialize(
         if trainable:
             image_target = bootstrap_output / f"{sample_id}{source.suffix.lower()}"
             label_target = bootstrap_output / f"{sample_id}.txt"
-            if image_target.exists() or label_target.exists():
-                raise FileExistsError(f"Review 1 output already exists for {sample_id}")
-            shutil.copy2(source, image_target)
             labels = "\n".join(yolo_line(annotation) for annotation in annotations)
-            label_target.write_text(labels + ("\n" if labels else ""), encoding="utf-8")
+            expected_label = labels + ("\n" if labels else "")
+            if image_target.exists() or label_target.exists():
+                if not image_target.is_file() or not label_target.is_file():
+                    raise FileExistsError(f"partial Review 1 output exists for {sample_id}")
+                if sha256_file(image_target) != sha256_file(source):
+                    raise ValueError(f"materialized image hash mismatch for {sample_id}")
+                if label_target.read_text(encoding="utf-8") != expected_label:
+                    raise ValueError(f"materialized label mismatch for {sample_id}")
+            else:
+                shutil.copy2(source, image_target)
+                label_target.write_text(expected_label, encoding="utf-8")
             item["reviewed_path"] = str(image_target.resolve())
             item["label_path"] = str(label_target.resolve())
         bootstrap_manifest.append(item)

@@ -1,0 +1,34 @@
+{
+  "pages": [
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_002\\page_001.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_002\\page_001.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_002\\page_002.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_002\\page_002.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_002\\page_003.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_002\\page_003.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_002\\page_004.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_002\\page_004.json"
+    },
+    {
+      "image": "reports\\diagnostics\\review1_phone_negative_batch_002\\page_005.jpg",
+      "items": 20,
+      "manifest": "reports\\diagnostics\\review1_phone_negative_batch_002\\page_005.json"
+    }
+  ],
+  "schema_version": 1,
+  "selected": 100,
+  "selection_offset": 100,
+  "selection_reason": "no_source_phone_box_and_no_model_phone_detection",
+  "source_manifest": "datasets\\manifests\\v2_phone_negative_priority_review.json"
+}

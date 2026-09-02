@@ -23,7 +23,7 @@ weights, calibration, external testing, and human approval remain mandatory.
 | Calibrated fusion | BLOCKED_BY_WEIGHTS | artifact absent; health exposes fallback/fail-closed |
 | Evidence clip and trace | IMPLEMENTED | canonical keyframes, protected clip/trace, full-package SHA-256 anchor and confirmation gate |
 | Human review provenance | IMPLEMENTED | explicit HUMAN assertion, append-only transition/source hashes, idempotent identical retry and serialized local append; human identity remains an operational responsibility |
-| Review 1 delegated review | PARTIAL / NOT_GOVERNED | append-only AI provenance, SHA validation, checkpoints and separate materialization lanes implemented; 100/3,013 phone-negative candidates visually reviewed, 2,957 attention items remain |
+| Review 1 delegated review | PARTIAL / NOT_GOVERNED | append-only AI provenance, SHA validation, checkpoints and separate materialization lanes implemented; 200/3,013 phone-negative candidates visually reviewed, 2,950 attention items remain |
 | Admin confirmation | IMPLEMENTED_TOOLING / NOT_RUN | explicit typed confirmation appends a separate HUMAN record only after metadata/role/condition gates; zero actual confirmations |
 | Analysis queue/concurrency | PARTIALLY_IMPLEMENTED | API/business logic separated; single-process demo worker serializes complete inference; BackgroundTasks is not durable or multi-process |
 | File source | IMPLEMENTED | `FileVideoSource` |

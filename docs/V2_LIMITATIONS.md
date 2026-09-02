@@ -5,9 +5,9 @@
 V2 is **UNTRAINED**, **NOT CALIBRATED**, **NOT HUMAN APPROVED**, and **NOT PRODUCTION READY**.
 No component or event metric has been run for a final governed V2 model.
 
-Review 1 has visually inspected 100 of the 3,013 prioritized phone-negative candidates, accepting
-56 as Tier-B proposals and proposing rejection of 44 invalid/out-of-vehicle contexts. All 100 lack
-complete governed metadata, no actual admin confirmation has occurred, and 2,957 items remain in
+Review 1 has visually inspected 200 of the 3,013 prioritized phone-negative candidates, accepting
+63 as Tier-B proposals and proposing rejection of 137 invalid/out-of-vehicle contexts. All 200 lack
+complete governed metadata, no actual admin confirmation has occurred, and 2,950 items remain in
 the post-Review-1 attention queue. Therefore this progress only applies to the explicit
 model-assisted bootstrap lane and does not clear the human-review gate.
 

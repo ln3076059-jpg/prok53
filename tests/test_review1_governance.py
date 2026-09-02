@@ -4,9 +4,11 @@ import json
 from pathlib import Path
 
 import pytest
+from PIL import Image
 from pydantic import ValidationError
 
 from tools.annotation_reviewer import app as reviewer
+from training.build_review1_contact_sheets import build as build_contact_sheets
 from training.common import sha256_file
 from training.materialize_review1_lanes import materialize
 from training.run_review1_review import run
@@ -340,6 +342,15 @@ def test_review1_correction_materializes_separate_lane_without_overwriting_sourc
     assert source_label.read_text(encoding="utf-8") == ""
     assert Path(bootstrap[0]["label_path"]).read_text(encoding="utf-8").startswith("0 ")
 
+    resumed_bootstrap, resumed_governed = materialize(
+        records,
+        [correction],
+        tmp_path / "bootstrap",
+        tmp_path / "governed",
+    )
+    assert resumed_bootstrap == bootstrap
+    assert resumed_governed == []
+
 
 def test_reviewer_ui_names_review1_and_requires_explicit_admin_confirmation():
     html = Path("tools/annotation_reviewer/index.html").read_text(encoding="utf-8")
@@ -348,3 +359,39 @@ def test_reviewer_ui_names_review1_and_requires_explicit_admin_confirmation():
     assert "Bạn đang xác nhận các đề xuất do Review 1 rà soát với tư cách admin." in html
     assert "CONFIRM_REVIEW1_PROPOSALS_AS_ADMIN" in html
     assert 'id="adminConfirm"' in html
+
+
+def test_contact_sheet_offset_selects_the_next_deterministic_batch(tmp_path):
+    queue = []
+    datasets = tmp_path / "datasets"
+    datasets.mkdir()
+    for index in range(3):
+        image = datasets / f"sample-{index}.jpg"
+        Image.new("RGB", (20, 20), color=(index * 20, 0, 0)).save(image)
+        queue.append(
+            {
+                "sample_id": f"sample-{index}",
+                "image_path": str(image),
+                "annotations": [],
+                "proposal_review": {"reason": ["target"]},
+            }
+        )
+    manifest = tmp_path / "queue.json"
+    manifest.write_text(json.dumps(queue), encoding="utf-8")
+
+    report = build_contact_sheets(
+        manifest,
+        tmp_path / "sheets",
+        reason="target",
+        offset=1,
+        limit=1,
+        per_page=1,
+        columns=1,
+        tile_width=100,
+        tile_height=100,
+        datasets_root=datasets,
+    )
+    selected = json.loads((tmp_path / "sheets" / "page_001.json").read_text())
+
+    assert report["selection_offset"] == 1
+    assert selected[0]["sample_id"] == "sample-1"
