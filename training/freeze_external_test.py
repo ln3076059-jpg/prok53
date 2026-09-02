@@ -101,6 +101,8 @@ def freeze_external_test(
             errors.append(f"{sample_id}: dataset_role must be {policy['dataset_role']}")
         if item["human_review_status"] != "APPROVED":
             errors.append(f"{sample_id}: human review is not APPROVED")
+        if item["reviewer_type"] != "HUMAN":
+            errors.append(f"{sample_id}: reviewer_type must be HUMAN")
         if not str(item["reviewer_id"]).strip() or not str(item["reviewed_at"]).strip():
             errors.append(f"{sample_id}: reviewer provenance is incomplete")
         else:
@@ -166,7 +168,11 @@ def freeze_external_test(
     if errors:
         raise ValueError("cannot freeze external test:\n- " + "\n- ".join(errors))
 
+    if output_path.exists():
+        raise FileExistsError(f"refusing to overwrite frozen external test: {output_path}")
+
     frozen = {
+        "schema_version": 2,
         "status": "FROZEN_EXTERNAL_TEST",
         "created_at": datetime.now(UTC).isoformat(),
         "dataset_role": policy["dataset_role"],
@@ -177,12 +183,15 @@ def freeze_external_test(
         "policy_sha256": sha256_file(policy_path),
         "independent_group_coverage": coverage,
         "condition_coverage": sorted(conditions),
+        "video_ids": sorted(external_values["video_id"]),
         "development_overlap": overlaps,
         "human_review_status": "ALL_APPROVED",
         "scientific_claim": "INTEGRITY_AND_ISOLATION_ONLY_NOT_MODEL_ACCURACY",
     }
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(json.dumps(frozen, indent=2, sort_keys=True), encoding="utf-8")
+    with output_path.open("x", encoding="utf-8") as handle:
+        json.dump(frozen, handle, indent=2, sort_keys=True)
+        handle.write("\n")
     return frozen
 
 

@@ -3,7 +3,10 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+from datetime import UTC, datetime
 from pathlib import Path
+
+from training.common import sha256_file
 
 REQUIRED = {"video_id", "event_type", "start_seconds", "end_seconds"}
 
@@ -33,7 +36,7 @@ def evaluate(
 ) -> dict:
     matched_truth: set[int] = set()
     matches: list[tuple[int, int]] = []
-    duplicates = 0
+    duplicate_predictions: set[int] = set()
     for prediction_index, prediction in enumerate(prediction_rows):
         candidates = [
             truth_index
@@ -51,7 +54,7 @@ def evaluate(
             matched_truth.add(truth_index)
             matches.append((truth_index, prediction_index))
         elif candidates:
-            duplicates += 1
+            duplicate_predictions.add(prediction_index)
 
     report = {"status": "MEASURED", "event_types": {}}
     event_types = sorted({row["event_type"] for row in truth_rows + prediction_rows})
@@ -81,11 +84,116 @@ def evaluate(
             "false_positives": fp,
             "missed_events": fn,
             "false_events_per_minute": fp / video_minutes if video_minutes > 0 else None,
+            "false_events_per_hour": fp / video_minutes * 60 if video_minutes > 0 else None,
             "mean_time_to_detection_seconds": sum(delays) / len(delays) if delays else None,
+            "event_fragmentation_count": len(
+                [index for index in duplicate_predictions if index in prediction_indices]
+            ),
         }
-    report["duplicate_events"] = duplicates
+    report["duplicate_events"] = len(duplicate_predictions)
+    report["event_fragmentation_count"] = len(duplicate_predictions)
     report["video_minutes"] = video_minutes
     report["matching_tolerance_seconds"] = tolerance_seconds
+    return report
+
+
+def evaluate_frozen(
+    truth_path: Path,
+    prediction_path: Path,
+    ground_truth_lock_path: Path,
+    model_lock_path: Path,
+    output_path: Path,
+    video_minutes: float,
+    tolerance_seconds: float = 0.5,
+) -> dict:
+    if output_path.exists():
+        raise FileExistsError(f"refusing to overwrite frozen event evaluation: {output_path}")
+    if video_minutes <= 0:
+        raise ValueError("frozen event evaluation requires positive --video-minutes")
+    ground_truth_lock = json.loads(ground_truth_lock_path.read_text(encoding="utf-8"))
+    if ground_truth_lock.get("status") != "FROZEN_EVENT_GROUND_TRUTH":
+        raise ValueError("ground-truth artifact is not FROZEN_EVENT_GROUND_TRUTH")
+    if ground_truth_lock.get("human_review_status") != "ALL_APPROVED":
+        raise ValueError("ground-truth artifact is not fully human-approved")
+    if ground_truth_lock.get("adjudication_status") != "ALL_FINAL":
+        raise ValueError("ground-truth artifact is not fully adjudicated")
+    if ground_truth_lock.get("truth_csv", {}).get("sha256") != sha256_file(truth_path):
+        raise ValueError("event truth SHA256 does not match its frozen artifact")
+
+    external_record = ground_truth_lock.get("external_test_lock", {})
+    external_lock_path = Path(str(external_record.get("path", "")))
+    if not external_lock_path.is_file():
+        raise ValueError("frozen external-test artifact referenced by event truth is missing")
+    if external_record.get("sha256") != sha256_file(external_lock_path):
+        raise ValueError("frozen external-test artifact SHA256 mismatch")
+    external_lock = json.loads(external_lock_path.read_text(encoding="utf-8"))
+    if external_lock.get("status") != "FROZEN_EXTERNAL_TEST":
+        raise ValueError("referenced external-test artifact is not frozen")
+
+    model_lock = json.loads(model_lock_path.read_text(encoding="utf-8"))
+    if model_lock.get("record_schema") != "ROADWATCH_MODEL_VERSION_V2":
+        raise ValueError("model lock is not a V2 model-lock artifact")
+    if model_lock.get("activation_state") != "ACTIVE":
+        raise ValueError("frozen event evaluation requires an ACTIVE model lock")
+    required_model_lock_fields = {
+        "experiment_id",
+        "locked_at",
+        "weights_sha256",
+        "config_sha256",
+        "training_data_manifest_sha256",
+        "validation_metric_artifact",
+        "threshold_calibration_artifact",
+        "human_review_readiness_artifact",
+        "code_commit",
+    }
+    missing_model_lock_fields = required_model_lock_fields - set(model_lock)
+    if missing_model_lock_fields:
+        raise ValueError(
+            f"model lock lacks governed provenance: {sorted(missing_model_lock_fields)}"
+        )
+    calibration_record = model_lock["threshold_calibration_artifact"]
+    if not isinstance(calibration_record, dict) or not calibration_record.get("sha256"):
+        raise ValueError("model lock has no threshold calibration artifact")
+    readiness_record = model_lock["human_review_readiness_artifact"]
+    if not isinstance(readiness_record, dict) or (
+        readiness_record.get("governed_training_ready") is not True
+    ):
+        raise ValueError("model lock does not record governed human-review readiness")
+
+    report = evaluate(
+        _read(truth_path),
+        _read(prediction_path),
+        video_minutes,
+        tolerance_seconds,
+    )
+    report.update(
+        {
+            "status": "MEASURED_FROZEN_EXTERNAL_TEST",
+            "created_at_utc": datetime.now(UTC).isoformat(),
+            "ground_truth": {
+                "path": str(truth_path),
+                "sha256": sha256_file(truth_path),
+                "lock_path": str(ground_truth_lock_path),
+                "lock_sha256": sha256_file(ground_truth_lock_path),
+            },
+            "predictions": {
+                "path": str(prediction_path),
+                "sha256": sha256_file(prediction_path),
+            },
+            "model_lock": {
+                "path": str(model_lock_path),
+                "sha256": sha256_file(model_lock_path),
+                "experiment_id": model_lock.get("experiment_id"),
+                "code_commit": model_lock.get("code_commit"),
+            },
+            "external_test_lock": external_record,
+            "scientific_claim": "FROZEN_EVENT_METRICS_FOR_THIS_LOCKED_MODEL_ONLY",
+        }
+    )
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with output_path.open("x", encoding="utf-8") as handle:
+        json.dump(report, handle, indent=2, sort_keys=True)
+        handle.write("\n")
     return report
 
 
@@ -97,6 +205,16 @@ def main() -> None:
     parser.add_argument("predictions", type=Path, nargs="?")
     parser.add_argument("--video-minutes", type=float, default=0.0)
     parser.add_argument("--tolerance-seconds", type=float, default=0.5)
+    parser.add_argument(
+        "--ground-truth-lock",
+        type=Path,
+        default=Path("datasets/manifests/v2_event_truth_frozen.json"),
+    )
+    parser.add_argument(
+        "--model-lock",
+        type=Path,
+        default=Path("reports/model_lock_v2.json"),
+    )
     parser.add_argument("--output", type=Path, default=Path("reports/event_evaluation.json"))
     args = parser.parse_args()
     if not args.truth or not args.predictions:
@@ -108,14 +226,15 @@ def main() -> None:
         args.output.write_text(json.dumps(report, indent=2, sort_keys=True), encoding="utf-8")
         print(json.dumps(report, indent=2))
         return
-    report = evaluate(
-        _read(args.truth),
-        _read(args.predictions),
+    report = evaluate_frozen(
+        args.truth,
+        args.predictions,
+        args.ground_truth_lock,
+        args.model_lock,
+        args.output,
         args.video_minutes,
         args.tolerance_seconds,
     )
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(report, indent=2, sort_keys=True), encoding="utf-8")
     print(json.dumps(report, indent=2))
 
 

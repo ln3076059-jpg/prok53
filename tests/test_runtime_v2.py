@@ -540,6 +540,7 @@ def test_external_test_freeze_requires_human_review_and_disjoint_data(tmp_path):
         "conditions": ["daylight"],
         "human_review_status": "APPROVED",
         "reviewer_id": "reviewer-1",
+        "reviewer_type": "HUMAN",
         "reviewed_at": "2026-09-02T00:00:00Z",
     }
     manifest_path = tmp_path / "external.jsonl"
@@ -573,6 +574,7 @@ required_fields:
   - conditions
   - human_review_status
   - reviewer_id
+  - reviewer_type
   - reviewed_at
 required_condition_coverage: [daylight]
 disjoint_dimensions: [sha256, source_id, camera_id, video_id]
@@ -591,7 +593,18 @@ minimum_independent_groups: {source_id: 1, camera_id: 1, video_id: 1}
         freeze_external_test(manifest_path, development_path, policy_path, output_path)
 
     item["human_review_status"] = "APPROVED"
+    item["reviewer_type"] = "AI"
+    manifest_path.write_text(json.dumps(item) + "\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="reviewer_type must be HUMAN"):
+        freeze_external_test(manifest_path, development_path, policy_path, output_path)
+
+    item["reviewer_type"] = "HUMAN"
     item["camera_id"] = "development-camera"
     manifest_path.write_text(json.dumps(item) + "\n", encoding="utf-8")
     with pytest.raises(ValueError, match="camera_id overlaps development data"):
+        freeze_external_test(manifest_path, development_path, policy_path, output_path)
+
+    item["camera_id"] = "external-camera"
+    manifest_path.write_text(json.dumps(item) + "\n", encoding="utf-8")
+    with pytest.raises(FileExistsError, match="refusing to overwrite"):
         freeze_external_test(manifest_path, development_path, policy_path, output_path)

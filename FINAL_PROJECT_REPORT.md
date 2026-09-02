@@ -44,7 +44,11 @@ Implemented: FastAPI endpoints, central model service, MySQL-compatible schema, 
 
 PHONE metrics: `NOT_RUN`. NO_SEATBELT metrics: `NOT_RUN`. Independent human event ground truth is required.
 Vehicle/cabin/occupant/phone association accuracy and pose availability: `NOT_RUN`. The evaluator
-is implemented, but independently reviewed association annotations are required.
+is implemented, but independently reviewed association annotations are required. Event truth now
+has an explicit immutable freeze artifact bound to the frozen external-test SHA-256. Event
+evaluation requires an ACTIVE governed model lock, records every input hash, and refuses to
+overwrite the first result. These refusal gates do not create a metric; all event results remain
+`NOT_RUN`.
 
 ## I. Limitations
 

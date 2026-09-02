@@ -26,11 +26,11 @@ weights, calibration, external testing, and human approval remain mandatory.
 | Durable analysis queue | PARTIALLY_IMPLEMENTED | abstraction exists; demo adapter is not durable |
 | File source | IMPLEMENTED | `FileVideoSource` |
 | Webcam/RTSP production source | PARTIALLY_IMPLEMENTED | adapters experimental |
-| Event evaluator | IMPLEMENTED_TOOLING | measurements `NOT_RUN` |
+| Event evaluator | IMPLEMENTED_TOOLING | requires frozen reviewed truth + ACTIVE governed model lock; binds input hashes and refuses result overwrite; measurements `NOT_RUN` |
 | Association/pose evaluator | IMPLEMENTED_TOOLING | measurements `NOT_RUN` |
 | Runtime benchmark | IMPLEMENTED_TOOLING | measurements `NOT_RUN` |
 | Governed V2 training | BLOCKED_BY_HUMAN_REVIEW | readiness report gates remain open |
-| External frozen test | IMPLEMENTED_TOOLING / BLOCKED_BY_DATA | freeze tool enforces reviewed source/camera/video-disjoint inputs; real set absent |
+| External frozen test | IMPLEMENTED_TOOLING / BLOCKED_BY_DATA | freeze tool enforces reviewed source/camera/video-disjoint inputs and immutable output; real set absent |
 | Production startup validation | IMPLEMENTED | refuses mismatched/unlocked/unapproved artifacts |
 | Production activation | BLOCKED | no ACTIVE human-approved matching model lock; all scientific gates above must pass |
 | Deterministic CI | IMPLEMENTED | Ruff, compile, tests, FastAPI import and frontend build; no training/model/data downloads |
@@ -56,3 +56,6 @@ The external set can only be frozen with `training/freeze_external_test.py`. Its
 point to real video and annotation files, carry reviewer provenance, meet
 `datasets/v2_external_test_policy.yaml`, and remain disjoint from the supplied development
 manifest. The generated lock asserts integrity and isolation only; it never asserts accuracy.
+`training.freeze_event_ground_truth` then binds reviewed event truth to that external lock.
+`training.evaluate_events` will only measure it with an ACTIVE governed V2 model lock and will not
+overwrite the first result.

@@ -15,6 +15,7 @@ required_fields:
   - conditions
   - human_review_status
   - reviewer_id
+  - reviewer_type
   - reviewed_at
 required_condition_coverage:
   - daylight

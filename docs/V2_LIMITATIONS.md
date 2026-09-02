@@ -49,8 +49,9 @@ No component or event metric has been run for a final governed V2 model.
 - Component metrics: `NOT_RUN` for final V2 weights.
 - Association and pose-availability metrics: `NOT_RUN`; tooling exists, but no independent
   association ground truth exists.
-- Event metrics: `NOT_RUN`; no frozen human event ground truth exists.
-- External-domain test: `NOT_RUN` and not yet frozen.
+- Event metrics: `NOT_RUN`; no frozen human event ground truth exists. The evaluator now enforces
+  its truth/external/model-lock hashes and immutable first result, but this clears no data gate.
+- External-domain test: `NOT_RUN` and not yet frozen. Its freeze artifact is now non-overwritable.
 - Runtime benchmark: `NOT_RUN` until `py -m tools.benchmark_runtime --video ...` runs on the target
   hardware with installed weights.
 

@@ -40,6 +40,7 @@ separate architecture designed to remove that cross-task label conflict.
 | MEDIUM | Evidence lacked a confirmation-grade integrity gate | Persistence checked a DB row, not every required file/hash or post-event completeness | A reviewer could confirm incomplete or altered evidence | `backend/ai/evidence.py`, `backend/api/routes.py`, `frontend/src/App.tsx` | Require complete clip, canonical keyframes, trace status, and matching SHA-256 before CONFIRMED | IMPLEMENTED |
 | MEDIUM | API execution is coupled to FastAPI background tasks | Route function owns worker business logic | No independent scheduling/retry boundary | `backend/api/routes.py` | Add queue/worker abstraction while retaining demo adapter | PARTIALLY_IMPLEMENTED |
 | MEDIUM | Event-level metrics are absent | No frozen human event ground truth | Detector AP cannot establish violation accuracy | `training/evaluate_v2.py`, reports | Add event evaluation contract/tool; leave results `NOT_RUN` | IMPLEMENTED_TOOLING; NOT_RUN |
+| HIGH | Event evaluator did not enforce its frozen-test claim | Arbitrary CSVs could be evaluated without checking the external truth or model lock, and results could be overwritten | A mutable or pre-lock run could be mistaken for final external evidence | `training/evaluate_events.py`, `training/freeze_external_test.py` | Bind reviewed truth/external/model hashes, require ACTIVE governed lock and refuse overwrite | IMPLEMENTED_TOOLING; NOT_RUN |
 | MEDIUM | UI does not serve real evidence or history | Event detail contains a deployment placeholder | Human review is not evidence-backed in the app | `frontend/src/App.tsx`, `backend/api/routes.py` | Serve protected evidence and append-only review provenance | IMPLEMENTED |
 | LOW | Canonical config env name is inconsistent | `.env.example` uses `MODEL_CONFIG` instead of the settings field name | Deployments can silently load V1/default config | `.env.example`, docs | Standardize on `MODEL_CONFIG_PATH` and validate startup/runtime status | IMPLEMENTED |
 | HIGH | Production startup trusted configuration too loosely | Artifact existence was the primary route gate | Mismatched class maps, uncalibrated thresholds, absent fusion, or an unlocked model could start | `backend/ai/detector.py`, `backend/main.py` | Validate config contract in every environment and model-lock/approval/calibration hashes in production | IMPLEMENTED |
@@ -66,7 +67,7 @@ Verification performed on 2026-09-02 against the working tree described above:
 | Check | Result |
 |---|---|
 | V1 scientific baseline diff | PASS — `experiments/MC_BOOTSTRAP_001/config.yaml` unchanged |
-| Python test suite | PASS — 103/103 tests |
+| Python test suite | PASS — 106/106 tests locally |
 | Ruff checks and Python compilation | PASS |
 | Frontend production build | PASS |
 | FastAPI in-memory startup and `/health` smoke test | PASS — HTTP 200, deliberately `degraded` without approved V2 artifacts |

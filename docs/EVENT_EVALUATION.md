@@ -38,24 +38,38 @@ no input, the checked-in report remains `NOT_RUN`.
 
 ## Level 3 — event metrics
 
-`training.evaluate_events` accepts frozen human truth and system prediction CSV files with:
+`training.evaluate_events` accepts frozen human truth and system prediction CSV files. The metric
+reader needs the four columns below; the preceding ground-truth freeze additionally requires the
+review, adjudication, identity and condition columns in `docs/V2_EVENT_GROUND_TRUTH_PROTOCOL.md`.
 
 ```text
 video_id,event_type,start_seconds,end_seconds
 ```
 
-Run only after the ground truth is independently reviewed:
+Freeze independently reviewed truth first:
+
+```powershell
+py -m training.freeze_event_ground_truth `
+  reports/event_truth.csv `
+  datasets/manifests/v2_external_test_frozen.json
+```
+
+Run only after an ACTIVE governed model lock exists:
 
 ```powershell
 py -m training.evaluate_events `
-  reports/event_truth_frozen.csv `
+  reports/event_truth.csv `
   reports/event_predictions.csv `
   --video-minutes 180 `
+  --ground-truth-lock datasets/manifests/v2_event_truth_frozen.json `
+  --model-lock reports/model_lock_v2.json `
   --output reports/event_evaluation.json
 ```
 
-The report contains per-event precision, recall, F1, false events/minute, missed events, duplicate
-events, and mean time-to-detection. Without both files the tool reports `NOT_RUN`.
+The report contains per-event precision, recall, F1, false events/minute/hour, missed events,
+duplicate/fragmented events, and mean time-to-detection. It records hashes for truth, predictions,
+ground-truth lock, external-test lock and model lock. It refuses changed truth, an inactive or
+incomplete lock, and overwriting a prior result. Without both CSV files the tool reports `NOT_RUN`.
 
 ## External test protocol
 
@@ -77,4 +91,4 @@ py -m training.freeze_external_test `
 
 The command verifies file hashes, reviewer provenance, condition coverage, policy minimums, and
 source/camera/video/hash disjointness. It fails without writing a frozen artifact when any gate
-is unmet.
+is unmet and refuses to overwrite an existing freeze.

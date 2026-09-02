@@ -91,6 +91,10 @@ py -m training.audit_v2_diversity
 
 # Rebuilds the model-assisted priority order; all 3,013 rows remain PENDING.
 py -m training.prioritize_phone_negative_review
+
+# With no real inputs, event metrics remain NOT_RUN. A real run additionally requires frozen
+# reviewed truth and an ACTIVE governed model lock; the result cannot be overwritten.
+py -m training.evaluate_events
 ```
 
 The current diversity audit is `NOT_GOVERNED`: phone and upper-body proposal data each use one
