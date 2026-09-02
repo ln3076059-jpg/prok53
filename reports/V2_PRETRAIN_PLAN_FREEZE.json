@@ -4,7 +4,17 @@
   "config_sha": "0ac6ce22cb0a9c7ebc817f763e74bb53934fda5b07b00eb1c3c42d8dc7e49b23",
   "data_yaml_sha": "95b4fe4dbcaaf1bc0b10a3fd33c02d82e78d69defaa0b0d710982cfec8cc1d83",
   "dataset_manifest_sha": "855794ae8542467fde45712b6c8ba56947f4b43bc1354f589445a8f024a605b2",
-  "split_hashes": {},
+  "split_hashes": {
+    "phone_detector.train": "ffc0128e90889976a6fbfb39fc1f6720ab6fe91847141ab6c700491989e93598",
+    "phone_detector.val": "d9aa839f24e353baccd5913e47f7c9ea5e5011da8af33aeedf6f7ee9695d9858",
+    "phone_detector.test": "e3807b4eddd244221ee7f42d9af8d1e822079642374cdb06c2d9d9ae91bf3259",
+    "seatbelt_detector.train": "3eb53a4ec73015b61a5997720836066f62cc22a561d28514e8d1c7f87911c3ce",
+    "seatbelt_detector.val": "34751b7df3f59738b8bb18be044cd1dc4dca96013eb2d2e9b6222b72ba2b6edd",
+    "seatbelt_detector.test": "f68c23767e43d559714b2e0c607e065b3356408a5bcec53d8ce79f82e3ce0043",
+    "seatbelt_classifier.train": "MISSING",
+    "seatbelt_classifier.val": "MISSING",
+    "seatbelt_classifier.test": "MISSING"
+  },
   "base_weights_sha": {
     "yolo11s.pt": "85a76fe86dd8afe384648546b56a7a78580c7cb7b404fc595f97969322d502d5",
     "yolo11s-cls.pt": "e2b605d1c8c212b434a75a32759a6f7adf1d2b29c35f76bdccd4c794cb653cf2"
@@ -40,5 +50,5 @@
   ],
   "amp": true,
   "seed": 42,
-  "training_plan_fingerprint": "072f5c7184e4259b0703daf944091dbfd1cf2ddabc6caeb66a6b4a9060a0f4be"
+  "training_plan_fingerprint": "0f00d41f99a5b0d12f5bb6a45341b19b38ccf8238597707cc9955c113079d738"
 }

@@ -1,5 +1,5 @@
 # V2 Final Pre-Train Freeze
-- **audited_source_head_sha**: `ad2a776bf96923e9a5fe74780fcd591350fb65af`
+- **audited_source_head_sha**: `4f9a3dfc349429ea2dbbf270c3634d1d23cac899`
 - **V1_SHA**: `5a71e6b20a2d18cf25bbfba4f203ebca533549e7bcc6316a6a100034d6b2cebb`
 - **BUNDLE**: `kaggle/MULTIMODEL_V2_PRETRAIN_PENDING_APPROVAL_PORTABLE.zip` (678b3a6e2b5a6ccb0b4db939303f4f97743e0ef41f0d51273028e240c3a021aa)
 
