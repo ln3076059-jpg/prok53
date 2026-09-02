@@ -11,9 +11,9 @@
     "seatbelt_detector.train": "3eb53a4ec73015b61a5997720836066f62cc22a561d28514e8d1c7f87911c3ce",
     "seatbelt_detector.val": "34751b7df3f59738b8bb18be044cd1dc4dca96013eb2d2e9b6222b72ba2b6edd",
     "seatbelt_detector.test": "f68c23767e43d559714b2e0c607e065b3356408a5bcec53d8ce79f82e3ce0043",
-    "seatbelt_classifier.train": "MISSING",
-    "seatbelt_classifier.val": "MISSING",
-    "seatbelt_classifier.test": "MISSING"
+    "seatbelt_classifier.train": "0ab64603a8442253c13b2cf4a4a0ea6de25a8cf41254e9c8b9c9d39483ea0137",
+    "seatbelt_classifier.val": "723991e376d2f32a28e5f61d21d37df501b7d0f3036d664a11fc360a838b5113",
+    "seatbelt_classifier.test": "4a6bb37b1753f44ef69e4c2c57ac26a4f54669b96e4202ead668aefb06efb4dd"
   },
   "base_weights_sha": {
     "yolo11s.pt": "85a76fe86dd8afe384648546b56a7a78580c7cb7b404fc595f97969322d502d5",
@@ -50,5 +50,5 @@
   ],
   "amp": true,
   "seed": 42,
-  "training_plan_fingerprint": "0f00d41f99a5b0d12f5bb6a45341b19b38ccf8238597707cc9955c113079d738"
+  "training_plan_fingerprint": "00c9c3345f53fc7ebcbd148d5cf8bbc663bade560ff8dc075c079bbc000556ee"
 }

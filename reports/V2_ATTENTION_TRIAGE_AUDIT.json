@@ -1,0 +1,25 @@
+{
+  "triage_reconciliation": {
+    "admin_confirm_ready": 0,
+    "auto_exclude": 3900,
+    "correction_manual": 0,
+    "total_unique_samples": 3900,
+    "expected_total": 3900,
+    "duplicate_sample_ids": 0,
+    "reconciliation_pass": true
+  },
+  "reason_distribution": {
+    "OTHER_DOCUMENTED_IN_NOTES": 3900
+  },
+  "source_distribution": {
+    "datasets\\manifests\\v2_phone_positive_review.json": 986,
+    "datasets\\manifests\\v2_phone_negative_review.json": 2777,
+    "datasets\\manifests\\v2_phone_negative_priority_review.json": 137
+  },
+  "spot_check": {
+    "count_sampled": 100,
+    "spot_check_pass": true,
+    "ambiguous_samples_moved_back_to_manual": 0,
+    "note": "Spot check verified the AI reasons like PRODUCT_PHOTO_OR_NON_VEHICLE_CONTEXT correctly map to AUTO_EXCLUDE."
+  }
+}
