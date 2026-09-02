@@ -31,163 +31,103 @@ def _changed_annotations(record: dict) -> tuple[bool, bool]:
     return bbox_changed, class_changed
 
 
-def summarize(
-    queue: list[dict],
-    decisions: list[dict],
-    acknowledgements: list[dict],
-    attention: list[dict],
-    head_sha: str,
-) -> dict:
+def _summarize_lane(queue: list[dict], decisions: list[dict]) -> dict:
     review1_by_id = {}
-    human_confirmed = set()
     for item in decisions:
         sample_id = str(item["sample_id"])
         if item.get("reviewer_id") == "review1" and item.get("reviewer_type") == "AI":
             review1_by_id[sample_id] = item
-        if item.get("reviewer_type") == "HUMAN" and item.get("status") in {
-            "APPROVED",
-            "APPROVED_NEGATIVE",
-        }:
-            human_confirmed.add(sample_id)
     reviewed = list(review1_by_id.values())
     tiers = Counter(item.get("tier", "TIER_C") for item in reviewed)
     statuses = Counter(item.get("new_status") or item.get("status") for item in reviewed)
-    bbox_corrections = 0
-    class_corrections = 0
-    for item in reviewed:
-        bbox_changed, class_changed = _changed_annotations(item)
-        bbox_corrections += bbox_changed
-        class_corrections += class_changed
-    acknowledgement_statuses = {
-        "ADMIN_ACKNOWLEDGED_MODEL_PROPOSAL_BATCH",
-        "ADMIN_ACKNOWLEDGED_REVIEW_PENDING_APPROVAL_BATCH",
-    }
-    acknowledged = {
-        str(sample_id)
-        for item in acknowledgements
-        if item.get("status") in acknowledgement_statuses
-        for sample_id in item.get("sample_ids", [])
-    }
-    acknowledged_records = sum(
-        len(item.get("sample_ids", []))
-        for item in acknowledgements
-        if item.get("status") in acknowledgement_statuses
-    )
-    total_queue = len(queue)
-    remaining = len({str(item["sample_id"]) for item in attention})
-    reduction = 0.0 if not total_queue else 100 * max(0, total_queue - remaining) / total_queue
+    
     return {
-        "head_sha": head_sha,
-        "total_queue": total_queue,
-        "review1_reviewed": len(reviewed),
+        "total": len(queue),
+        "reviewed": len(reviewed),
         "tier_a": tiers["TIER_A"],
         "tier_b": tiers["TIER_B"],
         "tier_c": tiers["TIER_C"],
-        "review1_accepted": statuses["REVIEW1_APPROVED_UNDER_ADMIN_DELEGATION"]
-        + statuses["REVIEW1_ACCEPTED_PROPOSAL"],
-        "review1_rejected": statuses["REVIEW1_REJECTED_PROPOSAL"],
-        "review1_corrections": statuses["REVIEW1_CORRECTION_PROPOSAL"],
-        "missing_phone_labels": sum(
-            item.get("decision_reason") == "PHONE_MISSING_LABEL" for item in reviewed
-        ),
-        "bbox_corrections": bbox_corrections,
-        "class_corrections": class_corrections,
-        "uncertain_seatbelt": sum(
-            item.get("decision_reason") == "UNCERTAIN_OR_OCCLUDED" for item in reviewed
-        ),
-        "unknown_occupant": sum(
-            item.get("occupant_role") in {None, "UNKNOWN", "UNCERTAIN", "PENDING"}
-            for item in reviewed
-        ),
-        "bad_metadata": sum(
-            any(item.get(key) in {None, "", "UNKNOWN", "NOT_PROVABLE"} for key in (
-                "video_id",
-                "vehicle_id",
-                "person_id",
-                "camera_id",
-            ))
-            for item in reviewed
-        ),
-        "admin_acknowledged": acknowledged_records,
-        "admin_acknowledged_unique_samples": len(acknowledged),
-        "human_confirmed": len(human_confirmed),
-        "remaining_human_attention": remaining,
-        "manual_review_reduction_percent": round(reduction, 2),
+        "accepted": statuses["REVIEW1_APPROVED_UNDER_ADMIN_DELEGATION"] + statuses["REVIEW1_ACCEPTED_PROPOSAL"],
+        "rejected": statuses["REVIEW1_REJECTED_PROPOSAL"],
+    }
+
+
+def summarize(
+    neg_queue: list[dict],
+    neg_decisions: list[dict],
+    pos_queue: list[dict],
+    pos_decisions: list[dict],
+    attention: list[dict],
+    head_sha: str,
+) -> dict:
+    remaining = len({str(item["sample_id"]) for item in attention})
+    return {
+        "audited_source_head_sha": head_sha,
+        "phone_negative": _summarize_lane(neg_queue, neg_decisions),
+        "phone_positive": _summarize_lane(pos_queue, pos_decisions),
+        "global_attention": {
+            "remaining": remaining
+        },
         "governed_ready": False,
     }
 
 
 def markdown(report: dict) -> str:
-    labels = {
-        "head_sha": "HEAD SHA",
-        "total_queue": "TOTAL_QUEUE",
-        "review1_reviewed": "REVIEW1_REVIEWED",
-        "tier_a": "TIER_A",
-        "tier_b": "TIER_B",
-        "tier_c": "TIER_C",
-        "review1_accepted": "REVIEW1_ACCEPTED",
-        "review1_rejected": "REVIEW1_REJECTED",
-        "review1_corrections": "REVIEW1_CORRECTIONS",
-        "missing_phone_labels": "MISSING_PHONE_LABELS",
-        "bbox_corrections": "BBOX_CORRECTIONS",
-        "class_corrections": "CLASS_CORRECTIONS",
-        "uncertain_seatbelt": "UNCERTAIN_SEATBELT",
-        "unknown_occupant": "UNKNOWN_OCCUPANT",
-        "bad_metadata": "BAD_METADATA",
-        "admin_acknowledged": "ADMIN_ACKNOWLEDGED",
-        "admin_acknowledged_unique_samples": "ADMIN_ACKNOWLEDGED_UNIQUE_SAMPLES",
-        "human_confirmed": "HUMAN_CONFIRMED",
-        "remaining_human_attention": "REMAINING_HUMAN_ATTENTION",
-        "manual_review_reduction_percent": "MANUAL_REVIEW_REDUCTION_PERCENT",
-        "governed_ready": "GOVERNED_READY",
-    }
     lines = [
         "# Review 1 full review summary",
         "",
         "Review 1 records are AI provenance under admin delegation. They are not human approval.",
         "",
+        f"- audited_source_head_sha: `{report['audited_source_head_sha']}`",
+        f"- governed_ready: `{report['governed_ready']}`",
+        "",
+        "## Phone Negative",
     ]
-    lines.extend(f"- {labels[key]}: `{value}`" for key, value in report.items())
-    return "\n".join(lines) + "\n"
+    for k, v in report["phone_negative"].items():
+        lines.append(f"- {k}: `{v}`")
+    lines.extend([
+        "",
+        "## Phone Positive"
+    ])
+    for k, v in report["phone_positive"].items():
+        lines.append(f"- {k}: `{v}`")
+    lines.extend([
+        "",
+        "## Global Attention",
+        f"- remaining: `{report['global_attention']['remaining']}`",
+        ""
+    ])
+    return "\n".join(lines)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Summarize append-only Review 1 evidence")
-    parser.add_argument("--queue", type=Path, required=True)
-    parser.add_argument(
-        "--decisions",
-        type=Path,
-        default=Path("datasets/manifests/review_decisions.jsonl"),
-    )
-    parser.add_argument(
-        "--acknowledgements",
-        type=Path,
-        default=Path("datasets/manifests/model_proposal_batch_acknowledgements.jsonl"),
-    )
-    parser.add_argument(
-        "--attention",
-        type=Path,
-        default=Path("datasets/manifests/v2_human_attention_after_review1.json"),
-    )
-    parser.add_argument(
-        "--json-output", type=Path, default=Path("reports/REVIEW1_FULL_REVIEW_SUMMARY.json")
-    )
-    parser.add_argument(
-        "--markdown-output", type=Path, default=Path("reports/REVIEW1_FULL_REVIEW_SUMMARY.md")
-    )
+    parser.add_argument("--queue", type=Path, help="legacy arg ignored")
+    parser.add_argument("--decisions", type=Path, help="legacy arg ignored")
+    parser.add_argument("--attention", type=Path, default=Path("datasets/manifests/v2_human_attention_after_review1.json"))
+    parser.add_argument("--json-output", type=Path, default=Path("reports/REVIEW1_FULL_REVIEW_SUMMARY.json"))
+    parser.add_argument("--markdown-output", type=Path, default=Path("reports/REVIEW1_FULL_REVIEW_SUMMARY.md"))
     args = parser.parse_args()
-    queue_payload = json.loads(args.queue.read_text(encoding="utf-8"))
-    queue = queue_payload if isinstance(queue_payload, list) else queue_payload.get("samples", [])
-    attention = (
-        json.loads(args.attention.read_text(encoding="utf-8"))
-        if args.attention.exists()
-        else []
-    )
+
+    def load_q(p: Path) -> list[dict]:
+        if not p.exists(): return []
+        payload = json.loads(p.read_text(encoding="utf-8"))
+        return payload if isinstance(payload, list) else payload.get("samples", [])
+
+    neg_queue = load_q(Path("datasets/manifests/v2_phone_negative_review.json"))
+    neg_decisions = read_jsonl(Path("datasets/manifests/review1_phone_negative_decisions.jsonl"))
+    
+    pos_queue = load_q(Path("datasets/manifests/v2_phone_positive_review.json"))
+    pos_decisions = read_jsonl(Path("datasets/manifests/review1_phone_positive_decisions.jsonl"))
+
+    attention = load_q(args.attention)
+
     head = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
     report = summarize(
-        queue,
-        read_jsonl(args.decisions),
-        read_jsonl(args.acknowledgements),
+        neg_queue,
+        neg_decisions,
+        pos_queue,
+        pos_decisions,
         attention,
         head,
     )
@@ -195,7 +135,6 @@ def main() -> None:
     args.json_output.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     args.markdown_output.write_text(markdown(report), encoding="utf-8")
     print(json.dumps(report, indent=2))
-
 
 if __name__ == "__main__":
     main()

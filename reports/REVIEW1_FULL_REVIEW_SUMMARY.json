@@ -1,23 +1,25 @@
 {
-  "head_sha": "77dd77980c3f458bc5bef1ec833d74db8f4bc829",
-  "total_queue": 3013,
-  "review1_reviewed": 3013,
-  "tier_a": 0,
-  "tier_b": 99,
-  "tier_c": 2914,
-  "review1_accepted": 99,
-  "review1_rejected": 2914,
-  "review1_corrections": 0,
-  "missing_phone_labels": 0,
-  "bbox_corrections": 0,
-  "class_corrections": 0,
-  "uncertain_seatbelt": 0,
-  "unknown_occupant": 2914,
-  "bad_metadata": 3013,
-  "admin_acknowledged": 0,
-  "admin_acknowledged_unique_samples": 0,
-  "human_confirmed": 0,
-  "remaining_human_attention": 3900,
-  "manual_review_reduction_percent": 0.0,
+  "audited_source_head_sha": "9110319de4f047b732da7662f9e981c31aaaf0a0",
+  "phone_negative": {
+    "total": 3013,
+    "reviewed": 3013,
+    "tier_a": 0,
+    "tier_b": 99,
+    "tier_c": 2914,
+    "accepted": 99,
+    "rejected": 2914
+  },
+  "phone_positive": {
+    "total": 1216,
+    "reviewed": 1216,
+    "tier_a": 0,
+    "tier_b": 230,
+    "tier_c": 986,
+    "accepted": 230,
+    "rejected": 986
+  },
+  "global_attention": {
+    "remaining": 3900
+  },
   "governed_ready": false
 }

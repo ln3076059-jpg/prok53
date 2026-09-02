@@ -2,24 +2,26 @@
 
 Review 1 records are AI provenance under admin delegation. They are not human approval.
 
-- HEAD SHA: `77dd77980c3f458bc5bef1ec833d74db8f4bc829`
-- TOTAL_QUEUE: `3013`
-- REVIEW1_REVIEWED: `3013`
-- TIER_A: `0`
-- TIER_B: `99`
-- TIER_C: `2914`
-- REVIEW1_ACCEPTED: `99`
-- REVIEW1_REJECTED: `2914`
-- REVIEW1_CORRECTIONS: `0`
-- MISSING_PHONE_LABELS: `0`
-- BBOX_CORRECTIONS: `0`
-- CLASS_CORRECTIONS: `0`
-- UNCERTAIN_SEATBELT: `0`
-- UNKNOWN_OCCUPANT: `2914`
-- BAD_METADATA: `3013`
-- ADMIN_ACKNOWLEDGED: `0`
-- ADMIN_ACKNOWLEDGED_UNIQUE_SAMPLES: `0`
-- HUMAN_CONFIRMED: `0`
-- REMAINING_HUMAN_ATTENTION: `3900`
-- MANUAL_REVIEW_REDUCTION_PERCENT: `0.0`
-- GOVERNED_READY: `False`
+- audited_source_head_sha: `9110319de4f047b732da7662f9e981c31aaaf0a0`
+- governed_ready: `False`
+
+## Phone Negative
+- total: `3013`
+- reviewed: `3013`
+- tier_a: `0`
+- tier_b: `99`
+- tier_c: `2914`
+- accepted: `99`
+- rejected: `2914`
+
+## Phone Positive
+- total: `1216`
+- reviewed: `1216`
+- tier_a: `0`
+- tier_b: `230`
+- tier_c: `986`
+- accepted: `230`
+- rejected: `986`
+
+## Global Attention
+- remaining: `3900`
