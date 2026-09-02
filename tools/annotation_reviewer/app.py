@@ -4,6 +4,7 @@ import argparse
 import json
 from datetime import UTC, datetime
 from pathlib import Path
+from threading import Lock
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
@@ -16,6 +17,7 @@ manifest_path = Path("datasets/manifests/review_queue.json")
 decisions_path = Path("datasets/manifests/review_decisions.jsonl")
 acknowledgements_path = Path("datasets/manifests/model_proposal_batch_acknowledgements.jsonl")
 pending_only = False
+decision_lock = Lock()
 
 
 class Annotation(BaseModel):
@@ -34,7 +36,7 @@ class Annotation(BaseModel):
 class Decision(BaseModel):
     sample_id: str
     reviewer_id: str = Field(min_length=2, max_length=256)
-    reviewer_type: str = Field(default="HUMAN", pattern="^HUMAN$")
+    reviewer_type: str = Field(pattern="^HUMAN$")
     status: str = Field(pattern="^(APPROVED|APPROVED_NEGATIVE|REJECTED|UNCERTAIN)$")
     decision_reason: str = Field(
         min_length=3,
@@ -93,6 +95,7 @@ class Decision(BaseModel):
 
 class BatchAcknowledgement(BaseModel):
     reviewer_id: str = Field(min_length=2, max_length=256)
+    reviewer_type: str = Field(pattern="^HUMAN$")
     sample_ids: list[str] = Field(min_length=1, max_length=500)
     notes: str = Field(default="", max_length=4000)
 
@@ -184,16 +187,30 @@ def decision(payload: Decision):
     )
     if queue_item is None:
         raise HTTPException(404, "Sample not found in the active queue")
-    previous = load_latest_decisions().get(payload.sample_id)
-    decisions_path.parent.mkdir(parents=True, exist_ok=True)
-    with decisions_path.open("a", encoding="utf-8") as handle:
+    with decision_lock:
+        previous = load_latest_decisions().get(payload.sample_id)
         record = payload.model_dump()
+        if previous and all(previous.get(key) == value for key, value in record.items()):
+            return {
+                "saved": False,
+                "duplicate": True,
+                "decision_id": previous["decision_id"],
+            }
+        previous_status = (
+            previous.get("new_status") or previous.get("status") if previous else "PENDING"
+        )
+        if previous_status not in {
+            "PENDING",
+            "APPROVED",
+            "APPROVED_NEGATIVE",
+            "REJECTED",
+            "UNCERTAIN",
+        }:
+            raise HTTPException(409, f"Invalid previous review status: {previous_status}")
         for index, annotation in enumerate(record["annotations"]):
             annotation["box_id"] = annotation.get("box_id") or (f"{payload.sample_id}:box:{index}")
         record["schema_version"] = 2
-        record["previous_status"] = (
-            previous.get("new_status") or previous.get("status") if previous else "PENDING"
-        )
+        record["previous_status"] = previous_status
         record["new_status"] = payload.status
         record["reviewed_at_utc"] = datetime.now(UTC).isoformat()
         record["proposal_review_snapshot"] = queue_item.get("proposal_review")
@@ -206,7 +223,9 @@ def decision(payload: Decision):
             "source_asset_id": queue_item.get("source_asset_id"),
         }
         record["decision_id"] = stable_json_hash(record)
-        handle.write(json.dumps(record, sort_keys=True) + "\n")
+        decisions_path.parent.mkdir(parents=True, exist_ok=True)
+        with decisions_path.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(record, sort_keys=True) + "\n")
     return {"saved": True, "decision_id": record["decision_id"]}
 
 
@@ -234,7 +253,7 @@ def batch_acknowledgement(payload: BatchAcknowledgement):
     record = {
         "schema_version": 1,
         "reviewer_id": payload.reviewer_id,
-        "reviewer_type": "HUMAN",
+        "reviewer_type": payload.reviewer_type,
         "status": "ADMIN_ACKNOWLEDGED_MODEL_PROPOSAL_BATCH",
         "sample_ids": sorted(set(payload.sample_ids)),
         "notes": payload.notes,
@@ -247,9 +266,10 @@ def batch_acknowledgement(payload: BatchAcknowledgement):
             "it is not per-sample HUMAN_APPROVED."
         ),
     }
-    acknowledgements_path.parent.mkdir(parents=True, exist_ok=True)
-    with acknowledgements_path.open("a", encoding="utf-8") as handle:
-        handle.write(json.dumps(record, sort_keys=True) + "\n")
+    with decision_lock:
+        acknowledgements_path.parent.mkdir(parents=True, exist_ok=True)
+        with acknowledgements_path.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(record, sort_keys=True) + "\n")
     return {"saved": True, "acknowledged": len(record["sample_ids"])}
 
 

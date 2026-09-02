@@ -426,6 +426,14 @@ def test_review_confirmation_requires_complete_integrity_checked_evidence(tmp_pa
             user,
         )
         assert reviewed.review_status == ReviewStatus.CONFIRMED
+        with pytest.raises(HTTPException) as duplicate:
+            review_event(
+                event.id,
+                ReviewRequest(status=ReviewStatus.CONFIRMED, notes="duplicate retry"),
+                session,
+                user,
+            )
+        assert duplicate.value.status_code == 409
 
 
 def test_raw_traffic_context_skips_untracked_vehicle_regions():

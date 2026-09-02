@@ -21,6 +21,8 @@ def calibrate(
     minimum_recall: float = 0.70,
     objective: str = "MAXIMIZE_F1_SUBJECT_TO_MINIMUM_RECALL",
 ) -> dict:
+    if output.exists():
+        raise FileExistsError(f"refusing to overwrite calibration artifact: {output}")
     for artifact_name, artifact_path in (
         ("model", model_path),
         ("validation manifest", validation_manifest),
@@ -67,7 +69,9 @@ def calibrate(
         report["thresholds"][class_name] = selected["threshold"]
         report["classes"][class_name] = {**selected, "validation_rows": len(values)}
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(report, indent=2, sort_keys=True), encoding="utf-8")
+    with output.open("x", encoding="utf-8") as handle:
+        json.dump(report, handle, indent=2, sort_keys=True)
+        handle.write("\n")
     return report
 
 

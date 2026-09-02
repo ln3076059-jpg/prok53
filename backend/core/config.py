@@ -1,15 +1,17 @@
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import field_validator
+from pydantic import field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+DEVELOPMENT_SECRET_KEY = "development-only-change-before-production-1234"
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     app_env: str = "development"
-    secret_key: str = "development-only-change-before-production-1234"
+    secret_key: str = DEVELOPMENT_SECRET_KEY
     database_url: str = "sqlite:///./driver_safety.db"
     model_path: Path = Path("models/active/best.pt")
     model_config_path: Path = Path("models/model_config.yaml")
@@ -26,6 +28,15 @@ class Settings(BaseSettings):
         if len(value) < 32:
             raise ValueError("SECRET_KEY must be at least 32 characters")
         return value
+
+    @model_validator(mode="after")
+    def reject_development_secret_in_production(self):
+        if (
+            self.app_env.strip().lower() == "production"
+            and self.secret_key == DEVELOPMENT_SECRET_KEY
+        ):
+            raise ValueError("production cannot use the public development SECRET_KEY")
+        return self
 
     @property
     def cors_origin_list(self) -> list[str]:

@@ -22,18 +22,20 @@ weights, calibration, external testing, and human approval remain mandatory.
 | EMA/ratio/duration/gap/hysteresis/cooldown | IMPLEMENTED | activation latch, release threshold, expiry/reset and tests |
 | Calibrated fusion | BLOCKED_BY_WEIGHTS | artifact absent; health exposes fallback/fail-closed |
 | Evidence clip and trace | IMPLEMENTED | canonical keyframes, protected clip/trace, full-package SHA-256 anchor and confirmation gate |
-| Human review provenance | IMPLEMENTED | append-only history exposed to UI |
-| Durable analysis queue | PARTIALLY_IMPLEMENTED | abstraction exists; demo adapter is not durable |
+| Human review provenance | IMPLEMENTED | explicit HUMAN assertion, append-only transition/source hashes, idempotent identical retry and serialized local append; human identity remains an operational responsibility |
+| Analysis queue/concurrency | PARTIALLY_IMPLEMENTED | API/business logic separated; single-process demo worker serializes complete inference; BackgroundTasks is not durable or multi-process |
 | File source | IMPLEMENTED | `FileVideoSource` |
-| Webcam/RTSP production source | PARTIALLY_IMPLEMENTED | adapters experimental |
-| Event evaluator | IMPLEMENTED_TOOLING | requires frozen reviewed truth + ACTIVE governed model lock; binds input hashes and refuses result overwrite; measurements `NOT_RUN` |
+| Webcam/RTSP production source | PARTIALLY_IMPLEMENTED | malformed identifiers and failed-open cleanup tested; reconnect/read-timeout/load evidence absent, so adapters remain experimental |
+| Event evaluator | IMPLEMENTED_TOOLING | requires frozen reviewed truth + ACTIVE governed model lock; binds input hashes, refuses result overwrite and can re-verify every bound artifact; measurements `NOT_RUN` |
 | Association/pose evaluator | IMPLEMENTED_TOOLING | measurements `NOT_RUN` |
 | Runtime benchmark | IMPLEMENTED_TOOLING | measurements `NOT_RUN` |
 | Governed V2 training | BLOCKED_BY_HUMAN_REVIEW | readiness report gates remain open |
 | External frozen test | IMPLEMENTED_TOOLING / BLOCKED_BY_DATA | freeze tool enforces reviewed source/camera/video-disjoint inputs and immutable output; real set absent |
-| Production startup validation | IMPLEMENTED | refuses mismatched/unlocked/unapproved artifacts |
+| Calibration/model-lock binding | IMPLEMENTED_TOOLING / NOT_RUN | lock verifies calibration model SHA, exact configured thresholds and all configured component hashes; real calibration absent |
+| Production startup validation | IMPLEMENTED | refuses mismatched/unlocked/unapproved artifacts, missing configured components and the public development secret |
 | Production activation | BLOCKED | no ACTIVE human-approved matching model lock; all scientific gates above must pass |
 | Deterministic CI | IMPLEMENTED | Ruff, compile, tests, FastAPI import and frontend build; no training/model/data downloads |
+| Main branch protection | BLOCKED_BY_GITHUB_SETTINGS | public branch metadata reports `protected=false`; see `docs/BRANCH_PROTECTION_RECOMMENDATION.md` |
 
 ## Required activation record
 

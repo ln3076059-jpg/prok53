@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 
+import pytest
+
 from tools.annotation_reviewer import app as reviewer
 
 
@@ -28,6 +30,7 @@ def test_reviewer_appends_transition_reason_source_and_stable_box_id(tmp_path, m
     first = reviewer.Decision(
         sample_id="sample-1",
         reviewer_id="reviewer@example.org",
+        reviewer_type="HUMAN",
         status="UNCERTAIN",
         decision_reason="INSUFFICIENT_EVIDENCE",
         annotations=[
@@ -39,15 +42,16 @@ def test_reviewer_appends_transition_reason_source_and_stable_box_id(tmp_path, m
         ],
     )
     reviewer.decision(first)
-    reviewer.decision(
-        reviewer.Decision(
-            sample_id="sample-1",
-            reviewer_id="reviewer@example.org",
-            status="REJECTED",
-            decision_reason="PHONE_FALSE_POSITIVE",
-            annotations=[],
-        )
+    second = reviewer.Decision(
+        sample_id="sample-1",
+        reviewer_id="reviewer@example.org",
+        reviewer_type="HUMAN",
+        status="REJECTED",
+        decision_reason="PHONE_FALSE_POSITIVE",
+        annotations=[],
     )
+    reviewer.decision(second)
+    duplicate = reviewer.decision(second)
 
     records = [json.loads(line) for line in decisions.read_text(encoding="utf-8").splitlines()]
     assert len(records) == 2
@@ -58,3 +62,19 @@ def test_reviewer_appends_transition_reason_source_and_stable_box_id(tmp_path, m
     assert records[0]["decision_id"]
     assert records[1]["previous_status"] == "UNCERTAIN"
     assert records[1]["new_status"] == "REJECTED"
+    assert duplicate["saved"] is False
+    assert duplicate["duplicate"] is True
+
+
+def test_reviewer_type_must_be_explicit_human():
+    base = {
+        "sample_id": "sample-1",
+        "reviewer_id": "reviewer@example.org",
+        "status": "UNCERTAIN",
+        "decision_reason": "INSUFFICIENT_EVIDENCE",
+        "annotations": [],
+    }
+    with pytest.raises(ValueError):
+        reviewer.Decision(**base)
+    with pytest.raises(ValueError):
+        reviewer.Decision(**base, reviewer_type="AI")

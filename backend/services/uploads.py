@@ -20,8 +20,10 @@ def safe_upload_name(original: str) -> str:
 
 
 async def save_upload(upload: UploadFile, destination: Path, maximum_bytes: int) -> tuple[int, str]:
-    if upload.content_type and not upload.content_type.startswith(ALLOWED_MIME_PREFIXES):
-        raise HTTPException(status_code=415, detail="Unsupported media type")
+    if upload.content_type:
+        media_type = upload.content_type.split(";", 1)[0].strip().lower()
+        if not (media_type.startswith("video/") or media_type == "application/octet-stream"):
+            raise HTTPException(status_code=415, detail="Unsupported media type")
     destination.parent.mkdir(parents=True, exist_ok=True)
     size = 0
     digest = hashlib.sha256()

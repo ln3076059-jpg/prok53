@@ -108,6 +108,9 @@ class SafetyDetector:
             blockers.append(f"model activation state is {self.activation_state}")
         if self.config.get("threshold_status") != "CALIBRATED_ON_VALIDATION":
             blockers.append("thresholds are not calibrated on validation data")
+        for name, path in self._configured_component_paths().items():
+            if not path.is_file():
+                blockers.append(f"configured runtime artifact is missing: {name} ({path})")
 
         activation = self.config.get("activation_policy", {})
         auxiliary = self.config.get("auxiliary_models", {})
@@ -143,16 +146,35 @@ class SafetyDetector:
         expected_experiment = self.config.get("experiment_id")
         if expected_experiment and lock.get("experiment_id") != expected_experiment:
             blockers.append("model lock experiment_id does not match runtime config")
-        if self.specialists.get("enabled"):
-            expected = {
-                item["name"]: self._sha256(Path(item["weights"]))
-                for item in self.specialists.get("models", [])
-            }
+        expected = {
+            name: self._sha256(path)
+            for name, path in self._configured_component_paths().items()
+        }
+        if expected:
             if lock.get("component_weight_sha256") != expected:
                 blockers.append("model lock component weight hashes do not match runtime artifacts")
-        elif lock.get("weights_sha256") != self._sha256(self.weights):
+        if not self.specialists.get("enabled") and (
+            lock.get("weights_sha256") != self._sha256(self.weights)
+        ):
             blockers.append("model lock weight SHA-256 does not match runtime artifact")
         return blockers
+
+    def _configured_component_paths(self) -> dict[str, Path]:
+        paths = {
+            str(item["name"]): Path(item["weights"])
+            for item in self.specialists.get("models", [])
+            if item.get("weights")
+        }
+        auxiliary = self.config.get("auxiliary_models", {})
+        vehicle = self.config.get("vehicle_context", {})
+        optional = {
+            "seatbelt_classifier": auxiliary.get("seatbelt_classifier_weights"),
+            "pose_estimator": auxiliary.get("pose_weights"),
+            "vehicle_detector": vehicle.get("vehicle_weights"),
+            "windshield_detector": vehicle.get("cabin_localizer", {}).get("weights"),
+        }
+        paths.update({name: Path(value) for name, value in optional.items() if value})
+        return paths
 
     @staticmethod
     def _sha256(path: Path) -> str | None:
@@ -304,9 +326,7 @@ class SafetyDetector:
         auxiliary = self.config.get("auxiliary_models", {})
         vehicle = self.config.get("vehicle_context", {})
         specialist_hashes = {
-            item.get("name", "unknown"): self._sha256(Path(item["weights"]))
-            for item in self.specialists.get("models", [])
-            if item.get("weights")
+            name: self._sha256(path) for name, path in self._configured_component_paths().items()
         }
         return {
             "available": self.available,

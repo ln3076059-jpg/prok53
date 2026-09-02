@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from urllib.parse import urlparse
 
 import cv2
 
@@ -25,6 +26,7 @@ class OpenCVVideoSource(VideoSource):
     def __init__(self, source: str | int):
         self.capture = cv2.VideoCapture(source)
         if not self.capture.isOpened():
+            self.capture.release()
             raise ValueError("video source cannot be opened")
 
     @property
@@ -49,6 +51,17 @@ class FileVideoSource(OpenCVVideoSource):
 class WebcamSource(OpenCVVideoSource):
     """Experimental source. Production reconnect/backpressure is not implemented."""
 
+    def __init__(self, source: int):
+        if isinstance(source, bool) or not isinstance(source, int) or source < 0:
+            raise ValueError("webcam source must be a non-negative integer device index")
+        super().__init__(source)
+
 
 class RTSPSource(OpenCVVideoSource):
     """Experimental source. Production reconnect/backpressure is not implemented."""
+
+    def __init__(self, source: str):
+        parsed = urlparse(source)
+        if parsed.scheme.lower() not in {"rtsp", "rtsps"} or not parsed.hostname:
+            raise ValueError("RTSP source must use rtsp:// or rtsps:// with a hostname")
+        super().__init__(source)

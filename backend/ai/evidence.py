@@ -78,7 +78,10 @@ class EventEvidenceBuffer:
     ) -> None:
         if event_id in self.pending:
             raise ValueError(f"evidence already pending for event {event_id}")
-        root = evidence_root / event_id
+        evidence_base = evidence_root.resolve()
+        root = (evidence_base / event_id).resolve()
+        if evidence_base not in root.parents:
+            raise ValueError("event_id escapes the evidence root")
         if root.exists():
             raise FileExistsError(f"evidence directory already exists: {root}")
         pre_frames = [(ts, image.copy()) for ts, image in self.frames if ts <= timestamp]

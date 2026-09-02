@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from training.evaluate_events import evaluate_frozen
+from training.evaluate_events import evaluate_frozen, verify_evaluation_integrity
 from training.freeze_event_ground_truth import REQUIRED_COLUMNS, freeze_event_ground_truth
 
 
@@ -114,6 +114,19 @@ def test_frozen_event_evaluation_requires_active_model_and_preserves_result(tmp_
     model_lock_path.write_text(json.dumps(model_lock), encoding="utf-8")
     output_path = tmp_path / "event-evaluation.json"
 
+    external_lock_original = external_lock_path.read_text(encoding="utf-8")
+    external_lock_path.write_text(external_lock_original + "\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="external-test artifact SHA256 mismatch"):
+        evaluate_frozen(
+            truth_path,
+            predictions_path,
+            truth_lock_path,
+            model_lock_path,
+            output_path,
+            video_minutes=1.0,
+        )
+    external_lock_path.write_text(external_lock_original, encoding="utf-8")
+
     with pytest.raises(ValueError, match="ACTIVE model lock"):
         evaluate_frozen(
             truth_path,
@@ -138,6 +151,10 @@ def test_frozen_event_evaluation_requires_active_model_and_preserves_result(tmp_
     assert report["status"] == "MEASURED_FROZEN_EXTERNAL_TEST"
     assert report["event_types"]["PHONE"]["false_events_per_hour"] == 0.0
     assert report["model_lock"]["experiment_id"] == "V2_TEST"
+    assert (
+        verify_evaluation_integrity(output_path)["status"]
+        == "FROZEN_EVENT_EVALUATION_INTEGRITY_VERIFIED"
+    )
     with pytest.raises(FileExistsError, match="refusing to overwrite"):
         evaluate_frozen(
             truth_path,
@@ -147,6 +164,18 @@ def test_frozen_event_evaluation_requires_active_model_and_preserves_result(tmp_
             output_path,
             video_minutes=1.0,
         )
+
+    predictions_original = predictions_path.read_text(encoding="utf-8")
+    predictions_path.write_text(predictions_original + "\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="predictions SHA256 changed"):
+        verify_evaluation_integrity(output_path)
+    predictions_path.write_text(predictions_original, encoding="utf-8")
+
+    model_lock_path.write_text(
+        json.dumps({**model_lock, "code_commit": "changed"}), encoding="utf-8"
+    )
+    with pytest.raises(ValueError, match="model lock SHA256 changed"):
+        verify_evaluation_integrity(output_path)
 
 
 def test_frozen_event_evaluation_rejects_truth_changed_after_freeze(tmp_path):

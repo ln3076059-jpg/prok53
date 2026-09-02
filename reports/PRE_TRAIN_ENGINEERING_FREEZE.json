@@ -1,0 +1,69 @@
+{
+  "audit_base_head": "40561ce2dea49169bc26152b08d54049fea83e63",
+  "audit_timestamp": "2026-09-02T03:44:13.1084455Z",
+  "code_solvable_issues_fixed": 9,
+  "code_solvable_issues_found": 9,
+  "code_status": {
+    "api_smoke": {
+      "http_status": 200,
+      "result": "PASS",
+      "runtime_status": "degraded"
+    },
+    "ci": {
+      "result": "PENDING_FREEZE_COMMIT",
+      "previous_main_result": "PASS"
+    },
+    "compile": "PASS",
+    "frontend": "PASS",
+    "lint": "PASS",
+    "tests": {
+      "baseline_passed": 106,
+      "baseline_total": 106,
+      "final_passed": 124,
+      "final_total": 124,
+      "meaning": "TOOLING_TESTED_NOT_MODEL_EVALUATED"
+    }
+  },
+  "engineering_gaps_remaining": [
+    {
+      "gap": "BackgroundTasks is not durable and inference serialization is process-local",
+      "status": "PARTIALLY_IMPLEMENTED"
+    },
+    {
+      "gap": "RTSP/webcam reconnect, timeout, backpressure and real-hardware behavior are unvalidated",
+      "status": "PARTIALLY_IMPLEMENTED"
+    },
+    {
+      "gap": "Database migrations and production operations are absent",
+      "status": "PARTIALLY_IMPLEMENTED"
+    },
+    {
+      "gap": "Main branch protection is disabled",
+      "status": "BLOCKED_BY_GITHUB_SETTINGS"
+    }
+  ],
+  "external_blockers": {
+    "calibration": "NOT_RUN",
+    "camera_calibration": "NOT_RUN",
+    "event_ground_truth": "BLOCKED_BY_REAL_DATA",
+    "external_test": "BLOCKED_BY_REAL_DATA",
+    "hardware_benchmark": "BLOCKED_BY_HARDWARE",
+    "human_review": {
+      "phone_proposals_pending": 9728,
+      "seatbelt_proposals_pending": 4868,
+      "status": "BLOCKED_BY_HUMAN_REVIEW"
+    },
+    "model_weights": "BLOCKED_BY_WEIGHTS",
+    "real_data": "BLOCKED_BY_REAL_DATA"
+  },
+  "ready_for_governed_training": false,
+  "ready_for_human_review": true,
+  "ready_for_production": false,
+  "repository_head": "40561ce2dea49169bc26152b08d54049fea83e63",
+  "status": "ENGINEERING_PRE_TRAINING_FREEZE_REACHED",
+  "v1_baseline": {
+    "path": "experiments/MC_BOOTSTRAP_001/config.yaml",
+    "sha256": "5A71E6B20A2D18CF25BBFBA4F203EBCA533549E7BCC6316A6A100034D6B2CEBB",
+    "unchanged": true
+  }
+}

@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
+from threading import Lock
 
 from sqlalchemy.orm import Session
 
@@ -23,8 +24,16 @@ class InferenceWorker:
         self.session_factory = session_factory
         self.detector = detector
         self.evidence_root = evidence_root
+        # The demo queue is process-local and can dispatch work from multiple request threads.
+        # Serialize the complete inference pipeline so independently stateful YOLO/ByteTrack,
+        # pose, classifier, temporal, and evidence objects cannot overlap on shared hardware.
+        self._execution_lock = Lock()
 
     def run(self, job_id: str) -> None:
+        with self._execution_lock:
+            self._run_serialized(job_id)
+
+    def _run_serialized(self, job_id: str) -> None:
         with self.session_factory() as session:
             job = session.get(AnalysisJob, job_id)
             if not job:

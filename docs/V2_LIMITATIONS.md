@@ -38,11 +38,19 @@ No component or event metric has been run for a final governed V2 model.
   identity.
 - Evidence MP4 generation depends on the local OpenCV codec. A missing codec records
   `CLIP_UNAVAILABLE`; it never fabricates a clip and confirmation remains blocked.
-- BackgroundTasks remains a non-durable demo queue. Process crashes can lose queued work.
-- Webcam/RTSP adapters are experimental and lack production reconnect/backpressure controls.
+- BackgroundTasks remains a non-durable demo queue. Complete inference is now serialized inside
+  one process to prevent model/tracker/cache overlap, but process crashes can still lose queued
+  work and multiple server processes are not supported for inference.
+- Webcam/RTSP adapters reject malformed identifiers and release failed captures, but remain
+  experimental: reconnect, read timeout, backpressure and real-camera load evidence are absent.
 - Database schema migration tooling is still required before production deployment.
 - Production startup validation is implemented, but no ACTIVE human-approved V2 model lock exists;
   production therefore correctly refuses to start with the current artifacts.
+- The local annotation reviewer now requires an explicit HUMAN assertion and prevents identical
+  retry duplication. Software cannot prove a person's identity; access control and reviewer
+  identity verification remain operational governance responsibilities.
+- GitHub reports `main.protected=false`. Enabling required PR/CI and force-push protection is
+  `BLOCKED_BY_GITHUB_SETTINGS`, not achievable through a source-code commit.
 
 ## Evaluation limitations
 

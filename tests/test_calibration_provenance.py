@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import csv
 
+import pytest
+
 from training.calibrate_thresholds import calibrate
 from training.common import sha256_file
 
@@ -30,3 +32,5 @@ def test_threshold_calibration_records_model_and_validation_provenance(tmp_path)
     assert report["validation_dataset_manifest"]["sha256"] == sha256_file(manifest)
     assert report["input_split_rows"] == {"test": 1, "val": 2}
     assert report["test_rows_used"] == 0
+    with pytest.raises(FileExistsError, match="refusing to overwrite"):
+        calibrate(scores, tmp_path / "calibration.json", model, manifest)

@@ -60,8 +60,24 @@ detector = SafetyDetector(settings.model_path, settings.model_config_path)
 worker = InferenceWorker(SessionLocal, detector, settings.evidence_dir)
 
 
+def _csv_safe(value):
+    if not isinstance(value, str):
+        return value
+    if value[:1] in {"=", "+", "-", "@", "\t", "\r"}:
+        return "'" + value
+    return value
+
+
+def _event_evidence_root(event_id: str) -> Path:
+    base = settings.evidence_dir.resolve()
+    root = (base / event_id).resolve()
+    if base not in root.parents:
+        raise HTTPException(status_code=400, detail="Unsafe event evidence path")
+    return root
+
+
 def _read_evidence_trace(event_id: str) -> tuple[dict, Path]:
-    trace_path = settings.evidence_dir / event_id / "trace.json"
+    trace_path = _event_evidence_root(event_id) / "trace.json"
     if not trace_path.is_file():
         return {}, trace_path
     try:
@@ -71,7 +87,7 @@ def _read_evidence_trace(event_id: str) -> tuple[dict, Path]:
 
 
 def _evidence_integrity(event_id: str, evidence: Evidence | None, trace: dict) -> dict:
-    root = (settings.evidence_dir / event_id).resolve()
+    root = _event_evidence_root(event_id)
     original = (
         root / "original_keyframe.jpg"
         if (root / "original_keyframe.jpg").is_file()
@@ -251,7 +267,7 @@ def event_detail(event_id: str, db: Session = Depends(get_db), _: User = Depends
     trace, trace_path = _read_evidence_trace(event_id)
     integrity = _evidence_integrity(event_id, evidence, trace)
     root_url = f"/events/{event_id}/evidence"
-    event_root = settings.evidence_dir / event_id
+    event_root = _event_evidence_root(event_id)
     original_path = (
         event_root / "original_keyframe.jpg"
         if (event_root / "original_keyframe.jpg").is_file()
@@ -307,13 +323,13 @@ def event_evidence(
     names = {
         "original": (
             "original_keyframe.jpg"
-            if (settings.evidence_dir / event_id / "original_keyframe.jpg").is_file()
+            if (_event_evidence_root(event_id) / "original_keyframe.jpg").is_file()
             else "original.jpg",
             "image/jpeg",
         ),
         "annotated": (
             "annotated_keyframe.jpg"
-            if (settings.evidence_dir / event_id / "annotated_keyframe.jpg").is_file()
+            if (_event_evidence_root(event_id) / "annotated_keyframe.jpg").is_file()
             else "annotated.jpg",
             "image/jpeg",
         ),
@@ -323,7 +339,7 @@ def event_evidence(
     if kind not in names:
         raise HTTPException(status_code=404, detail="Evidence kind not found")
     filename, media_type = names[kind]
-    event_root = (settings.evidence_dir / event_id).resolve()
+    event_root = _event_evidence_root(event_id)
     path = (event_root / filename).resolve()
     if event_root not in path.parents or not path.is_file():
         raise HTTPException(status_code=404, detail="Evidence file not found")
@@ -341,6 +357,8 @@ def review_event(
         raise HTTPException(status_code=422, detail="A review cannot return an event to PENDING")
     if not (event := db.get(Event, event_id)):
         raise HTTPException(status_code=404, detail="Event not found")
+    if payload.status == event.review_status:
+        raise HTTPException(status_code=409, detail="Duplicate review status transition")
     if payload.status == ReviewStatus.CONFIRMED:
         evidence = db.scalar(select(Evidence).where(Evidence.event_id == event.id))
         trace, _ = _read_evidence_trace(event.id)
@@ -420,6 +438,8 @@ def export_events(db: Session = Depends(get_db), _: User = Depends(current_user)
     for event in db.scalars(select(Event).order_by(Event.created_at.desc())):
         writer.writerow(
             [
+                _csv_safe(value)
+                for value in (
                 event.id,
                 event.event_type.value,
                 event.timestamp_seconds,
@@ -430,6 +450,7 @@ def export_events(db: Session = Depends(get_db), _: User = Depends(current_user)
                 f"{event.confidence:.6f}",
                 event.review_status.value,
                 event.model_version,
+                )
             ]
         )
     return Response(

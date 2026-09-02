@@ -346,7 +346,7 @@
       const candidates = queue.filter(sample => sample.proposal_review?.tier === "HIGH_CONFIDENCE" && sample.proposal_review?.decision === "PASS").slice(0, 500);
       if (!candidates.length) { setStatus("No high-confidence model-assisted PASS samples are available in this queue.", "error"); return; }
       if (!window.confirm(`Acknowledge proposals for ${candidates.length} samples? This is not governed HUMAN_APPROVED.`)) return;
-      await submit("/api/batch-acknowledgement", {reviewer_id: reviewerId, sample_ids: candidates.map(sample => sample.sample_id), notes: "Reviewer acknowledged visible high-confidence model proposals."}, `Acknowledged ${candidates.length} proposals for pretrain use.`);
+      await submit("/api/batch-acknowledgement", {reviewer_id: reviewerId, reviewer_type: "HUMAN", sample_ids: candidates.map(sample => sample.sample_id), notes: "Reviewer acknowledged visible high-confidence model proposals."}, `Acknowledged ${candidates.length} proposals for pretrain use.`);
     };
     async function submit(url, payload, successMessage) {
       if (saving) return false;

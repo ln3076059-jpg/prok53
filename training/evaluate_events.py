@@ -197,6 +197,38 @@ def evaluate_frozen(
     return report
 
 
+def verify_evaluation_integrity(report_path: Path) -> dict:
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    if report.get("status") != "MEASURED_FROZEN_EXTERNAL_TEST":
+        raise ValueError("event evaluation is not a frozen external-test result")
+    artifacts = {
+        "ground truth": report.get("ground_truth", {}),
+        "ground-truth lock": {
+            "path": report.get("ground_truth", {}).get("lock_path"),
+            "sha256": report.get("ground_truth", {}).get("lock_sha256"),
+        },
+        "predictions": report.get("predictions", {}),
+        "model lock": report.get("model_lock", {}),
+        "external-test lock": report.get("external_test_lock", {}),
+    }
+    verified: dict[str, str] = {}
+    for name, record in artifacts.items():
+        path = Path(str(record.get("path", "")))
+        expected_hash = record.get("sha256")
+        if not path.is_file():
+            raise ValueError(f"{name} referenced by event evaluation is missing")
+        actual_hash = sha256_file(path)
+        if not expected_hash or actual_hash != expected_hash:
+            raise ValueError(f"{name} SHA256 changed after frozen evaluation")
+        verified[name] = actual_hash
+    return {
+        "status": "FROZEN_EVENT_EVALUATION_INTEGRITY_VERIFIED",
+        "report_path": str(report_path),
+        "report_sha256": sha256_file(report_path),
+        "verified_artifacts": verified,
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Evaluate event-level predictions against frozen human ground truth"
@@ -205,6 +237,11 @@ def main() -> None:
     parser.add_argument("predictions", type=Path, nargs="?")
     parser.add_argument("--video-minutes", type=float, default=0.0)
     parser.add_argument("--tolerance-seconds", type=float, default=0.5)
+    parser.add_argument(
+        "--verify-existing",
+        type=Path,
+        help="Verify that every artifact bound to an existing frozen result is unchanged",
+    )
     parser.add_argument(
         "--ground-truth-lock",
         type=Path,
@@ -217,6 +254,9 @@ def main() -> None:
     )
     parser.add_argument("--output", type=Path, default=Path("reports/event_evaluation.json"))
     args = parser.parse_args()
+    if args.verify_existing:
+        print(json.dumps(verify_evaluation_integrity(args.verify_existing), indent=2))
+        return
     if not args.truth or not args.predictions:
         report = {
             "status": "NOT_RUN",
