@@ -1,5 +1,5 @@
 {
-  "head_sha": "9c640f27d52e1845911c604a73be72c3cd5d30a2",
+  "head_sha": "77dd77980c3f458bc5bef1ec833d74db8f4bc829",
   "total_queue": 3013,
   "review1_reviewed": 3013,
   "tier_a": 0,
@@ -17,7 +17,7 @@
   "admin_acknowledged": 0,
   "admin_acknowledged_unique_samples": 0,
   "human_confirmed": 0,
-  "remaining_human_attention": 986,
-  "manual_review_reduction_percent": 67.28,
+  "remaining_human_attention": 3900,
+  "manual_review_reduction_percent": 0.0,
   "governed_ready": false
 }

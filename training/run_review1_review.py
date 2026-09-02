@@ -248,8 +248,17 @@ def _write_attention_queue(
             "human_confirmation": False,
             "governance_eligible": False,
         }
-    queue = [selected[key] for key in sorted(selected)]
     output.parent.mkdir(parents=True, exist_ok=True)
+    if output.exists():
+        try:
+            existing = json.loads(output.read_text(encoding="utf-8"))
+            existing_by_id = {str(item["sample_id"]): item for item in existing}
+            existing_by_id.update(selected)
+            queue = [existing_by_id[key] for key in sorted(existing_by_id)]
+        except json.JSONDecodeError:
+            queue = [selected[key] for key in sorted(selected)]
+    else:
+        queue = [selected[key] for key in sorted(selected)]
     output.write_text(json.dumps(queue, indent=2, sort_keys=True), encoding="utf-8")
     return queue
 

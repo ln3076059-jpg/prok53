@@ -2,7 +2,7 @@
 
 Review 1 records are AI provenance under admin delegation. They are not human approval.
 
-- HEAD SHA: `9c640f27d52e1845911c604a73be72c3cd5d30a2`
+- HEAD SHA: `77dd77980c3f458bc5bef1ec833d74db8f4bc829`
 - TOTAL_QUEUE: `3013`
 - REVIEW1_REVIEWED: `3013`
 - TIER_A: `0`
@@ -20,6 +20,6 @@ Review 1 records are AI provenance under admin delegation. They are not human ap
 - ADMIN_ACKNOWLEDGED: `0`
 - ADMIN_ACKNOWLEDGED_UNIQUE_SAMPLES: `0`
 - HUMAN_CONFIRMED: `0`
-- REMAINING_HUMAN_ATTENTION: `986`
-- MANUAL_REVIEW_REDUCTION_PERCENT: `67.28`
+- REMAINING_HUMAN_ATTENTION: `3900`
+- MANUAL_REVIEW_REDUCTION_PERCENT: `0.0`
 - GOVERNED_READY: `False`
