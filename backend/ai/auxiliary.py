@@ -115,6 +115,7 @@ class VehicleDetector:
             persist=True,
             classes=sorted(self.COCO_VEHICLE_CLASSES),
             conf=self.confidence,
+            tracker="bytetrack.yaml",
             verbose=False,
         )[0]
         boxes = getattr(result, "boxes", None)
