@@ -82,7 +82,7 @@ Verification performed on 2026-09-02 against the working tree described above:
 | FastAPI in-memory startup and `/health` smoke test | PASS — HTTP 200, deliberately `degraded` without approved V2 artifacts |
 | Production fail-closed startup contract | PASS — refused missing/unapproved/uncalibrated artifacts |
 | Review UI mechanical quality detector | COMPLETED — flagged one color-token advisory and type-hierarchy warning; both corrected, detector not rerun per bounded-pass policy |
-| CI workflow | PASS — Ubuntu GitHub Actions run `33586606094` verified fatal Ruff, compile, Python tests, FastAPI import and frontend build for commit `f95c6c8` |
+| CI workflow | PASS — Ubuntu GitHub Actions run [`33589082514`](https://github.com/ln3076059-jpg/prok53/actions/runs/33589082514) verified fatal Ruff, compile, 124 Python tests, FastAPI import and frontend build for commit `1ae0451` |
 | Runtime benchmark | NOT_RUN — no production video/model artifacts supplied |
 | Association and event-level scientific evaluation | NOT_RUN — no frozen human ground truth supplied |
 

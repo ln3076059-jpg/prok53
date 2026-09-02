@@ -56,7 +56,9 @@ The primary blockers are human physical-phone reboxing, seatbelt upper-body sema
 
 CI now checks Ruff, Python compilation, tests, FastAPI import, and the frontend build without GPU
 training or dataset/model downloads. CI correctness does not supply model accuracy or clear any
-scientific gate.
+scientific gate. GitHub Actions run
+[`33589082514`](https://github.com/ln3076059-jpg/prok53/actions/runs/33589082514) passed for
+the verified code commit `1ae0451`.
 
 ## J. Pre-training engineering freeze
 

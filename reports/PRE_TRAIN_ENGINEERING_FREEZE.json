@@ -10,8 +10,10 @@
       "runtime_status": "degraded"
     },
     "ci": {
-      "result": "PENDING_FREEZE_COMMIT",
-      "previous_main_result": "PASS"
+      "result": "PASS",
+      "run_id": 33589082514,
+      "run_url": "https://github.com/ln3076059-jpg/prok53/actions/runs/33589082514",
+      "verified_commit": "1ae045155fc9571e643f1ee75d40d0d271508afa"
     },
     "compile": "PASS",
     "frontend": "PASS",
@@ -59,7 +61,7 @@
   "ready_for_governed_training": false,
   "ready_for_human_review": true,
   "ready_for_production": false,
-  "repository_head": "40561ce2dea49169bc26152b08d54049fea83e63",
+  "repository_head": "1ae045155fc9571e643f1ee75d40d0d271508afa",
   "status": "ENGINEERING_PRE_TRAINING_FREEZE_REACHED",
   "v1_baseline": {
     "path": "experiments/MC_BOOTSTRAP_001/config.yaml",

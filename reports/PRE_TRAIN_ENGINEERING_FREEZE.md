@@ -1,6 +1,7 @@
 # Pre-train Engineering Freeze
 
 Audit base HEAD: `40561ce2dea49169bc26152b08d54049fea83e63`  
+Verified code HEAD: `1ae045155fc9571e643f1ee75d40d0d271508afa`
 Audit timestamp: `2026-09-02T03:44:13.1084455Z`  
 Status: **ENGINEERING PRE-TRAINING FREEZE REACHED**
 
@@ -15,7 +16,7 @@ Status: **ENGINEERING PRE-TRAINING FREEZE REACHED**
 | Python compile | PASS |
 | Frontend build | PASS |
 | FastAPI smoke | PASS — HTTP 200, intentionally `degraded` |
-| GitHub CI | Pending for the freeze commit; previous `main` run passed |
+| GitHub CI | PASS — run [`33589082514`](https://github.com/ln3076059-jpg/prok53/actions/runs/33589082514) verified code HEAD `1ae0451` |
 
 The tests exercise tooling and refusal paths. Status is `TOOLING_TESTED`, not `MODEL_EVALUATED`.
 
