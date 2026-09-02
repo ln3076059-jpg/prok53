@@ -1,10 +1,25 @@
 from __future__ import annotations
 
 import json
+import subprocess
+import sys
 
 import pytest
 
 from tools.annotation_reviewer import app as reviewer
+
+
+def test_reviewer_documented_module_launcher_imports_from_repository_root():
+    result = subprocess.run(
+        [sys.executable, "-m", "tools.annotation_reviewer.app", "--help"],
+        check=False,
+        capture_output=True,
+        text=True,
+        timeout=30,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert "--manifest" in result.stdout
 
 
 def test_reviewer_appends_transition_reason_source_and_stable_box_id(tmp_path, monkeypatch):

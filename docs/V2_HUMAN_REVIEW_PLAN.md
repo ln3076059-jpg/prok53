@@ -29,7 +29,7 @@ Only a named human can create `APPROVED` or `APPROVED_NEGATIVE`. Automated passe
 Start the prioritized negative queue with:
 
 ```powershell
-py tools/annotation_reviewer/app.py `
+py -m tools.annotation_reviewer.app `
   --manifest datasets/manifests/v2_phone_negative_priority_review.json `
   --decisions datasets/manifests/v2_phone_negative_decisions.jsonl `
   --pending-only

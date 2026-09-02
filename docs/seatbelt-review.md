@@ -16,7 +16,7 @@ The queue has 8,371 images and 8,451 state proposals: 6,646 `seatbelt_fastened` 
 Start or resume review with a dedicated append-only decision log:
 
 ```powershell
-py tools/annotation_reviewer/app.py `
+py -m tools.annotation_reviewer.app `
   --manifest datasets/manifests/review_queue_roboflow_seatbelttraining_v4.json `
   --decisions datasets/manifests/review_decisions_roboflow_seatbelttraining_v4.jsonl `
   --pending-only

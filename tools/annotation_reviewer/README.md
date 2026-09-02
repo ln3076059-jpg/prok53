@@ -3,7 +3,7 @@
 Generate `datasets/manifests/review_queue.json` with `training.build_review_queue`, then run:
 
 ```bash
-python tools/annotation_reviewer/app.py
+python -m tools.annotation_reviewer.app
 ```
 
 Open `http://127.0.0.1:8010`. Decisions append to
@@ -24,7 +24,7 @@ for any occupant.
 To review a dedicated queue without mixing its audit trail with other reviews:
 
 ```powershell
-py tools/annotation_reviewer/app.py `
+py -m tools.annotation_reviewer.app `
   --manifest datasets/manifests/review_queue_mendeley_phone_bootstrap_001.json `
   --decisions datasets/manifests/review_decisions_mendeley_phone_bootstrap_001.jsonl `
   --confirmations datasets/manifests/review_confirmations_mendeley_phone_bootstrap_001.jsonl
