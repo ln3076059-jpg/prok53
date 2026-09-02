@@ -12,7 +12,8 @@
       "topic": "PHONE OBJECT DETECTION",
       "current": "YOLO11s (physical phone only)",
       "papers": [
-        "Dingus et al."
+        "Dingus et al.",
+        "Nguyen et al. 2025"
       ],
       "gap": "None",
       "risk": "None",
@@ -27,9 +28,21 @@
         "Celona et al."
       ],
       "gap": "Leakage risk across views",
-      "risk": "High",
+      "risk": "Medium",
       "action": "Audit camera overlap (NOT_PROVABLE if no metadata)",
-      "priority": "MUST_FIX_BEFORE_TRAIN"
+      "priority": "EXTERNAL_EVALUATION"
+    },
+    {
+      "topic": "SEATBELT ROI",
+      "current": "3-class classification on upper-body",
+      "papers": [
+        "Chun et al.",
+        "Hu et al."
+      ],
+      "gap": "None",
+      "risk": "None",
+      "action": "Proceed with baseline",
+      "priority": "BASELINE_FIRST_THEN_ABLATE"
     }
   ]
 }

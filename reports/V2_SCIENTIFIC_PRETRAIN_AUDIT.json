@@ -1,5 +1,5 @@
 {
-  "CURRENT_HEAD": "3d42ab1292b2a36e15257281f5fc4475e18d310f",
+  "CURRENT_HEAD": "ba36d1e7cf9960595025180b214d29f7e02b3e49",
   "VIDEO_SOURCES": {
     "total": 7,
     "accessible": 0,
@@ -7,31 +7,35 @@
   },
   "ACADEMIC_SOURCES": {
     "total": 26,
-    "peer_reviewed": 25,
-    "Q1_or_top_venue": 24,
-    "preprints": 1
+    "peer_reviewed": 24,
+    "Q1_or_top_venue": 19,
+    "preprints": 2
   },
   "LITERATURE_FINDINGS": [
-    "Baseline architecture is scientifically sound",
-    "No need for complex Transformers yet"
+    "Baseline YOLO11s + ByteTrack is scientifically sound",
+    "No need for complex Transformers (ViT) on edge hardware",
+    "Temporal logic matches CVPR localization concepts"
   ],
   "ALREADY_IMPLEMENTED": [
     "ByteTrack",
     "TemporalEventEngine",
     "CabinLocalizer",
-    "Seatbelt Uncertain Class"
+    "Seatbelt Uncertain Class",
+    "YOLO11s"
   ],
   "MUST_FIX_BEFORE_TRAIN": [],
   "BASELINE_FIRST_THEN_ABLATE": [
-    "Camera-invariant representation"
+    "Camera-invariant representation",
+    "Attention modules"
   ],
   "POST_TRAIN_CALIBRATION": [
     "Temporal hysteresis thresholds"
   ],
   "EXTERNAL_EVALUATION": [
-    "Cross-camera generalization"
+    "Cross-camera generalization",
+    "Domain adversarial validation"
   ],
   "FUTURE_WORK": [
-    "IR sensor fusion"
+    "mmWave Radar sensor fusion"
   ]
 }

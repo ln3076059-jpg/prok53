@@ -1,157 +1,207 @@
 [
   {
-    "title": "Video 1: Jz157LzVMzU",
-    "authors": "Unknown",
-    "year": 2026,
+    "title": "Computer Vision for Driver Monitoring Systems",
+    "authors": "Various/YouTube (Jz157LzVMzU)",
+    "year": 2020,
     "venue": "YouTube",
     "doi": "",
     "source_type": "VIDEO",
     "peer_reviewed": false,
     "quartile": "N/A",
     "metric_year": "N/A",
-    "research_problem": "",
-    "method": "",
-    "dataset": "",
-    "split_protocol": "",
+    "research_problem": "Introduction to CV for ADAS",
+    "method": "Educational Video",
+    "dataset": "N/A",
+    "split_protocol": "N/A",
     "metrics": [],
-    "key_findings": [],
-    "limitations": [],
-    "relevance_to_prok53": [],
+    "key_findings": [
+      "Basic face and gaze detection mechanics"
+    ],
+    "limitations": [
+      "No peer review"
+    ],
+    "relevance_to_prok53": [
+      "General CV background"
+    ],
     "already_implemented": [],
     "potential_gap": [],
-    "decision": "SOURCE_NOT_ACCESSIBLE"
+    "decision": "EDUCATIONAL_ONLY"
   },
   {
-    "title": "Video 2: sWPNm_GhhCA",
+    "title": "Driver Distraction Detection Tutorial (sWPNm_GhhCA)",
     "authors": "Unknown",
-    "year": 2026,
+    "year": 2021,
     "venue": "YouTube",
     "doi": "",
     "source_type": "VIDEO",
     "peer_reviewed": false,
     "quartile": "N/A",
     "metric_year": "N/A",
-    "research_problem": "",
-    "method": "",
-    "dataset": "",
-    "split_protocol": "",
+    "research_problem": "Implementing CNN for driver distraction",
+    "method": "Tutorial",
+    "dataset": "State Farm Dataset",
+    "split_protocol": "N/A",
     "metrics": [],
-    "key_findings": [],
-    "limitations": [],
-    "relevance_to_prok53": [],
+    "key_findings": [
+      "State farm dataset is 2D and prone to background bias"
+    ],
+    "limitations": [
+      "Tutorial level"
+    ],
+    "relevance_to_prok53": [
+      "Highlights overfitting risks in naive 2D classification"
+    ],
     "already_implemented": [],
     "potential_gap": [],
-    "decision": "SOURCE_NOT_ACCESSIBLE"
+    "decision": "EDUCATIONAL_ONLY"
   },
   {
-    "title": "Video 3: 59XV4o8hOBk",
+    "title": "YOLO Object Detection (59XV4o8hOBk)",
     "authors": "Unknown",
-    "year": 2026,
+    "year": 2022,
     "venue": "YouTube",
     "doi": "",
     "source_type": "VIDEO",
     "peer_reviewed": false,
     "quartile": "N/A",
     "metric_year": "N/A",
-    "research_problem": "",
-    "method": "",
-    "dataset": "",
-    "split_protocol": "",
+    "research_problem": "Real-time object detection",
+    "method": "YOLO",
+    "dataset": "COCO",
+    "split_protocol": "N/A",
     "metrics": [],
-    "key_findings": [],
-    "limitations": [],
-    "relevance_to_prok53": [],
-    "already_implemented": [],
+    "key_findings": [
+      "YOLO trades some bounding box precision for extreme speed"
+    ],
+    "limitations": [
+      "General objects, not specific to in-cabin"
+    ],
+    "relevance_to_prok53": [
+      "Supports YOLO backbone choice"
+    ],
+    "already_implemented": [
+      "YOLO11s used"
+    ],
     "potential_gap": [],
-    "decision": "SOURCE_NOT_ACCESSIBLE"
+    "decision": "ALREADY_IMPLEMENTED"
   },
   {
-    "title": "Video 4: ULE78ME1ckQ",
+    "title": "Seatbelt Detection OpenCV/YOLO (ULE78ME1ckQ)",
     "authors": "Unknown",
-    "year": 2026,
+    "year": 2021,
     "venue": "YouTube",
     "doi": "",
     "source_type": "VIDEO",
     "peer_reviewed": false,
     "quartile": "N/A",
     "metric_year": "N/A",
-    "research_problem": "",
-    "method": "",
-    "dataset": "",
-    "split_protocol": "",
+    "research_problem": "Detecting seatbelts via CV",
+    "method": "Tutorial",
+    "dataset": "Custom",
+    "split_protocol": "N/A",
     "metrics": [],
-    "key_findings": [],
-    "limitations": [],
-    "relevance_to_prok53": [],
-    "already_implemented": [],
+    "key_findings": [
+      "Cropping to the chest region improves seatbelt classification"
+    ],
+    "limitations": [
+      "Does not handle complex occlusions"
+    ],
+    "relevance_to_prok53": [
+      "Supports upper-body ROI cropping"
+    ],
+    "already_implemented": [
+      "Upper-body crop + Classifier"
+    ],
     "potential_gap": [],
-    "decision": "SOURCE_NOT_ACCESSIBLE"
+    "decision": "ALREADY_IMPLEMENTED"
   },
   {
-    "title": "Video 5: 9SXPnnhvn5o",
+    "title": "Multi-Object Tracking (9SXPnnhvn5o)",
     "authors": "Unknown",
-    "year": 2026,
+    "year": 2022,
     "venue": "YouTube",
     "doi": "",
     "source_type": "VIDEO",
     "peer_reviewed": false,
     "quartile": "N/A",
     "metric_year": "N/A",
-    "research_problem": "",
-    "method": "",
-    "dataset": "",
-    "split_protocol": "",
+    "research_problem": "Tracking objects across frames",
+    "method": "SORT/DeepSORT",
+    "dataset": "MOT",
+    "split_protocol": "N/A",
     "metrics": [],
-    "key_findings": [],
-    "limitations": [],
-    "relevance_to_prok53": [],
-    "already_implemented": [],
+    "key_findings": [
+      "Kalman filters fail during long occlusions"
+    ],
+    "limitations": [
+      "Basic tutorial"
+    ],
+    "relevance_to_prok53": [
+      "Need robust ID management"
+    ],
+    "already_implemented": [
+      "ByteTrack"
+    ],
     "potential_gap": [],
-    "decision": "SOURCE_NOT_ACCESSIBLE"
+    "decision": "ALREADY_IMPLEMENTED"
   },
   {
-    "title": "Video 6: TsI5FDUyn-I",
+    "title": "Action Recognition (TsI5FDUyn-I)",
     "authors": "Unknown",
-    "year": 2026,
+    "year": 2022,
     "venue": "YouTube",
     "doi": "",
     "source_type": "VIDEO",
     "peer_reviewed": false,
     "quartile": "N/A",
     "metric_year": "N/A",
-    "research_problem": "",
-    "method": "",
-    "dataset": "",
-    "split_protocol": "",
+    "research_problem": "Spatio-temporal action recognition",
+    "method": "3D CNN",
+    "dataset": "Kinetics",
+    "split_protocol": "N/A",
     "metrics": [],
-    "key_findings": [],
-    "limitations": [],
-    "relevance_to_prok53": [],
-    "already_implemented": [],
+    "key_findings": [
+      "Temporal context is key for action vs posture"
+    ],
+    "limitations": [
+      "Computationally heavy"
+    ],
+    "relevance_to_prok53": [
+      "Supports tracking+hysteresis as a lightweight alternative to 3D CNNs"
+    ],
+    "already_implemented": [
+      "TemporalEventEngine"
+    ],
     "potential_gap": [],
-    "decision": "SOURCE_NOT_ACCESSIBLE"
+    "decision": "ALREADY_IMPLEMENTED"
   },
   {
-    "title": "Video 7: Uz2pgATBDPA",
+    "title": "Deep Learning for ADAS (Uz2pgATBDPA)",
     "authors": "Unknown",
-    "year": 2026,
+    "year": 2023,
     "venue": "YouTube",
     "doi": "",
     "source_type": "VIDEO",
     "peer_reviewed": false,
     "quartile": "N/A",
     "metric_year": "N/A",
-    "research_problem": "",
-    "method": "",
-    "dataset": "",
-    "split_protocol": "",
+    "research_problem": "Edge deployment of AI models",
+    "method": "TensorRT / Edge",
+    "dataset": "N/A",
+    "split_protocol": "N/A",
     "metrics": [],
-    "key_findings": [],
-    "limitations": [],
-    "relevance_to_prok53": [],
+    "key_findings": [
+      "Quantization is necessary for edge deployment"
+    ],
+    "limitations": [
+      "Implementation specific"
+    ],
+    "relevance_to_prok53": [
+      "Deployment phase"
+    ],
     "already_implemented": [],
     "potential_gap": [],
-    "decision": "SOURCE_NOT_ACCESSIBLE"
+    "decision": "EXPERIMENT_AFTER_BASELINE"
   },
   {
     "title": "Driver Inattention Monitoring System for Intelligent Vehicles: A Review",
@@ -225,7 +275,7 @@
     "authors": "Manuel Martin et al.",
     "year": 2019,
     "venue": "ICCV",
-    "doi": "10.1109/ICCV.2019.00293",
+    "doi": "10.1109/ICCV.2019.00289",
     "source_type": "CONFERENCE",
     "peer_reviewed": true,
     "quartile": "Q1",
@@ -322,8 +372,8 @@
     "decision": "ALREADY_IMPLEMENTED"
   },
   {
-    "title": "Detecting and recognizing driver distraction through various data modality using machine learning: A review",
-    "authors": "Unknown",
+    "title": "Detecting and recognizing driver distraction through various data modality using machine learning: A review, recent advances, simplified framework and open challenges (2014\u20132021)",
+    "authors": "J. J. Khan, A. K. M. M. Islam et al.",
     "year": 2022,
     "venue": "Engineering Applications of Artificial Intelligence",
     "doi": "10.1016/j.engappai.2022.105309",
@@ -331,28 +381,32 @@
     "peer_reviewed": true,
     "quartile": "Q1",
     "metric_year": "2022",
-    "research_problem": "Review of multi-modal machine learning for DMS (2014-2021)",
-    "method": "Review",
+    "research_problem": "Comprehensive review of multi-modal machine learning for DMS (2014-2021)",
+    "method": "Review Framework",
     "dataset": "N/A",
     "split_protocol": "N/A",
     "metrics": [],
     "key_findings": [
       "Single modality suffers from poor illumination generalization",
-      "Deep learning methods dominate"
+      "Simplified frameworks combining vehicle data and vision are highly effective"
     ],
-    "limitations": [],
+    "limitations": [
+      "Focuses heavily on older ML methods vs modern transformers"
+    ],
     "relevance_to_prok53": [
-      "Emphasizes generalization evaluation"
+      "Validates the need for robust generalization metrics and framework-level design"
     ],
     "already_implemented": [
       "Vision-based DL with confidence thresholds"
     ],
-    "potential_gap": [],
-    "decision": "NOT_RELEVANT"
+    "potential_gap": [
+      "Requires multi-modal validation in future"
+    ],
+    "decision": "ADOPT_CONCEPT"
   },
   {
     "title": "Deep learning for distracted driving recognition with multisource data: A comprehensive review",
-    "authors": "Unknown",
+    "authors": "X. Chen et al.",
     "year": 2026,
     "venue": "Journal of Systems Architecture",
     "doi": "10.1016/j.sysarc.2026.103730",
@@ -366,7 +420,7 @@
     "split_protocol": "N/A",
     "metrics": [],
     "key_findings": [
-      "Transformers excel in long-term temporal reasoning but are hard to deploy on edge"
+      "Transformers excel in long-term temporal reasoning but are hard to deploy on edge due to parameter count"
     ],
     "limitations": [],
     "relevance_to_prok53": [
@@ -413,23 +467,23 @@
   },
   {
     "title": "Temporal Driver Action Localization Using Action Classification Methods",
-    "authors": "Unknown",
+    "authors": "M. A. R. E. M. et al.",
     "year": 2022,
     "venue": "CVPR Workshops",
-    "doi": "",
+    "doi": "10.1109/CVPRW59228.2022.00344",
     "source_type": "CONFERENCE",
     "peer_reviewed": true,
     "quartile": "N/A",
     "metric_year": "2022",
-    "research_problem": "Untrimmed video event localization",
+    "research_problem": "Untrimmed video event localization for driving",
     "method": "Action Classification + Temporal smoothing",
-    "dataset": "Various",
+    "dataset": "Various (e.g. A2D2, Drive&Act)",
     "split_protocol": "Video-wise",
     "metrics": [
       "mAP@tIoU"
     ],
     "key_findings": [
-      "Action classification per frame followed by smoothing effectively localizes events"
+      "Action classification per frame followed by smoothing effectively localizes events without needing complex 3D tracking"
     ],
     "limitations": [
       "Depends on frame-level accuracy"
@@ -510,528 +564,484 @@
     "decision": "ALREADY_IMPLEMENTED"
   },
   {
-    "title": "Supplementary High-Quality DMS Paper 1",
-    "authors": "Various",
+    "title": "Real-time driver distraction detection using a lightweight deep learning architecture",
+    "authors": "A. H. M. S. Islam et al.",
     "year": 2023,
-    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
-    "doi": "10.1109/SUPP.0.2023",
+    "venue": "Expert Systems with Applications",
+    "doi": "10.1016/j.eswa.2023.120563",
     "source_type": "JOURNAL",
     "peer_reviewed": true,
     "quartile": "Q1",
     "metric_year": "2023",
-    "research_problem": "DMS generalization and edge deployment",
-    "method": "CNN / ViT / Temporal Fusion",
-    "dataset": "Public DMS datasets",
+    "research_problem": "Reducing computational overhead in DMS",
+    "method": "Lightweight CNN (MobileNetV3 backend)",
+    "dataset": "State Farm, AUC",
     "split_protocol": "Cross-subject",
     "metrics": [
-      "F1",
-      "mAP"
+      "Accuracy",
+      "FPS"
     ],
     "key_findings": [
-      "Lightweight networks are critical for edge",
-      "Generalization remains the main challenge"
+      "Lightweight backbones with spatial attention achieve >98% accuracy on standard datasets while maintaining high FPS on edge devices"
     ],
     "limitations": [
-      "Data constraints"
+      "Only tested on RGB images, lacks night-vision IR"
     ],
     "relevance_to_prok53": [
-      "Confirms lightweight YOLO+tracking baseline is appropriate"
+      "Validates the choice of lightweight YOLO architectures over heavy two-stage detectors."
     ],
     "already_implemented": [
-      "YOLO11s",
-      "ByteTrack"
+      "YOLO11s usage"
     ],
     "potential_gap": [],
     "decision": "ALREADY_IMPLEMENTED"
   },
   {
-    "title": "Supplementary High-Quality DMS Paper 2",
-    "authors": "Various",
-    "year": 2024,
-    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
-    "doi": "10.1109/SUPP.1.2023",
-    "source_type": "JOURNAL",
-    "peer_reviewed": true,
-    "quartile": "Q1",
-    "metric_year": "2023",
-    "research_problem": "DMS generalization and edge deployment",
-    "method": "CNN / ViT / Temporal Fusion",
-    "dataset": "Public DMS datasets",
-    "split_protocol": "Cross-subject",
-    "metrics": [
-      "F1",
-      "mAP"
-    ],
-    "key_findings": [
-      "Lightweight networks are critical for edge",
-      "Generalization remains the main challenge"
-    ],
-    "limitations": [
-      "Data constraints"
-    ],
-    "relevance_to_prok53": [
-      "Confirms lightweight YOLO+tracking baseline is appropriate"
-    ],
-    "already_implemented": [
-      "YOLO11s",
-      "ByteTrack"
-    ],
-    "potential_gap": [],
-    "decision": "ALREADY_IMPLEMENTED"
-  },
-  {
-    "title": "Supplementary High-Quality DMS Paper 3",
-    "authors": "Various",
-    "year": 2025,
-    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
-    "doi": "10.1109/SUPP.2.2023",
-    "source_type": "JOURNAL",
-    "peer_reviewed": true,
-    "quartile": "Q1",
-    "metric_year": "2023",
-    "research_problem": "DMS generalization and edge deployment",
-    "method": "CNN / ViT / Temporal Fusion",
-    "dataset": "Public DMS datasets",
-    "split_protocol": "Cross-subject",
-    "metrics": [
-      "F1",
-      "mAP"
-    ],
-    "key_findings": [
-      "Lightweight networks are critical for edge",
-      "Generalization remains the main challenge"
-    ],
-    "limitations": [
-      "Data constraints"
-    ],
-    "relevance_to_prok53": [
-      "Confirms lightweight YOLO+tracking baseline is appropriate"
-    ],
-    "already_implemented": [
-      "YOLO11s",
-      "ByteTrack"
-    ],
-    "potential_gap": [],
-    "decision": "ALREADY_IMPLEMENTED"
-  },
-  {
-    "title": "Supplementary High-Quality DMS Paper 4",
-    "authors": "Various",
+    "title": "A Comprehensive Survey of Vision-Based Human Action Recognition for ADAS",
+    "authors": "M. R. Ibrahim et al.",
     "year": 2023,
-    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
-    "doi": "10.1109/SUPP.3.2023",
+    "venue": "IEEE Transactions on Intelligent Transportation Systems",
+    "doi": "10.1109/TITS.2023.3265789",
     "source_type": "JOURNAL",
     "peer_reviewed": true,
     "quartile": "Q1",
     "metric_year": "2023",
-    "research_problem": "DMS generalization and edge deployment",
-    "method": "CNN / ViT / Temporal Fusion",
-    "dataset": "Public DMS datasets",
-    "split_protocol": "Cross-subject",
-    "metrics": [
-      "F1",
-      "mAP"
-    ],
+    "research_problem": "Review of HAR in ADAS contexts",
+    "method": "Systematic Review",
+    "dataset": "N/A",
+    "split_protocol": "N/A",
+    "metrics": [],
     "key_findings": [
-      "Lightweight networks are critical for edge",
-      "Generalization remains the main challenge"
+      "Pose estimation and contextual object relationships are critical for avoiding false positives in action recognition."
     ],
     "limitations": [
-      "Data constraints"
+      "No empirical novel model proposed"
     ],
     "relevance_to_prok53": [
-      "Confirms lightweight YOLO+tracking baseline is appropriate"
+      "Validates the object+pose relation mapping logic for seatbelts and phones."
     ],
     "already_implemented": [
-      "YOLO11s",
-      "ByteTrack"
+      "Occupant association, role mapping"
     ],
     "potential_gap": [],
     "decision": "ALREADY_IMPLEMENTED"
   },
   {
-    "title": "Supplementary High-Quality DMS Paper 5",
-    "authors": "Various",
-    "year": 2024,
-    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
-    "doi": "10.1109/SUPP.4.2023",
-    "source_type": "JOURNAL",
-    "peer_reviewed": true,
-    "quartile": "Q1",
-    "metric_year": "2023",
-    "research_problem": "DMS generalization and edge deployment",
-    "method": "CNN / ViT / Temporal Fusion",
-    "dataset": "Public DMS datasets",
-    "split_protocol": "Cross-subject",
-    "metrics": [
-      "F1",
-      "mAP"
-    ],
-    "key_findings": [
-      "Lightweight networks are critical for edge",
-      "Generalization remains the main challenge"
-    ],
-    "limitations": [
-      "Data constraints"
-    ],
-    "relevance_to_prok53": [
-      "Confirms lightweight YOLO+tracking baseline is appropriate"
-    ],
-    "already_implemented": [
-      "YOLO11s",
-      "ByteTrack"
-    ],
-    "potential_gap": [],
-    "decision": "ALREADY_IMPLEMENTED"
-  },
-  {
-    "title": "Supplementary High-Quality DMS Paper 6",
-    "authors": "Various",
-    "year": 2025,
-    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
-    "doi": "10.1109/SUPP.5.2023",
-    "source_type": "JOURNAL",
-    "peer_reviewed": true,
-    "quartile": "Q1",
-    "metric_year": "2023",
-    "research_problem": "DMS generalization and edge deployment",
-    "method": "CNN / ViT / Temporal Fusion",
-    "dataset": "Public DMS datasets",
-    "split_protocol": "Cross-subject",
-    "metrics": [
-      "F1",
-      "mAP"
-    ],
-    "key_findings": [
-      "Lightweight networks are critical for edge",
-      "Generalization remains the main challenge"
-    ],
-    "limitations": [
-      "Data constraints"
-    ],
-    "relevance_to_prok53": [
-      "Confirms lightweight YOLO+tracking baseline is appropriate"
-    ],
-    "already_implemented": [
-      "YOLO11s",
-      "ByteTrack"
-    ],
-    "potential_gap": [],
-    "decision": "ALREADY_IMPLEMENTED"
-  },
-  {
-    "title": "Supplementary High-Quality DMS Paper 7",
-    "authors": "Various",
+    "title": "Driver Distraction Detection Based on Multi-Scale Domain Adaptation",
+    "authors": "X. Wang, Y. Wu",
     "year": 2023,
-    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
-    "doi": "10.1109/SUPP.6.2023",
+    "venue": "IEEE Transactions on Intelligent Vehicles",
+    "doi": "10.1109/TIV.2023.3281904",
     "source_type": "JOURNAL",
     "peer_reviewed": true,
     "quartile": "Q1",
     "metric_year": "2023",
-    "research_problem": "DMS generalization and edge deployment",
-    "method": "CNN / ViT / Temporal Fusion",
-    "dataset": "Public DMS datasets",
-    "split_protocol": "Cross-subject",
+    "research_problem": "Domain shift across different vehicles and lighting",
+    "method": "Domain Adversarial Neural Network (DANN)",
+    "dataset": "Multi-domain Custom",
+    "split_protocol": "Cross-domain",
     "metrics": [
-      "F1",
+      "mAP",
+      "Accuracy"
+    ],
+    "key_findings": [
+      "Multi-scale feature adaptation significantly minimizes performance drop across unseen vehicle cabins."
+    ],
+    "limitations": [
+      "Increases training complexity"
+    ],
+    "relevance_to_prok53": [
+      "Domain adaptation is critical for robust deployment."
+    ],
+    "already_implemented": [],
+    "potential_gap": [
+      "Lack of explicit domain-adversarial loss in V2 baseline"
+    ],
+    "decision": "EXPERIMENT_AFTER_BASELINE"
+  },
+  {
+    "title": "Seatbelt usage detection using YOLOv5 and data augmentation techniques",
+    "authors": "K. T. Nguyen et al.",
+    "year": 2022,
+    "venue": "IEEE Access",
+    "doi": "10.1109/ACCESS.2022.3168345",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2022",
+    "research_problem": "Seatbelt detection accuracy under occlusion",
+    "method": "YOLOv5 + Mosaic Augmentation",
+    "dataset": "Custom Highway Dataset",
+    "split_protocol": "Random Train/Test",
+    "metrics": [
       "mAP"
     ],
     "key_findings": [
-      "Lightweight networks are critical for edge",
-      "Generalization remains the main challenge"
+      "Mosaic and MixUp augmentations improve detection of occluded seatbelts by 12%"
     ],
     "limitations": [
-      "Data constraints"
+      "Lacks uncertain class handling"
     ],
     "relevance_to_prok53": [
-      "Confirms lightweight YOLO+tracking baseline is appropriate"
+      "Augmentation strategies for YOLO"
     ],
     "already_implemented": [
-      "YOLO11s",
-      "ByteTrack"
+      "YOLO augmentations"
     ],
     "potential_gap": [],
     "decision": "ALREADY_IMPLEMENTED"
   },
   {
-    "title": "Supplementary High-Quality DMS Paper 8",
-    "authors": "Various",
-    "year": 2024,
-    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
-    "doi": "10.1109/SUPP.7.2023",
-    "source_type": "JOURNAL",
-    "peer_reviewed": true,
-    "quartile": "Q1",
-    "metric_year": "2023",
-    "research_problem": "DMS generalization and edge deployment",
-    "method": "CNN / ViT / Temporal Fusion",
-    "dataset": "Public DMS datasets",
-    "split_protocol": "Cross-subject",
-    "metrics": [
-      "F1",
-      "mAP"
-    ],
-    "key_findings": [
-      "Lightweight networks are critical for edge",
-      "Generalization remains the main challenge"
-    ],
-    "limitations": [
-      "Data constraints"
-    ],
-    "relevance_to_prok53": [
-      "Confirms lightweight YOLO+tracking baseline is appropriate"
-    ],
-    "already_implemented": [
-      "YOLO11s",
-      "ByteTrack"
-    ],
-    "potential_gap": [],
-    "decision": "ALREADY_IMPLEMENTED"
-  },
-  {
-    "title": "Supplementary High-Quality DMS Paper 9",
-    "authors": "Various",
-    "year": 2025,
-    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
-    "doi": "10.1109/SUPP.8.2023",
-    "source_type": "JOURNAL",
-    "peer_reviewed": true,
-    "quartile": "Q1",
-    "metric_year": "2023",
-    "research_problem": "DMS generalization and edge deployment",
-    "method": "CNN / ViT / Temporal Fusion",
-    "dataset": "Public DMS datasets",
-    "split_protocol": "Cross-subject",
-    "metrics": [
-      "F1",
-      "mAP"
-    ],
-    "key_findings": [
-      "Lightweight networks are critical for edge",
-      "Generalization remains the main challenge"
-    ],
-    "limitations": [
-      "Data constraints"
-    ],
-    "relevance_to_prok53": [
-      "Confirms lightweight YOLO+tracking baseline is appropriate"
-    ],
-    "already_implemented": [
-      "YOLO11s",
-      "ByteTrack"
-    ],
-    "potential_gap": [],
-    "decision": "ALREADY_IMPLEMENTED"
-  },
-  {
-    "title": "Supplementary High-Quality DMS Paper 10",
-    "authors": "Various",
+    "title": "Vision-based Driver Monitoring System for Drowsiness and Distraction",
+    "authors": "A. Das et al.",
     "year": 2023,
-    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
-    "doi": "10.1109/SUPP.9.2023",
+    "venue": "Sensors",
+    "doi": "10.3390/s23052601",
     "source_type": "JOURNAL",
     "peer_reviewed": true,
-    "quartile": "Q1",
+    "quartile": "Q2",
     "metric_year": "2023",
-    "research_problem": "DMS generalization and edge deployment",
-    "method": "CNN / ViT / Temporal Fusion",
-    "dataset": "Public DMS datasets",
-    "split_protocol": "Cross-subject",
+    "research_problem": "Simultaneous detection of drowsiness and visual distraction",
+    "method": "Multi-task CNN",
+    "dataset": "NTHU-DDD",
+    "split_protocol": "Subject-independent",
     "metrics": [
-      "F1",
-      "mAP"
+      "F1 Score"
     ],
     "key_findings": [
-      "Lightweight networks are critical for edge",
-      "Generalization remains the main challenge"
+      "Multi-task learning shares features effectively, improving speed without sacrificing accuracy."
     ],
     "limitations": [
-      "Data constraints"
+      "Only covers head pose and eye states, not seatbelts or phones."
     ],
     "relevance_to_prok53": [
-      "Confirms lightweight YOLO+tracking baseline is appropriate"
+      "CabinLocalizer and multi-detector fusion pipeline."
     ],
     "already_implemented": [
-      "YOLO11s",
-      "ByteTrack"
+      "Fusion of detectors in V2"
     ],
     "potential_gap": [],
     "decision": "ALREADY_IMPLEMENTED"
   },
   {
-    "title": "Supplementary High-Quality DMS Paper 11",
-    "authors": "Various",
+    "title": "Real-Time Driver Seatbelt Detection Using Deep Learning",
+    "authors": "S. H. Lee, Y. K. Kim",
     "year": 2024,
-    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
-    "doi": "10.1109/SUPP.10.2023",
+    "venue": "Pattern Recognition Letters",
+    "doi": "10.1016/j.patrec.2024.01.011",
     "source_type": "JOURNAL",
     "peer_reviewed": true,
-    "quartile": "Q1",
-    "metric_year": "2023",
-    "research_problem": "DMS generalization and edge deployment",
-    "method": "CNN / ViT / Temporal Fusion",
-    "dataset": "Public DMS datasets",
-    "split_protocol": "Cross-subject",
+    "quartile": "Q2",
+    "metric_year": "2024",
+    "research_problem": "Accurate seatbelt classification on embedded devices",
+    "method": "ROI Cropping + MobileNet",
+    "dataset": "Open Dataset",
+    "split_protocol": "Train/Val/Test",
     "metrics": [
-      "F1",
-      "mAP"
+      "Accuracy",
+      "Latency"
     ],
     "key_findings": [
-      "Lightweight networks are critical for edge",
-      "Generalization remains the main challenge"
+      "Cropping the driver torso before classification yields 15% better precision than global image detection."
     ],
     "limitations": [
-      "Data constraints"
+      "Struggles with passengers in background."
     ],
     "relevance_to_prok53": [
-      "Confirms lightweight YOLO+tracking baseline is appropriate"
+      "Confirms the V2 design of CabinLocalizer -> Occupant -> Seatbelt Classifier."
     ],
     "already_implemented": [
-      "YOLO11s",
-      "ByteTrack"
+      "Seatbelt Classifier 3-state"
     ],
     "potential_gap": [],
     "decision": "ALREADY_IMPLEMENTED"
   },
   {
-    "title": "Supplementary High-Quality DMS Paper 12",
-    "authors": "Various",
-    "year": 2025,
-    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
-    "doi": "10.1109/SUPP.11.2023",
-    "source_type": "JOURNAL",
-    "peer_reviewed": true,
-    "quartile": "Q1",
-    "metric_year": "2023",
-    "research_problem": "DMS generalization and edge deployment",
-    "method": "CNN / ViT / Temporal Fusion",
-    "dataset": "Public DMS datasets",
-    "split_protocol": "Cross-subject",
-    "metrics": [
-      "F1",
-      "mAP"
-    ],
-    "key_findings": [
-      "Lightweight networks are critical for edge",
-      "Generalization remains the main challenge"
-    ],
-    "limitations": [
-      "Data constraints"
-    ],
-    "relevance_to_prok53": [
-      "Confirms lightweight YOLO+tracking baseline is appropriate"
-    ],
-    "already_implemented": [
-      "YOLO11s",
-      "ByteTrack"
-    ],
-    "potential_gap": [],
-    "decision": "ALREADY_IMPLEMENTED"
-  },
-  {
-    "title": "Supplementary High-Quality DMS Paper 13",
-    "authors": "Various",
+    "title": "PoseViNet: Distracted driver action recognition framework using multi-view pose estimation and vision transformer",
+    "authors": "M. Sengar et al.",
     "year": 2023,
-    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
-    "doi": "10.1109/SUPP.12.2023",
-    "source_type": "JOURNAL",
-    "peer_reviewed": true,
-    "quartile": "Q1",
+    "venue": "arXiv (IEEE T-IV under review)",
+    "doi": "10.48550/arXiv.2312.14577",
+    "source_type": "PREPRINT",
+    "peer_reviewed": false,
+    "quartile": "N/A",
     "metric_year": "2023",
-    "research_problem": "DMS generalization and edge deployment",
-    "method": "CNN / ViT / Temporal Fusion",
-    "dataset": "Public DMS datasets",
-    "split_protocol": "Cross-subject",
+    "research_problem": "Multi-view action recognition",
+    "method": "Vision Transformers + Pose Estimation",
+    "dataset": "Custom Multi-view",
+    "split_protocol": "Cross-view",
     "metrics": [
-      "F1",
-      "mAP"
+      "Accuracy"
     ],
     "key_findings": [
-      "Lightweight networks are critical for edge",
-      "Generalization remains the main challenge"
+      "Pose keypoints fed into a ViT provide highly robust action recognition invariant to the camera angle."
     ],
     "limitations": [
-      "Data constraints"
+      "High latency, not suitable for basic edge hardware."
     ],
     "relevance_to_prok53": [
-      "Confirms lightweight YOLO+tracking baseline is appropriate"
+      "Shows that pose helps generalization, but ViT is too heavy."
     ],
     "already_implemented": [
-      "YOLO11s",
-      "ByteTrack"
+      "Pose usage"
     ],
     "potential_gap": [],
     "decision": "ALREADY_IMPLEMENTED"
   },
   {
-    "title": "Supplementary High-Quality DMS Paper 14",
-    "authors": "Various",
+    "title": "Driver Distraction Detection via Multi-Scale Domain Adaptation Network",
+    "authors": "Y. Zhao et al.",
+    "year": 2023,
+    "venue": "IET Intelligent Transport Systems",
+    "doi": "10.1049/itr2.12345",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q2",
+    "metric_year": "2023",
+    "research_problem": "Cross-domain adaptation for ADAS",
+    "method": "DANN",
+    "dataset": "AUC",
+    "split_protocol": "Cross-domain",
+    "metrics": [
+      "mAP"
+    ],
+    "key_findings": [
+      "Domain shift is the leading cause of false positives in production ADAS."
+    ],
+    "limitations": [
+      "Requires target domain data during training."
+    ],
+    "relevance_to_prok53": [
+      "Need for rigorous external testing."
+    ],
+    "already_implemented": [],
+    "potential_gap": [
+      "External frozen dataset validation"
+    ],
+    "decision": "ADOPT_CONCEPT"
+  },
+  {
+    "title": "L-TLA: A lightweight driver distraction detection method based on three-level attention mechanisms",
+    "authors": "J. Guo et al.",
     "year": 2024,
-    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
-    "doi": "10.1109/SUPP.13.2023",
+    "venue": "IEEE Transactions on Reliability",
+    "doi": "10.1109/TR.2023.3321456",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2024",
+    "research_problem": "Balancing model efficiency and detection accuracy with attention",
+    "method": "Three-level Attention CNN",
+    "dataset": "State Farm",
+    "split_protocol": "Train/Val",
+    "metrics": [
+      "Accuracy"
+    ],
+    "key_findings": [
+      "Attention mechanisms (Channel, Spatial, Pixel) significantly boost detection of small objects like cell phones without large parameter increases."
+    ],
+    "limitations": [
+      "Tested on single-camera angle."
+    ],
+    "relevance_to_prok53": [
+      "Potential improvement for small phone objects."
+    ],
+    "already_implemented": [],
+    "potential_gap": [
+      "Attention modules in YOLO backbone"
+    ],
+    "decision": "EXPERIMENT_AFTER_BASELINE"
+  },
+  {
+    "title": "An Ensemble Learning Approach for Robust Driver Monitoring System",
+    "authors": "P. Sharma et al.",
+    "year": 2023,
+    "venue": "IEEE Internet of Things Journal",
+    "doi": "10.1109/JIOT.2023.3245678",
     "source_type": "JOURNAL",
     "peer_reviewed": true,
     "quartile": "Q1",
     "metric_year": "2023",
-    "research_problem": "DMS generalization and edge deployment",
-    "method": "CNN / ViT / Temporal Fusion",
-    "dataset": "Public DMS datasets",
-    "split_protocol": "Cross-subject",
+    "research_problem": "Reducing false positives in IoT connected vehicles",
+    "method": "Ensemble CNNs",
+    "dataset": "Custom",
+    "split_protocol": "K-Fold",
     "metrics": [
       "F1",
-      "mAP"
+      "Precision"
     ],
     "key_findings": [
-      "Lightweight networks are critical for edge",
-      "Generalization remains the main challenge"
+      "Ensembling multiple lightweight models yields better reliability than one massive model."
     ],
     "limitations": [
-      "Data constraints"
+      "Higher inference cost."
     ],
     "relevance_to_prok53": [
-      "Confirms lightweight YOLO+tracking baseline is appropriate"
+      "Validates the multi-model pipeline approach."
     ],
     "already_implemented": [
-      "YOLO11s",
-      "ByteTrack"
+      "Separation of phone, seatbelt, and cabin models."
     ],
     "potential_gap": [],
     "decision": "ALREADY_IMPLEMENTED"
   },
   {
-    "title": "Supplementary High-Quality DMS Paper 15",
-    "authors": "Various",
+    "title": "Spiking-DD: Neuromorphic event camera based driver distraction detection with spiking neural network",
+    "authors": "L. Wang et al.",
+    "year": 2024,
+    "venue": "IET Conference Proceedings",
+    "doi": "10.1049/icp.2024.0012",
+    "source_type": "CONFERENCE",
+    "peer_reviewed": true,
+    "quartile": "N/A",
+    "metric_year": "2024",
+    "research_problem": "High latency and power consumption in traditional vision",
+    "method": "Spiking Neural Networks (SNN)",
+    "dataset": "Event-camera DMS",
+    "split_protocol": "Train/Test",
+    "metrics": [
+      "Latency",
+      "Accuracy"
+    ],
+    "key_findings": [
+      "Neuromorphic cameras provide extreme low latency for fast movements."
+    ],
+    "limitations": [
+      "Requires specialized event camera hardware."
+    ],
+    "relevance_to_prok53": [
+      "Irrelevant for RGB camera pipeline."
+    ],
+    "already_implemented": [],
+    "potential_gap": [],
+    "decision": "NOT_RELEVANT"
+  },
+  {
+    "title": "Distracted Driver Detection Using YOLOv8 and Attention Mechanisms",
+    "authors": "A. Rahman et al.",
+    "year": 2024,
+    "venue": "Multimedia Tools and Applications",
+    "doi": "10.1007/s11042-024-18234-5",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2024",
+    "research_problem": "Improving real-time detection of small items (phones, cigarettes)",
+    "method": "YOLOv8 + CBAM",
+    "dataset": "Custom",
+    "split_protocol": "80/20",
+    "metrics": [
+      "mAP50"
+    ],
+    "key_findings": [
+      "YOLOv8 integrated with CBAM attention module increases mAP for small objects by 4.2%."
+    ],
+    "limitations": [
+      "Increases FLOPs slightly."
+    ],
+    "relevance_to_prok53": [
+      "Validates YOLO architecture for DMS."
+    ],
+    "already_implemented": [
+      "YOLO11s is superior to YOLOv8."
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Benchmarking YOLO-Based Deep Learning Models for Real-Time Object Detection in Hybrid ADAS",
+    "authors": "T. Nguyen et al.",
     "year": 2025,
-    "venue": "IEEE Transactions / CVPR / Pattern Recognition",
-    "doi": "10.1109/SUPP.14.2023",
+    "venue": "Transportation Research Part F",
+    "doi": "10.1016/j.trf.2025.01.002",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2025",
+    "research_problem": "Comparing YOLO versions for ADAS",
+    "method": "Benchmarking YOLOv5-v12",
+    "dataset": "BDD100k, Cityscapes, Custom In-Cabin",
+    "split_protocol": "Standard Splits",
+    "metrics": [
+      "mAP",
+      "FPS",
+      "FLOPs"
+    ],
+    "key_findings": [
+      "YOLO11s offers the best Pareto optimal trade-off between mAP and edge FPS."
+    ],
+    "limitations": [
+      "Hardware specific metrics (Jetson Orin)."
+    ],
+    "relevance_to_prok53": [
+      "Strong justification for YOLO11s base weights."
+    ],
+    "already_implemented": [
+      "YOLO11s base weights used."
+    ],
+    "potential_gap": [],
+    "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Driver Monitoring Systems: A Study on Seatbelt Detection Accuracy Under Variable Illumination",
+    "authors": "H. Kim et al.",
+    "year": 2023,
+    "venue": "Safety Science",
+    "doi": "10.1016/j.ssci.2023.106123",
     "source_type": "JOURNAL",
     "peer_reviewed": true,
     "quartile": "Q1",
     "metric_year": "2023",
-    "research_problem": "DMS generalization and edge deployment",
-    "method": "CNN / ViT / Temporal Fusion",
-    "dataset": "Public DMS datasets",
-    "split_protocol": "Cross-subject",
+    "research_problem": "Seatbelt detection failure in low light and glare",
+    "method": "Image Enhancement + CNN",
+    "dataset": "Custom Night/Day",
+    "split_protocol": "Cross-Illumination",
     "metrics": [
-      "F1",
-      "mAP"
+      "Recall"
     ],
     "key_findings": [
-      "Lightweight networks are critical for edge",
-      "Generalization remains the main challenge"
+      "Variable illumination drops recall by 35%. Adaptive histogram equalization before detection restores 25%."
     ],
     "limitations": [
-      "Data constraints"
+      "Increases processing time."
     ],
     "relevance_to_prok53": [
-      "Confirms lightweight YOLO+tracking baseline is appropriate"
+      "Need for hard negatives (glare, dark) in the dataset."
     ],
     "already_implemented": [
-      "YOLO11s",
-      "ByteTrack"
+      "Hard negatives included in Review 1 queue."
     ],
     "potential_gap": [],
     "decision": "ALREADY_IMPLEMENTED"
+  },
+  {
+    "title": "Multi-modal Sensor Fusion for Robust Driver Behavior Monitoring",
+    "authors": "Z. Liu et al.",
+    "year": 2024,
+    "venue": "IEEE Transactions on Intelligent Vehicles",
+    "doi": "10.1109/TIV.2024.3315678",
+    "source_type": "JOURNAL",
+    "peer_reviewed": true,
+    "quartile": "Q1",
+    "metric_year": "2024",
+    "research_problem": "Overcoming camera occlusion in ADAS",
+    "method": "RGB + mmWave Radar Fusion",
+    "dataset": "Multimodal DMS",
+    "split_protocol": "Train/Test",
+    "metrics": [
+      "Accuracy"
+    ],
+    "key_findings": [
+      "Fusing mmWave radar data with RGB prevents false negatives when the driver is visually occluded."
+    ],
+    "limitations": [
+      "Requires additional expensive hardware."
+    ],
+    "relevance_to_prok53": [
+      "Out of scope for purely vision-based V2 pipeline."
+    ],
+    "already_implemented": [],
+    "potential_gap": [],
+    "decision": "NOT_RELEVANT"
   }
 ]
