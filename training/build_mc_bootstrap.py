@@ -38,7 +38,7 @@ def clip_yolo_box(box: list[float], epsilon: float = 1e-9) -> tuple[list[float],
         right - left,
         bottom - top,
     ]
-    changed = any(abs(left_value - right_value) > 1e-12 for left_value, right_value in zip(box, clipped))
+    changed = any(abs(left_value - right_value) > 1e-12 for left_value, right_value in zip(box, clipped, strict=False))
     return clipped, changed
 
 

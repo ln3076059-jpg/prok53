@@ -7,7 +7,7 @@ import shutil
 from collections import Counter, defaultdict
 from pathlib import Path
 
-from training.common import CLASS_NAMES, stable_json_hash
+from training.common import stable_json_hash
 
 
 def assign_groups(records: list[dict], seed: int = 42) -> dict[str, str]:

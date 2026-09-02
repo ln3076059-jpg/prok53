@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from datetime import UTC, datetime
 from pathlib import Path
 from threading import Lock
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Header, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
@@ -28,24 +29,21 @@ class Annotation(BaseModel):
     yolo: tuple[float, float, float, float]
     occupant_role: str = Field(
         default="PENDING",
-        pattern="^(PENDING|driver|front_passenger|rear_left|rear_center|rear_right|other_occupant|UNCERTAIN)$",
+        pattern="^(driver|front_passenger|rear_left|rear_center|rear_right|other_occupant|PENDING|UNCERTAIN)$",
     )
 
-    def model_post_init(self, __context) -> None:
+    def validate(self) -> None:
         YoloLabel(self.class_id, *self.yolo).validate()
 
 
 class Decision(BaseModel):
-    sample_id: str
+    sample_id: str = Field(min_length=1, max_length=256)
     reviewer_id: str = Field(min_length=2, max_length=256)
     reviewer_type: str = Field(pattern="^(HUMAN|AI)$")
     status: str = Field(
-        pattern=(
-            "^(APPROVED|APPROVED_NEGATIVE|REJECTED|UNCERTAIN|"
-            "REVIEW1_APPROVED_UNDER_ADMIN_DELEGATION|REVIEW1_ACCEPTED_PROPOSAL|"
-            "REVIEW1_REJECTED_PROPOSAL|REVIEW1_CORRECTION_PROPOSAL|"
-            "REVIEW1_UNCERTAIN|NEEDS_HUMAN_REVIEW)$"
-        )
+        pattern="^(APPROVED|APPROVED_NEGATIVE|REJECTED|UNCERTAIN|"
+        + "|".join(sorted(REVIEW1_STATUSES))
+        + ")$"
     )
     decision_reason: str = Field(
         min_length=3,
@@ -74,7 +72,6 @@ class Decision(BaseModel):
         default="PENDING",
         pattern="^(PENDING|driver|front_passenger|rear_left|rear_center|rear_right|other_occupant|UNCERTAIN)$",
     )
-
     def model_post_init(self, __context) -> None:
         if self.reviewer_type == "AI":
             if self.reviewer_id != REVIEWER_ID:
@@ -149,11 +146,23 @@ class BatchAcknowledgement(BaseModel):
     notes: str = Field(default="", max_length=4000)
 
 
+
 class AdminBatchConfirmation(BaseModel):
     admin_actor_id: str = Field(pattern="^admin$")
     reviewer_type: str = Field(pattern="^HUMAN$")
     sample_ids: list[str] = Field(min_length=1, max_length=500)
     confirmation_text: str = Field(pattern="^CONFIRM_REVIEW1_PROPOSALS_AS_ADMIN$")
+    admin_token: str | None = Field(default=None, max_length=512)
+    vehicle_context_id: str | None = Field(default=None, max_length=256)
+    video_id: str | None = Field(default=None, max_length=256)
+    vehicle_id: str | None = Field(default=None, max_length=256)
+    person_id: str | None = Field(default=None, max_length=256)
+    camera_id: str | None = Field(default=None, max_length=256)
+    conditions: list[str] = Field(default_factory=list, max_length=16)
+    occupant_role: str | None = Field(
+        default=None,
+        pattern="^(driver|front_passenger|rear_left|rear_center|rear_right|other_occupant)$",
+    )
 
 
 def load_queue() -> list[dict]:
@@ -383,29 +392,65 @@ def batch_acknowledgement(payload: BatchAcknowledgement):
     return {"saved": True, "acknowledged": len(record["sample_ids"])}
 
 
-def _confirmed_record(sample_id: str, previous: dict, queue_item: dict) -> dict:
+def _confirmed_record(
+    sample_id: str, previous: dict, queue_item: dict, payload: AdminBatchConfirmation
+) -> dict:
     annotations = previous.get("reviewed_annotations", previous.get("annotations", []))
     target_status = "APPROVED" if annotations else "APPROVED_NEGATIVE"
+
+    vehicle_context_id = (
+        previous.get("vehicle_context_id")
+        if previous.get("vehicle_context_id") and previous.get("vehicle_context_id") != "UNKNOWN"
+        else payload.vehicle_context_id
+    )
+    video_id = (
+        previous.get("video_id")
+        if previous.get("video_id") and previous.get("video_id") != "UNKNOWN"
+        else payload.video_id
+    )
+    vehicle_id = (
+        previous.get("vehicle_id")
+        if previous.get("vehicle_id") and previous.get("vehicle_id") != "UNKNOWN"
+        else payload.vehicle_id
+    )
+    person_id = (
+        previous.get("person_id")
+        if previous.get("person_id") and previous.get("person_id") != "UNKNOWN"
+        else payload.person_id
+    )
+    camera_id = (
+        previous.get("camera_id")
+        if previous.get("camera_id") and previous.get("camera_id") != "UNKNOWN"
+        else payload.camera_id
+    )
+    conditions = previous.get("conditions") or payload.conditions
+    occupant_role = (
+        previous.get("occupant_role")
+        if previous.get("occupant_role")
+        not in {None, "PENDING", "UNCERTAIN", "unknown", "UNKNOWN"}
+        else payload.occupant_role
+    )
+
     required = {
-        "vehicle_context_id": previous.get("vehicle_context_id"),
-        "video_id": previous.get("video_id"),
-        "vehicle_id": previous.get("vehicle_id"),
-        "person_id": previous.get("person_id"),
-        "camera_id": previous.get("camera_id"),
+        "vehicle_context_id": vehicle_context_id,
+        "video_id": video_id,
+        "vehicle_id": vehicle_id,
+        "person_id": person_id,
+        "camera_id": camera_id,
     }
     missing = [key for key, value in required.items() if not value or value == "UNKNOWN"]
-    if missing or not previous.get("conditions"):
+    if missing or not conditions:
         raise HTTPException(
             409,
             f"Admin confirmation blocked for {sample_id}; incomplete governed metadata: {missing}",
         )
-    if previous.get("occupant_role") in {None, "PENDING", "UNCERTAIN", "unknown"}:
+    if occupant_role in {None, "PENDING", "UNCERTAIN", "unknown", "UNKNOWN"}:
         raise HTTPException(409, f"Admin confirmation blocked for {sample_id}; unresolved role")
     unresolved = [
         index
         for index, annotation in enumerate(annotations)
         if annotation.get("occupant_role")
-        in {None, "PENDING", "UNCERTAIN", "unknown"}
+        in {None, "PENDING", "UNCERTAIN", "unknown", "UNKNOWN"}
     ]
     if unresolved:
         raise HTTPException(
@@ -427,6 +472,13 @@ def _confirmed_record(sample_id: str, previous: dict, queue_item: dict) -> dict:
         "reviewed_at_utc": datetime.now(UTC).isoformat(),
         "human_confirmation": True,
         "governance_eligible": True,
+        "vehicle_context_id": vehicle_context_id,
+        "video_id": video_id,
+        "vehicle_id": vehicle_id,
+        "person_id": person_id,
+        "camera_id": camera_id,
+        "conditions": conditions,
+        "occupant_role": occupant_role,
         "source_group_id": queue_item.get("source_group_id"),
     }
     record.pop("decision_id", None)
@@ -435,7 +487,18 @@ def _confirmed_record(sample_id: str, previous: dict, queue_item: dict) -> dict:
 
 
 @app.post("/api/admin-batch-confirm")
-def admin_batch_confirm(payload: AdminBatchConfirmation):
+def admin_batch_confirm(
+    payload: AdminBatchConfirmation,
+    x_admin_token: str | None = Header(default=None, alias="X-Admin-Token"),
+):
+    expected_secret = os.environ.get("ADMIN_CONFIRMATION_SECRET") or os.environ.get("ADMIN_TOKEN")
+    provided_token = payload.admin_token or x_admin_token
+    if expected_secret:
+        if not provided_token or provided_token != expected_secret:
+            raise HTTPException(
+                401, "UNAUTHORIZED_ADMIN_CONFIRMATION: Invalid or missing admin token"
+            )
+
     queue_by_id = {item["sample_id"]: item for item in load_queue()}
     with decision_lock:
         latest = load_latest_decisions()
@@ -444,18 +507,17 @@ def admin_batch_confirm(payload: AdminBatchConfirmation):
             if sample_id not in queue_by_id:
                 raise HTTPException(404, f"Sample not found in active queue: {sample_id}")
             previous = latest.get(sample_id)
-            if (
-                not previous
-                or previous.get("new_status")
-                != "REVIEW1_APPROVED_UNDER_ADMIN_DELEGATION"
-            ):
+            if not previous or previous.get("new_status") not in {
+                "REVIEW1_APPROVED_UNDER_ADMIN_DELEGATION",
+                "REVIEW1_ACCEPTED_PROPOSAL",
+            }:
                 raise HTTPException(
-                    409, f"Sample is not an eligible Review 1 Tier-A proposal: {sample_id}"
+                    409, f"Sample is not an eligible Review 1 proposal: {sample_id}"
                 )
             if previous.get("reviewer_type") != "AI" or previous.get("reviewer_id") != REVIEWER_ID:
                 raise HTTPException(409, f"Invalid Review 1 provenance: {sample_id}")
             resolve_queue_image(queue_by_id[sample_id])
-            records.append(_confirmed_record(sample_id, previous, queue_by_id[sample_id]))
+            records.append(_confirmed_record(sample_id, previous, queue_by_id[sample_id], payload))
         decisions_path.parent.mkdir(parents=True, exist_ok=True)
         with decisions_path.open("a", encoding="utf-8") as handle:
             for record in records:

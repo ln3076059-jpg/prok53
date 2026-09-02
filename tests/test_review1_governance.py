@@ -294,6 +294,92 @@ def test_reviewer_api_keeps_review1_ai_and_admin_confirmation_separate(tmp_path,
     assert reviewer.status()["human_confirmed"] == 1
 
 
+def test_admin_batch_confirm_tier_b_with_metadata_and_auth(tmp_path, monkeypatch):
+    import os
+
+    from fastapi import HTTPException
+
+    datasets, _, queue, _, image, digest = _queue_and_visual(tmp_path)
+    decisions = tmp_path / "api-tierb-decisions.jsonl"
+    payload = json.loads(queue.read_text(encoding="utf-8"))
+    payload[0]["sha256"] = digest
+    queue.write_text(json.dumps(payload), encoding="utf-8")
+
+    monkeypatch.setattr(reviewer, "manifest_path", queue)
+    monkeypatch.setattr(reviewer, "decisions_path", decisions)
+    monkeypatch.setattr(reviewer, "datasets_root", datasets)
+    monkeypatch.setattr(os, "environ", {**os.environ, "ADMIN_CONFIRMATION_SECRET": "secret123"})
+
+    tier_b_proposal = {
+        "sample_id": "sample-1",
+        "reviewer_id": "review1",
+        "reviewer_type": "AI",
+        "decision_reason": "HARD_NEGATIVE_CONFIRMED",
+        "annotations": [],
+        "delegated_by": "admin",
+        "approval_authority_id": "admin",
+        "review1_confidence": 0.90,
+        "risk_flags": [],
+        "visual_evidence": {
+            "inspected": True,
+            "method": "DIRECT_IMAGE_INSPECTION",
+        },
+        "vehicle_context_id": "UNKNOWN",
+        "occupant_role": "UNCERTAIN",
+        "video_id": "UNKNOWN",
+        "vehicle_id": "UNKNOWN",
+        "person_id": "UNKNOWN",
+        "camera_id": "UNKNOWN",
+        "conditions": [],
+    }
+
+    reviewer.decision(
+        reviewer.Decision(**tier_b_proposal, status="REVIEW1_ACCEPTED_PROPOSAL")
+    )
+
+    # Missing/wrong token should fail authentication with HTTP 401
+    with pytest.raises(HTTPException) as exc_info:
+        reviewer.admin_batch_confirm(
+            reviewer.AdminBatchConfirmation(
+                admin_actor_id="admin",
+                reviewer_type="HUMAN",
+                sample_ids=["sample-1"],
+                confirmation_text="CONFIRM_REVIEW1_PROPOSALS_AS_ADMIN",
+                admin_token="wrong_token",
+            )
+        )
+    assert exc_info.value.status_code == 401
+
+    # Successful admin confirmation supplying missing batch metadata overrides
+    confirmed = reviewer.admin_batch_confirm(
+        reviewer.AdminBatchConfirmation(
+            admin_actor_id="admin",
+            reviewer_type="HUMAN",
+            sample_ids=["sample-1"],
+            confirmation_text="CONFIRM_REVIEW1_PROPOSALS_AS_ADMIN",
+            admin_token="secret123",
+            vehicle_context_id="dms_context_01",
+            video_id="video_dms_01",
+            vehicle_id="vehicle_sedan_01",
+            person_id="person_driver_01",
+            camera_id="cam_front_01",
+            conditions=["NORMAL_DAYLIGHT"],
+            occupant_role="driver",
+        )
+    )
+    assert confirmed["confirmed"] == 1
+    records = [json.loads(line) for line in decisions.read_text(encoding="utf-8").splitlines()]
+    human_rec = records[1]
+    assert human_rec["reviewer_type"] == "HUMAN"
+    assert human_rec["status"] == "APPROVED_NEGATIVE"
+    assert human_rec["vehicle_context_id"] == "dms_context_01"
+    assert human_rec["occupant_role"] == "driver"
+    assert human_rec["video_id"] == "video_dms_01"
+    assert human_rec["conditions"] == ["NORMAL_DAYLIGHT"]
+    assert human_rec["governance_eligible"] is True
+
+
+
 def test_review1_correction_materializes_separate_lane_without_overwriting_source(tmp_path):
     image = tmp_path / "source.jpg"
     image.write_bytes(b"immutable-source-image")
