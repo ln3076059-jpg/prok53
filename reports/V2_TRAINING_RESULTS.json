@@ -1,0 +1,94 @@
+{
+  "components": {
+    "phone_detector": {
+      "best_weights": "C:\\RoadWatchV2\\runs\\full\\MULTIMODEL_V2_RTX5060TI_16GB_ALL_PRETRAIN_PENDING_TRAIN_phone_detector\\weights\\best.pt",
+      "best_weights_sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+      "component": "phone_detector",
+      "plan": "C:\\RoadWatchV2\\runs\\full\\MULTIMODEL_V2_RTX5060TI_16GB_ALL_PRETRAIN_PENDING_TRAIN_phone_detector_PLAN.json",
+      "plan_fingerprint": "89ce8dc79a9489cdd9360c28936f35868f275791558fa99c297ed205aad41135",
+      "resumed": true,
+      "reused_completed": true,
+      "run": "C:\\RoadWatchV2\\runs\\full\\MULTIMODEL_V2_RTX5060TI_16GB_ALL_PRETRAIN_PENDING_TRAIN_phone_detector",
+      "skipped_completed_checkpoint": false,
+      "task": "detect",
+      "test_split_used": false,
+      "validation_metrics": {
+        "fitness": 0.7247994080810819,
+        "metrics/mAP50(B)": 0.9448490310543104,
+        "metrics/mAP50-95(B)": 0.7003494499729455,
+        "metrics/precision(B)": 0.9712760616546096,
+        "metrics/recall(B)": 0.8273381294964028
+      }
+    },
+    "seatbelt_classifier": {
+      "best_weights": "C:\\RoadWatchV2\\runs\\full\\MULTIMODEL_V2_RTX5060TI_16GB_ALL_PRETRAIN_PENDING_TRAIN_seatbelt_classifier\\weights\\best.pt",
+      "best_weights_sha256": "e55158e3f152922e710ad260295da16488ffc2c6a145b8dfdc5c4ce323392bd4",
+      "component": "seatbelt_classifier",
+      "plan": "C:\\RoadWatchV2\\runs\\full\\MULTIMODEL_V2_RTX5060TI_16GB_ALL_PRETRAIN_PENDING_TRAIN_seatbelt_classifier_PLAN.json",
+      "plan_fingerprint": "a8306e24463b4043c3286eaceeb5c5bd1da2521003d82c6d9896961c573f7d5b",
+      "resumed": false,
+      "run": "C:\\RoadWatchV2\\runs\\full\\MULTIMODEL_V2_RTX5060TI_16GB_ALL_PRETRAIN_PENDING_TRAIN_seatbelt_classifier",
+      "skipped_completed_checkpoint": false,
+      "task": "classify",
+      "test_split_used": false,
+      "validation_metrics": {
+        "fitness": 0.9048362076282501,
+        "metrics/accuracy_top1": 0.8096724152565002,
+        "metrics/accuracy_top5": 1.0
+      }
+    },
+    "seatbelt_detector": {
+      "best_weights": "C:\\RoadWatchV2\\runs\\full\\MULTIMODEL_V2_RTX5060TI_16GB_ALL_PRETRAIN_PENDING_TRAIN_seatbelt_detector\\weights\\best.pt",
+      "best_weights_sha256": "361436ab073c8fcc17a041f098285efdd0cf6775a8970be2ffada4e45c6bc500",
+      "component": "seatbelt_detector",
+      "plan": "C:\\RoadWatchV2\\runs\\full\\MULTIMODEL_V2_RTX5060TI_16GB_ALL_PRETRAIN_PENDING_TRAIN_seatbelt_detector_PLAN.json",
+      "plan_fingerprint": "fdfcfb6ca1ef48f0e43047ebde74c3c6d054eae123be9e4cd6e9927d69ea15d8",
+      "resumed": true,
+      "run": "C:\\RoadWatchV2\\runs\\full\\MULTIMODEL_V2_RTX5060TI_16GB_ALL_PRETRAIN_PENDING_TRAIN_seatbelt_detector",
+      "skipped_completed_checkpoint": false,
+      "task": "detect",
+      "test_split_used": false,
+      "validation_metrics": {
+        "fitness": 0.5780512824360486,
+        "metrics/mAP50(B)": 0.9472888607966224,
+        "metrics/mAP50-95(B)": 0.5370248848404293,
+        "metrics/precision(B)": 0.9256772679835057,
+        "metrics/recall(B)": 0.8784763762031585
+      }
+    }
+  },
+  "config": "C:\\RoadWatchV2\\runs\\full\\runtime_config.yaml",
+  "config_sha256": "e9bf872b6ec4aac9fa8add867f6000ed0427f89377e3ce5d81e5e280047832e1",
+  "created_at": "2026-09-03T08:19:27.303997+00:00",
+  "environment": {
+    "capability": [
+      8,
+      6
+    ],
+    "cuda_available": true,
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "platform": "Windows-10-10.0.19045-SP0",
+    "python": "3.11.0 (main, Oct 24 2022, 18:26:48) [MSC v.1933 64 bit (AMD64)]",
+    "torch": "2.8.0+cu128",
+    "torch_cuda_runtime": "12.8",
+    "ultralytics": "8.3.187",
+    "vram_bytes": 25769279488
+  },
+  "experiment_id": "MULTIMODEL_V2_RTX5060TI_16GB_ALL_PRETRAIN_PENDING_TRAIN",
+  "external_resume_backup": "C:\\RoadWatchV2\\backup",
+  "policy": "VALIDATION_ONLY_DURING_TRAINING; FROZEN_TEST_AFTER_MODEL_LOCK",
+  "recovery_archive": "C:\\RoadWatchV2\\runs\\full\\MULTIMODEL_V2_RTX5060TI_16GB_ALL_PRETRAIN_PENDING_TRAIN_RECOVERY.zip",
+  "recovery_sha256": "f0ebe8a29a87dac1759ffe08b1cf467be1e6ffa35ce723a19c36b4226e8170ba",
+  "runtime_policy": {
+    "profile": "rtx5060ti_16gb",
+    "readiness_level": "pretrain_pending",
+    "selection": [
+      "phone_detector",
+      "seatbelt_classifier",
+      "seatbelt_detector"
+    ],
+    "smoke": false,
+    "test_split_used": false
+  },
+  "schema_version": 1
+}
