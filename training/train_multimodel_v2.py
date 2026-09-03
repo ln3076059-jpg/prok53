@@ -13,6 +13,11 @@ from pathlib import Path
 import yaml
 
 from training.common import sha256_file, stable_json_hash
+from training.epoch_snapshots import (
+    check_disk_space_for_snapshots,
+    create_snapshots_manifest,
+    save_epoch_snapshot,
+)
 
 
 def _write_json_atomic(path: Path, payload: dict) -> None:
@@ -232,6 +237,7 @@ def train_component(
     working: Path,
     resume: bool = False,
     backup_dir: Path | None = None,
+    backup_epoch_snapshots: bool = False,
 ) -> dict:
     from ultralytics import YOLO
 
@@ -283,10 +289,22 @@ def train_component(
             raise ValueError(f"STOP: completed report plan mismatch for {component}")
         if not best.is_file() or sha256_file(best) != report.get("best_weights_sha256"):
             raise ValueError(f"STOP: completed best.pt mismatch for {component}")
+        create_snapshots_manifest(run, component, plan["fingerprint"])
         return {**report, "reused_completed": True}
 
     resumed = False
     skipped_completed_checkpoint = False
+
+    def _epoch_snapshot_callback(trainer):
+        save_epoch_snapshot(
+            trainer=trainer,
+            component=component,
+            plan_fingerprint=plan["fingerprint"],
+            run_dir=run,
+            backup_dir=backup_dir,
+            backup_epoch_snapshots=backup_epoch_snapshots,
+        )
+
     if run.exists():
         last = run / "weights" / "last.pt"
         if not resume:
@@ -297,13 +315,19 @@ def train_component(
             raise FileNotFoundError(f"STOP: incomplete run has no resumable last.pt: {last}")
         model = YOLO(str(last))
         model.add_callback("on_train_batch_end", assert_finite_training_state)
+        model.add_callback("on_model_save", _epoch_snapshot_callback)
         if backup_dir is not None:
             model.add_callback(
                 "on_model_save",
                 _resume_backup_callback(backup_dir, run_name, plan_path, plan["fingerprint"]),
             )
         completed_epochs = int((model.ckpt or {}).get("epoch", -1)) + 1
-        if completed_epochs >= int(config["epochs"]):
+        total_epochs = int(config["epochs"])
+        
+        current_last_pt_size = last.stat().st_size
+        check_disk_space_for_snapshots(run, current_last_pt_size, total_epochs)
+
+        if completed_epochs >= total_epochs:
             skipped_completed_checkpoint = True
         else:
             model.train(resume=True)
@@ -311,6 +335,7 @@ def train_component(
     else:
         model = YOLO(model_name)
         model.add_callback("on_train_batch_end", assert_finite_training_state)
+        model.add_callback("on_model_save", _epoch_snapshot_callback)
         if backup_dir is not None:
             model.add_callback(
                 "on_model_save",
@@ -344,6 +369,7 @@ def train_component(
         "validation_metrics": metrics,
         "test_split_used": False,
     }
+    create_snapshots_manifest(run, component, plan["fingerprint"])
     _write_json_atomic(run / "v2_component_report.json", report)
     return report
 
@@ -354,6 +380,7 @@ def train_suite(
     only: set[str] | None = None,
     resume: bool = False,
     backup_dir: Path | None = None,
+    backup_epoch_snapshots: bool = False,
 ) -> dict:
     config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
     experiment_id = str(config["experiment_id"])
@@ -387,6 +414,7 @@ def train_suite(
             working,
             resume=resume,
             backup_dir=backup_dir,
+            backup_epoch_snapshots=backup_epoch_snapshots,
         )
     suite = {
         "schema_version": 1,
@@ -459,6 +487,11 @@ def main() -> None:
         action="store_true",
         help="Resume only when the saved component plan matches and last.pt exists",
     )
+    parser.add_argument(
+        "--backup-epoch-snapshots",
+        action="store_true",
+        help="Mirror per-epoch snapshots to backup dir",
+    )
     args = parser.parse_args()
     print(
         json.dumps(
@@ -468,6 +501,7 @@ def main() -> None:
                 set(args.only or []),
                 resume=args.resume,
                 backup_dir=args.backup_dir,
+                backup_epoch_snapshots=args.backup_epoch_snapshots,
             ),
             indent=2,
         )
