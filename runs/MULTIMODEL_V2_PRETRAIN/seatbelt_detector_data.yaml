@@ -1,0 +1,6 @@
+path: C:\RoadWatchV2\bundle\datasets\derived\v2_pretrain_pending_approval\seatbelt_detector
+train: images/train
+val: images/val
+test: images/test
+names:
+  0: occupant_upper_body

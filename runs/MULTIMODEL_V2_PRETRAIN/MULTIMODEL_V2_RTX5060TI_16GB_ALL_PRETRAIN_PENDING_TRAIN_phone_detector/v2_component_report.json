@@ -1,0 +1,19 @@
+{
+  "best_weights": "C:\\RoadWatchV2\\runs\\full\\MULTIMODEL_V2_RTX5060TI_16GB_ALL_PRETRAIN_PENDING_TRAIN_phone_detector\\weights\\best.pt",
+  "best_weights_sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+  "component": "phone_detector",
+  "plan": "C:\\RoadWatchV2\\runs\\full\\MULTIMODEL_V2_RTX5060TI_16GB_ALL_PRETRAIN_PENDING_TRAIN_phone_detector_PLAN.json",
+  "plan_fingerprint": "89ce8dc79a9489cdd9360c28936f35868f275791558fa99c297ed205aad41135",
+  "resumed": true,
+  "run": "C:\\RoadWatchV2\\runs\\full\\MULTIMODEL_V2_RTX5060TI_16GB_ALL_PRETRAIN_PENDING_TRAIN_phone_detector",
+  "skipped_completed_checkpoint": false,
+  "task": "detect",
+  "test_split_used": false,
+  "validation_metrics": {
+    "fitness": 0.7247994080810819,
+    "metrics/mAP50(B)": 0.9448490310543104,
+    "metrics/mAP50-95(B)": 0.7003494499729455,
+    "metrics/precision(B)": 0.9712760616546096,
+    "metrics/recall(B)": 0.8273381294964028
+  }
+}

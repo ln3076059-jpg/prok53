@@ -1,0 +1,17 @@
+{
+  "best_weights": "C:\\RoadWatchV2\\runs\\full\\MULTIMODEL_V2_RTX5060TI_16GB_ALL_PRETRAIN_PENDING_TRAIN_seatbelt_classifier\\weights\\best.pt",
+  "best_weights_sha256": "e55158e3f152922e710ad260295da16488ffc2c6a145b8dfdc5c4ce323392bd4",
+  "component": "seatbelt_classifier",
+  "plan": "C:\\RoadWatchV2\\runs\\full\\MULTIMODEL_V2_RTX5060TI_16GB_ALL_PRETRAIN_PENDING_TRAIN_seatbelt_classifier_PLAN.json",
+  "plan_fingerprint": "a8306e24463b4043c3286eaceeb5c5bd1da2521003d82c6d9896961c573f7d5b",
+  "resumed": false,
+  "run": "C:\\RoadWatchV2\\runs\\full\\MULTIMODEL_V2_RTX5060TI_16GB_ALL_PRETRAIN_PENDING_TRAIN_seatbelt_classifier",
+  "skipped_completed_checkpoint": false,
+  "task": "classify",
+  "test_split_used": false,
+  "validation_metrics": {
+    "fitness": 0.9048362076282501,
+    "metrics/accuracy_top1": 0.8096724152565002,
+    "metrics/accuracy_top5": 1.0
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "active_component": null,
+  "completed_components": [
+    "phone_detector",
+    "seatbelt_classifier",
+    "seatbelt_detector"
+  ],
+  "experiment_id": "MULTIMODEL_V2_RTX5060TI_16GB_ALL_PRETRAIN_PENDING_TRAIN",
+  "manifest": "C:\\RoadWatchV2\\runs\\full\\MULTIMODEL_V2_RTX5060TI_16GB_ALL_PRETRAIN_PENDING_TRAIN_MANIFEST.json",
+  "recovery_archive": "C:\\RoadWatchV2\\runs\\full\\MULTIMODEL_V2_RTX5060TI_16GB_ALL_PRETRAIN_PENDING_TRAIN_RECOVERY.zip",
+  "recovery_sha256": "f0ebe8a29a87dac1759ffe08b1cf467be1e6ffa35ce723a19c36b4226e8170ba",
+  "remaining_components": [],
+  "schema_version": 1,
+  "status": "COMPLETE"
+}
