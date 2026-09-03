@@ -73,7 +73,9 @@ def save_epoch_snapshot(
     snapshot_pt = snapshot_dir / f"epoch_{epoch:03d}.pt"
     snapshot_json = snapshot_dir / f"epoch_{epoch:03d}.json"
 
-    if snapshot_pt.exists() and snapshot_json.exists():
+    if snapshot_pt.exists() or snapshot_json.exists():
+        if not snapshot_pt.exists() or not snapshot_json.exists():
+            raise ValueError(f"STOP: Partial snapshot conflict for {snapshot_pt.name}")
         existing_metadata = json.loads(snapshot_json.read_text(encoding="utf-8"))
         if existing_metadata.get("plan_fingerprint") != plan_fingerprint:
             raise ValueError(f"STOP: Existing snapshot {snapshot_pt} has a different plan fingerprint.")
@@ -171,11 +173,21 @@ def create_snapshots_manifest(run_dir: Path, component: str, plan_fingerprint: s
         except (ValueError, IndexError):
             continue
             
+        json_file = pt.with_suffix(".json")
+        if not json_file.exists():
+            raise ValueError(f"Missing JSON metadata for {pt}")
+            
+        metadata = json.loads(json_file.read_text(encoding="utf-8"))
+        if metadata.get("plan_fingerprint") != plan_fingerprint:
+            raise ValueError(f"Manifest generation failed: Plan fingerprint mismatch for {pt}")
+
         pt_size = pt.stat().st_size
         if pt_size == 0:
             raise ValueError(f"Snapshot {pt} has size 0")
             
         pt_sha256 = sha256_file(pt)
+        if metadata.get("checkpoint_sha256") != pt_sha256:
+            raise ValueError(f"Manifest generation failed: SHA256 mismatch for {pt}")
         
         epochs.append(epoch_num)
         snapshots.append(

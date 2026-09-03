@@ -26,6 +26,7 @@ SUPPORT = (
     Path("training/__init__.py"),
     Path("training/common.py"),
     Path("training/audit_v2_readiness.py"),
+    Path("training/epoch_snapshots.py"),
     Path("training/train_multimodel_v2.py"),
     Path("training/v2_portable_runner.py"),
     Path("training/download_base_weights.py"),

@@ -333,6 +333,11 @@ def train_component(
             model.train(resume=True)
             resumed = True
     else:
+        total_epochs = int(config["epochs"])
+        initial_model_path = Path(model_name)
+        estimated_size = initial_model_path.stat().st_size if initial_model_path.is_file() else 50 * 1024 * 1024
+        check_disk_space_for_snapshots(run, estimated_size, total_epochs)
+
         model = YOLO(model_name)
         model.add_callback("on_train_batch_end", assert_finite_training_state)
         model.add_callback("on_model_save", _epoch_snapshot_callback)

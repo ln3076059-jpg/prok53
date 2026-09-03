@@ -13,7 +13,7 @@ Bundle hien hanh:
 
 SHA-256 bat buoc:
 
-  4554ee7fba51b0b2c77e4eca053083df7e8a868dc0318a0c647331fe967ecae2
+  bbb40c7151b4ea1797d7de1b512452610f40acb83f44e5a3cc24805ff44fc09a
 
 Bundle gom 3 model:
 

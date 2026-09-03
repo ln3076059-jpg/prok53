@@ -31,6 +31,7 @@ BASE_SOURCES = (
     Path("models/base/yolo11s.provenance.json"),
     Path("training/__init__.py"),
     Path("training/common.py"),
+    Path("training/epoch_snapshots.py"),
     Path("training/train_multimodel_v2.py"),
     Path("training/v2_portable_runner.py"),
     Path("training/v2_pretrain_portable_runner.py"),

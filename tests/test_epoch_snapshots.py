@@ -100,6 +100,14 @@ def test_resume_no_overwrite_and_conflict(run_dir):
     
     assert sha256_file(pt_file) == original_sha
     
+    # Conflict: partial snapshot (pt exists, json missing)
+    json_file.unlink()
+    with pytest.raises(ValueError, match="Partial snapshot conflict"):
+        save_epoch_snapshot(trainer, "comp", "abc", run_dir)
+        
+    # Recreate JSON to continue
+    json_file.write_text(json.dumps({"plan_fingerprint": "abc", "checkpoint_sha256": original_sha}))
+    
     # Conflict: plan fingerprint mismatch
     trainer.epoch = 0
     with pytest.raises(ValueError, match="different plan fingerprint"):
@@ -123,6 +131,12 @@ def test_manifest_generation_and_early_stopping(run_dir):
         pt = snapshot_dir / f"epoch_{i:03d}.pt"
         pt.write_text(f"weight {i}")
         
+        json_file = snapshot_dir / f"epoch_{i:03d}.json"
+        json_file.write_text(json.dumps({
+            "plan_fingerprint": "abc",
+            "checkpoint_sha256": sha256_file(pt)
+        }))
+        
     create_snapshots_manifest(run_dir, "comp", "abc")
     
     manifest_file = run_dir / "epoch_snapshots_manifest.json"
@@ -140,8 +154,13 @@ def test_manifest_missing_epoch(run_dir):
     snapshot_dir.mkdir(parents=True)
     
     # Create epochs 1, 3 (missing 2)
-    (snapshot_dir / "epoch_001.pt").write_text("w1")
-    (snapshot_dir / "epoch_003.pt").write_text("w3")
+    pt1 = snapshot_dir / "epoch_001.pt"
+    pt1.write_text("w1")
+    (snapshot_dir / "epoch_001.json").write_text(json.dumps({"plan_fingerprint": "abc", "checkpoint_sha256": sha256_file(pt1)}))
+    
+    pt3 = snapshot_dir / "epoch_003.pt"
+    pt3.write_text("w3")
+    (snapshot_dir / "epoch_003.json").write_text(json.dumps({"plan_fingerprint": "abc", "checkpoint_sha256": sha256_file(pt3)}))
     
     with pytest.raises(ValueError, match="Missing epoch snapshots"):
         create_snapshots_manifest(run_dir, "comp", "abc")
