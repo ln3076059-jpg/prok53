@@ -266,7 +266,7 @@ def train_component(
         "task": task,
         "model": str(model_name),
         "data": str(Path(data_argument).resolve()),
-        "data_sha256": sha256_file(Path(data_argument)),
+        "data_sha256": sha256_file(Path(data_argument)) if task == "detect" else sha256_file(Path(data_argument) / "CLASSIFIER_DATASET_REPORT.json"),
         "training": config,
     }
     plan["fingerprint"] = stable_json_hash(plan)
