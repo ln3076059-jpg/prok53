@@ -12,7 +12,7 @@ from pathlib import Path
 
 import yaml
 
-from training.common import sha256_file, stable_json_hash
+from training.common import sha256_file, sha256_path, stable_json_hash
 from training.epoch_snapshots import (
     check_disk_space_for_snapshots,
     create_snapshots_manifest,
@@ -266,7 +266,7 @@ def train_component(
         "task": task,
         "model": str(model_name),
         "data": str(Path(data_argument).resolve()),
-        "data_sha256": sha256_file(Path(data_argument)) if task == "detect" else sha256_file(Path(data_argument) / "CLASSIFIER_DATASET_REPORT.json"),
+        "data_sha256": sha256_path(Path(data_argument)),
         "training": config,
     }
     plan["fingerprint"] = stable_json_hash(plan)

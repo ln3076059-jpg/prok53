@@ -60,6 +60,20 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def sha256_path(path: Path) -> str:
+    if path.is_file():
+        return sha256_file(path)
+    digest = hashlib.sha256()
+    for child in sorted(path.rglob("*")):
+        if child.is_file():
+            rel_path = child.relative_to(path).as_posix()
+            digest.update(rel_path.encode("utf-8"))
+            with child.open("rb") as handle:
+                for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                    digest.update(chunk)
+    return digest.hexdigest()
+
+
 def perceptual_hash(path: Path) -> str:
     with Image.open(path) as image:
         return str(imagehash.phash(image.convert("RGB")))
