@@ -22,3 +22,4 @@ def test_sha256_path_directory(tmp_path: Path):
     # Ensure changing file content changes hash
     (d2 / "b.txt").write_text("world2")
     assert hash1 != sha256_path(d2)
+
