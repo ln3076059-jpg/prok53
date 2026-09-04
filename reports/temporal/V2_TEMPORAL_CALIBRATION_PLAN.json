@@ -1,0 +1,56 @@
+{
+  "status": "PENDING_SEQUENCE_GROUND_TRUTH",
+  "parameters_to_tune": [
+    "observation_window",
+    "minimum_observations",
+    "minimum_positive_duration",
+    "positive_ratio",
+    "ema_alpha",
+    "candidate_threshold",
+    "activation_threshold",
+    "release_threshold",
+    "gap_tolerance",
+    "cooldown"
+  ],
+  "phone_pipeline": {
+    "stages": [
+      "vehicle",
+      "cabin",
+      "occupant_association",
+      "DRIVER",
+      "phone_detection_association",
+      "hand_face_ear_pose_context",
+      "handheld_use_evidence",
+      "temporal_confirmation",
+      "PHONE_USE_event"
+    ],
+    "reject_conditions": [
+      "passenger_phone",
+      "mounted_static_phone",
+      "outside_person",
+      "unknown_occupant_role",
+      "insufficient_context",
+      "single_frame_spike"
+    ]
+  },
+  "seatbelt_pipeline": {
+    "stages": [
+      "vehicle",
+      "cabin",
+      "occupant",
+      "upper_body_detection",
+      "3_class_classifier",
+      "reject_UNKNOWN_policy",
+      "temporal_confirmation",
+      "NO_SEATBELT_event"
+    ],
+    "reject_conditions": [
+      "uncertain_or_occluded",
+      "missing_visibility",
+      "motorcycle",
+      "outside_person",
+      "unknown_context",
+      "single_frame_spike"
+    ]
+  }
+}

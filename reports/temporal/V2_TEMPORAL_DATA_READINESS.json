@@ -1,0 +1,17 @@
+{
+  "status": "PENDING_SEQUENCE_GROUND_TRUTH",
+  "sequence_count": 0,
+  "has_clip_identity": false,
+  "has_frame_timestamps": false,
+  "has_phone_event_intervals": false,
+  "has_seatbelt_event_intervals": false,
+  "has_occupant_roles": false,
+  "has_vehicle_context": false,
+  "has_human_review": false,
+  "sufficient_for_temporal_calibration": false,
+  "blockers": [
+    "No video clips or sequence datasets available.",
+    "Missing sequence-level event interval ground truth.",
+    "Missing human review of sequence annotations."
+  ]
+}

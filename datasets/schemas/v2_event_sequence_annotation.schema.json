@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "V2 Event Sequence Annotation",
+  "description": "Schema for sequence-level ground truth required for temporal calibration and event evaluation.",
+  "type": "object",
+  "required": [
+    "sequence_id",
+    "video_id",
+    "source_id",
+    "fps",
+    "frame_count",
+    "start_time",
+    "end_time",
+    "occupants",
+    "events",
+    "context",
+    "review_provenance"
+  ],
+  "properties": {
+    "sequence_id": { "type": "string" },
+    "video_id": { "type": "string" },
+    "source_id": { "type": "string" },
+    "camera_id": { "type": "string" },
+    "vehicle_id": { "type": "string" },
+    "fps": { "type": "number" },
+    "frame_count": { "type": "integer" },
+    "start_time": { "type": "string", "format": "date-time" },
+    "end_time": { "type": "string", "format": "date-time" },
+    "occupants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["occupant_id", "role"],
+        "properties": {
+          "occupant_id": { "type": "string" },
+          "role": { "type": "string", "enum": ["driver", "passenger", "outside_person", "unknown"] },
+          "role_confidence": { "type": "number" },
+          "reviewer_confirmed_role": { "type": "boolean" },
+          "vehicle_context_confirmed": { "type": "boolean" }
+        }
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["event_type", "occupant_id", "start_frame", "end_frame", "label"],
+        "properties": {
+          "event_type": { "type": "string", "enum": ["PHONE", "SEATBELT"] },
+          "occupant_id": { "type": "string" },
+          "start_frame": { "type": "integer" },
+          "end_frame": { "type": "integer" },
+          "start_time_sec": { "type": "number" },
+          "end_time_sec": { "type": "number" },
+          "label": {
+            "type": "string",
+            "enum": [
+              "PHONE_USE",
+              "PHONE_PRESENT_NOT_USED",
+              "MOUNTED_OR_STATIC_PHONE",
+              "NO_PHONE",
+              "UNKNOWN",
+              "FASTENED",
+              "UNFASTENED",
+              "UNCERTAIN_OR_OCCLUDED",
+              "NOT_APPLICABLE"
+            ]
+          }
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "vehicle_type": { "type": "string" },
+        "motorcycle_flag": { "type": "boolean" },
+        "inside_vehicle": { "type": "boolean" },
+        "outside_vehicle_person": { "type": "boolean" },
+        "day_night": { "type": "string", "enum": ["day", "night", "unknown"] },
+        "occlusion": { "type": "string", "enum": ["none", "partial", "heavy"] },
+        "camera_viewpoint": { "type": "string" }
+      }
+    },
+    "review_provenance": {
+      "type": "object",
+      "required": ["reviewer_type", "status", "annotation_version"],
+      "properties": {
+        "reviewer_type": { "type": "string", "enum": ["HUMAN", "AI"] },
+        "reviewer_id": { "type": "string" },
+        "reviewed_at": { "type": "string", "format": "date-time" },
+        "evidence_hash": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["AI_REVIEWED_PROPOSAL", "HUMAN_APPROVED"]
+        },
+        "annotation_version": { "type": "string" }
+      }
+    }
+  }
+}

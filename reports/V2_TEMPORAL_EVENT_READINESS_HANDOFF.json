@@ -1,0 +1,24 @@
+{
+  "context": "V2 Temporal and Event Readiness Audit",
+  "head_sha": "30b427a58b48fc3faf9180480c21b4943339be96",
+  "models": {
+    "phone_detector_sha": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+    "seatbelt_detector_sha": "361436ab073c8fcc17a041f098285efdd0cf6775a8970be2ffada4e45c6bc500",
+    "seatbelt_classifier_sha": "e55158e3f152922e710ad260295da16488ffc2c6a145b8dfdc5c4ce323392bd4"
+  },
+  "calibration_lock_sha": "6b661fdf8bbeec8618d9fd1d3b364ac89bf74398d39f51533fa5d491b0cf9cf2",
+  "status_flags": {
+    "TRAINING": "COMPLETE",
+    "MODEL_LOCK": "PASS",
+    "VALIDATION_CALIBRATION": "COMPLETE",
+    "THRESHOLD_LOCK": "PASS",
+    "FROZEN_TEST": "COMPLETE",
+    "FROZEN_TEST_RUN_COUNT": 1,
+    "TEMPORAL_DATA_READY": false,
+    "TEMPORAL_POLICY_LOCK": "PENDING_SEQUENCE_GROUND_TRUTH",
+    "EVENT_HOLDOUT_READY": false,
+    "EVENT_EVALUATION": "PENDING_NEW_UNTOUCHED_HOLDOUT",
+    "HUMAN_VERIFIED": false,
+    "PRODUCTION_READY": false
+  }
+}
