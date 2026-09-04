@@ -1,24 +1,50 @@
 # V2 Validation Error Analysis
 
-## Phone Detector Error Modes
-- **hand near face:** Some instances where the driver rests their hand near their face are confused with phone usage.
-- **hand near ear:** Scratching the ear or adjusting glasses sometimes triggers a false positive.
-- **mounted phone:** Phones mounted on the dashboard are generally ignored, but some large glare might trigger detection if occluded.
-- **passenger phone:** Model still occasionally detects passenger phones if they lean into the driver's space.
-- **dark cabin:** Low light conditions reduce recall significantly.
+## 1. Overview
+This error analysis relies entirely on the **Canonical Validation splits**. The frozen test dataset remains untouched for this analysis.
 
-## Seatbelt Detector Error Modes
-- **dark belt / same-color shirt:** High false negative rate when the driver wears black clothing with a black seatbelt.
-- **occlusion:** Arms blocking the chest area lower the bounding box confidence.
-- **seat/door edge:** Sometimes the B-pillar or seat edge is misidentified as a seatbelt.
-- **rear passenger:** Model struggles to detect seatbelts for rear passengers accurately.
+## 2. Phone Detector Analysis
+**False Positives (Visual Confusion):**
+- Hand near face or ear.
+- Dashboard objects resembling a phone.
+- Reflections on windows.
 
-## Seatbelt Classifier Error Modes
-- **fastened → unfastened:** Misclassifications happen when the belt blends into the clothing.
-- **unfastened → fastened:** A diagonal strap from a bag or clothing pattern is sometimes mistaken for a fastened belt.
-- **fastened/unfastened → uncertain:** Happens frequently in blurry frames or severe occlusion.
+**False Negatives (Missed Detections):**
+- Tiny phones (far distance).
+- Partially occluded phones (hidden behind steering wheel or hand).
+- Dark cabin or heavy glare.
 
-## Recommendations for V2.1 POST-BASELINE EXPERIMENT
-- Introduce more synthetic augmentation for low light.
-- Collect more hard negative examples of hands near the face without phones.
-- Train the classifier with a specialized loss to penalize confident wrong predictions heavily.
+**System-Level Rejections (Business Logic):**
+*Note: The detector may correctly find a phone, but the system must reject it if:*
+- It is a passenger's phone.
+- It is a mounted/static phone (e.g., GPS).
+- It belongs to a person outside the vehicle.
+- It is located outside the cabin.
+- The occupant role is ambiguous.
+
+## 3. Seatbelt Detector Analysis
+**False Positives (Irrelevant Occupants):**
+- Persons outside the vehicle.
+- Motorcycle riders.
+
+**False Negatives (Missed Torsos):**
+- Dark clothing or belts matching the shirt color.
+- Diagonal seat edges mimicking belts.
+- Partial belts or severe occlusion.
+- Rear passengers or heavily cropped torsos.
+- UNKNOWN belt visibility.
+
+*Note: Missing an occupant's upper body DOES NOT mean the occupant is unfastened. It simply means the classifier won't run, failing closed.*
+
+## 4. Seatbelt Classifier Analysis
+**Confusion Modes Observed:**
+- Fastened predicted as Unfastened (Critical: False Violation).
+- Unfastened predicted as Fastened (Missed Violation).
+- Uncertain predicted as confident Fastened or Unfastened.
+- Valid classes predicted as Uncertain.
+
+**Mitigation:** 
+We introduced an asymmetric confidence reject policy (`0.60` for unfastened, `0.50` for fastened). Low-confidence predictions are forced into `uncertain_or_occluded`, avoiding automated false violations.
+
+## 5. Conclusion
+No weights will be mutated based on this error analysis. The `V2_BASELINE_001` lock remains absolute. If further improvements are strictly necessary, a `V2_1_RETRAIN_RECOMMENDATION` must be drafted, establishing a completely new experimental track.

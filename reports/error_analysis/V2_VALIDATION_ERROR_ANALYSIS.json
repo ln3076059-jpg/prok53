@@ -1,0 +1,55 @@
+{
+  "analysis_source": "Canonical validation splits",
+  "status": "COMPLETED_WITHOUT_WEIGHT_MUTATION",
+  "phone_detector": {
+    "false_positives": [
+      "hand near face",
+      "hand near ear",
+      "dashboard object",
+      "reflection"
+    ],
+    "false_negatives": [
+      "tiny phone",
+      "partially occluded phone",
+      "dark cabin",
+      "glare"
+    ],
+    "system_level_rejections": [
+      "passenger phone",
+      "mounted phone",
+      "person outside vehicle",
+      "phone outside cabin",
+      "ambiguous occupant role"
+    ]
+  },
+  "seatbelt_detector": {
+    "false_positives": [
+      "person outside vehicle",
+      "motorcycle"
+    ],
+    "false_negatives": [
+      "dark clothing",
+      "belt same color as shirt",
+      "diagonal seat edge",
+      "partial belt",
+      "occlusion",
+      "rear passenger",
+      "cropped torso",
+      "UNKNOWN belt visibility"
+    ]
+  },
+  "seatbelt_classifier": {
+    "confusion_modes": [
+      "fastened -> unfastened",
+      "unfastened -> fastened",
+      "uncertain -> confident fastened",
+      "uncertain -> confident unfastened",
+      "valid class -> uncertain"
+    ],
+    "mitigation": "Implemented asymmetric confidence threshold to force low-confidence valid classes into uncertain_or_occluded."
+  },
+  "recommendations": {
+    "retrain_needed": false,
+    "note": "V2_1_RETRAIN_RECOMMENDATION might be considered if false positive UNFASTENED rate remains high after temporal smoothing, but V2_BASELINE_001 weights are strictly locked and will not be mutated."
+  }
+}
