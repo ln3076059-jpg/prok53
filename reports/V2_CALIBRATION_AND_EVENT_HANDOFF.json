@@ -19,8 +19,8 @@
       "validation_top1": 0.8097,
       "validation_macro_f1": 0.5727,
       "per_class": {
-        "fastened": {"P": 0.8571, "R": 0.8310, "F1": 0.8439},
-        "unfastened": {"P": 0.8195, "R": 0.7870, "F1": 0.8029}
+        "fastened": {"P": 0.8310, "R": 0.8571, "F1": 0.8439},
+        "unfastened": {"P": 0.7870, "R": 0.8195, "F1": 0.8029}
       }
     }
   },

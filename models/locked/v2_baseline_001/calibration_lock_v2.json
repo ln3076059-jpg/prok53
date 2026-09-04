@@ -34,9 +34,9 @@
     "unknown_policy": "If max probability does not meet the respective threshold, override classification to uncertain_or_occluded.",
     "validation_macro_f1": 0.5727,
     "per_class_metrics": {
-      "fastened": {"precision": 0.8571, "recall": 0.8310, "f1": 0.8439},
-      "unfastened": {"precision": 0.8195, "recall": 0.7870, "f1": 0.8029},
-      "uncertain": {"precision": 0.0400, "recall": 0.3333, "f1": 0.0714}
+      "fastened": {"precision": 0.8310, "recall": 0.8571, "f1": 0.8439},
+      "unfastened": {"precision": 0.7870, "recall": 0.8195, "f1": 0.8029},
+      "uncertain": {"precision": 0.3333, "recall": 0.0400, "f1": 0.0714}
     }
   },
   "evidence_files": [
