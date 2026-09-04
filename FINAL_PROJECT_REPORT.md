@@ -46,7 +46,7 @@ Canonical execution of the frozen test split produced the following baseline evi
 * **Phone Detector (Test 302 imgs, 139 instances):** Precision 90.2%, Recall 86.2%, mAP50 90.5%, mAP50-95 65.5%
 * **Seatbelt Detector (Test 614 imgs, 617 instances):** Precision 93.8%, Recall 88.2%, mAP50 92.7%, mAP50-95 47.7%
 * **Seatbelt Classifier (Test 621 imgs, 3-class):** Top-1 Accuracy 78.9%, Top-5 Accuracy 100.0%
-Integration blocker lifted; model status transitioned to VERIFIED.
+Integration blocker lifted; model status transitioned to EVALUATION_COMPLETE.
 
 ## F. Performance
 

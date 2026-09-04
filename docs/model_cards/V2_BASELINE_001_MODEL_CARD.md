@@ -8,15 +8,15 @@
   - Seatbelt Classifier: YOLO11s-cls (Image Classification)
 
 ## 2. Datasets
-- Phone Detector: `datasets/derived/phone_bootstrap_v2`
-- Seatbelt Detector: `datasets/derived/seatbelt_v2_balanced`
-- Seatbelt Classifier: `datasets/derived/seatbelt_classifier_v2`
+- Phone Detector: `datasets/derived/v2_pretrain_pending_approval/phone_detector`
+- Seatbelt Detector: `datasets/derived/v2_pretrain_pending_approval/seatbelt_detector`
+- Seatbelt Classifier: `datasets/derived/v2_pretrain_pending_approval/seatbelt_classifier`
 
 ## 3. Governance
 - **Status:** MODEL_ASSISTED_PENDING_APPROVAL
 - **Production Ready:** false
 - **Human Verified:** false
-- **Integration Status:** BLOCKED (Pending true evaluation)
+- **Integration Status:** EVALUATION_COMPLETE
 
 ## 4. Evaluation Metrics
 ### Validation Metrics (mAP50 / F1)
@@ -24,8 +24,10 @@
 - **Seatbelt Detector:** 94.73% / 90.13%
 - **Seatbelt Classifier:** Top-1 80.97%
 
-### Frozen Test Metrics (mAP50 / F1)
-- **STATUS:** INVALID_UNVERIFIED (Pending raw evaluation evidence. Test split data has not yet been reliably consumed.)
+### Frozen Test Metrics
+- **Phone Detector (Test 302 imgs, 139 instances):** Precision 90.2%, Recall 86.2%, mAP50 90.5%, mAP50-95 65.5%
+- **Seatbelt Detector (Test 614 imgs, 617 instances):** Precision 93.8%, Recall 88.2%, mAP50 92.7%, mAP50-95 47.7%
+- **Seatbelt Classifier (Test 621 imgs, 3-class):** Top-1 Accuracy 78.9%, Top-5 Accuracy 100.0%
 
 *Note: Detector mAP does not equal event accuracy.*
 
