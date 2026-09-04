@@ -1,0 +1,12 @@
+{
+  "datasets": {
+    "phone_detector": "datasets/derived/phone_bootstrap_v2",
+    "seatbelt_detector": "datasets/derived/seatbelt_v2_balanced",
+    "seatbelt_classifier": "datasets/derived/seatbelt_classifier_v2"
+  },
+  "dataset_split_hashes": {
+    "phone_detector": "89ce8dc79a9489cdd9360c28936f35868f275791558fa99c297ed205aad41135",
+    "seatbelt_detector": "fdfcfb6ca1ef48f0e43047ebde74c3c6d054eae123be9e4cd6e9927d69ea15d8",
+    "seatbelt_classifier": "a8306e24463b4043c3286eaceeb5c5bd1da2521003d82c6d9896961c573f7d5b"
+  }
+}

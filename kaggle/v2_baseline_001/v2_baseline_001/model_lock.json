@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "lock_id": "V2_BASELINE_001",
+  "status": "LOCKED_FOR_FROZEN_EVALUATION",
+  "governance": "MODEL_ASSISTED_PENDING_APPROVAL",
+  "human_verified": false,
+  "production_ready": false,
+  "components": {
+    "phone_detector": {
+       "best_weights": "models/locked/v2_baseline_001/phone_detector/best.pt",
+       "sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54"
+    },
+    "seatbelt_detector": {
+       "best_weights": "models/locked/v2_baseline_001/seatbelt_detector/best.pt",
+       "sha256": "361436ab073c8fcc17a041f098285efdd0cf6775a8970be2ffada4e45c6bc500"
+    },
+    "seatbelt_classifier": {
+       "best_weights": "models/locked/v2_baseline_001/seatbelt_classifier/best.pt",
+       "sha256": "e55158e3f152922e710ad260295da16488ffc2c6a145b8dfdc5c4ce323392bd4"
+    }
+  },
+  "training_results_manifest": "reports/V2_TRAINING_RESULTS.json",
+  "training_config_sha256": "e9bf872b6ec4aac9fa8add867f6000ed0427f89377e3ce5d81e5e280047832e1",
+  "dataset_split_hashes": {
+      "phone_detector": "89ce8dc79a9489cdd9360c28936f35868f275791558fa99c297ed205aad41135",
+      "seatbelt_detector": "fdfcfb6ca1ef48f0e43047ebde74c3c6d054eae123be9e4cd6e9927d69ea15d8",
+      "seatbelt_classifier": "a8306e24463b4043c3286eaceeb5c5bd1da2521003d82c6d9896961c573f7d5b"
+  },
+  "created_at_utc": "2026-09-04T01:28:00Z",
+  "frozen_test_used_before_lock": false
+}

@@ -4,9 +4,9 @@
   "code_file": "run_eval.py",
   "language": "python",
   "kernel_type": "script",
-  "is_private": "true",
-  "enable_gpu": "true",
-  "enable_internet": "true",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_internet": true,
   "dataset_sources": [
     "lethunga/dms-v2-baseline-001",
     "lethunga/dms-v2-eval-datasets"

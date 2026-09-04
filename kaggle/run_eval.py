@@ -2,24 +2,22 @@ import os
 import shutil
 from pathlib import Path
 
-# Install ultralytics WITHOUT upgrading dependencies (especially PyTorch)
-print("Installing ultralytics without touching PyTorch...")
-os.system("pip install -q ultralytics --no-deps")
+# CPU ONLY INFERENCE - 30 CPU Cores on Kaggle
+print("Installing ultralytics...")
+os.system("pip install -q ultralytics")
 
 print("Importing ultralytics...")
 from ultralytics import YOLO
-import torch
 
 def main():
-    print(f"PyTorch version: {torch.__version__}")
-    print(f"CUDA available: {torch.cuda.is_available()}")
-    if torch.cuda.is_available():
-        print(f"GPU: {torch.cuda.get_device_name(0)}")
-
     print("Setting up datasets...")
     # Copy all input datasets to working so we can modify them
     os.system("cp -r /kaggle/input/dms-v2-eval-datasets/derived /kaggle/working/eval_ds")
     
+    # YOLO classification val() expects a 'train' folder even if it's not used
+    print("Faking train folder for classifier...")
+    os.system("cp -r /kaggle/working/eval_ds/seatbelt_classifier_v2/val /kaggle/working/eval_ds/seatbelt_classifier_v2/train")
+
     phone_yaml = Path("/kaggle/working/eval_ds/phone_bootstrap_v2/data.yaml")
     seatbelt_yaml = Path("/kaggle/working/eval_ds/seatbelt_v2_balanced/data.yaml")
     cls_data = Path("/kaggle/working/eval_ds/seatbelt_classifier_v2")
@@ -30,7 +28,7 @@ def main():
     
     if phone_yaml.exists():
         phone_yaml.write_text("""path: /kaggle/working/eval_ds/phone_bootstrap_v2
-train: images/train
+train: images/val
 val: images/val
 test: images/test
 names:
@@ -39,7 +37,7 @@ names:
         
     if seatbelt_yaml.exists():
         seatbelt_yaml.write_text("""path: /kaggle/working/eval_ds/seatbelt_v2_balanced
-train: images/train
+train: images/val
 val: images/val
 test: images/test
 names:
@@ -69,26 +67,26 @@ names:
         return
 
     try:
-        print("Running Phone Detector Validation...")
+        print("Running Phone Detector Validation on CPU...")
         model_phone = YOLO(str(phone_pt))
-        model_phone.val(data=str(phone_yaml), split="val", project="/kaggle/working/reports/calibration", name="phone_val")
+        model_phone.val(data=str(phone_yaml), split="val", project="/kaggle/working/reports/calibration", name="phone_val", device="cpu", workers=4)
 
-        print("Running Seatbelt Detector Validation...")
+        print("Running Seatbelt Detector Validation on CPU...")
         model_seatbelt = YOLO(str(seatbelt_pt))
-        model_seatbelt.val(data=str(seatbelt_yaml), split="val", project="/kaggle/working/reports/calibration", name="seatbelt_val")
+        model_seatbelt.val(data=str(seatbelt_yaml), split="val", project="/kaggle/working/reports/calibration", name="seatbelt_val", device="cpu", workers=4)
 
-        print("Running Seatbelt Classifier Validation...")
+        print("Running Seatbelt Classifier Validation on CPU...")
         model_cls = YOLO(str(cls_pt))
-        model_cls.val(data=str(cls_data), split="val", project="/kaggle/working/reports/calibration", name="classifier_val")
+        model_cls.val(data=str(cls_data), split="val", project="/kaggle/working/reports/calibration", name="classifier_val", device="cpu", workers=4)
 
-        print("Running Phone Detector Test...")
-        model_phone.val(data=str(phone_yaml), split="test", project="/kaggle/working/reports/frozen_test", name="phone_test")
+        print("Running Phone Detector Test on CPU...")
+        model_phone.val(data=str(phone_yaml), split="test", project="/kaggle/working/reports/frozen_test", name="phone_test", device="cpu", workers=4)
 
-        print("Running Seatbelt Detector Test...")
-        model_seatbelt.val(data=str(seatbelt_yaml), split="test", project="/kaggle/working/reports/frozen_test", name="seatbelt_test")
+        print("Running Seatbelt Detector Test on CPU...")
+        model_seatbelt.val(data=str(seatbelt_yaml), split="test", project="/kaggle/working/reports/frozen_test", name="seatbelt_test", device="cpu", workers=4)
 
-        print("Running Seatbelt Classifier Test...")
-        model_cls.val(data=str(cls_data), split="test", project="/kaggle/working/reports/frozen_test", name="classifier_test")
+        print("Running Seatbelt Classifier Test on CPU...")
+        model_cls.val(data=str(cls_data), split="test", project="/kaggle/working/reports/frozen_test", name="classifier_test", device="cpu", workers=4)
     
     except Exception as e:
         print("Exception during YOLO inference:")

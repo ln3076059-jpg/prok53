@@ -1,0 +1,6 @@
+path: /kaggle/working/datasets\derived\phone_bootstrap_v2
+train: images/train
+val: images/val
+test: images/test
+names:
+  0: phone

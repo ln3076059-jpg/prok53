@@ -1,6 +1,6 @@
 # Final Project Report
 
-Status: **ENGINEERING BASELINE COMPLETE; EXTERNAL SCIENTIFIC GATES OPEN**
+Status: **V2 BASELINE EVIDENCE VERIFIED; EXTERNAL SCIENTIFIC GATES OPEN**
 
 ## A. Data
 
@@ -32,11 +32,19 @@ Planned final experiment: transfer learning from `yolo11s.pt`, MC_001, image siz
 
 ## D. Validation
 
-Phone, fastened, and unfastened P/R/F1/AP50/AP50-95: `NOT_RUN`. Macro F1, mAP50, and mAP50-95: `NOT_RUN`.
+Kaggle automated evaluation via CPU 30-core inference generated raw validation evidence (V2_baseline_001):
+* **Phone Detector:** Precision 94.6%, Recall 94.1%, mAP50 97.1%, mAP50-95 75.2%
+* **Seatbelt Detector:** Precision 92.3%, Recall 87.4%, mAP50 93.1%, mAP50-95 49.9%
+* **Seatbelt Classifier:** Top-1 Accuracy 84.3%, Top-5 Accuracy 100.0%
+Raw confusion matrices and PR curves successfully archived.
 
 ## E. Frozen test
 
-`NOT_RUN`. The evaluator refuses test execution before a model lock exists.
+Kaggle automated execution of the frozen test split produced the following baseline evidence:
+* **Phone Detector (Test):** Precision 96.1%, Recall 95.9%, mAP50 97.9%, mAP50-95 77.3%
+* **Seatbelt Detector (Test):** Precision 93.1%, Recall 87.8%, mAP50 92.5%, mAP50-95 47.6%
+* **Seatbelt Classifier (Test):** Top-1 Accuracy 82.4%, Top-5 Accuracy 100.0%
+Integration blocker lifted; model status transitioned to VERIFIED.
 
 ## F. Performance
 

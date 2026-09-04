@@ -1,0 +1,14 @@
+{
+  "capability": [
+    8,
+    6
+  ],
+  "cuda_available": true,
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "platform": "Windows-10-10.0.19045-SP0",
+  "python": "3.11.0 (main, Oct 24 2022, 18:26:48) [MSC v.1933 64 bit (AMD64)]",
+  "torch": "2.8.0+cu128",
+  "torch_cuda_runtime": "12.8",
+  "ultralytics": "8.3.187",
+  "vram_bytes": 25769279488
+}
