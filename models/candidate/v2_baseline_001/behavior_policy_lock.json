@@ -1,0 +1,20 @@
+{
+  "PHONE_VIOLATION": {
+    "violation_role": "driver",
+    "passenger_phone": "NO_VIOLATION",
+    "mounted_or_static": "NO_EVENT",
+    "unknown_context": "NEEDS_REVIEW",
+    "handheld_context": "PENDING",
+    "person_outside_vehicle": "NO_VIOLATION",
+    "single_frame_detection": "NO_IMMEDIATE_VIOLATION"
+  },
+  "SEATBELT_VIOLATION": {
+    "violation_roles": ["driver", "front_passenger", "rear_left", "rear_center", "rear_right"],
+    "invisible_or_occluded_belt": "UNKNOWN",
+    "classifier_uncertain": "UNKNOWN",
+    "motorcycle": "NEVER_SEATBELT_VIOLATION",
+    "person_outside_vehicle": "NO_VIOLATION",
+    "detector_classifier_disagreement": "NEEDS_REVIEW",
+    "belt_not_detected_implies_unfastened": false
+  }
+}

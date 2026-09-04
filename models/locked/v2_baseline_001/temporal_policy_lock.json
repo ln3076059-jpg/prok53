@@ -1,0 +1,13 @@
+{
+  "window_seconds": 2.5,
+  "smoothing_alpha": 0.35,
+  "feature_positive_score": 0.5,
+  "min_positive_seconds": 1.2,
+  "min_observations": 4,
+  "cooldown_seconds": 5.0,
+  "positive_ratio": 0.60,
+  "gap_tolerance_seconds": 0.75,
+  "candidate_threshold": 0.45,
+  "activation_threshold": 0.55,
+  "release_threshold": 0.35
+}

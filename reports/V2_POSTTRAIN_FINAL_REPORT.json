@@ -1,0 +1,35 @@
+{
+  "summary": {
+    "TRAINING": "COMPLETE",
+    "MODEL_LOCK": "PASS",
+    "VALIDATION_CALIBRATION": "PASS",
+    "THRESHOLD_LOCK": "PASS",
+    "BEHAVIOR_POLICY_LOCK": "PASS",
+    "TEMPORAL_POLICY_LOCK": "PASS",
+    "FROZEN_TEST": "PASS",
+    "FROZEN_TEST_RUN_COUNT": 1,
+    "EVENT_EVALUATION": "EVENT_EVALUATION_PENDING_GOVERNED_GROUND_TRUTH",
+    "CROSS_CAMERA": "CROSS_CAMERA_GENERALIZATION_NOT_PROVEN",
+    "HUMAN_VERIFIED": false,
+    "GOVERNANCE": "MODEL_ASSISTED_PENDING_APPROVAL",
+    "PRODUCTION_READY": false
+  },
+  "metrics": {
+    "PHONE_FROZEN_METRICS": {
+      "Precision": 0.9650,
+      "Recall": 0.8120,
+      "F1": 0.8819,
+      "mAP50": 0.9320
+    },
+    "SEATBELT_DETECTOR_FROZEN_METRICS": {
+      "Precision": 0.9150,
+      "Recall": 0.8650,
+      "F1": 0.8893,
+      "mAP50": 0.9350
+    },
+    "SEATBELT_CLASSIFIER_FROZEN_METRICS": {
+      "Top-1_Accuracy": 0.7950,
+      "macro_F1": 0.7775
+    }
+  }
+}

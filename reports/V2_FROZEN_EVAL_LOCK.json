@@ -1,0 +1,13 @@
+{
+  "status": "READY_FOR_FROZEN_TEST",
+  "production_ready": false,
+  "human_verified": false,
+  "phone_best_pt_sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+  "seatbelt_detector_best_pt_sha256": "361436ab073c8fcc17a041f098285efdd0cf6775a8970be2ffada4e45c6bc500",
+  "classifier_best_pt_sha256": "e55158e3f152922e710ad260295da16488ffc2c6a145b8dfdc5c4ce323392bd4",
+  "runtime_config_sha256": "e9bf872b6ec4aac9fa8add867f6000ed0427f89377e3ce5d81e5e280047832e1",
+  "calibration_lock_sha256": "40e6e7205fcbd2344f6d9d96b2fde7fe2b5582f15958981019772b7ca19b6a08",
+  "behavior_policy_sha256": "616788e48ec7646b83fc088a602c119df33b3a7f2fd39459354e8da4353710f9",
+  "temporal_policy_sha256": "ccec1fdd13274e6d7e8ec579d5a8df18c1da14a30d4a05e25ca2b272169b578a",
+  "dataset_manifest_hashes_sha256": "a921c8db68e3c2746c62b72f948f121af38c1f50dfb6d5e44d97a6343e373f63"
+}

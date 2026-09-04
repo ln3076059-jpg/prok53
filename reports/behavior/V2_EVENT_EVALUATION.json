@@ -1,0 +1,10 @@
+{
+  "status": "EVENT_EVALUATION_PENDING_GOVERNED_GROUND_TRUTH",
+  "reason": "Insufficient human-reviewed event GT at the moment.",
+  "safety_invariants_tested": {
+    "passenger_phone_false_violation_count": 0,
+    "outside_person_violation_count": 0,
+    "motorcycle_seatbelt_violation_count": 0,
+    "unknown_auto_unfastened_count": 0
+  }
+}
