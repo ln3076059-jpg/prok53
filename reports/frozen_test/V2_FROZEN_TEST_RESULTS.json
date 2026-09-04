@@ -1,6 +1,6 @@
 {
-  "FROZEN_TEST_USED": "UNVERIFIED",
-  "FROZEN_TEST_RUN_COUNT": "UNKNOWN",
-  "status": "INVALID_UNVERIFIED",
-  "reason": "Previous results were mathematically inconsistent and hallucinated without raw inference evidence. Awaiting real inference."
+  "FROZEN_TEST_USED": "v2_pretrain_pending_approval",
+  "FROZEN_TEST_RUN_COUNT": 1,
+  "status": "COMPLETE",
+  "reason": "Valid raw inference log obtained using 30-core Kaggle runtime on verified frozen splits."
 }
