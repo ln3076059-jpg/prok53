@@ -56,7 +56,7 @@ video run has been supplied. No real-time claim is made.
 
 ## G. System
 
-Implemented: FastAPI endpoints, central model service, MySQL-compatible schema, safe uploads, ByteTrack integration, mandatory vehicle/cabin context, occupant-role association, temporal rules, event cooldown, evidence persistence, human review, CSV export, React dashboard, and annotation reviewer. Model lock successfully verifies recovery archives and weight SHA-256. Reviewer approval requires vehicle context plus resolved sample- and box-level occupant roles. End-to-end event generation awaits calibrated confidence/IOU thresholds and temporal evaluation policies. Phone events are driver-only; visible unfastened-seatbelt events cover every configured occupant role.
+Implemented: FastAPI endpoints, central model service, MySQL-compatible schema, safe uploads, ByteTrack integration, mandatory vehicle/cabin context, occupant-role association, temporal rules, event cooldown, evidence persistence, human review, CSV export, React dashboard, and annotation reviewer. Model lock successfully verifies recovery archives and weight SHA-256. Reviewer approval requires vehicle context plus resolved sample- and box-level occupant roles. End-to-end event evaluation awaits sequence-grounded temporal calibration and a new untouched event holdout. Phone events are driver-only; visible unfastened-seatbelt events cover every configured occupant role.
 
 ## H. Event evaluation
 
@@ -70,7 +70,7 @@ overwrite the first result. These refusal gates do not create a metric; all even
 
 ## I. Limitations
 
-The primary blockers are human physical-phone reboxing, seatbelt upper-body semantic review, trustworthy subject/vehicle metadata, threshold calibration, system-level temporal calibration, and independent event ground truth. Generic COCO YOLO found phones in only 3 of 334 Mendeley cellphone-use frames at low confidence, confirming that domain-specific pretraining is necessary. Raw traffic support now performs vehicle tracking followed by explicit cabin localization; it fails closed when the vehicle is untracked or the cabin is unknown. Ambiguous belt visibility, mounted phones, passenger/driver association, cabin-camera geometry, low light, and cross-domain generalization remain material risks.
+The primary blockers are human physical-phone reboxing, seatbelt upper-body semantic review, trustworthy subject/vehicle metadata, system-level temporal calibration, and independent event ground truth. Generic COCO YOLO found phones in only 3 of 334 Mendeley cellphone-use frames at low confidence, confirming that domain-specific pretraining is necessary. Raw traffic support now performs vehicle tracking followed by explicit cabin localization; it fails closed when the vehicle is untracked or the cabin is unknown. Ambiguous belt visibility, mounted phones, passenger/driver association, cabin-camera geometry, low light, and cross-domain generalization remain material risks.
 
 CI now checks Ruff, Python compilation, tests, FastAPI import, and the frontend build without GPU
 training or dataset/model downloads. CI correctness does not supply model accuracy or clear any

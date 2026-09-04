@@ -52,7 +52,7 @@ CROSS_CAMERA_GENERALIZATION_NOT_PROVEN. This baseline has not been proven agains
 
 ## 8. Intended Use and Prohibited Interpretation
 - **Intended Use:** Review candidate for Driver Monitoring Systems.
-- **Prohibited Interpretation:** Do not map `unknown` to `unfastened`. Do not assign violation to passengers or outside pedestrians. Do not use test metrics to choose models.
+- **Prohibited Interpretation:** Do not map `unknown` to `unfastened`. Do not assign PHONE_USE violation to passengers. Seatbelt violations may apply to configured vehicle occupants. Persons outside the vehicle must never trigger either violation. Do not use test metrics to choose models.
 
 ## 9. Artifact Hashes
 - **Phone Detector SHA256:** `840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54`
