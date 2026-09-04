@@ -11,8 +11,16 @@ from ultralytics import YOLO
 
 def main():
     print("Setting up datasets...")
-    # Copy all input datasets to working so we can modify them
-    os.system("cp -r /kaggle/input/dms-v2-eval-datasets-canonical/datasets/derived/v2_pretrain_pending_approval /kaggle/working/eval_ds")
+    # Find dataset root dynamically to avoid Kaggle zip extraction path issues
+    res = os.popen("find /kaggle/input -name phone_detector -type d | head -n 1").read().strip()
+    if res:
+        dataset_root = str(Path(res).parent)
+        print(f"Found dataset root: {dataset_root}")
+        os.system(f"cp -r {dataset_root} /kaggle/working/eval_ds")
+    else:
+        print("CRITICAL ERROR: Could not find phone_detector in /kaggle/input")
+        os.system("find /kaggle/input")
+        return
     
     # YOLO classification val() expects a 'train' folder even if it's not used
     print("Faking train folder for classifier...")
