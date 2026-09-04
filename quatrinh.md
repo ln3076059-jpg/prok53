@@ -19,6 +19,7 @@
 - **mAP50-95:** 70.03%
 - **Precision:** 97.13%
 - **Recall:** 82.73%
+- **F1-Score:** 89.34%
 - **Đánh giá:** Rất xuất sắc, khả năng nhận diện chính xác cao và tỷ lệ báo động giả cực thấp.
 
 ### 3.2. Seatbelt Detector (Phát hiện dây an toàn - Bounding Box)
@@ -26,6 +27,7 @@
 - **mAP50-95:** 53.70%
 - **Precision:** 92.57%
 - **Recall:** 87.85%
+- **F1-Score:** 90.13%
 - **Đánh giá:** Khả năng định vị vùng chứa dây an toàn (occupant upper body) rất chuẩn xác.
 
 ### 3.3. Seatbelt Classifier (Phân loại trạng thái dây an toàn)
