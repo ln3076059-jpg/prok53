@@ -1,7 +1,8 @@
 {
   "handoff_context": "V2 Validation-Only Threshold Calibration and Status Transition",
   "repository": "ln3076059-jpg/prok53",
-  "head_sha_at_calibration": "86d356acee2c842794823eb5fb5e0843eb99a69e",
+  "source_head_before_calibration": "86d356acee2c842794823eb5fb5e0843eb99a69e",
+  "calibration_final_head": "70aa1e06b8dd34da37253eb8811706b74f957f22",
   "frozen_test_consumed": true,
   "frozen_test_run_count": 1,
   "components": {

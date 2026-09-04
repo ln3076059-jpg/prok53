@@ -58,7 +58,7 @@ CROSS_CAMERA_GENERALIZATION_NOT_PROVEN. This baseline has not been proven agains
 - **Phone Detector SHA256:** `840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54`
 - **Seatbelt Detector SHA256:** `361436ab073c8fcc17a041f098285efdd0cf6775a8970be2ffada4e45c6bc500`
 - **Seatbelt Classifier SHA256:** `e55158e3f152922e710ad260295da16488ffc2c6a145b8dfdc5c4ce323392bd4`
-- **Calibration Lock SHA256:** `11161162007e0e450a141e5209629177db53aa52ab40232f61847ac7eafd1426`
+- **Calibration Lock SHA256:** `6b661fdf8bbeec8618d9fd1d3b364ac89bf74398d39f51533fa5d491b0cf9cf2`
 
 ## 10. Training Environment
 NVIDIA GeForce RTX 3090, 24GB VRAM, Windows 10, PyTorch 2.8.0+cu128.

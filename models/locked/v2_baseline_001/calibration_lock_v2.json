@@ -42,7 +42,9 @@
   "evidence_files": [
     "reports/calibration/V2_PHONE_DETECTOR_CALIBRATION.json",
     "reports/calibration/V2_SEATBELT_DETECTOR_CALIBRATION.json",
-    "reports/calibration/V2_SEATBELT_CLASSIFIER_CALIBRATION.json"
+    "reports/calibration/V2_SEATBELT_CLASSIFIER_CALIBRATION.json",
+    "reports/calibration/seatbelt_classifier_threshold_sweep.csv",
+    "reports/calibration/seatbelt_classifier_raw_predictions.csv"
   ],
   "created_at_utc": "2026-09-04T02:35:00Z"
 }
