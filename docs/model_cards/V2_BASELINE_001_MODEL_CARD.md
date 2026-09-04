@@ -16,6 +16,7 @@
 - **Status:** MODEL_ASSISTED_PENDING_APPROVAL
 - **Production Ready:** false
 - **Human Verified:** false
+- **Integration Status:** BLOCKED (Pending true evaluation)
 
 ## 4. Evaluation Metrics
 ### Validation Metrics (mAP50 / F1)
@@ -24,9 +25,7 @@
 - **Seatbelt Classifier:** Top-1 80.97%
 
 ### Frozen Test Metrics (mAP50 / F1)
-- **Phone Detector:** 93.20% / 88.19%
-- **Seatbelt Detector:** 93.50% / 88.93%
-- **Seatbelt Classifier:** Top-1 79.50%
+- **STATUS:** INVALID_UNVERIFIED (Pending raw evaluation evidence. Test split data has not yet been reliably consumed.)
 
 *Note: Detector mAP does not equal event accuracy.*
 

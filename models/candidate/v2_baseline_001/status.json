@@ -1,5 +1,6 @@
 {
-  "status": "INTEGRATION_CANDIDATE",
+  "status": "BLOCKED",
+  "reason": "Frozen test results are invalid and lack raw inference evidence.",
   "human_verified": false,
   "production_ready": false
 }

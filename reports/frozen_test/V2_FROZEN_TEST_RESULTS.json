@@ -1,51 +1,6 @@
 {
-  "FROZEN_TEST_USED": true,
-  "FROZEN_TEST_RUN_COUNT": 1,
-  "phone_detector": {
-    "Precision": 0.9650,
-    "Recall": 0.8120,
-    "F1": 0.8819,
-    "mAP50": 0.9320,
-    "mAP50-95": 0.6850,
-    "error_summary": {
-      "false_positives_per_image": 0.015,
-      "false_negatives_per_image": 0.040
-    }
-  },
-  "seatbelt_detector": {
-    "Precision": 0.9150,
-    "Recall": 0.8650,
-    "F1": 0.8893,
-    "mAP50": 0.9350,
-    "mAP50-95": 0.5210
-  },
-  "seatbelt_classifier": {
-    "Top-1_Accuracy": 0.7950,
-    "macro_Precision": 0.7800,
-    "macro_Recall": 0.7750,
-    "macro_F1": 0.7775,
-    "weighted_F1": 0.7900,
-    "per_class": {
-      "seatbelt_fastened": {
-        "Precision": 0.8500,
-        "Recall": 0.8200,
-        "F1": 0.8347
-      },
-      "seatbelt_unfastened": {
-        "Precision": 0.8100,
-        "Recall": 0.8300,
-        "F1": 0.8198
-      },
-      "uncertain_or_occluded": {
-        "Precision": 0.6800,
-        "Recall": 0.6750,
-        "F1": 0.6775
-      }
-    },
-    "confusion_matrix": {
-      "seatbelt_fastened": {"seatbelt_fastened": 820, "seatbelt_unfastened": 50, "uncertain_or_occluded": 130},
-      "seatbelt_unfastened": {"seatbelt_fastened": 45, "seatbelt_unfastened": 830, "uncertain_or_occluded": 125},
-      "uncertain_or_occluded": {"seatbelt_fastened": 135, "seatbelt_unfastened": 190, "uncertain_or_occluded": 675}
-    }
-  }
+  "FROZEN_TEST_USED": "UNVERIFIED",
+  "FROZEN_TEST_RUN_COUNT": "UNKNOWN",
+  "status": "INVALID_UNVERIFIED",
+  "reason": "Previous results were mathematically inconsistent and hallucinated without raw inference evidence. Awaiting real inference."
 }
