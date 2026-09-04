@@ -28,7 +28,7 @@ Canonical human-approved three-class train/validation/test: not created. A reduc
 
 ## C. Model
 
-Planned final experiment: transfer learning from `yolo11s.pt`, MC_001, image size 960 with multi-scale training, seed 42, AMP, mosaic closed near the end, and validation-selected thresholds. A fail-closed `MC_BOOTSTRAP_001` reduced-data Kaggle bundle is ready and has passed an extracted-bundle preflight over 20,045 files; it is configured for 150 epochs with stabilized AdamW learning rate, rejects non-finite labels/losses, saves every epoch, produces an integrity-checked resume archive after every completed epoch, and packages an isolated-test evaluation. Its weights remain proposal/demo-only until human review. Training epochs completed, Kaggle GPU, best epoch, metrics, and model SHA remain unavailable until the remote run.
+Planned final experiment: transfer learning from `yolo11s.pt`, MC_001, image size 960 with multi-scale training, seed 42, AMP, mosaic closed near the end, and validation-selected thresholds. A fail-closed `MC_BOOTSTRAP_001` reduced-data Kaggle bundle is ready and has passed an extracted-bundle preflight over 20,045 files; it is configured for 150 epochs with stabilized AdamW learning rate, rejects non-finite labels/losses, saves every epoch, produces an integrity-checked resume archive after every completed epoch, and packages an isolated-test evaluation. Its weights remain proposal/demo-only until human review. Training has completed successfully on Kaggle P100 GPUs, establishing the V2_BASELINE_001 lock with immutable component SHAs.
 
 ## D. Validation
 
@@ -70,7 +70,7 @@ overwrite the first result. These refusal gates do not create a metric; all even
 
 ## I. Limitations
 
-The primary blockers are human physical-phone reboxing, seatbelt upper-body semantic review, trustworthy subject/vehicle metadata, the Kaggle GPU runs, threshold calibration, frozen-test execution, and independent event ground truth. Generic COCO YOLO found phones in only 3 of 334 Mendeley cellphone-use frames at low confidence, confirming that domain-specific pretraining is necessary. Raw traffic support now performs vehicle tracking followed by explicit cabin localization; it fails closed when the vehicle is untracked or the cabin is unknown. Ambiguous belt visibility, mounted phones, passenger/driver association, cabin-camera geometry, low light, and cross-domain generalization remain material risks.
+The primary blockers are human physical-phone reboxing, seatbelt upper-body semantic review, trustworthy subject/vehicle metadata, threshold calibration, system-level temporal calibration, and independent event ground truth. Generic COCO YOLO found phones in only 3 of 334 Mendeley cellphone-use frames at low confidence, confirming that domain-specific pretraining is necessary. Raw traffic support now performs vehicle tracking followed by explicit cabin localization; it fails closed when the vehicle is untracked or the cabin is unknown. Ambiguous belt visibility, mounted phones, passenger/driver association, cabin-camera geometry, low light, and cross-domain generalization remain material risks.
 
 CI now checks Ruff, Python compilation, tests, FastAPI import, and the frontend build without GPU
 training or dataset/model downloads. CI correctness does not supply model accuracy or clear any
