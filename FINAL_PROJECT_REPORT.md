@@ -46,7 +46,7 @@ Canonical execution of the frozen test split produced the following baseline evi
 * **Phone Detector (Test 302 imgs, 139 instances):** Precision 90.2%, Recall 86.2%, mAP50 90.5%, mAP50-95 65.5%
 * **Seatbelt Detector (Test 614 imgs, 617 instances):** Precision 93.8%, Recall 88.2%, mAP50 92.7%, mAP50-95 47.7%
 * **Seatbelt Classifier (Test 621 imgs, 3-class):** Top-1 Accuracy 78.9%
-Integration blocker lifted; model status transitioned to CALIBRATED_EVALUATION_CANDIDATE.
+Component-level calibration gates are complete; the model status is CALIBRATED_EVALUATION_CANDIDATE. Temporal and event-level scientific gates remain open.
 
 ## F. Performance
 
@@ -86,7 +86,7 @@ component locking, post-evaluation hash verification, production secret safety, 
 hardening, plus a repository-root-safe reviewer launcher. Local verification passes 125/125
 tests; these are tooling checks, not model metrics.
 
-The repository is ready to begin controlled human review, but governed training and production
+The repository is ready to continue controlled human review, but governed training and production
 remain false. Durable multi-process queuing, production RTSP behavior and target-hardware
 performance are not claimed. GitHub reports `main` is unprotected, so branch protection remains
 `BLOCKED_BY_GITHUB_SETTINGS`. See `reports/PRE_TRAIN_ENGINEERING_FREEZE.md`.
