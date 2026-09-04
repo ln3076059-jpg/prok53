@@ -1,0 +1,17 @@
+{
+  "component": "phone_detector",
+  "calibration_source": "datasets/derived/v2_pretrain_pending_approval/phone_detector/images/val",
+  "calibration_split": "val",
+  "sample_count": 302,
+  "instances": 139,
+  "model_sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+  "optimal_thresholds": {
+    "confidence": 0.5996,
+    "nms_iou": 0.7
+  },
+  "metrics_at_optimal": {
+    "precision": 0.9667,
+    "recall": 0.8417,
+    "f1": 0.8999
+  }
+}
