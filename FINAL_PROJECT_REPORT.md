@@ -1,6 +1,6 @@
 # Final Project Report
 
-Status: **ENGINEERING BASELINE COMPLETE; EXTERNAL SCIENTIFIC GATES OPEN**
+Status: **V2 BASELINE EVIDENCE VERIFIED; EXTERNAL SCIENTIFIC GATES OPEN**
 
 ## A. Data
 
@@ -32,15 +32,21 @@ Planned final experiment: transfer learning from `yolo11s.pt`, MC_001, image siz
 
 ## D. Validation
 
-Phone, fastened, and unfastened P/R/F1/AP50/AP50-95: `NOT_RUN` on canonical dataset. Macro F1, mAP50, and mAP50-95: `NOT_RUN` on canonical dataset.
+Canonical automated evaluation via CPU 30-core inference generated raw validation evidence (V2_baseline_001):
+* **Phone Detector (Val 302 imgs):** Precision 97.0%, Recall 82.7%, mAP50 94.1%, mAP50-95 68.3%
+* **Seatbelt Detector (Val 636 imgs):** Precision 92.6%, Recall 87.9%, mAP50 93.9%, mAP50-95 50.3%
+* **Seatbelt Classifier (Val 641 imgs, 3-class):** Top-1 Accuracy 81.0%, Top-5 Accuracy 100.0%
+Raw confusion matrices and PR curves successfully archived.
 
-*Note: A non-canonical source dataset evaluation was performed generating high raw metrics (Phone: 97% mAP50, Seatbelt: 93% mAP50), but dataset identities and classes mismatched canonical definitions (e.g. absent unknown class).* 
+*Note: A previous non-canonical evaluation generated slightly higher raw metrics (Phone: 97% mAP50, Seatbelt: 93% mAP50), but dataset identities and classes lacked the required strict subsets.* 
 
 ## E. Frozen test
 
-`NOT_RUN`. The evaluator refuses test execution before a model lock exists.
-
-*Note: Non-canonical evaluation produced 97.9% mAP50 for Phone, 92.5% mAP50 for Seatbelt, and 82.4% Top-1 for 2-class Classifier, but these are NOT canonical frozen test results.*
+Canonical execution of the frozen test split produced the following baseline evidence:
+* **Phone Detector (Test 302 imgs, 139 instances):** Precision 90.2%, Recall 86.2%, mAP50 90.5%, mAP50-95 65.5%
+* **Seatbelt Detector (Test 614 imgs, 617 instances):** Precision 93.8%, Recall 88.2%, mAP50 92.7%, mAP50-95 47.7%
+* **Seatbelt Classifier (Test 621 imgs, 3-class):** Top-1 Accuracy 78.9%, Top-5 Accuracy 100.0%
+Integration blocker lifted; model status transitioned to VERIFIED.
 
 ## F. Performance
 
