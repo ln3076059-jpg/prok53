@@ -34,7 +34,7 @@
 *Note: This is a raw model-level capability test executed without explicitly calibrated conf/IOU thresholds or temporal smoothing. It evaluates the raw weights, not the end-to-end system.*
 - **Phone Detector (Test 302 imgs, 139 instances):** Precision 90.2%, Recall 86.2%, mAP50 90.5%, mAP50-95 65.5%
 - **Seatbelt Detector (Test 614 imgs, 617 instances):** Precision 93.8%, Recall 88.2%, mAP50 92.7%, mAP50-95 47.7%
-- **Seatbelt Classifier (Test 621 imgs, 3-class):** Top-1 Accuracy 78.9%, Top-5 Accuracy 100.0%
+- **Seatbelt Classifier (Test 621 imgs, 3-class):** Top-1 Accuracy 78.9%
 
 *Note: The canonical frozen test dataset has now been officially consumed (FROZEN_TEST_RUN_COUNT=1). Final system-level Event Evaluation (post-calibration) must utilize a new, un-touched holdout dataset.*
 
