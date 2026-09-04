@@ -66,7 +66,40 @@
               "NOT_APPLICABLE"
             ]
           }
-        }
+        },
+        "allOf": [
+          {
+            "if": { "properties": { "event_type": { "const": "PHONE" } } },
+            "then": {
+              "properties": {
+                "label": {
+                  "enum": [
+                    "PHONE_USE",
+                    "PHONE_PRESENT_NOT_USED",
+                    "MOUNTED_OR_STATIC_PHONE",
+                    "NO_PHONE",
+                    "UNKNOWN"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": { "properties": { "event_type": { "const": "SEATBELT" } } },
+            "then": {
+              "properties": {
+                "label": {
+                  "enum": [
+                    "FASTENED",
+                    "UNFASTENED",
+                    "UNCERTAIN_OR_OCCLUDED",
+                    "NOT_APPLICABLE"
+                  ]
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "context": {
