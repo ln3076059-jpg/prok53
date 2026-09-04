@@ -1,5 +1,5 @@
 {
-  "status": "EVENT_EVALUATION_PENDING_GOVERNED_GROUND_TRUTH",
+  "status": "EVENT_EVALUATION_PENDING_NEW_UNTOUCHED_HOLDOUT",
   "reason": "Insufficient human-reviewed event GT at the moment.",
   "safety_invariants_tested": {
     "passenger_phone_false_violation_count": 0,
