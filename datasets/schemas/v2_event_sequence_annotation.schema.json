@@ -33,7 +33,7 @@
         "required": ["occupant_id", "role"],
         "properties": {
           "occupant_id": { "type": "string" },
-          "role": { "type": "string", "enum": ["driver", "passenger", "outside_person", "unknown"] },
+          "role": { "type": "string", "enum": ["driver", "front_passenger", "rear_left", "rear_center", "rear_right", "unknown"] },
           "role_confidence": { "type": "number" },
           "reviewer_confirmed_role": { "type": "boolean" },
           "vehicle_context_confirmed": { "type": "boolean" }
@@ -94,7 +94,20 @@
           "enum": ["AI_REVIEWED_PROPOSAL", "HUMAN_APPROVED"]
         },
         "annotation_version": { "type": "string" }
-      }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "reviewer_type": { "const": "AI" } } },
+          "then": { "properties": { "status": { "const": "AI_REVIEWED_PROPOSAL" } } }
+        },
+        {
+          "if": { "properties": { "reviewer_type": { "const": "HUMAN" } } },
+          "then": {
+            "properties": { "status": { "const": "HUMAN_APPROVED" } },
+            "required": ["reviewer_id", "reviewed_at", "evidence_hash"]
+          }
+        }
+      ]
     }
   }
 }
