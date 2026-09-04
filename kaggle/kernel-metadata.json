@@ -9,7 +9,7 @@
   "enable_internet": true,
   "dataset_sources": [
     "lethunga/dms-v2-baseline-001",
-    "lethunga/dms-v2-eval-datasets"
+    "lethunga/dms-v2-eval-datasets-canonical"
   ],
   "competition_sources": [],
   "kernel_sources": []

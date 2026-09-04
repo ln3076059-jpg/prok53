@@ -12,22 +12,22 @@ from ultralytics import YOLO
 def main():
     print("Setting up datasets...")
     # Copy all input datasets to working so we can modify them
-    os.system("cp -r /kaggle/input/dms-v2-eval-datasets/derived /kaggle/working/eval_ds")
+    os.system("cp -r /kaggle/input/dms-v2-eval-datasets-canonical/datasets/derived/v2_pretrain_pending_approval /kaggle/working/eval_ds")
     
     # YOLO classification val() expects a 'train' folder even if it's not used
     print("Faking train folder for classifier...")
-    os.system("cp -r /kaggle/working/eval_ds/seatbelt_classifier_v2/val /kaggle/working/eval_ds/seatbelt_classifier_v2/train")
+    os.system("cp -r /kaggle/working/eval_ds/seatbelt_classifier/val /kaggle/working/eval_ds/seatbelt_classifier/train")
 
-    phone_yaml = Path("/kaggle/working/eval_ds/phone_bootstrap_v2/data.yaml")
-    seatbelt_yaml = Path("/kaggle/working/eval_ds/seatbelt_v2_balanced/data.yaml")
-    cls_data = Path("/kaggle/working/eval_ds/seatbelt_classifier_v2")
+    phone_yaml = Path("/kaggle/working/eval_ds/phone_detector/data.yaml")
+    seatbelt_yaml = Path("/kaggle/working/eval_ds/seatbelt_detector/data.yaml")
+    cls_data = Path("/kaggle/working/eval_ds/seatbelt_classifier")
 
     print(f"Phone yaml: {phone_yaml}")
     print(f"Seatbelt yaml: {seatbelt_yaml}")
     print(f"Cls data: {cls_data}")
     
     if phone_yaml.exists():
-        phone_yaml.write_text("""path: /kaggle/working/eval_ds/phone_bootstrap_v2
+        phone_yaml.write_text("""path: /kaggle/working/eval_ds/phone_detector
 train: images/val
 val: images/val
 test: images/test
@@ -36,13 +36,12 @@ names:
 """)
         
     if seatbelt_yaml.exists():
-        seatbelt_yaml.write_text("""path: /kaggle/working/eval_ds/seatbelt_v2_balanced
+        seatbelt_yaml.write_text("""path: /kaggle/working/eval_ds/seatbelt_detector
 train: images/val
 val: images/val
 test: images/test
 names:
-  0: unfastened
-  1: fastened
+  0: occupant_upper_body
 """)
 
     phone_pt = Path("/kaggle/input/datasets/lethunga/dms-v2-baseline-001/phone_detector/best.pt")
@@ -61,7 +60,7 @@ names:
         return
 
     # Check if datasets exist
-    if not (Path("/kaggle/working/eval_ds/phone_bootstrap_v2/images/val").exists()):
+    if not (Path("/kaggle/working/eval_ds/phone_detector/images/val").exists()):
         print("CRITICAL ERROR: Dataset not copied correctly!")
         os.system("ls -la /kaggle/working/eval_ds")
         return
