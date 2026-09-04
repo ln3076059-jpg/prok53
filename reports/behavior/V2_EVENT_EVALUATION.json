@@ -1,10 +1,6 @@
 {
-  "status": "EVENT_EVALUATION_PENDING_NEW_UNTOUCHED_HOLDOUT",
-  "reason": "Insufficient human-reviewed event GT at the moment.",
-  "safety_invariants_tested": {
-    "passenger_phone_false_violation_count": 0,
-    "outside_person_violation_count": 0,
-    "motorcycle_seatbelt_violation_count": 0,
-    "unknown_auto_unfastened_count": 0
-  }
+  "status": "PENDING_NEW_UNTOUCHED_HOLDOUT",
+  "reason": "Final event evaluation requires a new untouched sequence holdout with independently reviewed event ground truth.",
+  "runtime_unit_invariant_tests": "PASS",
+  "event_holdout_invariant_counters": "NOT_RUN"
 }
