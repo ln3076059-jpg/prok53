@@ -1,6 +1,6 @@
 {
-  "status": "EVALUATION_COMPLETE",
-  "reason": "Canonical frozen test metrics securely extracted via Kaggle Version 17. Calibration and human verification pending.",
+  "status": "CALIBRATED_EVALUATION_CANDIDATE",
+  "reason": "Canonical validation thresholds derived and frozen test metrics consumed. Temporal calibration pending sequence GT.",
   "human_verified": false,
   "production_ready": false
 }

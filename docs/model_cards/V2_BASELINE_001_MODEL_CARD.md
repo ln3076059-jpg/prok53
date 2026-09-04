@@ -16,7 +16,7 @@
 - **Status:** MODEL_ASSISTED_PENDING_APPROVAL
 - **Production Ready:** false
 - **Human Verified:** false
-- **Integration Status:** EVALUATION_COMPLETE
+- **Integration Status:** CALIBRATED_EVALUATION_CANDIDATE
 
 ## 4. Evaluation Metrics
 
@@ -58,7 +58,7 @@ CROSS_CAMERA_GENERALIZATION_NOT_PROVEN. This baseline has not been proven agains
 - **Phone Detector SHA256:** `840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54`
 - **Seatbelt Detector SHA256:** `361436ab073c8fcc17a041f098285efdd0cf6775a8970be2ffada4e45c6bc500`
 - **Seatbelt Classifier SHA256:** `e55158e3f152922e710ad260295da16488ffc2c6a145b8dfdc5c4ce323392bd4`
-- **Calibration Lock SHA256:** `40e6e7205fcbd2344f6d9d96b2fde7fe2b5582f15958981019772b7ca19b6a08`
+- **Calibration Lock SHA256:** `5e88b5040ad9f8b579f1dcfd0232db309e1dccdbf93ea93206790f7ed8f4683e`
 
 ## 10. Training Environment
 NVIDIA GeForce RTX 3090, 24GB VRAM, Windows 10, PyTorch 2.8.0+cu128.

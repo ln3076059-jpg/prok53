@@ -1,0 +1,45 @@
+{
+  "handoff_context": "V2 Validation-Only Threshold Calibration and Status Transition",
+  "repository": "ln3076059-jpg/prok53",
+  "head_sha_at_calibration": "86d356acee2c842794823eb5fb5e0843eb99a69e",
+  "frozen_test_consumed": true,
+  "frozen_test_run_count": 1,
+  "components": {
+    "phone_detector": {
+      "sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+      "selected_confidence_threshold": 0.5996
+    },
+    "seatbelt_detector": {
+      "sha256": "361436ab073c8fcc17a041f098285efdd0cf6775a8970be2ffada4e45c6bc500",
+      "selected_confidence_threshold": 0.4074
+    },
+    "seatbelt_classifier": {
+      "sha256": "e55158e3f152922e710ad260295da16488ffc2c6a145b8dfdc5c4ce323392bd4",
+      "reject_policy": "Fastened < 0.50 or Unfastened < 0.60 -> uncertain_or_occluded",
+      "validation_top1": 0.8097,
+      "validation_macro_f1": 0.5727,
+      "per_class": {
+        "fastened": {"P": 0.8571, "R": 0.8310, "F1": 0.8439},
+        "unfastened": {"P": 0.8195, "R": 0.7870, "F1": 0.8029}
+      }
+    }
+  },
+  "temporal_calibration": {
+    "status": "PENDING_SEQUENCE_GROUND_TRUTH",
+    "reason": "Missing end-to-end video event sequences for smoothing derivation."
+  },
+  "event_holdout": {
+    "status": "PENDING_NEW_UNTOUCHED_HOLDOUT"
+  },
+  "event_evaluation": {
+    "status": "NOT_RUN"
+  },
+  "cross_camera": {
+    "status": "NOT_PROVEN"
+  },
+  "governance": {
+    "human_verified": false,
+    "production_ready": false,
+    "integration_status": "CALIBRATED_EVALUATION_CANDIDATE"
+  }
+}

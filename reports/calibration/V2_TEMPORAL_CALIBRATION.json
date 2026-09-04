@@ -1,0 +1,5 @@
+{
+  "status": "PENDING_SEQUENCE_GROUND_TRUTH",
+  "reason": "No validated temporal sequence ground truth datasets (video event annotations) exist in the repository to rigorously calibrate temporal parameters like observation_window_frames, min_positive_frames, or EMA alpha.",
+  "action_required": "Provide a holdout or validation sequence dataset containing end-to-end event boundaries for phone usage and seatbelt unfastening to derive temporal smoothing parameters objectively."
+}

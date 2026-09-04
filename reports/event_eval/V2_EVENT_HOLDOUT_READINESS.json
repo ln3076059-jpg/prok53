@@ -1,0 +1,12 @@
+{
+  "status": "PENDING_NEW_UNTOUCHED_HOLDOUT",
+  "reason": "The canonical frozen test (FROZEN_TEST_RUN_COUNT=1) has already been consumed for evaluating raw model weights. A fresh, untouched sequence dataset is required to evaluate final system event accuracy objectively.",
+  "requirements": [
+    "Never used in training",
+    "Never used in validation",
+    "Never used in calibration (temporal or threshold)",
+    "Never used in the consumed frozen test",
+    "No overlapping clips or adjacent frames with existing sets",
+    "Must be a sequence dataset with ground truth event annotations (not just single frames)"
+  ]
+}
