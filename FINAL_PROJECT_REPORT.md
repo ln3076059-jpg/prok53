@@ -28,7 +28,7 @@ Canonical human-approved three-class train/validation/test: not created. A reduc
 
 ## C. Model
 
-Planned final experiment: transfer learning from `yolo11s.pt`, MC_001, image size 960 with multi-scale training, seed 42, AMP, mosaic closed near the end, and validation-selected thresholds. A fail-closed `MC_BOOTSTRAP_001` reduced-data Kaggle bundle is ready and has passed an extracted-bundle preflight over 20,045 files; it is configured for 150 epochs with stabilized AdamW learning rate, rejects non-finite labels/losses, saves every epoch, produces an integrity-checked resume archive after every completed epoch, and packages an isolated-test evaluation. Its weights remain proposal/demo-only until human review. Training has completed successfully on Kaggle P100 GPUs, establishing the V2_BASELINE_001 lock with immutable component SHAs.
+Training of the V2 multi-model pipeline (Phone Detector, Seatbelt Detector, and Seatbelt Classifier) has successfully completed on an NVIDIA GeForce RTX 3090 (Windows 10, PyTorch 2.8.0+cu128). This established the V2_BASELINE_001 lock with immutable SHA-256 component hashes. The final architecture utilizes YOLO11s for detection and YOLO11s-cls for classification.
 
 ## D. Validation
 
@@ -56,7 +56,7 @@ video run has been supplied. No real-time claim is made.
 
 ## G. System
 
-Implemented: FastAPI endpoints, central model service, MySQL-compatible schema, safe uploads, ByteTrack integration, mandatory vehicle/cabin context, occupant-role association, temporal rules, event cooldown, evidence persistence, human review, CSV export, React dashboard, and annotation reviewer. The post-Kaggle phone-bootstrap handoff now verifies the recovery archive and weight SHA-256, installs an immutable proposal-only checkpoint, generates Mendeley proposals, and builds a focused review queue. Reviewer approval requires vehicle context plus resolved sample- and box-level occupant roles. End-to-end inference awaits locked weights. Phone events are driver-only; visible unfastened-seatbelt events cover every configured occupant role.
+Implemented: FastAPI endpoints, central model service, MySQL-compatible schema, safe uploads, ByteTrack integration, mandatory vehicle/cabin context, occupant-role association, temporal rules, event cooldown, evidence persistence, human review, CSV export, React dashboard, and annotation reviewer. Model lock successfully verifies recovery archives and weight SHA-256. Reviewer approval requires vehicle context plus resolved sample- and box-level occupant roles. End-to-end event generation awaits calibrated confidence/IOU thresholds and temporal evaluation policies. Phone events are driver-only; visible unfastened-seatbelt events cover every configured occupant role.
 
 ## H. Event evaluation
 
