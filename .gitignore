@@ -24,3 +24,5 @@ uploads/
 
 # Downloaded/pretrained model weights
 *.pt
+
+epoch_snapshots/
