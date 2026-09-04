@@ -39,8 +39,8 @@
 *Note: The canonical frozen test dataset has now been officially consumed (FROZEN_TEST_RUN_COUNT=1). Final system-level Event Evaluation (post-calibration) must utilize a new, un-touched holdout dataset.*
 
 ## 5. Behavior Evaluation
-EVENT_EVALUATION_PENDING_GOVERNED_GROUND_TRUTH
-Event accuracy is not yet proven due to insufficient human-reviewed event GT.
+EVENT_EVALUATION = PENDING_NEW_UNTOUCHED_HOLDOUT
+Final system-level event evaluation has not yet been executed. It requires a newly frozen, untouched sequence holdout with independently reviewed and governed event ground truth. The canonical frozen model test cannot be reused for this purpose.
 
 ## 6. Known Failure Modes & Limitations
 - **Phone:** Hand near face/ear triggers false positives. Low light reduces recall.

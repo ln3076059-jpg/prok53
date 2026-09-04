@@ -89,13 +89,13 @@ def test_mounted_phone_is_not_an_event():
     )
 
 
-def test_unknown_phone_context_and_unknown_occupant_need_review():
+def test_unknown_phone_context_and_unknown_occupant_fail_closed():
     runtime = engine()
     runtime.add(Observation(0, "phone", 0.9, 5, "unknown", "car-1", "UNKNOWN_PHONE_CONTEXT"))
     events = runtime.add(
         Observation(1.1, "phone", 0.9, 5, "unknown", "car-1", "UNKNOWN_PHONE_CONTEXT")
     )
-    assert events[0].review_status == "NEEDS_REVIEW"
+    assert events == []
 
 
 def test_outside_vehicle_and_uncertain_belt_do_not_emit():
