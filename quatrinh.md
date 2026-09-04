@@ -12,7 +12,7 @@
 
 ## 3. Hoàn tất Huấn luyện Mô hình (Pre-training)
 - **Trạng thái:** `COMPLETE` cho cả 3 thành phần.
-- **Môi trường:** RTX 5060 Ti 16GB (All Pretrain Pending Train).
+- **Môi trường:** NVIDIA GeForce RTX 3090, VRAM ~24GB, Windows 10, PyTorch 2.8.0+cu128.
 
 ### 3.1. Phone Detector (Nhận diện sử dụng điện thoại)
 - **mAP50:** 94.48%
@@ -32,9 +32,14 @@
 
 ### 3.3. Seatbelt Classifier (Phân loại trạng thái dây an toàn)
 - **Accuracy Top-1:** 80.97%
-- **Accuracy Top-5:** 100.00%
-- **Đánh giá:** Hiệu suất tốt ở mức ~81% để phân loại xem người lái có thắt dây hay không.
+- **Đánh giá:** Hiệu suất Top-1 đạt ~81% (lưu ý không dùng chỉ số Top-5 vì mô hình chỉ có 3 classes). Sẽ bổ sung macro-F1 và per-class precision-recall trong báo cáo chi tiết sau.
 
 ## 4. Trọng số Mô hình (Weights)
 - Các tệp trọng số tốt nhất (best weights) hiện đang được lưu tại đường dẫn con `weights/best.pt` của thư mục `runs/MULTIMODEL_V2_PRETRAIN/...`.
-- **Bước tiếp theo dự kiến:** Evaluate (đánh giá trên tập test) hoặc Lock model (đóng băng mô hình) để chuẩn bị tích hợp.
+- **Bước tiếp theo dự kiến:** 
+  1. Lock model / config (đóng băng mô hình).
+  2. Threshold / calibration bằng tập validation.
+  3. Frozen test (chỉ dùng test split sau khi lock).
+  4. Behavior / event evaluation.
+  5. Camera / temporal calibration.
+  6. Xem xét activation.
