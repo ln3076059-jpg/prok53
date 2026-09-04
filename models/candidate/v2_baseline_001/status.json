@@ -1,6 +1,6 @@
 {
-  "status": "VERIFIED",
-  "reason": "Successfully verified via Kaggle Pipeline (Version 15) with raw inference evidence and Confusion Matrices extracted.",
-  "human_verified": true,
-  "production_ready": true
+  "status": "BLOCKED",
+  "reason": "Raw inference obtained, but datasets evaluated were non-canonical. Canonical validation and frozen test pending.",
+  "human_verified": false,
+  "production_ready": false
 }
