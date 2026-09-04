@@ -75,7 +75,7 @@ class TemporalEventEngine:
         if observation.vehicle_context_id is None:
             return []
         role = observation.occupant_role or "unknown"
-        if observation.class_name == "phone" and role not in {"driver", "unknown"}:
+        if observation.class_name == "phone" and role != "driver":
             return []
         if observation.class_name == "phone" and observation.phone_context == "MOUNTED_OR_STATIC":
             self._release("PHONE", observation)

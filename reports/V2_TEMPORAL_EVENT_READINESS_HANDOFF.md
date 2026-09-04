@@ -1,7 +1,8 @@
 # V2 Temporal and Event Readiness Handoff
 
 ## Context
-**HEAD SHA:** `30b427a58b48fc3faf9180480c21b4943339be96`
+**Source HEAD Before Readiness:** `30b427a58b48fc3faf9180480c21b4943339be96`
+**Readiness Artifact Commit:** `be4679ccb18b311ad8164b572b1ca2df0c9e4606`
 **Calibration Lock SHA:** `6b661fdf8bbeec8618d9fd1d3b364ac89bf74398d39f51533fa5d491b0cf9cf2`
 
 ## Verified Component Hashes
