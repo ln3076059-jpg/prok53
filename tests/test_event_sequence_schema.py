@@ -1,13 +1,17 @@
 import json
 from pathlib import Path
 import pytest
-from jsonschema import validate, ValidationError
+from jsonschema import Draft7Validator, FormatChecker, ValidationError
 
 @pytest.fixture
 def schema():
     schema_path = Path("datasets/schemas/v2_event_sequence_annotation.schema.json")
     with open(schema_path, "r", encoding="utf-8") as f:
         return json.load(f)
+
+@pytest.fixture
+def validator(schema):
+    return Draft7Validator(schema, format_checker=FormatChecker())
 
 def create_base_record():
     return {
@@ -28,17 +32,17 @@ def create_base_record():
         }
     }
 
-def test_ai_proposal_is_valid(schema):
+def test_ai_proposal_is_valid(validator):
     record = create_base_record()
-    validate(instance=record, schema=schema)
+    validator.validate(record)
 
-def test_ai_reviewer_cannot_be_human_approved(schema):
+def test_ai_reviewer_cannot_be_human_approved(validator):
     record = create_base_record()
     record["review_provenance"]["status"] = "HUMAN_APPROVED"
     with pytest.raises(ValidationError):
-        validate(instance=record, schema=schema)
+        validator.validate(record)
 
-def test_human_approval_requires_provenance(schema):
+def test_human_approval_requires_provenance(validator):
     record = create_base_record()
     record["review_provenance"] = {
         "reviewer_type": "HUMAN",
@@ -48,9 +52,9 @@ def test_human_approval_requires_provenance(schema):
         "evidence_hash": "hash123",
         "annotation_version": "v1.0"
     }
-    validate(instance=record, schema=schema)
+    validator.validate(record)
 
-def test_human_approval_missing_provenance_fails(schema):
+def test_human_approval_missing_provenance_fails(validator):
     record = create_base_record()
     # Missing reviewer_id
     record["review_provenance"] = {
@@ -61,24 +65,43 @@ def test_human_approval_missing_provenance_fails(schema):
         "annotation_version": "v1.0"
     }
     with pytest.raises(ValidationError):
-        validate(instance=record, schema=schema)
+        validator.validate(record)
+
+def test_invalid_date_time_format_fails(validator):
+    record = create_base_record()
+    record["start_time"] = "yesterday"
+    with pytest.raises(ValidationError):
+        validator.validate(record)
+        
+def test_invalid_reviewed_at_date_time_format_fails(validator):
+    record = create_base_record()
+    record["review_provenance"] = {
+        "reviewer_type": "HUMAN",
+        "status": "HUMAN_APPROVED",
+        "reviewer_id": "rev1",
+        "reviewed_at": "abc",
+        "evidence_hash": "hash123",
+        "annotation_version": "v1.0"
+    }
+    with pytest.raises(ValidationError):
+        validator.validate(record)
 
 @pytest.mark.parametrize("valid_role", [
     "driver", "front_passenger", "rear_left", "rear_center", "rear_right", "unknown"
 ])
-def test_valid_occupant_roles(schema, valid_role):
+def test_valid_occupant_roles(validator, valid_role):
     record = create_base_record()
     record["occupants"][0]["role"] = valid_role
-    validate(instance=record, schema=schema)
+    validator.validate(record)
 
 @pytest.mark.parametrize("invalid_role", ["passenger", "outside_person"])
-def test_invalid_occupant_roles(schema, invalid_role):
+def test_invalid_occupant_roles(validator, invalid_role):
     record = create_base_record()
     record["occupants"][0]["role"] = invalid_role
     with pytest.raises(ValidationError):
-        validate(instance=record, schema=schema)
+        validator.validate(record)
 
-def test_phone_event_with_valid_label(schema):
+def test_phone_event_with_valid_label(validator):
     record = create_base_record()
     record["events"].append({
         "event_type": "PHONE",
@@ -87,9 +110,9 @@ def test_phone_event_with_valid_label(schema):
         "end_frame": 10,
         "label": "PHONE_USE"
     })
-    validate(instance=record, schema=schema)
+    validator.validate(record)
 
-def test_phone_event_with_seatbelt_label_fails(schema):
+def test_phone_event_with_seatbelt_label_fails(validator):
     record = create_base_record()
     record["events"].append({
         "event_type": "PHONE",
@@ -99,9 +122,9 @@ def test_phone_event_with_seatbelt_label_fails(schema):
         "label": "UNFASTENED"
     })
     with pytest.raises(ValidationError):
-        validate(instance=record, schema=schema)
+        validator.validate(record)
 
-def test_seatbelt_event_with_valid_label(schema):
+def test_seatbelt_event_with_valid_label(validator):
     record = create_base_record()
     record["events"].append({
         "event_type": "SEATBELT",
@@ -110,9 +133,9 @@ def test_seatbelt_event_with_valid_label(schema):
         "end_frame": 10,
         "label": "UNFASTENED"
     })
-    validate(instance=record, schema=schema)
+    validator.validate(record)
 
-def test_seatbelt_event_with_phone_label_fails(schema):
+def test_seatbelt_event_with_phone_label_fails(validator):
     record = create_base_record()
     record["events"].append({
         "event_type": "SEATBELT",
@@ -122,4 +145,4 @@ def test_seatbelt_event_with_phone_label_fails(schema):
         "label": "PHONE_USE"
     })
     with pytest.raises(ValidationError):
-        validate(instance=record, schema=schema)
+        validator.validate(record)
