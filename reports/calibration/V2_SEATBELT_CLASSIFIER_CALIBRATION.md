@@ -24,12 +24,17 @@ The raw evaluation matrix on 641 images before applying any reject policy:
 - **Macro F1:** 57.27%
 - **Weighted F1:** 82.23%
 
-## 3. Reject Policy (Threshold Calibration)
-Currently, 47 fastened belts are falsely classified as unfastened (false positive violations) and 49 unfastened belts are missed (false negatives).
-To minimize the risk of raising false positive unfastened alarms, we introduce an asymmetrical confidence reject policy:
+## 3. Reject Policy (Threshold Sweep & Evidence)
+Currently, 47 fastened belts are falsely classified as unfastened (false positive violations). To minimize the risk of raising false positive unfastened alarms, a full threshold sweep was performed across raw classification probabilities (see `seatbelt_classifier_threshold_sweep.csv`).
 
+**Key Operating Point Evidence (Fastened 0.50 / Unfastened 0.60):**
+- **Coverage:** 95.16% (Only 4.8% of images rejected)
+- **Macro F1 (Main Classes):** 81.61%
+- **False Unfastened Count:** Reduced from 47 down to 36 (a ~23.4% reduction in false alarms).
+- **False Fastened Count:** 47
+
+**Policy Rule:**
 - **Unfastened Confidence Threshold:** `0.60`
 - **Fastened Confidence Threshold:** `0.50`
 
-**Policy Rule:** 
-If the maximum probability predicted by the classifier falls below the specific threshold for its class, the system will explicitly override the classification to `uncertain_or_occluded`. This fail-closed approach ensures that edge cases (e.g., poor lighting, thick clothing) do not spontaneously trigger safety violations.
+If the maximum probability predicted by the classifier falls below the specific threshold for its class, the system explicitly overrides the classification to `uncertain_or_occluded`. This fail-closed approach empirically reduces confident false unfastened violations while maintaining excellent coverage.
