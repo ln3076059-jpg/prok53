@@ -1,0 +1,48 @@
+{
+  "schema_version": 2,
+  "lock_id": "V2_BASELINE_001_CALIBRATION_LOCK",
+  "status": "LOCKED",
+  "calibration_source": "CANONICAL_VALIDATION_ONLY",
+  "frozen_test_used_for_calibration": false,
+  "phone_detector": {
+    "model_sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+    "confidence": 0.5996,
+    "nms_iou": 0.70,
+    "selection_reason": "Maximizes F1 score (0.8999) on canonical validation while heavily suppressing background noise (Precision: 0.9667).",
+    "validation_metrics_at_selected_threshold": {
+      "precision": 0.9667,
+      "recall": 0.8417,
+      "f1": 0.8999
+    }
+  },
+  "seatbelt_detector": {
+    "model_sha256": "361436ab073c8fcc17a041f098285efdd0cf6775a8970be2ffada4e45c6bc500",
+    "confidence": 0.4074,
+    "nms_iou": 0.70,
+    "selection_reason": "Maximizes F1 score (0.9010) ensuring high recall (0.8712) for occupant upper bodies to feed the classifier.",
+    "validation_metrics_at_selected_threshold": {
+      "precision": 0.9329,
+      "recall": 0.8712,
+      "f1": 0.9010
+    }
+  },
+  "seatbelt_classifier": {
+    "model_sha256": "e55158e3f152922e710ad260295da16488ffc2c6a145b8dfdc5c4ce323392bd4",
+    "fastened_min_confidence": 0.50,
+    "unfastened_min_confidence": 0.60,
+    "reject_threshold": 0.50,
+    "unknown_policy": "If max probability does not meet the respective threshold, override classification to uncertain_or_occluded.",
+    "validation_macro_f1": 0.5727,
+    "per_class_metrics": {
+      "fastened": {"precision": 0.8571, "recall": 0.8310, "f1": 0.8439},
+      "unfastened": {"precision": 0.8195, "recall": 0.7870, "f1": 0.8029},
+      "uncertain": {"precision": 0.0400, "recall": 0.3333, "f1": 0.0714}
+    }
+  },
+  "evidence_files": [
+    "reports/calibration/V2_PHONE_DETECTOR_CALIBRATION.json",
+    "reports/calibration/V2_SEATBELT_DETECTOR_CALIBRATION.json",
+    "reports/calibration/V2_SEATBELT_CLASSIFIER_CALIBRATION.json"
+  ],
+  "created_at_utc": "2026-09-04T02:35:00Z"
+}
