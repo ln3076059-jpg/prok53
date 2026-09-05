@@ -10,6 +10,7 @@ from pathlib import Path
 
 from training.common import sha256_file
 from training.freeze_event_ground_truth import OCCUPANT_ROLES, _parse_reviewed_at
+from training.identity_contract import validate_identity_contract
 
 REQUIRED_COLUMNS = {
     "video_id",
@@ -117,6 +118,14 @@ def freeze_context_ground_truth(
                 identities[field] = _known_identity(row, field, context_id)
             except ValueError as exc:
                 errors.append(str(exc))
+
+        for err in validate_identity_contract(
+            video_id,
+            identities.get("vehicle_id", row["vehicle_id"].strip()),
+            identities.get("cabin_id", row["cabin_id"].strip()),
+            identities.get("occupant_id", row["occupant_id"].strip()),
+        ):
+            errors.append(f"{context_id}: {err}")
 
         role = row["occupant_role"].strip()
         if role not in OCCUPANT_ROLES:

@@ -19,16 +19,20 @@ def _write_csv(path: Path, rows: list[dict[str, str]], fields: set[str]) -> None
         writer.writerows(rows)
 
 
-def _truth_row() -> dict[str, str]:
-    return {
-        "video_id": "external-video",
+def _truth_row(**overrides: str) -> dict[str, str]:
+    video_id = overrides.get("video_id", "external-video")
+    vehicle_id = overrides.get("vehicle_id", f"video:{video_id}:vehicle-track:1")
+    cabin_id = overrides.get("cabin_id", f"{vehicle_id}:cabin:1")
+    occupant_id = overrides.get("occupant_id", f"{cabin_id}:occupant-track:1")
+    row = {
+        "video_id": video_id,
         "event_id": "event-1",
         "event_type": "PHONE",
         "start_seconds": "1.0",
         "end_seconds": "2.0",
-        "occupant_id": "occupant-1",
-        "vehicle_id": "vehicle-1",
-        "cabin_id": "cabin-1",
+        "occupant_id": occupant_id,
+        "vehicle_id": vehicle_id,
+        "cabin_id": cabin_id,
         "inside_vehicle": "true",
         "outside_vehicle_person": "false",
         "motorcycle_flag": "false",
@@ -43,15 +47,21 @@ def _truth_row() -> dict[str, str]:
         "adjudication_status": "FINAL",
         "notes": "independently reviewed",
     }
+    row.update(overrides)
+    return row
 
 
 def _context_row(**overrides: str) -> dict[str, str]:
+    video_id = overrides.get("video_id", "external-video")
+    vehicle_id = overrides.get("vehicle_id", f"video:{video_id}:vehicle-track:1")
+    cabin_id = overrides.get("cabin_id", f"{vehicle_id}:cabin:1")
+    occupant_id = overrides.get("occupant_id", f"{cabin_id}:occupant-track:1")
     row = {
-        "video_id": "external-video",
+        "video_id": video_id,
         "context_id": "context-1",
-        "occupant_id": "occupant-1",
-        "vehicle_id": "vehicle-1",
-        "cabin_id": "cabin-1",
+        "occupant_id": occupant_id,
+        "vehicle_id": vehicle_id,
+        "cabin_id": cabin_id,
         "occupant_role": "driver",
         "start_seconds": "0",
         "end_seconds": "60",
@@ -130,6 +140,42 @@ def test_event_truth_freeze_requires_review_and_is_immutable(tmp_path):
         freeze_event_ground_truth(pending_path, external_lock_path, tmp_path / "pending-lock.json")
 
 
+def test_freeze_event_truth_rejects_non_canonical_identities(tmp_path):
+    external_lock_path = tmp_path / "external-lock.json"
+    external_lock_path.write_text(
+        json.dumps(
+            {
+                "status": "FROZEN_EXTERNAL_TEST",
+                "human_review_status": "ALL_APPROVED",
+                "video_ids": ["external-video"],
+            }
+        ),
+        encoding="utf-8",
+    )
+    # 1. Non-canonical format
+    truth_path = tmp_path / "bad_ids.csv"
+    bad_row = _truth_row(
+        vehicle_id="vehicle-1",
+        cabin_id="cabin-1",
+        occupant_id="occupant-1",
+    )
+    _write_csv(truth_path, [bad_row], REQUIRED_COLUMNS)
+    with pytest.raises(ValueError, match="cannot freeze event ground truth") as exc_info:
+        freeze_event_ground_truth(truth_path, external_lock_path, tmp_path / "bad_ids-lock.json")
+    assert "vehicle_id 'vehicle-1' does not match pattern" in str(exc_info.value)
+
+    # 2. Cross-cabin mismatch
+    mismatch_path = tmp_path / "mismatch.csv"
+    mismatched_row = _truth_row(
+        vehicle_id="video:external-video:vehicle-track:1",
+        cabin_id="video:external-video:vehicle-track:2:cabin:1",
+        occupant_id="video:external-video:vehicle-track:2:cabin:1:occupant-track:1",
+    )
+    _write_csv(mismatch_path, [mismatched_row], REQUIRED_COLUMNS)
+    with pytest.raises(ValueError, match="does not belong to vehicle_id"):
+        freeze_event_ground_truth(mismatch_path, external_lock_path, tmp_path / "mismatch-lock.json")
+
+
 def test_frozen_event_evaluation_requires_active_model_and_preserves_result(tmp_path):
     external_lock_path = tmp_path / "external-lock.json"
     external_lock_path.write_text(
@@ -142,8 +188,9 @@ def test_frozen_event_evaluation_requires_active_model_and_preserves_result(tmp_
         ),
         encoding="utf-8",
     )
+    t_row = _truth_row()
     truth_path = tmp_path / "truth.csv"
-    _write_csv(truth_path, [_truth_row()], REQUIRED_COLUMNS)
+    _write_csv(truth_path, [t_row], REQUIRED_COLUMNS)
     truth_lock_path = tmp_path / "truth-lock.json"
     freeze_event_ground_truth(truth_path, external_lock_path, truth_lock_path)
 
@@ -152,12 +199,12 @@ def test_frozen_event_evaluation_requires_active_model_and_preserves_result(tmp_
         predictions_path,
         [
             {
-                "video_id": "external-video",
+                "video_id": t_row["video_id"],
                 "event_type": "PHONE",
-                "occupant_id": "occupant-1",
+                "occupant_id": t_row["occupant_id"],
                 "occupant_role": "driver",
-                "vehicle_id": "vehicle-1",
-                "cabin_id": "cabin-1",
+                "vehicle_id": t_row["vehicle_id"],
+                "cabin_id": t_row["cabin_id"],
                 "start_seconds": "1.2",
                 "end_seconds": "2.1",
                 "label": "PHONE_USE",

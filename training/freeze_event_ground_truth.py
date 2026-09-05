@@ -8,6 +8,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from training.common import sha256_file
+from training.identity_contract import validate_identity_contract
 
 REQUIRED_COLUMNS = {
     "video_id",
@@ -127,6 +128,13 @@ def freeze_event_ground_truth(
             value = row[field].strip()
             if not value or value.upper() == "UNKNOWN":
                 errors.append(f"{event_id}: {field} must be a known stable identity")
+        for err in validate_identity_contract(
+            video_id,
+            row["vehicle_id"].strip(),
+            row["cabin_id"].strip(),
+            row["occupant_id"].strip(),
+        ):
+            errors.append(f"{event_id}: {err}")
         for field in (
             "inside_vehicle",
             "outside_vehicle_person",
