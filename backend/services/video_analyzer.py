@@ -545,6 +545,7 @@ class VideoAnalyzer:
                     phone_hand_proximity=hand_proximity,
                     phone_face_proximity=face_proximity,
                     pose_confidence=pose_confidence,
+                    seatbelt_probabilities=probabilities,
                     cabin_id=context.context_id,
                     visibility="unknown",
                     outside_vehicle_person="",

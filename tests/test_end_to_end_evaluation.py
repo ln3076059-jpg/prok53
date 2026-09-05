@@ -95,6 +95,10 @@ def test_end_to_end_prediction_evaluation(tmp_path: Path):
             "occupant_role": "driver",
             "vehicle_id": "v1",
             "cabin_id": "c1",
+            "inside_vehicle": "true",
+            "outside_vehicle_person": "false",
+            "motorcycle_flag": "false",
+            "label": "PHONE_USE",
             "start_seconds": "1.0",
             "end_seconds": "2.5"
         }
@@ -262,6 +266,10 @@ def test_end_to_end_seatbelt_evaluation(tmp_path: Path):
             "occupant_role": "driver",
             "vehicle_id": "v1",
             "cabin_id": "c1",
+            "inside_vehicle": "true",
+            "outside_vehicle_person": "false",
+            "motorcycle_flag": "false",
+            "label": "UNFASTENED",
             "start_seconds": "1.0",
             "end_seconds": "2.5"
         }

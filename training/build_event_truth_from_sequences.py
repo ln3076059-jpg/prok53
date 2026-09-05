@@ -69,19 +69,12 @@ def convert_sequence_to_events(annotation):
         final_event_type = None
         
         if event_type == "PHONE":
-            if label == "PHONE_USE" and role == "driver":
-                if inside_vehicle is None or outside_vehicle_person is None:
-                    raise ValueError(f"Missing context for PHONE event (inside_vehicle={inside_vehicle}, outside_vehicle_person={outside_vehicle_person})")
-                if inside_vehicle is True and outside_vehicle_person is not True:
-                    final_event_type = "PHONE"
-                    
+            if label in ("PHONE_USE", "MOUNTED_OR_STATIC_PHONE", "PHONE_PRESENT_NOT_USED", "NO_PHONE", "UNKNOWN"):
+                final_event_type = "PHONE"
         elif event_type == "SEATBELT":
-            if label == "UNFASTENED":
-                if motorcycle_flag is None or inside_vehicle is None or outside_vehicle_person is None:
-                    raise ValueError(f"Missing context for SEATBELT event (motorcycle_flag={motorcycle_flag}, inside_vehicle={inside_vehicle}, outside_vehicle_person={outside_vehicle_person})")
-                if motorcycle_flag is False and inside_vehicle is True and outside_vehicle_person is False and role in valid_roles:
-                    final_event_type = "NO_SEATBELT"
-                    
+            if label in ("FASTENED", "UNFASTENED", "UNCERTAIN_OR_OCCLUDED", "NOT_APPLICABLE"):
+                final_event_type = "NO_SEATBELT"
+                
         if final_event_type:
             event_id = f"{video_id}_{sequence_id}_evt_{idx}"
             emitted_events.append({
@@ -93,6 +86,10 @@ def convert_sequence_to_events(annotation):
                 "vehicle_id": vehicle_id,
                 "cabin_id": cabin_id,
                 "occupant_role": role,
+                "inside_vehicle": str(inside_vehicle).lower() if inside_vehicle is not None else "",
+                "outside_vehicle_person": str(outside_vehicle_person).lower() if outside_vehicle_person is not None else "",
+                "motorcycle_flag": str(motorcycle_flag).lower() if motorcycle_flag is not None else "",
+                "label": label,
                 "visibility": visibility,
                 "conditions": conditions,
                 "human_review_status": human_review_status,
@@ -132,6 +129,10 @@ def process_file(json_path, csv_writer, schema):
             evt["vehicle_id"],
             evt["cabin_id"],
             evt["occupant_role"],
+            evt["inside_vehicle"],
+            evt["outside_vehicle_person"],
+            evt["motorcycle_flag"],
+            evt["label"],
             evt["visibility"],
             evt["conditions"],
             evt["human_review_status"],

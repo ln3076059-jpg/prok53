@@ -46,10 +46,26 @@ def evaluate(
     from scipy.optimize import linear_sum_assignment
     import numpy as np
 
+    def _is_detectable(t: dict) -> bool:
+        evt = t.get("event_type", "")
+        label = t.get("label", "PHONE_USE" if evt == "PHONE" else "UNFASTENED")
+        role = t.get("occupant_role", "driver")
+        inside = str(t.get("inside_vehicle", "true")).lower() == "true"
+        outside = str(t.get("outside_vehicle_person", "false")).lower() == "true"
+        moto = str(t.get("motorcycle_flag", "false")).lower() == "true"
+        
+        if evt == "PHONE":
+            return label == "PHONE_USE" and role == "driver" and inside and not outside
+        elif evt == "NO_SEATBELT":
+            return label == "UNFASTENED" and not moto and inside and not outside and role in {"driver", "front_passenger", "rear_left", "rear_center", "rear_right"}
+        return False
+
+    detectable_truth_rows = [t for t in truth_rows if _is_detectable(t)]
+
     matches: list[tuple[int, int]] = []
-    if truth_rows and prediction_rows:
-        cost_matrix = np.full((len(truth_rows), len(prediction_rows)), 1e9)
-        for t_idx, truth in enumerate(truth_rows):
+    if detectable_truth_rows and prediction_rows:
+        cost_matrix = np.full((len(detectable_truth_rows), len(prediction_rows)), 1e9)
+        for t_idx, truth in enumerate(detectable_truth_rows):
             for p_idx, pred in enumerate(prediction_rows):
                 if _overlap(truth, pred, tolerance_seconds):
                     cost_matrix[t_idx, p_idx] = abs(
@@ -65,15 +81,15 @@ def evaluate(
     duplicate_predictions: set[int] = set()
     for p_idx, pred in enumerate(prediction_rows):
         if p_idx not in matched_predictions:
-            for t_idx, truth in enumerate(truth_rows):
+            for t_idx, truth in enumerate(detectable_truth_rows):
                 if _overlap(truth, pred, tolerance_seconds):
                     duplicate_predictions.add(p_idx)
                     break
 
     report = {"status": "MEASURED", "event_types": {}}
-    event_types = sorted({row["event_type"] for row in truth_rows + prediction_rows})
+    event_types = sorted({row["event_type"] for row in detectable_truth_rows + prediction_rows})
     for event_type in event_types:
-        truth_indices = {i for i, row in enumerate(truth_rows) if row["event_type"] == event_type}
+        truth_indices = {i for i, row in enumerate(detectable_truth_rows) if row["event_type"] == event_type}
         prediction_indices = {
             i for i, row in enumerate(prediction_rows) if row["event_type"] == event_type
         }
@@ -87,7 +103,7 @@ def evaluate(
         recall = tp / (tp + fn) if tp + fn else 0.0
         f1 = 2 * precision * recall / (precision + recall) if precision + recall else 0.0
         delays = [
-            float(prediction_rows[p]["start_seconds"]) - float(truth_rows[t]["start_seconds"])
+            float(prediction_rows[p]["start_seconds"]) - float(detectable_truth_rows[t]["start_seconds"])
             for t, p in type_matches
         ]
         type_duplicates = [p for p in duplicate_predictions if p in prediction_indices]
@@ -179,16 +195,37 @@ def evaluate(
         for p in prediction_rows:
             evt = p["event_type"]
             role = p.get("occupant_role", "")
-            if evt == "PHONE" and role in ("front_passenger", "rear_left", "rear_center", "rear_right"):
+            
+            # Context Truth vs Prediction Overlap Logic
+            overlapping_truth = [
+                t for t in truth_rows
+                if t["video_id"] == p["video_id"]
+                and t["event_type"] == p["event_type"]
+                and (float(t["start_seconds"]) <= float(p["end_seconds"]) + tolerance_seconds)
+                and (float(p["start_seconds"]) <= float(t["end_seconds"]) + tolerance_seconds)
+            ]
+            
+            # For passenger phone violation, if ANY overlapping truth row is a passenger phone event
+            if evt == "PHONE" and any(t.get("occupant_role") in ("front_passenger", "rear_left", "rear_center", "rear_right") for t in overlapping_truth):
                 counters["passenger_phone_violation_count"] += 1
-            if evt == "PHONE" and (p.get("visibility") == "mounted" or p.get("label") == "MOUNTED_OR_STATIC_PHONE"):
+                
+            # For mounted phone violation, if ANY overlapping truth row is a mounted phone event
+            if evt == "PHONE" and any(t.get("label") == "MOUNTED_OR_STATIC_PHONE" for t in overlapping_truth):
                 counters["mounted_phone_violation_count"] += 1
-            if str(p.get("outside_vehicle_person")).lower() == "true":
+                
+            # For outside person violation, if ANY overlapping truth row states they are outside
+            if any(str(t.get("outside_vehicle_person")).lower() == "true" for t in overlapping_truth):
                 counters["outside_person_violation_count"] += 1
+                
+            # Unknown role is a prediction failure invariant
             if evt == "PHONE" and role == "unknown":
                 counters["unknown_role_phone_violation_count"] += 1
-            if evt == "NO_SEATBELT" and str(p.get("motorcycle_flag")).lower() == "true":
+                
+            # For motorcycle seatbelt violation, if ANY overlapping truth row is a motorcycle
+            if evt == "NO_SEATBELT" and any(str(t.get("motorcycle_flag")).lower() == "true" for t in overlapping_truth):
                 counters["motorcycle_seatbelt_violation_count"] += 1
+                
+            # Unknown belt is a prediction failure invariant
             if evt == "NO_SEATBELT" and role == "unknown":
                 counters["unknown_belt_violation_count"] += 1
                 
