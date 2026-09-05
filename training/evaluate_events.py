@@ -11,14 +11,14 @@ from training.common import sha256_file
 REQUIRED = {"video_id", "event_type", "occupant_role", "vehicle_id", "cabin_id", "start_seconds", "end_seconds"}
 
 
-def _read(path: Path) -> list[dict]:
+def _read(path: Path) -> tuple[list[dict], set[str]]:
     with path.open(newline="", encoding="utf-8-sig") as handle:
         reader = csv.DictReader(handle)
         missing = REQUIRED - set(reader.fieldnames or [])
         if missing:
             raise ValueError(f"{path} is missing columns: {sorted(missing)}")
         rows = list(reader)
-    return rows
+    return rows, set(reader.fieldnames or [])
 
 
 def _overlap(a: dict, b: dict, tolerance: float) -> bool:
@@ -41,6 +41,7 @@ def evaluate(
     prediction_rows: list[dict],
     video_minutes: float,
     tolerance_seconds: float = 0.5,
+    prediction_fieldnames: set[str] | None = None,
 ) -> dict:
     from scipy.optimize import linear_sum_assignment
     import numpy as np
@@ -108,35 +109,44 @@ def evaluate(
             "event_fragmentation_count": len(type_duplicates),
         }
 
-    counters = {
-        "passenger_phone_violation_count": 0,
-        "mounted_phone_violation_count": 0,
-        "outside_person_violation_count": 0,
-        "unknown_role_phone_violation_count": 0,
-        "motorcycle_seatbelt_violation_count": 0,
-        "unknown_belt_violation_count": 0,
-        "single_frame_violation_count": 0,
-    }
-    
-    for p in prediction_rows:
-        evt = p["event_type"]
-        role = p.get("occupant_role", "")
-        if evt == "PHONE" and role in ("front_passenger", "rear_left", "rear_center", "rear_right", "passenger"):
-            counters["passenger_phone_violation_count"] += 1
-        if evt == "PHONE" and (p.get("visibility") == "mounted" or p.get("label") == "PHONE_MOUNTED_OR_STATIC"):
-            counters["mounted_phone_violation_count"] += 1
-        if str(p.get("outside_vehicle_person")).lower() == "true":
-            counters["outside_person_violation_count"] += 1
-        if evt == "PHONE" and role == "UNKNOWN":
-            counters["unknown_role_phone_violation_count"] += 1
-        if evt == "NO_SEATBELT" and str(p.get("motorcycle_flag")).lower() == "true":
-            counters["motorcycle_seatbelt_violation_count"] += 1
-        if evt == "NO_SEATBELT" and role == "UNKNOWN":
-            counters["unknown_belt_violation_count"] += 1
-            
-        start, end = float(p["start_seconds"]), float(p["end_seconds"])
-        if start == end:
-            counters["single_frame_violation_count"] += 1
+    if prediction_fieldnames is None:
+        prediction_fieldnames = set()
+        for p in prediction_rows:
+            prediction_fieldnames.update(p.keys())
+
+    safety_requirements = {"label", "visibility", "outside_vehicle_person", "motorcycle_flag"}
+    if not safety_requirements.issubset(prediction_fieldnames):
+        counters = "MISSING_METADATA"
+    else:
+        counters = {
+            "passenger_phone_violation_count": 0,
+            "mounted_phone_violation_count": 0,
+            "outside_person_violation_count": 0,
+            "unknown_role_phone_violation_count": 0,
+            "motorcycle_seatbelt_violation_count": 0,
+            "unknown_belt_violation_count": 0,
+            "single_frame_violation_count": 0,
+        }
+        
+        for p in prediction_rows:
+            evt = p["event_type"]
+            role = p.get("occupant_role", "")
+            if evt == "PHONE" and role in ("front_passenger", "rear_left", "rear_center", "rear_right", "passenger"):
+                counters["passenger_phone_violation_count"] += 1
+            if evt == "PHONE" and (p.get("visibility") == "mounted" or p.get("label") == "MOUNTED_OR_STATIC_PHONE"):
+                counters["mounted_phone_violation_count"] += 1
+            if str(p.get("outside_vehicle_person")).lower() == "true":
+                counters["outside_person_violation_count"] += 1
+            if evt == "PHONE" and role == "unknown":
+                counters["unknown_role_phone_violation_count"] += 1
+            if evt == "NO_SEATBELT" and str(p.get("motorcycle_flag")).lower() == "true":
+                counters["motorcycle_seatbelt_violation_count"] += 1
+            if evt == "NO_SEATBELT" and role == "unknown":
+                counters["unknown_belt_violation_count"] += 1
+                
+            start, end = float(p["start_seconds"]), float(p["end_seconds"])
+            if start == end:
+                counters["single_frame_violation_count"] += 1
 
     report["safety_invariant_counters"] = counters
     report["duplicate_events"] = len(duplicate_predictions)
@@ -209,11 +219,14 @@ def evaluate_frozen(
     ):
         raise ValueError("model lock does not record governed human-review readiness")
 
+    truth_rows, _ = _read(truth_path)
+    prediction_rows, pred_fields = _read(prediction_path)
     report = evaluate(
-        _read(truth_path),
-        _read(prediction_path),
+        truth_rows,
+        prediction_rows,
         video_minutes,
         tolerance_seconds,
+        prediction_fieldnames=pred_fields,
     )
     report.update(
         {

@@ -391,3 +391,44 @@ def test_evaluator_order_independent_matching():
     assert report2["event_types"]["PHONE"]["false_positives"] == 0
     assert report2["event_types"]["PHONE"]["missed_events"] == 0
 
+def test_evaluator_safety_counters():
+    from training.evaluate_events import evaluate
+    
+    # 1. Missing metadata test
+    report_missing = evaluate(
+        truth_rows=[],
+        prediction_rows=[{"event_type": "PHONE"}],
+        video_minutes=1.0
+    )
+    assert report_missing["safety_invariant_counters"] == "MISSING_METADATA"
+    
+    # 2. Fully populated test
+    prediction_rows = [
+        # passenger_phone_violation
+        {"event_type": "PHONE", "occupant_role": "front_passenger", "start_seconds": "0", "end_seconds": "1", "label": "", "visibility": "", "outside_vehicle_person": "false", "motorcycle_flag": "false"},
+        # mounted_phone_violation (by label)
+        {"event_type": "PHONE", "occupant_role": "driver", "label": "MOUNTED_OR_STATIC_PHONE", "start_seconds": "2", "end_seconds": "3", "visibility": "", "outside_vehicle_person": "false", "motorcycle_flag": "false"},
+        # mounted_phone_violation (by visibility)
+        {"event_type": "PHONE", "occupant_role": "driver", "visibility": "mounted", "start_seconds": "4", "end_seconds": "5", "label": "", "outside_vehicle_person": "false", "motorcycle_flag": "false"},
+        # outside_person_violation
+        {"event_type": "NO_SEATBELT", "occupant_role": "driver", "outside_vehicle_person": "True", "start_seconds": "6", "end_seconds": "7", "label": "", "visibility": "", "motorcycle_flag": "false"},
+        # unknown_role_phone_violation
+        {"event_type": "PHONE", "occupant_role": "unknown", "start_seconds": "8", "end_seconds": "9", "label": "", "visibility": "", "outside_vehicle_person": "false", "motorcycle_flag": "false"},
+        # motorcycle_seatbelt_violation
+        {"event_type": "NO_SEATBELT", "occupant_role": "driver", "motorcycle_flag": "True", "start_seconds": "10", "end_seconds": "11", "label": "", "visibility": "", "outside_vehicle_person": "false"},
+        # unknown_belt_violation
+        {"event_type": "NO_SEATBELT", "occupant_role": "unknown", "start_seconds": "12", "end_seconds": "13", "label": "", "visibility": "", "outside_vehicle_person": "false", "motorcycle_flag": "false"},
+        # single_frame_violation
+        {"event_type": "PHONE", "occupant_role": "driver", "start_seconds": "15", "end_seconds": "15", "label": "", "visibility": "", "outside_vehicle_person": "false", "motorcycle_flag": "false"},
+    ]
+    
+    report = evaluate(truth_rows=[], prediction_rows=prediction_rows, video_minutes=1.0)
+    counters = report["safety_invariant_counters"]
+    assert counters != "MISSING_METADATA"
+    assert counters["passenger_phone_violation_count"] == 1
+    assert counters["mounted_phone_violation_count"] == 2
+    assert counters["outside_person_violation_count"] == 1
+    assert counters["unknown_role_phone_violation_count"] == 1
+    assert counters["motorcycle_seatbelt_violation_count"] == 1
+    assert counters["unknown_belt_violation_count"] == 1
+    assert counters["single_frame_violation_count"] == 1
