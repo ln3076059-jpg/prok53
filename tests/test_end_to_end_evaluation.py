@@ -415,3 +415,27 @@ def test_needs_review_not_promoted(tmp_path: Path):
     # Exporter should exclude NEEDS_REVIEW entirely
     assert len(prediction_rows) == 0
 
+
+def test_camera_calibration_fallback_does_not_impersonate_occupant_track():
+    from backend.ai.association import OccupantAssociator
+    from backend.ai.detector import NormalizedDetection
+
+    regions = [
+        {
+            "role": "driver",
+            "normalized_xyxy": (0.0, 0.0, 0.5, 1.0),
+            "min_overlap": 0.5,
+            "enabled": True,
+        }
+    ]
+    assoc = OccupantAssociator(calibrated_regions=regions)
+
+    # Phone detection in driver ROI with track_id=17, no upper bodies
+    phone_det = NormalizedDetection(0, "phone", 0.9, (10, 10, 40, 80), 17)
+    assignment = assoc.assign_object(phone_det, occupants=[], frame_width=100, frame_height=100)
+
+    assert assignment.role == "driver"
+    assert assignment.occupant_track_id is None
+    assert assignment.method == "CAMERA_CALIBRATION_NO_OCCUPANT_TRACK"
+
+

@@ -2,23 +2,27 @@ import pytest
 from training.validate_event_sequence_annotations import validate_annotation
 
 def create_valid_annotation():
+    video_id = "vid1"
+    vehicle_id = f"video:{video_id}:vehicle-track:1"
+    cabin_id = f"{vehicle_id}:cabin:1"
+    occupant_id = f"{cabin_id}:occupant-track:1"
     return {
         "sequence_id": "seq1",
-        "video_id": "vid1",
-        "vehicle_id": "vehicle-1",
-        "cabin_id": "cabin-1",
+        "video_id": video_id,
+        "vehicle_id": vehicle_id,
+        "cabin_id": cabin_id,
         "source_id": "src1",
         "fps": 30.0,
         "frame_count": 300,
         "start_time": "2026-09-04T12:00:00Z",
         "end_time": "2026-09-04T12:00:10Z",
         "occupants": [
-            {"occupant_id": "occ1", "role": "driver", "role_confidence": 0.9}
+            {"occupant_id": occupant_id, "role": "driver", "role_confidence": 0.9}
         ],
         "events": [
             {
                 "event_type": "PHONE",
-                "occupant_id": "occ1",
+                "occupant_id": occupant_id,
                 "start_frame": 30,
                 "end_frame": 60,
                 "start_time_sec": 1.0,
@@ -29,7 +33,7 @@ def create_valid_annotation():
         "context_intervals": [
             {
                 "context_id": "ctx-before",
-                "occupant_id": "occ1",
+                "occupant_id": occupant_id,
                 "start_frame": 0,
                 "end_frame": 30,
                 "inside_vehicle": True,
@@ -42,7 +46,7 @@ def create_valid_annotation():
             },
             {
                 "context_id": "ctx-event",
-                "occupant_id": "occ1",
+                "occupant_id": occupant_id,
                 "start_frame": 30,
                 "end_frame": 61,
                 "inside_vehicle": True,
@@ -55,7 +59,7 @@ def create_valid_annotation():
             },
             {
                 "context_id": "ctx-after",
-                "occupant_id": "occ1",
+                "occupant_id": occupant_id,
                 "start_frame": 61,
                 "end_frame": 300,
                 "inside_vehicle": True,
@@ -89,7 +93,7 @@ def test_valid_annotation():
 
 def test_duplicate_occupant_id():
     ann = create_valid_annotation()
-    ann["occupants"].append({"occupant_id": "occ1", "role": "front_passenger"})
+    ann["occupants"].append({"occupant_id": ann["occupants"][0]["occupant_id"], "role": "front_passenger"})
     errors = validate_annotation(ann, {})
     semantic_errors = [e for e in errors if e.startswith('Semantic error:')]
     assert any("duplicate occupant_id" in e for e in semantic_errors)
@@ -186,3 +190,34 @@ def test_unknown_vehicle_identity_is_rejected():
     errors = validate_annotation(ann, {})
     semantic_errors = [e for e in errors if e.startswith("Semantic error:")]
     assert any("vehicle_id must be a known stable identity" in e for e in semantic_errors)
+
+
+def test_cross_entity_cabin_id_rejected():
+    ann = create_valid_annotation()
+    # vehicle is vehicle-track:1, but cabin is from vehicle-track:2
+    ann["cabin_id"] = "video:vid1:vehicle-track:2:cabin:1"
+    errors = validate_annotation(ann, {})
+    semantic_errors = [e for e in errors if e.startswith("Semantic error:")]
+    assert any("does not belong to vehicle_id" in e for e in semantic_errors)
+
+
+def test_cross_entity_occupant_id_rejected():
+    ann = create_valid_annotation()
+    # occupant is from cabin:2, but cabin is cabin:1
+    wrong_occ_id = "video:vid1:vehicle-track:1:cabin:2:occupant-track:1"
+    ann["occupants"][0]["occupant_id"] = wrong_occ_id
+    ann["events"][0]["occupant_id"] = wrong_occ_id
+    for interval in ann["context_intervals"]:
+        interval["occupant_id"] = wrong_occ_id
+    errors = validate_annotation(ann, {})
+    semantic_errors = [e for e in errors if e.startswith("Semantic error:")]
+    assert any("does not belong to cabin_id" in e for e in semantic_errors)
+
+
+def test_video_prefix_mismatch_rejected():
+    ann = create_valid_annotation()
+    ann["vehicle_id"] = "video:other_vid:vehicle-track:1"
+    errors = validate_annotation(ann, {})
+    semantic_errors = [e for e in errors if e.startswith("Semantic error:")]
+    assert any("does not match expected prefix" in e for e in semantic_errors)
+

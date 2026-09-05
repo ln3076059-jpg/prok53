@@ -166,7 +166,12 @@ class OccupantAssociator:
         if not occupants:
             calibrated = self._calibrated(detection, frame_width, frame_height)
             if calibrated.confidence >= self.minimum_confidence:
-                return calibrated
+                return OccupantAssignment(
+                    calibrated.role,
+                    calibrated.confidence,
+                    "CAMERA_CALIBRATION_NO_OCCUPANT_TRACK",
+                    None,
+                )
             return OccupantAssignment("unknown", calibrated.confidence, "NO_OCCUPANT_MATCH", None)
 
         object_center = (

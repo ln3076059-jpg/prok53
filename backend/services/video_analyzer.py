@@ -427,13 +427,17 @@ class VideoAnalyzer:
                     }
                 if assignment.role not in {"driver", "unknown"}:
                     phone_state = "PASSENGER_PHONE"
-
+            occupant_id = (
+                f"{context.cabin_id}:occupant-track:{assignment.occupant_track_id}"
+                if assignment.occupant_track_id is not None
+                else ""
+            )
             classifier_fastened = seatbelt_evidence.fastened if seatbelt_evidence else 0.0
             classifier_unfastened = seatbelt_evidence.unfastened if seatbelt_evidence else 0.0
+            occupant_identity_key = occupant_id if occupant_id else f"detection-track:{detection.track_id}"
             sequence_key = (
-                context.context_id,
-                detection.track_id,
-                assignment.role,
+                context.cabin_id,
+                occupant_identity_key,
                 detection.class_name,
             )
             sequence = self.sequence.add(sequence_key, timestamp, detection.confidence)

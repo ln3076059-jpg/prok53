@@ -72,9 +72,42 @@ def validate_annotation(annotation, schema):
                     f"0 and 1, got {role_conf}"
                 )
 
+    video_id = str(annotation.get("video_id", ""))
+    vehicle_id = str(annotation.get("vehicle_id", ""))
+    cabin_id = str(annotation.get("cabin_id", ""))
+
     for field in ("vehicle_id", "cabin_id"):
         if str(annotation.get(field, "")).strip().upper() in UNKNOWN_IDENTITIES:
             errors.append(f"Semantic error: {field} must be a known stable identity")
+
+    expected_prefix = f"video:{video_id}:"
+    if video_id and not vehicle_id.startswith(expected_prefix):
+        errors.append(
+            f"Semantic error: vehicle_id '{vehicle_id}' does not match expected prefix '{expected_prefix}'"
+        )
+
+    if ":vehicle-track:" in vehicle_id:
+        if not cabin_id.startswith(vehicle_id + ":cabin:"):
+            errors.append(
+                f"Semantic error: cabin_id '{cabin_id}' does not belong to vehicle_id '{vehicle_id}'"
+            )
+    elif vehicle_id:
+        if vehicle_id != f"{expected_prefix}provided-vehicle":
+            errors.append(
+                f"Semantic error: vehicle_id '{vehicle_id}' must be '{expected_prefix}provided-vehicle'"
+            )
+        if cabin_id != f"{expected_prefix}provided-cabin":
+            errors.append(
+                f"Semantic error: cabin_id '{cabin_id}' must be '{expected_prefix}provided-cabin'"
+            )
+
+    for occ in occupants:
+        oid = str(occ.get("occupant_id", ""))
+        expected_occ_prefix = f"{cabin_id}:occupant-track:"
+        if cabin_id and not oid.startswith(expected_occ_prefix):
+            errors.append(
+                f"Semantic error: occupant_id '{oid}' does not belong to cabin_id '{cabin_id}'"
+            )
 
     events = annotation.get("events", [])
     duration_sec = frame_count / fps if fps > 0 else 0
