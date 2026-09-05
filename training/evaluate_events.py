@@ -8,7 +8,7 @@ from pathlib import Path
 
 from training.common import sha256_file
 
-REQUIRED = {"video_id", "event_type", "start_seconds", "end_seconds"}
+REQUIRED = {"video_id", "event_type", "occupant_role", "start_seconds", "end_seconds"}
 
 
 def _read(path: Path) -> list[dict]:
@@ -22,6 +22,12 @@ def _read(path: Path) -> list[dict]:
 
 def _overlap(a: dict, b: dict, tolerance: float) -> bool:
     if a["video_id"] != b["video_id"] or a["event_type"] != b["event_type"]:
+        return False
+    if a.get("occupant_role") != b.get("occupant_role"):
+        return False
+    if a.get("vehicle_id") and b.get("vehicle_id") and a["vehicle_id"] != b["vehicle_id"]:
+        return False
+    if a.get("cabin_id") and b.get("cabin_id") and a["cabin_id"] != b["cabin_id"]:
         return False
     a_start, a_end = float(a["start_seconds"]), float(a["end_seconds"])
     b_start, b_end = float(b["start_seconds"]), float(b["end_seconds"])

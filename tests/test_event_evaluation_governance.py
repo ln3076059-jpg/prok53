@@ -91,11 +91,12 @@ def test_frozen_event_evaluation_requires_active_model_and_preserves_result(tmp_
             {
                 "video_id": "external-video",
                 "event_type": "PHONE",
+                "occupant_role": "driver",
                 "start_seconds": "1.2",
                 "end_seconds": "2.1",
             }
         ],
-        {"video_id", "event_type", "start_seconds", "end_seconds"},
+        {"video_id", "event_type", "occupant_role", "start_seconds", "end_seconds"},
     )
     model_lock_path = tmp_path / "model-lock.json"
     model_lock = {
@@ -199,7 +200,7 @@ def test_frozen_event_evaluation_rejects_truth_changed_after_freeze(tmp_path):
     _write_csv(
         predictions_path,
         [],
-        {"video_id", "event_type", "start_seconds", "end_seconds"},
+        {"video_id", "event_type", "occupant_role", "start_seconds", "end_seconds"},
     )
     model_lock_path = tmp_path / "model-lock.json"
     model_lock_path.write_text(
@@ -228,5 +229,64 @@ def test_frozen_event_evaluation_rejects_truth_changed_after_freeze(tmp_path):
             truth_lock_path,
             model_lock_path,
             tmp_path / "evaluation.json",
-            video_minutes=1.0,
         )
+        
+def test_evaluator_matching_requires_identity():
+    from training.evaluate_events import evaluate
+
+    truth_rows = [
+        {
+            "video_id": "vid1",
+            "event_type": "NO_SEATBELT",
+            "occupant_role": "rear_left",
+            "vehicle_id": "veh1",
+            "start_seconds": "10.0",
+            "end_seconds": "15.0"
+        }
+    ]
+
+    # 1. Matching role -> TP
+    pred_match = [
+        {
+            "video_id": "vid1",
+            "event_type": "NO_SEATBELT",
+            "occupant_role": "rear_left",
+            "vehicle_id": "veh1",
+            "start_seconds": "11.0",
+            "end_seconds": "14.0"
+        }
+    ]
+    report = evaluate(truth_rows, pred_match, video_minutes=1.0)
+    assert report["event_types"]["NO_SEATBELT"]["true_positives"] == 1
+    assert report["event_types"]["NO_SEATBELT"]["false_positives"] == 0
+
+    # 2. Mismatched role -> FP + FN
+    pred_mismatch_role = [
+        {
+            "video_id": "vid1",
+            "event_type": "NO_SEATBELT",
+            "occupant_role": "rear_right",
+            "vehicle_id": "veh1",
+            "start_seconds": "11.0",
+            "end_seconds": "14.0"
+        }
+    ]
+    report2 = evaluate(truth_rows, pred_mismatch_role, video_minutes=1.0)
+    assert report2["event_types"]["NO_SEATBELT"]["true_positives"] == 0
+    assert report2["event_types"]["NO_SEATBELT"]["false_positives"] == 1
+    assert report2["event_types"]["NO_SEATBELT"]["missed_events"] == 1
+
+    # 3. Mismatched vehicle -> FP + FN
+    pred_mismatch_veh = [
+        {
+            "video_id": "vid1",
+            "event_type": "NO_SEATBELT",
+            "occupant_role": "rear_left",
+            "vehicle_id": "veh2",
+            "start_seconds": "11.0",
+            "end_seconds": "14.0"
+        }
+    ]
+    report3 = evaluate(truth_rows, pred_mismatch_veh, video_minutes=1.0)
+    assert report3["event_types"]["NO_SEATBELT"]["true_positives"] == 0
+    assert report3["event_types"]["NO_SEATBELT"]["false_positives"] == 1
