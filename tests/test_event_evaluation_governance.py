@@ -229,6 +229,7 @@ def test_frozen_event_evaluation_rejects_truth_changed_after_freeze(tmp_path):
             truth_lock_path,
             model_lock_path,
             tmp_path / "evaluation.json",
+            video_minutes=1.0,
         )
         
 def test_evaluator_matching_requires_identity():
