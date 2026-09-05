@@ -17,19 +17,19 @@ def create_base_record():
     return {
         "sequence_id": "seq1",
         "video_id": "vid1",
-        "vehicle_id": "vehicle-1",
-        "cabin_id": "cabin-1",
+        "vehicle_id": "video:vid1:vehicle-track:1",
+        "cabin_id": "video:vid1:vehicle-track:1:cabin:1",
         "source_id": "src1",
         "fps": 30.0,
         "frame_count": 300,
         "start_time": "2026-09-04T12:00:00Z",
         "end_time": "2026-09-04T12:00:10Z",
-        "occupants": [{"occupant_id": "occ1", "role": "driver"}],
+        "occupants": [{"occupant_id": "video:vid1:vehicle-track:1:cabin:1:occupant-track:1", "role": "driver"}],
         "events": [],
         "context_intervals": [
             {
                 "context_id": "ctx1",
-                "occupant_id": "occ1",
+                "occupant_id": "video:vid1:vehicle-track:1:cabin:1:occupant-track:1",
                 "start_frame": 0,
                 "end_frame": 300,
                 "inside_vehicle": True,
@@ -122,7 +122,7 @@ def test_phone_event_with_valid_label(validator):
     record = create_base_record()
     record["events"].append({
         "event_type": "PHONE",
-        "occupant_id": "occ1",
+        "occupant_id": "video:vid1:vehicle-track:1:cabin:1:occupant-track:1",
         "start_frame": 0,
         "end_frame": 10,
         "label": "PHONE_USE"
@@ -133,7 +133,7 @@ def test_phone_event_with_seatbelt_label_fails(validator):
     record = create_base_record()
     record["events"].append({
         "event_type": "PHONE",
-        "occupant_id": "occ1",
+        "occupant_id": "video:vid1:vehicle-track:1:cabin:1:occupant-track:1",
         "start_frame": 0,
         "end_frame": 10,
         "label": "UNFASTENED"
@@ -145,7 +145,7 @@ def test_seatbelt_event_with_valid_label(validator):
     record = create_base_record()
     record["events"].append({
         "event_type": "SEATBELT",
-        "occupant_id": "occ1",
+        "occupant_id": "video:vid1:vehicle-track:1:cabin:1:occupant-track:1",
         "start_frame": 0,
         "end_frame": 10,
         "label": "UNFASTENED"
@@ -156,7 +156,7 @@ def test_seatbelt_event_with_phone_label_fails(validator):
     record = create_base_record()
     record["events"].append({
         "event_type": "SEATBELT",
-        "occupant_id": "occ1",
+        "occupant_id": "video:vid1:vehicle-track:1:cabin:1:occupant-track:1",
         "start_frame": 0,
         "end_frame": 10,
         "label": "PHONE_USE"

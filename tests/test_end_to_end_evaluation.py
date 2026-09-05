@@ -160,8 +160,8 @@ def test_video_analyzer_metadata_contract():
         update=lambda *args: [NormalizedDetection(0, "phone", 0.9, (10, 10, 20, 20), 1)]
     )
     analyzer.occupants = SimpleNamespace(
-        assign_upper_body=lambda *args: SimpleNamespace(role="driver", confidence=0.9, method="test"),
-        assign_object=lambda *args: SimpleNamespace(role="driver", confidence=0.9, method="test")
+        assign_upper_body=lambda *args: SimpleNamespace(role="driver", confidence=0.9, method="test", occupant_track_id=42),
+        assign_object=lambda *args: SimpleNamespace(role="driver", confidence=0.9, method="test", occupant_track_id=42)
     )
     analyzer.pose_interval = 100
     analyzer.use_fusion = False
@@ -207,6 +207,7 @@ def test_video_analyzer_metadata_contract():
     assert obs.visibility == "unknown"
     assert obs.outside_vehicle_person == ""
     assert obs.behavior_label == "PHONE_USE"
+    assert obs.occupant_id == "v1:car-1:cabin:0:occupant-track:42"
 
 def test_end_to_end_seatbelt_evaluation(tmp_path: Path):
     engine = TemporalEventEngine(window_seconds=2.0)
@@ -324,34 +325,61 @@ def test_role_misclassification_identity_preservation():
     # 3. Giữ identity ổn định qua role misclassification
     engine = TemporalEventEngine(window_seconds=2.0)
     
-    # Track ID is 1. Ground truth is passenger, but runtime misclassifies as driver consistently.
+    # Upper-body track ID is 42. Behavior (phone) track is 7 then 9. 
+    # Role is passenger then driver. 
+    # occupant_id should be stable based on 42.
+    obs1 = Observation(
+        timestamp=1.0, class_name="phone", confidence=0.9, track_id=7, occupant_role="front_passenger", 
+        vehicle_context_id="v1", cabin_id="c1", phone_context="HANDHELD", behavior_label="PHONE_USE", 
+        occupant_id="c1:occupant-track:42"
+    )
+    obs2 = Observation(
+        timestamp=2.0, class_name="phone", confidence=0.9, track_id=9, occupant_role="driver", 
+        vehicle_context_id="v1", cabin_id="c1", phone_context="HANDHELD", behavior_label="PHONE_USE", 
+        occupant_id="c1:occupant-track:42"
+    )
+    obs3 = Observation(
+        timestamp=3.0, class_name="phone", confidence=0.9, track_id=9, occupant_role="driver", 
+        vehicle_context_id="v1", cabin_id="c1", phone_context="HANDHELD", behavior_label="PHONE_USE", 
+        occupant_id="c1:occupant-track:42"
+    )
+    obs4 = Observation(
+        timestamp=4.0, class_name="phone", confidence=0.9, track_id=9, occupant_role="driver", 
+        vehicle_context_id="v1", cabin_id="c1", phone_context="HANDHELD", behavior_label="PHONE_USE", 
+        occupant_id="c1:occupant-track:42"
+    )
+
+    # Engine processes these
+    engine.add(obs1)
+    engine.add(obs2)
+    engine.add(obs3)
+    candidates = engine.add(obs4)
+    
+    assert len(candidates) > 0
+    candidate = candidates[0]
+    
+    # identity preserved regardless of the last assigned role or the behavior track changing from 7 to 9
+    assert candidate.occupant_id == "c1:occupant-track:42"
+    assert candidate.occupant_role == "driver"
+
+def test_engine_reset_vehicle():
+    engine = TemporalEventEngine(window_seconds=2.0)
     obs1 = Observation(
         timestamp=1.0, class_name="phone", confidence=0.9, track_id=1, occupant_role="driver", 
         vehicle_context_id="v1", cabin_id="c1", phone_context="HANDHELD", behavior_label="PHONE_USE", 
         occupant_id="c1:occupant-track:1"
     )
-    obs2 = Observation(
-        timestamp=2.0, class_name="phone", confidence=0.9, track_id=1, occupant_role="driver", 
-        vehicle_context_id="v1", cabin_id="c1", phone_context="HANDHELD", behavior_label="PHONE_USE", 
-        occupant_id="c1:occupant-track:1"
-    )
-    obs3 = Observation(
-        timestamp=3.0, class_name="phone", confidence=0.9, track_id=1, occupant_role="driver", 
-        vehicle_context_id="v1", cabin_id="c1", phone_context="HANDHELD", behavior_label="PHONE_USE", 
-        occupant_id="c1:occupant-track:1"
-    )
-    
-    # Engine processes these
     engine.add(obs1)
-    engine.add(obs2)
-    candidates = engine.add(obs3)
     
-    assert len(candidates) > 0
-    candidate = candidates[0]
+    # Verify state exists
+    assert any(key[0] == "v1" for key in engine.windows)
     
-    # identity preserved regardless of the last assigned role
-    assert candidate.occupant_id == "c1:occupant-track:1"
-    assert candidate.occupant_role == "driver"
+    # Reset vehicle
+    engine.reset_vehicle("v1")
+    
+    # Verify state cleared
+    assert not any(key[0] == "v1" for key in engine.windows)
+    assert not any(key[0] == "v1" for key in engine.smoothed)
     
 def test_needs_review_not_promoted(tmp_path: Path):
     engine = TemporalEventEngine(window_seconds=2.0)

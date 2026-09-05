@@ -22,20 +22,20 @@ def create_valid_sequence(path: Path, video_id: str):
     seq_data = {
         "sequence_id": "seq123",
         "video_id": video_id,
-        "vehicle_id": "vehicle-1",
-        "cabin_id": "cabin-1",
+        "vehicle_id": "video:test:vehicle-track:1",
+        "cabin_id": "video:test:vehicle-track:1:cabin:1",
         "source_id": "src1",
         "fps": 30.0,
         "frame_count": 300,
         "start_time": "2026-09-04T12:00:00Z",
         "end_time": "2026-09-04T12:00:10Z",
         "occupants": [
-            {"occupant_id": "occ1", "role": "driver", "role_confidence": 0.9}
+            {"occupant_id": "video:test:vehicle-track:1:cabin:1:occupant-track:1", "role": "driver", "role_confidence": 0.9}
         ],
         "events": [
             {
                 "event_type": "PHONE",
-                "occupant_id": "occ1",
+                "occupant_id": "video:test:vehicle-track:1:cabin:1:occupant-track:1",
                 "start_frame": 30,
                 "end_frame": 60,
                 "label": "PHONE_USE"
@@ -44,7 +44,7 @@ def create_valid_sequence(path: Path, video_id: str):
         "context_intervals": [
             {
                 "context_id": "ctx-before",
-                "occupant_id": "occ1",
+                "occupant_id": "video:test:vehicle-track:1:cabin:1:occupant-track:1",
                 "start_frame": 0,
                 "end_frame": 30,
                 "inside_vehicle": True,
@@ -57,7 +57,7 @@ def create_valid_sequence(path: Path, video_id: str):
             },
             {
                 "context_id": "ctx-event",
-                "occupant_id": "occ1",
+                "occupant_id": "video:test:vehicle-track:1:cabin:1:occupant-track:1",
                 "start_frame": 30,
                 "end_frame": 61,
                 "inside_vehicle": True,
@@ -70,7 +70,7 @@ def create_valid_sequence(path: Path, video_id: str):
             },
             {
                 "context_id": "ctx-after",
-                "occupant_id": "occ1",
+                "occupant_id": "video:test:vehicle-track:1:cabin:1:occupant-track:1",
                 "start_frame": 61,
                 "end_frame": 300,
                 "inside_vehicle": True,

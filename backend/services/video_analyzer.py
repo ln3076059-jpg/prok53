@@ -276,6 +276,7 @@ class VideoAnalyzer:
         engine = TemporalEventEngine(**self.detector.config.get("temporal", {}))
         frame_number = 0
         previous_contexts: set[str] = set()
+        previous_vehicles: set[str] = set()
         pose_cache: dict[str, list] = {}
         try:
             while True:
@@ -286,12 +287,15 @@ class VideoAnalyzer:
                 self._persist_artifacts(session, evidence_buffer.add_frame(timestamp, frame))
                 contexts = self._frame_contexts(frame, video, frame_number)
                 active_contexts = {context.context_id for context in contexts}
+                active_vehicles = {context.vehicle_id for context in contexts}
                 for lost_context in previous_contexts - active_contexts:
-                    engine.reset_vehicle(lost_context)
                     self.local_tracker.reset_vehicle(lost_context)
                     pose_cache.pop(lost_context, None)
                     self._reset_context_caches(lost_context)
+                for lost_vehicle in previous_vehicles - active_vehicles:
+                    engine.reset_vehicle(lost_vehicle)
                 previous_contexts = active_contexts
+                previous_vehicles = active_vehicles
 
                 if frame_number % self.behavior_interval == 0:
                     for context in contexts:
@@ -535,7 +539,7 @@ class VideoAnalyzer:
                     vehicle_context_id=context.vehicle_id,
                 )
             )
-            occupant_id = f"{context.cabin_id}:occupant-track:{detection.track_id}" if detection.track_id is not None else ""
+            occupant_id = f"{context.cabin_id}:occupant-track:{assignment.occupant_track_id}" if assignment.occupant_track_id is not None else ""
             candidates = engine.add(
                 Observation(
                     timestamp=timestamp,

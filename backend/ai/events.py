@@ -173,9 +173,10 @@ class TemporalEventEngine:
         if positive_ratio < self.minimum_positive_ratio:
             return False
         occupant_group = observations[-1].occupant_id if observations[-1].occupant_id else (observations[-1].occupant_role or "unknown")
+        window_track_id = observations[-1].track_id if observations[-1].class_name == "phone" else None
         key = (
             observations[-1].vehicle_context_id or "",
-            observations[-1].track_id,
+            window_track_id,
             occupant_group,
         )
         previous = self.smoothed.get(key, scores[0])
@@ -193,6 +194,7 @@ class TemporalEventEngine:
         if current.vehicle_context_id is None:
             raise ValueError("event candidate requires vehicle context")
         role = current.occupant_role or "unknown"
+        occupant_group = current.occupant_id if current.occupant_id else role
         scores = [
             item.fusion_score if item.fusion_score is not None else item.confidence
             for item in observations
@@ -228,7 +230,7 @@ class TemporalEventEngine:
             behavior_label=current.behavior_label,
             vehicle_type=current.vehicle_type,
             temporal_score=self.smoothed.get(
-                (current.vehicle_context_id, current.track_id, role), scores[-1]
+                (current.vehicle_context_id, current.track_id if event_type == "PHONE" else None, occupant_group), scores[-1]
             ),
             occupant_id=occupant_id,
         )
