@@ -29,10 +29,16 @@ class EventCandidate:
     event_type: str
     confidence: float
     timestamp: float
+    start_timestamp: float
+    end_timestamp: float
+    observation_count: int
     track_id: int | None
     review_status: str
     occupant_role: str
     vehicle_context_id: str
+    cabin_id: str = ""
+    visibility: str = ""
+    outside_vehicle_person: str = ""
     vehicle_type: str = "unknown"
     temporal_score: float = 0.0
 
@@ -185,10 +191,16 @@ class TemporalEventEngine:
             event_type,
             sum(scores) / len(scores),
             current.timestamp,
+            observations[0].timestamp,
+            observations[-1].timestamp,
+            len(observations),
             current.track_id,
             status,
             role,
             current.vehicle_context_id,
+            "",
+            "",
+            "",
             current.vehicle_type,
             self.smoothed.get((current.vehicle_context_id, current.track_id, role), scores[-1]),
         )

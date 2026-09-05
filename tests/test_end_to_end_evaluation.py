@@ -61,21 +61,35 @@ def test_end_to_end_prediction_evaluation(tmp_path: Path):
     
     # 3. Read back using evaluate_events _read logic
     prediction_rows, pred_fields = _read(csv_path)
+    assert len(prediction_rows) == 1
     
-    # 4. Mock Ground Truth
+    assert prediction_rows[0]["observation_count"] == "4"
+    assert prediction_rows[0]["start_seconds"] == "1.000"
+    assert prediction_rows[0]["end_seconds"] == "2.500"
+    
+    # 4. Patch metadata to simulate a runtime engine that actually outputs safety metadata
+    for row in prediction_rows:
+        row["label"] = "PHONE_USE"
+        row["visibility"] = "clear"
+        row["outside_vehicle_person"] = "false"
+        row["cabin_id"] = "c1"
+    
+    pred_fields.update({"label", "visibility", "outside_vehicle_person", "cabin_id"})
+    
+    # 5. Mock Ground Truth
     truth_rows = [
         {
             "video_id": "video_1",
             "event_type": "PHONE",
             "occupant_role": "driver",
             "vehicle_id": "v1",
-            "cabin_id": "v1",
+            "cabin_id": "c1",
             "start_seconds": "1.0",
             "end_seconds": "2.5"
         }
     ]
     
-    # 5. Evaluate
+    # 6. Evaluate
     report = evaluate(
         truth_rows=truth_rows,
         prediction_rows=prediction_rows,
@@ -83,6 +97,7 @@ def test_end_to_end_prediction_evaluation(tmp_path: Path):
         prediction_fieldnames=pred_fields
     )
     
-    # 6. Assert contract integrity
+    # 7. Assert contract integrity
     assert report["safety_invariant_counters"] != "NOT_EVALUABLE", "Metadata from exporter failed validation"
     assert report["event_types"]["PHONE"]["true_positives"] >= 1, "Expected matching TP for the predicted event"
+    assert report["safety_invariant_counters"]["single_frame_violation_count"] == 0, "Should not be a single-frame violation"

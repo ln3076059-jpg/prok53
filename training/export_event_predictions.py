@@ -24,31 +24,22 @@ def export_predictions_to_csv(
         writer.writeheader()
         
         for candidate in candidates:
-            # 1. Provide safe defaults for labels
-            if candidate.event_type == "PHONE":
-                label = "PHONE_USE"
-            elif candidate.event_type == "NO_SEATBELT":
-                label = "UNFASTENED"
-            else:
-                label = "UNKNOWN"
+            if candidate.review_status == "NEEDS_REVIEW":
+                continue
                 
-            # 2. Derive motorcycle flag from runtime vehicle type
             motorcycle_flag = "true" if candidate.vehicle_type == "motorcycle" else "false"
-            
-            # 3. Handle single-frame evaluation duration since candidates are instantaneous
-            # We set observation_count = 1 to signal true single-frame semantics to evaluator
             
             writer.writerow({
                 "video_id": video_id,
                 "event_type": candidate.event_type,
                 "occupant_role": candidate.occupant_role,
                 "vehicle_id": candidate.vehicle_context_id,
-                "cabin_id": candidate.vehicle_context_id,  # Runtime doesn't split these natively yet
-                "start_seconds": f"{candidate.timestamp:.3f}",
-                "end_seconds": f"{candidate.timestamp:.3f}",
-                "label": label,
-                "visibility": "clear",
-                "outside_vehicle_person": "false",
+                "cabin_id": candidate.cabin_id,
+                "start_seconds": f"{candidate.start_timestamp:.3f}",
+                "end_seconds": f"{candidate.end_timestamp:.3f}",
+                "label": "",
+                "visibility": candidate.visibility,
+                "outside_vehicle_person": candidate.outside_vehicle_person,
                 "motorcycle_flag": motorcycle_flag,
-                "observation_count": 1,
+                "observation_count": candidate.observation_count,
             })
