@@ -487,10 +487,15 @@ def evaluate_frozen(
     if report.get("safety_invariant_counters") == "NOT_EVALUABLE":
         raise ValueError("frozen event evaluation requires evaluable safety metadata")
 
+    manifest_sha = ground_truth_lock.get("identity_manifest_sha256")
+    context_manifest_sha = context_lock.get("identity_manifest_sha256")
+    if manifest_sha and context_manifest_sha and manifest_sha != context_manifest_sha:
+        raise ValueError("event and context truth do not bind the same identity manifest")
+
     report.update(
         {
             "status": "MEASURED_FROZEN_EXTERNAL_TEST",
-            "created_at_utc": datetime.now(UTC).isoformat(),
+            "measured_at_utc": datetime.now(UTC).isoformat(),
             "ground_truth": {
                 "path": str(truth_path),
                 "sha256": sha256_file(truth_path),
@@ -519,6 +524,11 @@ def evaluate_frozen(
             "scientific_claim": "FROZEN_EVENT_METRICS_FOR_THIS_LOCKED_MODEL_ONLY",
         }
     )
+    if manifest_sha or context_manifest_sha:
+        report["identity_manifest"] = {
+            "status": "BOUND_FROZEN_IDENTITY_MANIFEST",
+            "manifest_sha256": manifest_sha or context_manifest_sha,
+        }
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("x", encoding="utf-8") as handle:
         json.dump(report, handle, indent=2, sort_keys=True)

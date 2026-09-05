@@ -178,6 +178,7 @@
         "reviewer_id": { "type": "string" },
         "reviewed_at": { "type": "string", "format": "date-time" },
         "evidence_hash": { "type": "string" },
+        "identity_manifest_sha256": { "type": "string" },
         "status": {
           "type": "string",
           "enum": ["AI_REVIEWED_PROPOSAL", "HUMAN_APPROVED"]

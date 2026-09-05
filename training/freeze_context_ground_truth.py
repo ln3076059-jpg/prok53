@@ -74,6 +74,7 @@ def freeze_context_ground_truth(
     context_path: Path,
     external_test_lock_path: Path,
     output_path: Path,
+    identity_manifest_lock_path: Path | None = None,
 ) -> dict:
     """Validate and freeze human-reviewed, full-timeline safety context."""
     if output_path.exists():
@@ -84,6 +85,33 @@ def freeze_context_ground_truth(
         raise ValueError("external test artifact is not FROZEN_EXTERNAL_TEST")
     if external_lock.get("human_review_status") != "ALL_APPROVED":
         raise ValueError("external test artifact is not fully human-approved")
+
+    if identity_manifest_lock_path is None and "identity_manifest_lock_path" in external_lock:
+        identity_manifest_lock_path = Path(external_lock["identity_manifest_lock_path"])
+
+    manifest_lock = None
+    manifest_proven_identities: set[tuple[str, str, str, str]] = set()
+    if identity_manifest_lock_path is not None:
+        if not identity_manifest_lock_path.is_file():
+            raise ValueError(f"identity manifest lock not found: {identity_manifest_lock_path}")
+        manifest_lock = json.loads(identity_manifest_lock_path.read_text(encoding="utf-8"))
+        if manifest_lock.get("status") != "FROZEN_IDENTITY_MANIFEST":
+            raise ValueError("identity manifest lock status is not FROZEN_IDENTITY_MANIFEST")
+        if "identity_manifest_sha256" in external_lock:
+            if manifest_lock.get("manifest_sha256") != external_lock["identity_manifest_sha256"]:
+                raise ValueError("identity manifest SHA256 does not match external-test lock requirement")
+        for entity in manifest_lock.get("proven_identities", []):
+            manifest_proven_identities.add(
+                (
+                    entity["video_id"],
+                    entity["vehicle_id"],
+                    entity["cabin_id"],
+                    entity["occupant_id"],
+                )
+            )
+    elif external_lock.get("require_identity_manifest") is True:
+        raise ValueError("external test artifact requires a frozen identity manifest")
+
     external_video_ids = set(external_lock.get("video_ids", []))
     if not external_video_ids:
         raise ValueError("external test artifact does not declare frozen video_ids")
@@ -119,13 +147,24 @@ def freeze_context_ground_truth(
             except ValueError as exc:
                 errors.append(str(exc))
 
+        veh_id = identities.get("vehicle_id", row["vehicle_id"].strip())
+        cab_id = identities.get("cabin_id", row["cabin_id"].strip())
+        occ_id = identities.get("occupant_id", row["occupant_id"].strip())
+
         for err in validate_identity_contract(
             video_id,
-            identities.get("vehicle_id", row["vehicle_id"].strip()),
-            identities.get("cabin_id", row["cabin_id"].strip()),
-            identities.get("occupant_id", row["occupant_id"].strip()),
+            veh_id,
+            cab_id,
+            occ_id,
         ):
             errors.append(f"{context_id}: {err}")
+
+        if manifest_lock is not None:
+            row_entity = (video_id, veh_id, cab_id, occ_id)
+            if row_entity not in manifest_proven_identities:
+                errors.append(
+                    f"{context_id}: identity {row_entity} is not in the frozen identity manifest"
+                )
 
         role = row["occupant_role"].strip()
         if role not in OCCUPANT_ROLES:
@@ -244,6 +283,13 @@ def freeze_context_ground_truth(
         "adjudication_status": "ALL_FINAL",
         "scientific_claim": "FROZEN_HUMAN_CONTEXT_NOT_MODEL_ACCURACY",
     }
+    if manifest_lock is not None and identity_manifest_lock_path is not None:
+        frozen["identity_manifest_sha256"] = manifest_lock.get("manifest_sha256")
+        frozen["identity_manifest_lock"] = {
+            "path": str(identity_manifest_lock_path.resolve()),
+            "sha256": sha256_file(identity_manifest_lock_path),
+            "manifest_sha256": manifest_lock.get("manifest_sha256"),
+        }
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("x", encoding="utf-8") as handle:
         json.dump(frozen, handle, indent=2, sort_keys=True)
@@ -262,10 +308,21 @@ def main() -> None:
         type=Path,
         default=Path("datasets/manifests/v2_context_truth_frozen.json"),
     )
+    parser.add_argument(
+        "--identity-manifest-lock",
+        type=Path,
+        default=None,
+        help="Optional path to frozen identity manifest lock JSON",
+    )
     args = parser.parse_args()
     print(
         json.dumps(
-            freeze_context_ground_truth(args.context, args.external_test_lock, args.output),
+            freeze_context_ground_truth(
+                args.context,
+                args.external_test_lock,
+                args.output,
+                args.identity_manifest_lock,
+            ),
             indent=2,
         )
     )

@@ -14,7 +14,7 @@ def load_schema(schema_path):
         return json.load(f)
 
 
-def validate_annotation(annotation, schema):
+def validate_annotation(annotation, schema, allow_proposal: bool = False):
     errors = []
 
     # 1. Schema Validation
@@ -226,11 +226,16 @@ def validate_annotation(annotation, schema):
     # 3. Provenance Validation
     provenance = annotation.get("review_provenance", {})
     if provenance.get("status") != "HUMAN_APPROVED":
-        errors.append(
-            "Semantic error: review_provenance status must be HUMAN_APPROVED, "
-            f"got {provenance.get('status')}. AI proposals are not valid for "
-            "governed calibration."
-        )
+        if not (
+            allow_proposal
+            and provenance.get("status") == "AI_REVIEWED_PROPOSAL"
+            and provenance.get("reviewer_type") == "AI"
+        ):
+            errors.append(
+                "Semantic error: review_provenance status must be HUMAN_APPROVED, "
+                f"got {provenance.get('status')}. AI proposals are not valid for "
+                "governed calibration."
+            )
     else:
         required_fields = ["reviewer_id", "reviewed_at", "evidence_hash"]
         for field in required_fields:

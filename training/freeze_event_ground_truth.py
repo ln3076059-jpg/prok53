@@ -83,6 +83,7 @@ def freeze_event_ground_truth(
     truth_path: Path,
     external_test_lock_path: Path,
     output_path: Path,
+    identity_manifest_lock_path: Path | None = None,
 ) -> dict:
     if output_path.exists():
         raise FileExistsError(f"refusing to overwrite frozen event truth: {output_path}")
@@ -91,6 +92,32 @@ def freeze_event_ground_truth(
         raise ValueError("external test artifact is not FROZEN_EXTERNAL_TEST")
     if external_lock.get("human_review_status") != "ALL_APPROVED":
         raise ValueError("external test artifact is not fully human-approved")
+
+    if identity_manifest_lock_path is None and "identity_manifest_lock_path" in external_lock:
+        identity_manifest_lock_path = Path(external_lock["identity_manifest_lock_path"])
+
+    manifest_lock = None
+    manifest_proven_identities: set[tuple[str, str, str, str]] = set()
+    if identity_manifest_lock_path is not None:
+        if not identity_manifest_lock_path.is_file():
+            raise ValueError(f"identity manifest lock not found: {identity_manifest_lock_path}")
+        manifest_lock = json.loads(identity_manifest_lock_path.read_text(encoding="utf-8"))
+        if manifest_lock.get("status") != "FROZEN_IDENTITY_MANIFEST":
+            raise ValueError("identity manifest lock status is not FROZEN_IDENTITY_MANIFEST")
+        if "identity_manifest_sha256" in external_lock:
+            if manifest_lock.get("manifest_sha256") != external_lock["identity_manifest_sha256"]:
+                raise ValueError("identity manifest SHA256 does not match external-test lock requirement")
+        for entity in manifest_lock.get("proven_identities", []):
+            manifest_proven_identities.add(
+                (
+                    entity["video_id"],
+                    entity["vehicle_id"],
+                    entity["cabin_id"],
+                    entity["occupant_id"],
+                )
+            )
+    elif external_lock.get("require_identity_manifest") is True:
+        raise ValueError("external test artifact requires a frozen identity manifest")
 
     rows = _read_csv(truth_path)
     if not rows:
@@ -135,6 +162,19 @@ def freeze_event_ground_truth(
             row["occupant_id"].strip(),
         ):
             errors.append(f"{event_id}: {err}")
+
+        if manifest_lock is not None:
+            row_entity = (
+                video_id,
+                row["vehicle_id"].strip(),
+                row["cabin_id"].strip(),
+                row["occupant_id"].strip(),
+            )
+            if row_entity not in manifest_proven_identities:
+                errors.append(
+                    f"{event_id}: identity {row_entity} is not in the frozen identity manifest"
+                )
+
         for field in (
             "inside_vehicle",
             "outside_vehicle_person",
@@ -191,6 +231,13 @@ def freeze_event_ground_truth(
         "adjudication_status": "ALL_FINAL",
         "scientific_claim": "FROZEN_HUMAN_GROUND_TRUTH_NOT_MODEL_ACCURACY",
     }
+    if manifest_lock is not None and identity_manifest_lock_path is not None:
+        frozen["identity_manifest_sha256"] = manifest_lock.get("manifest_sha256")
+        frozen["identity_manifest_lock"] = {
+            "path": str(identity_manifest_lock_path.resolve()),
+            "sha256": sha256_file(identity_manifest_lock_path),
+            "manifest_sha256": manifest_lock.get("manifest_sha256"),
+        }
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("x", encoding="utf-8") as handle:
         json.dump(frozen, handle, indent=2, sort_keys=True)
@@ -207,10 +254,21 @@ def main() -> None:
         type=Path,
         default=Path("datasets/manifests/v2_event_truth_frozen.json"),
     )
+    parser.add_argument(
+        "--identity-manifest-lock",
+        type=Path,
+        default=None,
+        help="Optional path to frozen identity manifest lock JSON",
+    )
     args = parser.parse_args()
     print(
         json.dumps(
-            freeze_event_ground_truth(args.truth, args.external_test_lock, args.output),
+            freeze_event_ground_truth(
+                args.truth,
+                args.external_test_lock,
+                args.output,
+                args.identity_manifest_lock,
+            ),
             indent=2,
         )
     )
