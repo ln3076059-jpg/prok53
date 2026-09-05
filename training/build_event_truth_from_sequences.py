@@ -9,6 +9,9 @@ def convert_sequence_to_events(annotation):
     emitted_events = []
     
     video_id = annotation.get("video_id")
+    sequence_id = annotation.get("sequence_id", "unknown_seq")
+    fps = annotation.get("fps", 30.0)
+    
     if not video_id:
         return emitted_events
         
@@ -16,16 +19,22 @@ def convert_sequence_to_events(annotation):
     # Fail-closed semantics for context
     motorcycle_flag = context.get("motorcycle_flag")
     inside_vehicle = context.get("inside_vehicle")
+    outside_vehicle_person = context.get("outside_vehicle_person")
     
-    vehicle_id = annotation.get("vehicle_id", "")
-    cabin_id = "" # Default if not present
+    vehicle_id = annotation.get("vehicle_id") or "UNKNOWN"
+    cabin_id = "UNKNOWN"
     
     provenance = annotation.get("review_provenance", {})
-    human_review_status = provenance.get("status", "")
+    prov_status = provenance.get("status", "")
+    human_review_status = "APPROVED" if prov_status == "HUMAN_APPROVED" else prov_status
     reviewer_id = provenance.get("reviewer_id", "")
     reviewer_type = provenance.get("reviewer_type", "")
     reviewed_at = provenance.get("reviewed_at", "")
-    adjudication_status = "FINAL" # Or derived if appropriate
+    adjudication_status = provenance.get("adjudication_status")
+    
+    if adjudication_status != "FINAL":
+        raise ValueError(f"Annotation adjudication_status is not FINAL (got {adjudication_status})")
+        
     notes = ""
     visibility = context.get("day_night", "unknown")
     conditions = context.get("occlusion", "none")
@@ -41,8 +50,17 @@ def convert_sequence_to_events(annotation):
         event_type = evt.get("event_type")
         label = evt.get("label")
         occ_id = evt.get("occupant_id")
+        
+        start_frame = evt.get("start_frame", 0)
+        end_frame = evt.get("end_frame", 0)
+        
         start_sec = evt.get("start_time_sec")
+        if start_sec is None:
+            start_sec = start_frame / fps if fps > 0 else 0
+            
         end_sec = evt.get("end_time_sec")
+        if end_sec is None:
+            end_sec = end_frame / fps if fps > 0 else 0
         
         occ = occ_map.get(occ_id, {})
         role = occ.get("role", "unknown")
@@ -50,18 +68,21 @@ def convert_sequence_to_events(annotation):
         final_event_type = None
         
         if event_type == "PHONE":
-            # Phone usage is only a violation if inside a vehicle, not a motorcycle, and is the driver
             if label == "PHONE_USE" and role == "driver":
-                if inside_vehicle is True and context.get("outside_vehicle_person") is not True:
+                if inside_vehicle is None or outside_vehicle_person is None:
+                    raise ValueError(f"Missing context for PHONE event (inside_vehicle={inside_vehicle}, outside_vehicle_person={outside_vehicle_person})")
+                if inside_vehicle is True and outside_vehicle_person is not True:
                     final_event_type = "PHONE"
                     
         elif event_type == "SEATBELT":
             if label == "UNFASTENED":
+                if motorcycle_flag is None or inside_vehicle is None:
+                    raise ValueError(f"Missing context for SEATBELT event (motorcycle_flag={motorcycle_flag}, inside_vehicle={inside_vehicle})")
                 if motorcycle_flag is False and inside_vehicle is True and role in valid_roles:
                     final_event_type = "NO_SEATBELT"
                     
         if final_event_type:
-            event_id = f"{video_id}_evt_{idx}"
+            event_id = f"{video_id}_{sequence_id}_evt_{idx}"
             emitted_events.append({
                 "video_id": video_id,
                 "event_id": event_id,
@@ -89,12 +110,17 @@ def process_file(json_path, csv_writer, schema):
         
     errors = validate_annotation(annotation, schema)
     if errors:
-        print(f"Skipping {json_path} due to validation errors:")
+        print(f"Skipping {json_path} due to schema/semantic validation errors:")
         for e in errors:
             print(f" - {e}")
         return False
         
-    events = convert_sequence_to_events(annotation)
+    try:
+        events = convert_sequence_to_events(annotation)
+    except ValueError as e:
+        print(f"Skipping {json_path} due to conversion error: {e}")
+        return False
+        
     for evt in events:
         csv_writer.writerow([
             evt["video_id"],

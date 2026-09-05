@@ -126,7 +126,11 @@
           "type": "string",
           "enum": ["AI_REVIEWED_PROPOSAL", "HUMAN_APPROVED"]
         },
-        "annotation_version": { "type": "string" }
+        "annotation_version": { "type": "string" },
+        "adjudication_status": {
+          "type": "string",
+          "enum": ["PENDING", "FINAL"]
+        }
       },
       "allOf": [
         {
