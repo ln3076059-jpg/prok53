@@ -141,7 +141,7 @@ def evaluate(
         evt = p.get("event_type", "")
         if evt not in {"PHONE", "NO_SEATBELT"}:
             return False
-        if p.get("outside_vehicle_person", "").lower() not in {"true", "false"}:
+        if p.get("outside_vehicle_person", "").lower() not in {"true", "false", ""}:
             return False
         if p.get("motorcycle_flag", "").lower() not in {"true", "false"}:
             return False
@@ -204,6 +204,19 @@ def evaluate(
                 and (float(t["start_seconds"]) <= float(p["end_seconds"]) + tolerance_seconds)
                 and (float(p["start_seconds"]) <= float(t["end_seconds"]) + tolerance_seconds)
             ]
+            
+            if len(overlapping_truth) > 1:
+                unique_contexts = {
+                    (
+                        t.get("vehicle_id"), 
+                        t.get("cabin_id"), 
+                        t.get("occupant_role"), 
+                        t.get("outside_vehicle_person", "").lower()
+                    ) for t in overlapping_truth
+                }
+                if len(unique_contexts) > 1:
+                    counters = "NOT_EVALUABLE"
+                    break
             
             # For passenger phone violation, if ANY overlapping truth row is a passenger phone event
             if evt == "PHONE" and any(t.get("occupant_role") in ("front_passenger", "rear_left", "rear_center", "rear_right") for t in overlapping_truth):

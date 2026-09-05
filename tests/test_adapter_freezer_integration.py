@@ -88,3 +88,36 @@ def test_adapter_freezer_integration(tmp_path: Path):
     assert frozen_result["status"] == "FROZEN_EVENT_GROUND_TRUTH"
     assert frozen_result["rows"] == 1
     assert "PHONE" in frozen_result["event_type_counts"]
+
+def test_adapter_freezer_cli_integration(tmp_path: Path):
+    import subprocess
+    import sys
+    
+    video_id = "test_vid_cli"
+    
+    lock_path = tmp_path / "external_lock.json"
+    create_valid_external_lock(lock_path, video_id)
+    
+    seq_dir = tmp_path / "sequences"
+    seq_dir.mkdir()
+    seq_path = seq_dir / "seq1.json"
+    create_valid_sequence(seq_path, video_id)
+    
+    csv_path = tmp_path / "events.csv"
+    
+    # Run the adapter via CLI
+    result = subprocess.run([
+        sys.executable, "-m", "training.build_event_truth_from_sequences",
+        str(seq_dir), str(csv_path)
+    ], capture_output=True, text=True)
+    
+    assert result.returncode == 0, f"Adapter CLI failed: {result.stderr}"
+    assert csv_path.exists(), "Adapter CLI did not produce CSV"
+    
+    # Freeze the output
+    output_frozen = tmp_path / "frozen.json"
+    frozen_result = freeze_event_ground_truth(csv_path, lock_path, output_frozen)
+    
+    assert frozen_result["status"] == "FROZEN_EVENT_GROUND_TRUTH"
+    assert frozen_result["rows"] == 1
+    assert "PHONE" in frozen_result["event_type_counts"]

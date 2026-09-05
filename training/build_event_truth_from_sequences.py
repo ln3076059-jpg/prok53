@@ -171,7 +171,10 @@ def main():
         writer = csv.writer(f)
         writer.writerow([
             "video_id", "event_id", "event_type", "start_seconds", "end_seconds",
-            "vehicle_id", "cabin_id", "occupant_role", "visibility", "conditions",
+            "vehicle_id", "cabin_id", "occupant_role",
+            "inside_vehicle", "outside_vehicle_person",
+            "motorcycle_flag", "label",
+            "visibility", "conditions",
             "human_review_status", "reviewer_id", "reviewer_type", "reviewed_at",
             "adjudication_status", "notes"
         ])
