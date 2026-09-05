@@ -78,6 +78,7 @@ def create_valid_annotation():
             "reviewer_id": "rev1",
             "reviewed_at": "2026-09-04T12:05:00Z",
             "evidence_hash": "hash123",
+            "identity_manifest_sha256": "a" * 64,
             "annotation_version": "v1.0"
         }
     }

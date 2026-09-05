@@ -96,28 +96,30 @@ def freeze_event_ground_truth(
     if identity_manifest_lock_path is None and "identity_manifest_lock_path" in external_lock:
         identity_manifest_lock_path = Path(external_lock["identity_manifest_lock_path"])
 
-    manifest_lock = None
+    if identity_manifest_lock_path is None:
+        raise ValueError("freezing event ground truth requires a frozen identity manifest lock")
+
+    if not identity_manifest_lock_path.is_file():
+        raise ValueError(f"identity manifest lock not found: {identity_manifest_lock_path}")
+    manifest_lock = json.loads(identity_manifest_lock_path.read_text(encoding="utf-8"))
+    if manifest_lock.get("status") != "FROZEN_IDENTITY_MANIFEST":
+        raise ValueError("identity manifest lock status is not FROZEN_IDENTITY_MANIFEST")
+    manifest_sha = manifest_lock.get("manifest_sha256")
+    if not manifest_sha:
+        raise ValueError("identity manifest lock is missing manifest_sha256")
+    if "identity_manifest_sha256" in external_lock:
+        if manifest_sha != external_lock["identity_manifest_sha256"]:
+            raise ValueError("identity manifest SHA256 does not match external-test lock requirement")
     manifest_proven_identities: set[tuple[str, str, str, str]] = set()
-    if identity_manifest_lock_path is not None:
-        if not identity_manifest_lock_path.is_file():
-            raise ValueError(f"identity manifest lock not found: {identity_manifest_lock_path}")
-        manifest_lock = json.loads(identity_manifest_lock_path.read_text(encoding="utf-8"))
-        if manifest_lock.get("status") != "FROZEN_IDENTITY_MANIFEST":
-            raise ValueError("identity manifest lock status is not FROZEN_IDENTITY_MANIFEST")
-        if "identity_manifest_sha256" in external_lock:
-            if manifest_lock.get("manifest_sha256") != external_lock["identity_manifest_sha256"]:
-                raise ValueError("identity manifest SHA256 does not match external-test lock requirement")
-        for entity in manifest_lock.get("proven_identities", []):
-            manifest_proven_identities.add(
-                (
-                    entity["video_id"],
-                    entity["vehicle_id"],
-                    entity["cabin_id"],
-                    entity["occupant_id"],
-                )
+    for entity in manifest_lock.get("proven_identities", []):
+        manifest_proven_identities.add(
+            (
+                entity["video_id"],
+                entity["vehicle_id"],
+                entity["cabin_id"],
+                entity["occupant_id"],
             )
-    elif external_lock.get("require_identity_manifest") is True:
-        raise ValueError("external test artifact requires a frozen identity manifest")
+        )
 
     rows = _read_csv(truth_path)
     if not rows:
@@ -231,13 +233,12 @@ def freeze_event_ground_truth(
         "adjudication_status": "ALL_FINAL",
         "scientific_claim": "FROZEN_HUMAN_GROUND_TRUTH_NOT_MODEL_ACCURACY",
     }
-    if manifest_lock is not None and identity_manifest_lock_path is not None:
-        frozen["identity_manifest_sha256"] = manifest_lock.get("manifest_sha256")
-        frozen["identity_manifest_lock"] = {
-            "path": str(identity_manifest_lock_path.resolve()),
-            "sha256": sha256_file(identity_manifest_lock_path),
-            "manifest_sha256": manifest_lock.get("manifest_sha256"),
-        }
+    frozen["identity_manifest_sha256"] = manifest_sha
+    frozen["identity_manifest_lock"] = {
+        "path": str(identity_manifest_lock_path.resolve()),
+        "sha256": sha256_file(identity_manifest_lock_path),
+        "manifest_sha256": manifest_sha,
+    }
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("x", encoding="utf-8") as handle:
         json.dump(frozen, handle, indent=2, sort_keys=True)

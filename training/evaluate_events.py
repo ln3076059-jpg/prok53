@@ -489,8 +489,20 @@ def evaluate_frozen(
 
     manifest_sha = ground_truth_lock.get("identity_manifest_sha256")
     context_manifest_sha = context_lock.get("identity_manifest_sha256")
-    if manifest_sha and context_manifest_sha and manifest_sha != context_manifest_sha:
-        raise ValueError("event and context truth do not bind the same identity manifest")
+    external_manifest_sha = external_lock.get("identity_manifest_sha256")
+
+    if not manifest_sha:
+        raise ValueError("frozen event truth is missing mandatory identity_manifest_sha256")
+    if not context_manifest_sha:
+        raise ValueError("frozen context truth is missing mandatory identity_manifest_sha256")
+    if not external_manifest_sha:
+        raise ValueError("frozen external test is missing mandatory identity_manifest_sha256")
+
+    if not (manifest_sha == context_manifest_sha == external_manifest_sha):
+        raise ValueError(
+            "frozen identity manifest SHA mismatch across artifacts: "
+            f"event={manifest_sha!r}, context={context_manifest_sha!r}, external={external_manifest_sha!r}"
+        )
 
     report.update(
         {
@@ -524,11 +536,10 @@ def evaluate_frozen(
             "scientific_claim": "FROZEN_EVENT_METRICS_FOR_THIS_LOCKED_MODEL_ONLY",
         }
     )
-    if manifest_sha or context_manifest_sha:
-        report["identity_manifest"] = {
-            "status": "BOUND_FROZEN_IDENTITY_MANIFEST",
-            "manifest_sha256": manifest_sha or context_manifest_sha,
-        }
+    report["identity_manifest"] = {
+        "status": "BOUND_FROZEN_IDENTITY_MANIFEST",
+        "manifest_sha256": manifest_sha,
+    }
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("x", encoding="utf-8") as handle:
         json.dump(report, handle, indent=2, sort_keys=True)

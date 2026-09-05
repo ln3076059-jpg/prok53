@@ -130,9 +130,9 @@
           "occupant_id": { "type": "string", "minLength": 1, "pattern": "^video:[^:]+:(vehicle-track:[0-9]+:cabin:[0-9]+|provided-cabin):occupant-track:[0-9]+$" },
           "start_frame": { "type": "integer", "minimum": 0 },
           "end_frame": { "type": "integer", "minimum": 1 },
-          "inside_vehicle": { "type": "boolean" },
-          "outside_vehicle_person": { "type": "boolean" },
-          "motorcycle_flag": { "type": "boolean" },
+          "inside_vehicle": { "type": ["boolean", "null"] },
+          "outside_vehicle_person": { "type": ["boolean", "null"] },
+          "motorcycle_flag": { "type": ["boolean", "null"] },
           "phone_state": {
             "type": "string",
             "enum": [
@@ -162,9 +162,9 @@
       "type": "object",
       "properties": {
         "vehicle_type": { "type": "string" },
-        "motorcycle_flag": { "type": "boolean" },
-        "inside_vehicle": { "type": "boolean" },
-        "outside_vehicle_person": { "type": "boolean" },
+        "motorcycle_flag": { "type": ["boolean", "null"] },
+        "inside_vehicle": { "type": ["boolean", "null"] },
+        "outside_vehicle_person": { "type": ["boolean", "null"] },
         "day_night": { "type": "string", "enum": ["day", "night", "unknown"] },
         "occlusion": { "type": "string", "enum": ["none", "partial", "heavy"] },
         "camera_viewpoint": { "type": "string" }
@@ -197,8 +197,11 @@
         {
           "if": { "properties": { "reviewer_type": { "const": "HUMAN" } } },
           "then": {
-            "properties": { "status": { "const": "HUMAN_APPROVED" } },
-            "required": ["reviewer_id", "reviewed_at", "evidence_hash"]
+            "properties": {
+              "status": { "const": "HUMAN_APPROVED" },
+              "identity_manifest_sha256": { "type": "string", "minLength": 64 }
+            },
+            "required": ["reviewer_id", "reviewed_at", "evidence_hash", "identity_manifest_sha256"]
           }
         }
       ]

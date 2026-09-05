@@ -237,12 +237,20 @@ def validate_annotation(annotation, schema, allow_proposal: bool = False):
                 "governed calibration."
             )
     else:
-        required_fields = ["reviewer_id", "reviewed_at", "evidence_hash"]
+        required_fields = ["reviewer_id", "reviewed_at", "evidence_hash", "identity_manifest_sha256"]
         for field in required_fields:
             if not provenance.get(field):
                 errors.append(
                     f"Semantic error: review_provenance missing {field} for HUMAN_APPROVED"
                 )
+        for idx, interval in enumerate(annotation.get("context_intervals", [])):
+            for bool_field in ("inside_vehicle", "outside_vehicle_person", "motorcycle_flag"):
+                val = interval.get(bool_field)
+                if val is None or not isinstance(val, bool):
+                    errors.append(
+                        f"Semantic error: context interval {idx} field '{bool_field}' "
+                        f"must be a confirmed boolean for HUMAN_APPROVED (got {val!r})"
+                    )
 
     return errors
 

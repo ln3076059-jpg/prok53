@@ -92,6 +92,45 @@ def _freeze_context(tmp_path: Path, external_lock_path: Path) -> tuple[Path, Pat
     return context_path, context_lock_path
 
 
+def _write_external_lock(path: Path, video_id: str = "external-video") -> tuple[Path, Path]:
+    vehicle_id = f"video:{video_id}:vehicle-track:1"
+    cabin_id = f"{vehicle_id}:cabin:1"
+    occupant_id = f"{cabin_id}:occupant-track:1"
+    manifest_lock_path = path.parent / f"manifest-lock-{video_id}.json"
+    manifest_sha = "a" * 64
+    manifest_lock = {
+        "status": "FROZEN_IDENTITY_MANIFEST",
+        "manifest_sha256": manifest_sha,
+        "manifest_file": "manifest.json",
+        "source_type": "RUNTIME_IDENTITY_TRACKS",
+        "source_path": f"memory:tracks:{video_id}",
+        "source_sha256": "b" * 64,
+        "video_ids": [video_id],
+        "proven_identities": [
+            {
+                "video_id": video_id,
+                "vehicle_id": vehicle_id,
+                "cabin_id": cabin_id,
+                "occupant_id": occupant_id,
+            }
+        ],
+        "identity_count": 1,
+        "locked_at": "2026-09-05T00:00:00Z",
+    }
+    manifest_lock_path.write_text(json.dumps(manifest_lock), encoding="utf-8")
+
+    external_lock = {
+        "status": "FROZEN_EXTERNAL_TEST",
+        "human_review_status": "ALL_APPROVED",
+        "video_ids": [video_id],
+        "identity_manifest_sha256": manifest_sha,
+        "identity_manifest_lock_path": str(manifest_lock_path.resolve()),
+        "require_identity_manifest": True,
+    }
+    path.write_text(json.dumps(external_lock), encoding="utf-8")
+    return path, manifest_lock_path
+
+
 def _as_safety_context(row: dict[str, str]) -> dict[str, str]:
     return {
         "video_id": row["video_id"],
@@ -111,16 +150,7 @@ def _as_safety_context(row: dict[str, str]) -> dict[str, str]:
 
 def test_event_truth_freeze_requires_review_and_is_immutable(tmp_path):
     external_lock_path = tmp_path / "external-lock.json"
-    external_lock_path.write_text(
-        json.dumps(
-            {
-                "status": "FROZEN_EXTERNAL_TEST",
-                "human_review_status": "ALL_APPROVED",
-                "video_ids": ["external-video"],
-            }
-        ),
-        encoding="utf-8",
-    )
+    _write_external_lock(external_lock_path)
     truth_path = tmp_path / "truth.csv"
     output_path = tmp_path / "truth-lock.json"
     row = _truth_row()
@@ -142,16 +172,7 @@ def test_event_truth_freeze_requires_review_and_is_immutable(tmp_path):
 
 def test_freeze_event_truth_rejects_non_canonical_identities(tmp_path):
     external_lock_path = tmp_path / "external-lock.json"
-    external_lock_path.write_text(
-        json.dumps(
-            {
-                "status": "FROZEN_EXTERNAL_TEST",
-                "human_review_status": "ALL_APPROVED",
-                "video_ids": ["external-video"],
-            }
-        ),
-        encoding="utf-8",
-    )
+    _write_external_lock(external_lock_path)
     # 1. Non-canonical format
     truth_path = tmp_path / "bad_ids.csv"
     bad_row = _truth_row(
@@ -178,16 +199,7 @@ def test_freeze_event_truth_rejects_non_canonical_identities(tmp_path):
 
 def test_frozen_event_evaluation_requires_active_model_and_preserves_result(tmp_path):
     external_lock_path = tmp_path / "external-lock.json"
-    external_lock_path.write_text(
-        json.dumps(
-            {
-                "status": "FROZEN_EXTERNAL_TEST",
-                "human_review_status": "ALL_APPROVED",
-                "video_ids": ["external-video"],
-            }
-        ),
-        encoding="utf-8",
-    )
+    _write_external_lock(external_lock_path)
     t_row = _truth_row()
     truth_path = tmp_path / "truth.csv"
     _write_csv(truth_path, [t_row], REQUIRED_COLUMNS)
@@ -311,16 +323,7 @@ def test_frozen_event_evaluation_requires_active_model_and_preserves_result(tmp_
 
 def test_frozen_event_evaluation_rejects_truth_changed_after_freeze(tmp_path):
     external_lock_path = tmp_path / "external-lock.json"
-    external_lock_path.write_text(
-        json.dumps(
-            {
-                "status": "FROZEN_EXTERNAL_TEST",
-                "human_review_status": "ALL_APPROVED",
-                "video_ids": ["external-video"],
-            }
-        ),
-        encoding="utf-8",
-    )
+    _write_external_lock(external_lock_path)
     truth_path = tmp_path / "truth.csv"
     _write_csv(truth_path, [_truth_row()], REQUIRED_COLUMNS)
     truth_lock_path = tmp_path / "truth-lock.json"
@@ -429,7 +432,7 @@ def test_evaluate_empty_predictions(tmp_path):
     truth_path = tmp_path / "truth.csv"
     _write_csv(truth_path, [_truth_row()], REQUIRED_COLUMNS)
     external_lock_path = tmp_path / "external-lock.json"
-    external_lock_path.write_text(json.dumps({"status": "FROZEN_EXTERNAL_TEST", "human_review_status": "ALL_APPROVED", "video_ids": ["external-video"]}), encoding="utf-8")
+    _write_external_lock(external_lock_path)
     truth_lock_path = tmp_path / "truth-lock.json"
     freeze_event_ground_truth(truth_path, external_lock_path, truth_lock_path)
     context_path, context_lock_path = _freeze_context(tmp_path, external_lock_path)
@@ -664,3 +667,51 @@ def test_evaluator_safety_counters_fail_close_missing_context():
         context_rows=context_rows,
     )
     assert report2["safety_invariant_counters"] == "NOT_EVALUABLE"
+
+
+def test_freeze_event_truth_rejects_missing_identity_manifest_lock(tmp_path):
+    external_lock_path = tmp_path / "external-lock-no-manifest.json"
+    external_lock_path.write_text(
+        json.dumps(
+            {
+                "status": "FROZEN_EXTERNAL_TEST",
+                "human_review_status": "ALL_APPROVED",
+                "video_ids": ["external-video"],
+            }
+        ),
+        encoding="utf-8",
+    )
+    truth_path = tmp_path / "truth.csv"
+    _write_csv(truth_path, [_truth_row()], REQUIRED_COLUMNS)
+    with pytest.raises(ValueError, match="freezing event ground truth requires a frozen identity manifest lock"):
+        freeze_event_ground_truth(truth_path, external_lock_path, tmp_path / "out.json")
+
+
+def test_freeze_event_truth_rejects_mismatched_identity_manifest_lock(tmp_path):
+    external_lock_path, manifest_lock_path = _write_external_lock(tmp_path / "external-lock.json")
+    mismatched_lock_path = tmp_path / "mismatched-manifest-lock.json"
+    mismatched_lock_path.write_text(
+        json.dumps(
+            {
+                "status": "FROZEN_IDENTITY_MANIFEST",
+                "manifest_sha256": "f" * 64,
+                "manifest_file": "manifest.json",
+                "source_type": "RUNTIME_IDENTITY_TRACKS",
+                "source_path": "memory:tracks:external-video",
+                "source_sha256": "b" * 64,
+                "video_ids": ["external-video"],
+                "proven_identities": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    truth_path = tmp_path / "truth.csv"
+    _write_csv(truth_path, [_truth_row()], REQUIRED_COLUMNS)
+    with pytest.raises(ValueError, match="identity manifest SHA256 does not match external-test lock requirement"):
+        freeze_event_ground_truth(
+            truth_path,
+            external_lock_path,
+            tmp_path / "out.json",
+            identity_manifest_lock_path=mismatched_lock_path,
+        )
+

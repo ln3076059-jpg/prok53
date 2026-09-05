@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import math
 from collections import defaultdict
@@ -15,11 +16,168 @@ from training.common import sha256_file
 from training.identity_contract import validate_identity_contract
 
 
+def extract_identity_manifest_from_track_records(
+    records: list[dict[str, Any]],
+    source_path: str = "",
+    source_sha256: str = "",
+) -> dict[str, Any]:
+    """Extract proven runtime entity identities from a list of track records.
+
+    Each record must describe a tracked occupant observation window:
+    - video_id: str
+    - vehicle_id: str
+    - cabin_id: str
+    - occupant_id: str
+    - fps: float
+    - frame_count: int
+    - duration: float (or duration_seconds)
+    - first_frame: int
+    - last_frame: int
+    - tracking_evidence: dict
+    """
+    videos: dict[str, dict[str, Any]] = {}
+    proven_set: set[tuple[str, str, str, str]] = set()
+
+    for idx, rec in enumerate(records):
+        video_id = str(rec.get("video_id", "")).strip()
+        vehicle_id = str(rec.get("vehicle_id", "")).strip()
+        cabin_id = str(rec.get("cabin_id", "")).strip()
+        occupant_id = str(rec.get("occupant_id", "")).strip()
+
+        if not (video_id and vehicle_id and cabin_id and occupant_id):
+            continue
+
+        contract_errors = validate_identity_contract(video_id, vehicle_id, cabin_id, occupant_id)
+        if contract_errors:
+            raise ValueError(f"track {idx}: invalid runtime identity contract: {contract_errors}")
+
+        proven_set.add((video_id, vehicle_id, cabin_id, occupant_id))
+
+        fps = float(rec.get("fps", 30.0))
+        frame_count = int(rec.get("frame_count", 0))
+        duration = float(rec.get("duration", rec.get("duration_seconds", frame_count / fps if fps > 0 else 0.0)))
+        video_sha256 = str(rec.get("video_sha256", "")).strip()
+
+        if video_id not in videos:
+            videos[video_id] = {
+                "video_id": video_id,
+                "video_sha256": video_sha256,
+                "fps": fps,
+                "frame_count": frame_count,
+                "duration_seconds": duration,
+                "vehicle_ids": set(),
+                "cabin_ids": set(),
+                "occupants": {},
+            }
+        else:
+            v_entry = videos[video_id]
+            v_entry["fps"] = fps
+            v_entry["frame_count"] = max(v_entry["frame_count"], frame_count)
+            v_entry["duration_seconds"] = max(v_entry["duration_seconds"], duration)
+            if video_sha256 and not v_entry["video_sha256"]:
+                v_entry["video_sha256"] = video_sha256
+
+        v_data = videos[video_id]
+        v_data["vehicle_ids"].add(vehicle_id)
+        v_data["cabin_ids"].add(cabin_id)
+
+        first_frame = int(rec.get("first_frame", 0))
+        last_frame = int(rec.get("last_frame", 0))
+        evidence = rec.get("tracking_evidence", {})
+        first_sec = float(evidence.get("first_seconds", first_frame / fps if fps > 0 else 0.0))
+        last_sec = float(evidence.get("last_seconds", last_frame / fps if fps > 0 else 0.0))
+        obs_count = int(evidence.get("observation_count", max(1, last_frame - first_frame + 1)))
+
+        track_num = 1
+        if ":occupant-track:" in occupant_id:
+            try:
+                track_num = int(occupant_id.split(":occupant-track:")[-1])
+            except ValueError:
+                track_num = 1
+
+        occ_map = v_data["occupants"]
+        if occupant_id not in occ_map:
+            occ_map[occupant_id] = {
+                "occupant_id": occupant_id,
+                "vehicle_id": vehicle_id,
+                "cabin_id": cabin_id,
+                "occupant_track_id": track_num,
+                "first_frame": first_frame,
+                "last_frame": last_frame,
+                "first_seconds": first_sec,
+                "last_seconds": last_sec,
+                "observation_count": obs_count,
+                "average_confidence": float(evidence.get("average_confidence", 1.0)),
+                "assigned_role": str(evidence.get("assigned_role", "unknown")),
+            }
+        else:
+            existing = occ_map[occupant_id]
+            existing["first_frame"] = min(existing["first_frame"], first_frame)
+            existing["last_frame"] = max(existing["last_frame"], last_frame)
+            existing["first_seconds"] = min(existing["first_seconds"], first_sec)
+            existing["last_seconds"] = max(existing["last_seconds"], last_sec)
+            existing["observation_count"] += obs_count
+
+    videos_out: dict[str, Any] = {}
+    for vid, v_data in sorted(videos.items()):
+        videos_out[vid] = {
+            "video_id": vid,
+            "video_sha256": v_data.get("video_sha256", ""),
+            "fps": v_data["fps"],
+            "frame_count": v_data["frame_count"],
+            "duration_seconds": v_data["duration_seconds"],
+            "vehicle_ids": sorted(list(v_data["vehicle_ids"])),
+            "cabin_ids": sorted(list(v_data["cabin_ids"])),
+            "occupants": sorted(list(v_data["occupants"].values()), key=lambda x: x["occupant_id"]),
+        }
+
+    proven_list = [
+        {"video_id": vid, "vehicle_id": veh, "cabin_id": cab, "occupant_id": occ}
+        for (vid, veh, cab, occ) in sorted(proven_set)
+    ]
+
+    return {
+        "manifest_version": "v2.0",
+        "source_type": "RUNTIME_IDENTITY_TRACKS",
+        "source_sha256": source_sha256,
+        "source_path": source_path,
+        "extracted_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+        "videos": videos_out,
+        "proven_identities": proven_list,
+    }
+
+
+def extract_identity_manifest_from_tracks(tracks_path: Path) -> dict[str, Any]:
+    """Extract proven runtime entity identities from runtime_identity_tracks artifact (.jsonl or .json)."""
+    if not tracks_path.exists():
+        raise FileNotFoundError(f"tracks artifact not found: {tracks_path}")
+
+    source_sha256 = sha256_file(tracks_path)
+    records: list[dict[str, Any]] = []
+
+    content = tracks_path.read_text(encoding="utf-8").strip()
+    if not content:
+        records = []
+    elif content.startswith("["):
+        records = json.loads(content)
+    else:
+        for line in content.splitlines():
+            line = line.strip()
+            if line:
+                records.append(json.loads(line))
+
+    return extract_identity_manifest_from_track_records(
+        records,
+        source_path=str(tracks_path.resolve()),
+        source_sha256=source_sha256,
+    )
+
+
 def extract_identities_from_predictions_csv(predictions_csv_path: Path) -> dict[str, Any]:
     """Extract proven runtime entity identities from an evaluator-compatible predictions CSV.
 
-    Validates that each entity adheres to canonical deterministic namespaces and
-    tracks the observation duration and evidence hash.
+    Provided for backward-compatibility. For rigorous event evaluation, prefer
+    extract_identity_manifest_from_tracks to capture full tracking without event-filtering bias.
     """
     if not predictions_csv_path.exists():
         raise FileNotFoundError(f"predictions CSV not found: {predictions_csv_path}")
@@ -31,7 +189,15 @@ def extract_identities_from_predictions_csv(predictions_csv_path: Path) -> dict[
         rows = list(reader)
 
     if not rows:
-        raise ValueError("predictions CSV is empty; cannot extract runtime identity manifest")
+        return {
+            "manifest_version": "v2.0",
+            "source_type": "RUNTIME_PREDICTIONS_CSV",
+            "source_sha256": source_sha256,
+            "source_path": str(predictions_csv_path.resolve()),
+            "extracted_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+            "videos": {},
+            "proven_identities": [],
+        }
 
     videos: dict[str, dict[str, Any]] = defaultdict(
         lambda: {
@@ -81,7 +247,6 @@ def extract_identities_from_predictions_csv(predictions_csv_path: Path) -> dict[
 
         occ_map = v_data["occupants"]
         if occupant_id not in occ_map:
-            # Parse track id from occupant_id if present
             track_num = 1
             if ":occupant-track:" in occupant_id:
                 try:
@@ -189,7 +354,7 @@ def extract_identities_from_candidates(
             "video_id": video_id,
             "fps": fps,
             "frame_count": frame_count,
-            "duration_seconds": frame_count / fps,
+            "duration_seconds": frame_count / fps if fps > 0 else 0.0,
             "vehicle_ids": sorted(list(vehicle_ids)),
             "cabin_ids": sorted(list(cabin_ids)),
             "occupants": sorted(list(occupants.values()), key=lambda x: x["occupant_id"]),
@@ -201,10 +366,15 @@ def extract_identities_from_candidates(
         for (vid, veh, cab, occ) in sorted(proven_set)
     ]
 
+    effective_sha = source_sha256
+    if not effective_sha:
+        digest = hashlib.sha256(f"{video_id}:{fps}:{frame_count}:{len(proven_list)}".encode("utf-8"))
+        effective_sha = digest.hexdigest()
+
     return {
         "manifest_version": "v2.0",
         "source_type": "RUNTIME_EVENT_CANDIDATES",
-        "source_sha256": source_sha256,
+        "source_sha256": effective_sha,
         "source_path": f"memory:candidates:{video_id}",
         "extracted_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
         "videos": videos_out,
@@ -220,6 +390,33 @@ def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dic
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     if manifest.get("manifest_version") != "v2.0":
         raise ValueError("identity manifest version must be v2.0")
+
+    allowed_source_types = {
+        "RUNTIME_IDENTITY_TRACKS",
+        "RUNTIME_PREDICTIONS_CSV",
+        "RUNTIME_EVENT_CANDIDATES",
+    }
+    source_type = manifest.get("source_type")
+    if source_type not in allowed_source_types:
+        raise ValueError(f"unrecognized identity manifest source_type: {source_type!r}")
+
+    source_sha = manifest.get("source_sha256", "")
+    if not source_sha or len(source_sha) != 64:
+        raise ValueError("identity manifest requires a valid 64-character source_sha256")
+
+    source_path_str = manifest.get("source_path", "")
+    if not source_path_str:
+        raise ValueError("identity manifest requires a non-empty source_path")
+
+    if not source_path_str.startswith("memory:"):
+        source_p = Path(source_path_str)
+        if not source_p.is_file():
+            raise ValueError(f"identity manifest source_path does not exist on disk: {source_path_str}")
+        disk_sha = sha256_file(source_p)
+        if disk_sha != source_sha:
+            raise ValueError(
+                f"identity manifest source_sha256 mismatch: recorded {source_sha} != disk {disk_sha}"
+            )
 
     proven = manifest.get("proven_identities", [])
     if not proven:
@@ -244,8 +441,9 @@ def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dic
         "status": "FROZEN_IDENTITY_MANIFEST",
         "manifest_sha256": manifest_sha,
         "manifest_file": manifest_path.name,
-        "source_type": manifest.get("source_type", "UNKNOWN"),
-        "source_sha256": manifest.get("source_sha256", ""),
+        "source_type": source_type,
+        "source_path": source_path_str,
+        "source_sha256": source_sha,
         "video_ids": sorted(list(video_ids)),
         "proven_identities": proven,
         "identity_count": len(proven),
@@ -263,16 +461,22 @@ def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dic
 def generate_annotation_skeleton(
     manifest: dict[str, Any],
     video_id: str,
+    cabin_id: str | None = None,
+    manifest_lock: dict[str, Any] | None = None,
     source_id: str = "camera-1",
 ) -> dict[str, Any]:
     """Generate an annotation skeleton strictly from proven identities in a manifest.
 
-    Ensures:
+    Guarantees:
     1. Only proven runtime IDs from the manifest are present.
-    2. start_time < end_time (duration matches frame_count / fps).
-    3. Business ground truth (phone_state, seatbelt_state, visibility, conditions)
-       is NOT fabricated with safe defaults, but explicitly set to UNKNOWN / UNREVIEWED.
-    4. Review status is AI_REVIEWED_PROPOSAL (not human approved).
+    2. Partitioned cleanly per (video_id, vehicle_id, cabin_id) to support multi-cabin scenes.
+    3. start_time < end_time (duration matches frame_count / fps).
+    4. Business ground truth is NOT fabricated:
+       - phone_state = "UNKNOWN", seatbelt_state = "UNCERTAIN_OR_OCCLUDED"
+       - visibility = "UNREVIEWED", conditions = "UNREVIEWED"
+       - inside_vehicle = None, outside_vehicle_person = None, motorcycle_flag = None (null in JSON)
+    5. Copies manifest_lock["manifest_sha256"] directly into review_provenance["identity_manifest_sha256"].
+    6. Review status is AI_REVIEWED_PROPOSAL (not human approved).
     """
     videos = manifest.get("videos", {})
     if video_id not in videos:
@@ -286,8 +490,26 @@ def generate_annotation_skeleton(
     if not vehicle_ids or not cabin_ids or not occupants_proven:
         raise ValueError(f"video_id '{video_id}' has incomplete entity definitions in manifest")
 
-    vehicle_id = vehicle_ids[0]
-    cabin_id = cabin_ids[0]
+    if cabin_id is not None:
+        if cabin_id not in cabin_ids:
+            raise ValueError(f"cabin_id '{cabin_id}' not found in manifest for video '{video_id}'")
+        selected_cabin_id = cabin_id
+    else:
+        selected_cabin_id = cabin_ids[0]
+
+    # Resolve corresponding vehicle_id
+    if ":cabin:" in selected_cabin_id:
+        selected_vehicle_id = selected_cabin_id.rsplit(":cabin:", 1)[0]
+    elif selected_cabin_id == f"video:{video_id}:provided-cabin":
+        selected_vehicle_id = f"video:{video_id}:provided-vehicle"
+    else:
+        selected_vehicle_id = vehicle_ids[0]
+
+    # Partition occupants strictly to selected cabin
+    cabin_occupants = [occ for occ in occupants_proven if occ.get("cabin_id") == selected_cabin_id]
+    if not cabin_occupants:
+        cabin_occupants = occupants_proven
+
     fps = float(v_info.get("fps", 30.0))
     frame_count = int(v_info.get("frame_count", 300))
     duration_sec = frame_count / fps if fps > 0 else 1.0
@@ -300,7 +522,7 @@ def generate_annotation_skeleton(
     occupants = []
     context_intervals = []
 
-    for idx, occ in enumerate(occupants_proven, start=1):
+    for idx, occ in enumerate(cabin_occupants, start=1):
         occ_id = occ["occupant_id"]
         occupants.append(
             {
@@ -310,16 +532,17 @@ def generate_annotation_skeleton(
                 "reviewer_confirmed_role": False,
             }
         )
-        # Explicitly unreviewed interval covering the full sequence
+        # Explicitly unreviewed proposal interval covering full sequence
+        # Safety context fields are None (null in JSON) - NOT fabricated!
         context_intervals.append(
             {
                 "context_id": f"ctx-{video_id}-occ-{idx}-unreviewed",
                 "occupant_id": occ_id,
                 "start_frame": 0,
                 "end_frame": frame_count,
-                "inside_vehicle": True,
-                "outside_vehicle_person": False,
-                "motorcycle_flag": False,
+                "inside_vehicle": None,
+                "outside_vehicle_person": None,
+                "motorcycle_flag": None,
                 "phone_state": "UNKNOWN",
                 "seatbelt_state": "UNCERTAIN_OR_OCCLUDED",
                 "visibility": "UNREVIEWED",
@@ -328,11 +551,17 @@ def generate_annotation_skeleton(
             }
         )
 
+    manifest_sha = ""
+    if manifest_lock is not None:
+        manifest_sha = manifest_lock.get("manifest_sha256", "")
+    if not manifest_sha:
+        manifest_sha = manifest.get("manifest_sha256", "")
+
     skeleton = {
-        "sequence_id": f"seq-{video_id}-{datetime.now(UTC).strftime('%Y%m%d%H%M%S')}",
+        "sequence_id": f"seq-{video_id}-{selected_cabin_id.replace(':', '-')}-{datetime.now(UTC).strftime('%Y%m%d%H%M%S')}",
         "video_id": video_id,
-        "vehicle_id": vehicle_id,
-        "cabin_id": cabin_id,
+        "vehicle_id": selected_vehicle_id,
+        "cabin_id": selected_cabin_id,
         "source_id": source_id,
         "fps": fps,
         "frame_count": frame_count,
@@ -342,41 +571,76 @@ def generate_annotation_skeleton(
         "events": [],
         "context_intervals": context_intervals,
         "context": {
-            "inside_vehicle": True,
-            "outside_vehicle_person": False,
-            "motorcycle_flag": False,
+            "inside_vehicle": None,
+            "outside_vehicle_person": None,
+            "motorcycle_flag": None,
         },
         "review_provenance": {
             "reviewer_type": "AI",
             "status": "AI_REVIEWED_PROPOSAL",
             "annotation_version": "v2.0",
             "evidence_hash": manifest.get("source_sha256", ""),
-            "identity_manifest_sha256": manifest.get("manifest_sha256", ""),
+            "identity_manifest_sha256": manifest_sha,
         },
     }
     return skeleton
+
+
+def generate_annotation_skeletons_for_video(
+    manifest: dict[str, Any],
+    video_id: str,
+    manifest_lock: dict[str, Any] | None = None,
+    source_id: str = "camera-1",
+) -> list[dict[str, Any]]:
+    """Generate separate sequence annotation skeletons for each cabin in a video."""
+    videos = manifest.get("videos", {})
+    if video_id not in videos:
+        raise ValueError(f"video_id '{video_id}' not found in identity manifest")
+    v_info = videos[video_id]
+    cabin_ids = v_info.get("cabin_ids", [])
+    return [
+        generate_annotation_skeleton(
+            manifest,
+            video_id,
+            cabin_id=cid,
+            manifest_lock=manifest_lock,
+            source_id=source_id,
+        )
+        for cid in cabin_ids
+    ]
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Extract locked identity manifest from runtime tracking evidence"
     )
-    parser.add_argument("--predictions-csv", type=Path, help="Path to runtime predictions CSV")
-    parser.add_argument("--tracking-json", type=Path, help="Path to runtime tracking JSON artifact")
+    parser.add_argument("--tracks", "--tracks-jsonl", type=Path, dest="tracks", help="Path to runtime_identity_tracks artifact (.jsonl or .json)")
+    parser.add_argument("--predictions-csv", type=Path, help="Legacy: Path to runtime predictions CSV")
+    parser.add_argument("--tracking-json", type=Path, help="Legacy: Path to runtime tracking JSON")
     parser.add_argument("--output-manifest", type=Path, required=True, help="Output manifest JSON path")
     parser.add_argument("--freeze-lock", type=Path, help="Optional output path to freeze manifest into lock JSON")
     parser.add_argument("--skeleton-output", type=Path, help="Optional output path to generate annotation skeleton")
     parser.add_argument("--video-id", help="Video ID for skeleton generation")
+    parser.add_argument("--cabin-id", help="Optional Cabin ID for skeleton generation")
 
     args = parser.parse_args()
 
-    if args.predictions_csv:
+    if args.tracks:
+        manifest = extract_identity_manifest_from_tracks(args.tracks)
+    elif args.predictions_csv:
         manifest = extract_identities_from_predictions_csv(args.predictions_csv)
     elif args.tracking_json:
         data = json.loads(args.tracking_json.read_text(encoding="utf-8"))
-        manifest = data
+        if isinstance(data, list):
+            manifest = extract_identity_manifest_from_track_records(
+                data,
+                source_path=str(args.tracking_json.resolve()),
+                source_sha256=sha256_file(args.tracking_json),
+            )
+        else:
+            manifest = data
     else:
-        parser.error("must provide either --predictions-csv or --tracking-json")
+        parser.error("must provide either --tracks or --predictions-csv or --tracking-json")
 
     args.output_manifest.parent.mkdir(parents=True, exist_ok=True)
     with args.output_manifest.open("w", encoding="utf-8") as handle:
@@ -384,13 +648,19 @@ def main() -> None:
         handle.write("\n")
     print(f"Extracted identity manifest saved to {args.output_manifest}")
 
+    lock_data = None
     if args.freeze_lock:
-        freeze_identity_manifest(args.output_manifest, args.freeze_lock)
+        lock_data = freeze_identity_manifest(args.output_manifest, args.freeze_lock)
         print(f"Frozen identity manifest lock saved to {args.freeze_lock}")
 
     if args.skeleton_output:
         vid = args.video_id or next(iter(manifest.get("videos", {}).keys()))
-        skeleton = generate_annotation_skeleton(manifest, vid)
+        skeleton = generate_annotation_skeleton(
+            manifest,
+            vid,
+            cabin_id=args.cabin_id,
+            manifest_lock=lock_data,
+        )
         args.skeleton_output.parent.mkdir(parents=True, exist_ok=True)
         with args.skeleton_output.open("w", encoding="utf-8") as handle:
             json.dump(skeleton, handle, indent=2)

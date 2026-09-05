@@ -8,9 +8,13 @@ import pytest
 
 from training.extract_identity_manifest import (
     extract_identities_from_predictions_csv,
+    extract_identity_manifest_from_tracks,
     freeze_identity_manifest,
     generate_annotation_skeleton,
+    generate_annotation_skeletons_for_video,
 )
+from training.evaluate_events import evaluate_frozen
+from training.common import sha256_file
 from training.freeze_event_ground_truth import REQUIRED_COLUMNS, freeze_event_ground_truth
 from training.freeze_context_ground_truth import (
     REQUIRED_COLUMNS as CONTEXT_REQUIRED_COLUMNS,
@@ -306,3 +310,301 @@ def test_freezer_rejects_unproven_identities(tmp_path: Path):
         identity_manifest_lock_path=lock_file,
     )
     assert frozen_event["identity_manifest_sha256"] == lock_data["manifest_sha256"]
+
+
+def test_extract_identity_manifest_from_tracks_preserves_full_provenance(tmp_path: Path):
+    tracks_file = tmp_path / "runtime_identity_tracks.jsonl"
+    record1 = {
+        "video_id": "vid-provenance-1",
+        "video_sha256": "v" * 64,
+        "fps": 25.0,
+        "frame_count": 3000,
+        "duration": 120.0,
+        "vehicle_id": "video:vid-provenance-1:vehicle-track:1",
+        "cabin_id": "video:vid-provenance-1:vehicle-track:1:cabin:0",
+        "occupant_id": "video:vid-provenance-1:vehicle-track:1:cabin:0:occupant-track:10",
+        "first_frame": 0,
+        "last_frame": 2999,
+        "tracking_evidence": {
+            "observation_count": 2850,
+            "first_seconds": 0.0,
+            "last_seconds": 119.96,
+            "average_confidence": 0.92,
+            "assigned_role": "driver",
+        },
+    }
+    record2 = {
+        "video_id": "vid-provenance-1",
+        "video_sha256": "v" * 64,
+        "fps": 25.0,
+        "frame_count": 3000,
+        "duration": 120.0,
+        "vehicle_id": "video:vid-provenance-1:vehicle-track:1",
+        "cabin_id": "video:vid-provenance-1:vehicle-track:1:cabin:0",
+        "occupant_id": "video:vid-provenance-1:vehicle-track:1:cabin:0:occupant-track:11",
+        "first_frame": 50,
+        "last_frame": 2800,
+        "tracking_evidence": {
+            "observation_count": 2500,
+            "first_seconds": 2.0,
+            "last_seconds": 112.0,
+            "average_confidence": 0.89,
+            "assigned_role": "front_passenger",
+        },
+    }
+    with tracks_file.open("w", encoding="utf-8") as f:
+        f.write(json.dumps(record1) + "\n")
+        f.write(json.dumps(record2) + "\n")
+
+    manifest = extract_identity_manifest_from_tracks(tracks_file)
+
+    assert manifest["manifest_version"] == "v2.0"
+    assert manifest["source_type"] == "RUNTIME_IDENTITY_TRACKS"
+    assert manifest["source_sha256"] == sha256_file(tracks_file)
+    assert manifest["source_path"] == str(tracks_file.resolve())
+
+    v_data = manifest["videos"]["vid-provenance-1"]
+    assert v_data["fps"] == 25.0
+    assert v_data["frame_count"] == 3000
+    assert v_data["duration_seconds"] == 120.0
+    assert v_data["video_sha256"] == "v" * 64
+    assert len(v_data["occupants"]) == 2
+
+    lock_file = tmp_path / "tracks_manifest_lock.json"
+    manifest_file = tmp_path / "manifest.json"
+    manifest_file.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    lock = freeze_identity_manifest(manifest_file, lock_file)
+
+    assert lock["status"] == "FROZEN_IDENTITY_MANIFEST"
+    assert lock["source_type"] == "RUNTIME_IDENTITY_TRACKS"
+    assert lock["source_sha256"] == sha256_file(tracks_file)
+
+
+def test_zero_predictions_manifest_extraction_does_not_blind_evaluator(tmp_path: Path):
+    tracks_file = tmp_path / "runtime_identity_tracks.jsonl"
+    record = {
+        "video_id": "vid-safe-driver",
+        "video_sha256": "s" * 64,
+        "fps": 30.0,
+        "frame_count": 3600,
+        "duration": 120.0,
+        "vehicle_id": "video:vid-safe-driver:vehicle-track:1",
+        "cabin_id": "video:vid-safe-driver:vehicle-track:1:cabin:0",
+        "occupant_id": "video:vid-safe-driver:vehicle-track:1:cabin:0:occupant-track:1",
+        "first_frame": 0,
+        "last_frame": 3599,
+        "tracking_evidence": {
+            "observation_count": 3590,
+            "first_seconds": 0.0,
+            "last_seconds": 119.97,
+            "average_confidence": 0.95,
+            "assigned_role": "driver",
+        },
+    }
+    with tracks_file.open("w", encoding="utf-8") as f:
+        f.write(json.dumps(record) + "\n")
+
+    manifest = extract_identity_manifest_from_tracks(tracks_file)
+    assert len(manifest["proven_identities"]) == 1
+    assert manifest["videos"]["vid-safe-driver"]["duration_seconds"] == 120.0
+
+    manifest_file = tmp_path / "manifest_safe.json"
+    manifest_file.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    lock_file = tmp_path / "manifest_safe_lock.json"
+    lock = freeze_identity_manifest(manifest_file, lock_file)
+
+    external_lock_file = tmp_path / "external-lock-safe.json"
+    external_lock_file.write_text(
+        json.dumps(
+            {
+                "status": "FROZEN_EXTERNAL_TEST",
+                "human_review_status": "ALL_APPROVED",
+                "video_ids": ["vid-safe-driver"],
+                "identity_manifest_sha256": lock["manifest_sha256"],
+                "identity_manifest_lock_path": str(lock_file.resolve()),
+                "require_identity_manifest": True,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    truth_csv = tmp_path / "event_truth_missed.csv"
+    with truth_csv.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=sorted(REQUIRED_COLUMNS))
+        writer.writeheader()
+        writer.writerow(
+            {
+                "video_id": "vid-safe-driver",
+                "event_id": "evt-missed-1",
+                "event_type": "PHONE",
+                "start_seconds": "15.0",
+                "end_seconds": "20.0",
+                "occupant_id": "video:vid-safe-driver:vehicle-track:1:cabin:0:occupant-track:1",
+                "vehicle_id": "video:vid-safe-driver:vehicle-track:1",
+                "cabin_id": "video:vid-safe-driver:vehicle-track:1:cabin:0",
+                "inside_vehicle": "true",
+                "outside_vehicle_person": "false",
+                "motorcycle_flag": "false",
+                "label": "PHONE_USE",
+                "occupant_role": "driver",
+                "visibility": "clear",
+                "conditions": "daylight",
+                "human_review_status": "APPROVED",
+                "reviewer_id": "rev-1",
+                "reviewer_type": "HUMAN",
+                "reviewed_at": "2026-09-05T00:00:00Z",
+                "adjudication_status": "FINAL",
+                "notes": "missed phone use event by model",
+            }
+        )
+
+    frozen_event = freeze_event_ground_truth(
+        truth_csv,
+        external_lock_file,
+        tmp_path / "frozen_event_missed.json",
+    )
+    assert frozen_event["identity_manifest_sha256"] == lock["manifest_sha256"]
+
+
+def test_freeze_identity_manifest_cryptographic_verification(tmp_path: Path):
+    tracks_file = tmp_path / "tracks.jsonl"
+    tracks_file.write_text(
+        json.dumps(
+            {
+                "video_id": "v1",
+                "vehicle_id": "video:v1:vehicle-track:1",
+                "cabin_id": "video:v1:vehicle-track:1:cabin:0",
+                "occupant_id": "video:v1:vehicle-track:1:cabin:0:occupant-track:1",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    manifest = extract_identity_manifest_from_tracks(tracks_file)
+
+    manifest_file = tmp_path / "manifest.json"
+    manifest_file.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+
+    # 1. Missing source path
+    manifest_bad_path = {**manifest, "source_path": str(tmp_path / "non_existent.jsonl")}
+    m_path = tmp_path / "manifest_bad_path.json"
+    m_path.write_text(json.dumps(manifest_bad_path), encoding="utf-8")
+    with pytest.raises(ValueError, match="source_path does not exist on disk"):
+        freeze_identity_manifest(m_path, tmp_path / "lock1.json")
+
+    # 2. Tampered source file / SHA mismatch
+    manifest_tampered = {**manifest, "source_sha256": "0" * 64}
+    m_tampered = tmp_path / "manifest_tampered.json"
+    m_tampered.write_text(json.dumps(manifest_tampered), encoding="utf-8")
+    with pytest.raises(ValueError, match="source_sha256 mismatch"):
+        freeze_identity_manifest(m_tampered, tmp_path / "lock2.json")
+
+    # 3. Invalid source_type
+    manifest_bad_type = {**manifest, "source_type": "UNTRUSTED_INFERENCE"}
+    m_type = tmp_path / "manifest_bad_type.json"
+    m_type.write_text(json.dumps(manifest_bad_type), encoding="utf-8")
+    with pytest.raises(ValueError, match="unrecognized identity manifest source_type"):
+        freeze_identity_manifest(m_type, tmp_path / "lock3.json")
+
+
+def test_multi_cabin_video_generates_isolated_skeletons(tmp_path: Path):
+    tracks_file = tmp_path / "multi_cabin_tracks.jsonl"
+    r1 = {
+        "video_id": "vid-multi",
+        "fps": 30.0,
+        "frame_count": 900,
+        "duration": 30.0,
+        "vehicle_id": "video:vid-multi:vehicle-track:1",
+        "cabin_id": "video:vid-multi:vehicle-track:1:cabin:0",
+        "occupant_id": "video:vid-multi:vehicle-track:1:cabin:0:occupant-track:1",
+        "first_frame": 0,
+        "last_frame": 899,
+        "tracking_evidence": {"observation_count": 890, "assigned_role": "driver"},
+    }
+    r2 = {
+        "video_id": "vid-multi",
+        "fps": 30.0,
+        "frame_count": 900,
+        "duration": 30.0,
+        "vehicle_id": "video:vid-multi:vehicle-track:2",
+        "cabin_id": "video:vid-multi:vehicle-track:2:cabin:0",
+        "occupant_id": "video:vid-multi:vehicle-track:2:cabin:0:occupant-track:2",
+        "first_frame": 0,
+        "last_frame": 899,
+        "tracking_evidence": {"observation_count": 890, "assigned_role": "driver"},
+    }
+    with tracks_file.open("w", encoding="utf-8") as f:
+        f.write(json.dumps(r1) + "\n")
+        f.write(json.dumps(r2) + "\n")
+
+    manifest = extract_identity_manifest_from_tracks(tracks_file)
+    manifest_file = tmp_path / "manifest_multi.json"
+    manifest_file.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    lock_file = tmp_path / "lock_multi.json"
+    lock = freeze_identity_manifest(manifest_file, lock_file)
+
+    skeletons = generate_annotation_skeletons_for_video(
+        manifest, "vid-multi", manifest_lock=lock
+    )
+    assert len(skeletons) == 2
+
+    schema_path = Path("datasets/schemas/v2_event_sequence_annotation.schema.json")
+    schema = load_schema(schema_path)
+
+    sk1, sk2 = skeletons[0], skeletons[1]
+    assert sk1["cabin_id"] == "video:vid-multi:vehicle-track:1:cabin:0"
+    assert len(sk1["occupants"]) == 1
+    assert sk1["occupants"][0]["occupant_id"] == "video:vid-multi:vehicle-track:1:cabin:0:occupant-track:1"
+    assert sk1["review_provenance"]["identity_manifest_sha256"] == lock["manifest_sha256"]
+
+    assert sk2["cabin_id"] == "video:vid-multi:vehicle-track:2:cabin:0"
+    assert len(sk2["occupants"]) == 1
+    assert sk2["occupants"][0]["occupant_id"] == "video:vid-multi:vehicle-track:2:cabin:0:occupant-track:2"
+    assert sk2["review_provenance"]["identity_manifest_sha256"] == lock["manifest_sha256"]
+
+    assert validate_annotation(sk1, schema, allow_proposal=True) == []
+    assert validate_annotation(sk2, schema, allow_proposal=True) == []
+
+
+def test_proposal_skeleton_no_fabrication_and_binds_lock_sha(tmp_path: Path):
+    tracks_file = tmp_path / "tracks.jsonl"
+    r = {
+        "video_id": "vid-proposal-test",
+        "fps": 30.0,
+        "frame_count": 300,
+        "duration": 10.0,
+        "vehicle_id": "video:vid-proposal-test:vehicle-track:1",
+        "cabin_id": "video:vid-proposal-test:vehicle-track:1:cabin:0",
+        "occupant_id": "video:vid-proposal-test:vehicle-track:1:cabin:0:occupant-track:1",
+        "first_frame": 0,
+        "last_frame": 299,
+        "tracking_evidence": {"observation_count": 290, "assigned_role": "driver"},
+    }
+    tracks_file.write_text(json.dumps(r) + "\n", encoding="utf-8")
+    manifest = extract_identity_manifest_from_tracks(tracks_file)
+    manifest_file = tmp_path / "manifest.json"
+    manifest_file.write_text(json.dumps(manifest), encoding="utf-8")
+    lock = freeze_identity_manifest(manifest_file, tmp_path / "lock.json")
+
+    skeleton = generate_annotation_skeleton(
+        manifest, "vid-proposal-test", manifest_lock=lock
+    )
+
+    # Asserts no fabrication of safety-context booleans
+    assert skeleton["context"]["inside_vehicle"] is None
+    assert skeleton["context"]["outside_vehicle_person"] is None
+    assert skeleton["context"]["motorcycle_flag"] is None
+
+    for interval in skeleton["context_intervals"]:
+        assert interval["inside_vehicle"] is None
+        assert interval["outside_vehicle_person"] is None
+        assert interval["motorcycle_flag"] is None
+        assert interval["phone_state"] == "UNKNOWN"
+        assert interval["seatbelt_state"] == "UNCERTAIN_OR_OCCLUDED"
+        assert interval["visibility"] == "UNREVIEWED"
+        assert interval["conditions"] == "UNREVIEWED"
+
+    assert skeleton["review_provenance"]["identity_manifest_sha256"] == lock["manifest_sha256"]
+    schema = load_schema(Path("datasets/schemas/v2_event_sequence_annotation.schema.json"))
+    assert validate_annotation(skeleton, schema, allow_proposal=True) == []
+

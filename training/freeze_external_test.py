@@ -61,6 +61,7 @@ def freeze_external_test(
     development_manifest_path: Path,
     policy_path: Path,
     output_path: Path,
+    identity_manifest_lock_path: Path | None = None,
 ) -> dict:
     policy = yaml.safe_load(policy_path.read_text(encoding="utf-8"))
     records = _read_jsonl(manifest_path)
@@ -74,6 +75,19 @@ def freeze_external_test(
     file_hashes: dict[str, dict[str, str]] = {}
     seen_sample_ids: set[str] = set()
     seen_unique: defaultdict[str, set[str]] = defaultdict(set)
+
+    manifest_lock = None
+    if identity_manifest_lock_path is not None:
+        if not identity_manifest_lock_path.is_file():
+            errors.append(f"identity manifest lock not found: {identity_manifest_lock_path}")
+        else:
+            manifest_lock = json.loads(identity_manifest_lock_path.read_text(encoding="utf-8"))
+            if manifest_lock.get("status") != "FROZEN_IDENTITY_MANIFEST":
+                errors.append("identity manifest lock status is not FROZEN_IDENTITY_MANIFEST")
+            elif not manifest_lock.get("manifest_sha256"):
+                errors.append("identity manifest lock is missing manifest_sha256")
+    elif policy.get("require_identity_manifest") is True:
+        errors.append("external test policy requires a frozen identity manifest lock")
 
     for item in development:
         for dimension in disjoint_dimensions:
@@ -188,6 +202,15 @@ def freeze_external_test(
         "human_review_status": "ALL_APPROVED",
         "scientific_claim": "INTEGRITY_AND_ISOLATION_ONLY_NOT_MODEL_ACCURACY",
     }
+    if manifest_lock is not None and identity_manifest_lock_path is not None:
+        frozen["identity_manifest_sha256"] = manifest_lock.get("manifest_sha256")
+        frozen["identity_manifest_lock_path"] = str(identity_manifest_lock_path.resolve())
+        frozen["identity_manifest_lock"] = {
+            "path": str(identity_manifest_lock_path.resolve()),
+            "sha256": sha256_file(identity_manifest_lock_path),
+        }
+        frozen["require_identity_manifest"] = True
+
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("x", encoding="utf-8") as handle:
         json.dump(frozen, handle, indent=2, sort_keys=True)
@@ -209,12 +232,19 @@ def main() -> None:
         type=Path,
         default=Path("datasets/manifests/v2_external_test_frozen.json"),
     )
+    parser.add_argument(
+        "--identity-manifest-lock",
+        type=Path,
+        default=None,
+        help="Optional path to frozen identity manifest lock JSON",
+    )
     args = parser.parse_args()
     report = freeze_external_test(
         args.manifest,
         args.development_manifest,
         args.policy,
         args.output,
+        args.identity_manifest_lock,
     )
     print(json.dumps(report, indent=2))
 

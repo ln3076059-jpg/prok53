@@ -1,11 +1,15 @@
 from __future__ import annotations
 
+import json
 from collections import defaultdict, deque
 from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any
 
 from sqlalchemy.orm import Session
+
+from training.common import sha256_file
 
 from backend.ai.association import OccupantAssignment, OccupantAssociator
 from backend.ai.auxiliary import (
@@ -57,6 +61,90 @@ class InferenceContext:
     cabin_method: str
     vehicle_bbox: tuple[float, float, float, float] | None = None
     cabin_bbox: tuple[float, float, float, float] | None = None
+
+
+class RuntimeIdentityTracker:
+    """Tracks occupant identities across all video frames before event filtering."""
+
+    def __init__(self, video_id: str, video_sha256: str, fps: float, frame_count: int):
+        self.video_id = video_id
+        self.video_sha256 = video_sha256
+        self.fps = float(fps)
+        self.frame_count = int(frame_count)
+        self.duration = self.frame_count / self.fps if self.fps > 0 else 0.0
+        self.tracks: dict[tuple[str, str, str, str], dict[str, Any]] = {}
+
+    def observe(
+        self,
+        vehicle_id: str,
+        cabin_id: str,
+        occupant_id: str,
+        frame_number: int,
+        confidence: float,
+        role: str,
+    ) -> None:
+        key = (self.video_id, vehicle_id, cabin_id, occupant_id)
+        if key not in self.tracks:
+            self.tracks[key] = {
+                "video_id": self.video_id,
+                "video_sha256": self.video_sha256,
+                "fps": self.fps,
+                "frame_count": self.frame_count,
+                "duration": self.duration,
+                "vehicle_id": vehicle_id,
+                "cabin_id": cabin_id,
+                "occupant_id": occupant_id,
+                "first_frame": frame_number,
+                "last_frame": frame_number,
+                "observation_count": 1,
+                "confidences": [float(confidence)],
+                "roles": [str(role)],
+            }
+        else:
+            rec = self.tracks[key]
+            rec["first_frame"] = min(rec["first_frame"], frame_number)
+            rec["last_frame"] = max(rec["last_frame"], frame_number)
+            rec["observation_count"] += 1
+            if len(rec["confidences"]) < 100:
+                rec["confidences"].append(float(confidence))
+            if len(rec["roles"]) < 100:
+                rec["roles"].append(str(role))
+
+    def to_records(self) -> list[dict[str, Any]]:
+        records = []
+        for (vid, veh, cab, occ), rec in sorted(self.tracks.items()):
+            confs = rec.get("confidences", [])
+            roles = rec.get("roles", [])
+            avg_conf = sum(confs) / len(confs) if confs else 0.0
+            primary_role = max(set(roles), key=roles.count) if roles else "unknown"
+            records.append(
+                {
+                    "video_id": vid,
+                    "video_sha256": self.video_sha256,
+                    "fps": self.fps,
+                    "frame_count": self.frame_count,
+                    "duration": self.duration,
+                    "vehicle_id": veh,
+                    "cabin_id": cab,
+                    "occupant_id": occ,
+                    "first_frame": rec["first_frame"],
+                    "last_frame": rec["last_frame"],
+                    "tracking_evidence": {
+                        "observation_count": rec["observation_count"],
+                        "first_seconds": rec["first_frame"] / self.fps if self.fps > 0 else 0.0,
+                        "last_seconds": rec["last_frame"] / self.fps if self.fps > 0 else 0.0,
+                        "average_confidence": round(avg_conf, 4),
+                        "assigned_role": primary_role,
+                    },
+                }
+            )
+        return records
+
+    def write_jsonl(self, output_path: Path) -> None:
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        with output_path.open("w", encoding="utf-8") as f:
+            for rec in self.to_records():
+                f.write(json.dumps(rec) + "\n")
 
 
 class VideoAnalyzer:
@@ -263,13 +351,22 @@ class VideoAnalyzer:
             )
         return contexts
 
-    def analyze(self, session: Session, job: AnalysisJob, video: Video) -> None:
+    def analyze(
+        self,
+        session: Session,
+        job: AnalysisJob,
+        video: Video,
+        identity_tracks_output_path: Path | None = None,
+    ) -> None:
         if not self.supports_scope(video.input_scope):
             raise ValueError("input scope requires configured local vehicle detector weights")
         job.status = JobStatus.RUNNING
         session.commit()
         source = FileVideoSource(video.storage_path)
         total, fps = source.frame_count, source.fps
+        video_path = Path(video.storage_path)
+        video_sha = sha256_file(video_path) if video_path.is_file() else ""
+        identity_tracker = RuntimeIdentityTracker(video.id, video_sha, fps, total)
         evidence_buffer = EventEvidenceBuffer(
             fps, self.evidence_pre_seconds, self.evidence_post_seconds
         )
@@ -310,6 +407,7 @@ class VideoAnalyzer:
                             engine,
                             evidence_buffer,
                             pose_cache,
+                            identity_tracker=identity_tracker,
                         )
                 engine.expire(timestamp)
                 frame_number += 1
@@ -318,12 +416,75 @@ class VideoAnalyzer:
                     session.commit()
 
             self._persist_artifacts(session, evidence_buffer.flush())
+            if identity_tracks_output_path is not None:
+                identity_tracker.write_jsonl(identity_tracks_output_path)
+            elif self.evidence_root:
+                identity_tracker.write_jsonl(
+                    self.evidence_root / video.id / "runtime_identity_tracks.jsonl"
+                )
             job.status = JobStatus.COMPLETED
             job.progress = 1.0
             job.completed_at = datetime.now(UTC)
             session.commit()
         finally:
             source.close()
+
+    def extract_runtime_identity_tracks(
+        self,
+        video: Video,
+        output_path: Path | None = None,
+    ) -> list[dict[str, Any]]:
+        """Extract proven runtime identity tracks across every frame before event filtering."""
+        source = FileVideoSource(video.storage_path)
+        total, fps = source.frame_count, source.fps
+        video_path = Path(video.storage_path)
+        video_sha = sha256_file(video_path) if video_path.is_file() else ""
+        tracker = RuntimeIdentityTracker(video.id, video_sha, fps, total)
+        frame_number = 0
+        try:
+            while True:
+                ok, frame = source.read()
+                if not ok:
+                    break
+                contexts = self._frame_contexts(frame, video, frame_number)
+                if frame_number % self.behavior_interval == 0:
+                    for context in contexts:
+                        cabin = context.cabin
+                        detections = self.detector.predict(cabin, track=False)
+                        detections = self.local_tracker.update(
+                            context.context_id,
+                            frame_number,
+                            detections,
+                            cabin.shape[1],
+                            cabin.shape[0],
+                        )
+                        upper_bodies = [
+                            item for item in detections if item.class_name == "occupant_upper_body"
+                        ]
+                        for item in upper_bodies:
+                            assignment = self.occupants.assign_upper_body(
+                                item, cabin.shape[1], cabin.shape[0]
+                            )
+                            if assignment.occupant_track_id is not None:
+                                occ_id = (
+                                    f"{context.cabin_id}:occupant-track:{assignment.occupant_track_id}"
+                                )
+                                tracker.observe(
+                                    context.vehicle_id,
+                                    context.cabin_id,
+                                    occ_id,
+                                    frame_number,
+                                    item.confidence,
+                                    assignment.role,
+                                )
+                frame_number += 1
+        finally:
+            source.close()
+
+        records = tracker.to_records()
+        if output_path is not None:
+            tracker.write_jsonl(output_path)
+        return records
 
     def _analyze_context(
         self,
@@ -337,6 +498,7 @@ class VideoAnalyzer:
         engine: TemporalEventEngine,
         evidence_buffer: EventEvidenceBuffer,
         pose_cache: dict[str, list],
+        identity_tracker: RuntimeIdentityTracker | None = None,
     ) -> None:
         cabin = context.cabin
         detections = self.detector.predict(cabin, track=False)
@@ -359,6 +521,18 @@ class VideoAnalyzer:
             )
             for item in upper_bodies
         ]
+        if identity_tracker is not None:
+            for item, assignment in assigned_upper_bodies:
+                if assignment.occupant_track_id is not None:
+                    occ_id = f"{context.cabin_id}:occupant-track:{assignment.occupant_track_id}"
+                    identity_tracker.observe(
+                        context.vehicle_id,
+                        context.cabin_id,
+                        occ_id,
+                        frame_number,
+                        item.confidence,
+                        assignment.role,
+                    )
 
         for raw_detection in detections:
             detection = raw_detection
@@ -709,3 +883,22 @@ class VideoAnalyzer:
                     sha256=evidence_package_sha256(item.hashes),
                 )
             )
+
+
+def extract_runtime_identity_tracks_from_video(
+    video_path: Path,
+    video_id: str,
+    analyzer: VideoAnalyzer,
+    output_path: Path | None = None,
+    input_scope: InputScope = InputScope.VEHICLE_CABIN_CROP,
+) -> list[dict[str, Any]]:
+    """Standalone helper to extract runtime identity tracks across video frames without DB session."""
+    class _StandaloneVideo:
+        def __init__(self, vid_id: str, path: Path, scope: InputScope):
+            self.id = vid_id
+            self.storage_path = str(path)
+            self.input_scope = scope
+
+    standalone_video = _StandaloneVideo(video_id, video_path, input_scope)
+    return analyzer.extract_runtime_identity_tracks(standalone_video, output_path=output_path)
+

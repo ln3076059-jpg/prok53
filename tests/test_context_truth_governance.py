@@ -52,12 +52,42 @@ def _context_row(**overrides: str) -> dict[str, str]:
 
 
 def _external_lock(path: Path) -> None:
+    video_id = "video-1"
+    vehicle_id = f"video:{video_id}:vehicle-track:1"
+    cabin_id = f"{vehicle_id}:cabin:1"
+    occupant_id = f"{cabin_id}:occupant-track:1"
+    manifest_lock_path = path.parent / "identity-manifest-lock.json"
+    manifest_sha = "a" * 64
+    manifest_lock = {
+        "status": "FROZEN_IDENTITY_MANIFEST",
+        "manifest_sha256": manifest_sha,
+        "manifest_file": "manifest.json",
+        "source_type": "RUNTIME_IDENTITY_TRACKS",
+        "source_path": f"memory:tracks:{video_id}",
+        "source_sha256": "b" * 64,
+        "video_ids": [video_id],
+        "proven_identities": [
+            {
+                "video_id": video_id,
+                "vehicle_id": vehicle_id,
+                "cabin_id": cabin_id,
+                "occupant_id": occupant_id,
+            }
+        ],
+        "identity_count": 1,
+        "locked_at": "2026-09-05T00:00:00Z",
+    }
+    manifest_lock_path.write_text(json.dumps(manifest_lock), encoding="utf-8")
+
     path.write_text(
         json.dumps(
             {
                 "status": "FROZEN_EXTERNAL_TEST",
                 "human_review_status": "ALL_APPROVED",
-                "video_ids": ["video-1"],
+                "video_ids": [video_id],
+                "identity_manifest_sha256": manifest_sha,
+                "identity_manifest_lock_path": str(manifest_lock_path.resolve()),
+                "require_identity_manifest": True,
             }
         ),
         encoding="utf-8",
@@ -256,3 +286,22 @@ def test_safety_context_fails_closed_for_unknown_behavior_state() -> None:
     )
 
     assert report["safety_invariant_counters"] == "NOT_EVALUABLE"
+
+
+def test_context_freeze_rejects_missing_identity_manifest(tmp_path: Path) -> None:
+    external_lock = tmp_path / "external-lock-no-manifest.json"
+    external_lock.write_text(
+        json.dumps(
+            {
+                "status": "FROZEN_EXTERNAL_TEST",
+                "human_review_status": "ALL_APPROVED",
+                "video_ids": ["video-1"],
+            }
+        ),
+        encoding="utf-8",
+    )
+    context_path = tmp_path / "context.csv"
+    _write_context(context_path, [_context_row(end_seconds="60")])
+    with pytest.raises(ValueError, match="freezing context ground truth requires a frozen identity manifest lock"):
+        freeze_context_ground_truth(context_path, external_lock, tmp_path / "context-lock.json")
+
