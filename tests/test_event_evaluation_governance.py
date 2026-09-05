@@ -340,3 +340,54 @@ def test_evaluate_empty_predictions(tmp_path):
     assert report["event_types"]["PHONE"]["missed_events"] == 1
     assert report["event_types"]["PHONE"]["recall"] == 0.0
 
+def test_evaluator_order_independent_matching():
+    from training.evaluate_events import evaluate
+    
+    truth_rows = [
+        {
+            "video_id": "vid1",
+            "event_type": "PHONE",
+            "occupant_role": "driver",
+            "start_seconds": "0.0",
+            "end_seconds": "10.0"
+        },
+        {
+            "video_id": "vid1",
+            "event_type": "PHONE",
+            "occupant_role": "driver",
+            "start_seconds": "8.0",
+            "end_seconds": "18.0"
+        }
+    ]
+    
+    pred_p1 = {
+        "video_id": "vid1",
+        "event_type": "PHONE",
+        "occupant_role": "driver",
+        "start_seconds": "1.0",
+        "end_seconds": "9.0"
+    } # Overlaps both truth A and truth B
+    
+    pred_p2 = {
+        "video_id": "vid1",
+        "event_type": "PHONE",
+        "occupant_role": "driver",
+        "start_seconds": "0.0",
+        "end_seconds": "1.0"
+    } # Overlaps only truth A
+    
+    # 1. Order P1, P2
+    report1 = evaluate(truth_rows, [pred_p1, pred_p2], video_minutes=1.0, tolerance_seconds=0.5)
+    
+    # 2. Order P2, P1
+    report2 = evaluate(truth_rows, [pred_p2, pred_p1], video_minutes=1.0, tolerance_seconds=0.5)
+    
+    # Both should optimally assign P2->A and P1->B resulting in 2 TP, 0 FP, 0 FN
+    assert report1["event_types"]["PHONE"]["true_positives"] == 2
+    assert report1["event_types"]["PHONE"]["false_positives"] == 0
+    assert report1["event_types"]["PHONE"]["missed_events"] == 0
+    
+    assert report2["event_types"]["PHONE"]["true_positives"] == 2
+    assert report2["event_types"]["PHONE"]["false_positives"] == 0
+    assert report2["event_types"]["PHONE"]["missed_events"] == 0
+

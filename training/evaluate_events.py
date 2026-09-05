@@ -42,27 +42,32 @@ def evaluate(
     video_minutes: float,
     tolerance_seconds: float = 0.5,
 ) -> dict:
-    matched_truth: set[int] = set()
+    from scipy.optimize import linear_sum_assignment
+    import numpy as np
+
     matches: list[tuple[int, int]] = []
+    if truth_rows and prediction_rows:
+        cost_matrix = np.full((len(truth_rows), len(prediction_rows)), 1e9)
+        for t_idx, truth in enumerate(truth_rows):
+            for p_idx, pred in enumerate(prediction_rows):
+                if _overlap(truth, pred, tolerance_seconds):
+                    cost_matrix[t_idx, p_idx] = abs(
+                        float(truth["start_seconds"]) - float(pred["start_seconds"])
+                    )
+        row_ind, col_ind = linear_sum_assignment(cost_matrix)
+        for r, c in zip(row_ind, col_ind):
+            if cost_matrix[r, c] < 1e8:
+                matches.append((int(r), int(c)))
+
+    matched_predictions = {p for t, p in matches}
+    
     duplicate_predictions: set[int] = set()
-    for prediction_index, prediction in enumerate(prediction_rows):
-        candidates = [
-            truth_index
-            for truth_index, truth in enumerate(truth_rows)
-            if _overlap(truth, prediction, tolerance_seconds)
-        ]
-        unmatched = [index for index in candidates if index not in matched_truth]
-        if unmatched:
-            truth_index = min(
-                unmatched,
-                key=lambda index: abs(
-                    float(truth_rows[index]["start_seconds"]) - float(prediction["start_seconds"])
-                ),
-            )
-            matched_truth.add(truth_index)
-            matches.append((truth_index, prediction_index))
-        elif candidates:
-            duplicate_predictions.add(prediction_index)
+    for p_idx, pred in enumerate(prediction_rows):
+        if p_idx not in matched_predictions:
+            for t_idx, truth in enumerate(truth_rows):
+                if _overlap(truth, pred, tolerance_seconds):
+                    duplicate_predictions.add(p_idx)
+                    break
 
     report = {"status": "MEASURED", "event_types": {}}
     event_types = sorted({row["event_type"] for row in truth_rows + prediction_rows})
@@ -84,6 +89,8 @@ def evaluate(
             float(prediction_rows[p]["start_seconds"]) - float(truth_rows[t]["start_seconds"])
             for t, p in type_matches
         ]
+        type_duplicates = [p for p in duplicate_predictions if p in prediction_indices]
+        
         report["event_types"][event_type] = {
             "precision": precision,
             "recall": recall,
@@ -91,13 +98,47 @@ def evaluate(
             "true_positives": tp,
             "false_positives": fp,
             "missed_events": fn,
+            "false_alarms_per_minute": fp / video_minutes if video_minutes > 0 else None,
+            "missed_events_per_minute": fn / video_minutes if video_minutes > 0 else None,
+            "mean_time_to_detection_seconds": sum(delays) / len(delays) if delays else None,
+            "duplicate_alerts_per_event": len(type_duplicates) / tp if tp > 0 else None,
+            # Backwards compatibility
             "false_events_per_minute": fp / video_minutes if video_minutes > 0 else None,
             "false_events_per_hour": fp / video_minutes * 60 if video_minutes > 0 else None,
-            "mean_time_to_detection_seconds": sum(delays) / len(delays) if delays else None,
-            "event_fragmentation_count": len(
-                [index for index in duplicate_predictions if index in prediction_indices]
-            ),
+            "event_fragmentation_count": len(type_duplicates),
         }
+
+    counters = {
+        "passenger_phone_violation_count": 0,
+        "mounted_phone_violation_count": 0,
+        "outside_person_violation_count": 0,
+        "unknown_role_phone_violation_count": 0,
+        "motorcycle_seatbelt_violation_count": 0,
+        "unknown_belt_violation_count": 0,
+        "single_frame_violation_count": 0,
+    }
+    
+    for p in prediction_rows:
+        evt = p["event_type"]
+        role = p.get("occupant_role", "")
+        if evt == "PHONE" and role in ("front_passenger", "rear_left", "rear_center", "rear_right", "passenger"):
+            counters["passenger_phone_violation_count"] += 1
+        if evt == "PHONE" and (p.get("visibility") == "mounted" or p.get("label") == "PHONE_MOUNTED_OR_STATIC"):
+            counters["mounted_phone_violation_count"] += 1
+        if str(p.get("outside_vehicle_person")).lower() == "true":
+            counters["outside_person_violation_count"] += 1
+        if evt == "PHONE" and role == "UNKNOWN":
+            counters["unknown_role_phone_violation_count"] += 1
+        if evt == "NO_SEATBELT" and str(p.get("motorcycle_flag")).lower() == "true":
+            counters["motorcycle_seatbelt_violation_count"] += 1
+        if evt == "NO_SEATBELT" and role == "UNKNOWN":
+            counters["unknown_belt_violation_count"] += 1
+            
+        start, end = float(p["start_seconds"]), float(p["end_seconds"])
+        if start == end:
+            counters["single_frame_violation_count"] += 1
+
+    report["safety_invariant_counters"] = counters
     report["duplicate_events"] = len(duplicate_predictions)
     report["event_fragmentation_count"] = len(duplicate_predictions)
     report["video_minutes"] = video_minutes
