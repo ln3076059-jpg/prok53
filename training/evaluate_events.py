@@ -114,9 +114,41 @@ def evaluate(
         for p in prediction_rows:
             prediction_fieldnames.update(p.keys())
 
+    has_frame_info = "start_frame" in prediction_fieldnames and "end_frame" in prediction_fieldnames
+    has_obs_info = "observation_count" in prediction_fieldnames
     safety_requirements = {"label", "visibility", "outside_vehicle_person", "motorcycle_flag"}
-    if not safety_requirements.issubset(prediction_fieldnames):
-        counters = "MISSING_METADATA"
+    
+    def _is_valid_row(p: dict) -> bool:
+        role = p.get("occupant_role", "")
+        if role not in {"driver", "front_passenger", "rear_left", "rear_center", "rear_right", "passenger", "unknown"}:
+            return False
+        evt = p.get("event_type", "")
+        if evt not in {"PHONE", "NO_SEATBELT"}:
+            return False
+        if p.get("outside_vehicle_person", "").lower() not in {"true", "false"}:
+            return False
+        if p.get("motorcycle_flag", "").lower() not in {"true", "false"}:
+            return False
+        if p.get("vehicle_id", "") == "" or p.get("cabin_id", "") == "":
+            return False
+        try:
+            start = float(p.get("start_seconds", -1))
+            end = float(p.get("end_seconds", -1))
+            if not (0 <= start <= end) or start == float('inf') or end == float('inf'):
+                return False
+        except ValueError:
+            return False
+        label = p.get("label", "")
+        if evt == "PHONE" and label not in {"PHONE_USE", "PHONE_PRESENT_NOT_USED", "MOUNTED_OR_STATIC_PHONE", "NO_PHONE", "UNKNOWN"}:
+            return False
+        if evt == "NO_SEATBELT" and label not in {"FASTENED", "UNFASTENED", "UNCERTAIN_OR_OCCLUDED", "NOT_APPLICABLE", "UNKNOWN"}:
+            return False
+        return True
+
+    if not safety_requirements.issubset(prediction_fieldnames) or not (has_frame_info or has_obs_info):
+        counters = "NOT_EVALUABLE"
+    elif not all(_is_valid_row(p) for p in prediction_rows):
+        counters = "NOT_EVALUABLE"
     else:
         counters = {
             "passenger_phone_violation_count": 0,
@@ -144,9 +176,18 @@ def evaluate(
             if evt == "NO_SEATBELT" and role == "unknown":
                 counters["unknown_belt_violation_count"] += 1
                 
-            start, end = float(p["start_seconds"]), float(p["end_seconds"])
-            if start == end:
-                counters["single_frame_violation_count"] += 1
+            if has_frame_info:
+                try:
+                    if int(p["start_frame"]) == int(p["end_frame"]):
+                        counters["single_frame_violation_count"] += 1
+                except ValueError:
+                    pass
+            elif has_obs_info:
+                try:
+                    if int(p["observation_count"]) == 1:
+                        counters["single_frame_violation_count"] += 1
+                except ValueError:
+                    pass
 
     report["safety_invariant_counters"] = counters
     report["duplicate_events"] = len(duplicate_predictions)

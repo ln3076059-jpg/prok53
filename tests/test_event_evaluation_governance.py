@@ -400,31 +400,31 @@ def test_evaluator_safety_counters():
         prediction_rows=[{"event_type": "PHONE"}],
         video_minutes=1.0
     )
-    assert report_missing["safety_invariant_counters"] == "MISSING_METADATA"
+    assert report_missing["safety_invariant_counters"] == "NOT_EVALUABLE"
     
     # 2. Fully populated test
     prediction_rows = [
         # passenger_phone_violation
-        {"event_type": "PHONE", "occupant_role": "front_passenger", "start_seconds": "0", "end_seconds": "1", "label": "", "visibility": "", "outside_vehicle_person": "false", "motorcycle_flag": "false"},
+        {"event_type": "PHONE", "occupant_role": "front_passenger", "start_seconds": "0", "end_seconds": "1", "label": "PHONE_USE", "visibility": "clear", "outside_vehicle_person": "false", "motorcycle_flag": "false", "vehicle_id": "v1", "cabin_id": "c1", "start_frame": "0", "end_frame": "30"},
         # mounted_phone_violation (by label)
-        {"event_type": "PHONE", "occupant_role": "driver", "label": "MOUNTED_OR_STATIC_PHONE", "start_seconds": "2", "end_seconds": "3", "visibility": "", "outside_vehicle_person": "false", "motorcycle_flag": "false"},
+        {"event_type": "PHONE", "occupant_role": "driver", "label": "MOUNTED_OR_STATIC_PHONE", "start_seconds": "2", "end_seconds": "3", "visibility": "clear", "outside_vehicle_person": "false", "motorcycle_flag": "false", "vehicle_id": "v1", "cabin_id": "c1", "start_frame": "60", "end_frame": "90"},
         # mounted_phone_violation (by visibility)
-        {"event_type": "PHONE", "occupant_role": "driver", "visibility": "mounted", "start_seconds": "4", "end_seconds": "5", "label": "", "outside_vehicle_person": "false", "motorcycle_flag": "false"},
+        {"event_type": "PHONE", "occupant_role": "driver", "visibility": "mounted", "start_seconds": "4", "end_seconds": "5", "label": "PHONE_USE", "outside_vehicle_person": "false", "motorcycle_flag": "false", "vehicle_id": "v1", "cabin_id": "c1", "start_frame": "120", "end_frame": "150"},
         # outside_person_violation
-        {"event_type": "NO_SEATBELT", "occupant_role": "driver", "outside_vehicle_person": "True", "start_seconds": "6", "end_seconds": "7", "label": "", "visibility": "", "motorcycle_flag": "false"},
+        {"event_type": "NO_SEATBELT", "occupant_role": "driver", "outside_vehicle_person": "True", "start_seconds": "6", "end_seconds": "7", "label": "UNFASTENED", "visibility": "clear", "motorcycle_flag": "false", "vehicle_id": "v1", "cabin_id": "c1", "start_frame": "180", "end_frame": "210"},
         # unknown_role_phone_violation
-        {"event_type": "PHONE", "occupant_role": "unknown", "start_seconds": "8", "end_seconds": "9", "label": "", "visibility": "", "outside_vehicle_person": "false", "motorcycle_flag": "false"},
+        {"event_type": "PHONE", "occupant_role": "unknown", "start_seconds": "8", "end_seconds": "9", "label": "PHONE_USE", "visibility": "clear", "outside_vehicle_person": "false", "motorcycle_flag": "false", "vehicle_id": "v1", "cabin_id": "c1", "start_frame": "240", "end_frame": "270"},
         # motorcycle_seatbelt_violation
-        {"event_type": "NO_SEATBELT", "occupant_role": "driver", "motorcycle_flag": "True", "start_seconds": "10", "end_seconds": "11", "label": "", "visibility": "", "outside_vehicle_person": "false"},
+        {"event_type": "NO_SEATBELT", "occupant_role": "driver", "motorcycle_flag": "True", "start_seconds": "10", "end_seconds": "11", "label": "UNFASTENED", "visibility": "clear", "outside_vehicle_person": "false", "vehicle_id": "v1", "cabin_id": "c1", "start_frame": "300", "end_frame": "330"},
         # unknown_belt_violation
-        {"event_type": "NO_SEATBELT", "occupant_role": "unknown", "start_seconds": "12", "end_seconds": "13", "label": "", "visibility": "", "outside_vehicle_person": "false", "motorcycle_flag": "false"},
+        {"event_type": "NO_SEATBELT", "occupant_role": "unknown", "start_seconds": "12", "end_seconds": "13", "label": "UNFASTENED", "visibility": "clear", "outside_vehicle_person": "false", "motorcycle_flag": "false", "vehicle_id": "v1", "cabin_id": "c1", "start_frame": "360", "end_frame": "390"},
         # single_frame_violation
-        {"event_type": "PHONE", "occupant_role": "driver", "start_seconds": "15", "end_seconds": "15", "label": "", "visibility": "", "outside_vehicle_person": "false", "motorcycle_flag": "false"},
+        {"event_type": "PHONE", "occupant_role": "driver", "start_seconds": "15", "end_seconds": "15.033", "label": "PHONE_USE", "visibility": "clear", "outside_vehicle_person": "false", "motorcycle_flag": "false", "vehicle_id": "v1", "cabin_id": "c1", "start_frame": "450", "end_frame": "450"},
     ]
     
     report = evaluate(truth_rows=[], prediction_rows=prediction_rows, video_minutes=1.0)
     counters = report["safety_invariant_counters"]
-    assert counters != "MISSING_METADATA"
+    assert counters != "NOT_EVALUABLE"
     assert counters["passenger_phone_violation_count"] == 1
     assert counters["mounted_phone_violation_count"] == 2
     assert counters["outside_person_violation_count"] == 1
