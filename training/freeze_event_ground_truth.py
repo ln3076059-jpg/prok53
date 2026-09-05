@@ -32,6 +32,7 @@ REQUIRED_COLUMNS = {
     "reviewed_at",
     "adjudication_status",
     "notes",
+    "identity_manifest_sha256",
 }
 EVENT_TYPES = {"PHONE", "NO_SEATBELT"}
 EVENT_LABELS = {
@@ -107,6 +108,11 @@ def freeze_event_ground_truth(
     manifest_sha = manifest_lock.get("manifest_sha256")
     if not manifest_sha:
         raise ValueError("identity manifest lock is missing manifest_sha256")
+    if not manifest_lock.get("eligible_for_frozen_event_evaluation", False):
+        raise ValueError(
+            f"identity manifest source_type '{manifest_lock.get('source_type')}' is not eligible for frozen event evaluation "
+            "(legacy prediction/candidate manifests are disallowed in final frozen evaluation)"
+        )
     if "identity_manifest_sha256" in external_lock:
         if manifest_sha != external_lock["identity_manifest_sha256"]:
             raise ValueError("identity manifest SHA256 does not match external-test lock requirement")
@@ -185,9 +191,16 @@ def freeze_event_ground_truth(
             "visibility",
             "conditions",
             "reviewer_id",
+            "identity_manifest_sha256",
         ):
             if not row[field].strip():
                 errors.append(f"{event_id}: {field} must not be empty; use UNKNOWN if unavailable")
+        row_manifest_sha = row["identity_manifest_sha256"].strip()
+        if row_manifest_sha and row_manifest_sha != manifest_sha:
+            errors.append(
+                f"{event_id}: annotation identity_manifest_sha256 ({row_manifest_sha}) "
+                f"does not match frozen manifest lock SHA ({manifest_sha})"
+            )
         for field in ("inside_vehicle", "outside_vehicle_person", "motorcycle_flag"):
             if row[field].strip().lower() not in {"true", "false"}:
                 errors.append(f"{event_id}: {field} must be true or false")
@@ -234,6 +247,7 @@ def freeze_event_ground_truth(
         "scientific_claim": "FROZEN_HUMAN_GROUND_TRUTH_NOT_MODEL_ACCURACY",
     }
     frozen["identity_manifest_sha256"] = manifest_sha
+    frozen["evaluation_scope"] = manifest_lock.get("evaluation_scope", "FULL_SYSTEM_EVENT_EVALUATION")
     frozen["identity_manifest_lock"] = {
         "path": str(identity_manifest_lock_path.resolve()),
         "sha256": sha256_file(identity_manifest_lock_path),

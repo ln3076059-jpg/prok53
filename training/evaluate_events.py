@@ -66,9 +66,20 @@ def evaluate(
     tolerance_seconds: float = 0.5,
     prediction_fieldnames: set[str] | None = None,
     context_rows: list[dict] | None = None,
+    identity_mapping: dict[str, str] | None = None,
 ) -> dict:
     import numpy as np
     from scipy.optimize import linear_sum_assignment
+
+    if identity_mapping:
+        remapped_predictions = []
+        for p in prediction_rows:
+            p_copy = dict(p)
+            p_occ = p_copy.get("occupant_id", "")
+            if p_occ in identity_mapping:
+                p_copy["occupant_id"] = identity_mapping[p_occ]
+            remapped_predictions.append(p_copy)
+        prediction_rows = remapped_predictions
 
     def _is_detectable(t: dict) -> bool:
         evt = t.get("event_type", "")
@@ -157,6 +168,17 @@ def evaluate(
             "false_events_per_hour": fp / video_minutes * 60 if video_minutes > 0 else None,
             "event_fragmentation_count": len(type_duplicates),
         }
+
+    gt_occupants = {t.get("occupant_id") for t in truth_rows if t.get("occupant_id")}
+    pred_occupants = {p.get("occupant_id") for p in prediction_rows if p.get("occupant_id")}
+    untracked_gt_occupants = sorted(list(gt_occupants - pred_occupants))
+
+    report["identity_adjudication"] = {
+        "total_gt_occupants": len(gt_occupants),
+        "tracked_occupants": len(pred_occupants & gt_occupants),
+        "untracked_gt_occupants": untracked_gt_occupants,
+        "adjudication_applied": bool(identity_mapping),
+    }
 
     if prediction_fieldnames is None:
         prediction_fieldnames = set()
@@ -384,6 +406,7 @@ def evaluate_frozen(
     tolerance_seconds: float = 0.5,
     context_truth_path: Path | None = None,
     context_truth_lock_path: Path | None = None,
+    identity_adjudication_path: Path | None = None,
 ) -> dict:
     if output_path.exists():
         raise FileExistsError(f"refusing to overwrite frozen event evaluation: {output_path}")
@@ -476,6 +499,12 @@ def evaluate_frozen(
     truth_rows, _ = _read(truth_path)
     prediction_rows, pred_fields = _read(prediction_path)
     context_rows, _ = _read(context_truth_path, CONTEXT_REQUIRED)
+
+    identity_mapping = None
+    if identity_adjudication_path is not None and identity_adjudication_path.is_file():
+        adj_data = json.loads(identity_adjudication_path.read_text(encoding="utf-8"))
+        identity_mapping = adj_data.get("mappings", adj_data)
+
     report = evaluate(
         truth_rows,
         prediction_rows,
@@ -483,6 +512,7 @@ def evaluate_frozen(
         tolerance_seconds,
         prediction_fieldnames=pred_fields,
         context_rows=context_rows,
+        identity_mapping=identity_mapping,
     )
     if report.get("safety_invariant_counters") == "NOT_EVALUABLE":
         raise ValueError("frozen event evaluation requires evaluable safety metadata")
@@ -503,6 +533,39 @@ def evaluate_frozen(
             "frozen identity manifest SHA mismatch across artifacts: "
             f"event={manifest_sha!r}, context={context_manifest_sha!r}, external={external_manifest_sha!r}"
         )
+
+    # Check that truth rows with identity_manifest_sha256 match
+    for t_row in truth_rows:
+        row_sha = t_row.get("identity_manifest_sha256", "").strip()
+        if row_sha and row_sha != manifest_sha:
+            raise ValueError(
+                f"event truth row {t_row.get('event_id')} identity_manifest_sha256 mismatch: {row_sha} != {manifest_sha}"
+            )
+    for c_row in context_rows:
+        row_sha = c_row.get("identity_manifest_sha256", "").strip()
+        if row_sha and row_sha != manifest_sha:
+            raise ValueError(
+                f"context truth row {c_row.get('context_id')} identity_manifest_sha256 mismatch: {row_sha} != {manifest_sha}"
+            )
+
+    manifest_lock_info = ground_truth_lock.get("identity_manifest_lock", {})
+    manifest_lock_path_str = manifest_lock_info.get("path")
+    manifest_lock_dict = None
+    if manifest_lock_path_str:
+        mlp = Path(manifest_lock_path_str)
+        if mlp.is_file():
+            manifest_lock_dict = json.loads(mlp.read_text(encoding="utf-8"))
+
+    eval_scope = "FULL_SYSTEM_EVENT_EVALUATION"
+    if manifest_lock_dict:
+        if not manifest_lock_dict.get("eligible_for_frozen_event_evaluation", False):
+            raise ValueError(
+                f"identity manifest source_type '{manifest_lock_dict.get('source_type')}' is not eligible for frozen event evaluation "
+                "(legacy prediction/candidate manifests are disallowed in final frozen evaluation)"
+            )
+        eval_scope = manifest_lock_dict.get("evaluation_scope", eval_scope)
+    elif ground_truth_lock.get("evaluation_scope"):
+        eval_scope = ground_truth_lock["evaluation_scope"]
 
     report.update(
         {
@@ -539,7 +602,13 @@ def evaluate_frozen(
     report["identity_manifest"] = {
         "status": "BOUND_FROZEN_IDENTITY_MANIFEST",
         "manifest_sha256": manifest_sha,
+        "evaluation_scope": eval_scope,
     }
+    if eval_scope == "CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING":
+        report["identity_manifest"]["scope_caution"] = (
+            "Metrics represent performance GIVEN occupant successfully tracked; "
+            "untracked occupants were excluded from ground truth."
+        )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("x", encoding="utf-8") as handle:
         json.dump(report, handle, indent=2, sort_keys=True)
@@ -617,6 +686,11 @@ def main() -> None:
         type=Path,
         default=Path("reports/model_lock_v2.json"),
     )
+    parser.add_argument(
+        "--identity-adjudication",
+        type=Path,
+        help="Optional path to identity adjudication mapping JSON",
+    )
     parser.add_argument("--output", type=Path, default=Path("reports/event_evaluation.json"))
     args = parser.parse_args()
     if args.verify_existing:
@@ -641,6 +715,7 @@ def main() -> None:
         args.tolerance_seconds,
         context_truth_path=args.context_truth,
         context_truth_lock_path=args.context_truth_lock,
+        identity_adjudication_path=args.identity_adjudication,
     )
     print(json.dumps(report, indent=2))
 

@@ -29,6 +29,7 @@ EVENT_FIELDNAMES = [
     "reviewed_at",
     "adjudication_status",
     "notes",
+    "identity_manifest_sha256",
 ]
 
 CONTEXT_FIELDNAMES = [
@@ -54,6 +55,7 @@ CONTEXT_FIELDNAMES = [
     "reviewed_at",
     "adjudication_status",
     "notes",
+    "identity_manifest_sha256",
 ]
 
 
@@ -66,6 +68,7 @@ def _review_fields(annotation):
         "reviewer_type": provenance.get("reviewer_type", ""),
         "reviewed_at": provenance.get("reviewed_at", ""),
         "adjudication_status": provenance.get("adjudication_status"),
+        "identity_manifest_sha256": provenance.get("identity_manifest_sha256", ""),
     }
 
 
@@ -173,6 +176,7 @@ def convert_sequence_to_events(annotation):
                     "reviewed_at": review["reviewed_at"],
                     "adjudication_status": adjudication_status,
                     "notes": event_context.get("notes", ""),
+                    "identity_manifest_sha256": review["identity_manifest_sha256"],
                 }
             )
 

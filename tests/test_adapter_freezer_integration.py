@@ -22,7 +22,10 @@ def create_valid_external_lock(path: Path, video_id: str):
         "source_type": "RUNTIME_IDENTITY_TRACKS",
         "source_path": f"memory:tracks:{video_id}",
         "source_sha256": "b" * 64,
+        "eligible_for_frozen_event_evaluation": True,
+        "evaluation_scope": "FULL_SYSTEM_EVENT_EVALUATION",
         "video_ids": [video_id],
+        "videos": {video_id: {"sha256": "v" * 64, "fps": 30.0, "frame_count": 1800, "duration_seconds": 60.0}},
         "proven_identities": [
             {
                 "video_id": video_id,
@@ -145,17 +148,11 @@ def test_adapter_freezer_integration(tmp_path: Path):
     
     schema = load_schema("datasets/schemas/v2_event_sequence_annotation.schema.json")
     
+    from training.build_event_truth_from_sequences import EVENT_FIELDNAMES
     csv_path = tmp_path / "events.csv"
     with open(csv_path, "w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
-        writer.writerow([
-            "video_id", "event_id", "event_type", "start_seconds", "end_seconds",
-            "occupant_id", "vehicle_id", "cabin_id", "occupant_role", "inside_vehicle",
-            "outside_vehicle_person", "motorcycle_flag", "label",
-            "visibility", "conditions",
-            "human_review_status", "reviewer_id", "reviewer_type", "reviewed_at",
-            "adjudication_status", "notes"
-        ])
+        writer.writerow(EVENT_FIELDNAMES)
         success = process_file(seq_path, writer, schema)
         
     assert success, "Adapter failed to process the sequence JSON"

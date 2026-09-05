@@ -139,6 +139,8 @@ def extract_identity_manifest_from_track_records(
     return {
         "manifest_version": "v2.0",
         "source_type": "RUNTIME_IDENTITY_TRACKS",
+        "evaluation_scope": "CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING",
+        "eligible_for_frozen_event_evaluation": True,
         "source_sha256": source_sha256,
         "source_path": source_path,
         "extracted_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
@@ -290,6 +292,8 @@ def extract_identities_from_predictions_csv(predictions_csv_path: Path) -> dict[
     return {
         "manifest_version": "v2.0",
         "source_type": "RUNTIME_PREDICTIONS_CSV",
+        "evaluation_scope": "LEGACY_DEBUG_ONLY",
+        "eligible_for_frozen_event_evaluation": False,
         "source_sha256": source_sha256,
         "source_path": str(predictions_csv_path.resolve()),
         "extracted_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
@@ -374,9 +378,154 @@ def extract_identities_from_candidates(
     return {
         "manifest_version": "v2.0",
         "source_type": "RUNTIME_EVENT_CANDIDATES",
+        "evaluation_scope": "LEGACY_DEBUG_ONLY",
+        "eligible_for_frozen_event_evaluation": False,
         "source_sha256": effective_sha,
         "source_path": f"memory:candidates:{video_id}",
         "extracted_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+        "videos": videos_out,
+        "proven_identities": proven_list,
+    }
+
+
+def extract_identity_manifest_from_annotations(
+    annotation_paths: list[Path],
+    source_manifest_path: Path | None = None,
+    video_metadata: dict[str, dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Extract an independent ground-truth identity manifest from sequence annotations.
+
+    Guarantees:
+    1. Identity roster is independent of whether the model-under-test detects occupants.
+    2. Eligible for final frozen event evaluation (source_type = INDEPENDENT_GROUND_TRUTH_ANNOTATIONS).
+    3. Scope is FULL_SYSTEM_EVENT_EVALUATION (allows measuring false negatives for missed occupants).
+    4. Validates identity contracts for every declared occupant.
+    5. Preserves full video provenance (fps, frame_count, duration, video_sha256).
+    """
+    if not annotation_paths:
+        raise ValueError("no annotation paths provided for identity manifest extraction")
+
+    videos: dict[str, dict[str, Any]] = {}
+    proven_set: set[tuple[str, str, str, str]] = set()
+
+    for p in sorted(annotation_paths):
+        if not p.is_file():
+            raise ValueError(f"annotation file not found: {p}")
+        ann = json.loads(p.read_text(encoding="utf-8"))
+        vid = str(ann.get("video_id", "")).strip()
+        if not vid:
+            raise ValueError(f"{p}: sequence annotation missing video_id")
+        veh_id = str(ann.get("vehicle_id", "")).strip()
+        cab_id = str(ann.get("cabin_id", "")).strip()
+        fps = float(ann.get("fps", 30.0))
+        frame_count = int(ann.get("frame_count", 0))
+        duration = float(ann.get("duration_seconds", frame_count / fps if fps > 0 else 0.0))
+
+        video_sha256 = str(ann.get("video_sha256", "")).strip()
+        if video_metadata and vid in video_metadata:
+            vm = video_metadata[vid]
+            video_sha256 = str(vm.get("sha256", video_sha256)).strip()
+            fps = float(vm.get("fps", fps))
+            frame_count = int(vm.get("frame_count", frame_count))
+            duration = float(vm.get("duration_seconds", duration))
+
+        if vid not in videos:
+            videos[vid] = {
+                "video_id": vid,
+                "video_sha256": video_sha256,
+                "fps": fps,
+                "frame_count": frame_count,
+                "duration_seconds": duration,
+                "vehicle_ids": set(),
+                "cabin_ids": set(),
+                "occupants": {},
+            }
+        else:
+            v_data = videos[vid]
+            v_data["fps"] = fps
+            v_data["frame_count"] = max(v_data["frame_count"], frame_count)
+            v_data["duration_seconds"] = max(v_data["duration_seconds"], duration)
+            if video_sha256 and not v_data["video_sha256"]:
+                v_data["video_sha256"] = video_sha256
+
+        v_data = videos[vid]
+        if veh_id:
+            v_data["vehicle_ids"].add(veh_id)
+        if cab_id:
+            v_data["cabin_ids"].add(cab_id)
+
+        occupants = ann.get("occupants", [])
+        for occ in occupants:
+            occ_id = str(occ.get("occupant_id", "")).strip()
+            role = str(occ.get("role", "unknown")).strip()
+            contract_errors = validate_identity_contract(vid, veh_id, cab_id, occ_id)
+            if contract_errors:
+                raise ValueError(f"{p}: invalid identity contract for {occ_id}: {contract_errors}")
+
+            proven_set.add((vid, veh_id, cab_id, occ_id))
+
+            track_num = 1
+            if ":occupant-track:" in occ_id:
+                try:
+                    track_num = int(occ_id.split(":occupant-track:")[-1])
+                except ValueError:
+                    track_num = 1
+
+            if occ_id not in v_data["occupants"]:
+                v_data["occupants"][occ_id] = {
+                    "occupant_id": occ_id,
+                    "vehicle_id": veh_id,
+                    "cabin_id": cab_id,
+                    "occupant_track_id": track_num,
+                    "first_frame": 0,
+                    "last_frame": frame_count,
+                    "first_seconds": 0.0,
+                    "last_seconds": duration,
+                    "observation_count": frame_count,
+                    "average_confidence": 1.0,
+                    "assigned_role": role,
+                    "source": "INDEPENDENT_GROUND_TRUTH_ANNOTATION",
+                }
+
+    videos_out: dict[str, Any] = {}
+    for vid, v in videos.items():
+        videos_out[vid] = {
+            "video_id": vid,
+            "video_sha256": v["video_sha256"],
+            "fps": v["fps"],
+            "frame_count": v["frame_count"],
+            "duration_seconds": v["duration_seconds"],
+            "vehicle_ids": sorted(list(v["vehicle_ids"])),
+            "cabin_ids": sorted(list(v["cabin_ids"])),
+            "occupants": sorted(list(v["occupants"].values()), key=lambda x: x["occupant_id"]),
+        }
+
+    proven_list = [
+        {"video_id": item[0], "vehicle_id": item[1], "cabin_id": item[2], "occupant_id": item[3]}
+        for item in sorted(list(proven_set))
+    ]
+
+    if source_manifest_path is not None and source_manifest_path.is_file():
+        source_path_str = str(source_manifest_path.resolve())
+        source_sha = sha256_file(source_manifest_path)
+    elif len(annotation_paths) == 1:
+        source_path_str = str(annotation_paths[0].resolve())
+        source_sha = sha256_file(annotation_paths[0])
+    else:
+        source_path_str = str(annotation_paths[0].parent.resolve())
+        hasher = hashlib.sha256()
+        for p in sorted(annotation_paths):
+            hasher.update(p.read_bytes())
+        source_sha = hasher.hexdigest()
+
+    return {
+        "manifest_version": "v2.0",
+        "created_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+        "source_type": "INDEPENDENT_GROUND_TRUTH_ANNOTATIONS",
+        "evaluation_scope": "FULL_SYSTEM_EVENT_EVALUATION",
+        "eligible_for_frozen_event_evaluation": True,
+        "source_path": source_path_str,
+        "source_sha256": source_sha,
         "videos": videos_out,
         "proven_identities": proven_list,
     }
@@ -391,11 +540,17 @@ def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dic
     if manifest.get("manifest_version") != "v2.0":
         raise ValueError("identity manifest version must be v2.0")
 
-    allowed_source_types = {
+    governed_frozen_source_types = {
         "RUNTIME_IDENTITY_TRACKS",
+        "INDEPENDENT_GROUND_TRUTH_ANNOTATIONS",
+        "INDEPENDENT_IDENTITY_ROSTER",
+    }
+    legacy_debug_source_types = {
         "RUNTIME_PREDICTIONS_CSV",
         "RUNTIME_EVENT_CANDIDATES",
     }
+    allowed_source_types = governed_frozen_source_types | legacy_debug_source_types
+
     source_type = manifest.get("source_type")
     if source_type not in allowed_source_types:
         raise ValueError(f"unrecognized identity manifest source_type: {source_type!r}")
@@ -408,15 +563,39 @@ def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dic
     if not source_path_str:
         raise ValueError("identity manifest requires a non-empty source_path")
 
-    if not source_path_str.startswith("memory:"):
-        source_p = Path(source_path_str)
-        if not source_p.is_file():
-            raise ValueError(f"identity manifest source_path does not exist on disk: {source_path_str}")
-        disk_sha = sha256_file(source_p)
-        if disk_sha != source_sha:
+    if source_type in governed_frozen_source_types:
+        eligible_for_frozen_event_evaluation = True
+        evaluation_scope = manifest.get(
+            "evaluation_scope",
+            "CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING"
+            if source_type == "RUNTIME_IDENTITY_TRACKS"
+            else "FULL_SYSTEM_EVENT_EVALUATION",
+        )
+        if source_path_str.startswith("memory:"):
             raise ValueError(
-                f"identity manifest source_sha256 mismatch: recorded {source_sha} != disk {disk_sha}"
+                f"governed source_type '{source_type}' requires an immutable disk artifact, not {source_path_str}"
             )
+        source_p = Path(source_path_str)
+        if not source_p.exists():
+            raise ValueError(f"identity manifest source_path does not exist on disk: {source_path_str}")
+        if source_p.is_file():
+            disk_sha = sha256_file(source_p)
+            if disk_sha != source_sha:
+                raise ValueError(
+                    f"identity manifest source_sha256 mismatch: recorded {source_sha} != disk {disk_sha}"
+                )
+    else:
+        eligible_for_frozen_event_evaluation = False
+        evaluation_scope = "LEGACY_DEBUG_ONLY"
+        if not source_path_str.startswith("memory:"):
+            source_p = Path(source_path_str)
+            if not source_p.is_file():
+                raise ValueError(f"identity manifest source_path does not exist on disk: {source_path_str}")
+            disk_sha = sha256_file(source_p)
+            if disk_sha != source_sha:
+                raise ValueError(
+                    f"identity manifest source_sha256 mismatch: recorded {source_sha} != disk {disk_sha}"
+                )
 
     proven = manifest.get("proven_identities", [])
     if not proven:
@@ -436,6 +615,15 @@ def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dic
     if errors:
         raise ValueError("cannot freeze identity manifest:\n- " + "\n- ".join(errors))
 
+    lock_videos: dict[str, Any] = {}
+    for vid, v_entry in manifest.get("videos", {}).items():
+        lock_videos[vid] = {
+            "sha256": str(v_entry.get("video_sha256", "")).strip(),
+            "fps": float(v_entry.get("fps", 30.0)),
+            "frame_count": int(v_entry.get("frame_count", 0)),
+            "duration_seconds": float(v_entry.get("duration_seconds", 0.0)),
+        }
+
     manifest_sha = sha256_file(manifest_path)
     lock_data = {
         "status": "FROZEN_IDENTITY_MANIFEST",
@@ -444,7 +632,10 @@ def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dic
         "source_type": source_type,
         "source_path": source_path_str,
         "source_sha256": source_sha,
+        "eligible_for_frozen_event_evaluation": eligible_for_frozen_event_evaluation,
+        "evaluation_scope": evaluation_scope,
         "video_ids": sorted(list(video_ids)),
+        "videos": lock_videos,
         "proven_identities": proven,
         "identity_count": len(proven),
         "locked_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
@@ -612,11 +803,13 @@ def generate_annotation_skeletons_for_video(
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Extract locked identity manifest from runtime tracking evidence"
+        description="Extract locked identity manifest from runtime tracking evidence or independent ground truth"
     )
     parser.add_argument("--tracks", "--tracks-jsonl", type=Path, dest="tracks", help="Path to runtime_identity_tracks artifact (.jsonl or .json)")
-    parser.add_argument("--predictions-csv", type=Path, help="Legacy: Path to runtime predictions CSV")
-    parser.add_argument("--tracking-json", type=Path, help="Legacy: Path to runtime tracking JSON")
+    parser.add_argument("--annotations", nargs="+", type=Path, help="Paths to human-approved sequence annotation JSON files")
+    parser.add_argument("--annotations-dir", type=Path, help="Directory containing human-approved sequence annotation JSON files")
+    parser.add_argument("--predictions-csv", type=Path, help="Legacy debug: Path to runtime predictions CSV")
+    parser.add_argument("--tracking-json", type=Path, help="Legacy debug: Path to runtime tracking JSON")
     parser.add_argument("--output-manifest", type=Path, required=True, help="Output manifest JSON path")
     parser.add_argument("--freeze-lock", type=Path, help="Optional output path to freeze manifest into lock JSON")
     parser.add_argument("--skeleton-output", type=Path, help="Optional output path to generate annotation skeleton")
@@ -627,6 +820,13 @@ def main() -> None:
 
     if args.tracks:
         manifest = extract_identity_manifest_from_tracks(args.tracks)
+    elif args.annotations or args.annotations_dir:
+        ann_paths: list[Path] = []
+        if args.annotations:
+            ann_paths.extend(args.annotations)
+        if args.annotations_dir:
+            ann_paths.extend(sorted(args.annotations_dir.glob("*.json")))
+        manifest = extract_identity_manifest_from_annotations(ann_paths)
     elif args.predictions_csv:
         manifest = extract_identities_from_predictions_csv(args.predictions_csv)
     elif args.tracking_json:
@@ -640,7 +840,7 @@ def main() -> None:
         else:
             manifest = data
     else:
-        parser.error("must provide either --tracks or --predictions-csv or --tracking-json")
+        parser.error("must provide either --tracks, --annotations/--annotations-dir, --predictions-csv, or --tracking-json")
 
     args.output_manifest.parent.mkdir(parents=True, exist_ok=True)
     with args.output_manifest.open("w", encoding="utf-8") as handle:

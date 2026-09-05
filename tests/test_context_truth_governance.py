@@ -46,6 +46,7 @@ def _context_row(**overrides: str) -> dict[str, str]:
         "reviewed_at": "2026-09-05T00:00:00Z",
         "adjudication_status": "FINAL",
         "notes": "reviewed timeline context",
+        "identity_manifest_sha256": "a" * 64,
     }
     row.update(overrides)
     return row
@@ -65,7 +66,10 @@ def _external_lock(path: Path) -> None:
         "source_type": "RUNTIME_IDENTITY_TRACKS",
         "source_path": f"memory:tracks:{video_id}",
         "source_sha256": "b" * 64,
+        "eligible_for_frozen_event_evaluation": True,
+        "evaluation_scope": "FULL_SYSTEM_EVENT_EVALUATION",
         "video_ids": [video_id],
+        "videos": {video_id: {"sha256": "v" * 64, "fps": 30.0, "frame_count": 1800, "duration_seconds": 60.0}},
         "proven_identities": [
             {
                 "video_id": video_id,

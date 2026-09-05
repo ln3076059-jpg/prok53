@@ -8,12 +8,15 @@ import pytest
 
 from training.extract_identity_manifest import (
     extract_identities_from_predictions_csv,
+    extract_identity_manifest_from_annotations,
     extract_identity_manifest_from_tracks,
     freeze_identity_manifest,
     generate_annotation_skeleton,
     generate_annotation_skeletons_for_video,
 )
-from training.evaluate_events import evaluate_frozen
+from training.evaluate_events import evaluate, evaluate_frozen
+from training.freeze_external_test import freeze_external_test
+from training.build_event_truth_from_sequences import process_file
 from training.common import sha256_file
 from training.freeze_event_ground_truth import REQUIRED_COLUMNS, freeze_event_ground_truth
 from training.freeze_context_ground_truth import (
@@ -170,6 +173,8 @@ def test_freezer_rejects_unproven_identities(tmp_path: Path):
     pred_csv = tmp_path / "predictions.csv"
     _make_sample_predictions_csv(pred_csv)
     manifest = extract_identities_from_predictions_csv(pred_csv)
+    manifest["source_type"] = "RUNTIME_IDENTITY_TRACKS"
+    manifest["eligible_for_frozen_event_evaluation"] = True
     # Restrict to only track 42
     manifest["videos"]["vid-run-1"]["occupants"] = [
         manifest["videos"]["vid-run-1"]["occupants"][0]
@@ -188,6 +193,9 @@ def test_freezer_rejects_unproven_identities(tmp_path: Path):
                 "status": "FROZEN_EXTERNAL_TEST",
                 "human_review_status": "ALL_APPROVED",
                 "video_ids": ["vid-run-1"],
+                "identity_manifest_sha256": lock_data["manifest_sha256"],
+                "identity_manifest_lock_path": str(lock_file.resolve()),
+                "require_identity_manifest": True,
             }
         ),
         encoding="utf-8",
@@ -221,6 +229,7 @@ def test_freezer_rejects_unproven_identities(tmp_path: Path):
                 "reviewed_at": "2026-09-05T00:00:00Z",
                 "adjudication_status": "FINAL",
                 "notes": "unproven occupant",
+                "identity_manifest_sha256": lock_data["manifest_sha256"],
             }
         )
 
@@ -261,6 +270,7 @@ def test_freezer_rejects_unproven_identities(tmp_path: Path):
                 "reviewed_at": "2026-09-05T00:00:00Z",
                 "adjudication_status": "FINAL",
                 "notes": "unproven occupant context",
+                "identity_manifest_sha256": lock_data["manifest_sha256"],
             }
         )
 
@@ -300,6 +310,7 @@ def test_freezer_rejects_unproven_identities(tmp_path: Path):
                 "reviewed_at": "2026-09-05T00:00:00Z",
                 "adjudication_status": "FINAL",
                 "notes": "proven occupant",
+                "identity_manifest_sha256": lock_data["manifest_sha256"],
             }
         )
 
@@ -455,6 +466,7 @@ def test_zero_predictions_manifest_extraction_does_not_blind_evaluator(tmp_path:
                 "reviewed_at": "2026-09-05T00:00:00Z",
                 "adjudication_status": "FINAL",
                 "notes": "missed phone use event by model",
+                "identity_manifest_sha256": lock["manifest_sha256"],
             }
         )
 
@@ -607,4 +619,380 @@ def test_proposal_skeleton_no_fabrication_and_binds_lock_sha(tmp_path: Path):
     assert skeleton["review_provenance"]["identity_manifest_sha256"] == lock["manifest_sha256"]
     schema = load_schema(Path("datasets/schemas/v2_event_sequence_annotation.schema.json"))
     assert validate_annotation(skeleton, schema, allow_proposal=True) == []
+
+
+def test_extract_identity_manifest_from_annotations(tmp_path: Path):
+    ann_path = tmp_path / "seq.json"
+    ann_data = {
+        "sequence_id": "seq-ind-1",
+        "video_id": "vid-annotated",
+        "vehicle_id": "video:vid-annotated:vehicle-track:1",
+        "cabin_id": "video:vid-annotated:vehicle-track:1:cabin:0",
+        "fps": 25.0,
+        "frame_count": 2500,
+        "video_sha256": "v" * 64,
+        "occupants": [
+            {
+                "occupant_id": "video:vid-annotated:vehicle-track:1:cabin:0:occupant-track:1",
+                "role": "driver",
+            },
+            {
+                "occupant_id": "video:vid-annotated:vehicle-track:1:cabin:0:occupant-track:2",
+                "role": "front_passenger",
+            },
+        ],
+        "events": [],
+        "context_intervals": [],
+    }
+    ann_path.write_text(json.dumps(ann_data, indent=2), encoding="utf-8")
+
+    manifest = extract_identity_manifest_from_annotations([ann_path])
+
+    assert manifest["manifest_version"] == "v2.0"
+    assert manifest["source_type"] == "INDEPENDENT_GROUND_TRUTH_ANNOTATIONS"
+    assert manifest["evaluation_scope"] == "FULL_SYSTEM_EVENT_EVALUATION"
+    assert manifest["eligible_for_frozen_event_evaluation"] is True
+    assert len(manifest["proven_identities"]) == 2
+    assert manifest["videos"]["vid-annotated"]["duration_seconds"] == 100.0
+
+    manifest_file = tmp_path / "manifest.json"
+    manifest_file.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    lock_file = tmp_path / "manifest_lock.json"
+    lock = freeze_identity_manifest(manifest_file, lock_file)
+
+    assert lock["status"] == "FROZEN_IDENTITY_MANIFEST"
+    assert lock["eligible_for_frozen_event_evaluation"] is True
+    assert lock["evaluation_scope"] == "FULL_SYSTEM_EVENT_EVALUATION"
+    assert lock["videos"]["vid-annotated"]["sha256"] == "v" * 64
+
+
+def test_freezer_and_evaluator_reject_legacy_manifest_locks(tmp_path: Path):
+    pred_csv = tmp_path / "preds.csv"
+    _make_sample_predictions_csv(pred_csv)
+    manifest = extract_identities_from_predictions_csv(pred_csv)
+    assert manifest["eligible_for_frozen_event_evaluation"] is False
+
+    manifest_file = tmp_path / "legacy_manifest.json"
+    manifest_file.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    lock_file = tmp_path / "legacy_manifest_lock.json"
+    lock = freeze_identity_manifest(manifest_file, lock_file)
+
+    assert lock["eligible_for_frozen_event_evaluation"] is False
+
+    ext_lock = tmp_path / "ext_lock.json"
+    ext_lock.write_text(
+        json.dumps(
+            {
+                "status": "FROZEN_EXTERNAL_TEST",
+                "human_review_status": "ALL_APPROVED",
+                "video_ids": ["vid-run-1"],
+                "identity_manifest_sha256": lock["manifest_sha256"],
+                "identity_manifest_lock_path": str(lock_file.resolve()),
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    truth_csv = tmp_path / "truth.csv"
+    with truth_csv.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=sorted(REQUIRED_COLUMNS))
+        writer.writeheader()
+        writer.writerow(
+            {
+                "video_id": "vid-run-1",
+                "event_id": "evt-1",
+                "event_type": "PHONE",
+                "start_seconds": "1.0",
+                "end_seconds": "2.0",
+                "occupant_id": "video:vid-run-1:vehicle-track:1:cabin:0:occupant-track:42",
+                "vehicle_id": "video:vid-run-1:vehicle-track:1",
+                "cabin_id": "video:vid-run-1:vehicle-track:1:cabin:0",
+                "inside_vehicle": "true",
+                "outside_vehicle_person": "false",
+                "motorcycle_flag": "false",
+                "label": "PHONE_USE",
+                "occupant_role": "driver",
+                "visibility": "clear",
+                "conditions": "daylight",
+                "human_review_status": "APPROVED",
+                "reviewer_id": "rev-1",
+                "reviewer_type": "HUMAN",
+                "reviewed_at": "2026-09-05T00:00:00Z",
+                "adjudication_status": "FINAL",
+                "notes": "test",
+                "identity_manifest_sha256": lock["manifest_sha256"],
+            }
+        )
+
+    with pytest.raises(ValueError, match="is not eligible for frozen event evaluation"):
+        freeze_event_ground_truth(truth_csv, ext_lock, tmp_path / "frozen_evt.json", lock_file)
+
+
+def test_gt_only_occupant_counts_as_false_negative_without_detector_dependency():
+    truth_rows = [
+        {
+            "video_id": "vid-gt-miss",
+            "event_id": "evt-driver-phone",
+            "event_type": "PHONE",
+            "start_seconds": "5.0",
+            "end_seconds": "10.0",
+            "occupant_id": "video:vid-gt-miss:vehicle-track:1:cabin:0:occupant-track:1",
+            "vehicle_id": "video:vid-gt-miss:vehicle-track:1",
+            "cabin_id": "video:vid-gt-miss:vehicle-track:1:cabin:0",
+            "occupant_role": "driver",
+            "inside_vehicle": "true",
+            "outside_vehicle_person": "false",
+            "motorcycle_flag": "false",
+            "label": "PHONE_USE",
+        }
+    ]
+    # Model runtime occupant detector missed the occupant completely (0 predictions)
+    prediction_rows = []
+
+    report = evaluate(
+        truth_rows,
+        prediction_rows,
+        video_minutes=1.0,
+    )
+
+    phone_metrics = report["event_types"]["PHONE"]
+    assert phone_metrics["true_positives"] == 0
+    assert phone_metrics["missed_events"] == 1
+    assert phone_metrics["recall"] == 0.0
+    assert report["identity_adjudication"]["total_gt_occupants"] == 1
+    assert report["identity_adjudication"]["tracked_occupants"] == 0
+    assert report["identity_adjudication"]["untracked_gt_occupants"] == [
+        "video:vid-gt-miss:vehicle-track:1:cabin:0:occupant-track:1"
+    ]
+
+
+def test_identity_adjudication_maps_runtime_track_to_gt_occupant():
+    truth_rows = [
+        {
+            "video_id": "vid-1",
+            "event_id": "evt-1",
+            "event_type": "PHONE",
+            "start_seconds": "5.0",
+            "end_seconds": "10.0",
+            "occupant_id": "video:vid-1:vehicle-track:1:cabin:0:occupant-track:1",
+            "vehicle_id": "video:vid-1:vehicle-track:1",
+            "cabin_id": "video:vid-1:vehicle-track:1:cabin:0",
+            "occupant_role": "driver",
+            "inside_vehicle": "true",
+            "outside_vehicle_person": "false",
+            "motorcycle_flag": "false",
+            "label": "PHONE_USE",
+        }
+    ]
+    # Model detected occupant as arbitrary runtime track 77
+    prediction_rows = [
+        {
+            "video_id": "vid-1",
+            "event_type": "PHONE",
+            "start_seconds": "5.1",
+            "end_seconds": "9.9",
+            "occupant_id": "video:vid-1:vehicle-track:1:cabin:0:occupant-track:77",
+            "vehicle_id": "video:vid-1:vehicle-track:1",
+            "cabin_id": "video:vid-1:vehicle-track:1:cabin:0",
+            "occupant_role": "driver",
+            "inside_vehicle": "true",
+            "outside_vehicle_person": "false",
+            "motorcycle_flag": "false",
+            "label": "PHONE_USE",
+        }
+    ]
+
+    # Without mapping -> 0 matches, 1 missed event
+    unmapped_report = evaluate(truth_rows, prediction_rows, video_minutes=1.0)
+    assert unmapped_report["event_types"]["PHONE"]["true_positives"] == 0
+    assert unmapped_report["event_types"]["PHONE"]["missed_events"] == 1
+
+    # With adjudication mapping 77 -> 1
+    mapping = {
+        "video:vid-1:vehicle-track:1:cabin:0:occupant-track:77": "video:vid-1:vehicle-track:1:cabin:0:occupant-track:1"
+    }
+    mapped_report = evaluate(truth_rows, prediction_rows, video_minutes=1.0, identity_mapping=mapping)
+    assert mapped_report["event_types"]["PHONE"]["true_positives"] == 1
+    assert mapped_report["event_types"]["PHONE"]["missed_events"] == 0
+    assert mapped_report["event_types"]["PHONE"]["recall"] == 1.0
+    assert mapped_report["identity_adjudication"]["adjudication_applied"] is True
+
+
+def test_freeze_external_test_enforces_video_sha_binding_with_manifest(tmp_path: Path):
+    policy_path = tmp_path / "policy.yaml"
+    policy_path.write_text(
+        """schema_version: 1
+dataset_role: EXTERNAL_TEST
+require_identity_manifest: true
+required_fields:
+  - sample_id
+  - dataset_role
+  - source_id
+  - camera_id
+  - video_id
+  - vehicle_id
+  - person_id
+  - video_path
+  - sha256
+  - annotation_path
+  - annotation_sha256
+  - conditions
+  - human_review_status
+  - reviewer_id
+  - reviewer_type
+  - reviewed_at
+required_condition_coverage: [daylight]
+disjoint_dimensions: [sha256, source_id, camera_id, video_id, vehicle_id, person_id]
+minimum_independent_groups: {source_id: 1, camera_id: 1, video_id: 1, vehicle_id: 1, person_id: 1}
+""",
+        encoding="utf-8",
+    )
+
+    vid_file = tmp_path / "v1.mp4"
+    vid_file.write_bytes(b"sample video bytes")
+    v_sha = sha256_file(vid_file)
+
+    ann_file = tmp_path / "ann.json"
+    ann_file.write_text("[]", encoding="utf-8")
+    a_sha = sha256_file(ann_file)
+
+    manifest_record = {
+        "sample_id": "s1",
+        "dataset_role": "EXTERNAL_TEST",
+        "source_id": "src1",
+        "camera_id": "cam1",
+        "video_id": "vid-sha-bind",
+        "vehicle_id": "veh1",
+        "person_id": "p1",
+        "video_path": str(vid_file.resolve()),
+        "sha256": v_sha,
+        "annotation_path": str(ann_file.resolve()),
+        "annotation_sha256": a_sha,
+        "conditions": ["daylight"],
+        "human_review_status": "APPROVED",
+        "reviewer_id": "rev1",
+        "reviewer_type": "HUMAN",
+        "reviewed_at": "2026-09-05T00:00:00Z",
+    }
+    ext_manifest_path = tmp_path / "ext_manifest.jsonl"
+    ext_manifest_path.write_text(json.dumps(manifest_record) + "\n", encoding="utf-8")
+
+    dev_manifest_path = tmp_path / "dev_manifest.jsonl"
+    dev_manifest_path.write_text("", encoding="utf-8")
+
+    # Identity manifest lock with MISMATCHED video SHA
+    mismatched_lock = {
+        "status": "FROZEN_IDENTITY_MANIFEST",
+        "manifest_sha256": "m" * 64,
+        "manifest_file": "man.json",
+        "source_type": "RUNTIME_IDENTITY_TRACKS",
+        "source_path": str(vid_file.resolve()),
+        "source_sha256": v_sha,
+        "eligible_for_frozen_event_evaluation": True,
+        "evaluation_scope": "FULL_SYSTEM_EVENT_EVALUATION",
+        "video_ids": ["vid-sha-bind"],
+        "videos": {
+            "vid-sha-bind": {
+                "sha256": "different_sha_from_tracking" + "0" * 36,
+                "fps": 30.0,
+                "frame_count": 300,
+                "duration_seconds": 10.0,
+            }
+        },
+        "proven_identities": [],
+    }
+    mismatched_lock_path = tmp_path / "mismatched_id_lock.json"
+    mismatched_lock_path.write_text(json.dumps(mismatched_lock), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="video SHA in identity manifest .* does not match external test video SHA"):
+        freeze_external_test(
+            ext_manifest_path,
+            dev_manifest_path,
+            policy_path,
+            tmp_path / "frozen_ext.json",
+            identity_manifest_lock_path=mismatched_lock_path,
+        )
+
+
+def test_annotation_manifest_sha_chain_of_custody(tmp_path: Path):
+    truth_csv = tmp_path / "truth.csv"
+    with truth_csv.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=sorted(REQUIRED_COLUMNS))
+        writer.writeheader()
+        writer.writerow(
+            {
+                "video_id": "vid-chain",
+                "event_id": "evt-chain-1",
+                "event_type": "PHONE",
+                "start_seconds": "1.0",
+                "end_seconds": "2.0",
+                "occupant_id": "video:vid-chain:vehicle-track:1:cabin:0:occupant-track:1",
+                "vehicle_id": "video:vid-chain:vehicle-track:1",
+                "cabin_id": "video:vid-chain:vehicle-track:1:cabin:0",
+                "inside_vehicle": "true",
+                "outside_vehicle_person": "false",
+                "motorcycle_flag": "false",
+                "label": "PHONE_USE",
+                "occupant_role": "driver",
+                "visibility": "clear",
+                "conditions": "daylight",
+                "human_review_status": "APPROVED",
+                "reviewer_id": "rev-1",
+                "reviewer_type": "HUMAN",
+                "reviewed_at": "2026-09-05T00:00:00Z",
+                "adjudication_status": "FINAL",
+                "notes": "chain test",
+                "identity_manifest_sha256": "1" * 64,  # Annotation says reviewed against manifest 1111...
+            }
+        )
+
+    ext_lock = tmp_path / "ext_lock.json"
+    ext_lock.write_text(
+        json.dumps(
+            {
+                "status": "FROZEN_EXTERNAL_TEST",
+                "human_review_status": "ALL_APPROVED",
+                "video_ids": ["vid-chain"],
+                "identity_manifest_sha256": "2" * 64,  # Lock is 2222...
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    manifest_lock = tmp_path / "id_lock.json"
+    manifest_lock.write_text(
+        json.dumps(
+            {
+                "status": "FROZEN_IDENTITY_MANIFEST",
+                "manifest_sha256": "2" * 64,
+                "manifest_file": "man.json",
+                "source_type": "RUNTIME_IDENTITY_TRACKS",
+                "source_path": "memory:dummy",
+                "source_sha256": "s" * 64,
+                "eligible_for_frozen_event_evaluation": True,
+                "evaluation_scope": "FULL_SYSTEM_EVENT_EVALUATION",
+                "video_ids": ["vid-chain"],
+                "videos": {"vid-chain": {"sha256": "v" * 64, "fps": 30.0, "frame_count": 300, "duration_seconds": 10.0}},
+                "proven_identities": [
+                    {
+                        "video_id": "vid-chain",
+                        "vehicle_id": "video:vid-chain:vehicle-track:1",
+                        "cabin_id": "video:vid-chain:vehicle-track:1:cabin:0",
+                        "occupant_id": "video:vid-chain:vehicle-track:1:cabin:0:occupant-track:1",
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    # Attempting to freeze annotation reviewed against manifest 1 against manifest lock 2 is rejected
+    with pytest.raises(ValueError, match="annotation identity_manifest_sha256 .* does not match frozen manifest lock SHA"):
+        freeze_event_ground_truth(
+            truth_csv,
+            ext_lock,
+            tmp_path / "frozen_out.json",
+            identity_manifest_lock_path=manifest_lock,
+        )
+
 

@@ -86,6 +86,10 @@ def freeze_external_test(
                 errors.append("identity manifest lock status is not FROZEN_IDENTITY_MANIFEST")
             elif not manifest_lock.get("manifest_sha256"):
                 errors.append("identity manifest lock is missing manifest_sha256")
+            elif not manifest_lock.get("eligible_for_frozen_event_evaluation", False):
+                errors.append(
+                    f"identity manifest source_type '{manifest_lock.get('source_type')}' is not eligible for frozen external test evaluation"
+                )
     elif policy.get("require_identity_manifest") is True:
         errors.append("external test policy requires a frozen identity manifest lock")
 
@@ -143,6 +147,21 @@ def freeze_external_test(
             errors.append(f"{sample_id}: annotation SHA mismatch")
         else:
             errors.extend(_validate_event_annotation(annotation_path, sample_id))
+
+        if manifest_lock is not None:
+            manifest_videos = manifest_lock.get("videos", {})
+            manifest_video_ids = set(manifest_lock.get("video_ids", []))
+            item_vid = str(item.get("video_id", ""))
+            item_sha = str(item.get("sha256", ""))
+            if manifest_video_ids and item_vid not in manifest_video_ids:
+                errors.append(f"{sample_id}: video_id '{item_vid}' is not declared in frozen identity manifest video_ids")
+            if item_vid in manifest_videos:
+                m_sha = manifest_videos[item_vid].get("sha256", "")
+                if m_sha and m_sha != item_sha:
+                    errors.append(
+                        f"{sample_id}: video SHA in identity manifest ({m_sha}) does not match external test video SHA ({item_sha})"
+                    )
+
         file_hashes[sample_id] = {
             "video": str(item["sha256"]),
             "annotation": str(item["annotation_sha256"]),
@@ -204,6 +223,7 @@ def freeze_external_test(
     }
     if manifest_lock is not None and identity_manifest_lock_path is not None:
         frozen["identity_manifest_sha256"] = manifest_lock.get("manifest_sha256")
+        frozen["evaluation_scope"] = manifest_lock.get("evaluation_scope", "FULL_SYSTEM_EVENT_EVALUATION")
         frozen["identity_manifest_lock_path"] = str(identity_manifest_lock_path.resolve())
         frozen["identity_manifest_lock"] = {
             "path": str(identity_manifest_lock_path.resolve()),

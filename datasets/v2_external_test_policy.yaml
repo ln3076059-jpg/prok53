@@ -1,5 +1,6 @@
 schema_version: 1
 dataset_role: EXTERNAL_TEST
+require_identity_manifest: true
 required_fields:
   - sample_id
   - dataset_role

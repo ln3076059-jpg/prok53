@@ -35,6 +35,7 @@ REQUIRED_COLUMNS = {
     "reviewed_at",
     "adjudication_status",
     "notes",
+    "identity_manifest_sha256",
 }
 
 PHONE_STATES = {
@@ -100,6 +101,11 @@ def freeze_context_ground_truth(
     manifest_sha = manifest_lock.get("manifest_sha256")
     if not manifest_sha:
         raise ValueError("identity manifest lock is missing manifest_sha256")
+    if not manifest_lock.get("eligible_for_frozen_event_evaluation", False):
+        raise ValueError(
+            f"identity manifest source_type '{manifest_lock.get('source_type')}' is not eligible for frozen event evaluation "
+            "(legacy prediction/candidate manifests are disallowed in final frozen evaluation)"
+        )
     if "identity_manifest_sha256" in external_lock:
         if manifest_sha != external_lock["identity_manifest_sha256"]:
             raise ValueError("identity manifest SHA256 does not match external-test lock requirement")
@@ -182,9 +188,15 @@ def freeze_context_ground_truth(
             and row["outside_vehicle_person"].strip().lower() == "true"
         ):
             errors.append(f"{context_id}: context cannot be both inside and outside vehicle")
-        for field in ("visibility", "conditions", "reviewer_id"):
+        for field in ("visibility", "conditions", "reviewer_id", "identity_manifest_sha256"):
             if not row[field].strip():
                 errors.append(f"{context_id}: {field} must not be empty")
+        row_manifest_sha = row["identity_manifest_sha256"].strip()
+        if row_manifest_sha and row_manifest_sha != manifest_sha:
+            errors.append(
+                f"{context_id}: annotation identity_manifest_sha256 ({row_manifest_sha}) "
+                f"does not match frozen manifest lock SHA ({manifest_sha})"
+            )
         if row["human_review_status"].strip() != "APPROVED":
             errors.append(f"{context_id}: human_review_status must be APPROVED")
         if row["reviewer_type"].strip() != "HUMAN":
@@ -285,6 +297,7 @@ def freeze_context_ground_truth(
         "scientific_claim": "FROZEN_HUMAN_CONTEXT_NOT_MODEL_ACCURACY",
     }
     frozen["identity_manifest_sha256"] = manifest_sha
+    frozen["evaluation_scope"] = manifest_lock.get("evaluation_scope", "FULL_SYSTEM_EVENT_EVALUATION")
     frozen["identity_manifest_lock"] = {
         "path": str(identity_manifest_lock_path.resolve()),
         "sha256": sha256_file(identity_manifest_lock_path),
