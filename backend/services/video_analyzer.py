@@ -546,6 +546,10 @@ class VideoAnalyzer:
                     phone_face_proximity=face_proximity,
                     pose_confidence=pose_confidence,
                     seatbelt_probabilities=probabilities,
+                    cabin_id=context.context_id,
+                    visibility="unknown",
+                    outside_vehicle_person="false",
+                    behavior_label="PHONE_USE" if detection.class_name == "phone" else "NO_SEATBELT",
                 )
             )
             for candidate in candidates:

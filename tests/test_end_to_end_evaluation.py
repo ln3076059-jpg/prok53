@@ -112,3 +112,65 @@ def test_end_to_end_prediction_evaluation(tmp_path: Path):
     assert report["safety_invariant_counters"] != "NOT_EVALUABLE", "Metadata from exporter failed validation"
     assert report["event_types"]["PHONE"]["true_positives"] >= 1, "Expected matching TP for the predicted event"
     assert report["safety_invariant_counters"]["single_frame_violation_count"] == 0, "Should not be a single-frame violation"
+
+def test_video_analyzer_metadata_contract():
+    from backend.services.video_analyzer import VideoAnalyzer, InferenceContext
+    from backend.ai.detector import NormalizedDetection
+    from types import SimpleNamespace
+    import numpy as np
+    from collections import defaultdict
+
+    analyzer = VideoAnalyzer.__new__(VideoAnalyzer)
+    analyzer.detector = SimpleNamespace(
+        predict=lambda *args, **kwargs: [NormalizedDetection(0, "phone", 0.9, (10, 10, 20, 20), 1)],
+        model_version="V2_TEST"
+    )
+    analyzer.local_tracker = SimpleNamespace(
+        update=lambda *args: [NormalizedDetection(0, "phone", 0.9, (10, 10, 20, 20), 1)]
+    )
+    analyzer.occupants = SimpleNamespace(
+        assign_upper_body=lambda *args: SimpleNamespace(role="driver", confidence=0.9, method="test"),
+        assign_object=lambda *args: SimpleNamespace(role="driver", confidence=0.9, method="test")
+    )
+    analyzer.pose_interval = 100
+    analyzer.use_fusion = False
+    analyzer.sequence = SimpleNamespace(
+        add=lambda *args: SimpleNamespace(ratio=1.0, positive_ratio=1.0, duration_seconds=1.0, maximum_gap_seconds=0.0)
+    )
+    analyzer._feature_history = defaultdict(list)
+    analyzer.runtime_status = lambda: {"fusion": {"fusion_mode": "DISABLED"}}
+
+    observations_captured = []
+    engine = SimpleNamespace(
+        add=lambda obs: observations_captured.append(obs) or []
+    )
+
+    session = SimpleNamespace(add=lambda x: None, flush=lambda: None)
+    job = SimpleNamespace(id="j1")
+    video = SimpleNamespace(id="v1")
+    context = InferenceContext(
+        context_id="v1:car-1:cabin:0",
+        cabin=np.zeros((10, 10, 3)),
+        offset=(0, 0),
+        vehicle_track_id=1,
+        vehicle_type="car",
+        vehicle_class_id=1,
+        vehicle_confidence=0.9,
+        cabin_confidence=0.9,
+        cabin_method="KNOWN_CABIN",
+        vehicle_bbox=(0.0, 0.0, 100.0, 100.0),
+        cabin_bbox=(10.0, 10.0, 90.0, 90.0)
+    )
+
+    analyzer._analyze_context(
+        session, job, video, np.zeros((100, 100, 3)), 0, 1.0,
+        context, engine, SimpleNamespace(register=lambda *args: None), {}
+    )
+
+    assert len(observations_captured) == 1
+    obs = observations_captured[0]
+    
+    assert obs.cabin_id == "v1:car-1:cabin:0"
+    assert obs.visibility == "unknown"
+    assert obs.outside_vehicle_person == "false"
+    assert obs.behavior_label == "PHONE_USE"

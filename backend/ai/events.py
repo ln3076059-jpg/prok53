@@ -192,6 +192,17 @@ class TemporalEventEngine:
             item.fusion_score if item.fusion_score is not None else item.confidence
             for item in observations
         ]
+        
+        for item in observations:
+            if (
+                item.cabin_id != observations[0].cabin_id
+                or item.visibility != observations[0].visibility
+                or item.outside_vehicle_person != observations[0].outside_vehicle_person
+                or item.behavior_label != observations[0].behavior_label
+                or item.vehicle_type != observations[0].vehicle_type
+            ):
+                status = "NEEDS_REVIEW"
+                break
         return EventCandidate(
             event_type,
             sum(scores) / len(scores),
