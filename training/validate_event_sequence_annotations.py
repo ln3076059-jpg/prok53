@@ -40,6 +40,10 @@ def validate_annotation(annotation, schema):
                 errors.append(f"Semantic error: sequence start_time {start_time_str} must be < end_time {end_time_str}")
         except Exception:
             errors.append(f"Semantic error: invalid date format in start_time or end_time")
+            
+    context = annotation.get('context', {})
+    if context.get('inside_vehicle') is True and context.get('outside_vehicle_person') is True:
+        errors.append("Semantic error: contradictory context - inside_vehicle and outside_vehicle_person cannot both be True")
         
     occupants = annotation.get('occupants', [])
     valid_occupant_ids = set()

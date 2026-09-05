@@ -2,6 +2,7 @@ import json
 import csv
 import argparse
 import sys
+import os
 from pathlib import Path
 from training.validate_event_sequence_annotations import validate_annotation, load_schema
 
@@ -76,9 +77,9 @@ def convert_sequence_to_events(annotation):
                     
         elif event_type == "SEATBELT":
             if label == "UNFASTENED":
-                if motorcycle_flag is None or inside_vehicle is None:
-                    raise ValueError(f"Missing context for SEATBELT event (motorcycle_flag={motorcycle_flag}, inside_vehicle={inside_vehicle})")
-                if motorcycle_flag is False and inside_vehicle is True and role in valid_roles:
+                if motorcycle_flag is None or inside_vehicle is None or outside_vehicle_person is None:
+                    raise ValueError(f"Missing context for SEATBELT event (motorcycle_flag={motorcycle_flag}, inside_vehicle={inside_vehicle}, outside_vehicle_person={outside_vehicle_person})")
+                if motorcycle_flag is False and inside_vehicle is True and outside_vehicle_person is False and role in valid_roles:
                     final_event_type = "NO_SEATBELT"
                     
         if final_event_type:
@@ -164,7 +165,8 @@ def main():
         files_to_process.extend(input_p.glob("*.json"))
         
     success_count = 0
-    with open(args.output_csv, 'w', encoding='utf-8', newline='') as f:
+    temp_csv = str(args.output_csv) + ".tmp"
+    with open(temp_csv, 'w', encoding='utf-8', newline='') as f:
         writer = csv.writer(f)
         writer.writerow([
             "video_id", "event_id", "event_type", "start_seconds", "end_seconds",
@@ -177,9 +179,14 @@ def main():
             if process_file(p, writer, schema):
                 success_count += 1
             
-    print(f"Successfully converted {success_count}/{len(files_to_process)} files to {args.output_csv}")
     if success_count < len(files_to_process):
+        print(f"Failed to process {len(files_to_process) - success_count} files. Aborting export.")
+        if os.path.exists(temp_csv):
+            os.remove(temp_csv)
         sys.exit(1)
+    else:
+        print(f"Successfully converted {success_count}/{len(files_to_process)} files to {args.output_csv}")
+        os.replace(temp_csv, args.output_csv)
 
 if __name__ == "__main__":
     main()

@@ -111,3 +111,11 @@ def test_ai_proposal_not_valid():
     errors = validate_annotation(ann, {})
     semantic_errors = [e for e in errors if e.startswith('Semantic error:')]
     assert any("AI proposals are not valid for governed calibration" in e for e in semantic_errors)
+
+def test_contradictory_context():
+    ann = create_valid_annotation()
+    ann["context"]["inside_vehicle"] = True
+    ann["context"]["outside_vehicle_person"] = True
+    errors = validate_annotation(ann, {})
+    semantic_errors = [e for e in errors if e.startswith('Semantic error:')]
+    assert any("contradictory context - inside_vehicle and outside_vehicle_person cannot both be True" in e for e in semantic_errors)
