@@ -545,11 +545,16 @@ class VideoAnalyzer:
                     phone_hand_proximity=hand_proximity,
                     phone_face_proximity=face_proximity,
                     pose_confidence=pose_confidence,
-                    seatbelt_probabilities=probabilities,
                     cabin_id=context.context_id,
                     visibility="unknown",
-                    outside_vehicle_person="false",
-                    behavior_label="PHONE_USE" if detection.class_name == "phone" else "NO_SEATBELT",
+                    outside_vehicle_person="",
+                    behavior_label={
+                        "phone": "PHONE_USE",
+                        "seatbelt_fastened": "FASTENED",
+                        "seatbelt_unfastened": "UNFASTENED",
+                        "seatbelt_uncertain": "UNCERTAIN_OR_OCCLUDED",
+                        "uncertain_or_occluded": "UNCERTAIN_OR_OCCLUDED",
+                    }.get(detection.class_name, ""),
                 )
             )
             for candidate in candidates:

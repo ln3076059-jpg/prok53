@@ -172,5 +172,107 @@ def test_video_analyzer_metadata_contract():
     
     assert obs.cabin_id == "v1:car-1:cabin:0"
     assert obs.visibility == "unknown"
-    assert obs.outside_vehicle_person == "false"
+    assert obs.outside_vehicle_person == ""
     assert obs.behavior_label == "PHONE_USE"
+
+def test_end_to_end_seatbelt_evaluation(tmp_path: Path):
+    engine = TemporalEventEngine(window_seconds=2.0)
+    
+    observations = [
+        Observation(
+            timestamp=1.0, 
+            class_name="seatbelt_unfastened", 
+            confidence=0.8, 
+            track_id=1, 
+            occupant_role="driver", 
+            vehicle_context_id="v1",
+            cabin_id="c1",
+            visibility="clear",
+            outside_vehicle_person="false",
+            behavior_label="UNFASTENED",
+            vehicle_type="car",
+            seatbelt_probabilities=[0.1, 0.8, 0.1]
+        ),
+        Observation(
+            timestamp=1.5, 
+            class_name="seatbelt_unfastened", 
+            confidence=0.85, 
+            track_id=1, 
+            occupant_role="driver", 
+            vehicle_context_id="v1",
+            cabin_id="c1",
+            visibility="clear",
+            outside_vehicle_person="false",
+            behavior_label="UNFASTENED",
+            vehicle_type="car",
+            seatbelt_probabilities=[0.1, 0.85, 0.05]
+        ),
+        Observation(
+            timestamp=2.0, 
+            class_name="seatbelt_unfastened", 
+            confidence=0.9, 
+            track_id=1, 
+            occupant_role="driver", 
+            vehicle_context_id="v1",
+            cabin_id="c1",
+            visibility="clear",
+            outside_vehicle_person="false",
+            behavior_label="UNFASTENED",
+            vehicle_type="car",
+            seatbelt_probabilities=[0.05, 0.9, 0.05]
+        ),
+        Observation(
+            timestamp=2.5, 
+            class_name="seatbelt_unfastened", 
+            confidence=0.95, 
+            track_id=1, 
+            occupant_role="driver", 
+            vehicle_context_id="v1",
+            cabin_id="c1",
+            visibility="clear",
+            outside_vehicle_person="false",
+            behavior_label="UNFASTENED",
+            vehicle_type="car",
+            seatbelt_probabilities=[0.01, 0.95, 0.04]
+        ),
+    ]
+    
+    candidates = []
+    for obs in observations:
+        candidates.extend(engine.add(obs))
+        
+    assert len(candidates) > 0, "TemporalEventEngine should produce at least one candidate"
+    assert candidates[0].event_type == "NO_SEATBELT"
+    assert candidates[0].behavior_label == "UNFASTENED"
+    
+    csv_path = tmp_path / "predictions_seatbelt.csv"
+    export_predictions_to_csv(candidates, video_id="video_1", output_path=csv_path)
+    
+    assert csv_path.exists()
+    
+    prediction_rows, pred_fields = _read(csv_path)
+    assert len(prediction_rows) == 1
+    assert prediction_rows[0]["event_type"] == "NO_SEATBELT"
+    assert prediction_rows[0]["label"] == "UNFASTENED"
+    
+    truth_rows = [
+        {
+            "video_id": "video_1",
+            "event_type": "NO_SEATBELT",
+            "occupant_role": "driver",
+            "vehicle_id": "v1",
+            "cabin_id": "c1",
+            "start_seconds": "1.0",
+            "end_seconds": "2.5"
+        }
+    ]
+    
+    report = evaluate(
+        truth_rows=truth_rows,
+        prediction_rows=prediction_rows,
+        video_minutes=1.0,
+        prediction_fieldnames=pred_fields
+    )
+    
+    assert report["safety_invariant_counters"] != "NOT_EVALUABLE", "Metadata from exporter failed validation"
+    assert report["event_types"]["NO_SEATBELT"]["true_positives"] >= 1, "Expected matching TP for the predicted event"
