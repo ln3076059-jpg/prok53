@@ -412,10 +412,13 @@ def test_evaluator_safety_counters():
     
     # 2. Fully populated test
     truth_rows = [
-        {"video_id": "v1", "event_type": "PHONE", "start_seconds": "0", "end_seconds": "1", "occupant_role": "front_passenger"},
-        {"video_id": "v1", "event_type": "PHONE", "start_seconds": "2", "end_seconds": "5", "label": "MOUNTED_OR_STATIC_PHONE"},
-        {"video_id": "v1", "event_type": "NO_SEATBELT", "start_seconds": "6", "end_seconds": "7", "outside_vehicle_person": "true"},
-        {"video_id": "v1", "event_type": "NO_SEATBELT", "start_seconds": "10", "end_seconds": "11", "motorcycle_flag": "true"}
+        {"video_id": "v1", "event_type": "PHONE", "start_seconds": "0", "end_seconds": "1", "occupant_role": "front_passenger", "vehicle_id": "v1", "cabin_id": "c1"},
+        {"video_id": "v1", "event_type": "PHONE", "start_seconds": "2", "end_seconds": "5", "label": "MOUNTED_OR_STATIC_PHONE", "vehicle_id": "v1", "cabin_id": "c1"},
+        {"video_id": "v1", "event_type": "NO_SEATBELT", "start_seconds": "6", "end_seconds": "7", "outside_vehicle_person": "true", "vehicle_id": "v1", "cabin_id": "c1"},
+        {"video_id": "v1", "event_type": "PHONE", "start_seconds": "8", "end_seconds": "9", "vehicle_id": "v1", "cabin_id": "c1"},
+        {"video_id": "v1", "event_type": "NO_SEATBELT", "start_seconds": "10", "end_seconds": "11", "motorcycle_flag": "true", "vehicle_id": "v1", "cabin_id": "c1"},
+        {"video_id": "v1", "event_type": "NO_SEATBELT", "start_seconds": "12", "end_seconds": "13", "vehicle_id": "v1", "cabin_id": "c1"},
+        {"video_id": "v1", "event_type": "PHONE", "start_seconds": "15", "end_seconds": "16", "vehicle_id": "v1", "cabin_id": "c1"}
     ]
     
     prediction_rows = [
@@ -464,4 +467,28 @@ def test_evaluator_ambiguous_overlap():
     
     report = evaluate(truth_rows=truth_rows, prediction_rows=prediction_rows, video_minutes=1.0)
     assert report["safety_invariant_counters"] == "NOT_EVALUABLE"
+
+def test_evaluator_safety_counters_fail_close_missing_context():
+    from training.evaluate_events import evaluate
+    
+    # Truth has a single event
+    truth_rows = [
+        {"video_id": "v1", "event_type": "PHONE", "start_seconds": "10", "end_seconds": "15", "occupant_role": "driver", "label": "PHONE_USE", "vehicle_id": "veh_A", "cabin_id": "cab1", "inside_vehicle": "true", "outside_vehicle_person": "false", "motorcycle_flag": "false"}
+    ]
+    
+    # Prediction 1: overlaps but has wrong vehicle_id (veh_B vs veh_A) -> incompatible context -> NOT_EVALUABLE
+    pred_incompatible = [
+        {"video_id": "v1", "event_type": "PHONE", "occupant_role": "driver", "start_seconds": "11", "end_seconds": "14", "label": "PHONE_USE", "visibility": "clear", "outside_vehicle_person": "false", "motorcycle_flag": "false", "vehicle_id": "veh_B", "cabin_id": "cab1", "start_frame": "330", "end_frame": "420"}
+    ]
+    
+    report1 = evaluate(truth_rows=truth_rows, prediction_rows=pred_incompatible, video_minutes=1.0)
+    assert report1["safety_invariant_counters"] == "NOT_EVALUABLE"
+    
+    # Prediction 2: compatible vehicle, but completely misses the temporal window -> no context -> NOT_EVALUABLE
+    pred_no_overlap = [
+        {"video_id": "v1", "event_type": "PHONE", "occupant_role": "driver", "start_seconds": "20", "end_seconds": "25", "label": "PHONE_USE", "visibility": "clear", "outside_vehicle_person": "false", "motorcycle_flag": "false", "vehicle_id": "veh_A", "cabin_id": "cab1", "start_frame": "600", "end_frame": "750"}
+    ]
+    
+    report2 = evaluate(truth_rows=truth_rows, prediction_rows=pred_no_overlap, video_minutes=1.0)
+    assert report2["safety_invariant_counters"] == "NOT_EVALUABLE"
 

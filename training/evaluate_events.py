@@ -203,8 +203,14 @@ def evaluate(
                 and t["event_type"] == p["event_type"]
                 and (float(t["start_seconds"]) <= float(p["end_seconds"]) + tolerance_seconds)
                 and (float(p["start_seconds"]) <= float(t["end_seconds"]) + tolerance_seconds)
+                and (not p.get("vehicle_id") or p.get("vehicle_id") == "UNKNOWN" or not t.get("vehicle_id") or t.get("vehicle_id") == "UNKNOWN" or p.get("vehicle_id") == t.get("vehicle_id"))
+                and (not p.get("cabin_id") or p.get("cabin_id") == "UNKNOWN" or not t.get("cabin_id") or t.get("cabin_id") == "UNKNOWN" or p.get("cabin_id") == t.get("cabin_id"))
             ]
             
+            if len(overlapping_truth) == 0:
+                counters = "NOT_EVALUABLE"
+                break
+                
             if len(overlapping_truth) > 1:
                 unique_contexts = {
                     (
