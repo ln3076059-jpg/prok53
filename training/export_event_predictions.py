@@ -27,7 +27,12 @@ def export_predictions_to_csv(
             if candidate.review_status == "NEEDS_REVIEW":
                 continue
                 
-            motorcycle_flag = "true" if candidate.vehicle_type == "motorcycle" else "false"
+            if candidate.vehicle_type == "motorcycle":
+                motorcycle_flag = "true"
+            elif candidate.vehicle_type != "unknown" and candidate.vehicle_type != "":
+                motorcycle_flag = "false"
+            else:
+                motorcycle_flag = ""
             
             writer.writerow({
                 "video_id": video_id,
@@ -37,7 +42,7 @@ def export_predictions_to_csv(
                 "cabin_id": candidate.cabin_id,
                 "start_seconds": f"{candidate.start_timestamp:.3f}",
                 "end_seconds": f"{candidate.end_timestamp:.3f}",
-                "label": "",
+                "label": candidate.behavior_label,
                 "visibility": candidate.visibility,
                 "outside_vehicle_person": candidate.outside_vehicle_person,
                 "motorcycle_flag": motorcycle_flag,

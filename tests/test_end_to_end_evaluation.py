@@ -16,6 +16,11 @@ def test_end_to_end_prediction_evaluation(tmp_path: Path):
             track_id=1, 
             occupant_role="driver", 
             vehicle_context_id="v1",
+            cabin_id="c1",
+            visibility="clear",
+            outside_vehicle_person="false",
+            behavior_label="PHONE_USE",
+            vehicle_type="car",
             phone_context="HANDHELD"
         ),
         Observation(
@@ -25,6 +30,11 @@ def test_end_to_end_prediction_evaluation(tmp_path: Path):
             track_id=1, 
             occupant_role="driver", 
             vehicle_context_id="v1",
+            cabin_id="c1",
+            visibility="clear",
+            outside_vehicle_person="false",
+            behavior_label="PHONE_USE",
+            vehicle_type="car",
             phone_context="HANDHELD"
         ),
         Observation(
@@ -34,6 +44,11 @@ def test_end_to_end_prediction_evaluation(tmp_path: Path):
             track_id=1, 
             occupant_role="driver", 
             vehicle_context_id="v1",
+            cabin_id="c1",
+            visibility="clear",
+            outside_vehicle_person="false",
+            behavior_label="PHONE_USE",
+            vehicle_type="car",
             phone_context="HANDHELD"
         ),
         Observation(
@@ -43,6 +58,11 @@ def test_end_to_end_prediction_evaluation(tmp_path: Path):
             track_id=1, 
             occupant_role="driver", 
             vehicle_context_id="v1",
+            cabin_id="c1",
+            visibility="clear",
+            outside_vehicle_person="false",
+            behavior_label="PHONE_USE",
+            vehicle_type="car",
             phone_context="HANDHELD"
         ),
     ]
@@ -66,15 +86,6 @@ def test_end_to_end_prediction_evaluation(tmp_path: Path):
     assert prediction_rows[0]["observation_count"] == "4"
     assert prediction_rows[0]["start_seconds"] == "1.000"
     assert prediction_rows[0]["end_seconds"] == "2.500"
-    
-    # 4. Patch metadata to simulate a runtime engine that actually outputs safety metadata
-    for row in prediction_rows:
-        row["label"] = "PHONE_USE"
-        row["visibility"] = "clear"
-        row["outside_vehicle_person"] = "false"
-        row["cabin_id"] = "c1"
-    
-    pred_fields.update({"label", "visibility", "outside_vehicle_person", "cabin_id"})
     
     # 5. Mock Ground Truth
     truth_rows = [

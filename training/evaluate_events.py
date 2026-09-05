@@ -285,6 +285,9 @@ def evaluate_frozen(
         tolerance_seconds,
         prediction_fieldnames=pred_fields,
     )
+    if report.get("safety_invariant_counters") == "NOT_EVALUABLE":
+        raise ValueError("frozen event evaluation requires evaluable safety metadata")
+        
     report.update(
         {
             "status": "MEASURED_FROZEN_EXTERNAL_TEST",

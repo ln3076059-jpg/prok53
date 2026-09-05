@@ -22,6 +22,10 @@ class Observation:
     phone_face_proximity: float = 0.0
     pose_confidence: float = 0.0
     seatbelt_probabilities: tuple[float, float, float] | None = None
+    cabin_id: str | None = None
+    visibility: str = ""
+    outside_vehicle_person: str = ""
+    behavior_label: str = ""
 
 
 @dataclass(frozen=True)
@@ -39,6 +43,7 @@ class EventCandidate:
     cabin_id: str = ""
     visibility: str = ""
     outside_vehicle_person: str = ""
+    behavior_label: str = ""
     vehicle_type: str = "unknown"
     temporal_score: float = 0.0
 
@@ -198,9 +203,10 @@ class TemporalEventEngine:
             status,
             role,
             current.vehicle_context_id,
-            "",
-            "",
-            "",
+            current.cabin_id or "",
+            current.visibility,
+            current.outside_vehicle_person,
+            current.behavior_label,
             current.vehicle_type,
             self.smoothed.get((current.vehicle_context_id, current.track_id, role), scores[-1]),
         )

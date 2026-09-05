@@ -96,9 +96,14 @@ def test_frozen_event_evaluation_requires_active_model_and_preserves_result(tmp_
                 "cabin_id": "cabin-1",
                 "start_seconds": "1.2",
                 "end_seconds": "2.1",
+                "label": "PHONE_USE",
+                "visibility": "clear",
+                "outside_vehicle_person": "false",
+                "motorcycle_flag": "false",
+                "observation_count": "5"
             }
         ],
-        {"video_id", "event_type", "occupant_role", "vehicle_id", "cabin_id", "start_seconds", "end_seconds"},
+        {"video_id", "event_type", "occupant_role", "vehicle_id", "cabin_id", "start_seconds", "end_seconds", "label", "visibility", "outside_vehicle_person", "motorcycle_flag", "observation_count"},
     )
     model_lock_path = tmp_path / "model-lock.json"
     model_lock = {
@@ -305,8 +310,7 @@ def test_evaluate_empty_predictions(tmp_path):
     freeze_event_ground_truth(truth_path, external_lock_path, truth_lock_path)
     
     predictions_path = tmp_path / "predictions.csv"
-    # Empty rows, but valid header
-    _write_csv(predictions_path, [], REQUIRED)
+    _write_csv(predictions_path, [], REQUIRED | {"label", "visibility", "outside_vehicle_person", "motorcycle_flag", "observation_count"})
     
     model_lock_path = tmp_path / "model-lock.json"
     model_lock_path.write_text(
