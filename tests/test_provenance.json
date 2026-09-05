@@ -1,8 +1,10 @@
 {
-  "head_sha": "16768e61675256dae84c2d117df68b2fc90ffacb",
-  "command": "py -m pytest",
+  "head_sha": "9dcc3dc9d0e0c07d9cb4bd993fdc510294f912a6",
+  "command": "C:\\Users\\TSC\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -m pytest",
   "passed": 181,
   "failed": 0,
-  "log_sha256": "b699ba2fc34afd5f24d4589e853ed1997e148388df94d002e6373b5ba953be8f",
-  "timestamp": "2026-09-05T00:14:23.648177+00:00"
+  "log_sha256": "dd7c6ebaf4d0ad925a1b2fe50a5371382b8a415d0fe075a0dd4209b2d4b581ec",
+  "timestamp": "2026-09-05T00:20:30.592630+00:00",
+  "return_code": 0,
+  "status": "PASS"
 }

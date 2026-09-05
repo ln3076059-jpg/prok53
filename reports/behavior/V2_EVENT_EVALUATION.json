@@ -3,9 +3,9 @@
   "reason": "Final event evaluation requires a new untouched sequence holdout with independently reviewed event ground truth.",
   "runtime_unit_invariant_tests": {
     "status": "PASS",
-    "command": "py -m pytest -q",
-    "head_sha": "96285805372ab6abb854006a604ab4bcbd8bbd83",
-    "passed": 171,
+    "command": "py -m pytest",
+    "head_sha": "9dcc3dc9d0e0c07d9cb4bd993fdc510294f912a6",
+    "passed": 181,
     "failed": 0
   },
   "event_holdout_invariant_counters": "NOT_RUN"

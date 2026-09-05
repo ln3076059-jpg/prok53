@@ -1,9 +1,9 @@
 import json
 import csv
 import argparse
-import uuid
 import sys
 from pathlib import Path
+from training.validate_event_sequence_annotations import validate_annotation, load_schema
 
 def convert_sequence_to_events(annotation):
     emitted_events = []
@@ -13,8 +13,22 @@ def convert_sequence_to_events(annotation):
         return emitted_events
         
     context = annotation.get("context", {})
-    motorcycle_flag = context.get("motorcycle_flag", False)
-    inside_vehicle = context.get("inside_vehicle", True)
+    # Fail-closed semantics for context
+    motorcycle_flag = context.get("motorcycle_flag")
+    inside_vehicle = context.get("inside_vehicle")
+    
+    vehicle_id = annotation.get("vehicle_id", "")
+    cabin_id = "" # Default if not present
+    
+    provenance = annotation.get("review_provenance", {})
+    human_review_status = provenance.get("status", "")
+    reviewer_id = provenance.get("reviewer_id", "")
+    reviewer_type = provenance.get("reviewer_type", "")
+    reviewed_at = provenance.get("reviewed_at", "")
+    adjudication_status = "FINAL" # Or derived if appropriate
+    notes = ""
+    visibility = context.get("day_night", "unknown")
+    conditions = context.get("occlusion", "none")
     
     occupants = annotation.get("occupants", [])
     occ_map = {occ["occupant_id"]: occ for occ in occupants}
@@ -36,11 +50,14 @@ def convert_sequence_to_events(annotation):
         final_event_type = None
         
         if event_type == "PHONE":
+            # Phone usage is only a violation if inside a vehicle, not a motorcycle, and is the driver
             if label == "PHONE_USE" and role == "driver":
-                final_event_type = "PHONE"
+                if inside_vehicle is True and context.get("outside_vehicle_person") is not True:
+                    final_event_type = "PHONE"
+                    
         elif event_type == "SEATBELT":
             if label == "UNFASTENED":
-                if not motorcycle_flag and inside_vehicle and role in valid_roles:
+                if motorcycle_flag is False and inside_vehicle is True and role in valid_roles:
                     final_event_type = "NO_SEATBELT"
                     
         if final_event_type:
@@ -50,14 +67,32 @@ def convert_sequence_to_events(annotation):
                 "event_id": event_id,
                 "event_type": final_event_type,
                 "start_seconds": start_sec,
-                "end_seconds": end_sec
+                "end_seconds": end_sec,
+                "vehicle_id": vehicle_id,
+                "cabin_id": cabin_id,
+                "occupant_role": role,
+                "visibility": visibility,
+                "conditions": conditions,
+                "human_review_status": human_review_status,
+                "reviewer_id": reviewer_id,
+                "reviewer_type": reviewer_type,
+                "reviewed_at": reviewed_at,
+                "adjudication_status": adjudication_status,
+                "notes": notes
             })
             
     return emitted_events
 
-def process_file(json_path, csv_writer):
+def process_file(json_path, csv_writer, schema):
     with open(json_path, 'r', encoding='utf-8') as f:
         annotation = json.load(f)
+        
+    errors = validate_annotation(annotation, schema)
+    if errors:
+        print(f"Skipping {json_path} due to validation errors:")
+        for e in errors:
+            print(f" - {e}")
+        return False
         
     events = convert_sequence_to_events(annotation)
     for evt in events:
@@ -66,13 +101,26 @@ def process_file(json_path, csv_writer):
             evt["event_id"],
             evt["event_type"],
             evt["start_seconds"],
-            evt["end_seconds"]
+            evt["end_seconds"],
+            evt["vehicle_id"],
+            evt["cabin_id"],
+            evt["occupant_role"],
+            evt["visibility"],
+            evt["conditions"],
+            evt["human_review_status"],
+            evt["reviewer_id"],
+            evt["reviewer_type"],
+            evt["reviewed_at"],
+            evt["adjudication_status"],
+            evt["notes"]
         ])
-        
+    return True
+
 def main():
     parser = argparse.ArgumentParser(description="Convert sequence JSON annotations to final event CSV")
     parser.add_argument("input_path", help="Path to input JSON file or directory")
     parser.add_argument("output_csv", help="Path to output CSV file")
+    parser.add_argument("--schema", default="datasets/schemas/v2_event_sequence_annotation.schema.json", help="Path to sequence schema JSON")
     
     args = parser.parse_args()
     
@@ -81,20 +129,31 @@ def main():
         print(f"Error: {args.input_path} does not exist.")
         sys.exit(1)
         
+    schema = load_schema(args.schema)
+        
     files_to_process = []
     if input_p.is_file():
         files_to_process.append(input_p)
     else:
         files_to_process.extend(input_p.glob("*.json"))
         
+    success_count = 0
     with open(args.output_csv, 'w', encoding='utf-8', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(["video_id", "event_id", "event_type", "start_seconds", "end_seconds"])
+        writer.writerow([
+            "video_id", "event_id", "event_type", "start_seconds", "end_seconds",
+            "vehicle_id", "cabin_id", "occupant_role", "visibility", "conditions",
+            "human_review_status", "reviewer_id", "reviewer_type", "reviewed_at",
+            "adjudication_status", "notes"
+        ])
         
         for p in files_to_process:
-            process_file(p, writer)
+            if process_file(p, writer, schema):
+                success_count += 1
             
-    print(f"Converted {len(files_to_process)} files to {args.output_csv}")
+    print(f"Successfully converted {success_count}/{len(files_to_process)} files to {args.output_csv}")
+    if success_count < len(files_to_process):
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

@@ -3,11 +3,12 @@ import json
 import hashlib
 import re
 import datetime
+import sys
 from pathlib import Path
 
 def run_tests():
     # Run pytest
-    cmd = ["py", "-m", "pytest"]
+    cmd = [sys.executable, "-m", "pytest"]
     process = subprocess.run(cmd, capture_output=True, text=True)
     
     # Write log
@@ -34,8 +35,6 @@ def run_tests():
     passed = 0
     failed = 0
     
-    # Look for the summary line like "=== 171 passed, 1 warnings in 1.45s ==="
-    # or "1 failed, 170 passed"
     lines = output.split('\n')
     summary_line = ""
     for line in reversed(lines):
@@ -54,20 +53,24 @@ def run_tests():
             
     metadata = {
         "head_sha": head_sha,
-        "command": "py -m pytest",
+        "command": f"{sys.executable} -m pytest",
         "passed": passed,
         "failed": failed,
         "log_sha256": log_sha256,
-        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat()
+        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "return_code": process.returncode,
+        "status": "PASS" if process.returncode == 0 else "FAIL"
     }
     
     meta_path = Path("tests/test_provenance.json")
     with open(meta_path, "w", encoding="utf-8") as f:
         json.dump(metadata, f, indent=2)
         
-    print(f"Test run complete. Passed: {passed}, Failed: {failed}")
+    print(f"Test run complete. Passed: {passed}, Failed: {failed}, Return Code: {process.returncode}")
     print(f"Log written to {log_path}")
     print(f"Metadata written to {meta_path}")
+    
+    sys.exit(process.returncode)
 
 if __name__ == "__main__":
     run_tests()
