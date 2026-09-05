@@ -120,7 +120,7 @@ def evaluate(
     
     def _is_valid_row(p: dict) -> bool:
         role = p.get("occupant_role", "")
-        if role not in {"driver", "front_passenger", "rear_left", "rear_center", "rear_right", "passenger", "unknown"}:
+        if role not in {"driver", "front_passenger", "rear_left", "rear_center", "rear_right", "unknown"}:
             return False
         evt = p.get("event_type", "")
         if evt not in {"PHONE", "NO_SEATBELT"}:
@@ -141,8 +141,24 @@ def evaluate(
         label = p.get("label", "")
         if evt == "PHONE" and label not in {"PHONE_USE", "PHONE_PRESENT_NOT_USED", "MOUNTED_OR_STATIC_PHONE", "NO_PHONE", "UNKNOWN"}:
             return False
-        if evt == "NO_SEATBELT" and label not in {"FASTENED", "UNFASTENED", "UNCERTAIN_OR_OCCLUDED", "NOT_APPLICABLE", "UNKNOWN"}:
+        if evt == "NO_SEATBELT" and label not in {"FASTENED", "UNFASTENED", "UNCERTAIN_OR_OCCLUDED", "NOT_APPLICABLE"}:
             return False
+            
+        if has_frame_info:
+            try:
+                sf = int(p["start_frame"])
+                ef = int(p["end_frame"])
+                if sf < 0 or ef < sf:
+                    return False
+            except ValueError:
+                return False
+        if has_obs_info:
+            try:
+                if int(p["observation_count"]) < 1:
+                    return False
+            except ValueError:
+                return False
+                
         return True
 
     if not safety_requirements.issubset(prediction_fieldnames) or not (has_frame_info or has_obs_info):
@@ -163,7 +179,7 @@ def evaluate(
         for p in prediction_rows:
             evt = p["event_type"]
             role = p.get("occupant_role", "")
-            if evt == "PHONE" and role in ("front_passenger", "rear_left", "rear_center", "rear_right", "passenger"):
+            if evt == "PHONE" and role in ("front_passenger", "rear_left", "rear_center", "rear_right"):
                 counters["passenger_phone_violation_count"] += 1
             if evt == "PHONE" and (p.get("visibility") == "mounted" or p.get("label") == "MOUNTED_OR_STATIC_PHONE"):
                 counters["mounted_phone_violation_count"] += 1
