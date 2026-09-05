@@ -447,3 +447,21 @@ def test_evaluator_safety_counters():
     assert counters["motorcycle_seatbelt_violation_count"] == 1
     assert counters["unknown_belt_violation_count"] == 1
     assert counters["single_frame_violation_count"] == 1
+
+def test_evaluator_ambiguous_overlap():
+    from training.evaluate_events import evaluate
+    
+    # Truth has two overlapping events but different labels
+    truth_rows = [
+        {"video_id": "v1", "event_type": "PHONE", "start_seconds": "10", "end_seconds": "15", "occupant_role": "driver", "label": "PHONE_USE", "vehicle_id": "veh1", "cabin_id": "cab1", "inside_vehicle": "true", "outside_vehicle_person": "false", "motorcycle_flag": "false"},
+        {"video_id": "v1", "event_type": "PHONE", "start_seconds": "12", "end_seconds": "14", "occupant_role": "driver", "label": "MOUNTED_OR_STATIC_PHONE", "vehicle_id": "veh1", "cabin_id": "cab1", "inside_vehicle": "true", "outside_vehicle_person": "false", "motorcycle_flag": "false"}
+    ]
+    
+    # Prediction overlaps both
+    prediction_rows = [
+        {"video_id": "v1", "event_type": "PHONE", "occupant_role": "driver", "start_seconds": "11", "end_seconds": "16", "label": "PHONE_USE", "visibility": "clear", "outside_vehicle_person": "false", "motorcycle_flag": "false", "vehicle_id": "veh1", "cabin_id": "cab1", "start_frame": "330", "end_frame": "480"}
+    ]
+    
+    report = evaluate(truth_rows=truth_rows, prediction_rows=prediction_rows, video_minutes=1.0)
+    assert report["safety_invariant_counters"] == "NOT_EVALUABLE"
+

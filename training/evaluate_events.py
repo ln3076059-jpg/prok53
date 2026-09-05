@@ -143,7 +143,7 @@ def evaluate(
             return False
         if p.get("outside_vehicle_person", "").lower() not in {"true", "false", ""}:
             return False
-        if p.get("motorcycle_flag", "").lower() not in {"true", "false"}:
+        if p.get("motorcycle_flag", "").lower() not in {"true", "false", ""}:
             return False
         if p.get("vehicle_id", "") == "" or p.get("cabin_id", "") == "":
             return False
@@ -211,7 +211,10 @@ def evaluate(
                         t.get("vehicle_id"), 
                         t.get("cabin_id"), 
                         t.get("occupant_role"), 
-                        t.get("outside_vehicle_person", "").lower()
+                        str(t.get("inside_vehicle", "")).lower(),
+                        str(t.get("outside_vehicle_person", "")).lower(),
+                        str(t.get("motorcycle_flag", "")).lower(),
+                        t.get("label")
                     ) for t in overlapping_truth
                 }
                 if len(unique_contexts) > 1:
