@@ -8,13 +8,36 @@ from pathlib import Path
 
 from training.common import sha256_file
 
-REQUIRED = {"video_id", "event_type", "occupant_role", "vehicle_id", "cabin_id", "start_seconds", "end_seconds"}
+REQUIRED = {
+    "video_id",
+    "event_type",
+    "occupant_id",
+    "occupant_role",
+    "vehicle_id",
+    "cabin_id",
+    "start_seconds",
+    "end_seconds",
+}
+CONTEXT_REQUIRED = {
+    "video_id",
+    "occupant_id",
+    "occupant_role",
+    "vehicle_id",
+    "cabin_id",
+    "start_seconds",
+    "end_seconds",
+    "inside_vehicle",
+    "outside_vehicle_person",
+    "motorcycle_flag",
+    "phone_state",
+    "seatbelt_state",
+}
 
 
-def _read(path: Path) -> tuple[list[dict], set[str]]:
+def _read(path: Path, required: set[str] | None = None) -> tuple[list[dict], set[str]]:
     with path.open(newline="", encoding="utf-8-sig") as handle:
         reader = csv.DictReader(handle)
-        missing = REQUIRED - set(reader.fieldnames or [])
+        missing = (required or REQUIRED) - set(reader.fieldnames or [])
         if missing:
             raise ValueError(f"{path} is missing columns: {sorted(missing)}")
         rows = list(reader)
@@ -24,12 +47,12 @@ def _read(path: Path) -> tuple[list[dict], set[str]]:
 def _overlap(a: dict, b: dict, tolerance: float) -> bool:
     if a["video_id"] != b["video_id"] or a["event_type"] != b["event_type"]:
         return False
+    if a.get("occupant_id") != b.get("occupant_id"):
+        return False
     if a.get("occupant_role") != b.get("occupant_role"):
         return False
     for field in ("vehicle_id", "cabin_id"):
-        val_a = a.get(field)
-        val_b = b.get(field)
-        if val_a and val_b and val_a != "UNKNOWN" and val_b != "UNKNOWN" and val_a != val_b:
+        if a.get(field) != b.get(field):
             return False
     a_start, a_end = float(a["start_seconds"]), float(a["end_seconds"])
     b_start, b_end = float(b["start_seconds"]), float(b["end_seconds"])
@@ -42,9 +65,10 @@ def evaluate(
     video_minutes: float,
     tolerance_seconds: float = 0.5,
     prediction_fieldnames: set[str] | None = None,
+    context_rows: list[dict] | None = None,
 ) -> dict:
-    from scipy.optimize import linear_sum_assignment
     import numpy as np
+    from scipy.optimize import linear_sum_assignment
 
     def _is_detectable(t: dict) -> bool:
         evt = t.get("event_type", "")
@@ -53,11 +77,17 @@ def evaluate(
         inside = str(t.get("inside_vehicle", "true")).lower() == "true"
         outside = str(t.get("outside_vehicle_person", "false")).lower() == "true"
         moto = str(t.get("motorcycle_flag", "false")).lower() == "true"
-        
+
         if evt == "PHONE":
             return label == "PHONE_USE" and role == "driver" and inside and not outside
         elif evt == "NO_SEATBELT":
-            return label == "UNFASTENED" and not moto and inside and not outside and role in {"driver", "front_passenger", "rear_left", "rear_center", "rear_right"}
+            return (
+                label == "UNFASTENED"
+                and not moto
+                and inside
+                and not outside
+                and role in {"driver", "front_passenger", "rear_left", "rear_center", "rear_right"}
+            )
         return False
 
     detectable_truth_rows = [t for t in truth_rows if _is_detectable(t)]
@@ -72,16 +102,16 @@ def evaluate(
                         float(truth["start_seconds"]) - float(pred["start_seconds"])
                     )
         row_ind, col_ind = linear_sum_assignment(cost_matrix)
-        for r, c in zip(row_ind, col_ind):
+        for r, c in zip(row_ind, col_ind, strict=False):
             if cost_matrix[r, c] < 1e8:
                 matches.append((int(r), int(c)))
 
     matched_predictions = {p for t, p in matches}
-    
+
     duplicate_predictions: set[int] = set()
     for p_idx, pred in enumerate(prediction_rows):
         if p_idx not in matched_predictions:
-            for t_idx, truth in enumerate(detectable_truth_rows):
+            for truth in detectable_truth_rows:
                 if _overlap(truth, pred, tolerance_seconds):
                     duplicate_predictions.add(p_idx)
                     break
@@ -89,7 +119,9 @@ def evaluate(
     report = {"status": "MEASURED", "event_types": {}}
     event_types = sorted({row["event_type"] for row in detectable_truth_rows + prediction_rows})
     for event_type in event_types:
-        truth_indices = {i for i, row in enumerate(detectable_truth_rows) if row["event_type"] == event_type}
+        truth_indices = {
+            i for i, row in enumerate(detectable_truth_rows) if row["event_type"] == event_type
+        }
         prediction_indices = {
             i for i, row in enumerate(prediction_rows) if row["event_type"] == event_type
         }
@@ -103,11 +135,12 @@ def evaluate(
         recall = tp / (tp + fn) if tp + fn else 0.0
         f1 = 2 * precision * recall / (precision + recall) if precision + recall else 0.0
         delays = [
-            float(prediction_rows[p]["start_seconds"]) - float(detectable_truth_rows[t]["start_seconds"])
+            float(prediction_rows[p]["start_seconds"])
+            - float(detectable_truth_rows[t]["start_seconds"])
             for t, p in type_matches
         ]
         type_duplicates = [p for p in duplicate_predictions if p in prediction_indices]
-        
+
         report["event_types"][event_type] = {
             "precision": precision,
             "recall": recall,
@@ -133,10 +166,17 @@ def evaluate(
     has_frame_info = "start_frame" in prediction_fieldnames and "end_frame" in prediction_fieldnames
     has_obs_info = "observation_count" in prediction_fieldnames
     safety_requirements = {"label", "visibility", "outside_vehicle_person", "motorcycle_flag"}
-    
+
     def _is_valid_row(p: dict) -> bool:
         role = p.get("occupant_role", "")
-        if role not in {"driver", "front_passenger", "rear_left", "rear_center", "rear_right", "unknown"}:
+        if role not in {
+            "driver",
+            "front_passenger",
+            "rear_left",
+            "rear_center",
+            "rear_right",
+            "unknown",
+        }:
             return False
         evt = p.get("event_type", "")
         if evt not in {"PHONE", "NO_SEATBELT"}:
@@ -145,21 +185,33 @@ def evaluate(
             return False
         if p.get("motorcycle_flag", "").lower() not in {"true", "false", ""}:
             return False
-        if p.get("vehicle_id", "") == "" or p.get("cabin_id", "") == "":
-            return False
+        for field in ("occupant_id", "vehicle_id", "cabin_id"):
+            if not p.get(field) or p[field].upper() == "UNKNOWN":
+                return False
         try:
             start = float(p.get("start_seconds", -1))
             end = float(p.get("end_seconds", -1))
-            if not (0 <= start <= end) or start == float('inf') or end == float('inf'):
+            if not (0 <= start <= end) or start == float("inf") or end == float("inf"):
                 return False
         except ValueError:
             return False
         label = p.get("label", "")
-        if evt == "PHONE" and label not in {"PHONE_USE", "PHONE_PRESENT_NOT_USED", "MOUNTED_OR_STATIC_PHONE", "NO_PHONE", "UNKNOWN"}:
+        if evt == "PHONE" and label not in {
+            "PHONE_USE",
+            "PHONE_PRESENT_NOT_USED",
+            "MOUNTED_OR_STATIC_PHONE",
+            "NO_PHONE",
+            "UNKNOWN",
+        }:
             return False
-        if evt == "NO_SEATBELT" and label not in {"FASTENED", "UNFASTENED", "UNCERTAIN_OR_OCCLUDED", "NOT_APPLICABLE"}:
+        if evt == "NO_SEATBELT" and label not in {
+            "FASTENED",
+            "UNFASTENED",
+            "UNCERTAIN_OR_OCCLUDED",
+            "NOT_APPLICABLE",
+        }:
             return False
-            
+
         if has_frame_info:
             try:
                 sf = int(p["start_frame"])
@@ -174,10 +226,14 @@ def evaluate(
                     return False
             except ValueError:
                 return False
-                
+
         return True
 
-    if not safety_requirements.issubset(prediction_fieldnames) or not (has_frame_info or has_obs_info):
+    if context_rows is None:
+        counters = "NOT_EVALUABLE"
+    elif not safety_requirements.issubset(prediction_fieldnames) or not (
+        has_frame_info or has_obs_info
+    ):
         counters = "NOT_EVALUABLE"
     elif not all(_is_valid_row(p) for p in prediction_rows):
         counters = "NOT_EVALUABLE"
@@ -191,66 +247,112 @@ def evaluate(
             "unknown_belt_violation_count": 0,
             "single_frame_violation_count": 0,
         }
-        
+
         for p in prediction_rows:
             evt = p["event_type"]
             role = p.get("occupant_role", "")
-            
-            # Context Truth vs Prediction Overlap Logic
-            overlapping_truth = [
-                t for t in truth_rows
-                if t["video_id"] == p["video_id"]
-                and t["event_type"] == p["event_type"]
-                and (float(t["start_seconds"]) <= float(p["end_seconds"]) + tolerance_seconds)
-                and (float(p["start_seconds"]) <= float(t["end_seconds"]) + tolerance_seconds)
-                and (not p.get("vehicle_id") or p.get("vehicle_id") == "UNKNOWN" or not t.get("vehicle_id") or t.get("vehicle_id") == "UNKNOWN" or p.get("vehicle_id") == t.get("vehicle_id"))
-                and (not p.get("cabin_id") or p.get("cabin_id") == "UNKNOWN" or not t.get("cabin_id") or t.get("cabin_id") == "UNKNOWN" or p.get("cabin_id") == t.get("cabin_id"))
+
+            p_start = float(p["start_seconds"])
+            p_end = float(p["end_seconds"])
+            matching_context = [
+                context
+                for context in context_rows
+                if context["video_id"] == p["video_id"]
+                and context.get("occupant_id") == p.get("occupant_id")
+                and context.get("vehicle_id") == p.get("vehicle_id")
+                and context.get("cabin_id") == p.get("cabin_id")
+                and float(context["end_seconds"]) > p_start
+                and float(context["start_seconds"]) < p_end
             ]
-            
-            if len(overlapping_truth) == 0:
+            if p_start == p_end:
+                matching_context = [
+                    context
+                    for context in context_rows
+                    if context["video_id"] == p["video_id"]
+                    and context.get("occupant_id") == p.get("occupant_id")
+                    and context.get("vehicle_id") == p.get("vehicle_id")
+                    and context.get("cabin_id") == p.get("cabin_id")
+                    and float(context["start_seconds"]) <= p_start
+                    and p_start < float(context["end_seconds"])
+                ]
+
+            if not matching_context:
                 counters = "NOT_EVALUABLE"
                 break
-                
-            if len(overlapping_truth) > 1:
-                unique_contexts = {
-                    (
-                        t.get("vehicle_id"), 
-                        t.get("cabin_id"), 
-                        t.get("occupant_role"), 
-                        str(t.get("inside_vehicle", "")).lower(),
-                        str(t.get("outside_vehicle_person", "")).lower(),
-                        str(t.get("motorcycle_flag", "")).lower(),
-                        t.get("label")
-                    ) for t in overlapping_truth
-                }
-                if len(unique_contexts) > 1:
+
+            ordered_context = sorted(
+                matching_context, key=lambda context: float(context["start_seconds"])
+            )
+            cursor = p_start
+            for context in ordered_context:
+                start = max(p_start, float(context["start_seconds"]))
+                end = min(p_end, float(context["end_seconds"]))
+                if start > cursor + 1e-6:
                     counters = "NOT_EVALUABLE"
                     break
-            
-            # For passenger phone violation, if ANY overlapping truth row is a passenger phone event
-            if evt == "PHONE" and any(t.get("occupant_role") in ("front_passenger", "rear_left", "rear_center", "rear_right") for t in overlapping_truth):
+                cursor = max(cursor, end)
+            if counters == "NOT_EVALUABLE":
+                break
+            if cursor < p_end - 1e-6:
+                counters = "NOT_EVALUABLE"
+                break
+
+            unique_contexts = {
+                (
+                    context.get("occupant_id"),
+                    context.get("vehicle_id"),
+                    context.get("cabin_id"),
+                    context.get("occupant_role"),
+                    str(context.get("inside_vehicle", "")).lower(),
+                    str(context.get("outside_vehicle_person", "")).lower(),
+                    str(context.get("motorcycle_flag", "")).lower(),
+                    context.get("phone_state"),
+                    context.get("seatbelt_state"),
+                )
+                for context in matching_context
+            }
+            if len(unique_contexts) != 1:
+                counters = "NOT_EVALUABLE"
+                break
+
+            context = matching_context[0]
+            if context.get("occupant_role") == "unknown":
+                counters = "NOT_EVALUABLE"
+                break
+            if evt == "PHONE" and context.get("phone_state") == "UNKNOWN":
+                counters = "NOT_EVALUABLE"
+                break
+            if evt == "NO_SEATBELT" and context.get("seatbelt_state") in {
+                "UNCERTAIN_OR_OCCLUDED",
+                "",
+                None,
+            }:
+                counters = "NOT_EVALUABLE"
+                break
+
+            if evt == "PHONE" and context.get("occupant_role") in (
+                "front_passenger",
+                "rear_left",
+                "rear_center",
+                "rear_right",
+            ):
                 counters["passenger_phone_violation_count"] += 1
-                
-            # For mounted phone violation, if ANY overlapping truth row is a mounted phone event
-            if evt == "PHONE" and any(t.get("label") == "MOUNTED_OR_STATIC_PHONE" for t in overlapping_truth):
+
+            if evt == "PHONE" and context.get("phone_state") == "MOUNTED_OR_STATIC_PHONE":
                 counters["mounted_phone_violation_count"] += 1
-                
-            # For outside person violation, if ANY overlapping truth row states they are outside
-            if any(str(t.get("outside_vehicle_person")).lower() == "true" for t in overlapping_truth):
+
+            if str(context.get("outside_vehicle_person")).lower() == "true":
                 counters["outside_person_violation_count"] += 1
-                
-            # Unknown role is a prediction failure invariant
+
             if evt == "PHONE" and role == "unknown":
                 counters["unknown_role_phone_violation_count"] += 1
-                
-            # For motorcycle seatbelt violation, if ANY overlapping truth row is a motorcycle
-            if evt == "NO_SEATBELT" and any(str(t.get("motorcycle_flag")).lower() == "true" for t in overlapping_truth):
+
+            if evt == "NO_SEATBELT" and str(context.get("motorcycle_flag")).lower() == "true":
                 counters["motorcycle_seatbelt_violation_count"] += 1
-                
-            # Unknown belt is a prediction failure invariant
+
             if evt == "NO_SEATBELT" and role == "unknown":
                 counters["unknown_belt_violation_count"] += 1
-                
+
             if has_frame_info:
                 try:
                     if int(p["start_frame"]) == int(p["end_frame"]):
@@ -280,6 +382,8 @@ def evaluate_frozen(
     output_path: Path,
     video_minutes: float,
     tolerance_seconds: float = 0.5,
+    context_truth_path: Path | None = None,
+    context_truth_lock_path: Path | None = None,
 ) -> dict:
     if output_path.exists():
         raise FileExistsError(f"refusing to overwrite frozen event evaluation: {output_path}")
@@ -335,18 +439,54 @@ def evaluate_frozen(
     ):
         raise ValueError("model lock does not record governed human-review readiness")
 
+    if context_truth_path is None or context_truth_lock_path is None:
+        raise ValueError(
+            "frozen event evaluation requires separately frozen full-timeline context truth"
+        )
+    context_lock = json.loads(context_truth_lock_path.read_text(encoding="utf-8"))
+    if context_lock.get("status") != "FROZEN_CONTEXT_GROUND_TRUTH":
+        raise ValueError("context artifact is not FROZEN_CONTEXT_GROUND_TRUTH")
+    if context_lock.get("coverage_status") != "FULL_TIMELINE_NO_GAPS_OR_OVERLAPS":
+        raise ValueError("context artifact does not have complete timeline coverage")
+    if context_lock.get("identity_status") != "KNOWN_STABLE_OCCUPANT_VEHICLE_CABIN":
+        raise ValueError("context artifact does not have stable entity identity")
+    if context_lock.get("human_review_status") != "ALL_APPROVED":
+        raise ValueError("context artifact is not fully human-approved")
+    if context_lock.get("adjudication_status") != "ALL_FINAL":
+        raise ValueError("context artifact is not fully adjudicated")
+    if context_lock.get("context_csv", {}).get("sha256") != sha256_file(context_truth_path):
+        raise ValueError("context truth SHA256 does not match its frozen artifact")
+    context_external = context_lock.get("external_test_lock", {})
+    if context_external.get("sha256") != external_record.get("sha256"):
+        raise ValueError("event and context truth do not bind the same external-test lock")
+    context_external_path = Path(str(context_external.get("path", "")))
+    if not context_external_path.is_file():
+        raise ValueError("external-test artifact referenced by context truth is missing")
+    if context_external.get("sha256") != sha256_file(context_external_path):
+        raise ValueError("context truth external-test artifact SHA256 mismatch")
+    if set(context_lock.get("video_ids", [])) != set(external_lock.get("video_ids", [])):
+        raise ValueError("context truth does not cover every frozen external-test video")
+    locked_minutes = float(context_lock.get("total_timeline_seconds", 0.0)) / 60.0
+    if abs(locked_minutes - video_minutes) > 1e-6:
+        raise ValueError(
+            "--video-minutes must equal the duration proven by frozen context truth "
+            f"({locked_minutes:.9f})"
+        )
+
     truth_rows, _ = _read(truth_path)
     prediction_rows, pred_fields = _read(prediction_path)
+    context_rows, _ = _read(context_truth_path, CONTEXT_REQUIRED)
     report = evaluate(
         truth_rows,
         prediction_rows,
         video_minutes,
         tolerance_seconds,
         prediction_fieldnames=pred_fields,
+        context_rows=context_rows,
     )
     if report.get("safety_invariant_counters") == "NOT_EVALUABLE":
         raise ValueError("frozen event evaluation requires evaluable safety metadata")
-        
+
     report.update(
         {
             "status": "MEASURED_FROZEN_EXTERNAL_TEST",
@@ -360,6 +500,14 @@ def evaluate_frozen(
             "predictions": {
                 "path": str(prediction_path),
                 "sha256": sha256_file(prediction_path),
+            },
+            "context_truth": {
+                "path": str(context_truth_path),
+                "sha256": sha256_file(context_truth_path),
+                "lock_path": str(context_truth_lock_path),
+                "lock_sha256": sha256_file(context_truth_lock_path),
+                "coverage_status": context_lock.get("coverage_status"),
+                "identity_status": context_lock.get("identity_status"),
             },
             "model_lock": {
                 "path": str(model_lock_path),
@@ -389,6 +537,11 @@ def verify_evaluation_integrity(report_path: Path) -> dict:
             "sha256": report.get("ground_truth", {}).get("lock_sha256"),
         },
         "predictions": report.get("predictions", {}),
+        "context truth": report.get("context_truth", {}),
+        "context-truth lock": {
+            "path": report.get("context_truth", {}).get("lock_path"),
+            "sha256": report.get("context_truth", {}).get("lock_sha256"),
+        },
         "model lock": report.get("model_lock", {}),
         "external-test lock": report.get("external_test_lock", {}),
     }
@@ -429,6 +582,16 @@ def main() -> None:
         default=Path("datasets/manifests/v2_event_truth_frozen.json"),
     )
     parser.add_argument(
+        "--context-truth",
+        type=Path,
+        help="Human-reviewed full-timeline context CSV",
+    )
+    parser.add_argument(
+        "--context-truth-lock",
+        type=Path,
+        default=Path("datasets/manifests/v2_context_truth_frozen.json"),
+    )
+    parser.add_argument(
         "--model-lock",
         type=Path,
         default=Path("reports/model_lock_v2.json"),
@@ -455,6 +618,8 @@ def main() -> None:
         args.output,
         args.video_minutes,
         args.tolerance_seconds,
+        context_truth_path=args.context_truth,
+        context_truth_lock_path=args.context_truth_lock,
     )
     print(json.dumps(report, indent=2))
 

@@ -556,6 +556,7 @@ class VideoAnalyzer:
                         "seatbelt_uncertain": "UNCERTAIN_OR_OCCLUDED",
                         "uncertain_or_occluded": "UNCERTAIN_OR_OCCLUDED",
                     }.get(detection.class_name, ""),
+                    occupant_id=f"{context.context_id}:occupant:{assignment.role}",
                 )
             )
             for candidate in candidates:

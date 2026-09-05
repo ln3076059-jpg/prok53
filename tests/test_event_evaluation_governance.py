@@ -5,6 +5,10 @@ from pathlib import Path
 import pytest
 
 from training.evaluate_events import evaluate_frozen, verify_evaluation_integrity
+from training.freeze_context_ground_truth import (
+    REQUIRED_COLUMNS as CONTEXT_REQUIRED_COLUMNS,
+)
+from training.freeze_context_ground_truth import freeze_context_ground_truth
 from training.freeze_event_ground_truth import REQUIRED_COLUMNS, freeze_event_ground_truth
 
 
@@ -22,6 +26,7 @@ def _truth_row() -> dict[str, str]:
         "event_type": "PHONE",
         "start_seconds": "1.0",
         "end_seconds": "2.0",
+        "occupant_id": "occupant-1",
         "vehicle_id": "vehicle-1",
         "cabin_id": "cabin-1",
         "inside_vehicle": "true",
@@ -37,6 +42,60 @@ def _truth_row() -> dict[str, str]:
         "reviewed_at": "2026-09-02T00:00:00Z",
         "adjudication_status": "FINAL",
         "notes": "independently reviewed",
+    }
+
+
+def _context_row(**overrides: str) -> dict[str, str]:
+    row = {
+        "video_id": "external-video",
+        "context_id": "context-1",
+        "occupant_id": "occupant-1",
+        "vehicle_id": "vehicle-1",
+        "cabin_id": "cabin-1",
+        "occupant_role": "driver",
+        "start_seconds": "0",
+        "end_seconds": "60",
+        "timeline_end_seconds": "60",
+        "inside_vehicle": "true",
+        "outside_vehicle_person": "false",
+        "motorcycle_flag": "false",
+        "phone_state": "PHONE_USE",
+        "seatbelt_state": "FASTENED",
+        "visibility": "visible",
+        "conditions": "daylight",
+        "human_review_status": "APPROVED",
+        "reviewer_id": "human-reviewer-1",
+        "reviewer_type": "HUMAN",
+        "reviewed_at": "2026-09-02T00:00:00Z",
+        "adjudication_status": "FINAL",
+        "notes": "independently reviewed",
+    }
+    row.update(overrides)
+    return row
+
+
+def _freeze_context(tmp_path: Path, external_lock_path: Path) -> tuple[Path, Path]:
+    context_path = tmp_path / "context.csv"
+    context_lock_path = tmp_path / "context-lock.json"
+    _write_csv(context_path, [_context_row()], CONTEXT_REQUIRED_COLUMNS)
+    freeze_context_ground_truth(context_path, external_lock_path, context_lock_path)
+    return context_path, context_lock_path
+
+
+def _as_safety_context(row: dict[str, str]) -> dict[str, str]:
+    return {
+        "video_id": row["video_id"],
+        "occupant_id": row["occupant_id"],
+        "occupant_role": row.get("occupant_role", "driver"),
+        "vehicle_id": row["vehicle_id"],
+        "cabin_id": row["cabin_id"],
+        "start_seconds": row["start_seconds"],
+        "end_seconds": row["end_seconds"],
+        "inside_vehicle": row.get("inside_vehicle", "true"),
+        "outside_vehicle_person": row.get("outside_vehicle_person", "false"),
+        "motorcycle_flag": row.get("motorcycle_flag", "false"),
+        "phone_state": row.get("label", "NO_PHONE"),
+        "seatbelt_state": row.get("label", "FASTENED"),
     }
 
 
@@ -95,6 +154,7 @@ def test_frozen_event_evaluation_requires_active_model_and_preserves_result(tmp_
             {
                 "video_id": "external-video",
                 "event_type": "PHONE",
+                "occupant_id": "occupant-1",
                 "occupant_role": "driver",
                 "vehicle_id": "vehicle-1",
                 "cabin_id": "cabin-1",
@@ -107,7 +167,7 @@ def test_frozen_event_evaluation_requires_active_model_and_preserves_result(tmp_
                 "observation_count": "5"
             }
         ],
-        {"video_id", "event_type", "occupant_role", "vehicle_id", "cabin_id", "start_seconds", "end_seconds", "label", "visibility", "outside_vehicle_person", "motorcycle_flag", "observation_count"},
+        {"video_id", "event_type", "occupant_id", "occupant_role", "vehicle_id", "cabin_id", "start_seconds", "end_seconds", "label", "visibility", "outside_vehicle_person", "motorcycle_flag", "observation_count"},
     )
     model_lock_path = tmp_path / "model-lock.json"
     model_lock = {
@@ -151,6 +211,16 @@ def test_frozen_event_evaluation_requires_active_model_and_preserves_result(tmp_
 
     model_lock["activation_state"] = "ACTIVE"
     model_lock_path.write_text(json.dumps(model_lock), encoding="utf-8")
+    with pytest.raises(ValueError, match="separately frozen full-timeline context truth"):
+        evaluate_frozen(
+            truth_path,
+            predictions_path,
+            truth_lock_path,
+            model_lock_path,
+            output_path,
+            video_minutes=1.0,
+        )
+    context_path, context_lock_path = _freeze_context(tmp_path, external_lock_path)
     report = evaluate_frozen(
         truth_path,
         predictions_path,
@@ -158,6 +228,8 @@ def test_frozen_event_evaluation_requires_active_model_and_preserves_result(tmp_
         model_lock_path,
         output_path,
         video_minutes=1.0,
+        context_truth_path=context_path,
+        context_truth_lock_path=context_lock_path,
     )
 
     assert report["status"] == "MEASURED_FROZEN_EXTERNAL_TEST"
@@ -206,6 +278,7 @@ def test_frozen_event_evaluation_rejects_truth_changed_after_freeze(tmp_path):
     _write_csv(truth_path, [_truth_row()], REQUIRED_COLUMNS)
     truth_lock_path = tmp_path / "truth-lock.json"
     freeze_event_ground_truth(truth_path, external_lock_path, truth_lock_path)
+    context_path, context_lock_path = _freeze_context(tmp_path, external_lock_path)
     truth_path.write_text(truth_path.read_text(encoding="utf-8") + "\n", encoding="utf-8")
     predictions_path = tmp_path / "predictions.csv"
     _write_csv(
@@ -312,6 +385,7 @@ def test_evaluate_empty_predictions(tmp_path):
     external_lock_path.write_text(json.dumps({"status": "FROZEN_EXTERNAL_TEST", "human_review_status": "ALL_APPROVED", "video_ids": ["external-video"]}), encoding="utf-8")
     truth_lock_path = tmp_path / "truth-lock.json"
     freeze_event_ground_truth(truth_path, external_lock_path, truth_lock_path)
+    context_path, context_lock_path = _freeze_context(tmp_path, external_lock_path)
     
     predictions_path = tmp_path / "predictions.csv"
     _write_csv(predictions_path, [], REQUIRED | {"label", "visibility", "outside_vehicle_person", "motorcycle_flag", "observation_count"})
@@ -342,6 +416,8 @@ def test_evaluate_empty_predictions(tmp_path):
         model_lock_path,
         output_path,
         video_minutes=1.0,
+        context_truth_path=context_path,
+        context_truth_lock_path=context_lock_path,
     )
     assert report["event_types"]["PHONE"]["true_positives"] == 0
     assert report["event_types"]["PHONE"]["false_positives"] == 0
@@ -439,8 +515,42 @@ def test_evaluator_safety_counters():
         # single_frame_violation
         {"video_id": "v1", "event_type": "PHONE", "occupant_role": "driver", "start_seconds": "15", "end_seconds": "15.033", "label": "PHONE_USE", "visibility": "clear", "outside_vehicle_person": "false", "motorcycle_flag": "false", "vehicle_id": "v1", "cabin_id": "c1", "start_frame": "450", "end_frame": "450"},
     ]
-    
-    report = evaluate(truth_rows=truth_rows, prediction_rows=prediction_rows, video_minutes=1.0)
+
+    context_roles = [
+        "front_passenger", "driver", "driver", "driver",
+        "driver", "driver", "driver", "driver",
+    ]
+    context_rows = []
+    for index, (prediction, context_role) in enumerate(
+        zip(prediction_rows, context_roles, strict=True)
+    ):
+        occupant_id = f"occupant-{index}"
+        prediction["occupant_id"] = occupant_id
+        context_rows.append(
+            {
+                "video_id": "v1",
+                "occupant_id": occupant_id,
+                "occupant_role": context_role,
+                "vehicle_id": "v1",
+                "cabin_id": "c1",
+                "start_seconds": prediction["start_seconds"],
+                "end_seconds": prediction["end_seconds"],
+                "inside_vehicle": "true",
+                "outside_vehicle_person": "true" if index == 3 else "false",
+                "motorcycle_flag": "true" if index == 5 else "false",
+                "phone_state": (
+                    "MOUNTED_OR_STATIC_PHONE" if index in {1, 2} else "NO_PHONE"
+                ),
+                "seatbelt_state": "FASTENED",
+            }
+        )
+
+    report = evaluate(
+        truth_rows=truth_rows,
+        prediction_rows=prediction_rows,
+        video_minutes=1.0,
+        context_rows=context_rows,
+    )
     counters = report["safety_invariant_counters"]
     assert counters != "NOT_EVALUABLE"
     assert counters["passenger_phone_violation_count"] == 1
@@ -456,16 +566,21 @@ def test_evaluator_ambiguous_overlap():
     
     # Truth has two overlapping events but different labels
     truth_rows = [
-        {"video_id": "v1", "event_type": "PHONE", "start_seconds": "10", "end_seconds": "15", "occupant_role": "driver", "label": "PHONE_USE", "vehicle_id": "veh1", "cabin_id": "cab1", "inside_vehicle": "true", "outside_vehicle_person": "false", "motorcycle_flag": "false"},
-        {"video_id": "v1", "event_type": "PHONE", "start_seconds": "12", "end_seconds": "14", "occupant_role": "driver", "label": "MOUNTED_OR_STATIC_PHONE", "vehicle_id": "veh1", "cabin_id": "cab1", "inside_vehicle": "true", "outside_vehicle_person": "false", "motorcycle_flag": "false"}
+        {"video_id": "v1", "event_type": "PHONE", "occupant_id": "occupant-1", "start_seconds": "10", "end_seconds": "15", "occupant_role": "driver", "label": "PHONE_USE", "vehicle_id": "veh1", "cabin_id": "cab1", "inside_vehicle": "true", "outside_vehicle_person": "false", "motorcycle_flag": "false"},
+        {"video_id": "v1", "event_type": "PHONE", "occupant_id": "occupant-1", "start_seconds": "12", "end_seconds": "14", "occupant_role": "driver", "label": "MOUNTED_OR_STATIC_PHONE", "vehicle_id": "veh1", "cabin_id": "cab1", "inside_vehicle": "true", "outside_vehicle_person": "false", "motorcycle_flag": "false"}
     ]
     
     # Prediction overlaps both
     prediction_rows = [
-        {"video_id": "v1", "event_type": "PHONE", "occupant_role": "driver", "start_seconds": "11", "end_seconds": "16", "label": "PHONE_USE", "visibility": "clear", "outside_vehicle_person": "false", "motorcycle_flag": "false", "vehicle_id": "veh1", "cabin_id": "cab1", "start_frame": "330", "end_frame": "480"}
+        {"video_id": "v1", "event_type": "PHONE", "occupant_id": "occupant-1", "occupant_role": "driver", "start_seconds": "11", "end_seconds": "14", "label": "PHONE_USE", "visibility": "clear", "outside_vehicle_person": "false", "motorcycle_flag": "false", "vehicle_id": "veh1", "cabin_id": "cab1", "start_frame": "330", "end_frame": "420"}
     ]
     
-    report = evaluate(truth_rows=truth_rows, prediction_rows=prediction_rows, video_minutes=1.0)
+    report = evaluate(
+        truth_rows=truth_rows,
+        prediction_rows=prediction_rows,
+        video_minutes=1.0,
+        context_rows=[_as_safety_context(row) for row in truth_rows],
+    )
     assert report["safety_invariant_counters"] == "NOT_EVALUABLE"
 
 def test_evaluator_safety_counters_fail_close_missing_context():
@@ -473,22 +588,32 @@ def test_evaluator_safety_counters_fail_close_missing_context():
     
     # Truth has a single event
     truth_rows = [
-        {"video_id": "v1", "event_type": "PHONE", "start_seconds": "10", "end_seconds": "15", "occupant_role": "driver", "label": "PHONE_USE", "vehicle_id": "veh_A", "cabin_id": "cab1", "inside_vehicle": "true", "outside_vehicle_person": "false", "motorcycle_flag": "false"}
+        {"video_id": "v1", "event_type": "PHONE", "occupant_id": "occupant-1", "start_seconds": "10", "end_seconds": "15", "occupant_role": "driver", "label": "PHONE_USE", "vehicle_id": "veh_A", "cabin_id": "cab1", "inside_vehicle": "true", "outside_vehicle_person": "false", "motorcycle_flag": "false"}
     ]
     
     # Prediction 1: overlaps but has wrong vehicle_id (veh_B vs veh_A) -> incompatible context -> NOT_EVALUABLE
     pred_incompatible = [
-        {"video_id": "v1", "event_type": "PHONE", "occupant_role": "driver", "start_seconds": "11", "end_seconds": "14", "label": "PHONE_USE", "visibility": "clear", "outside_vehicle_person": "false", "motorcycle_flag": "false", "vehicle_id": "veh_B", "cabin_id": "cab1", "start_frame": "330", "end_frame": "420"}
+        {"video_id": "v1", "event_type": "PHONE", "occupant_id": "occupant-1", "occupant_role": "driver", "start_seconds": "11", "end_seconds": "14", "label": "PHONE_USE", "visibility": "clear", "outside_vehicle_person": "false", "motorcycle_flag": "false", "vehicle_id": "veh_B", "cabin_id": "cab1", "start_frame": "330", "end_frame": "420"}
     ]
     
-    report1 = evaluate(truth_rows=truth_rows, prediction_rows=pred_incompatible, video_minutes=1.0)
+    context_rows = [_as_safety_context(row) for row in truth_rows]
+    report1 = evaluate(
+        truth_rows=truth_rows,
+        prediction_rows=pred_incompatible,
+        video_minutes=1.0,
+        context_rows=context_rows,
+    )
     assert report1["safety_invariant_counters"] == "NOT_EVALUABLE"
     
     # Prediction 2: compatible vehicle, but completely misses the temporal window -> no context -> NOT_EVALUABLE
     pred_no_overlap = [
-        {"video_id": "v1", "event_type": "PHONE", "occupant_role": "driver", "start_seconds": "20", "end_seconds": "25", "label": "PHONE_USE", "visibility": "clear", "outside_vehicle_person": "false", "motorcycle_flag": "false", "vehicle_id": "veh_A", "cabin_id": "cab1", "start_frame": "600", "end_frame": "750"}
+        {"video_id": "v1", "event_type": "PHONE", "occupant_id": "occupant-1", "occupant_role": "driver", "start_seconds": "20", "end_seconds": "25", "label": "PHONE_USE", "visibility": "clear", "outside_vehicle_person": "false", "motorcycle_flag": "false", "vehicle_id": "veh_A", "cabin_id": "cab1", "start_frame": "600", "end_frame": "750"}
     ]
     
-    report2 = evaluate(truth_rows=truth_rows, prediction_rows=pred_no_overlap, video_minutes=1.0)
+    report2 = evaluate(
+        truth_rows=truth_rows,
+        prediction_rows=pred_no_overlap,
+        video_minutes=1.0,
+        context_rows=context_rows,
+    )
     assert report2["safety_invariant_counters"] == "NOT_EVALUABLE"
-

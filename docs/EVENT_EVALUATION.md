@@ -38,12 +38,13 @@ no input, the checked-in report remains `NOT_RUN`.
 
 ## Level 3 — event metrics
 
-`training.evaluate_events` accepts frozen human truth and system prediction CSV files. The metric
-reader needs the four columns below; the preceding ground-truth freeze additionally requires the
-review, adjudication, identity and condition columns in `docs/V2_EVENT_GROUND_TRUTH_PROTOCOL.md`.
+`training.evaluate_events` accepts a sparse frozen event-truth CSV, a separate frozen
+full-timeline context CSV, and the system prediction CSV. Event truth drives TP/FP/FN/F1/TTD;
+context truth alone drives the seven safety invariants. See
+`docs/V2_EVENT_GROUND_TRUTH_PROTOCOL.md` for the complete contracts.
 
 ```text
-video_id,event_type,start_seconds,end_seconds
+video_id,event_type,occupant_id,vehicle_id,cabin_id,occupant_role,start_seconds,end_seconds
 ```
 
 Freeze independently reviewed truth first:
@@ -51,6 +52,10 @@ Freeze independently reviewed truth first:
 ```powershell
 py -m training.freeze_event_ground_truth `
   reports/event_truth.csv `
+  datasets/manifests/v2_external_test_frozen.json
+
+py -m training.freeze_context_ground_truth `
+  reports/context_truth.csv `
   datasets/manifests/v2_external_test_frozen.json
 ```
 
@@ -62,14 +67,19 @@ py -m training.evaluate_events `
   reports/event_predictions.csv `
   --video-minutes 180 `
   --ground-truth-lock datasets/manifests/v2_event_truth_frozen.json `
+  --context-truth reports/context_truth.csv `
+  --context-truth-lock datasets/manifests/v2_context_truth_frozen.json `
   --model-lock reports/model_lock_v2.json `
   --output reports/event_evaluation.json
 ```
 
+The prediction exporter includes both stable `occupant_id` and diagnostic `track_id`. Frozen
+truth and predictions require known occupant/vehicle/cabin identity; `UNKNOWN` is not a wildcard.
 The report contains per-event precision, recall, F1, false events/minute/hour, missed events,
 duplicate/fragmented events, and mean time-to-detection. It records hashes for truth, predictions,
-ground-truth lock, external-test lock and model lock. It refuses changed truth, an inactive or
-incomplete lock, and overwriting a prior result. Without both CSV files the tool reports `NOT_RUN`.
+both truth locks, external-test lock and model lock. It refuses incomplete context coverage,
+ambiguous prediction context, changed truth, an inactive or incomplete model lock, and overwriting
+a prior result. Without the event and prediction positional CSV files the tool reports `NOT_RUN`.
 
 ## External test protocol
 

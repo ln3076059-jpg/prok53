@@ -17,6 +17,8 @@ def create_base_record():
     return {
         "sequence_id": "seq1",
         "video_id": "vid1",
+        "vehicle_id": "vehicle-1",
+        "cabin_id": "cabin-1",
         "source_id": "src1",
         "fps": 30.0,
         "frame_count": 300,
@@ -24,6 +26,21 @@ def create_base_record():
         "end_time": "2026-09-04T12:00:10Z",
         "occupants": [{"occupant_id": "occ1", "role": "driver"}],
         "events": [],
+        "context_intervals": [
+            {
+                "context_id": "ctx1",
+                "occupant_id": "occ1",
+                "start_frame": 0,
+                "end_frame": 300,
+                "inside_vehicle": True,
+                "outside_vehicle_person": False,
+                "motorcycle_flag": False,
+                "phone_state": "NO_PHONE",
+                "seatbelt_state": "FASTENED",
+                "visibility": "clear",
+                "conditions": "daylight",
+            }
+        ],
         "context": {},
         "review_provenance": {
             "reviewer_type": "AI",

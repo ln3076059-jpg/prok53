@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -14,6 +15,7 @@ REQUIRED_COLUMNS = {
     "event_type",
     "start_seconds",
     "end_seconds",
+    "occupant_id",
     "vehicle_id",
     "cabin_id",
     "occupant_role",
@@ -31,6 +33,21 @@ REQUIRED_COLUMNS = {
     "notes",
 }
 EVENT_TYPES = {"PHONE", "NO_SEATBELT"}
+EVENT_LABELS = {
+    "PHONE": {
+        "PHONE_USE",
+        "PHONE_PRESENT_NOT_USED",
+        "MOUNTED_OR_STATIC_PHONE",
+        "NO_PHONE",
+        "UNKNOWN",
+    },
+    "NO_SEATBELT": {
+        "FASTENED",
+        "UNFASTENED",
+        "UNCERTAIN_OR_OCCLUDED",
+        "NOT_APPLICABLE",
+    },
+}
 OCCUPANT_ROLES = {
     "driver",
     "front_passenger",
@@ -102,11 +119,15 @@ def freeze_event_ground_truth(
             errors.append(f"{event_id}: invalid event_type {event_type!r}")
         else:
             event_type_counts[event_type] += 1
+            if row["label"].strip() not in EVENT_LABELS[event_type]:
+                errors.append(f"{event_id}: invalid label {row['label']!r} for {event_type}")
         if row["occupant_role"].strip() not in OCCUPANT_ROLES:
             errors.append(f"{event_id}: invalid occupant_role {row['occupant_role']!r}")
+        for field in ("occupant_id", "vehicle_id", "cabin_id"):
+            value = row[field].strip()
+            if not value or value.upper() == "UNKNOWN":
+                errors.append(f"{event_id}: {field} must be a known stable identity")
         for field in (
-            "vehicle_id",
-            "cabin_id",
             "inside_vehicle",
             "outside_vehicle_person",
             "motorcycle_flag",
@@ -117,6 +138,14 @@ def freeze_event_ground_truth(
         ):
             if not row[field].strip():
                 errors.append(f"{event_id}: {field} must not be empty; use UNKNOWN if unavailable")
+        for field in ("inside_vehicle", "outside_vehicle_person", "motorcycle_flag"):
+            if row[field].strip().lower() not in {"true", "false"}:
+                errors.append(f"{event_id}: {field} must be true or false")
+        if (
+            row["inside_vehicle"].strip().lower() == "true"
+            and row["outside_vehicle_person"].strip().lower() == "true"
+        ):
+            errors.append(f"{event_id}: event cannot be both inside and outside vehicle")
         if row["human_review_status"].strip() != "APPROVED":
             errors.append(f"{event_id}: human_review_status must be APPROVED")
         if row["reviewer_type"].strip() != "HUMAN":
@@ -130,7 +159,7 @@ def freeze_event_ground_truth(
         try:
             start = float(row["start_seconds"])
             end = float(row["end_seconds"])
-            if start < 0 or end < start:
+            if not math.isfinite(start) or not math.isfinite(end) or start < 0 or end < start:
                 raise ValueError
         except ValueError:
             errors.append(f"{event_id}: invalid event interval")
@@ -139,7 +168,7 @@ def freeze_event_ground_truth(
         raise ValueError("cannot freeze event ground truth:\n- " + "\n- ".join(errors))
 
     frozen = {
-        "schema_version": 1,
+        "schema_version": 2,
         "status": "FROZEN_EVENT_GROUND_TRUTH",
         "created_at_utc": datetime.now(UTC).isoformat(),
         "truth_csv": {"path": str(truth_path.resolve()), "sha256": sha256_file(truth_path)},

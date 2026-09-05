@@ -6,6 +6,7 @@ import pytest
 
 from training.validate_event_sequence_annotations import load_schema
 from training.build_event_truth_from_sequences import process_file
+from training.freeze_context_ground_truth import freeze_context_ground_truth
 from training.freeze_event_ground_truth import freeze_event_ground_truth
 
 def create_valid_external_lock(path: Path, video_id: str):
@@ -21,6 +22,8 @@ def create_valid_sequence(path: Path, video_id: str):
     seq_data = {
         "sequence_id": "seq123",
         "video_id": video_id,
+        "vehicle_id": "vehicle-1",
+        "cabin_id": "cabin-1",
         "source_id": "src1",
         "fps": 30.0,
         "frame_count": 300,
@@ -37,6 +40,47 @@ def create_valid_sequence(path: Path, video_id: str):
                 "end_frame": 60,
                 "label": "PHONE_USE"
             }
+        ],
+        "context_intervals": [
+            {
+                "context_id": "ctx-before",
+                "occupant_id": "occ1",
+                "start_frame": 0,
+                "end_frame": 30,
+                "inside_vehicle": True,
+                "outside_vehicle_person": False,
+                "motorcycle_flag": False,
+                "phone_state": "NO_PHONE",
+                "seatbelt_state": "FASTENED",
+                "visibility": "clear",
+                "conditions": "daylight",
+            },
+            {
+                "context_id": "ctx-event",
+                "occupant_id": "occ1",
+                "start_frame": 30,
+                "end_frame": 61,
+                "inside_vehicle": True,
+                "outside_vehicle_person": False,
+                "motorcycle_flag": False,
+                "phone_state": "PHONE_USE",
+                "seatbelt_state": "FASTENED",
+                "visibility": "clear",
+                "conditions": "daylight",
+            },
+            {
+                "context_id": "ctx-after",
+                "occupant_id": "occ1",
+                "start_frame": 61,
+                "end_frame": 300,
+                "inside_vehicle": True,
+                "outside_vehicle_person": False,
+                "motorcycle_flag": False,
+                "phone_state": "NO_PHONE",
+                "seatbelt_state": "FASTENED",
+                "visibility": "clear",
+                "conditions": "daylight",
+            },
         ],
         "context": {
             "inside_vehicle": True,
@@ -72,7 +116,7 @@ def test_adapter_freezer_integration(tmp_path: Path):
         writer = csv.writer(f)
         writer.writerow([
             "video_id", "event_id", "event_type", "start_seconds", "end_seconds",
-            "vehicle_id", "cabin_id", "occupant_role", "inside_vehicle",
+            "occupant_id", "vehicle_id", "cabin_id", "occupant_role", "inside_vehicle",
             "outside_vehicle_person", "motorcycle_flag", "label",
             "visibility", "conditions",
             "human_review_status", "reviewer_id", "reviewer_type", "reviewed_at",
@@ -104,20 +148,27 @@ def test_adapter_freezer_cli_integration(tmp_path: Path):
     create_valid_sequence(seq_path, video_id)
     
     csv_path = tmp_path / "events.csv"
+    context_path = tmp_path / "context.csv"
     
     # Run the adapter via CLI
     result = subprocess.run([
         sys.executable, "-m", "training.build_event_truth_from_sequences",
-        str(seq_dir), str(csv_path)
+        str(seq_dir), str(csv_path),
+        "--context-output", str(context_path)
     ], capture_output=True, text=True)
     
     assert result.returncode == 0, f"Adapter CLI failed: {result.stderr}"
     assert csv_path.exists(), "Adapter CLI did not produce CSV"
+    assert context_path.exists(), "Adapter CLI did not produce context CSV"
     
     # Freeze the output
     output_frozen = tmp_path / "frozen.json"
     frozen_result = freeze_event_ground_truth(csv_path, lock_path, output_frozen)
+    frozen_context = freeze_context_ground_truth(
+        context_path, lock_path, tmp_path / "context-frozen.json"
+    )
     
     assert frozen_result["status"] == "FROZEN_EVENT_GROUND_TRUTH"
     assert frozen_result["rows"] == 1
     assert "PHONE" in frozen_result["event_type_counts"]
+    assert frozen_context["coverage_status"] == "FULL_TIMELINE_NO_GAPS_OR_OVERLAPS"

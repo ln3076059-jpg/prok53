@@ -5,6 +5,8 @@ def create_valid_annotation():
     return {
         "sequence_id": "seq1",
         "video_id": "vid1",
+        "vehicle_id": "vehicle-1",
+        "cabin_id": "cabin-1",
         "source_id": "src1",
         "fps": 30.0,
         "frame_count": 300,
@@ -23,6 +25,47 @@ def create_valid_annotation():
                 "end_time_sec": 2.0,
                 "label": "PHONE_USE"
             }
+        ],
+        "context_intervals": [
+            {
+                "context_id": "ctx-before",
+                "occupant_id": "occ1",
+                "start_frame": 0,
+                "end_frame": 30,
+                "inside_vehicle": True,
+                "outside_vehicle_person": False,
+                "motorcycle_flag": False,
+                "phone_state": "NO_PHONE",
+                "seatbelt_state": "FASTENED",
+                "visibility": "clear",
+                "conditions": "daylight",
+            },
+            {
+                "context_id": "ctx-event",
+                "occupant_id": "occ1",
+                "start_frame": 30,
+                "end_frame": 61,
+                "inside_vehicle": True,
+                "outside_vehicle_person": False,
+                "motorcycle_flag": False,
+                "phone_state": "PHONE_USE",
+                "seatbelt_state": "FASTENED",
+                "visibility": "clear",
+                "conditions": "daylight",
+            },
+            {
+                "context_id": "ctx-after",
+                "occupant_id": "occ1",
+                "start_frame": 61,
+                "end_frame": 300,
+                "inside_vehicle": True,
+                "outside_vehicle_person": False,
+                "motorcycle_flag": False,
+                "phone_state": "NO_PHONE",
+                "seatbelt_state": "FASTENED",
+                "visibility": "clear",
+                "conditions": "daylight",
+            },
         ],
         "context": {},
         "review_provenance": {
@@ -119,3 +162,27 @@ def test_contradictory_context():
     errors = validate_annotation(ann, {})
     semantic_errors = [e for e in errors if e.startswith('Semantic error:')]
     assert any("contradictory context - inside_vehicle and outside_vehicle_person cannot both be True" in e for e in semantic_errors)
+
+
+def test_event_label_must_match_timeline_context():
+    ann = create_valid_annotation()
+    ann["context_intervals"][1]["phone_state"] = "NO_PHONE"
+    errors = validate_annotation(ann, {})
+    semantic_errors = [e for e in errors if e.startswith("Semantic error:")]
+    assert any("conflicts with phone_state" in e for e in semantic_errors)
+
+
+def test_context_timeline_gap_is_rejected():
+    ann = create_valid_annotation()
+    ann["context_intervals"][2]["start_frame"] = 62
+    errors = validate_annotation(ann, {})
+    semantic_errors = [e for e in errors if e.startswith("Semantic error:")]
+    assert any("gap in context coverage" in e for e in semantic_errors)
+
+
+def test_unknown_vehicle_identity_is_rejected():
+    ann = create_valid_annotation()
+    ann["vehicle_id"] = "UNKNOWN"
+    errors = validate_annotation(ann, {})
+    semantic_errors = [e for e in errors if e.startswith("Semantic error:")]
+    assert any("vehicle_id must be a known stable identity" in e for e in semantic_errors)

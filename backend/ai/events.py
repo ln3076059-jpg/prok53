@@ -26,6 +26,7 @@ class Observation:
     visibility: str = ""
     outside_vehicle_person: str = ""
     behavior_label: str = ""
+    occupant_id: str = ""
 
 
 @dataclass(frozen=True)
@@ -46,6 +47,7 @@ class EventCandidate:
     behavior_label: str = ""
     vehicle_type: str = "unknown"
     temporal_score: float = 0.0
+    occupant_id: str = ""
 
 
 class TemporalEventEngine:
@@ -192,10 +194,11 @@ class TemporalEventEngine:
             item.fusion_score if item.fusion_score is not None else item.confidence
             for item in observations
         ]
-        
+
         for item in observations:
             if (
                 item.cabin_id != observations[0].cabin_id
+                or item.occupant_id != observations[0].occupant_id
                 or item.visibility != observations[0].visibility
                 or item.outside_vehicle_person != observations[0].outside_vehicle_person
                 or item.behavior_label != observations[0].behavior_label
@@ -203,23 +206,27 @@ class TemporalEventEngine:
             ):
                 status = "NEEDS_REVIEW"
                 break
+        occupant_id = current.occupant_id or (f"{current.vehicle_context_id}:occupant:{role}")
         return EventCandidate(
-            event_type,
-            sum(scores) / len(scores),
-            current.timestamp,
-            observations[0].timestamp,
-            observations[-1].timestamp,
-            len(observations),
-            current.track_id,
-            status,
-            role,
-            current.vehicle_context_id,
-            current.cabin_id or "",
-            current.visibility,
-            current.outside_vehicle_person,
-            current.behavior_label,
-            current.vehicle_type,
-            self.smoothed.get((current.vehicle_context_id, current.track_id, role), scores[-1]),
+            event_type=event_type,
+            confidence=sum(scores) / len(scores),
+            timestamp=current.timestamp,
+            start_timestamp=observations[0].timestamp,
+            end_timestamp=observations[-1].timestamp,
+            observation_count=len(observations),
+            track_id=current.track_id,
+            review_status=status,
+            occupant_role=role,
+            vehicle_context_id=current.vehicle_context_id,
+            cabin_id=current.cabin_id or "",
+            visibility=current.visibility,
+            outside_vehicle_person=current.outside_vehicle_person,
+            behavior_label=current.behavior_label,
+            vehicle_type=current.vehicle_type,
+            temporal_score=self.smoothed.get(
+                (current.vehicle_context_id, current.track_id, role), scores[-1]
+            ),
+            occupant_id=occupant_id,
         )
 
     def _cooldown_allows(self, candidate: EventCandidate) -> bool:

@@ -6,6 +6,8 @@
   "required": [
     "sequence_id",
     "video_id",
+    "vehicle_id",
+    "cabin_id",
     "source_id",
     "fps",
     "frame_count",
@@ -13,6 +15,7 @@
     "end_time",
     "occupants",
     "events",
+    "context_intervals",
     "context",
     "review_provenance"
   ],
@@ -21,7 +24,8 @@
     "video_id": { "type": "string" },
     "source_id": { "type": "string" },
     "camera_id": { "type": "string" },
-    "vehicle_id": { "type": "string" },
+    "vehicle_id": { "type": "string", "minLength": 1 },
+    "cabin_id": { "type": "string", "minLength": 1 },
     "fps": { "type": "number", "exclusiveMinimum": 0 },
     "frame_count": { "type": "integer", "minimum": 1 },
     "start_time": { "type": "string", "format": "date-time" },
@@ -100,6 +104,58 @@
             }
           }
         ]
+      }
+    },
+    "context_intervals": {
+      "description": "Human-reviewed, half-open [start_frame, end_frame) context intervals. Every occupant must be covered continuously from frame 0 through frame_count.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "context_id",
+          "occupant_id",
+          "start_frame",
+          "end_frame",
+          "inside_vehicle",
+          "outside_vehicle_person",
+          "motorcycle_flag",
+          "phone_state",
+          "seatbelt_state",
+          "visibility",
+          "conditions"
+        ],
+        "properties": {
+          "context_id": { "type": "string", "minLength": 1 },
+          "occupant_id": { "type": "string", "minLength": 1 },
+          "start_frame": { "type": "integer", "minimum": 0 },
+          "end_frame": { "type": "integer", "minimum": 1 },
+          "inside_vehicle": { "type": "boolean" },
+          "outside_vehicle_person": { "type": "boolean" },
+          "motorcycle_flag": { "type": "boolean" },
+          "phone_state": {
+            "type": "string",
+            "enum": [
+              "PHONE_USE",
+              "PHONE_PRESENT_NOT_USED",
+              "MOUNTED_OR_STATIC_PHONE",
+              "NO_PHONE",
+              "UNKNOWN"
+            ]
+          },
+          "seatbelt_state": {
+            "type": "string",
+            "enum": [
+              "FASTENED",
+              "UNFASTENED",
+              "UNCERTAIN_OR_OCCLUDED",
+              "NOT_APPLICABLE"
+            ]
+          },
+          "visibility": { "type": "string", "minLength": 1 },
+          "conditions": { "type": "string", "minLength": 1 },
+          "notes": { "type": "string" }
+        }
       }
     },
     "context": {

@@ -3,6 +3,25 @@ from backend.ai.events import TemporalEventEngine, Observation
 from training.export_event_predictions import export_predictions_to_csv
 from training.evaluate_events import evaluate, _read
 
+
+def _context_for_prediction(prediction: dict[str, str], **overrides: str) -> dict[str, str]:
+    context = {
+        "video_id": prediction["video_id"],
+        "occupant_id": prediction["occupant_id"],
+        "occupant_role": "driver",
+        "vehicle_id": prediction["vehicle_id"],
+        "cabin_id": prediction["cabin_id"],
+        "start_seconds": "0",
+        "end_seconds": "60",
+        "inside_vehicle": "true",
+        "outside_vehicle_person": "false",
+        "motorcycle_flag": "false",
+        "phone_state": "NO_PHONE",
+        "seatbelt_state": "FASTENED",
+    }
+    context.update(overrides)
+    return context
+
 def test_end_to_end_prediction_evaluation(tmp_path: Path):
     # 1. Generate runtime EventCandidates using TemporalEventEngine
     engine = TemporalEventEngine(window_seconds=2.0)
@@ -86,12 +105,15 @@ def test_end_to_end_prediction_evaluation(tmp_path: Path):
     assert prediction_rows[0]["observation_count"] == "4"
     assert prediction_rows[0]["start_seconds"] == "1.000"
     assert prediction_rows[0]["end_seconds"] == "2.500"
+    assert prediction_rows[0]["occupant_id"] == "v1:occupant:driver"
+    assert prediction_rows[0]["track_id"] == "1"
     
     # 5. Mock Ground Truth
     truth_rows = [
         {
             "video_id": "video_1",
             "event_type": "PHONE",
+            "occupant_id": "v1:occupant:driver",
             "occupant_role": "driver",
             "vehicle_id": "v1",
             "cabin_id": "c1",
@@ -109,7 +131,8 @@ def test_end_to_end_prediction_evaluation(tmp_path: Path):
         truth_rows=truth_rows,
         prediction_rows=prediction_rows,
         video_minutes=1.0,
-        prediction_fieldnames=pred_fields
+        prediction_fieldnames=pred_fields,
+        context_rows=[_context_for_prediction(prediction_rows[0])],
     )
     
     # 7. Assert contract integrity
@@ -263,6 +286,7 @@ def test_end_to_end_seatbelt_evaluation(tmp_path: Path):
         {
             "video_id": "video_1",
             "event_type": "NO_SEATBELT",
+            "occupant_id": "v1:occupant:driver",
             "occupant_role": "driver",
             "vehicle_id": "v1",
             "cabin_id": "c1",
@@ -279,7 +303,8 @@ def test_end_to_end_seatbelt_evaluation(tmp_path: Path):
         truth_rows=truth_rows,
         prediction_rows=prediction_rows,
         video_minutes=1.0,
-        prediction_fieldnames=pred_fields
+        prediction_fieldnames=pred_fields,
+        context_rows=[_context_for_prediction(prediction_rows[0])],
     )
     
     assert report["safety_invariant_counters"] != "NOT_EVALUABLE", "Metadata from exporter failed validation"
