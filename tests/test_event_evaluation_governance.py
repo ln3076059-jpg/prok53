@@ -92,11 +92,13 @@ def test_frozen_event_evaluation_requires_active_model_and_preserves_result(tmp_
                 "video_id": "external-video",
                 "event_type": "PHONE",
                 "occupant_role": "driver",
+                "vehicle_id": "vehicle-1",
+                "cabin_id": "cabin-1",
                 "start_seconds": "1.2",
                 "end_seconds": "2.1",
             }
         ],
-        {"video_id", "event_type", "occupant_role", "start_seconds", "end_seconds"},
+        {"video_id", "event_type", "occupant_role", "vehicle_id", "cabin_id", "start_seconds", "end_seconds"},
     )
     model_lock_path = tmp_path / "model-lock.json"
     model_lock = {
@@ -200,7 +202,7 @@ def test_frozen_event_evaluation_rejects_truth_changed_after_freeze(tmp_path):
     _write_csv(
         predictions_path,
         [],
-        {"video_id", "event_type", "occupant_role", "start_seconds", "end_seconds"},
+        {"video_id", "event_type", "occupant_role", "vehicle_id", "cabin_id", "start_seconds", "end_seconds"},
     )
     model_lock_path = tmp_path / "model-lock.json"
     model_lock_path.write_text(
@@ -291,3 +293,50 @@ def test_evaluator_matching_requires_identity():
     report3 = evaluate(truth_rows, pred_mismatch_veh, video_minutes=1.0)
     assert report3["event_types"]["NO_SEATBELT"]["true_positives"] == 0
     assert report3["event_types"]["NO_SEATBELT"]["false_positives"] == 1
+    assert report3["event_types"]["NO_SEATBELT"]["missed_events"] == 1
+
+def test_evaluate_empty_predictions(tmp_path):
+    from training.evaluate_events import evaluate_frozen, REQUIRED
+    truth_path = tmp_path / "truth.csv"
+    _write_csv(truth_path, [_truth_row()], REQUIRED_COLUMNS)
+    external_lock_path = tmp_path / "external-lock.json"
+    external_lock_path.write_text(json.dumps({"status": "FROZEN_EXTERNAL_TEST", "human_review_status": "ALL_APPROVED", "video_ids": ["external-video"]}), encoding="utf-8")
+    truth_lock_path = tmp_path / "truth-lock.json"
+    freeze_event_ground_truth(truth_path, external_lock_path, truth_lock_path)
+    
+    predictions_path = tmp_path / "predictions.csv"
+    # Empty rows, but valid header
+    _write_csv(predictions_path, [], REQUIRED)
+    
+    model_lock_path = tmp_path / "model-lock.json"
+    model_lock_path.write_text(
+        json.dumps({
+            "record_schema": "ROADWATCH_MODEL_VERSION_V2",
+            "activation_state": "ACTIVE",
+            "experiment_id": "V2_TEST",
+            "locked_at": "2026-09-02T00:00:00+00:00",
+            "weights_sha256": "a" * 64,
+            "config_sha256": "b" * 64,
+            "training_data_manifest_sha256": "c" * 64,
+            "validation_metric_artifact": {"sha256": "d" * 64},
+            "threshold_calibration_artifact": {"sha256": "e" * 64},
+            "human_review_readiness_artifact": {"governed_training_ready": True},
+            "code_commit": "abc123"
+        }),
+        encoding="utf-8"
+    )
+    
+    output_path = tmp_path / "evaluation.json"
+    report = evaluate_frozen(
+        truth_path,
+        predictions_path,
+        truth_lock_path,
+        model_lock_path,
+        output_path,
+        video_minutes=1.0,
+    )
+    assert report["event_types"]["PHONE"]["true_positives"] == 0
+    assert report["event_types"]["PHONE"]["false_positives"] == 0
+    assert report["event_types"]["PHONE"]["missed_events"] == 1
+    assert report["event_types"]["PHONE"]["recall"] == 0.0
+

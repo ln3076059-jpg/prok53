@@ -8,15 +8,16 @@ from pathlib import Path
 
 from training.common import sha256_file
 
-REQUIRED = {"video_id", "event_type", "occupant_role", "start_seconds", "end_seconds"}
+REQUIRED = {"video_id", "event_type", "occupant_role", "vehicle_id", "cabin_id", "start_seconds", "end_seconds"}
 
 
 def _read(path: Path) -> list[dict]:
     with path.open(newline="", encoding="utf-8-sig") as handle:
-        rows = list(csv.DictReader(handle))
-    missing = REQUIRED - set(rows[0] if rows else [])
-    if missing:
-        raise ValueError(f"{path} is missing columns: {sorted(missing)}")
+        reader = csv.DictReader(handle)
+        missing = REQUIRED - set(reader.fieldnames or [])
+        if missing:
+            raise ValueError(f"{path} is missing columns: {sorted(missing)}")
+        rows = list(reader)
     return rows
 
 
@@ -25,10 +26,11 @@ def _overlap(a: dict, b: dict, tolerance: float) -> bool:
         return False
     if a.get("occupant_role") != b.get("occupant_role"):
         return False
-    if a.get("vehicle_id") and b.get("vehicle_id") and a["vehicle_id"] != b["vehicle_id"]:
-        return False
-    if a.get("cabin_id") and b.get("cabin_id") and a["cabin_id"] != b["cabin_id"]:
-        return False
+    for field in ("vehicle_id", "cabin_id"):
+        val_a = a.get(field)
+        val_b = b.get(field)
+        if val_a and val_b and val_a != "UNKNOWN" and val_b != "UNKNOWN" and val_a != val_b:
+            return False
     a_start, a_end = float(a["start_seconds"]), float(a["end_seconds"])
     b_start, b_end = float(b["start_seconds"]), float(b["end_seconds"])
     return b_start <= a_end + tolerance and a_start <= b_end + tolerance
