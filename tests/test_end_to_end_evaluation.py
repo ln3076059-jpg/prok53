@@ -40,7 +40,8 @@ def test_end_to_end_prediction_evaluation(tmp_path: Path):
             outside_vehicle_person="false",
             behavior_label="PHONE_USE",
             vehicle_type="car",
-            phone_context="HANDHELD"
+            phone_context="HANDHELD",
+            occupant_id="v1:occupant-track:1"
         ),
         Observation(
             timestamp=1.5, 
@@ -54,7 +55,8 @@ def test_end_to_end_prediction_evaluation(tmp_path: Path):
             outside_vehicle_person="false",
             behavior_label="PHONE_USE",
             vehicle_type="car",
-            phone_context="HANDHELD"
+            phone_context="HANDHELD",
+            occupant_id="v1:occupant-track:1"
         ),
         Observation(
             timestamp=2.0, 
@@ -68,7 +70,8 @@ def test_end_to_end_prediction_evaluation(tmp_path: Path):
             outside_vehicle_person="false",
             behavior_label="PHONE_USE",
             vehicle_type="car",
-            phone_context="HANDHELD"
+            phone_context="HANDHELD",
+            occupant_id="v1:occupant-track:1"
         ),
         Observation(
             timestamp=2.5, 
@@ -82,7 +85,8 @@ def test_end_to_end_prediction_evaluation(tmp_path: Path):
             outside_vehicle_person="false",
             behavior_label="PHONE_USE",
             vehicle_type="car",
-            phone_context="HANDHELD"
+            phone_context="HANDHELD",
+            occupant_id="v1:occupant-track:1"
         ),
     ]
     
@@ -105,7 +109,7 @@ def test_end_to_end_prediction_evaluation(tmp_path: Path):
     assert prediction_rows[0]["observation_count"] == "4"
     assert prediction_rows[0]["start_seconds"] == "1.000"
     assert prediction_rows[0]["end_seconds"] == "2.500"
-    assert prediction_rows[0]["occupant_id"] == "v1:occupant:driver"
+    assert prediction_rows[0]["occupant_id"] == "v1:occupant-track:1"
     assert prediction_rows[0]["track_id"] == "1"
     
     # 5. Mock Ground Truth
@@ -113,7 +117,7 @@ def test_end_to_end_prediction_evaluation(tmp_path: Path):
         {
             "video_id": "video_1",
             "event_type": "PHONE",
-            "occupant_id": "v1:occupant:driver",
+            "occupant_id": "v1:occupant-track:1",
             "occupant_role": "driver",
             "vehicle_id": "v1",
             "cabin_id": "c1",
@@ -177,6 +181,8 @@ def test_video_analyzer_metadata_contract():
     video = SimpleNamespace(id="v1")
     context = InferenceContext(
         context_id="v1:car-1:cabin:0",
+        vehicle_id="v1:car-1",
+        cabin_id="v1:car-1:cabin:0",
         cabin=np.zeros((10, 10, 3)),
         offset=(0, 0),
         vehicle_track_id=1,
@@ -218,7 +224,8 @@ def test_end_to_end_seatbelt_evaluation(tmp_path: Path):
             outside_vehicle_person="false",
             behavior_label="UNFASTENED",
             vehicle_type="car",
-            seatbelt_probabilities=[0.1, 0.8, 0.1]
+            seatbelt_probabilities=[0.1, 0.8, 0.1],
+            occupant_id="v1:occupant-track:1"
         ),
         Observation(
             timestamp=1.5, 
@@ -232,7 +239,8 @@ def test_end_to_end_seatbelt_evaluation(tmp_path: Path):
             outside_vehicle_person="false",
             behavior_label="UNFASTENED",
             vehicle_type="car",
-            seatbelt_probabilities=[0.1, 0.85, 0.05]
+            seatbelt_probabilities=[0.1, 0.85, 0.05],
+            occupant_id="v1:occupant-track:1"
         ),
         Observation(
             timestamp=2.0, 
@@ -246,7 +254,8 @@ def test_end_to_end_seatbelt_evaluation(tmp_path: Path):
             outside_vehicle_person="false",
             behavior_label="UNFASTENED",
             vehicle_type="car",
-            seatbelt_probabilities=[0.05, 0.9, 0.05]
+            seatbelt_probabilities=[0.05, 0.9, 0.05],
+            occupant_id="v1:occupant-track:1"
         ),
         Observation(
             timestamp=2.5, 
@@ -260,7 +269,8 @@ def test_end_to_end_seatbelt_evaluation(tmp_path: Path):
             outside_vehicle_person="false",
             behavior_label="UNFASTENED",
             vehicle_type="car",
-            seatbelt_probabilities=[0.01, 0.95, 0.04]
+            seatbelt_probabilities=[0.01, 0.95, 0.04],
+            occupant_id="v1:occupant-track:1"
         ),
     ]
     
@@ -286,7 +296,7 @@ def test_end_to_end_seatbelt_evaluation(tmp_path: Path):
         {
             "video_id": "video_1",
             "event_type": "NO_SEATBELT",
-            "occupant_id": "v1:occupant:driver",
+            "occupant_id": "v1:occupant-track:1",
             "occupant_role": "driver",
             "vehicle_id": "v1",
             "cabin_id": "c1",
@@ -309,3 +319,71 @@ def test_end_to_end_seatbelt_evaluation(tmp_path: Path):
     
     assert report["safety_invariant_counters"] != "NOT_EVALUABLE", "Metadata from exporter failed validation"
     assert report["event_types"]["NO_SEATBELT"]["true_positives"] >= 1, "Expected matching TP for the predicted event"
+
+def test_role_misclassification_identity_preservation():
+    # 3. Giữ identity ổn định qua role misclassification
+    engine = TemporalEventEngine(window_seconds=2.0)
+    
+    # Track ID is 1. Ground truth is passenger, but runtime misclassifies as driver consistently.
+    obs1 = Observation(
+        timestamp=1.0, class_name="phone", confidence=0.9, track_id=1, occupant_role="driver", 
+        vehicle_context_id="v1", cabin_id="c1", phone_context="HANDHELD", behavior_label="PHONE_USE", 
+        occupant_id="c1:occupant-track:1"
+    )
+    obs2 = Observation(
+        timestamp=2.0, class_name="phone", confidence=0.9, track_id=1, occupant_role="driver", 
+        vehicle_context_id="v1", cabin_id="c1", phone_context="HANDHELD", behavior_label="PHONE_USE", 
+        occupant_id="c1:occupant-track:1"
+    )
+    obs3 = Observation(
+        timestamp=3.0, class_name="phone", confidence=0.9, track_id=1, occupant_role="driver", 
+        vehicle_context_id="v1", cabin_id="c1", phone_context="HANDHELD", behavior_label="PHONE_USE", 
+        occupant_id="c1:occupant-track:1"
+    )
+    
+    # Engine processes these
+    engine.add(obs1)
+    engine.add(obs2)
+    candidates = engine.add(obs3)
+    
+    assert len(candidates) > 0
+    candidate = candidates[0]
+    
+    # identity preserved regardless of the last assigned role
+    assert candidate.occupant_id == "c1:occupant-track:1"
+    assert candidate.occupant_role == "driver"
+    
+def test_needs_review_not_promoted(tmp_path: Path):
+    engine = TemporalEventEngine(window_seconds=2.0)
+    
+    observations = [
+        Observation(
+            timestamp=1.0, class_name="seatbelt_unfastened", confidence=0.8, track_id=2, occupant_role="driver", 
+            vehicle_context_id="v1", cabin_id="c1", phone_context="UNKNOWN", behavior_label="UNFASTENED", occupant_id="c1:occupant-track:2",
+            evidence_source="DETECTOR_CLASSIFIER_CONFLICT"
+        ),
+        Observation(
+            timestamp=2.0, class_name="seatbelt_unfastened", confidence=0.85, track_id=2, occupant_role="driver", 
+            vehicle_context_id="v1", cabin_id="c1", phone_context="UNKNOWN", behavior_label="UNFASTENED", occupant_id="c1:occupant-track:2",
+            evidence_source="DETECTOR_CLASSIFIER_CONFLICT"
+        ),
+        Observation(
+            timestamp=3.0, class_name="seatbelt_unfastened", confidence=0.9, track_id=2, occupant_role="driver", 
+            vehicle_context_id="v1", cabin_id="c1", phone_context="UNKNOWN", behavior_label="UNFASTENED", occupant_id="c1:occupant-track:2",
+            evidence_source="DETECTOR_CLASSIFIER_CONFLICT"
+        )
+    ]
+    
+    candidates = []
+    for obs in observations:
+        candidates.extend(engine.add(obs))
+        
+    assert candidates[0].review_status == "NEEDS_REVIEW"
+    
+    csv_path = tmp_path / "predictions_needs_review.csv"
+    export_predictions_to_csv(candidates, video_id="video_1", output_path=csv_path)
+    
+    prediction_rows, pred_fields = _read(csv_path)
+    # Exporter should exclude NEEDS_REVIEW entirely
+    assert len(prediction_rows) == 0
+

@@ -45,6 +45,8 @@ from backend.services.video_source import FileVideoSource
 @dataclass(frozen=True)
 class InferenceContext:
     context_id: str
+    vehicle_id: str
+    cabin_id: str
     cabin: object
     offset: tuple[int, int]
     vehicle_track_id: int | None
@@ -171,6 +173,8 @@ class VideoAnalyzer:
         if video.input_scope == InputScope.VEHICLE_CABIN_CROP:
             return [
                 InferenceContext(
+                    f"video:{video.id}:provided-context",
+                    f"video:{video.id}:provided-vehicle",
                     f"video:{video.id}:provided-cabin",
                     frame,
                     (0, 0),
@@ -232,10 +236,14 @@ class VideoAnalyzer:
             ):
                 self._cabin_epochs[base_context_id] += 1
             self._cabin_signatures[base_context_id] = signature
+            vehicle_id = f"video:{video.id}:vehicle-track:{region.track_id}"
+            cabin_id = f"{vehicle_id}:cabin:{self._cabin_epochs[base_context_id]}"
             context_id = f"{base_context_id}:cabin:{self._cabin_epochs[base_context_id]}"
             contexts.append(
                 InferenceContext(
                     context_id,
+                    vehicle_id,
+                    cabin_id,
                     cabin,
                     (x1 + cabin_offset[0], y1 + cabin_offset[1]),
                     region.track_id,
@@ -524,9 +532,10 @@ class VideoAnalyzer:
                     track_id=detection.track_id,
                     driver_associated=assignment.role == "driver",
                     occupant_role=assignment.role,
-                    vehicle_context_id=context.context_id,
+                    vehicle_context_id=context.vehicle_id,
                 )
             )
+            occupant_id = f"{context.cabin_id}:occupant-track:{detection.track_id}" if detection.track_id is not None else ""
             candidates = engine.add(
                 Observation(
                     timestamp=timestamp,
@@ -534,7 +543,7 @@ class VideoAnalyzer:
                     confidence=detection.confidence,
                     track_id=detection.track_id,
                     occupant_role=assignment.role,
-                    vehicle_context_id=context.context_id,
+                    vehicle_context_id=context.vehicle_id,
                     phone_context=phone_state,
                     fusion_score=fusion_score,
                     evidence_source=evidence_source,
@@ -546,7 +555,7 @@ class VideoAnalyzer:
                     phone_face_proximity=face_proximity,
                     pose_confidence=pose_confidence,
                     seatbelt_probabilities=probabilities,
-                    cabin_id=context.context_id,
+                    cabin_id=context.cabin_id,
                     visibility="unknown",
                     outside_vehicle_person="",
                     behavior_label={
@@ -556,7 +565,7 @@ class VideoAnalyzer:
                         "seatbelt_uncertain": "UNCERTAIN_OR_OCCLUDED",
                         "uncertain_or_occluded": "UNCERTAIN_OR_OCCLUDED",
                     }.get(detection.class_name, ""),
-                    occupant_id=f"{context.context_id}:occupant:{assignment.role}",
+                    occupant_id=occupant_id,
                 )
             )
             for candidate in candidates:

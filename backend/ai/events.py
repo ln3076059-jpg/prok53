@@ -90,9 +90,10 @@ class TemporalEventEngine:
         role = observation.occupant_role or "unknown"
         if observation.class_name == "phone" and role != "driver":
             return []
+        occupant_group = observation.occupant_id if observation.occupant_id else role
         if observation.class_name == "phone" and observation.phone_context == "MOUNTED_OR_STATIC":
             self._release("PHONE", observation)
-            self.windows.pop((observation.vehicle_context_id, observation.track_id, role), None)
+            self.windows.pop((observation.vehicle_context_id, observation.track_id, occupant_group), None)
             return []
         if (
             observation.class_name.startswith("seatbelt_")
@@ -114,7 +115,8 @@ class TemporalEventEngine:
         # Belt classes describe the same occupant ROI but a class flip can receive a new
         # tracker ID. Group belt evidence by vehicle+seat so contradictions remain visible.
         window_track_id = observation.track_id if observation.class_name == "phone" else None
-        window = self.windows[(observation.vehicle_context_id, window_track_id, role)]
+        occupant_group = observation.occupant_id if observation.occupant_id else role
+        window = self.windows[(observation.vehicle_context_id, window_track_id, occupant_group)]
         window.append(observation)
         while window and observation.timestamp - window[0].timestamp > self.window_seconds:
             window.popleft()
@@ -170,10 +172,11 @@ class TemporalEventEngine:
         positive_ratio = sum(score >= self.feature_positive_score for score in scores) / len(scores)
         if positive_ratio < self.minimum_positive_ratio:
             return False
+        occupant_group = observations[-1].occupant_id if observations[-1].occupant_id else (observations[-1].occupant_role or "unknown")
         key = (
             observations[-1].vehicle_context_id or "",
             observations[-1].track_id,
-            observations[-1].occupant_role or "unknown",
+            occupant_group,
         )
         previous = self.smoothed.get(key, scores[0])
         for score in scores[1:]:
@@ -206,7 +209,8 @@ class TemporalEventEngine:
             ):
                 status = "NEEDS_REVIEW"
                 break
-        occupant_id = current.occupant_id or (f"{current.vehicle_context_id}:occupant:{role}")
+        # occupant_id must not fallback to role
+        occupant_id = current.occupant_id
         return EventCandidate(
             event_type=event_type,
             confidence=sum(scores) / len(scores),
@@ -249,7 +253,7 @@ class TemporalEventEngine:
             candidate.event_type,
             candidate.vehicle_context_id,
             candidate.track_id if candidate.event_type == "PHONE" else None,
-            candidate.occupant_role,
+            candidate.occupant_id if candidate.occupant_id else candidate.occupant_role,
         )
 
     def _release(self, event_type: str, observation: Observation) -> None:
@@ -259,7 +263,7 @@ class TemporalEventEngine:
             event_type,
             observation.vehicle_context_id,
             observation.track_id if event_type == "PHONE" else None,
-            observation.occupant_role or "unknown",
+            observation.occupant_id if observation.occupant_id else (observation.occupant_role or "unknown"),
         )
         self.active_events.discard(key)
 
@@ -282,6 +286,6 @@ class TemporalEventEngine:
         for key in stale:
             del self.windows[key]
             self.smoothed.pop(key, None)
-            vehicle_context_id, track_id, role = key
-            self.active_events.discard(("PHONE", vehicle_context_id, track_id, role))
-            self.active_events.discard(("NO_SEATBELT", vehicle_context_id, None, role))
+            vehicle_context_id, track_id, occupant_group = key
+            self.active_events.discard(("PHONE", vehicle_context_id, track_id, occupant_group))
+            self.active_events.discard(("NO_SEATBELT", vehicle_context_id, None, occupant_group))
