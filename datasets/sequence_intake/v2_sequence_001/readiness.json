@@ -1,0 +1,85 @@
+{
+  "package_id": "v2_sequence_001",
+  "status": "BLOCKED_MISSING_REAL_SEQUENCE_INPUT_AND_HUMAN_REVIEW",
+  "created_at_utc": "2026-09-06T04:08:29.012688+00:00",
+  "repository_head_at_inventory": "a8ff8aa699b5d17046a0f343616941e3fbf48aca",
+  "inventory_scope": "Workspace filesystem paths only; includes gitignored data; no archive extraction or external disk scan",
+  "scan_command": [
+    "rg",
+    "--files",
+    "--hidden",
+    "--no-ignore",
+    "-g",
+    "!.git/**",
+    "-g",
+    "!frontend/node_modules/**",
+    "-g",
+    "*.mp4",
+    "-g",
+    "*.avi",
+    "-g",
+    "*.mov",
+    "-g",
+    "*.mkv",
+    "-g",
+    "*.webm",
+    "-g",
+    "*.m4v",
+    "-g",
+    "*.mts",
+    "-g",
+    "*.m2ts"
+  ],
+  "video_paths_found": [],
+  "video_count": 0,
+  "event_sequences_directory_exists": false,
+  "external_policy": {
+    "path": "datasets/v2_external_test_policy.yaml",
+    "sha256": "0b2bf2e26410918e02c0ce211db2c08c2149fb761ae4b16ee8cfeae19a666e35",
+    "minimum_independent_groups": {
+      "source_id": 2,
+      "camera_id": 3,
+      "video_id": 12,
+      "vehicle_id": 8,
+      "person_id": 8
+    },
+    "required_condition_coverage": [
+      "daylight",
+      "night",
+      "low_light",
+      "rain",
+      "glare",
+      "reflection",
+      "windshield_reflection",
+      "motion_blur",
+      "video_compression",
+      "partial_occlusion",
+      "oblique_view",
+      "dark_windshield",
+      "different_camera_angle",
+      "different_cabin_geometry"
+    ],
+    "disjoint_dimensions": [
+      "sha256",
+      "source_id",
+      "camera_id",
+      "video_id",
+      "vehicle_id",
+      "person_id"
+    ]
+  },
+  "registered_video_sources": [
+    {
+      "source_id": "kaggle_driver_activity_v1",
+      "status": "DEFERRED_STORAGE_AND_MODALITY_GATE",
+      "domain": "in_cabin_video_multimodal"
+    }
+  ],
+  "intake_rows": 0,
+  "human_approved_sequences": 0,
+  "model_inference_run": false,
+  "temporal_calibration_run": false,
+  "external_freeze_run": false,
+  "event_evaluation_run": false,
+  "canonical_frozen_model_test_rerun": false
+}
