@@ -133,3 +133,6 @@ is unmet and refuses to overwrite an existing freeze.
 The official policy binds canonical sequence JSON annotations and a frozen, human-reviewed
 development completeness attestation. Prepare these locks and export both truth CSVs from
 the same canonical sequences using the versioned workflow in `docs/V2_EXTERNAL_TEST_PROTOCOL.md`.
+Final event/context freezers regenerate rows from the external lock's canonical sequence SHA
+set and reject divergent CSVs. Both truth locks bind that source set; evaluation/integrity
+verification rechecks the original sequence files, review evidence and regenerated content.

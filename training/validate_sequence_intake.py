@@ -25,6 +25,13 @@ def dimension_values(item: dict, dimension: str) -> set[str]:
             raise ValueError("person_group_ids must be a non-empty list or semicolon-separated IDs")
     else:
         parts = [value]
+    if dimension == "physical_vehicle_group_id" and "vehicle_physical_groups" in item:
+        mapping = item["vehicle_physical_groups"]
+        if not isinstance(mapping, dict) or not mapping:
+            raise ValueError("vehicle_physical_groups must be a non-empty canonical-to-physical mapping")
+        if value not in mapping.values():
+            raise ValueError("physical_vehicle_group_id must be included in vehicle_physical_groups")
+        parts = list(mapping.values())
     result = set()
     for part in parts:
         if not isinstance(part, str) or not part.strip():
@@ -134,7 +141,15 @@ def validate_sequence_intake(
 def read_intake(path: Path) -> list[dict]:
     if path.suffix.lower() == ".csv":
         with path.open(encoding="utf-8-sig", newline="") as handle:
-            return list(csv.DictReader(handle))
+            rows = list(csv.DictReader(handle))
+        for row in rows:
+            if "vehicle_physical_groups" in row:
+                value = row["vehicle_physical_groups"]
+                if value:
+                    row["vehicle_physical_groups"] = json.loads(value)
+                else:
+                    row.pop("vehicle_physical_groups")
+        return rows
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()
             if line.strip()]
 

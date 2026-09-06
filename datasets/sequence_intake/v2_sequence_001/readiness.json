@@ -35,7 +35,7 @@
   "event_sequences_directory_exists": false,
   "external_policy": {
     "path": "datasets/v2_external_test_policy.yaml",
-    "sha256": "b650162b0dd58e5bd131287aea0cfd86c91d33c553979637a734b898ec7a5e41",
+    "sha256": "87317425b364878262751eda5e82158b8b21e33504fba4ecaaaaf247e503d8f1",
     "minimum_independent_groups": {
       "source_id": 2,
       "camera_id": 3,
@@ -73,7 +73,8 @@
     "require_full_system_evaluation": true,
     "require_sequence_intake": true,
     "require_canonical_sequence_annotations": true,
-    "require_development_lineage_lock": true
+    "require_development_lineage_lock": true,
+    "require_sequence_review_evidence": true
   },
   "registered_video_sources": [
     {
@@ -89,7 +90,7 @@
   "external_freeze_run": false,
   "event_evaluation_run": false,
   "canonical_frozen_model_test_rerun": false,
-  "policy_checked_at_utc": "2026-09-06T04:35:28.801861+00:00",
+  "policy_checked_at_utc": "2026-09-06T04:53:28.767422+00:00",
   "intake_gate_status": "NOT_READY_FOR_UNTOUCHED_FREEZE",
   "intake_gate_reason": "No real holdout videos or complete development physical lineage supplied.",
   "development_lineage_lock_status": "PENDING_HUMAN_COMPLETENESS_REVIEW"

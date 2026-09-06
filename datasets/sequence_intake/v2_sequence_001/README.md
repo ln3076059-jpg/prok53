@@ -32,6 +32,10 @@ copy nó vào thư mục incoming trước khi điền thông tin thật.
   nhiều ID trong một ô ngăn cách bằng dấu `;`.
 - `video_id`: ID video duy nhất. ID nhóm xe/người vật lý ở bảng intake khác với
   canonical `vehicle_id`/`occupant_id` trong annotation, vốn có namespace theo video.
+- `vehicle_physical_groups`: bắt buộc cho clip có nhiều canonical vehicle, ánh xạ mọi
+  canonical vehicle ID tới group xe vật lý. JSONL dùng object; CSV dùng chuỗi JSON được
+  quote theo CSV. Group xe chính ở `physical_vehicle_group_id` phải có trong mapping.
+  Cả holdout và development phải liệt kê mọi xe; gate so/count toàn bộ giá trị mapping.
 - `prior_usage`: dùng `NEVER_USED` khi chưa dùng và có bằng chứng; nếu đã dùng, ghi
   train/validation/calibration/test tương ứng. `model_predictions_seen`: ghi `true`, `false` hoặc `UNKNOWN`
   theo thông tin thực; `UNKNOWN` chưa đủ để xác nhận untouched.
@@ -71,6 +75,8 @@ Các tình huống dàn dựng như dùng điện thoại hoặc tháo đai th�
    event dùng frame cuối bao gồm, context dùng `[start_frame, end_frame)`.
    Không suy UNFASTENED từ việc không nhìn thấy dây đai. Kiểm tra role và context thực tế.
    Skeleton AI chưa phải human-approved; chỉ người duyệt thật mới ký provenance.
+   Official sequence cần `review_provenance.review_evidence` chứa path/SHA-256 của file
+   bằng chứng review không rỗng, và `evidence_hash` bằng SHA đó. File evidence được đọc/hash lại.
 5. Validate từng annotation bằng `training.validate_event_sequence_annotations`.
    Chỉ export event/context CSV từ các file đã duyệt hợp lệ, giữ riêng hai nhóm.
 6. Dùng nhóm temporal development cho calibration/lock policy. Holdout chưa được
@@ -119,6 +125,10 @@ event-list riêng. Với nhiều cabin, thêm `additional_sequence_annotations` 
 object `path`/`sha256` của sequence chuẩn cho những cabin còn lại. Freezer kiểm tra cùng
 schema/semantic validator, HUMAN/FINAL, video/manifest binding và đủ mọi occupant.
 CSV event/context được export từ chính các sequence này.
+Hai truth freezer sẽ tái tạo và đối chiếu toàn bộ rows CSV với đúng sequence SHA đã khóa;
+sửa field, thêm/xóa rows sau export đều bị reject. Truth lock lưu
+`source_sequence_set_sha256` và `source_sequence_bindings`; evaluator/verifier kiểm tra lại
+cả source, evidence và nội dung CSV. Giữ nguyên các file nguồn sau freeze.
 `freeze_external_test` tự chạy lại gate trên manifest thực và hồ sơ trên disk;
 không tin báo cáo precheck cũ. Official policy bắt `FULL_SYSTEM_EVENT_EVALUATION`.
 Số lượng tối thiểu 8 xe/8 người được đếm trên group vật lý, không trên ID theo video.

@@ -9,6 +9,7 @@ from pathlib import Path
 
 from training.common import sha256_file
 from training.identity_contract import validate_identity_contract
+from training.sequence_truth_binding import verify_truth_source_binding
 
 REQUIRED_COLUMNS = {
     "video_id",
@@ -93,6 +94,7 @@ def freeze_event_ground_truth(
         raise ValueError("external test artifact is not FROZEN_EXTERNAL_TEST")
     if external_lock.get("human_review_status") != "ALL_APPROVED":
         raise ValueError("external test artifact is not fully human-approved")
+    source_provenance = verify_truth_source_binding(external_lock, truth_path, "event")
 
     if identity_manifest_lock_path is None and "identity_manifest_lock_path" in external_lock:
         identity_manifest_lock_path = Path(external_lock["identity_manifest_lock_path"])
@@ -247,6 +249,7 @@ def freeze_event_ground_truth(
         "scientific_claim": "FROZEN_HUMAN_GROUND_TRUTH_NOT_MODEL_ACCURACY",
     }
     frozen["identity_manifest_sha256"] = manifest_sha
+    frozen.update(source_provenance)
     frozen["evaluation_scope"] = manifest_lock.get("evaluation_scope", "FULL_SYSTEM_EVENT_EVALUATION")
     frozen["identity_manifest_lock"] = {
         "path": str(identity_manifest_lock_path.resolve()),

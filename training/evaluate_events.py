@@ -7,6 +7,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from training.common import sha256_file
+from training.sequence_truth_binding import verify_truth_source_binding
 
 REQUIRED = {
     "video_id",
@@ -558,6 +559,8 @@ def evaluate_frozen(
         )
 
     manifest_sha = ground_truth_lock.get("identity_manifest_sha256")
+    verify_truth_source_binding(external_lock, truth_path, "event", ground_truth_lock)
+    verify_truth_source_binding(external_lock, context_truth_path, "context", context_lock)
     context_manifest_sha = context_lock.get("identity_manifest_sha256")
     external_manifest_sha = external_lock.get("identity_manifest_sha256")
 
@@ -794,6 +797,11 @@ def verify_evaluation_integrity(report_path: Path) -> dict:
     context_lock = json.loads(
         Path(artifacts["context-truth lock"]["path"]).read_text(encoding="utf-8")
     )
+    external_lock = json.loads(
+        Path(artifacts["external-test lock"]["path"]).read_text(encoding="utf-8")
+    )
+    verify_truth_source_binding(external_lock, Path(artifacts["ground truth"]["path"]), "event", ground_truth_lock)
+    verify_truth_source_binding(external_lock, Path(artifacts["context truth"]["path"]), "context", context_lock)
     manifest, binding = _bound_identity_manifest(ground_truth_lock, context_lock)
     if report.get("identity_manifest_lock") != binding:
         raise ValueError("report identity manifest lock does not match frozen truth binding")

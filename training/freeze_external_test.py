@@ -11,6 +11,7 @@ import yaml
 from training.common import sha256_file, stable_json_hash
 from training.validate_sequence_intake import dimension_values, validate_sequence_intake
 from training.validate_event_sequence_annotations import load_schema, validate_annotation
+from training.sequence_truth_binding import sequence_bindings as canonical_sequence_bindings
 
 
 def _read_jsonl(path: Path) -> list[dict]:
@@ -58,7 +59,9 @@ def _validate_event_annotation(path: Path, sample_id: str) -> list[str]:
     return errors
 
 
-def _validate_sequence_annotations(item: dict, manifest_lock: dict | None) -> tuple[list[str], list[dict]]:
+def _validate_sequence_annotations(
+    item: dict, manifest_lock: dict | None, *, require_review_evidence: bool = False,
+) -> tuple[list[str], list[dict]]:
     """Bind every cabin's canonical sequence source; no second event-list truth is needed."""
     errors: list[str] = []
     bindings: list[dict] = []
@@ -78,6 +81,11 @@ def _validate_sequence_annotations(item: dict, manifest_lock: dict | None) -> tu
         (p["vehicle_id"], p["cabin_id"], p["occupant_id"])
         for p in manifest_lock.get("proven_identities", []) if p.get("video_id") == video_id
     }
+    vehicles = {identity[0] for identity in expected}
+    physical_groups = item.get("vehicle_physical_groups")
+    if len(vehicles) > 1 or physical_groups is not None:
+        if not isinstance(physical_groups, dict) or set(physical_groups) != vehicles:
+            errors.append(f"{sample_id}: vehicle_physical_groups must map every canonical vehicle")
     observed: set[tuple[str, str, str]] = set()
     seen_paths: set[Path] = set()
     for record in sources:
@@ -100,7 +108,7 @@ def _validate_sequence_annotations(item: dict, manifest_lock: dict | None) -> tu
         if not isinstance(annotation, dict):
             errors.append(f"{sample_id}: canonical sequence annotation must be a JSON object")
             continue
-        annotation_errors = validate_annotation(annotation, schema)
+        annotation_errors = validate_annotation(annotation, schema, require_review_evidence=require_review_evidence)
         if annotation_errors:
             errors.extend(f"{sample_id}: {error}" for error in annotation_errors)
             continue
@@ -247,7 +255,10 @@ def freeze_external_test(
             errors.extend(_validate_event_annotation(annotation_path, sample_id))
 
         if policy.get("require_canonical_sequence_annotations") is True:
-            sequence_errors, bindings = _validate_sequence_annotations(item, manifest_lock)
+            sequence_errors, bindings = _validate_sequence_annotations(
+                item, manifest_lock,
+                require_review_evidence=policy.get("require_sequence_review_evidence") is True,
+            )
             errors.extend(sequence_errors)
             sequence_bindings[sample_id] = bindings
 
@@ -364,6 +375,9 @@ def freeze_external_test(
             frozen["development_lineage_lock"] = intake_validation["development_lineage_lock"]
     if sequence_bindings:
         frozen["sequence_annotations"] = sequence_bindings
+        frozen["require_canonical_sequence_annotations"] = True
+        frozen["require_sequence_review_evidence"] = policy.get("require_sequence_review_evidence") is True
+        frozen["source_sequence_set_sha256"] = stable_json_hash(canonical_sequence_bindings(frozen))
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("x", encoding="utf-8") as handle:

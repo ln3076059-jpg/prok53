@@ -163,7 +163,11 @@ def canonical_sequence(item):
             "reviewer_type": "HUMAN", "status": "HUMAN_APPROVED", "reviewer_id": "test-auditor",
             "reviewed_at": "2026-09-06T00:00:00Z", "adjudication_status": "FINAL",
             "annotation_version": "v2.0", "identity_manifest_sha256": "a" * 64,
-            "evidence_hash": "b" * 64,
+            "evidence_hash": item["independence_evidence_sha256"],
+            "review_evidence": {
+                "path": item["independence_evidence_path"],
+                "sha256": item["independence_evidence_sha256"],
+            },
         },
     }
 
@@ -309,9 +313,12 @@ def test_official_freeze_rejects_invalid_canonical_truth(official_freeze, mutati
     assert not output.exists()
 
 
-@pytest.mark.parametrize("multiple_cabins", [False, True])
+@pytest.mark.parametrize("multiple_cabins,mapping_case", [
+    (False, "valid"), (True, "valid"), (True, "missing"),
+    (True, "incomplete"), (True, "secondary_overlap"),
+])
 def test_canonical_truth_flows_through_external_event_and_context_freeze(
-    official_freeze, tmp_path, multiple_cabins,
+    official_freeze, tmp_path, multiple_cabins, mapping_case,
 ):
     import csv
 
@@ -336,12 +343,29 @@ def test_canonical_truth_flows_through_external_event_and_context_freeze(
         path = tmp_path / "extra-cabin.json"
         path.write_text(json.dumps(extra), encoding="utf-8")
         row["additional_sequence_annotations"] = [{"path": str(path), "sha256": sha256_file(path)}]
+        row["vehicle_physical_groups"] = {
+            row["vehicle_id"]: row["physical_vehicle_group_id"], vehicle: "extra-physical-vehicle",
+        }
         lock["proven_identities"].append({
             "video_id": row["video_id"], "vehicle_id": vehicle,
             "cabin_id": cabin, "occupant_id": occupant,
         })
     manifest.write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
     lock_path.write_text(json.dumps(lock), encoding="utf-8")
+    if mapping_case != "valid":
+        if mapping_case == "missing":
+            rows[0].pop("vehicle_physical_groups")
+        elif mapping_case == "incomplete":
+            rows[0]["vehicle_physical_groups"].pop(vehicle)
+        else:
+            dev = json.loads(development.read_text(encoding="utf-8"))
+            rows[0]["vehicle_physical_groups"][vehicle] = dev["physical_vehicle_group_id"]
+        manifest.write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
+        with pytest.raises(ValueError, match="vehicle_physical_groups|physical_vehicle_group_id overlaps"):
+            freeze_external_test(manifest, development, policy, output, lock_path,
+                                 development.with_suffix(".lock.json"))
+        assert not output.exists()
+        return
     external = freeze_external_test(manifest, development, policy, output, lock_path,
                                     development.with_suffix(".lock.json"))
     event_csv = tmp_path / "event.csv"
@@ -406,3 +430,191 @@ def test_lineage_freeze_requires_complete_human_attestation(intake, tmp_path, fi
     with pytest.raises(ValueError):
         freeze_development_lineage(path, review_path, tmp_path / "invalid-lock.json")
     assert not (tmp_path / "invalid-lock.json").exists()
+
+
+@pytest.fixture
+def canonical_truth_files(official_freeze, tmp_path):
+    import csv
+
+    from training.build_event_truth_from_sequences import (
+        CONTEXT_FIELDNAMES, EVENT_FIELDNAMES, convert_sequence_to_context, convert_sequence_to_events,
+    )
+
+    rows, manifest, development, policy, external_path, lock, lock_path = official_freeze
+    manifest.write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
+    lock_path.write_text(json.dumps(lock), encoding="utf-8")
+    external = freeze_external_test(manifest, development, policy, external_path, lock_path,
+                                    development.with_suffix(".lock.json"))
+    paths = {}
+    for kind, fields, convert in (
+        ("event", EVENT_FIELDNAMES, convert_sequence_to_events),
+        ("context", CONTEXT_FIELDNAMES, convert_sequence_to_context),
+    ):
+        path = tmp_path / f"{kind}.csv"
+        with path.open("w", newline="", encoding="utf-8") as handle:
+            writer = csv.DictWriter(handle, fieldnames=fields)
+            writer.writeheader()
+            for row in rows:
+                annotation = json.loads(Path(row["annotation_path"]).read_text(encoding="utf-8"))
+                writer.writerows(convert(annotation))
+        paths[kind] = path
+    return paths, external_path, external
+
+
+@pytest.mark.parametrize("kind,mutation", [
+    ("event", "label"), ("event", "interval"), ("event", "remove"), ("event", "add"),
+    ("event", "foreign"), ("event", "reorder"), ("context", "phone"),
+    ("context", "seatbelt"), ("context", "remove"), ("context", "add"),
+    ("context", "foreign"), ("context", "reorder"),
+])
+def test_final_truth_must_match_canonical_rows(canonical_truth_files, tmp_path, kind, mutation):
+    import csv
+
+    from training.freeze_context_ground_truth import freeze_context_ground_truth
+    from training.freeze_event_ground_truth import freeze_event_ground_truth
+
+    paths, external_path, external = canonical_truth_files
+    path = paths[kind]
+    with path.open(encoding="utf-8", newline="") as handle:
+        reader = csv.DictReader(handle)
+        fields = reader.fieldnames
+        rows = list(reader)
+    if mutation == "label":
+        rows[0]["label"] = "NO_PHONE"
+    elif mutation == "interval":
+        rows[0]["end_seconds"] = "9.0"
+    elif mutation == "remove":
+        rows.pop()
+    elif mutation == "add":
+        rows.append({**rows[0], "event_id" if kind == "event" else "context_id": "added-row"})
+    elif mutation == "phone":
+        rows[0]["phone_state"] = "NO_PHONE"
+    elif mutation == "seatbelt":
+        rows[0]["seatbelt_state"] = "UNFASTENED"
+    elif mutation == "foreign":
+        rows[0]["reviewer_id"] = "another-valid-reviewer"
+    else:
+        rows.reverse()
+        fields.reverse()
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(rows)
+    freeze = freeze_event_ground_truth if kind == "event" else freeze_context_ground_truth
+    output = tmp_path / f"{kind}-lock.json"
+    if mutation == "reorder":
+        result = freeze(path, external_path, output)
+        assert result["source_sequence_set_sha256"] == external["source_sequence_set_sha256"]
+        assert len(result["source_sequence_bindings"]) == 12
+    else:
+        with pytest.raises(ValueError, match="CSV does not match frozen canonical sequence rows"):
+            freeze(path, external_path, output)
+        assert not output.exists()
+
+
+@pytest.mark.parametrize("mutation", ["source_changed", "source_missing", "review_evidence_changed"])
+@pytest.mark.parametrize("kind", ["event", "context"])
+def test_truth_freeze_rechecks_sources_and_evidence(canonical_truth_files, tmp_path, mutation, kind):
+    from training.freeze_context_ground_truth import freeze_context_ground_truth
+    from training.freeze_event_ground_truth import freeze_event_ground_truth
+
+    paths, external_path, external = canonical_truth_files
+    source = Path(next(iter(external["sequence_annotations"].values()))[0]["path"])
+    if mutation == "source_changed":
+        source.write_bytes(source.read_bytes() + b"\n")
+    elif mutation == "source_missing":
+        source.unlink()
+    else:
+        annotation = json.loads(source.read_text(encoding="utf-8"))
+        Path(annotation["review_provenance"]["review_evidence"]["path"]).write_text("tamper", encoding="utf-8")
+    freeze = freeze_event_ground_truth if kind == "event" else freeze_context_ground_truth
+    with pytest.raises(ValueError, match="SHA256 mismatch"):
+        freeze(paths[kind], external_path, tmp_path / "rejected.json")
+    assert not (tmp_path / "rejected.json").exists()
+
+
+@pytest.mark.parametrize("mutation", ["event_set", "context_bindings", "source_file"])
+def test_evaluator_and_integrity_verify_exact_source_set(canonical_truth_files, tmp_path, mutation):
+    import csv
+
+    from training.evaluate_events import evaluate_frozen, verify_evaluation_integrity
+    from training.freeze_context_ground_truth import freeze_context_ground_truth
+    from training.freeze_event_ground_truth import freeze_event_ground_truth
+
+    paths, external_path, external = canonical_truth_files
+    event_lock_path, context_lock_path = tmp_path / "events.lock.json", tmp_path / "contexts.lock.json"
+    event_lock = freeze_event_ground_truth(paths["event"], external_path, event_lock_path)
+    context_lock = freeze_context_ground_truth(paths["context"], external_path, context_lock_path)
+    with paths["event"].open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+    predictions = tmp_path / "predictions.csv"
+    with predictions.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=[*rows[0], "observation_count"])
+        writer.writeheader()
+        writer.writerows({**row, "observation_count": "5"} for row in rows)
+    model = tmp_path / "model.json"
+    model.write_text(json.dumps({
+        "record_schema": "ROADWATCH_MODEL_VERSION_V2", "activation_state": "ACTIVE",
+        "experiment_id": "source-binding-test", "locked_at": "2026-09-06T00:00:00Z",
+        "weights_sha256": "a" * 64, "config_sha256": "b" * 64,
+        "training_data_manifest_sha256": "c" * 64,
+        "validation_metric_artifact": {"sha256": "d" * 64},
+        "threshold_calibration_artifact": {"sha256": "e" * 64},
+        "human_review_readiness_artifact": {"governed_training_ready": True}, "code_commit": "abc123",
+    }), encoding="utf-8")
+    args = (paths["event"], predictions, event_lock_path, model)
+    kwargs = {"video_minutes": 2.0, "context_truth_path": paths["context"],
+              "context_truth_lock_path": context_lock_path}
+    report_path = tmp_path / "evaluation.json"
+    report = evaluate_frozen(*args, report_path, **kwargs)
+    assert verify_evaluation_integrity(report_path)["status"] == "FROZEN_EVENT_EVALUATION_INTEGRITY_VERIFIED"
+    if mutation == "event_set":
+        event_lock["source_sequence_set_sha256"] = "f" * 64
+        event_lock_path.write_text(json.dumps(event_lock), encoding="utf-8")
+        report["ground_truth"]["lock_sha256"] = sha256_file(event_lock_path)
+    elif mutation == "context_bindings":
+        context_lock["source_sequence_bindings"].pop()
+        context_lock_path.write_text(json.dumps(context_lock), encoding="utf-8")
+        report["context_truth"]["lock_sha256"] = sha256_file(context_lock_path)
+    else:
+        source = Path(next(iter(external["sequence_annotations"].values()))[0]["path"])
+        source.write_bytes(source.read_bytes() + b"\n")
+    report_path.write_text(json.dumps(report), encoding="utf-8")
+    with pytest.raises(ValueError, match="canonical|source_sequence"):
+        verify_evaluation_integrity(report_path)
+    with pytest.raises(ValueError, match="canonical|source_sequence"):
+        evaluate_frozen(*args, tmp_path / "rejected-evaluation.json", **kwargs)
+
+
+@pytest.mark.parametrize("role", ["holdout", "development"])
+def test_second_physical_vehicle_overlap_is_detected(intake, role):
+    row, dev = intake
+    target = row if role == "holdout" else dev
+    other = dev if role == "holdout" else row
+    target["vehicle_physical_groups"] = {
+        "video:example:vehicle-track:1": target["physical_vehicle_group_id"],
+        "video:example:vehicle-track:2": other["physical_vehicle_group_id"],
+    }
+    report = validate_sequence_intake([row], [dev])
+    assert report["development_overlap"]["physical_vehicle_group_id"]
+
+
+@pytest.mark.parametrize("mutation", ["missing", "short_hash", "mismatch"])
+def test_official_sequence_review_evidence_is_required(official_freeze, mutation):
+    rows, manifest, development, policy, output, lock, lock_path = official_freeze
+    path = Path(rows[0]["annotation_path"])
+    annotation = json.loads(path.read_text(encoding="utf-8"))
+    review = annotation["review_provenance"]
+    if mutation == "missing":
+        review.pop("review_evidence")
+    elif mutation == "short_hash":
+        review["evidence_hash"] = "abc"
+    else:
+        review["review_evidence"]["sha256"] = "f" * 64
+    path.write_text(json.dumps(annotation), encoding="utf-8")
+    rows[0]["annotation_sha256"] = sha256_file(path)
+    manifest.write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
+    lock_path.write_text(json.dumps(lock), encoding="utf-8")
+    with pytest.raises(ValueError, match="review_evidence|evidence_hash"):
+        freeze_external_test(manifest, development, policy, output, lock_path,
+                             development.with_suffix(".lock.json"))

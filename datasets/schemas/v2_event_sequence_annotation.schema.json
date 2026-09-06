@@ -178,6 +178,15 @@
         "reviewer_id": { "type": "string" },
         "reviewed_at": { "type": "string", "format": "date-time" },
         "evidence_hash": { "type": "string" },
+        "review_evidence": {
+          "type": "object",
+          "required": ["path", "sha256"],
+          "properties": {
+            "path": { "type": "string", "minLength": 1 },
+            "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+          },
+          "additionalProperties": false
+        },
         "identity_manifest_sha256": { "type": "string" },
         "status": {
           "type": "string",

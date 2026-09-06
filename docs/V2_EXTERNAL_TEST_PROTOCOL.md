@@ -39,6 +39,31 @@ For multiple cabins, supply `additional_sequence_annotations` as a list of
 The frozen artifact stores every source path/hash in `sequence_annotations`. Export both
 event/context CSVs from these same files; annotators do not maintain a second event-list truth.
 
+Both final truth freezers reread the external lock's exact `sequence_annotations` path/SHA
+set, validate each source again and deterministically regenerate expected rows with the same
+exporter. They compare every CSV field and row multiplicity; row/column ordering and CSV
+quoting/newlines do not affect the comparison. Editing labels, intervals, review fields,
+adding/removing rows or supplying another sequence's CSV blocks freezing.
+Both truth locks store `source_sequence_set_sha256`, `source_sequence_bindings` and
+`canonical_truth_rows_sha256`. The evaluator and `--verify-existing` recheck these against
+the external lock, source files and regenerated CSV content. Keep all canonical sources
+available; deleting or changing them invalidates verification. Historical truth locks that
+bind canonical sources but lack this provenance fail verification under the new contract.
+
+Official sequences require `review_provenance.review_evidence` with `path` and lowercase
+64-hex `sha256` for a non-empty review evidence file. `evidence_hash` must equal that SHA.
+The shared validator rehashes supplied evidence, and official freeze requires it even when
+the legacy `evidence_hash` field is present. This proves artifact integrity, not that a
+human assertion is true. Historical proposals/custom inputs without an evidence reference
+retain their existing validation rules; they cannot enter a new official freeze.
+
+For a video with multiple canonical vehicles, intake must include `vehicle_physical_groups`,
+a mapping from every canonical `vehicle_id` to its physical group ID. Leakage checks and
+minimum group counts use all mapping values on both holdout and development sides.
+The singular `physical_vehicle_group_id` remains the primary vehicle for compatibility and
+must appear among those values. A one-vehicle video may use the singular field alone.
+Missing/incomplete mappings for multi-vehicle sequences are rejected at external freeze.
+
 Before intake validation, a human reviews the complete development/previous-use lineage
 and supplies an attestation JSON with these required fields:
 

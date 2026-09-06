@@ -1,10 +1,12 @@
 import argparse
 import json
+from pathlib import Path
 
 import dateutil.parser
 from jsonschema import Draft7Validator, FormatChecker
 
 from training.identity_contract import validate_identity_contract
+from training.common import sha256_file
 
 UNKNOWN_IDENTITIES = {"", "UNKNOWN"}
 
@@ -14,7 +16,9 @@ def load_schema(schema_path):
         return json.load(f)
 
 
-def validate_annotation(annotation, schema, allow_proposal: bool = False):
+def validate_annotation(
+    annotation, schema, allow_proposal: bool = False, require_review_evidence: bool = False,
+):
     errors = []
 
     # 1. Schema Validation
@@ -225,6 +229,18 @@ def validate_annotation(annotation, schema, allow_proposal: bool = False):
 
     # 3. Provenance Validation
     provenance = annotation.get("review_provenance", {})
+    evidence = provenance.get("review_evidence")
+    if require_review_evidence or evidence is not None:
+        if not isinstance(evidence, dict):
+            errors.append("Semantic error: review_evidence path/SHA256 is required")
+        else:
+            path = Path(str(evidence.get("path", "")))
+            if not path.is_file() or path.stat().st_size == 0:
+                errors.append("Semantic error: review_evidence file is missing or empty")
+            elif evidence.get("sha256") != sha256_file(path):
+                errors.append("Semantic error: review_evidence SHA256 mismatch")
+            if provenance.get("evidence_hash") != evidence.get("sha256"):
+                errors.append("Semantic error: evidence_hash must equal review_evidence SHA256")
     if provenance.get("status") != "HUMAN_APPROVED":
         if not (
             allow_proposal
