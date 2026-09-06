@@ -1,8 +1,10 @@
 # Tiếp nhận sequence thật — v2_sequence_001
 
 Workflow temporal mới: [Codex Review1 → human final confirmation](REVIEW1_WORKFLOW.md).
-Người thật duyệt/sửa proposal thay vì annotate từ đầu. Gói local hiện còn
-`BLOCKED_FULL_VIDEO_REVIEW_REQUIRED`; chưa được coi là Review1 hoàn tất hay human GT.
+Người thật duyệt/sửa proposal thay vì annotate từ đầu. Bốn clip primary đạt
+`REVIEW1_READY_FOR_HUMAN_CONFIRMATION` theo tiêu chí full visual review mới:
+đã xem 1.781/1.781 frame, giữ PTS/thứ tự và kiểm tra chuyển tiếp. Native playback/audio
+không được thực hiện; nhãn này là visual-only. Rights, lineage và human GT vẫn pending.
 Quy định independent human ground truth cho untouched holdout giữ nguyên.
 
 Trạng thái: **ĐÃ NHẬN VIDEO TEMPORAL LOCAL; CHỜ RIGHTS/LINEAGE, GT VÀ HUMAN REVIEW**. Đây là gói tiếp nhận dữ liệu,

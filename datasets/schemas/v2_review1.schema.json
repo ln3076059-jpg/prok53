@@ -3,52 +3,874 @@
   "title": "Temporal development Review1 record or human final receipt",
   "type": "object",
   "additionalProperties": false,
-  "required": ["record_type", "dataset_role", "video_id", "video_path", "video_sha256", "reviewer_type", "reviewer_origin", "review_stage", "reviewer_agent", "status", "requires_human_confirmation", "adjudication_status", "human_approved", "payload"],
+  "required": [
+    "record_type",
+    "dataset_role",
+    "video_id",
+    "video_path",
+    "video_sha256",
+    "reviewer_type",
+    "reviewer_origin",
+    "review_stage",
+    "reviewer_agent",
+    "status",
+    "requires_human_confirmation",
+    "adjudication_status",
+    "human_approved",
+    "payload"
+  ],
   "properties": {
-    "record_type": {"enum": ["sequence", "rights", "physical_lineage", "identity"]},
-    "dataset_role": {"const": "TEMPORAL_DEVELOPMENT"},
-    "video_id": {"type": "string", "minLength": 1},
-    "video_path": {"type": "string", "minLength": 1},
-    "video_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-    "reviewer_type": {"enum": ["AI", "HUMAN"]},
-    "reviewer_origin": {"enum": ["AI", "HUMAN"]},
-    "review_stage": {"enum": ["REVIEW1", "FINAL_REVIEW"]},
-    "reviewer_agent": {"type": ["string", "null"]},
-    "status": {"enum": ["REVIEW1_PROPOSAL", "HUMAN_APPROVED"]},
-    "requires_human_confirmation": {"type": "boolean"},
-    "adjudication_status": {"enum": ["PENDING", "FINAL"]},
-    "human_approved": {"type": "boolean"},
-    "payload": {"type": "object"},
-    "reviewer_id": {"type": ["string", "null"]},
-    "reviewed_at": {"type": ["string", "null"]},
-    "human_decision": {"enum": ["APPROVE", "EDIT_AND_APPROVE"]},
+    "record_type": {
+      "enum": [
+        "sequence",
+        "rights",
+        "physical_lineage",
+        "identity"
+      ]
+    },
+    "dataset_role": {
+      "const": "TEMPORAL_DEVELOPMENT"
+    },
+    "video_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "video_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "video_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "reviewer_type": {
+      "enum": [
+        "AI",
+        "HUMAN"
+      ]
+    },
+    "reviewer_origin": {
+      "enum": [
+        "AI",
+        "HUMAN"
+      ]
+    },
+    "review_stage": {
+      "enum": [
+        "REVIEW1",
+        "FINAL_REVIEW"
+      ]
+    },
+    "reviewer_agent": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "enum": [
+        "REVIEW1_PROPOSAL",
+        "HUMAN_APPROVED"
+      ]
+    },
+    "requires_human_confirmation": {
+      "type": "boolean"
+    },
+    "adjudication_status": {
+      "enum": [
+        "PENDING",
+        "FINAL"
+      ]
+    },
+    "human_approved": {
+      "type": "boolean"
+    },
+    "payload": {
+      "type": "object"
+    },
+    "reviewer_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reviewed_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "human_decision": {
+      "enum": [
+        "APPROVE",
+        "EDIT_AND_APPROVE"
+      ]
+    },
     "review_evidence": {
-      "type": "object", "required": ["path", "sha256"], "additionalProperties": false,
-      "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+      "type": "object",
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
     }
   },
   "allOf": [
     {
-      "if": {"properties": {"status": {"const": "REVIEW1_PROPOSAL"}}},
-      "then": {"properties": {
-        "reviewer_type": {"const": "AI"}, "reviewer_origin": {"const": "AI"},
-        "review_stage": {"const": "REVIEW1"}, "reviewer_agent": {"const": "CODEX"},
-        "requires_human_confirmation": {"const": true}, "adjudication_status": {"const": "PENDING"},
-        "human_approved": {"const": false}
-      }}
+      "if": {
+        "properties": {
+          "status": {
+            "const": "REVIEW1_PROPOSAL"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "reviewer_type": {
+            "const": "AI"
+          },
+          "reviewer_origin": {
+            "const": "AI"
+          },
+          "review_stage": {
+            "const": "REVIEW1"
+          },
+          "reviewer_agent": {
+            "const": "CODEX"
+          },
+          "requires_human_confirmation": {
+            "const": true
+          },
+          "adjudication_status": {
+            "const": "PENDING"
+          },
+          "human_approved": {
+            "const": false
+          }
+        }
+      }
     },
     {
-      "if": {"properties": {"status": {"const": "HUMAN_APPROVED"}}},
-      "then": {
-        "required": ["reviewer_id", "reviewed_at", "review_evidence", "human_decision"],
+      "if": {
         "properties": {
-          "reviewer_type": {"const": "HUMAN"}, "reviewer_origin": {"const": "HUMAN"},
-          "review_stage": {"const": "FINAL_REVIEW"}, "reviewer_agent": {"const": null},
-          "requires_human_confirmation": {"const": false}, "adjudication_status": {"const": "FINAL"},
-          "human_approved": {"const": true}, "reviewer_id": {"type": "string", "minLength": 1},
-          "reviewed_at": {"type": "string", "minLength": 1}
+          "status": {
+            "const": "HUMAN_APPROVED"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "reviewer_id",
+          "reviewed_at",
+          "review_evidence",
+          "human_decision"
+        ],
+        "properties": {
+          "reviewer_type": {
+            "const": "HUMAN"
+          },
+          "reviewer_origin": {
+            "const": "HUMAN"
+          },
+          "review_stage": {
+            "const": "FINAL_REVIEW"
+          },
+          "reviewer_agent": {
+            "const": null
+          },
+          "requires_human_confirmation": {
+            "const": false
+          },
+          "adjudication_status": {
+            "const": "FINAL"
+          },
+          "human_approved": {
+            "const": true
+          },
+          "reviewer_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reviewed_at": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_type": {
+            "const": "rights"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/definitions/rights"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_type": {
+            "const": "physical_lineage"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/definitions/physical_lineage"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_type": {
+            "const": "identity"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/definitions/identity"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_type": {
+            "const": "sequence"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/definitions/sequence"
+          }
         }
       }
     }
-  ]
+  ],
+  "definitions": {
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "nullable_text": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "role": {
+      "enum": [
+        "driver",
+        "front_passenger",
+        "rear_left",
+        "rear_center",
+        "rear_right",
+        "unknown"
+      ]
+    },
+    "visibility": {
+      "enum": [
+        "clear",
+        "partial",
+        "occluded",
+        "out_of_view",
+        "unknown"
+      ]
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "evidence": {
+      "type": "object",
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/definitions/text"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "rights": {
+      "type": "object",
+      "required": [
+        "source_page_url",
+        "license_or_terms_url",
+        "creator",
+        "asset_id",
+        "rights_recommendation",
+        "rights_reason",
+        "evidence_available"
+      ],
+      "properties": {
+        "source_page_url": {
+          "$ref": "#/definitions/nullable_text"
+        },
+        "license_or_terms_url": {
+          "$ref": "#/definitions/nullable_text"
+        },
+        "creator": {
+          "$ref": "#/definitions/nullable_text"
+        },
+        "asset_id": {
+          "$ref": "#/definitions/nullable_text"
+        },
+        "rights_recommendation": {
+          "enum": [
+            "ACCEPT_CANDIDATE",
+            "REJECT_CANDIDATE",
+            "NEEDS_HUMAN_DECISION"
+          ]
+        },
+        "rights_reason": {
+          "$ref": "#/definitions/text"
+        },
+        "evidence_available": {
+          "type": "boolean"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/evidence"
+          }
+        },
+        "project_use_review": {
+          "enum": [
+            "PENDING",
+            "REJECTED",
+            "HUMAN_APPROVED"
+          ]
+        },
+        "license_url": {
+          "$ref": "#/definitions/nullable_text"
+        },
+        "terms_url": {
+          "$ref": "#/definitions/nullable_text"
+        },
+        "original_filename": {
+          "$ref": "#/definitions/nullable_text"
+        },
+        "local_filename": {
+          "$ref": "#/definitions/nullable_text"
+        },
+        "downloaded_at": {
+          "$ref": "#/definitions/nullable_text"
+        },
+        "download_method": {
+          "$ref": "#/definitions/nullable_text"
+        },
+        "source_bytes_binding": {
+          "$ref": "#/definitions/nullable_text"
+        }
+      },
+      "additionalProperties": false
+    },
+    "physical_lineage": {
+      "type": "object",
+      "required": [
+        "source_id_proposal",
+        "camera_id_proposal",
+        "capture_session_id_proposal",
+        "physical_vehicle_group_id_proposal",
+        "person_group_ids_proposal",
+        "lineage_status",
+        "evidence_basis"
+      ],
+      "properties": {
+        "source_id_proposal": {
+          "$ref": "#/definitions/nullable_text"
+        },
+        "camera_id_proposal": {
+          "$ref": "#/definitions/nullable_text"
+        },
+        "capture_session_id_proposal": {
+          "$ref": "#/definitions/nullable_text"
+        },
+        "physical_vehicle_group_id_proposal": {
+          "$ref": "#/definitions/nullable_text"
+        },
+        "person_group_ids_proposal": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/definitions/text"
+              }
+            }
+          ]
+        },
+        "lineage_status": {
+          "enum": [
+            "PROPOSAL",
+            "NOT_PROVABLE",
+            "NEEDS_HUMAN_CONFIRMATION"
+          ]
+        },
+        "evidence_basis": {
+          "$ref": "#/definitions/text"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/evidence"
+          }
+        },
+        "prior_usage": {
+          "$ref": "#/definitions/text"
+        },
+        "holdout_eligible": {
+          "const": false
+        },
+        "vehicle_physical_groups_proposal": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": {
+                "$ref": "#/definitions/text"
+              }
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "lineage_status": {
+                "const": "NOT_PROVABLE"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "source_id_proposal": {
+                "type": "null"
+              },
+              "camera_id_proposal": {
+                "type": "null"
+              },
+              "capture_session_id_proposal": {
+                "type": "null"
+              },
+              "physical_vehicle_group_id_proposal": {
+                "type": "null"
+              },
+              "person_group_ids_proposal": {
+                "type": "null"
+              },
+              "vehicle_physical_groups_proposal": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "required": [
+              "evidence"
+            ],
+            "properties": {
+              "source_id_proposal": {
+                "$ref": "#/definitions/text"
+              },
+              "camera_id_proposal": {
+                "$ref": "#/definitions/text"
+              },
+              "capture_session_id_proposal": {
+                "$ref": "#/definitions/text"
+              },
+              "physical_vehicle_group_id_proposal": {
+                "$ref": "#/definitions/text"
+              },
+              "person_group_ids_proposal": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "$ref": "#/definitions/text"
+                }
+              },
+              "evidence": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/definitions/evidence"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "occupant": {
+      "type": "object",
+      "required": [
+        "occupant_id_proposal",
+        "role_proposal",
+        "inside_vehicle_proposal",
+        "evidence_basis",
+        "confidence"
+      ],
+      "properties": {
+        "occupant_id_proposal": {
+          "$ref": "#/definitions/text"
+        },
+        "role_proposal": {
+          "$ref": "#/definitions/role"
+        },
+        "inside_vehicle_proposal": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "evidence_basis": {
+          "$ref": "#/definitions/text"
+        },
+        "confidence": {
+          "$ref": "#/definitions/confidence"
+        },
+        "vehicle_id_proposal": {
+          "$ref": "#/definitions/text"
+        },
+        "cabin_id_proposal": {
+          "$ref": "#/definitions/text"
+        },
+        "structure_notes": {
+          "$ref": "#/definitions/text"
+        },
+        "role_confidence": {
+          "$ref": "#/definitions/confidence"
+        },
+        "identity_status": {
+          "const": "REVIEW1_PROPOSAL"
+        },
+        "human_confirmed": {
+          "const": false
+        },
+        "all_physical_occupants_confirmed": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "identity": {
+      "type": "object",
+      "required": [
+        "vehicle_id_proposal",
+        "cabin_id_proposal",
+        "occupants"
+      ],
+      "properties": {
+        "vehicle_id_proposal": {
+          "$ref": "#/definitions/text"
+        },
+        "cabin_id_proposal": {
+          "$ref": "#/definitions/text"
+        },
+        "occupants": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/occupant"
+          }
+        },
+        "physical_identity_claim": {
+          "const": false
+        },
+        "frame_evidence": {
+          "$ref": "#/definitions/text"
+        }
+      },
+      "additionalProperties": false
+    },
+    "phone_interval": {
+      "type": "object",
+      "required": [
+        "start_frame",
+        "end_frame",
+        "start_time",
+        "end_time",
+        "occupant_id_proposal",
+        "occupant_role_proposal",
+        "visibility",
+        "confidence",
+        "review_notes",
+        "state"
+      ],
+      "properties": {
+        "start_frame": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end_frame": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "start_time": {
+          "type": "number",
+          "minimum": 0
+        },
+        "end_time": {
+          "type": "number",
+          "minimum": 0
+        },
+        "occupant_id_proposal": {
+          "$ref": "#/definitions/text"
+        },
+        "occupant_role_proposal": {
+          "$ref": "#/definitions/role"
+        },
+        "visibility": {
+          "$ref": "#/definitions/visibility"
+        },
+        "confidence": {
+          "$ref": "#/definitions/confidence"
+        },
+        "review_notes": {
+          "$ref": "#/definitions/text"
+        },
+        "state": {
+          "enum": [
+            "PHONE_USE",
+            "PHONE_PRESENT_NOT_USED",
+            "MOUNTED_OR_STATIC_PHONE",
+            "NO_PHONE",
+            "UNKNOWN"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "seatbelt_interval": {
+      "type": "object",
+      "required": [
+        "start_frame",
+        "end_frame",
+        "start_time",
+        "end_time",
+        "occupant_id_proposal",
+        "occupant_role_proposal",
+        "visibility",
+        "confidence",
+        "review_notes",
+        "state"
+      ],
+      "properties": {
+        "start_frame": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end_frame": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "start_time": {
+          "type": "number",
+          "minimum": 0
+        },
+        "end_time": {
+          "type": "number",
+          "minimum": 0
+        },
+        "occupant_id_proposal": {
+          "$ref": "#/definitions/text"
+        },
+        "occupant_role_proposal": {
+          "$ref": "#/definitions/role"
+        },
+        "visibility": {
+          "$ref": "#/definitions/visibility"
+        },
+        "confidence": {
+          "$ref": "#/definitions/confidence"
+        },
+        "review_notes": {
+          "$ref": "#/definitions/text"
+        },
+        "state": {
+          "enum": [
+            "FASTENED",
+            "UNFASTENED",
+            "UNCERTAIN_OR_OCCLUDED",
+            "NOT_APPLICABLE"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "context_interval": {
+      "type": "object",
+      "required": [
+        "start_frame",
+        "end_frame",
+        "start_time",
+        "end_time",
+        "occupant_id_proposal",
+        "occupant_role_proposal",
+        "visibility",
+        "confidence",
+        "review_notes",
+        "inside_vehicle",
+        "outside_vehicle_person",
+        "motorcycle_flag",
+        "conditions"
+      ],
+      "properties": {
+        "start_frame": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end_frame": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "start_time": {
+          "type": "number",
+          "minimum": 0
+        },
+        "end_time": {
+          "type": "number",
+          "minimum": 0
+        },
+        "occupant_id_proposal": {
+          "$ref": "#/definitions/text"
+        },
+        "occupant_role_proposal": {
+          "$ref": "#/definitions/role"
+        },
+        "visibility": {
+          "$ref": "#/definitions/visibility"
+        },
+        "confidence": {
+          "$ref": "#/definitions/confidence"
+        },
+        "review_notes": {
+          "$ref": "#/definitions/text"
+        },
+        "inside_vehicle": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "outside_vehicle_person": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "motorcycle_flag": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "conditions": {
+          "$ref": "#/definitions/text"
+        }
+      },
+      "additionalProperties": false
+    },
+    "sequence": {
+      "type": "object",
+      "required": [
+        "frame_count",
+        "fps",
+        "occupants",
+        "phone_intervals",
+        "seatbelt_intervals",
+        "context_intervals"
+      ],
+      "properties": {
+        "frame_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "fps": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 10000
+        },
+        "occupants": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/occupant"
+          }
+        },
+        "phone_intervals": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/phone_interval"
+          }
+        },
+        "seatbelt_intervals": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/seatbelt_interval"
+          }
+        },
+        "context_intervals": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/context_interval"
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  }
 }

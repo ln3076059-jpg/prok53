@@ -29,7 +29,16 @@ class Review1ContractTests(unittest.TestCase):
             requires_human_confirmation=True,
             adjudication_status="PENDING",
             human_approved=False,
-            payload={"recommendation": "NEEDS_HUMAN_DECISION"},
+            payload=dict(
+                source_page_url="https://example.invalid/asset",
+                license_or_terms_url="https://example.invalid/terms",
+                creator=None,
+                asset_id=None,
+                rights_recommendation="NEEDS_HUMAN_DECISION",
+                rights_reason="Isolated unit fixture; no real rights claim.",
+                evidence_available=False,
+                evidence=[],
+            ),
         )
 
     def final_fixture(self):
@@ -78,7 +87,15 @@ class Review1ContractTests(unittest.TestCase):
         record["payload"] = dict(
             frame_count=2,
             fps=2,
-            occupants=[{"occupant_id_proposal": "unit-person"}],
+            occupants=[
+                dict(
+                    occupant_id_proposal="unit-person",
+                    role_proposal="unknown",
+                    inside_vehicle_proposal=None,
+                    evidence_basis="Isolated fixture.",
+                    confidence=0.5,
+                )
+            ],
             phone_intervals=[dict(interval, state="UNKNOWN")],
             seatbelt_intervals=[dict(interval, state="UNCERTAIN_OR_OCCLUDED")],
             context_intervals=[
@@ -127,7 +144,7 @@ class Review1ContractTests(unittest.TestCase):
 
     def test_evidence_mutation_and_payload_mutation(self):
         record = self.final_fixture()
-        record["payload"]["recommendation"] = "ACCEPT_CANDIDATE"
+        record["payload"]["rights_reason"] = "Changed after receipt."
         self.assertTrue(validate_record(record))
         record = self.final_fixture()
         Path(record["review_evidence"]["path"]).write_text("changed", encoding="utf-8")
@@ -180,6 +197,120 @@ class Review1ContractTests(unittest.TestCase):
         record["payload"]["context_intervals"][0].update(
             inside_vehicle=True, outside_vehicle_person=True
         )
+        self.assertTrue(validate_record(record))
+
+    def lineage_fixture(self):
+        return dict(
+            self.record,
+            record_type="physical_lineage",
+            payload=dict(
+                source_id_proposal=None,
+                camera_id_proposal=None,
+                capture_session_id_proposal=None,
+                physical_vehicle_group_id_proposal=None,
+                person_group_ids_proposal=None,
+                lineage_status="NOT_PROVABLE",
+                evidence_basis="No evidence in isolated fixture.",
+            ),
+        )
+
+    def identity_fixture(self):
+        return dict(
+            self.record,
+            record_type="identity",
+            payload=dict(
+                vehicle_id_proposal="unit-vehicle",
+                cabin_id_proposal="unit-cabin",
+                occupants=self.sequence_fixture()["payload"]["occupants"],
+            ),
+        )
+
+    def test_empty_payloads_rejected_for_all_types(self):
+        for kind in ("rights", "physical_lineage", "identity", "sequence"):
+            self.assertTrue(validate_record(dict(self.record, record_type=kind, payload={})))
+
+    def test_rights_recommendation_required_and_typed(self):
+        for value in (None, "HUMAN_APPROVED", "APPROVE"):
+            record = copy.deepcopy(self.record)
+            record["payload"]["rights_recommendation"] = value
+            self.assertTrue(validate_record(record))
+        record = copy.deepcopy(self.record)
+        del record["payload"]["rights_recommendation"]
+        self.assertTrue(validate_record(record))
+
+    def test_ai_project_use_approval_rejected(self):
+        record = copy.deepcopy(self.record)
+        record["payload"]["project_use_review"] = "HUMAN_APPROVED"
+        self.assertTrue(validate_record(record))
+        record = self.sequence_fixture()
+        record["payload"]["canonical_annotation_proposal"] = {"human_approved": True}
+        self.assertTrue(validate_record(record))
+
+    def test_unproven_lineage_must_not_invent_ids(self):
+        record = self.lineage_fixture()
+        self.assertEqual(validate_record(record), [])
+        for key, value in [
+            ("camera_id_proposal", "C01"),
+            ("person_group_ids_proposal", ["invented-person"]),
+            ("person_group_ids_proposal", "person"),
+            ("lineage_status", "HUMAN_APPROVED"),
+        ]:
+            changed = copy.deepcopy(record)
+            changed["payload"][key] = value
+            self.assertTrue(validate_record(changed))
+
+    def test_claimed_lineage_needs_evidence(self):
+        record = self.lineage_fixture()
+        record["payload"].update(
+            source_id_proposal="unit-source",
+            camera_id_proposal="unit-camera",
+            capture_session_id_proposal="unit-session",
+            physical_vehicle_group_id_proposal="unit-car",
+            person_group_ids_proposal=["unit-person"],
+            lineage_status="PROPOSAL",
+        )
+        self.assertTrue(validate_record(record))
+        record["payload"]["evidence"] = [{"path": str(self.video), "sha256": digest(self.video)}]
+        self.assertEqual(validate_record(record), [])  # Structure/hash only, never semantic proof.
+        record["payload"]["vehicle_physical_groups_proposal"] = {"other": "different-group"}
+        self.assertTrue(validate_record(record))
+
+    def test_identity_role_duplicates_and_cabin(self):
+        record = self.identity_fixture()
+        self.assertEqual(validate_record(record), [])
+        record["payload"]["occupants"] *= 2
+        self.assertTrue(validate_record(record))
+        record = self.identity_fixture()
+        record["payload"]["occupants"][0]["role_proposal"] = "pilot"
+        self.assertTrue(validate_record(record))
+        record = self.identity_fixture()
+        record["payload"]["occupants"][0]["cabin_id_proposal"] = "another-cabin"
+        self.assertTrue(validate_record(record))
+
+    def test_interval_role_and_visibility_enum(self):
+        for key, value in [
+            ("occupant_role_proposal", "pilot"),
+            ("occupant_role_proposal", "driver"),
+            ("visibility", "perfect"),
+        ]:
+            record = self.sequence_fixture()
+            record["payload"]["phone_intervals"][0][key] = value
+            self.assertTrue(validate_record(record))
+
+    def test_rights_evidence_flag_and_hash(self):
+        record = copy.deepcopy(self.record)
+        record["payload"]["evidence_available"] = True
+        self.assertTrue(validate_record(record))
+        record["payload"]["evidence"] = [{"path": str(self.video), "sha256": "0" * 64}]
+        self.assertTrue(validate_record(record))
+
+    def test_nonfinite_and_malformed_intervals_rejected(self):
+        for value in (float("nan"), float("inf"), "bad"):
+            record = self.sequence_fixture()
+            record["payload"]["phone_intervals"][0]["confidence"] = value
+            self.assertTrue(validate_record(record))
+        record = self.sequence_fixture()
+        record["payload"]["phone_intervals"][0]["state"] = ["UNKNOWN"]
         self.assertTrue(validate_record(record))
 
 

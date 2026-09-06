@@ -17,12 +17,37 @@ It contains `rights_review1.csv`, `physical_lineage_review1.csv`,
 `annotations/`, and `HUMAN_APPROVAL_QUEUE.csv`. Paths resolve from the repository
 root. Video bytes and previous `human_review_return/` files are not overwritten.
 
-The current four-clip package is **BLOCKED_FULL_VIDEO_REVIEW_REQUIRED**. Its AI
-review examined all 1,781 consecutive decoded frames on exhaustive contact pages,
-plus enlarged consecutive transition frames. Native continuous video playback and
-audio were not observed. This does **not** fulfill the user's explicit requirement
-to review the original video beyond contact sheets. Do not relabel the package
-`REVIEW1_READY` based only on extraction or record consistency passing.
+The current four-clip package is **REVIEW1_READY_FOR_HUMAN_CONFIRMATION** under
+the explicitly revised visual-task contract below. The earlier native-playback
+blocker is retained in local history. It was not a missing-frame finding.
+
+`REVIEW1_FULL_VISUAL_PASS` requires inspection of every decoded frame without
+sampling, in presentation order from frame 0 through the final frame; original
+PTS/timing and video SHA must match; decode must pass; all state transitions must
+be inspected at consecutive-frame resolution; visible cuts/discontinuities must
+be recorded. Merely generating an exhaustive sheet does not establish inspection.
+Sparse contact-sheet sampling cannot pass this contract.
+
+For PHONE/SEATBELT labels, native audio playback is not required unless a proposed
+label actually depends on audio. Neither native playback nor listening occurred
+here. Codex visually inspected all consecutive frame pages in the preceding turn
+and consecutive transition enlargements then and in the continuation. Image
+display resized frames; uncertain/occluded details remain explicitly uncertain.
+
+| Clip | Total frames | Inspected frames | Coverage | First / last frame |
+|---|---:|---:|---:|---|
+| C01 | 454 | 454 | 100% | 0 / 453 |
+| C07 | 646 | 646 | 100% | 0 / 645 |
+| C10 | 441 | 441 | 100% | 0 / 440 |
+| C11 | 240 | 240 | 100% | 0 / 239 |
+
+All four source hashes and original per-frame PTS were reverified through EOF.
+No visible shot cuts were observed in the complete ordered visual inspection.
+This finding does not establish original capture speed, physical independence,
+or visibility of hidden occupants. Local `full_visual_review.json` and per-clip
+`Cxx_full_visual_review.json` record source hashes, page/frame ranges, transition
+findings, image hashes and per-frame PTS evidence. The inspection count is a Codex
+review record; it is not inferred from decoder success or file existence.
 
 The proposals can still be inspected and corrected. All uncertain latch, phone
 onset, role and inside/outside boundaries remain explicit. Review1 confidence is
@@ -49,6 +74,26 @@ video hashes, malformed intervals, gaps/overlaps and frame/time inconsistencies.
 All Review1 intervals are zero-based and half-open `[start_frame, end_frame)`;
 the final boundary can equal `frame_count`. Times are video-relative seconds,
 not real capture timestamps.
+
+Each record type now has a typed payload contract:
+
+- Rights: source/terms URL, creator, asset ID, recommendation, reason and evidence
+  availability. Unknown source details may be null for a pending decision.
+  ACCEPT_CANDIDATE needs all source details and existing nonempty SHA-bound
+  evidence. No AI payload may claim human project-use approval.
+- Physical lineage: nullable source/camera/session/vehicle/person proposals,
+  lineage status and evidence basis. NOT_PROVABLE carries no asserted IDs;
+  other statuses need complete proposed IDs and SHA-bound evidence. A structured
+  proposal and matching evidence hash still do not prove physical independence.
+- Identity: proposed vehicle/cabin IDs and unique occupants, canonical role enum,
+  nullable inside-vehicle proposal, evidence basis and confidence.
+- Sequence: typed occupants and full PHONE/SEATBELT/context intervals. Interval
+  roles must match the referenced occupant. Allowed visibility values are
+  `clear`, `partial`, `occluded`, `out_of_view`, `unknown`.
+
+The canonical role enum is `driver`, `front_passenger`, `rear_left`,
+`rear_center`, `rear_right`, `unknown`. These are proposals, not physical IDs or
+human-approved identities. Nested structured AI claims of human approval fail.
 
 Each sequence payload includes a `canonical_annotation_proposal`. Source/camera
 and actual capture times stay null; occupant/cabin/vehicle IDs remain proposals.
@@ -111,7 +156,7 @@ full-video completion check, human approval, intake gate, or canonical GT check.
 After real human input, check the returned evidence and edited records first;
 then resolve identity/rights/lineage and run the existing canonical validation.
 
-Only Review1 unit tests may be run for this implementation:
+Run Review1 unit tests first for changes to this implementation:
 
 ```powershell
 py -m unittest discover -s tests -p test_review1_contract.py -q
@@ -119,6 +164,14 @@ py -m unittest discover -s tests -p test_review1_contract.py -q
 
 Their ephemeral test fixtures are not dataset inputs or real human evidence.
 They do not exercise any frozen model test.
+
+Ordinary full `py -m pytest` is also authorized for these executable-code changes.
+For clean provenance, first commit code/schema/tests, check the tracked tree is
+clean, then run `py tests/run_tests_with_provenance.py` (which runs full pytest).
+It records the tested code HEAD, pytest counts and log SHA in
+`tests/test_provenance.json`. A later provenance-only commit may contain the
+resulting log/metadata. Do not describe dirty-tree tests as testing exact HEAD;
+do not rerun pytest just to make the later provenance-only commit the tested SHA.
 
 ## Stages still prohibited
 

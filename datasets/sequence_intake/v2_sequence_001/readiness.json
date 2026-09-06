@@ -190,5 +190,35 @@
     "next_machine_command": null,
     "next_machine_command_reason": "No real human-completed evidence records or canonical sequence annotations yet.",
     "temporal_calibration_status": "BLOCKED"
+  },
+  "review1_handoff": {
+    "status": "REVIEW1_READY_FOR_HUMAN_CONFIRMATION",
+    "scope": "TEMPORAL_DEVELOPMENT_ONLY",
+    "primary_clips": [
+      "C01",
+      "C07",
+      "C10",
+      "C11"
+    ],
+    "inspected_frames": 1781,
+    "coverage_percent": 100,
+    "full_visual_review": "PASS",
+    "native_playback_observed": false,
+    "audio_observed": false,
+    "visual_review_path": "datasets/incoming/v2_sequence_001/review1/full_visual_review.json",
+    "visual_review_sha256": "73a1b459f962f89ef9c917a0325bd4a54eefec518d12c77e6d9026d8644fb5d2",
+    "records_consistency_pass": 16,
+    "human_queue_items": 37,
+    "human_decisions_supplied": 0,
+    "reviewer_type": "AI",
+    "reviewer_origin": "AI",
+    "review_stage": "REVIEW1",
+    "reviewer_agent": "CODEX",
+    "adjudication_status": "PENDING",
+    "human_approved": false,
+    "human_queue_path": "datasets/incoming/v2_sequence_001/review1/HUMAN_APPROVAL_QUEUE.csv",
+    "temporal_calibration_status": "BLOCKED_PENDING_HUMAN_FINAL_CONFIRMATION",
+    "governance_promotion": false,
+    "local_artifacts_tracked": false
   }
 }

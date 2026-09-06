@@ -31,6 +31,29 @@ def payload_digest(payload):
     ).hexdigest()
 
 
+def ai_human_claims(value):
+    """Reject structured human-approval claims, including nested draft metadata."""
+    if isinstance(value, list):
+        return any(ai_human_claims(item) for item in value)
+    if not isinstance(value, dict):
+        return False
+    for key, item in value.items():
+        key = key.lower()
+        if key in {"human_approved", "human_verified", "human_confirmed"} and item is not False:
+            return True
+        if key in {"reviewer_type", "reviewer_origin"} and item != "AI":
+            return True
+        if key == "adjudication_status" and item != "PENDING":
+            return True
+        if key == "project_use_review" and item not in (None, "PENDING", "REJECTED"):
+            return True
+        if key == "status" and isinstance(item, str) and "HUMAN_APPROVED" in item:
+            return True
+        if ai_human_claims(item):
+            return True
+    return False
+
+
 def validate_record(record):
     """Return errors. Evidence validity is not proof of human authorship or rights."""
     schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
@@ -41,6 +64,8 @@ def validate_record(record):
     if not video.is_file() or digest(video) != record["video_sha256"]:
         errors.append("video missing or SHA256 mismatch")
     if record["status"] == "REVIEW1_PROPOSAL":
+        if ai_human_claims(record["payload"]):
+            errors.append("AI payload cannot claim human approval")
         if any(
             record.get(k)
             for k in ("reviewer_id", "reviewed_at", "review_evidence", "human_decision")
@@ -111,8 +136,36 @@ def validate_record(record):
             except (ValueError, OSError):
                 errors.append("human evidence must be a readable JSON review receipt")
 
-    if record["record_type"] == "sequence":
-        payload = record["payload"]
+    payload = record["payload"]
+    kind = record["record_type"]
+    for evidence in payload.get("evidence", []) if kind in {"rights", "physical_lineage"} else []:
+        path = Path(evidence["path"])
+        if not path.is_file() or not path.stat().st_size or digest(path) != evidence["sha256"]:
+            errors.append("payload evidence missing/empty or SHA256 mismatch")
+    if kind == "rights":
+        if payload["evidence_available"] != bool(payload.get("evidence")):
+            errors.append("rights evidence_available must match supplied evidence")
+        if payload["rights_recommendation"] == "ACCEPT_CANDIDATE":
+            if not payload["evidence_available"] or any(
+                not payload[k]
+                for k in ("source_page_url", "license_or_terms_url", "creator", "asset_id")
+            ):
+                errors.append("ACCEPT_CANDIDATE requires source details and evidence")
+    if kind == "physical_lineage":
+        groups = payload.get("vehicle_physical_groups_proposal")
+        if groups and payload["physical_vehicle_group_id_proposal"] not in groups.values():
+            errors.append("primary physical vehicle must occur in vehicle mapping")
+    if kind in {"identity", "sequence"}:
+        occupants = payload["occupants"]
+        ids = [o["occupant_id_proposal"] for o in occupants]
+        if len(set(ids)) != len(ids):
+            errors.append("duplicate occupant proposal")
+        if kind == "identity":
+            for occupant in occupants:
+                for field in ("vehicle_id_proposal", "cabin_id_proposal"):
+                    if field in occupant and occupant[field] != payload[field]:
+                        errors.append(f"occupant {field} mismatches identity payload")
+    if kind == "sequence":
         count = payload.get("frame_count")
         fps = payload.get("fps")
         if (
@@ -150,6 +203,16 @@ def validate_record(record):
                 errors.append(f"{key} must be an array of objects")
                 continue
             for interval in intervals:
+                role = next(
+                    (
+                        o["role_proposal"]
+                        for o in occupants
+                        if o["occupant_id_proposal"] == interval["occupant_id_proposal"]
+                    ),
+                    None,
+                )
+                if role is not None and role != interval["occupant_role_proposal"]:
+                    errors.append("interval role differs from occupant proposal")
                 a, b = interval.get("start_frame"), interval.get("end_frame")
                 if (
                     type(a) is not int
