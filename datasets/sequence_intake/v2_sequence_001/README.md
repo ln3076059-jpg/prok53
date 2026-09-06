@@ -35,6 +35,26 @@ kiểm kê, full-decode và intake nháp, không nâng trạng thái governance.
 intake local cùng rights/lineage evidence và hoàn tất identity/sequence human review
 trước các bước tiếp theo.
 
+### Bàn giao cho người duyệt thật
+
+Làm theo [HUMAN_OPERATOR_CHECKLIST.md](HUMAN_OPERATOR_CHECKLIST.md): ưu tiên
+**C01 → C07 → C10 → C11**, sau đó C02, C03, C04, C05, C08, C09, C12, C16 nếu cần diversity.
+Trạng thái bàn giao: **HUMAN_INPUT_REQUIRED**; rights/lineage/canonical human sequence hoàn tất đều **0/12**.
+
+Gói review local tại `datasets/incoming/v2_sequence_001/temporal_review_package/`
+có audit 312 ô intake, 12 mẫu rights, 12 phiếu lineage và đề xuất nội dung từ 108 frame mẫu.
+Đề xuất chỉ là **AI_REVIEWED_PROPOSAL**, không phải full-video human review hoặc canonical GT.
+Packet timing PASS chỉ xác nhận timeline trình chiếu, không chứng minh capture liên tục hay tốc độ thực.
+
+Ba worksheet làm việc đã chuẩn bị tại `datasets/incoming/v2_sequence_001/human_review_return/`:
+`rights_review.csv`, `physical_lineage_review.csv`, `sequence_review.csv`.
+Người thật cần xem original full video, điền quyết định và nộp evidence theo checklist.
+Bản proposal, evidence gốc và mọi trường reviewer hiện có được giữ nguyên.
+Không tự chọn APPROVED/FINAL; lineage không chứng minh được phải ghi NOT_PROVABLE cùng lý do.
+Các worksheet, evidence, video và contact sheets chỉ ở local, không đi kèm GitHub.
+Chỉ sau khi người thật trả kết quả mới kiểm tra evidence/SHA, reviewer và video binding;
+chưa tạo roster, canonical skeleton hay chạy validation/calibration trong bước bàn giao này.
+
 ## 1. Đưa video vào hai nhóm riêng
 
 | Nhóm đề xuất trong `proposed_role` | Thư mục local đã chuẩn bị | Mục đích |

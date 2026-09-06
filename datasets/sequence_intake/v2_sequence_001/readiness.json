@@ -124,5 +124,71 @@
     "C11",
     "C12",
     "C16"
-  ]
+  ],
+  "local_review_package": {
+    "status": "BLOCKED_PENDING_HUMAN_REVIEW",
+    "path": "datasets/incoming/v2_sequence_001/temporal_review_package",
+    "tracked": false,
+    "created_at_utc": "2026-09-06T09:23:45.705869+00:00",
+    "prepared_at_repository_head": "081495dc6e3f306970602621c215421d666919d9",
+    "summary_checked_at_utc": "2026-09-06T09:29:36.042837+00:00",
+    "inventory_path": "datasets/incoming/v2_sequence_001/temporal_review_package/package_inventory.json",
+    "inventory_sha256": "cdaabc2ddde62e7158848127ea568df9fa6ac753a5385b85869275c78806d812",
+    "inventory_binding_scope": "Package input bindings describe the preparation snapshot at prepared_at_repository_head, including the then-current readiness.json; this summary is a subsequent documentation update.",
+    "file_count": 36,
+    "size_bytes": 2681287,
+    "intake_field_audit_cells": 312,
+    "rights_template_count": 12,
+    "physical_lineage_review_sheet_count": 12,
+    "sample_frames_visually_reviewed": 108,
+    "content_review_status": "AI_REVIEWED_PROPOSAL",
+    "content_review_scope": "Nine sampled frames per clip; not exhaustive human playback, canonical truth, or project model inference. Technical presentation timing does not prove uninterrupted capture or real-world capture speed.",
+    "media_technical_status": "MEDIA_TECHNICAL_PASS",
+    "packet_timing_passed": 12,
+    "primary_temporal_annotation": [
+      "C01",
+      "C07",
+      "C10",
+      "C11"
+    ],
+    "secondary_temporal_annotation": [
+      "C02",
+      "C03",
+      "C04",
+      "C05",
+      "C08",
+      "C09",
+      "C12",
+      "C16"
+    ],
+    "reject_temporal": [],
+    "grouping_scope": "Content priority proposals only; rights, physical lineage and human review remain unresolved for all clips. No conclusive rejection from sampled review.",
+    "identity_roster_eligible_clips": 0,
+    "temporal_calibration_status": "BLOCKED_PENDING_SEQUENCE_GROUND_TRUTH",
+    "full_decode_rerun_for_package": false
+  },
+  "human_operator_handoff": {
+    "status": "HUMAN_INPUT_REQUIRED",
+    "checked_at_utc": "2026-09-06T09:33:45.193043+00:00",
+    "checklist_path": "datasets/sequence_intake/v2_sequence_001/HUMAN_OPERATOR_CHECKLIST.md",
+    "local_return_directory": "datasets/incoming/v2_sequence_001/human_review_return",
+    "local_return_files": [
+      "rights_review.csv",
+      "physical_lineage_review.csv",
+      "sequence_review.csv"
+    ],
+    "local_return_files_tracked": false,
+    "rights_completion": 0,
+    "lineage_completion": 0,
+    "human_sequence_completion": 0,
+    "completion_denominator": 12,
+    "completion_basis": "All existing rights and lineage sheets remain pending/unverified with empty reviewer fields; no canonical sequence files supplied. New return worksheets are blank human-review drafts.",
+    "existing_review_package_preserved": true,
+    "reviewer_fields_modified": false,
+    "human_return_validation_run": false,
+    "canonical_sequence_validation_run": false,
+    "next_machine_command": null,
+    "next_machine_command_reason": "No real human-completed evidence records or canonical sequence annotations yet.",
+    "temporal_calibration_status": "BLOCKED"
+  }
 }
