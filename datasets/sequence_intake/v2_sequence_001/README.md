@@ -7,17 +7,31 @@ Kết quả kiểm kê nằm trong `readiness.json`; `intake.csv` hiện chỉ c
 Đợt tiếp nhận local hiện có **12 MP4/H.264**, tổng **316.732.819 byte** (316,7 MB);
 mỗi file dưới 100 MB. Tên file theo mã candidate: C01–C05, C07–C12 và C16.
 Đã đổi tên và đối chiếu SHA256 trước/sau cho 12/12 file; không chuyển mã hay đổi timing.
-Metadata lấy từ container header bằng PyAV, chưa phải kiểm tra decode toàn bộ hoặc GT.
+Full-decode video bằng PyAV/FFmpeg đã **PASS 12/12**, tổng **4.821 frame**;
+số frame khớp header, không ghi nhận lỗi decode, frame corrupt hoặc timestamp thiếu/không tăng.
+Đây là kiểm tra stream video đến EOF; chưa kiểm tra audio hoặc human ground truth.
+Báo cáo local: `datasets/incoming/v2_sequence_001/temporal_full_decode_report.json`.
+`readiness.json` lưu tóm tắt, thời điểm kiểm tra và SHA256 của báo cáo;
+cập nhật tài liệu không chạy lại full-decode hoặc pytest.
 Bảng tên gốc/hash/metadata nằm tại
 `datasets/incoming/v2_sequence_001/temporal_development/video_file_manifest.json`
 (local, gitignored). Video và manifest này **không được tải lên GitHub**;
 clone repo ở máy khác không bao gồm các file local này.
 
-Holdout vẫn **0 video**, intake vẫn **0 dòng dữ liệu**, human-approved sequences vẫn **0**.
+Holdout vẫn **0 video**, human-approved sequences vẫn **0**.
+Intake local có **12 dòng nháp, 0 dòng hoàn chỉnh** tại
+`datasets/incoming/v2_sequence_001/temporal_intake.csv`; CSV template trong Git vẫn trống.
+Các dòng nháp có hash, metadata và URL tham chiếu theo research/tên file gốc;
+URL này chưa chứng minh nguồn gốc bytes hoặc physical lineage.
+Danh sách cần review nằm tại `datasets/incoming/v2_sequence_001/temporal_rights_lineage_review.json`.
+Ngày tải và hồ sơ rights/lineage chưa được xác nhận; không suy ngày tải từ filesystem timestamp.
+Cả 12 clip đã được người vận hành phân vào development, **không dùng lại cho untouched holdout**,
+kể cả đổi tên. Việc phân nhóm này không khẳng định đã chạy training hoặc calibration.
+Các bản intake, báo cáo và hồ sơ review local đều gitignored, không được commit.
 Chưa xác nhận quyền sử dụng, source/camera/session hay nhóm người/xe vật lý;
 mã candidate không thay thế physical identity. Chưa chạy intake gate, inference,
-calibration, freeze hoặc evaluation cho đợt tiếp nhận này. Readiness chỉ ghi nhận
-sự hiện diện file, không nâng trạng thái governance. Người vận hành cần điền bản
+calibration, freeze hoặc evaluation cho đợt tiếp nhận này. Readiness ghi nhận
+kiểm kê, full-decode và intake nháp, không nâng trạng thái governance. Người vận hành cần điền bản
 intake local cùng rights/lineage evidence và hoàn tất identity/sequence human review
 trước các bước tiếp theo.
 
