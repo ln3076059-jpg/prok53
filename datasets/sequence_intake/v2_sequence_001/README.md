@@ -1,8 +1,25 @@
 # Tiếp nhận sequence thật — v2_sequence_001
 
-Trạng thái: **CHỜ VIDEO THẬT VÀ HUMAN REVIEW**. Đây là gói tiếp nhận dữ liệu,
+Trạng thái: **ĐÃ NHẬN VIDEO TEMPORAL LOCAL; CHỜ RIGHTS/LINEAGE, GT VÀ HUMAN REVIEW**. Đây là gói tiếp nhận dữ liệu,
 chưa phải ground truth, manifest được freeze hay bằng chứng đánh giá model.
 Kết quả kiểm kê nằm trong `readiness.json`; `intake.csv` hiện chỉ có tiêu đề cột.
+
+Đợt tiếp nhận local hiện có **12 MP4/H.264**, tổng **316.732.819 byte** (316,7 MB);
+mỗi file dưới 100 MB. Tên file theo mã candidate: C01–C05, C07–C12 và C16.
+Đã đổi tên và đối chiếu SHA256 trước/sau cho 12/12 file; không chuyển mã hay đổi timing.
+Metadata lấy từ container header bằng PyAV, chưa phải kiểm tra decode toàn bộ hoặc GT.
+Bảng tên gốc/hash/metadata nằm tại
+`datasets/incoming/v2_sequence_001/temporal_development/video_file_manifest.json`
+(local, gitignored). Video và manifest này **không được tải lên GitHub**;
+clone repo ở máy khác không bao gồm các file local này.
+
+Holdout vẫn **0 video**, intake vẫn **0 dòng dữ liệu**, human-approved sequences vẫn **0**.
+Chưa xác nhận quyền sử dụng, source/camera/session hay nhóm người/xe vật lý;
+mã candidate không thay thế physical identity. Chưa chạy intake gate, inference,
+calibration, freeze hoặc evaluation cho đợt tiếp nhận này. Readiness chỉ ghi nhận
+sự hiện diện file, không nâng trạng thái governance. Người vận hành cần điền bản
+intake local cùng rights/lineage evidence và hoàn tất identity/sequence human review
+trước các bước tiếp theo.
 
 ## 1. Đưa video vào hai nhóm riêng
 
