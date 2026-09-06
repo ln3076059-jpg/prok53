@@ -721,3 +721,161 @@ def test_freeze_event_truth_rejects_mismatched_identity_manifest_lock(tmp_path):
             identity_manifest_lock_path=mismatched_lock_path,
         )
 
+
+
+@pytest.fixture(params=[
+    ("FULL_SYSTEM_EVENT_EVALUATION", False),
+    ("CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING", False),
+    ("FULL_SYSTEM_EVENT_EVALUATION", True),
+    ("CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING", True),
+])
+def semantic_evaluation(tmp_path, request):
+    from training.extract_identity_manifest import freeze_identity_adjudication
+
+    scope, hierarchical = request.param
+    external, manifest_path = _write_external_lock(tmp_path / "external.json")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["evaluation_scope"] = scope
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    truth = tmp_path / "truth.csv"
+    truth_lock = tmp_path / "truth-lock.json"
+    _write_csv(truth, [_truth_row()], REQUIRED_COLUMNS)
+    freeze_event_ground_truth(truth, external, truth_lock)
+    context, context_lock = _freeze_context(tmp_path, external)
+    predictions = tmp_path / "predictions.csv"
+    prediction = {**_truth_row(), "observation_count": "5"}
+    _write_csv(predictions, [prediction], set(prediction))
+    model = tmp_path / "model.json"
+    model.write_text(json.dumps({
+        "record_schema": "ROADWATCH_MODEL_VERSION_V2",
+        "activation_state": "ACTIVE",
+        "experiment_id": "SEMANTIC_TEST",
+        "locked_at": "2026-09-06T00:00:00Z",
+        "weights_sha256": "a" * 64,
+        "config_sha256": "b" * 64,
+        "training_data_manifest_sha256": "c" * 64,
+        "validation_metric_artifact": {"sha256": "d" * 64},
+        "threshold_calibration_artifact": {"sha256": "e" * 64},
+        "human_review_readiness_artifact": {"governed_training_ready": True},
+        "code_commit": "abc123",
+    }), encoding="utf-8")
+    kwargs = {
+        "video_minutes": 1.0,
+        "context_truth_path": context,
+        "context_truth_lock_path": context_lock,
+        "allow_conditional_evaluation": scope != "FULL_SYSTEM_EVENT_EVALUATION",
+        "allow_hierarchical_adjudication_diagnostic": hierarchical,
+    }
+    if hierarchical:
+        source = tmp_path / "adjudication.json"
+        source.write_text(json.dumps({
+            "human_review_status": "APPROVED",
+            "adjudication_status": "FINAL",
+            "reviewer_type": "HUMAN",
+            "reviewer_id": "auditor",
+            "reviewed_at": "2026-09-06T00:00:00Z",
+            "target_identity_manifest_sha256": manifest["manifest_sha256"],
+            "mappings": {prediction["occupant_id"]: prediction["occupant_id"]},
+            "cabin_mappings": {prediction["cabin_id"]: prediction["cabin_id"]},
+        }), encoding="utf-8")
+        adjudication_lock = tmp_path / "adjudication-lock.json"
+        freeze_identity_adjudication(source, adjudication_lock, manifest_path)
+        kwargs["identity_adjudication_path"] = adjudication_lock
+    output = tmp_path / "report.json"
+    args = (truth, predictions, truth_lock, model)
+    report = evaluate_frozen(*args, output, **kwargs)
+    return args, kwargs, output, report, manifest_path
+
+
+def test_frozen_semantics_match_scope_and_hierarchy(semantic_evaluation):
+    _, kwargs, output, report, _ = semantic_evaluation
+    if kwargs["allow_hierarchical_adjudication_diagnostic"]:
+        expected = (
+            "MEASURED_HIERARCHICAL_ADJUDICATION_DIAGNOSTIC",
+            "DIAGNOSTIC_BEHAVIOR_METRICS_AFTER_HUMAN_IDENTITY_ALIGNMENT",
+        )
+    elif kwargs["allow_conditional_evaluation"]:
+        expected = (
+            "MEASURED_CONDITIONAL_DIAGNOSTIC",
+            "DIAGNOSTIC_METRICS_CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING",
+        )
+    else:
+        expected = (
+            "MEASURED_FROZEN_EXTERNAL_TEST",
+            "FROZEN_EVENT_METRICS_FOR_THIS_LOCKED_MODEL_ONLY",
+        )
+    assert (report["status"], report["scientific_claim"]) == expected
+    integrity = verify_evaluation_integrity(output)
+    assert "identity manifest lock" in integrity["verified_artifacts"]
+
+
+def test_frozen_semantics_reject_report_relabeling(semantic_evaluation):
+    _, _, output, report, _ = semantic_evaluation
+    statuses = {
+        "MEASURED_FROZEN_EXTERNAL_TEST",
+        "MEASURED_CONDITIONAL_DIAGNOSTIC",
+        "MEASURED_HIERARCHICAL_ADJUDICATION_DIAGNOSTIC",
+    }
+    claims = {
+        "FROZEN_EVENT_METRICS_FOR_THIS_LOCKED_MODEL_ONLY",
+        "DIAGNOSTIC_METRICS_CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING",
+        "DIAGNOSTIC_BEHAVIOR_METRICS_AFTER_HUMAN_IDENTITY_ALIGNMENT",
+    }
+    for field, alternatives in (("status", statuses), ("scientific_claim", claims)):
+        for value in alternatives - {report[field]}:
+            tampered = {**report, field: value}
+            output.write_text(json.dumps(tampered), encoding="utf-8")
+            with pytest.raises(ValueError, match="status and (scientific_claim|claim)"):
+                verify_evaluation_integrity(output)
+    tampered = json.loads(json.dumps(report))
+    scope = report["identity_manifest"]["evaluation_scope"]
+    tampered["identity_manifest"]["evaluation_scope"] = (
+        "FULL_SYSTEM_EVENT_EVALUATION"
+        if scope != "FULL_SYSTEM_EVENT_EVALUATION"
+        else "CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING"
+    )
+    output.write_text(json.dumps(tampered), encoding="utf-8")
+    with pytest.raises(ValueError, match="evaluation_scope does not match"):
+        verify_evaluation_integrity(output)
+
+
+def test_frozen_semantics_reject_manifest_tampering(semantic_evaluation, tmp_path):
+    args, kwargs, output, report, manifest_path = semantic_evaluation
+    original = manifest_path.read_bytes()
+    manifest = json.loads(original)
+    manifest["evaluation_scope"] = "FORGED_SCOPE"
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    with pytest.raises(ValueError, match="identity manifest lock SHA256"):
+        verify_evaluation_integrity(output)
+    with pytest.raises(ValueError, match="identity manifest lock SHA256"):
+        evaluate_frozen(*args, tmp_path / "new-report.json", **kwargs)
+    manifest_path.write_bytes(original)
+    missing = {k: v for k, v in report.items() if k != "identity_manifest_lock"}
+    output.write_text(json.dumps(missing), encoding="utf-8")
+    with pytest.raises(ValueError, match="identity manifest lock.*missing"):
+        verify_evaluation_integrity(output)
+    output.write_text(json.dumps(report), encoding="utf-8")
+    manifest_path.unlink()
+    with pytest.raises(ValueError, match="identity manifest lock.*missing"):
+        verify_evaluation_integrity(output)
+    with pytest.raises(ValueError, match="identity manifest lock.*missing"):
+        evaluate_frozen(*args, tmp_path / "missing-report.json", **kwargs)
+    assert not (tmp_path / "new-report.json").exists()
+    assert not (tmp_path / "missing-report.json").exists()
+
+
+def test_report_cannot_substitute_manifest_and_relabel_together(semantic_evaluation, tmp_path):
+    from training.common import sha256_file
+
+    _, _, output, report, manifest_path = semantic_evaluation
+    replacement = json.loads(manifest_path.read_text(encoding="utf-8"))
+    replacement["evaluation_scope"] = "FULL_SYSTEM_EVENT_EVALUATION"
+    replacement_path = tmp_path / "substituted-manifest.json"
+    replacement_path.write_text(json.dumps(replacement), encoding="utf-8")
+    report["identity_manifest_lock"] = {
+        "path": str(replacement_path.resolve()), "sha256": sha256_file(replacement_path),
+    }
+    report["identity_manifest"]["evaluation_scope"] = "FULL_SYSTEM_EVENT_EVALUATION"
+    output.write_text(json.dumps(report), encoding="utf-8")
+    with pytest.raises(ValueError, match="does not match frozen truth binding"):
+        verify_evaluation_integrity(output)

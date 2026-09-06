@@ -92,6 +92,21 @@ Identity adjudication must be human-approved and explicitly `adjudication_status
 before freezing; frozen locks without `FINAL` are rejected. See
 `docs/identity_roster_contract.md` for Policy A/B and the locality rules.
 
+Each report binds `identity_manifest_lock.path` and `identity_manifest_lock.sha256`.
+Evaluation and `--verify-existing` require this lock to match both frozen truth locks;
+missing, changed, ineligible, or unsupported-scope locks are rejected. Verification reads
+the scope from this artifact and checks the report scope, status, and scientific claim:
+
+| Frozen manifest scope | Cabin mappings | Report status | Scientific claim |
+| --- | --- | --- | --- |
+| `FULL_SYSTEM_EVENT_EVALUATION` | Empty | `MEASURED_FROZEN_EXTERNAL_TEST` | `FROZEN_EVENT_METRICS_FOR_THIS_LOCKED_MODEL_ONLY` |
+| `CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING` | Empty | `MEASURED_CONDITIONAL_DIAGNOSTIC` | `DIAGNOSTIC_METRICS_CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING` |
+| Either supported scope | Non-empty | `MEASURED_HIERARCHICAL_ADJUDICATION_DIAGNOSTIC` | `DIAGNOSTIC_BEHAVIOR_METRICS_AFTER_HUMAN_IDENTITY_ALIGNMENT` |
+
+Reports created before manifest-lock binding or with the previous conditional claim fail
+these integrity checks. Preserve them as historical artifacts; any new evaluation must
+follow the applicable holdout protocol and use a separate output.
+
 ## External test protocol
 
 - Source, camera, vehicles, and people should be disjoint from training where metadata permits.

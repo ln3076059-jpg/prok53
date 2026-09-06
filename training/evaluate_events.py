@@ -406,6 +406,55 @@ def evaluate(
     return report
 
 
+def _evaluation_semantics(eval_scope: str, has_cabin_mappings: bool) -> tuple[str, str]:
+    if eval_scope not in {
+        "FULL_SYSTEM_EVENT_EVALUATION",
+        "CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING",
+    }:
+        raise ValueError(f"unsupported frozen evaluation_scope: {eval_scope!r}")
+    if has_cabin_mappings:
+        return (
+            "MEASURED_HIERARCHICAL_ADJUDICATION_DIAGNOSTIC",
+            "DIAGNOSTIC_BEHAVIOR_METRICS_AFTER_HUMAN_IDENTITY_ALIGNMENT",
+        )
+    if eval_scope == "CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING":
+        return (
+            "MEASURED_CONDITIONAL_DIAGNOSTIC",
+            "DIAGNOSTIC_METRICS_CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING",
+        )
+    return (
+        "MEASURED_FROZEN_EXTERNAL_TEST",
+        "FROZEN_EVENT_METRICS_FOR_THIS_LOCKED_MODEL_ONLY",
+    )
+
+
+def _bound_identity_manifest(ground_truth_lock: dict, context_lock: dict) -> tuple[dict, dict]:
+    record = ground_truth_lock.get("identity_manifest_lock", {})
+    path = Path(str(record.get("path", "")))
+    if not path.is_file():
+        raise ValueError("identity manifest lock referenced by frozen truth is missing")
+    digest = sha256_file(path)
+    for truth_lock in (ground_truth_lock, context_lock):
+        binding = truth_lock.get("identity_manifest_lock", {})
+        if binding.get("sha256") != digest:
+            raise ValueError("identity manifest lock SHA256 does not match frozen truth")
+        if Path(str(binding.get("path", ""))).resolve() != path.resolve():
+            raise ValueError("event and context truth must bind the same identity manifest lock")
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    if manifest.get("status") != "FROZEN_IDENTITY_MANIFEST":
+        raise ValueError("identity manifest lock is not FROZEN_IDENTITY_MANIFEST")
+    if not manifest.get("eligible_for_frozen_event_evaluation", False):
+        raise ValueError("identity manifest is not eligible for frozen event evaluation")
+    scope = manifest.get("evaluation_scope")
+    _evaluation_semantics(scope, False)
+    for truth_lock in (ground_truth_lock, context_lock):
+        if manifest.get("manifest_sha256") != truth_lock.get("identity_manifest_sha256"):
+            raise ValueError("identity manifest SHA256 does not match frozen truth")
+        if truth_lock.get("evaluation_scope") != scope:
+            raise ValueError("frozen truth evaluation_scope does not match identity manifest lock")
+    return manifest, {"path": str(path.resolve()), "sha256": digest}
+
+
 def evaluate_frozen(
     truth_path: Path,
     prediction_path: Path,
@@ -543,24 +592,10 @@ def evaluate_frozen(
                 f"context truth row {c_row.get('context_id')} identity_manifest_sha256 mismatch: {row_sha} != {manifest_sha}"
             )
 
-    manifest_lock_info = ground_truth_lock.get("identity_manifest_lock", {})
-    manifest_lock_path_str = manifest_lock_info.get("path")
-    manifest_lock_dict = None
-    if manifest_lock_path_str:
-        mlp = Path(manifest_lock_path_str)
-        if mlp.is_file():
-            manifest_lock_dict = json.loads(mlp.read_text(encoding="utf-8"))
-
-    eval_scope = "FULL_SYSTEM_EVENT_EVALUATION"
-    if manifest_lock_dict:
-        if not manifest_lock_dict.get("eligible_for_frozen_event_evaluation", False):
-            raise ValueError(
-                f"identity manifest source_type '{manifest_lock_dict.get('source_type')}' is not eligible for frozen event evaluation "
-                "(legacy prediction/candidate manifests are disallowed in final frozen evaluation)"
-            )
-        eval_scope = manifest_lock_dict.get("evaluation_scope", eval_scope)
-    elif ground_truth_lock.get("evaluation_scope"):
-        eval_scope = ground_truth_lock["evaluation_scope"]
+    manifest_lock_dict, manifest_lock_record = _bound_identity_manifest(
+        ground_truth_lock, context_lock,
+    )
+    eval_scope = manifest_lock_dict["evaluation_scope"]
 
     if eval_scope != "FULL_SYSTEM_EVENT_EVALUATION":
         if not allow_conditional_evaluation:
@@ -648,12 +683,8 @@ def evaluate_frozen(
     if report.get("safety_invariant_counters") == "NOT_EVALUABLE":
         raise ValueError("frozen event evaluation requires evaluable safety metadata")
 
-    report_status = (
-        "MEASURED_HIERARCHICAL_ADJUDICATION_DIAGNOSTIC"
-        if raw_cabin_mappings
-        else "MEASURED_CONDITIONAL_DIAGNOSTIC"
-        if eval_scope != "FULL_SYSTEM_EVENT_EVALUATION"
-        else "MEASURED_FROZEN_EXTERNAL_TEST"
+    report_status, scientific_claim = _evaluation_semantics(
+        eval_scope, bool(raw_cabin_mappings),
     )
     report.update(
         {
@@ -684,11 +715,8 @@ def evaluate_frozen(
                 "code_commit": model_lock.get("code_commit"),
             },
             "external_test_lock": external_record,
-            "scientific_claim": (
-                "DIAGNOSTIC_BEHAVIOR_METRICS_AFTER_HUMAN_IDENTITY_ALIGNMENT"
-                if raw_cabin_mappings
-                else "FROZEN_EVENT_METRICS_FOR_THIS_LOCKED_MODEL_ONLY"
-            ),
+            "scientific_claim": scientific_claim,
+            "identity_manifest_lock": manifest_lock_record,
         }
     )
     if adjudication_record is not None:
@@ -734,10 +762,12 @@ def verify_evaluation_integrity(report_path: Path) -> dict:
         },
         "model lock": report.get("model_lock", {}),
         "external-test lock": report.get("external_test_lock", {}),
+        "identity manifest lock": report.get("identity_manifest_lock", {}),
     }
     if "identity_adjudication_lock" in report:
         artifacts["identity-adjudication lock"] = report["identity_adjudication_lock"]
     verified: dict[str, str] = {}
+    has_cabin_mappings = False
     for name, record in artifacts.items():
         path = Path(str(record.get("path", "")))
         expected_hash = record.get("sha256")
@@ -751,12 +781,32 @@ def verify_evaluation_integrity(report_path: Path) -> dict:
             adjudication = json.loads(path.read_text(encoding="utf-8"))
             if adjudication.get("adjudication_status") != "FINAL":
                 raise ValueError("identity adjudication requires adjudication_status == 'FINAL'")
+            has_cabin_mappings = bool(adjudication.get("cabin_mappings"))
             if adjudication.get("cabin_mappings") and (
                 report["status"] != "MEASURED_HIERARCHICAL_ADJUDICATION_DIAGNOSTIC"
                 or report.get("scientific_claim")
                 != "DIAGNOSTIC_BEHAVIOR_METRICS_AFTER_HUMAN_IDENTITY_ALIGNMENT"
             ):
                 raise ValueError("hierarchical adjudication result must retain diagnostic status and claim")
+    ground_truth_lock = json.loads(
+        Path(artifacts["ground-truth lock"]["path"]).read_text(encoding="utf-8")
+    )
+    context_lock = json.loads(
+        Path(artifacts["context-truth lock"]["path"]).read_text(encoding="utf-8")
+    )
+    manifest, binding = _bound_identity_manifest(ground_truth_lock, context_lock)
+    if report.get("identity_manifest_lock") != binding:
+        raise ValueError("report identity manifest lock does not match frozen truth binding")
+    identity = report.get("identity_manifest", {})
+    if identity.get("evaluation_scope") != manifest["evaluation_scope"]:
+        raise ValueError("report evaluation_scope does not match frozen identity manifest lock")
+    if identity.get("manifest_sha256") != manifest["manifest_sha256"]:
+        raise ValueError("report identity manifest SHA256 does not match frozen manifest")
+    expected_status, expected_claim = _evaluation_semantics(
+        manifest["evaluation_scope"], has_cabin_mappings,
+    )
+    if report["status"] != expected_status or report.get("scientific_claim") != expected_claim:
+        raise ValueError("report status and scientific_claim do not match frozen evaluation semantics")
     return {
         "status": "FROZEN_EVENT_EVALUATION_INTEGRITY_VERIFIED",
         "report_path": str(report_path),

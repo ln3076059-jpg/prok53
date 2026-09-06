@@ -136,3 +136,8 @@ When evaluating end-to-end models on sequence data, association errors must be t
   apply, both flags are required and the report retains the hierarchical diagnostic status.
 - **Verification**: `--verify-existing` checks artifact hashes and rejects hierarchical
   reports relabeled with an official status or claim.
+  It also verifies the report's manifest-lock path/SHA against both frozen truth locks,
+  reads the bound manifest scope, and rejects altered report scopes or incompatible
+  status/claim pairs. Conditional evaluation without cabin alignment uses
+  `DIAGNOSTIC_METRICS_CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING`; hierarchical
+  diagnostic status/claim take precedence when cabin mappings are present.

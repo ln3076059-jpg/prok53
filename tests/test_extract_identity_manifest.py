@@ -1518,6 +1518,9 @@ def test_evaluate_frozen_scope_guardrails(tmp_path: Path):
         allow_conditional_evaluation=True,
     )
     assert report["status"] == "MEASURED_CONDITIONAL_DIAGNOSTIC"
+    assert report["scientific_claim"] == (
+        "DIAGNOSTIC_METRICS_CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING"
+    )
     assert report["identity_manifest"]["evaluation_scope"] == "CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING"
     assert report["identity_manifest"]["conditional_evaluation_allowed"] is True
     assert "scope_caution" in report["identity_manifest"]
