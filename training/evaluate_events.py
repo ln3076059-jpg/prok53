@@ -67,6 +67,7 @@ def evaluate(
     prediction_fieldnames: set[str] | None = None,
     context_rows: list[dict] | None = None,
     identity_mapping: dict[str, str] | None = None,
+    cabin_mappings: dict[str, str] | None = None,
 ) -> dict:
     import numpy as np
     from scipy.optimize import linear_sum_assignment
@@ -77,7 +78,15 @@ def evaluate(
             p_copy = dict(p)
             p_occ = p_copy.get("occupant_id", "")
             if p_occ in identity_mapping:
-                p_copy["occupant_id"] = identity_mapping[p_occ]
+                g_occ = identity_mapping[p_occ]
+                p_copy["occupant_id"] = g_occ
+                if ":occupant-track:" in g_occ:
+                    g_cabin = g_occ.rsplit(":occupant-track:", 1)[0]
+                    p_copy["cabin_id"] = g_cabin
+                    if ":cabin:" in g_cabin:
+                        p_copy["vehicle_id"] = g_cabin.rsplit(":cabin:", 1)[0]
+                    elif ":provided-cabin" in g_cabin:
+                        p_copy["vehicle_id"] = g_cabin.replace(":provided-cabin", ":provided-vehicle")
             remapped_predictions.append(p_copy)
         prediction_rows = remapped_predictions
 
@@ -178,6 +187,7 @@ def evaluate(
         "tracked_occupants": len(pred_occupants & gt_occupants),
         "untracked_gt_occupants": untracked_gt_occupants,
         "adjudication_applied": bool(identity_mapping),
+        "cabin_mappings": cabin_mappings or {},
     }
 
     if prediction_fieldnames is None:
@@ -583,6 +593,8 @@ def evaluate_frozen(
         if not raw_mappings or not isinstance(raw_mappings, dict):
             raise ValueError("identity adjudication has empty or invalid mappings")
 
+        raw_cabin_mappings = adj_data.get("cabin_mappings", {})
+
         seen_targets: set[str] = set()
         for r_occ, g_occ in raw_mappings.items():
             if g_occ in seen_targets:
@@ -593,9 +605,10 @@ def evaluate_frozen(
             r_cab = r_occ.rsplit(":occupant-track:", 1)[0]
             g_cab = g_occ.rsplit(":occupant-track:", 1)[0]
             if r_cab != g_cab:
-                raise ValueError(
-                    f"cross-cabin identity adjudication violation: {r_cab} != {g_cab}"
-                )
+                if raw_cabin_mappings.get(r_cab) != g_cab:
+                    raise ValueError(
+                        f"cross-cabin identity adjudication violation: {r_cab} != {g_cab}"
+                    )
 
         identity_mapping = raw_mappings
         adjudication_record = {
@@ -605,6 +618,7 @@ def evaluate_frozen(
             "human_review_status": adj_data.get("human_review_status"),
             "reviewer_id": str(adj_data.get("reviewer_id")),
             "mapping_count": len(raw_mappings),
+            "cabin_mapping_count": len(raw_cabin_mappings) if raw_cabin_mappings else 0,
         }
 
     report = evaluate(
@@ -615,6 +629,7 @@ def evaluate_frozen(
         prediction_fieldnames=pred_fields,
         context_rows=context_rows,
         identity_mapping=identity_mapping,
+        cabin_mappings=raw_cabin_mappings if identity_mapping else None,
     )
     if report.get("safety_invariant_counters") == "NOT_EVALUABLE":
         raise ValueError("frozen event evaluation requires evaluable safety metadata")

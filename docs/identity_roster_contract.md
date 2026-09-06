@@ -17,12 +17,14 @@ Ground truth integrity requires complete provenance without synthetic or auto-fa
   - `adjudication_status = "PENDING"`
 - The system **never** defaults or falls back to synthetic reviewer IDs (such as `"human-reviewer-1"`). Placeholder reviewer names are rejected fail-closed.
 
-### Rule 2: Explicit Promotion via `approve_identity_roster`
+### Rule 2: Explicit Promotion & Semantic Evidence Hash
 Elevating an identity roster to human approval requires explicit human action via `approve_identity_roster()`:
 - `reviewer_id`: Non-empty string identifying the verified human auditor (e.g. `"lead-auditor-alice"`).
 - `reviewed_at`: Valid ISO-8601 string containing an explicit timezone (e.g. `"2026-09-06T00:00:00Z"`).
 - `adjudication_status`: Must be `"FINAL"`.
-- `evidence_hash`: 64-character SHA-256 hash computed over the canonical video/vehicle/occupant data.
+- `evidence_hash`: Deterministic SHA-256 computed over the canonical video/vehicle/occupant data via `canonical_identity_evidence_hash()`.
+  - The evidence hash is semantically verified at creation, approval, extraction, and freezing.
+  - Passing an arbitrary or stale evidence hash is rejected fail-closed.
 
 ### Rule 3: Multi-Roster Per-Source Provenance (No "Last Reviewer Wins")
 When multiple rosters are combined into an identity manifest via `extract_identity_manifest_from_roster([r1, r2, ...])`:
@@ -33,6 +35,7 @@ When multiple rosters are combined into an identity manifest via `extract_identi
 ### Rule 4: Cryptographic Re-Hash at Freezer Boundary
 When `freeze_identity_manifest()` locks an independent identity manifest:
 - The freezer re-hashes every individual source file declared in `roster_sources` directly from disk (`sha256_file(p) == item["sha256"]`).
+- In addition to the file hash, the freezer recomputes `canonical_identity_evidence_hash()` from the disk content and verifies that the recorded `evidence_hash` matches.
 - Any disk tampering or file modification between extraction and freezing triggers a cryptographic mismatch error.
 - All individual source review records are verified again and preserved in the frozen lock file.
 
@@ -72,15 +75,43 @@ Runtime detectors observe physical humans and assign arbitrary tracking IDs (e.g
 Identity adjudication maps runtime tracks to ground truth tracks:
 $$\text{runtime\_occupant} \longrightarrow \text{gt\_occupant}$$
 
-### Strict Locality Requirement
-`freeze_identity_adjudication()` strictly enforces **cabin locality**:
+### Locality Enforcement
+`freeze_identity_adjudication()` enforces strict cabin locality:
 ```python
 r_cabin = runtime_occ.rsplit(":occupant-track:", 1)[0]
 g_cabin = gt_occ.rsplit(":occupant-track:", 1)[0]
-assert r_cabin == g_cabin, "cross-cabin adjudication violation"
+if r_cabin != g_cabin:
+    assert cabin_mappings.get(r_cabin) == g_cabin, "cross-cabin adjudication violation"
 ```
 
-1. **Intra-Cabin Only**: Runtime tracks can only be mapped to GT occupants within the **exact same video, vehicle, and cabin**.
-2. **Cross-Cabin Prohibition**: Mapping a track from `cabin:0` to `cabin:1`, or from `vehicle-track:1` to `vehicle-track:2`, or from dynamic `vehicle-track:7` to `provided-cabin` is strictly rejected as a **cross-cabin adjudication violation**.
-3. **Bijective Mapping**: Adjudication must be strictly 1-to-1 (injective). No two runtime tracks can be mapped to the same ground-truth occupant.
+1. **Intra-Cabin by Default**: By default, runtime tracks can only be mapped to GT occupants within the **exact same video, vehicle, and cabin**.
+2. **Governed Cross-Cabin Mapping**: If dynamic tracking IDs differ between runtime and GT (e.g. `vehicle-track:7` vs `vehicle-track:1`), cross-cabin occupant mapping is permitted **only if explicitly declared in a verified `cabin_mappings` dictionary** within the same video.
+3. **Bijective Mapping**: Both `mappings` and `cabin_mappings` must be strictly 1-to-1 (injective). No duplicate targets are permitted.
 4. **Namespace Alignment**: For in-cabin test sets, detectors must be configured with `provided-cabin` context so runtime tracks share the same prefix `video:<id>:provided-cabin` as the ground-truth roster.
+
+---
+
+## 4. Scientific Policy on Vehicle & Cabin Association
+
+When evaluating end-to-end models on sequence data, association errors must be treated with strict scientific rigor:
+
+### Policy A: Default Full-System Benchmark Invariant (Unassisted)
+- **Principle**: In an unassisted full-system evaluation, tracking the correct vehicle and cabin entities over time is an essential capability of the detection system.
+- **Scoring**: If a system detects a driver in an unmapped or incorrect vehicle/cabin track, it constitutes an association error.
+- **Effect**: This error produces a **False Positive (FP)** on the hallucinated/incorrect vehicle cabin and a **False Negative (FN)** on the true vehicle cabin.
+- **Application**: Mandatory for official system benchmarks and freeze certifications.
+
+### Policy B: Governed Hierarchical Adjudication (Diagnostic / Multi-Vehicle)
+- **Principle**: In complex multi-vehicle scenes where ground-truth vehicle tracks were indexed independently from runtime detectors, human auditors can isolate behavior/action recognition from tracking indexing.
+- **Mechanism**: Auditors sign off on a `FROZEN_IDENTITY_ADJUDICATION` artifact containing explicit `cabin_mappings`:
+  ```json
+  {
+    "cabin_mappings": {
+      "video:v1:vehicle-track:7:cabin:0": "video:v1:vehicle-track:1:cabin:0"
+    },
+    "mappings": {
+      "video:v1:vehicle-track:7:cabin:0:occupant-track:42": "video:v1:vehicle-track:1:cabin:0:occupant-track:1"
+    }
+  }
+  ```
+- **Evaluation Alignment**: When applied during evaluation, the prediction row's `occupant_id`, `cabin_id`, and `vehicle_id` are consistently aligned to the target ground truth cabin, allowing event detection accuracy to be scored accurately without artifact mismatches.

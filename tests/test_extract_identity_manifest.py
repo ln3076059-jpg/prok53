@@ -8,6 +8,7 @@ import pytest
 
 from training.extract_identity_manifest import (
     approve_identity_roster,
+    canonical_identity_evidence_hash,
     create_identity_roster,
     extract_identities_from_predictions_csv,
     extract_identity_manifest_from_annotations,
@@ -2051,6 +2052,386 @@ def test_canonical_provided_cabin_roster_and_adjudication_contract(tmp_path: Pat
     cross_path.write_text(json.dumps(cross_data, indent=2), encoding="utf-8")
     with pytest.raises(ValueError, match="cross-cabin adjudication violation"):
         freeze_identity_adjudication(cross_path, tmp_path / "adj_cross_lock.json", identity_manifest_lock_path=lock_path)
+
+
+def test_canonical_identity_evidence_hash_and_tamper_rejection(tmp_path: Path):
+    video_sha = "e" * 64
+    raw_video_entry = {
+        "video_id": "vid-hash-1",
+        "video_sha256": video_sha,
+        "fps": 30.0,
+        "frame_count": 300,
+        "duration_seconds": 10.0,
+        "vehicles": [
+            {
+                "vehicle_id": "video:vid-hash-1:vehicle-track:1",
+                "cabins": [
+                    {
+                        "cabin_id": "video:vid-hash-1:vehicle-track:1:cabin:0",
+                        "occupants": [
+                            {
+                                "occupant_id": "video:vid-hash-1:vehicle-track:1:cabin:0:occupant-track:1",
+                                "role": "driver",
+                            }
+                        ],
+                    }
+                ],
+            }
+        ],
+    }
+
+    # 1. Deterministic invariance: key order variation yields identical canonical hash
+    reordered_video_entry = {
+        "vehicles": [
+            {
+                "cabins": [
+                    {
+                        "occupants": [
+                            {
+                                "role": "driver",
+                                "occupant_id": "video:vid-hash-1:vehicle-track:1:cabin:0:occupant-track:1",
+                            }
+                        ],
+                        "cabin_id": "video:vid-hash-1:vehicle-track:1:cabin:0",
+                    }
+                ],
+                "vehicle_id": "video:vid-hash-1:vehicle-track:1",
+            }
+        ],
+        "duration_seconds": 10.0,
+        "frame_count": 300,
+        "fps": 30.0,
+        "video_sha256": video_sha,
+        "video_id": "vid-hash-1",
+    }
+    hash1 = canonical_identity_evidence_hash([raw_video_entry])
+    hash2 = canonical_identity_evidence_hash([reordered_video_entry])
+    assert hash1 == hash2
+    assert len(hash1) == 64
+
+    # Dict input form also produces identical canonical hash
+    hash_dict = canonical_identity_evidence_hash({"vid-hash-1": raw_video_entry})
+    assert hash_dict == hash1
+
+    # 2. create_identity_roster rejects tampered evidence_hash
+    roster_path = tmp_path / "roster_tampered.json"
+    with pytest.raises(ValueError, match=r"evidence_hash.*mismatch"):
+        create_identity_roster(
+            [raw_video_entry],
+            evidence_hash="0" * 64,  # Incorrect hash!
+            output_path=roster_path,
+        )
+
+    # Valid creation computes & stores canonical hash
+    roster_path = tmp_path / "roster_valid.json"
+    created = create_identity_roster(
+        [raw_video_entry],
+        output_path=roster_path,
+    )
+    assert created["evidence_hash"] == hash1
+
+    # 3. Tampering roster file on disk: modifying an occupant ID without updating evidence_hash
+    tampered_raw = json.loads(roster_path.read_text(encoding="utf-8"))
+    tampered_raw["videos"][0]["vehicles"][0]["cabins"][0]["occupants"][0]["role"] = "passenger"
+    tampered_path = tmp_path / "roster_disk_tampered.json"
+    tampered_path.write_text(json.dumps(tampered_raw, indent=2), encoding="utf-8")
+
+    # approve_identity_roster rejects disk-tampered roster
+    with pytest.raises(ValueError, match=r"evidence_hash semantic mismatch"):
+        approve_identity_roster(
+            tampered_path,
+            reviewer_id="auditor-dave",
+            reviewed_at="2026-09-06T00:00:00Z",
+        )
+
+    # extract_identity_manifest_from_roster rejects disk-tampered roster
+    with pytest.raises(ValueError, match=r"evidence_hash semantic mismatch"):
+        extract_identity_manifest_from_roster(tampered_path)
+
+    # 4. Valid approve re-verifies hash and succeeds
+    approved = approve_identity_roster(
+        roster_path,
+        reviewer_id="auditor-dave",
+        reviewed_at="2026-09-06T00:00:00Z",
+        output_path=roster_path,
+    )
+    assert approved["evidence_hash"] == hash1
+
+    # 5. Extract manifest and test manifest freeze validation
+    manifest = extract_identity_manifest_from_roster(roster_path)
+    assert manifest["evidence_hash"] == hash1
+    manifest_path = tmp_path / "manifest_valid.json"
+    manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    lock_path = tmp_path / "lock_valid.json"
+    lock = freeze_identity_manifest(manifest_path, lock_path)
+    assert lock["evidence_hash"] == hash1
+
+    # Tampering manifest file before freeze raises semantic evidence_hash mismatch
+    tampered_man = dict(manifest)
+    tampered_man["evidence_hash"] = "f" * 64
+    tampered_man_path = tmp_path / "manifest_tampered.json"
+    tampered_man_path.write_text(json.dumps(tampered_man, indent=2), encoding="utf-8")
+    with pytest.raises(ValueError, match=r"evidence_hash semantic mismatch"):
+        freeze_identity_manifest(tampered_man_path, tmp_path / "lock_tampered.json")
+
+
+def test_hierarchical_cabin_adjudication_mapping_and_evaluation(tmp_path: Path):
+    v_sha = "d" * 64
+    vid_id = "vid-dyn-1"
+    gt_veh = f"video:{vid_id}:vehicle-track:1"
+    gt_cab = f"{gt_veh}:cabin:0"
+    gt_occ = f"{gt_cab}:occupant-track:1"
+
+    pred_veh = f"video:{vid_id}:vehicle-track:7"
+    pred_cab = f"{pred_veh}:cabin:0"
+    pred_occ = f"{pred_cab}:occupant-track:99"
+
+    # Step 1: Create approved independent roster with GT identity
+    roster_path = tmp_path / "dyn_roster.json"
+    create_identity_roster(
+        [
+            {
+                "video_id": vid_id,
+                "video_sha256": v_sha,
+                "fps": 30.0,
+                "frame_count": 300,
+                "vehicles": [
+                    {
+                        "vehicle_id": gt_veh,
+                        "cabins": [
+                            {
+                                "cabin_id": gt_cab,
+                                "occupants": [{"occupant_id": gt_occ, "role": "driver"}],
+                            }
+                        ],
+                    }
+                ],
+            }
+        ],
+        output_path=roster_path,
+    )
+    approve_identity_roster(roster_path, reviewer_id="auditor-eva", reviewed_at="2026-09-06T00:00:00Z", output_path=roster_path)
+    manifest = extract_identity_manifest_from_roster(roster_path)
+    manifest_file = tmp_path / "dyn_man.json"
+    manifest_file.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    manifest_lock_path = tmp_path / "dyn_man_lock.json"
+    manifest_lock = freeze_identity_manifest(manifest_file, manifest_lock_path)
+    m_sha = manifest_lock["manifest_sha256"]
+
+    # Step 2: Create ground truth CSV and freeze it
+    truth_csv = tmp_path / "dyn_truth.csv"
+    truth_row = {
+        "video_id": vid_id,
+        "event_id": "evt-1",
+        "event_type": "PHONE",
+        "start_seconds": "1.0",
+        "end_seconds": "3.0",
+        "occupant_id": gt_occ,
+        "vehicle_id": gt_veh,
+        "cabin_id": gt_cab,
+        "inside_vehicle": "true",
+        "outside_vehicle_person": "false",
+        "motorcycle_flag": "false",
+        "label": "PHONE_USE",
+        "occupant_role": "driver",
+        "visibility": "clear",
+        "conditions": "daylight",
+        "human_review_status": "APPROVED",
+        "reviewer_id": "rev-1",
+        "reviewer_type": "HUMAN",
+        "reviewed_at": "2026-09-06T00:00:00Z",
+        "adjudication_status": "FINAL",
+        "notes": "test",
+        "identity_manifest_sha256": m_sha,
+    }
+    with truth_csv.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=sorted(REQUIRED_COLUMNS))
+        writer.writeheader()
+        writer.writerow(truth_row)
+
+    ext_lock_path = tmp_path / "dyn_ext_lock.json"
+    ext_lock_path.write_text(
+        json.dumps(
+            {
+                "status": "FROZEN_EXTERNAL_TEST",
+                "human_review_status": "ALL_APPROVED",
+                "video_ids": [vid_id],
+                "identity_manifest_sha256": m_sha,
+            }
+        ),
+        encoding="utf-8",
+    )
+    event_lock_path = tmp_path / "dyn_event_lock.json"
+    freeze_event_ground_truth(truth_csv, ext_lock_path, event_lock_path, identity_manifest_lock_path=manifest_lock_path)
+
+    # Step 3: Context truth
+    context_csv = tmp_path / "dyn_context.csv"
+    context_row = {
+        "video_id": vid_id,
+        "context_id": "ctx-1",
+        "occupant_id": gt_occ,
+        "occupant_role": "driver",
+        "vehicle_id": gt_veh,
+        "cabin_id": gt_cab,
+        "start_seconds": "0.0",
+        "end_seconds": "10.0",
+        "timeline_end_seconds": "10.0",
+        "inside_vehicle": "true",
+        "outside_vehicle_person": "false",
+        "motorcycle_flag": "false",
+        "phone_state": "PHONE_USE",
+        "seatbelt_state": "FASTENED",
+        "visibility": "clear",
+        "conditions": "daylight",
+        "human_review_status": "APPROVED",
+        "reviewer_id": "rev-1",
+        "reviewer_type": "HUMAN",
+        "reviewed_at": "2026-09-06T00:00:00Z",
+        "adjudication_status": "FINAL",
+        "notes": "dyn context test",
+        "identity_manifest_sha256": m_sha,
+    }
+    with context_csv.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=sorted(CONTEXT_REQUIRED_COLUMNS))
+        writer.writeheader()
+        writer.writerow(context_row)
+    context_lock_path = tmp_path / "dyn_context_lock.json"
+    freeze_context_ground_truth(context_csv, ext_lock_path, context_lock_path, identity_manifest_lock_path=manifest_lock_path)
+
+    # Step 4: Model predictions with track 7 (pred_veh / pred_cab / pred_occ)
+    pred_csv = tmp_path / "dyn_pred.csv"
+    pred_row = {
+        "video_id": vid_id,
+        "event_type": "PHONE",
+        "occupant_id": pred_occ,
+        "vehicle_id": pred_veh,
+        "cabin_id": pred_cab,
+        "start_seconds": "1.0",
+        "end_seconds": "3.0",
+        "label": "PHONE_USE",
+        "occupant_role": "driver",
+        "inside_vehicle": "true",
+        "outside_vehicle_person": "false",
+        "motorcycle_flag": "false",
+        "visibility": "clear",
+        "observation_count": "5",
+        "start_frame": "30",
+        "end_frame": "90",
+    }
+    with pred_csv.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=sorted(pred_row.keys()))
+        writer.writeheader()
+        writer.writerow(pred_row)
+
+    model_lock_path = tmp_path / "dyn_model_lock.json"
+    model_lock_path.write_text(
+        json.dumps(
+            {
+                "record_schema": "ROADWATCH_MODEL_VERSION_V2",
+                "activation_state": "ACTIVE",
+                "experiment_id": "exp-dyn",
+                "locked_at": "2026-09-06T00:00:00Z",
+                "weights_sha256": "w" * 64,
+                "config_sha256": "c" * 64,
+                "training_data_manifest_sha256": "t" * 64,
+                "validation_metric_artifact": {"sha256": "v" * 64},
+                "threshold_calibration_artifact": {"sha256": "k" * 64},
+                "human_review_readiness_artifact": {"governed_training_ready": True},
+                "code_commit": "abc1234",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    # Policy A: Unadjudicated evaluation treats tracking mismatch as system failure -> 0 TP, 1 FN, 1 FP
+    unadj_report = evaluate([truth_row], [pred_row], video_minutes=10.0 / 60.0)
+    assert unadj_report["event_types"]["PHONE"]["true_positives"] == 0
+    assert unadj_report["event_types"]["PHONE"]["missed_events"] == 1
+    assert unadj_report["event_types"]["PHONE"]["false_positives"] == 1
+
+    # Attempting cross-cabin occupant mapping without cabin_mappings fails Policy A invariant
+    cross_without_cabin_map = {
+        "human_review_status": "APPROVED",
+        "reviewer_type": "HUMAN",
+        "reviewer_id": "auditor-eva",
+        "reviewed_at": "2026-09-06T01:00:00Z",
+        "target_identity_manifest_sha256": m_sha,
+        "mappings": {pred_occ: gt_occ},
+    }
+    cwcm_path = tmp_path / "cwcm.json"
+    cwcm_path.write_text(json.dumps(cross_without_cabin_map, indent=2), encoding="utf-8")
+    with pytest.raises(ValueError, match="cross-cabin adjudication violation"):
+        freeze_identity_adjudication(cwcm_path, tmp_path / "cwcm_lock.json", identity_manifest_lock_path=manifest_lock_path)
+
+    # Validation on cabin_mappings: reject cross-video cabin mapping
+    bad_xvideo_cabin = {
+        "human_review_status": "APPROVED",
+        "reviewer_type": "HUMAN",
+        "reviewer_id": "auditor-eva",
+        "reviewed_at": "2026-09-06T01:00:00Z",
+        "target_identity_manifest_sha256": m_sha,
+        "cabin_mappings": {pred_cab: f"video:different-vid:vehicle-track:1:cabin:0"},
+        "mappings": {pred_occ: gt_occ},
+    }
+    bxv_path = tmp_path / "bxv.json"
+    bxv_path.write_text(json.dumps(bad_xvideo_cabin, indent=2), encoding="utf-8")
+    with pytest.raises(ValueError, match="cross-video cabin adjudication violation"):
+        freeze_identity_adjudication(bxv_path, tmp_path / "bxv_lock.json", identity_manifest_lock_path=manifest_lock_path)
+
+    # Policy B: Governed Hierarchical Adjudication with cabin_mappings
+    valid_hierarchical_adj = {
+        "human_review_status": "APPROVED",
+        "reviewer_type": "HUMAN",
+        "reviewer_id": "auditor-eva",
+        "reviewed_at": "2026-09-06T01:00:00Z",
+        "target_identity_manifest_sha256": m_sha,
+        "cabin_mappings": {pred_cab: gt_cab},
+        "mappings": {pred_occ: gt_occ},
+    }
+    hier_path = tmp_path / "hier_adj.json"
+    hier_path.write_text(json.dumps(valid_hierarchical_adj, indent=2), encoding="utf-8")
+    hier_lock_path = tmp_path / "hier_lock.json"
+    hier_lock = freeze_identity_adjudication(hier_path, hier_lock_path, identity_manifest_lock_path=manifest_lock_path)
+    assert hier_lock["status"] == "FROZEN_IDENTITY_ADJUDICATION"
+    assert hier_lock["cabin_mapping_count"] == 1
+    assert hier_lock["cabin_mappings"][pred_cab] == gt_cab
+
+    # Evaluate directly with evaluate() using identity_mapping and cabin_mappings
+    mapped_report = evaluate(
+        [truth_row],
+        [pred_row],
+        video_minutes=10.0 / 60.0,
+        identity_mapping={pred_occ: gt_occ},
+        cabin_mappings={pred_cab: gt_cab},
+    )
+    assert mapped_report["event_types"]["PHONE"]["true_positives"] == 1
+    assert mapped_report["event_types"]["PHONE"]["missed_events"] == 0
+    assert mapped_report["event_types"]["PHONE"]["false_positives"] == 0
+    assert mapped_report["identity_adjudication"]["adjudication_applied"] is True
+    assert mapped_report["identity_adjudication"]["cabin_mappings"] == {pred_cab: gt_cab}
+
+    # Evaluate with evaluate_frozen using frozen hierarchical adjudication lock
+    frozen_eval_out = tmp_path / "dyn_eval_out.json"
+    frozen_report = evaluate_frozen(
+        truth_csv,
+        pred_csv,
+        event_lock_path,
+        model_lock_path,
+        frozen_eval_out,
+        video_minutes=10.0 / 60.0,
+        context_truth_path=context_csv,
+        context_truth_lock_path=context_lock_path,
+        identity_adjudication_path=hier_lock_path,
+    )
+    assert frozen_report["event_types"]["PHONE"]["true_positives"] == 1
+    assert frozen_report["event_types"]["PHONE"]["missed_events"] == 0
+    assert frozen_report["event_types"]["PHONE"]["false_positives"] == 0
+    assert frozen_report["identity_adjudication_lock"]["reviewer_id"] == "auditor-eva"
+    assert frozen_report["identity_adjudication_lock"]["cabin_mapping_count"] == 1
+
+    integrity = verify_evaluation_integrity(frozen_eval_out)
+    assert integrity["status"] == "FROZEN_EVENT_EVALUATION_INTEGRITY_VERIFIED"
+
 
 
 

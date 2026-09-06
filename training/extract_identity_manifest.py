@@ -539,6 +539,71 @@ def extract_identity_manifest_from_annotations(
     }
 
 
+def canonical_identity_evidence_hash(videos: list[dict[str, Any]] | dict[str, Any]) -> str:
+    """Compute deterministic SHA-256 evidence hash over canonical roster video/identity data.
+
+    Canonical normalization:
+    - Videos sorted by video_id
+    - video_sha256 lowercased
+    - Vehicles sorted by vehicle_id
+    - Cabins sorted by cabin_id
+    - Occupants sorted by occupant_id
+    - Deterministic JSON encoding (sort_keys=True, separators=(',', ':'))
+    """
+    if isinstance(videos, dict):
+        videos_list = list(videos.values())
+    elif isinstance(videos, list):
+        videos_list = videos
+    else:
+        raise TypeError(f"expected list or dict for videos, got {type(videos)}")
+
+    canonical_videos = []
+    for v in sorted(videos_list, key=lambda x: str(x.get("video_id", ""))):
+        vid = str(v.get("video_id", "")).strip()
+        v_sha = str(v.get("video_sha256", "")).strip().lower()
+        fps = round(float(v.get("fps", 30.0)), 4)
+        frame_count = int(v.get("frame_count", 0))
+        duration = round(float(v.get("duration_seconds", frame_count / fps if fps > 0 else 0.0)), 4)
+
+        vehicles_in = v.get("vehicles", [])
+        canonical_vehicles = []
+        for veh in sorted(vehicles_in, key=lambda x: str(x.get("vehicle_id", ""))):
+            veh_id = str(veh.get("vehicle_id", "")).strip()
+            cabins_in = veh.get("cabins", [])
+            canonical_cabins = []
+            for cab in sorted(cabins_in, key=lambda x: str(x.get("cabin_id", ""))):
+                cab_id = str(cab.get("cabin_id", "")).strip()
+                occupants_in = cab.get("occupants", [])
+                canonical_occupants = []
+                for occ in sorted(occupants_in, key=lambda x: str(x.get("occupant_id", ""))):
+                    occ_id = str(occ.get("occupant_id", "")).strip()
+                    role = str(occ.get("role", "unknown")).strip()
+                    canonical_occupants.append({
+                        "occupant_id": occ_id,
+                        "role": role,
+                    })
+                canonical_cabins.append({
+                    "cabin_id": cab_id,
+                    "occupants": canonical_occupants,
+                })
+            canonical_vehicles.append({
+                "vehicle_id": veh_id,
+                "cabins": canonical_cabins,
+            })
+
+        canonical_videos.append({
+            "video_id": vid,
+            "video_sha256": v_sha,
+            "fps": fps,
+            "frame_count": frame_count,
+            "duration_seconds": duration,
+            "vehicles": canonical_vehicles,
+        })
+
+    canonical_json = json.dumps(canonical_videos, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical_json.encode("utf-8")).hexdigest()
+
+
 def create_identity_roster(
     videos: list[dict[str, Any]],
     output_path: Path | None = None,
@@ -603,7 +668,15 @@ def create_identity_roster(
         final_reviewer_id = str(reviewer_id).strip() if reviewer_id else None
         final_reviewed_at = str(reviewed_at).strip() if reviewed_at else None
 
-    ev_hash = evidence_hash or hashlib.sha256(json.dumps(videos, sort_keys=True).encode("utf-8")).hexdigest()
+    canonical_ev_hash = canonical_identity_evidence_hash(videos)
+    if evidence_hash:
+        clean_ev_hash = str(evidence_hash).strip().lower()
+        if clean_ev_hash != canonical_ev_hash:
+            raise ValueError(
+                f"create_identity_roster: provided evidence_hash does not match canonical roster data (semantic evidence_hash mismatch): "
+                f"{clean_ev_hash} != {canonical_ev_hash}"
+            )
+
     roster_data = {
         "roster_version": "v2.0",
         "roster_status": resolved_status,
@@ -612,7 +685,7 @@ def create_identity_roster(
         "reviewer_type": reviewer_type,
         "reviewer_id": final_reviewer_id,
         "reviewed_at": final_reviewed_at,
-        "evidence_hash": ev_hash,
+        "evidence_hash": canonical_ev_hash,
         "adjudication_status": adjudication_status,
         "videos": videos,
     }
@@ -667,14 +740,29 @@ def approve_identity_roster(
         raise TypeError(f"expected Path or dict for roster_input, got {type(roster_input)}")
 
     videos = data.get("videos", [])
-    ev_hash = evidence_hash or data.get("evidence_hash") or hashlib.sha256(json.dumps(videos, sort_keys=True).encode("utf-8")).hexdigest()
+    canonical_ev_hash = canonical_identity_evidence_hash(videos)
+    recorded_ev_hash = data.get("evidence_hash")
+    if recorded_ev_hash:
+        clean_rec = str(recorded_ev_hash).strip().lower()
+        if clean_rec != canonical_ev_hash:
+            raise ValueError(
+                f"approve_identity_roster: roster evidence_hash semantic mismatch: "
+                f"recorded {clean_rec} != recomputed {canonical_ev_hash}"
+            )
+    if evidence_hash:
+        clean_ev_hash = str(evidence_hash).strip().lower()
+        if clean_ev_hash != canonical_ev_hash:
+            raise ValueError(
+                f"approve_identity_roster: provided evidence_hash does not match canonical roster data (semantic evidence_hash mismatch): "
+                f"{clean_ev_hash} != {canonical_ev_hash}"
+            )
 
     data["roster_status"] = "HUMAN_APPROVED_IDENTITY_ROSTER"
     data["human_review_status"] = "APPROVED"
     data["reviewer_type"] = "HUMAN"
     data["reviewer_id"] = cleaned_reviewer_id
     data["reviewed_at"] = str(reviewed_at).strip()
-    data["evidence_hash"] = ev_hash
+    data["evidence_hash"] = canonical_ev_hash
     data["adjudication_status"] = "FINAL"
 
     if output_path is not None:
@@ -797,6 +885,16 @@ def extract_identity_manifest_from_roster(roster_paths: Path | list[Path]) -> di
                 raw_videos = [raw]
             else:
                 raise ValueError(f"{p}: unrecognized roster format (expected 'videos' or 'video_id')")
+
+        canonical_ev_hash = canonical_identity_evidence_hash(raw_videos)
+        if p_ev_hash:
+            clean_p_ev_hash = str(p_ev_hash).strip().lower()
+            if clean_p_ev_hash != canonical_ev_hash:
+                raise ValueError(
+                    f"{p.name}: roster evidence_hash semantic mismatch: "
+                    f"recorded {clean_p_ev_hash} != recomputed {canonical_ev_hash}"
+                )
+        roster_sources[-1]["evidence_hash"] = canonical_ev_hash
 
         for v_item in raw_videos:
             vid = str(v_item.get("video_id", "")).strip()
@@ -944,6 +1042,7 @@ def extract_identity_manifest_from_roster(roster_paths: Path | list[Path]) -> di
         "eligible_for_frozen_event_evaluation": eligible_for_frozen_event_evaluation,
         "source_path": source_path_str,
         "source_sha256": source_sha,
+        "evidence_hash": review_provenance.get("evidence_hash"),
         "roster_sources": roster_sources,
         "review_provenance": review_provenance,
         "videos": videos_out,
@@ -1048,9 +1147,19 @@ def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dic
                             raise ValueError("reviewed_at must include timezone")
                     except Exception as err:
                         raise ValueError(f"roster source '{item_p.name}' invalid reviewed_at timestamp: {err}")
-                    ev_hash = str(item.get("evidence_hash", "")).strip()
+                    src_raw = json.loads(item_p.read_text(encoding="utf-8"))
+                    src_v = src_raw.get("videos", [])
+                    if isinstance(src_v, dict):
+                        src_v = list(src_v.values())
+                    recomputed_ev_hash = canonical_identity_evidence_hash(src_v)
+                    ev_hash = str(item.get("evidence_hash", "")).strip().lower()
                     if not ev_hash or len(ev_hash) != 64:
                         raise ValueError(f"roster source '{item_p.name}' requires a valid 64-character evidence_hash, got {ev_hash!r}")
+                    if ev_hash != recomputed_ev_hash:
+                        raise ValueError(
+                            f"roster source '{item_p.name}' evidence_hash semantic mismatch: "
+                            f"recorded {ev_hash} != recomputed {recomputed_ev_hash}"
+                        )
                     if item.get("adjudication_status") != "FINAL":
                         raise ValueError(
                             f"roster source '{item_p.name}' requires adjudication_status == 'FINAL', got {item.get('adjudication_status')!r}"
@@ -1099,6 +1208,26 @@ def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dic
             ev_hash = str(rev.get("evidence_hash", "")).strip()
             if not ev_hash or len(ev_hash) != 64:
                 raise ValueError(f"INDEPENDENT_IDENTITY_ROSTER requires a valid 64-character evidence_hash, got {ev_hash!r}")
+            if len(roster_sources) == 1:
+                expected_rev_ev_hash = roster_sources[0]["evidence_hash"]
+                if ev_hash.lower() != expected_rev_ev_hash.lower():
+                    raise ValueError(
+                        f"manifest review_provenance evidence_hash semantic mismatch: "
+                        f"recorded {ev_hash} != roster source evidence_hash {expected_rev_ev_hash}"
+                    )
+            root_ev_hash = manifest.get("evidence_hash")
+            if root_ev_hash:
+                clean_root_ev = str(root_ev_hash).strip().lower()
+                expected_root_ev = (
+                    roster_sources[0]["evidence_hash"]
+                    if len(roster_sources) == 1
+                    else ev_hash.lower()
+                )
+                if clean_root_ev != expected_root_ev:
+                    raise ValueError(
+                        f"manifest root evidence_hash semantic mismatch: "
+                        f"recorded {clean_root_ev} != expected {expected_root_ev}"
+                    )
             if rev.get("adjudication_status") != "FINAL":
                 raise ValueError(
                     f"INDEPENDENT_IDENTITY_ROSTER requires adjudication_status == 'FINAL', got {rev.get('adjudication_status')!r}"
@@ -1176,6 +1305,7 @@ def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dic
         "videos": lock_videos,
         "proven_identities": proven,
         "identity_count": len(proven),
+        "evidence_hash": roster_review_record.get("evidence_hash") if roster_review_record else manifest.get("evidence_hash"),
         "locked_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
     }
     if roster_sources_out is not None:
@@ -1413,6 +1543,26 @@ def freeze_identity_adjudication(
     if not raw_mappings or not isinstance(raw_mappings, dict):
         raise ValueError("identity adjudication requires a non-empty 'mappings' dictionary")
 
+    raw_cabin_mappings = raw.get("cabin_mappings", raw.get("cabin_mapping", {}))
+    validated_cabin_mappings: dict[str, str] = {}
+    if raw_cabin_mappings:
+        if not isinstance(raw_cabin_mappings, dict):
+            raise ValueError("identity adjudication 'cabin_mappings' must be a dictionary")
+        seen_target_cabins: set[str] = set()
+        for r_cab, g_cab in raw_cabin_mappings.items():
+            r_cab = str(r_cab).strip()
+            g_cab = str(g_cab).strip()
+            if g_cab in seen_target_cabins:
+                raise ValueError(f"many-to-one cabin adjudication violation: target GT cabin '{g_cab}' mapped more than once")
+            seen_target_cabins.add(g_cab)
+            r_vid = r_cab.split(":")[1] if r_cab.startswith("video:") else ""
+            g_vid = g_cab.split(":")[1] if g_cab.startswith("video:") else ""
+            if r_vid != g_vid or not r_vid:
+                raise ValueError(
+                    f"cross-video cabin adjudication violation: runtime cabin '{r_cab}' and target GT cabin '{g_cab}' must share the same video"
+                )
+            validated_cabin_mappings[r_cab] = g_cab
+
     mappings: dict[str, str] = {}
     seen_gt: set[str] = set()
     errors: list[str] = []
@@ -1434,10 +1584,11 @@ def freeze_identity_adjudication(
         g_cabin = gt_occ.rsplit(":occupant-track:", 1)[0]
 
         if r_cabin != g_cabin:
-            errors.append(
-                f"cross-cabin adjudication violation: runtime cabin '{r_cabin}' != target GT cabin '{g_cabin}'. "
-                "Adjudication must be strictly local to the same video, vehicle, and cabin."
-            )
+            if validated_cabin_mappings.get(r_cabin) != g_cabin:
+                errors.append(
+                    f"cross-cabin adjudication violation: runtime cabin '{r_cabin}' != target GT cabin '{g_cabin}'. "
+                    "Cross-cabin occupant mapping is only permitted when explicitly declared in a verified 'cabin_mappings' dictionary."
+                )
 
         if manifest_proven and gt_occ not in manifest_proven:
             errors.append(f"target GT occupant '{gt_occ}' is not declared in the bound identity manifest")
@@ -1460,9 +1611,12 @@ def freeze_identity_adjudication(
         "reviewed_at": reviewed_at_str,
         "mappings": mappings,
         "mapping_count": len(mappings),
+        "cabin_mapping_count": len(validated_cabin_mappings) if validated_cabin_mappings else 0,
         "notes": raw.get("notes", ""),
         "locked_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
     }
+    if validated_cabin_mappings:
+        lock_data["cabin_mappings"] = validated_cabin_mappings
     if identity_manifest_lock_path is not None:
         lock_data["identity_manifest_lock_path"] = str(identity_manifest_lock_path.resolve())
 
