@@ -7,6 +7,7 @@ import jsonschema
 import pytest
 
 from training.extract_identity_manifest import (
+    approve_identity_roster,
     create_identity_roster,
     extract_identities_from_predictions_csv,
     extract_identity_manifest_from_annotations,
@@ -1068,6 +1069,40 @@ def test_extract_identity_manifest_from_roster(tmp_path: Path):
         output_path=roster_file,
     )
 
+    # 1. Defaults to UNREVIEWED_IDENTITY_ROSTER (no auto-fabrication of human review)
+    assert roster_data["roster_status"] == "UNREVIEWED_IDENTITY_ROSTER"
+    assert roster_data["human_review_status"] == "PENDING"
+    assert roster_data["reviewer_type"] == "AI"
+    assert roster_data["reviewer_id"] is None
+    assert roster_data["reviewed_at"] is None
+
+    # Unreviewed roster extraction -> UNREVIEWED_ROSTER_SCOPE, not eligible
+    unrev_man = extract_identity_manifest_from_roster(roster_file)
+    assert unrev_man["eligible_for_frozen_event_evaluation"] is False
+    assert unrev_man["evaluation_scope"] == "UNREVIEWED_ROSTER_SCOPE"
+    unrev_man_path = tmp_path / "unrev_man.json"
+    unrev_man_path.write_text(json.dumps(unrev_man), encoding="utf-8")
+    with pytest.raises(ValueError, match="eligible_for_frozen_event_evaluation is False"):
+        freeze_identity_manifest(unrev_man_path, tmp_path / "unrev_lock.json")
+
+    # 2. Placeholder human reviewer rejection
+    with pytest.raises(ValueError, match="rejects placeholder reviewer_id"):
+        approve_identity_roster(roster_file, reviewer_id="human-reviewer-1", reviewed_at="2026-09-06T00:00:00Z")
+
+    # 3. Explicit human approval elevates to HUMAN_APPROVED_IDENTITY_ROSTER
+    approved_data = approve_identity_roster(
+        roster_file,
+        reviewer_id="lead-auditor-alice",
+        reviewed_at="2026-09-06T00:00:00Z",
+        output_path=roster_file,
+    )
+    assert approved_data["roster_status"] == "HUMAN_APPROVED_IDENTITY_ROSTER"
+    assert approved_data["human_review_status"] == "APPROVED"
+    assert approved_data["reviewer_type"] == "HUMAN"
+    assert approved_data["reviewer_id"] == "lead-auditor-alice"
+    assert approved_data["adjudication_status"] == "FINAL"
+
+    # Now extraction produces fully eligible manifest
     manifest = extract_identity_manifest_from_roster(roster_file)
     assert manifest["manifest_version"] == "v2.0"
     assert manifest["source_type"] == "INDEPENDENT_IDENTITY_ROSTER"
@@ -1075,6 +1110,8 @@ def test_extract_identity_manifest_from_roster(tmp_path: Path):
     assert manifest["eligible_for_frozen_event_evaluation"] is True
     assert len(manifest["proven_identities"]) == 2
     assert manifest["videos"]["vid-roster-1"]["video_sha256"] == video_sha
+    assert len(manifest["roster_sources"]) == 1
+    assert manifest["roster_sources"][0]["reviewer_id"] == "lead-auditor-alice"
 
     manifest_file = tmp_path / "roster_manifest.json"
     manifest_file.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
@@ -1088,8 +1125,10 @@ def test_extract_identity_manifest_from_roster(tmp_path: Path):
     assert len(lock["manifest_sha256"]) == 64
     assert lock["review_provenance"]["human_review_status"] == "APPROVED"
     assert lock["review_provenance"]["reviewer_type"] == "HUMAN"
+    assert lock["review_provenance"]["reviewer_id"] == "lead-auditor-alice"
+    assert len(lock["roster_sources"]) == 1
 
-    # Human review enforcement: AI reviewer must be rejected
+    # Human review enforcement: AI reviewer must be rejected at freeze
     ai_roster = tmp_path / "ai_roster.json"
     create_identity_roster(
         [
@@ -1117,39 +1156,8 @@ def test_extract_identity_manifest_from_roster(tmp_path: Path):
     ai_man = extract_identity_manifest_from_roster(ai_roster)
     ai_man_path = tmp_path / "ai_man.json"
     ai_man_path.write_text(json.dumps(ai_man), encoding="utf-8")
-    with pytest.raises(ValueError, match="reviewer_type == 'HUMAN'"):
+    with pytest.raises(ValueError, match="eligible_for_frozen_event_evaluation is False"):
         freeze_identity_manifest(ai_man_path, tmp_path / "ai_lock.json")
-
-    # Human review enforcement: Unapproved status must be rejected
-    unapp_roster = tmp_path / "unapp_roster.json"
-    create_identity_roster(
-        [
-            {
-                "video_id": "vid-unapp",
-                "video_sha256": "b" * 64,
-                "fps": 30.0,
-                "frame_count": 100,
-                "vehicles": [
-                    {
-                        "vehicle_id": "video:vid-unapp:vehicle-track:1",
-                        "cabins": [
-                            {
-                                "cabin_id": "video:vid-unapp:vehicle-track:1:cabin:0",
-                                "occupants": [{"occupant_id": "video:vid-unapp:vehicle-track:1:cabin:0:occupant-track:1"}],
-                            }
-                        ],
-                    }
-                ],
-            }
-        ],
-        output_path=unapp_roster,
-        human_review_status="PENDING",
-    )
-    unapp_man = extract_identity_manifest_from_roster(unapp_roster)
-    unapp_man_path = tmp_path / "unapp_man.json"
-    unapp_man_path.write_text(json.dumps(unapp_man), encoding="utf-8")
-    with pytest.raises(ValueError, match="human_review_status == 'APPROVED'"):
-        freeze_identity_manifest(unapp_man_path, tmp_path / "unapp_lock.json")
 
     # Invalid video SHA in roster -> REJECTED
     invalid_roster = tmp_path / "invalid_roster.json"
@@ -1170,7 +1178,7 @@ def test_extract_identity_manifest_from_roster(tmp_path: Path):
 
 
 def test_roster_to_annotation_skeleton_pipeline_eliminates_circular_sha(tmp_path: Path):
-    # Step 1: Create independent roster and freeze identity manifest
+    # Step 1: Create independent roster, approve with explicit human review, and freeze identity manifest
     roster_file = tmp_path / "roster.json"
     v_sha = "f" * 64
     create_identity_roster(
@@ -1198,6 +1206,12 @@ def test_roster_to_annotation_skeleton_pipeline_eliminates_circular_sha(tmp_path
                 ],
             }
         ],
+        output_path=roster_file,
+    )
+    approve_identity_roster(
+        roster_file,
+        reviewer_id="human-reviewer-alice",
+        reviewed_at="2026-09-06T00:00:00Z",
         output_path=roster_file,
     )
     manifest = extract_identity_manifest_from_roster(roster_file)
@@ -1870,5 +1884,173 @@ minimum_independent_groups: {source_id: 1, camera_id: 1, video_id: 1, vehicle_id
             tmp_path / "frozen_extra.json",
             identity_manifest_lock_path=extra_vid_lock_path,
         )
+
+
+def test_multi_roster_provenance_and_cryptographic_verification(tmp_path: Path):
+    r1_path = tmp_path / "roster_1.json"
+    r2_path = tmp_path / "roster_2.json"
+    v1_sha = "1" * 64
+    v2_sha = "2" * 64
+
+    # Create two unreviewed rosters
+    create_identity_roster(
+        [
+            {
+                "video_id": "vid-1",
+                "video_sha256": v1_sha,
+                "fps": 30.0,
+                "frame_count": 300,
+                "vehicles": [
+                    {
+                        "vehicle_id": "video:vid-1:vehicle-track:1",
+                        "cabins": [
+                            {
+                                "cabin_id": "video:vid-1:vehicle-track:1:cabin:0",
+                                "occupants": [{"occupant_id": "video:vid-1:vehicle-track:1:cabin:0:occupant-track:1"}],
+                            }
+                        ],
+                    }
+                ],
+            }
+        ],
+        output_path=r1_path,
+    )
+    create_identity_roster(
+        [
+            {
+                "video_id": "vid-2",
+                "video_sha256": v2_sha,
+                "fps": 30.0,
+                "frame_count": 300,
+                "vehicles": [
+                    {
+                        "vehicle_id": "video:vid-2:vehicle-track:1",
+                        "cabins": [
+                            {
+                                "cabin_id": "video:vid-2:vehicle-track:1:cabin:0",
+                                "occupants": [{"occupant_id": "video:vid-2:vehicle-track:1:cabin:0:occupant-track:1"}],
+                            }
+                        ],
+                    }
+                ],
+            }
+        ],
+        output_path=r2_path,
+    )
+
+    # Approve only roster 1
+    approve_identity_roster(r1_path, reviewer_id="auditor-alice", reviewed_at="2026-09-06T00:00:00Z", output_path=r1_path)
+
+    # Manifest with mixed rosters (r1 approved, r2 unreviewed) -> UNREVIEWED_ROSTER_SCOPE, eligible = False
+    man_mixed = extract_identity_manifest_from_roster([r1_path, r2_path])
+    assert man_mixed["eligible_for_frozen_event_evaluation"] is False
+    assert man_mixed["evaluation_scope"] == "UNREVIEWED_ROSTER_SCOPE"
+    assert man_mixed["review_provenance"]["all_sources_human_approved"] is False
+    assert len(man_mixed["roster_sources"]) == 2
+    assert man_mixed["roster_sources"][0]["is_human_approved"] is True
+    assert man_mixed["roster_sources"][1]["is_human_approved"] is False
+
+    man_mixed_path = tmp_path / "mixed_man.json"
+    man_mixed_path.write_text(json.dumps(man_mixed, indent=2), encoding="utf-8")
+    with pytest.raises(ValueError, match="eligible_for_frozen_event_evaluation is False"):
+        freeze_identity_manifest(man_mixed_path, tmp_path / "mixed_lock.json")
+
+    # Now approve roster 2 with a different auditor
+    approve_identity_roster(r2_path, reviewer_id="auditor-bob", reviewed_at="2026-09-06T01:00:00Z", output_path=r2_path)
+
+    man_both = extract_identity_manifest_from_roster([r1_path, r2_path])
+    assert man_both["eligible_for_frozen_event_evaluation"] is True
+    assert man_both["evaluation_scope"] == "FULL_SYSTEM_EVENT_EVALUATION"
+    assert man_both["review_provenance"]["all_sources_human_approved"] is True
+    assert man_both["review_provenance"]["reviewer_ids"] == ["auditor-alice", "auditor-bob"]
+
+    man_both_path = tmp_path / "both_man.json"
+    man_both_path.write_text(json.dumps(man_both, indent=2), encoding="utf-8")
+    lock_file = tmp_path / "both_lock.json"
+    lock = freeze_identity_manifest(man_both_path, lock_file)
+    assert lock["status"] == "FROZEN_IDENTITY_MANIFEST"
+    assert len(lock["roster_sources"]) == 2
+    assert lock["roster_sources"][0]["reviewer_id"] == "auditor-alice"
+    assert lock["roster_sources"][1]["reviewer_id"] == "auditor-bob"
+
+    # Tampering check: If roster 1 is tampered on disk after manifest creation, re-hashing fails!
+    r1_path.write_text(r1_path.read_text(encoding="utf-8") + " ", encoding="utf-8")
+    with pytest.raises(ValueError, match="cryptographic mismatch"):
+        freeze_identity_manifest(man_both_path, tmp_path / "tampered_lock.json")
+
+
+def test_canonical_provided_cabin_roster_and_adjudication_contract(tmp_path: Path):
+    roster_path = tmp_path / "provided_roster.json"
+    v_sha = "c" * 64
+
+    # Fixed camera / in-cabin setup using canonical provided-vehicle and provided-cabin
+    create_identity_roster(
+        [
+            {
+                "video_id": "vid-provided-1",
+                "video_sha256": v_sha,
+                "fps": 30.0,
+                "frame_count": 300,
+                "vehicles": [
+                    {
+                        "vehicle_id": "video:vid-provided-1:provided-vehicle",
+                        "cabins": [
+                            {
+                                "cabin_id": "video:vid-provided-1:provided-cabin",
+                                "occupants": [
+                                    {
+                                        "occupant_id": "video:vid-provided-1:provided-cabin:occupant-track:1",
+                                        "role": "driver",
+                                    }
+                                ],
+                            }
+                        ],
+                    }
+                ],
+            }
+        ],
+        output_path=roster_path,
+    )
+    approve_identity_roster(roster_path, reviewer_id="auditor-carol", reviewed_at="2026-09-06T00:00:00Z", output_path=roster_path)
+
+    manifest = extract_identity_manifest_from_roster(roster_path)
+    man_path = tmp_path / "prov_man.json"
+    man_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    lock_path = tmp_path / "prov_lock.json"
+    lock = freeze_identity_manifest(man_path, lock_path)
+
+    # Runtime detection in provided-cabin: track 99
+    # Valid intra-cabin adjudication mapping
+    adj_data = {
+        "human_review_status": "APPROVED",
+        "reviewer_type": "HUMAN",
+        "reviewer_id": "auditor-carol",
+        "reviewed_at": "2026-09-06T01:00:00Z",
+        "target_identity_manifest_sha256": lock["manifest_sha256"],
+        "mappings": {
+            "video:vid-provided-1:provided-cabin:occupant-track:99": "video:vid-provided-1:provided-cabin:occupant-track:1",
+        },
+    }
+    adj_path = tmp_path / "adj_prov.json"
+    adj_path.write_text(json.dumps(adj_data, indent=2), encoding="utf-8")
+    adj_lock = freeze_identity_adjudication(adj_path, tmp_path / "adj_prov_lock.json", identity_manifest_lock_path=lock_path)
+    assert adj_lock["status"] == "FROZEN_IDENTITY_ADJUDICATION"
+
+    # Cross-cabin adjudication attempt (e.g. from dynamic traffic vehicle-track to provided-cabin) -> REJECTED
+    cross_data = {
+        "human_review_status": "APPROVED",
+        "reviewer_type": "HUMAN",
+        "reviewer_id": "auditor-carol",
+        "reviewed_at": "2026-09-06T01:00:00Z",
+        "target_identity_manifest_sha256": lock["manifest_sha256"],
+        "mappings": {
+            "video:vid-provided-1:vehicle-track:7:cabin:0:occupant-track:99": "video:vid-provided-1:provided-cabin:occupant-track:1",
+        },
+    }
+    cross_path = tmp_path / "adj_cross.json"
+    cross_path.write_text(json.dumps(cross_data, indent=2), encoding="utf-8")
+    with pytest.raises(ValueError, match="cross-cabin adjudication violation"):
+        freeze_identity_adjudication(cross_path, tmp_path / "adj_cross_lock.json", identity_manifest_lock_path=lock_path)
+
 
 

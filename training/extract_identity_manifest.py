@@ -542,14 +542,24 @@ def extract_identity_manifest_from_annotations(
 def create_identity_roster(
     videos: list[dict[str, Any]],
     output_path: Path | None = None,
-    human_review_status: str = "APPROVED",
-    reviewer_type: str = "HUMAN",
+    human_review_status: str = "PENDING",
+    reviewer_type: str = "AI",
     reviewer_id: str | None = None,
     reviewed_at: str | None = None,
     evidence_hash: str | None = None,
-    adjudication_status: str = "FINAL",
+    adjudication_status: str = "PENDING",
+    roster_status: str | None = None,
 ) -> dict[str, Any]:
-    """Create a structured independent ground-truth identity roster document with human review provenance.
+    """Create a structured independent ground-truth identity roster document.
+
+    By default, creates an UNREVIEWED identity roster (human_review_status='PENDING',
+    reviewer_type='AI', reviewer_id=None, adjudication_status='PENDING').
+
+    To elevate an identity roster to HUMAN review, callers must explicitly use
+    `approve_identity_roster(...)` with valid reviewer_id and reviewed_at timestamp,
+    or supply explicit reviewer_id and valid reviewed_at timestamp to this function.
+    Fabrication of human reviewer IDs (e.g. defaulting to 'human-reviewer-1') is
+    strictly prohibited.
 
     Each video entry in `videos` must declare:
     - video_id: str
@@ -566,14 +576,42 @@ def create_identity_roster(
                 - role: str (optional, e.g. "driver", "front_passenger")
     """
     now_iso = datetime.now(UTC).isoformat().replace("+00:00", "Z")
+
+    if reviewer_type == "HUMAN":
+        if not reviewer_id or not str(reviewer_id).strip():
+            raise ValueError("create_identity_roster: reviewer_type 'HUMAN' requires an explicit, non-empty reviewer_id")
+        cleaned_rev_id = str(reviewer_id).strip()
+        if cleaned_rev_id.lower() in {"human-reviewer-1", "placeholder", "unknown", "none"}:
+            raise ValueError(f"create_identity_roster rejects placeholder reviewer_id: {cleaned_rev_id!r}")
+        if not reviewed_at or not str(reviewed_at).strip():
+            raise ValueError("create_identity_roster: reviewer_type 'HUMAN' requires an explicit, non-empty reviewed_at timestamp")
+        try:
+            parsed_dt = datetime.fromisoformat(str(reviewed_at).strip().replace("Z", "+00:00"))
+            if parsed_dt.tzinfo is None:
+                raise ValueError("reviewed_at must include timezone")
+        except Exception as err:
+            raise ValueError(f"create_identity_roster: invalid reviewed_at timestamp: {err}")
+        if adjudication_status != "FINAL":
+            raise ValueError(f"create_identity_roster: reviewer_type 'HUMAN' requires adjudication_status == 'FINAL', got {adjudication_status!r}")
+        if human_review_status != "APPROVED":
+            raise ValueError(f"create_identity_roster: reviewer_type 'HUMAN' requires human_review_status == 'APPROVED', got {human_review_status!r}")
+        resolved_status = roster_status or "HUMAN_APPROVED_IDENTITY_ROSTER"
+        final_reviewer_id = cleaned_rev_id
+        final_reviewed_at = str(reviewed_at).strip()
+    else:
+        resolved_status = roster_status or "UNREVIEWED_IDENTITY_ROSTER"
+        final_reviewer_id = str(reviewer_id).strip() if reviewer_id else None
+        final_reviewed_at = str(reviewed_at).strip() if reviewed_at else None
+
     ev_hash = evidence_hash or hashlib.sha256(json.dumps(videos, sort_keys=True).encode("utf-8")).hexdigest()
     roster_data = {
         "roster_version": "v2.0",
+        "roster_status": resolved_status,
         "created_at": now_iso,
         "human_review_status": human_review_status,
         "reviewer_type": reviewer_type,
-        "reviewer_id": reviewer_id or "human-reviewer-1",
-        "reviewed_at": reviewed_at or now_iso,
+        "reviewer_id": final_reviewer_id,
+        "reviewed_at": final_reviewed_at,
         "evidence_hash": ev_hash,
         "adjudication_status": adjudication_status,
         "videos": videos,
@@ -586,13 +624,77 @@ def create_identity_roster(
     return roster_data
 
 
+def approve_identity_roster(
+    roster_input: Path | dict[str, Any],
+    reviewer_id: str,
+    reviewed_at: str,
+    evidence_hash: str | None = None,
+    adjudication_status: str = "FINAL",
+    output_path: Path | None = None,
+) -> dict[str, Any]:
+    """Explicitly elevate an independent identity roster from UNREVIEWED to HUMAN_APPROVED.
+
+    Requires:
+    - reviewer_id: non-empty string identifying the human reviewer (no placeholders allowed).
+    - reviewed_at: ISO-8601 timestamp string with explicit timezone.
+    - adjudication_status: must be 'FINAL'.
+    """
+    if not reviewer_id or not str(reviewer_id).strip():
+        raise ValueError("approve_identity_roster requires a non-empty reviewer_id")
+    cleaned_reviewer_id = str(reviewer_id).strip()
+    if cleaned_reviewer_id.lower() in {"human-reviewer-1", "placeholder", "unknown", "none"}:
+        raise ValueError(f"approve_identity_roster rejects placeholder reviewer_id: {cleaned_reviewer_id!r}")
+
+    if not reviewed_at or not str(reviewed_at).strip():
+        raise ValueError("approve_identity_roster requires an explicit, non-empty reviewed_at timestamp")
+    try:
+        parsed_dt = datetime.fromisoformat(str(reviewed_at).strip().replace("Z", "+00:00"))
+        if parsed_dt.tzinfo is None:
+            raise ValueError("reviewed_at must include timezone")
+    except Exception as err:
+        raise ValueError(f"approve_identity_roster invalid reviewed_at timestamp: {err}")
+
+    if adjudication_status != "FINAL":
+        raise ValueError(f"approve_identity_roster requires adjudication_status == 'FINAL', got {adjudication_status!r}")
+
+    if isinstance(roster_input, Path):
+        if not roster_input.is_file():
+            raise FileNotFoundError(f"roster file not found: {roster_input}")
+        data = json.loads(roster_input.read_text(encoding="utf-8"))
+    elif isinstance(roster_input, dict):
+        data = dict(roster_input)
+    else:
+        raise TypeError(f"expected Path or dict for roster_input, got {type(roster_input)}")
+
+    videos = data.get("videos", [])
+    ev_hash = evidence_hash or data.get("evidence_hash") or hashlib.sha256(json.dumps(videos, sort_keys=True).encode("utf-8")).hexdigest()
+
+    data["roster_status"] = "HUMAN_APPROVED_IDENTITY_ROSTER"
+    data["human_review_status"] = "APPROVED"
+    data["reviewer_type"] = "HUMAN"
+    data["reviewer_id"] = cleaned_reviewer_id
+    data["reviewed_at"] = str(reviewed_at).strip()
+    data["evidence_hash"] = ev_hash
+    data["adjudication_status"] = "FINAL"
+
+    if output_path is not None:
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        with output_path.open("w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2)
+            f.write("\n")
+
+    return data
+
+
 def extract_identity_manifest_from_roster(roster_paths: Path | list[Path]) -> dict[str, Any]:
     """Extract an independent ground-truth identity manifest from one or more roster files.
 
     Guarantees:
     1. Identity roster is completely independent of runtime detections or annotation event proposals.
-    2. Eligible for final frozen event evaluation (source_type = INDEPENDENT_IDENTITY_ROSTER).
-    3. Scope is FULL_SYSTEM_EVENT_EVALUATION (full unconditioned benchmark).
+    2. Eligible for final frozen event evaluation (source_type = INDEPENDENT_IDENTITY_ROSTER)
+       only when all roster sources have verified human review.
+    3. Scope is FULL_SYSTEM_EVENT_EVALUATION if all sources are human approved, otherwise
+       UNREVIEWED_ROSTER_SCOPE (not eligible for frozen event evaluation).
     4. Validates identity contracts and requires valid 64-char hexadecimal video_sha256.
     5. Eliminates circular SHA dependency: freezing this manifest produces manifest_sha256,
        which can then be directly embedded into annotation skeletons prior to human annotation review.
@@ -603,27 +705,46 @@ def extract_identity_manifest_from_roster(roster_paths: Path | list[Path]) -> di
 
     videos: dict[str, dict[str, Any]] = {}
     proven_set: set[tuple[str, str, str, str]] = set()
-
-    roster_review_status = "APPROVED"
-    roster_reviewer_type = "HUMAN"
-    roster_reviewer_id = "human-reviewer-1"
-    roster_reviewed_at = datetime.now(UTC).isoformat().replace("+00:00", "Z")
-    roster_evidence_hash = ""
-    roster_adjudication_status = "FINAL"
+    roster_sources: list[dict[str, Any]] = []
 
     for p in sorted(paths):
         if not p.is_file():
             raise FileNotFoundError(f"roster file not found: {p}")
-        raw = json.loads(p.read_text(encoding="utf-8"))
+        file_bytes = p.read_bytes()
+        file_sha = hashlib.sha256(file_bytes).hexdigest()
+        raw = json.loads(file_bytes.decode("utf-8"))
+
+        p_status = raw.get("human_review_status", "PENDING") if isinstance(raw, dict) else "PENDING"
+        p_rev_type = raw.get("reviewer_type", "AI") if isinstance(raw, dict) else "AI"
+        p_rev_id = raw.get("reviewer_id") if isinstance(raw, dict) else None
+        p_rev_at = raw.get("reviewed_at") if isinstance(raw, dict) else None
+        p_ev_hash = raw.get("evidence_hash") if isinstance(raw, dict) else None
+        p_adj_status = raw.get("adjudication_status", "PENDING") if isinstance(raw, dict) else "PENDING"
+        p_roster_status = raw.get("roster_status") if isinstance(raw, dict) else None
+
+        is_valid_human = (
+            p_status == "APPROVED"
+            and p_rev_type == "HUMAN"
+            and bool(p_rev_id and str(p_rev_id).strip())
+            and bool(p_rev_at and str(p_rev_at).strip())
+            and p_adj_status == "FINAL"
+        )
+
+        roster_sources.append({
+            "path": str(p.resolve()),
+            "file_name": p.name,
+            "sha256": file_sha,
+            "roster_status": p_roster_status or ("HUMAN_APPROVED_IDENTITY_ROSTER" if is_valid_human else "UNREVIEWED_IDENTITY_ROSTER"),
+            "human_review_status": p_status,
+            "reviewer_type": p_rev_type,
+            "reviewer_id": str(p_rev_id).strip() if p_rev_id else None,
+            "reviewed_at": str(p_rev_at).strip() if p_rev_at else None,
+            "evidence_hash": str(p_ev_hash).strip() if p_ev_hash else file_sha,
+            "adjudication_status": p_adj_status,
+            "is_human_approved": is_valid_human,
+        })
 
         raw_videos: list[dict[str, Any]] = []
-        if isinstance(raw, dict):
-            roster_review_status = raw.get("human_review_status", roster_review_status)
-            roster_reviewer_type = raw.get("reviewer_type", roster_reviewer_type)
-            roster_reviewer_id = raw.get("reviewer_id", roster_reviewer_id)
-            roster_reviewed_at = raw.get("reviewed_at", roster_reviewed_at)
-            roster_evidence_hash = raw.get("evidence_hash", roster_evidence_hash)
-            roster_adjudication_status = raw.get("adjudication_status", roster_adjudication_status)
         if isinstance(raw, list):
             if raw and "vehicles" in raw[0]:
                 raw_videos = raw
@@ -771,35 +892,60 @@ def extract_identity_manifest_from_roster(roster_paths: Path | list[Path]) -> di
         for item in sorted(list(proven_set))
     ]
 
+    all_human_approved = bool(roster_sources and all(s["is_human_approved"] for s in roster_sources))
+    if all_human_approved:
+        evaluation_scope = "FULL_SYSTEM_EVENT_EVALUATION"
+        eligible_for_frozen_event_evaluation = True
+    else:
+        evaluation_scope = "UNREVIEWED_ROSTER_SCOPE"
+        eligible_for_frozen_event_evaluation = False
+
     if len(paths) == 1:
         source_path_str = str(paths[0].resolve())
-        source_sha = sha256_file(paths[0])
+        source_sha = roster_sources[0]["sha256"]
     else:
         source_path_str = str(paths[0].parent.resolve())
         hasher = hashlib.sha256()
-        for p in sorted(paths):
-            hasher.update(p.read_bytes())
+        for s in roster_sources:
+            hasher.update(bytes.fromhex(s["sha256"]))
         source_sha = hasher.hexdigest()
 
-    if not roster_evidence_hash:
-        roster_evidence_hash = source_sha
+    if len(roster_sources) == 1:
+        s0 = roster_sources[0]
+        review_provenance = {
+            "all_sources_human_approved": all_human_approved,
+            "human_review_status": s0["human_review_status"],
+            "reviewer_type": s0["reviewer_type"],
+            "reviewer_id": s0["reviewer_id"],
+            "reviewed_at": s0["reviewed_at"],
+            "evidence_hash": s0["evidence_hash"],
+            "adjudication_status": s0["adjudication_status"],
+        }
+    else:
+        reviewer_ids = sorted(list({s["reviewer_id"] for s in roster_sources if s["reviewer_id"]}))
+        reviewed_ats = [s["reviewed_at"] for s in roster_sources if s.get("reviewed_at")]
+        latest_reviewed_at = max(reviewed_ats) if reviewed_ats else None
+        review_provenance = {
+            "all_sources_human_approved": all_human_approved,
+            "human_review_status": "APPROVED" if all_human_approved else "PENDING",
+            "reviewer_type": "HUMAN" if all_human_approved else "MIXED_OR_AI",
+            "reviewer_ids": reviewer_ids,
+            "reviewer_id": reviewer_ids[0] if len(reviewer_ids) == 1 else (",".join(reviewer_ids) if reviewer_ids else None),
+            "reviewed_at": latest_reviewed_at,
+            "evidence_hash": source_sha,
+            "adjudication_status": "FINAL" if all_human_approved else "PENDING",
+        }
 
     return {
         "manifest_version": "v2.0",
         "created_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
         "source_type": "INDEPENDENT_IDENTITY_ROSTER",
-        "evaluation_scope": "FULL_SYSTEM_EVENT_EVALUATION",
-        "eligible_for_frozen_event_evaluation": True,
+        "evaluation_scope": evaluation_scope,
+        "eligible_for_frozen_event_evaluation": eligible_for_frozen_event_evaluation,
         "source_path": source_path_str,
         "source_sha256": source_sha,
-        "review_provenance": {
-            "human_review_status": roster_review_status,
-            "reviewer_type": roster_reviewer_type,
-            "reviewer_id": roster_reviewer_id,
-            "reviewed_at": roster_reviewed_at,
-            "evidence_hash": roster_evidence_hash,
-            "adjudication_status": roster_adjudication_status,
-        },
+        "roster_sources": roster_sources,
+        "review_provenance": review_provenance,
         "videos": videos_out,
         "proven_identities": proven_list,
     }
@@ -838,7 +984,13 @@ def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dic
         raise ValueError("identity manifest requires a non-empty source_path")
 
     roster_review_record = None
+    roster_sources_out = None
     if source_type in governed_frozen_source_types:
+        if not manifest.get("eligible_for_frozen_event_evaluation", False):
+            raise ValueError(
+                f"cannot freeze governed identity manifest: eligible_for_frozen_event_evaluation is False "
+                f"(evaluation_scope={manifest.get('evaluation_scope')!r})"
+            )
         eligible_for_frozen_event_evaluation = True
         evaluation_scope = manifest.get(
             "evaluation_scope",
@@ -853,6 +1005,7 @@ def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dic
         source_p = Path(source_path_str)
         if not source_p.exists():
             raise ValueError(f"identity manifest source_path does not exist on disk: {source_path_str}")
+
         if source_p.is_file():
             disk_sha = sha256_file(source_p)
             if disk_sha != source_sha:
@@ -861,6 +1014,58 @@ def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dic
                 )
 
         if source_type == "INDEPENDENT_IDENTITY_ROSTER":
+            roster_sources = manifest.get("roster_sources", [])
+            if roster_sources:
+                for item in roster_sources:
+                    item_path_str = item.get("path", "")
+                    if not item_path_str:
+                        raise ValueError("roster source entry missing path")
+                    item_p = Path(item_path_str)
+                    if not item_p.is_file():
+                        raise ValueError(f"roster source file does not exist on disk: {item_path_str}")
+                    disk_sha = sha256_file(item_p)
+                    if disk_sha != item.get("sha256"):
+                        raise ValueError(
+                            f"roster source '{item_p.name}' cryptographic mismatch: recorded {item.get('sha256')} != disk {disk_sha}"
+                        )
+                    if item.get("human_review_status") != "APPROVED":
+                        raise ValueError(
+                            f"roster source '{item_p.name}' requires human_review_status == 'APPROVED', got {item.get('human_review_status')!r}"
+                        )
+                    if item.get("reviewer_type") != "HUMAN":
+                        raise ValueError(
+                            f"roster source '{item_p.name}' requires reviewer_type == 'HUMAN' (AI rosters are strictly rejected), got {item.get('reviewer_type')!r}"
+                        )
+                    r_id = str(item.get("reviewer_id", "")).strip()
+                    if not r_id:
+                        raise ValueError(f"roster source '{item_p.name}' requires a non-empty reviewer_id")
+                    r_at = str(item.get("reviewed_at", "")).strip()
+                    if not r_at:
+                        raise ValueError(f"roster source '{item_p.name}' requires a non-empty reviewed_at timestamp")
+                    try:
+                        parsed_dt = datetime.fromisoformat(r_at.replace("Z", "+00:00"))
+                        if parsed_dt.tzinfo is None:
+                            raise ValueError("reviewed_at must include timezone")
+                    except Exception as err:
+                        raise ValueError(f"roster source '{item_p.name}' invalid reviewed_at timestamp: {err}")
+                    ev_hash = str(item.get("evidence_hash", "")).strip()
+                    if not ev_hash or len(ev_hash) != 64:
+                        raise ValueError(f"roster source '{item_p.name}' requires a valid 64-character evidence_hash, got {ev_hash!r}")
+                    if item.get("adjudication_status") != "FINAL":
+                        raise ValueError(
+                            f"roster source '{item_p.name}' requires adjudication_status == 'FINAL', got {item.get('adjudication_status')!r}"
+                        )
+                if len(roster_sources) > 1:
+                    hasher = hashlib.sha256()
+                    for s in roster_sources:
+                        hasher.update(bytes.fromhex(s["sha256"]))
+                    calc_coll_sha = hasher.hexdigest()
+                    if calc_coll_sha != source_sha:
+                        raise ValueError(
+                            f"multi-roster collection source_sha256 mismatch: recorded {source_sha} != calculated {calc_coll_sha}"
+                        )
+                roster_sources_out = roster_sources
+
             rev = manifest.get("review_provenance", {})
             if not rev and "human_review_status" in manifest:
                 rev = {
@@ -881,7 +1086,8 @@ def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dic
                 )
             if not rev.get("reviewer_id"):
                 raise ValueError("INDEPENDENT_IDENTITY_ROSTER requires a non-empty reviewer_id")
-            r_at = str(rev.get("reviewed_at", "")).strip()
+            r_at_raw = rev.get("reviewed_at")
+            r_at = str(r_at_raw).strip() if r_at_raw is not None else ""
             if not r_at:
                 raise ValueError("INDEPENDENT_IDENTITY_ROSTER requires a non-empty reviewed_at timestamp")
             try:
@@ -972,6 +1178,8 @@ def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dic
         "identity_count": len(proven),
         "locked_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
     }
+    if roster_sources_out is not None:
+        lock_data["roster_sources"] = roster_sources_out
     if roster_review_record is not None:
         lock_data["review_provenance"] = roster_review_record
 
