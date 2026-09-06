@@ -1,5 +1,10 @@
 # Tiếp nhận sequence thật — v2_sequence_001
 
+Workflow temporal mới: [Codex Review1 → human final confirmation](REVIEW1_WORKFLOW.md).
+Người thật duyệt/sửa proposal thay vì annotate từ đầu. Gói local hiện còn
+`BLOCKED_FULL_VIDEO_REVIEW_REQUIRED`; chưa được coi là Review1 hoàn tất hay human GT.
+Quy định independent human ground truth cho untouched holdout giữ nguyên.
+
 Trạng thái: **ĐÃ NHẬN VIDEO TEMPORAL LOCAL; CHỜ RIGHTS/LINEAGE, GT VÀ HUMAN REVIEW**. Đây là gói tiếp nhận dữ liệu,
 chưa phải ground truth, manifest được freeze hay bằng chứng đánh giá model.
 Kết quả kiểm kê nằm trong `readiness.json`; `intake.csv` hiện chỉ có tiêu đề cột.

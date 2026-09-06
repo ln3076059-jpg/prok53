@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Temporal development Review1 record or human final receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["record_type", "dataset_role", "video_id", "video_path", "video_sha256", "reviewer_type", "reviewer_origin", "review_stage", "reviewer_agent", "status", "requires_human_confirmation", "adjudication_status", "human_approved", "payload"],
+  "properties": {
+    "record_type": {"enum": ["sequence", "rights", "physical_lineage", "identity"]},
+    "dataset_role": {"const": "TEMPORAL_DEVELOPMENT"},
+    "video_id": {"type": "string", "minLength": 1},
+    "video_path": {"type": "string", "minLength": 1},
+    "video_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "reviewer_type": {"enum": ["AI", "HUMAN"]},
+    "reviewer_origin": {"enum": ["AI", "HUMAN"]},
+    "review_stage": {"enum": ["REVIEW1", "FINAL_REVIEW"]},
+    "reviewer_agent": {"type": ["string", "null"]},
+    "status": {"enum": ["REVIEW1_PROPOSAL", "HUMAN_APPROVED"]},
+    "requires_human_confirmation": {"type": "boolean"},
+    "adjudication_status": {"enum": ["PENDING", "FINAL"]},
+    "human_approved": {"type": "boolean"},
+    "payload": {"type": "object"},
+    "reviewer_id": {"type": ["string", "null"]},
+    "reviewed_at": {"type": ["string", "null"]},
+    "human_decision": {"enum": ["APPROVE", "EDIT_AND_APPROVE"]},
+    "review_evidence": {
+      "type": "object", "required": ["path", "sha256"], "additionalProperties": false,
+      "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "REVIEW1_PROPOSAL"}}},
+      "then": {"properties": {
+        "reviewer_type": {"const": "AI"}, "reviewer_origin": {"const": "AI"},
+        "review_stage": {"const": "REVIEW1"}, "reviewer_agent": {"const": "CODEX"},
+        "requires_human_confirmation": {"const": true}, "adjudication_status": {"const": "PENDING"},
+        "human_approved": {"const": false}
+      }}
+    },
+    {
+      "if": {"properties": {"status": {"const": "HUMAN_APPROVED"}}},
+      "then": {
+        "required": ["reviewer_id", "reviewed_at", "review_evidence", "human_decision"],
+        "properties": {
+          "reviewer_type": {"const": "HUMAN"}, "reviewer_origin": {"const": "HUMAN"},
+          "review_stage": {"const": "FINAL_REVIEW"}, "reviewer_agent": {"const": null},
+          "requires_human_confirmation": {"const": false}, "adjudication_status": {"const": "FINAL"},
+          "human_approved": {"const": true}, "reviewer_id": {"type": "string", "minLength": 1},
+          "reviewed_at": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  ]
+}
