@@ -1528,6 +1528,7 @@ def test_evaluate_frozen_scope_guardrails(tmp_path: Path):
 def test_freeze_identity_adjudication_bijective_and_locality(tmp_path: Path):
     target_manifest_sha = "9" * 64
     valid_adjudication = {
+        "adjudication_status": "FINAL",
         "human_review_status": "APPROVED",
         "reviewer_type": "HUMAN",
         "reviewer_id": "auditor-1",
@@ -1546,6 +1547,7 @@ def test_freeze_identity_adjudication_bijective_and_locality(tmp_path: Path):
     assert lock["status"] == "FROZEN_IDENTITY_ADJUDICATION"
     assert lock["human_review_status"] == "APPROVED"
     assert lock["mapping_count"] == 2
+    assert lock["adjudication_status"] == "FINAL"
     assert len(lock["adjudication_sha256"]) == 64
 
     # Many-to-one mapping rejection
@@ -1576,6 +1578,29 @@ def test_freeze_identity_adjudication_bijective_and_locality(tmp_path: Path):
     nh_file.write_text(json.dumps(non_human), encoding="utf-8")
     with pytest.raises(ValueError, match="reviewer_type == 'HUMAN'"):
         freeze_identity_adjudication(nh_file, tmp_path / "nh_lock.json")
+
+
+@pytest.mark.parametrize("adjudication_status", [None, "", "DRAFT", "PENDING", "final"])
+def test_freeze_identity_adjudication_requires_final(tmp_path: Path, adjudication_status):
+    source = {
+        "human_review_status": "APPROVED",
+        "reviewer_type": "HUMAN",
+        "reviewer_id": "auditor",
+        "reviewed_at": "2026-09-06T00:00:00Z",
+        "target_identity_manifest_sha256": "9" * 64,
+        "mappings": {
+            "video:v1:vehicle-track:1:cabin:0:occupant-track:88":
+            "video:v1:vehicle-track:1:cabin:0:occupant-track:1",
+        },
+    }
+    if adjudication_status is not None:
+        source["adjudication_status"] = adjudication_status
+    source_path = tmp_path / "adjudication.json"
+    source_path.write_text(json.dumps(source), encoding="utf-8")
+    output_path = tmp_path / "lock.json"
+    with pytest.raises(ValueError, match="adjudication_status == 'FINAL'"):
+        freeze_identity_adjudication(source_path, output_path)
+    assert not output_path.exists()
 
 
 def test_evaluate_frozen_governed_identity_adjudication(tmp_path: Path):
@@ -1758,6 +1783,7 @@ def test_evaluate_frozen_governed_identity_adjudication(tmp_path: Path):
 
     # Create approved adjudication and freeze it
     valid_adj = {
+        "adjudication_status": "FINAL",
         "human_review_status": "APPROVED",
         "reviewer_type": "HUMAN",
         "reviewer_id": "auditor-42",
@@ -1789,6 +1815,8 @@ def test_evaluate_frozen_governed_identity_adjudication(tmp_path: Path):
     assert adj_report["event_types"]["PHONE"]["missed_events"] == 0
     assert "identity_adjudication_lock" in adj_report
     assert adj_report["identity_adjudication_lock"]["reviewer_id"] == "auditor-42"
+    assert adj_report["status"] == "MEASURED_FROZEN_EXTERNAL_TEST"
+    assert adj_report["identity_adjudication_lock"]["adjudication_status"] == "FINAL"
 
     # Integrity verification verifies the adjudication lock artifact as well
     integrity = verify_evaluation_integrity(adj_report_path)
@@ -2023,6 +2051,7 @@ def test_canonical_provided_cabin_roster_and_adjudication_contract(tmp_path: Pat
     # Runtime detection in provided-cabin: track 99
     # Valid intra-cabin adjudication mapping
     adj_data = {
+        "adjudication_status": "FINAL",
         "human_review_status": "APPROVED",
         "reviewer_type": "HUMAN",
         "reviewer_id": "auditor-carol",
@@ -2039,6 +2068,7 @@ def test_canonical_provided_cabin_roster_and_adjudication_contract(tmp_path: Pat
 
     # Cross-cabin adjudication attempt (e.g. from dynamic traffic vehicle-track to provided-cabin) -> REJECTED
     cross_data = {
+        "adjudication_status": "FINAL",
         "human_review_status": "APPROVED",
         "reviewer_type": "HUMAN",
         "reviewer_id": "auditor-carol",
@@ -2175,7 +2205,7 @@ def test_canonical_identity_evidence_hash_and_tamper_rejection(tmp_path: Path):
         freeze_identity_manifest(tampered_man_path, tmp_path / "lock_tampered.json")
 
 
-def test_hierarchical_cabin_adjudication_mapping_and_evaluation(tmp_path: Path):
+def test_hierarchical_cabin_adjudication_mapping_and_evaluation(tmp_path: Path, monkeypatch):
     v_sha = "d" * 64
     vid_id = "vid-dyn-1"
     gt_veh = f"video:{vid_id}:vehicle-track:1"
@@ -2351,6 +2381,7 @@ def test_hierarchical_cabin_adjudication_mapping_and_evaluation(tmp_path: Path):
 
     # Attempting cross-cabin occupant mapping without cabin_mappings fails Policy A invariant
     cross_without_cabin_map = {
+        "adjudication_status": "FINAL",
         "human_review_status": "APPROVED",
         "reviewer_type": "HUMAN",
         "reviewer_id": "auditor-eva",
@@ -2365,6 +2396,7 @@ def test_hierarchical_cabin_adjudication_mapping_and_evaluation(tmp_path: Path):
 
     # Validation on cabin_mappings: reject cross-video cabin mapping
     bad_xvideo_cabin = {
+        "adjudication_status": "FINAL",
         "human_review_status": "APPROVED",
         "reviewer_type": "HUMAN",
         "reviewer_id": "auditor-eva",
@@ -2380,6 +2412,7 @@ def test_hierarchical_cabin_adjudication_mapping_and_evaluation(tmp_path: Path):
 
     # Policy B: Governed Hierarchical Adjudication with cabin_mappings
     valid_hierarchical_adj = {
+        "adjudication_status": "FINAL",
         "human_review_status": "APPROVED",
         "reviewer_type": "HUMAN",
         "reviewer_id": "auditor-eva",
@@ -2412,6 +2445,37 @@ def test_hierarchical_cabin_adjudication_mapping_and_evaluation(tmp_path: Path):
 
     # Evaluate with evaluate_frozen using frozen hierarchical adjudication lock
     frozen_eval_out = tmp_path / "dyn_eval_out.json"
+    eval_args = (
+        truth_csv, pred_csv, event_lock_path, model_lock_path, frozen_eval_out,
+    )
+    eval_kwargs = {
+        "video_minutes": 10.0 / 60.0,
+        "context_truth_path": context_csv,
+        "context_truth_lock_path": context_lock_path,
+    }
+    eval_kwargs["identity_adjudication_path"] = hier_lock_path
+    for allow_conditional in (False, True):
+        with pytest.raises(ValueError, match="official full-system evaluation must be unassisted"):
+            evaluate_frozen(
+                *eval_args, **eval_kwargs, allow_conditional_evaluation=allow_conditional,
+            )
+        assert not frozen_eval_out.exists()
+
+    # Even with diagnostic opt-in, missing or non-final adjudication is rejected.
+    for final_status in (None, "DRAFT"):
+        invalid_lock = dict(hier_lock)
+        if final_status is None:
+            invalid_lock.pop("adjudication_status")
+        else:
+            invalid_lock["adjudication_status"] = final_status
+        hier_lock_path.write_text(json.dumps(invalid_lock), encoding="utf-8")
+        with pytest.raises(ValueError, match="adjudication_status == 'FINAL'"):
+            evaluate_frozen(
+                *eval_args, **eval_kwargs, allow_hierarchical_adjudication_diagnostic=True,
+            )
+        assert not frozen_eval_out.exists()
+    hier_lock_path.write_text(json.dumps(hier_lock), encoding="utf-8")
+
     frozen_report = evaluate_frozen(
         truth_csv,
         pred_csv,
@@ -2422,6 +2486,11 @@ def test_hierarchical_cabin_adjudication_mapping_and_evaluation(tmp_path: Path):
         context_truth_path=context_csv,
         context_truth_lock_path=context_lock_path,
         identity_adjudication_path=hier_lock_path,
+        allow_hierarchical_adjudication_diagnostic=True,
+    )
+    assert frozen_report["status"] == "MEASURED_HIERARCHICAL_ADJUDICATION_DIAGNOSTIC"
+    assert frozen_report["scientific_claim"] == (
+        "DIAGNOSTIC_BEHAVIOR_METRICS_AFTER_HUMAN_IDENTITY_ALIGNMENT"
     )
     assert frozen_report["event_types"]["PHONE"]["true_positives"] == 1
     assert frozen_report["event_types"]["PHONE"]["missed_events"] == 0
@@ -2431,6 +2500,39 @@ def test_hierarchical_cabin_adjudication_mapping_and_evaluation(tmp_path: Path):
 
     integrity = verify_evaluation_integrity(frozen_eval_out)
     assert integrity["status"] == "FROZEN_EVENT_EVALUATION_INTEGRITY_VERIFIED"
+
+    # Exercise the CLI option through parsing, evaluation, and persisted report.
+    from training.evaluate_events import main
+
+    cli_output = tmp_path / "cli_diagnostic.json"
+    monkeypatch.setattr("sys.argv", [
+        "evaluate_events", str(truth_csv), str(pred_csv),
+        "--ground-truth-lock", str(event_lock_path),
+        "--model-lock", str(model_lock_path),
+        "--context-truth", str(context_csv),
+        "--context-truth-lock", str(context_lock_path),
+        "--video-minutes", str(10.0 / 60.0),
+        "--identity-adjudication", str(hier_lock_path),
+        "--allow-hierarchical-adjudication-diagnostic",
+        "--output", str(cli_output),
+    ])
+    main()
+    cli_report = json.loads(cli_output.read_text(encoding="utf-8"))
+    assert cli_report["status"] == frozen_report["status"]
+    assert cli_report["scientific_claim"] == frozen_report["scientific_claim"]
+    assert cli_report["event_types"] == frozen_report["event_types"]
+
+    # A diagnostic report cannot be relabeled as an official result on verification.
+    for field, value in (
+        ("status", "MEASURED_FROZEN_EXTERNAL_TEST"),
+        ("status", "MEASURED_CONDITIONAL_DIAGNOSTIC"),
+        ("scientific_claim", "FROZEN_EVENT_METRICS_FOR_THIS_LOCKED_MODEL_ONLY"),
+    ):
+        relabeled = dict(frozen_report)
+        relabeled[field] = value
+        frozen_eval_out.write_text(json.dumps(relabeled), encoding="utf-8")
+        with pytest.raises(ValueError, match="must retain diagnostic status and claim"):
+            verify_evaluation_integrity(frozen_eval_out)
 
 
 

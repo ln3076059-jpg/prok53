@@ -89,6 +89,12 @@ if r_cabin != g_cabin:
 3. **Bijective Mapping**: Both `mappings` and `cabin_mappings` must be strictly 1-to-1 (injective). No duplicate targets are permitted.
 4. **Namespace Alignment**: For in-cabin test sets, detectors must be configured with `provided-cabin` context so runtime tracks share the same prefix `video:<id>:provided-cabin` as the ground-truth roster.
 
+Freezing requires `human_review_status = APPROVED`, `reviewer_type = HUMAN`, a non-empty
+`reviewer_id`, a timezone-aware `reviewed_at`, and explicit `adjudication_status = FINAL`.
+The frozen lock preserves `FINAL`; evaluation and integrity verification reject missing or
+non-final adjudication status. Older locks without this field require a finalized source and
+a new freeze.
+
 ---
 
 ## 4. Scientific Policy on Vehicle & Cabin Association
@@ -100,6 +106,9 @@ When evaluating end-to-end models on sequence data, association errors must be t
 - **Scoring**: If a system detects a driver in an unmapped or incorrect vehicle/cabin track, it constitutes an association error.
 - **Effect**: This error produces a **False Positive (FP)** on the hallucinated/incorrect vehicle cabin and a **False Negative (FN)** on the true vehicle cabin.
 - **Application**: Mandatory for official system benchmarks and freeze certifications.
+- **Evaluator gate**: `evaluate_frozen()` rejects non-empty `cabin_mappings` by default.
+  Intra-cabin occupant ID alignment remains supported under the locality rules above;
+  it cannot repair vehicle/cabin association errors.
 
 ### Policy B: Governed Hierarchical Adjudication (Diagnostic / Multi-Vehicle)
 - **Principle**: In complex multi-vehicle scenes where ground-truth vehicle tracks were indexed independently from runtime detectors, human auditors can isolate behavior/action recognition from tracking indexing.
@@ -115,3 +124,15 @@ When evaluating end-to-end models on sequence data, association errors must be t
   }
   ```
 - **Evaluation Alignment**: When applied during evaluation, the prediction row's `occupant_id`, `cabin_id`, and `vehicle_id` are consistently aligned to the target ground truth cabin, allowing event detection accuracy to be scored accurately without artifact mismatches.
+- **Explicit diagnostic opt-in**: Pass `allow_hierarchical_adjudication_diagnostic=True`
+  to `evaluate_frozen()`, or `--allow-hierarchical-adjudication-diagnostic` on the CLI.
+  Whenever the lock contains non-empty `cabin_mappings`, the report status is
+  `MEASURED_HIERARCHICAL_ADJUDICATION_DIAGNOSTIC` and its `scientific_claim` is
+  `DIAGNOSTIC_BEHAVIOR_METRICS_AFTER_HUMAN_IDENTITY_ALIGNMENT`, even when the manifest
+  scope is `FULL_SYSTEM_EVENT_EVALUATION`. These metrics cannot certify an official benchmark.
+  The manifest scope continues to describe the ground-truth population, not the report claim.
+- **Conditional manifests**: `--allow-conditional-evaluation` remains separately required
+  for conditional ground truth; it does not authorize hierarchical adjudication. When both
+  apply, both flags are required and the report retains the hierarchical diagnostic status.
+- **Verification**: `--verify-existing` checks artifact hashes and rejects hierarchical
+  reports relabeled with an official status or claim.

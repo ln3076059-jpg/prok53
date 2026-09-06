@@ -1491,6 +1491,7 @@ def freeze_identity_adjudication(
        same video, vehicle, and cabin scope.
     4. Cryptographic binding to target identity manifest SHA-256.
     5. Refuses overwrite of existing frozen adjudication locks.
+    6. Final adjudication: adjudication_status == 'FINAL'.
     """
     if output_lock_path.exists():
         raise FileExistsError(f"refusing to overwrite frozen identity adjudication: {output_lock_path}")
@@ -1505,6 +1506,8 @@ def freeze_identity_adjudication(
         raise ValueError("identity adjudication requires human_review_status == 'APPROVED'")
     if raw.get("reviewer_type") != "HUMAN":
         raise ValueError("identity adjudication requires reviewer_type == 'HUMAN'")
+    if raw.get("adjudication_status") != "FINAL":
+        raise ValueError("identity adjudication requires adjudication_status == 'FINAL'")
 
     reviewer_id = str(raw.get("reviewer_id", "")).strip()
     if not reviewer_id:
@@ -1603,6 +1606,7 @@ def freeze_identity_adjudication(
         "schema_version": "v2.0",
         "status": "FROZEN_IDENTITY_ADJUDICATION",
         "adjudication_sha256": adjudication_sha,
+        "adjudication_status": "FINAL",
         "adjudication_file": adjudication_path.name,
         "target_identity_manifest_sha256": target_manifest_sha,
         "human_review_status": "APPROVED",

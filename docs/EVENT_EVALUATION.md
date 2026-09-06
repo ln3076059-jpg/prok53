@@ -81,6 +81,17 @@ both truth locks, external-test lock and model lock. It refuses incomplete conte
 ambiguous prediction context, changed truth, an inactive or incomplete model lock, and overwriting
 a prior result. Without the event and prediction positional CSV files the tool reports `NOT_RUN`.
 
+Official evaluation rejects hierarchical human cabin alignment by default. For diagnostics,
+add `--identity-adjudication <frozen-lock.json>` and
+`--allow-hierarchical-adjudication-diagnostic` to the command above, using a separate output.
+Non-empty `cabin_mappings` always produce status
+`MEASURED_HIERARCHICAL_ADJUDICATION_DIAGNOSTIC` and scientific claim
+`DIAGNOSTIC_BEHAVIOR_METRICS_AFTER_HUMAN_IDENTITY_ALIGNMENT`, including on full-system
+ground truth. Conditional manifests additionally require `--allow-conditional-evaluation`.
+Identity adjudication must be human-approved and explicitly `adjudication_status = FINAL`
+before freezing; frozen locks without `FINAL` are rejected. See
+`docs/identity_roster_contract.md` for Policy A/B and the locality rules.
+
 ## External test protocol
 
 - Source, camera, vehicles, and people should be disjoint from training where metadata permits.

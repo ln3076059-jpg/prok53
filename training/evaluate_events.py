@@ -418,6 +418,7 @@ def evaluate_frozen(
     context_truth_lock_path: Path | None = None,
     identity_adjudication_path: Path | None = None,
     allow_conditional_evaluation: bool = False,
+    allow_hierarchical_adjudication_diagnostic: bool = False,
 ) -> dict:
     if output_path.exists():
         raise FileExistsError(f"refusing to overwrite frozen event evaluation: {output_path}")
@@ -573,6 +574,7 @@ def evaluate_frozen(
 
     identity_mapping = None
     adjudication_record = None
+    raw_cabin_mappings = {}
     if identity_adjudication_path is not None:
         if not identity_adjudication_path.is_file():
             raise FileNotFoundError(f"identity adjudication file not found: {identity_adjudication_path}")
@@ -583,6 +585,8 @@ def evaluate_frozen(
             raise ValueError("identity adjudication is not human-approved (human_review_status must be 'APPROVED')")
         if adj_data.get("reviewer_type") != "HUMAN":
             raise ValueError("identity adjudication reviewer_type must be HUMAN")
+        if adj_data.get("adjudication_status") != "FINAL":
+            raise ValueError("identity adjudication requires adjudication_status == 'FINAL'")
         target_manifest_sha = str(adj_data.get("target_identity_manifest_sha256", "")).strip().lower()
         if target_manifest_sha != manifest_sha.lower():
             raise ValueError(
@@ -594,6 +598,15 @@ def evaluate_frozen(
             raise ValueError("identity adjudication has empty or invalid mappings")
 
         raw_cabin_mappings = adj_data.get("cabin_mappings", {})
+        if not isinstance(raw_cabin_mappings, dict):
+            raise ValueError("identity adjudication 'cabin_mappings' must be a dictionary")
+        if raw_cabin_mappings and not allow_hierarchical_adjudication_diagnostic:
+            raise ValueError(
+                "official full-system evaluation must be unassisted; "
+                "hierarchical cabin adjudication requires "
+                "allow_hierarchical_adjudication_diagnostic=True "
+                "(or --allow-hierarchical-adjudication-diagnostic) for diagnostic metrics only"
+            )
 
         seen_targets: set[str] = set()
         for r_occ, g_occ in raw_mappings.items():
@@ -616,6 +629,7 @@ def evaluate_frozen(
             "sha256": sha256_file(identity_adjudication_path),
             "target_identity_manifest_sha256": target_manifest_sha,
             "human_review_status": adj_data.get("human_review_status"),
+            "adjudication_status": adj_data["adjudication_status"],
             "reviewer_id": str(adj_data.get("reviewer_id")),
             "mapping_count": len(raw_mappings),
             "cabin_mapping_count": len(raw_cabin_mappings) if raw_cabin_mappings else 0,
@@ -635,7 +649,9 @@ def evaluate_frozen(
         raise ValueError("frozen event evaluation requires evaluable safety metadata")
 
     report_status = (
-        "MEASURED_CONDITIONAL_DIAGNOSTIC"
+        "MEASURED_HIERARCHICAL_ADJUDICATION_DIAGNOSTIC"
+        if raw_cabin_mappings
+        else "MEASURED_CONDITIONAL_DIAGNOSTIC"
         if eval_scope != "FULL_SYSTEM_EVENT_EVALUATION"
         else "MEASURED_FROZEN_EXTERNAL_TEST"
     )
@@ -668,7 +684,11 @@ def evaluate_frozen(
                 "code_commit": model_lock.get("code_commit"),
             },
             "external_test_lock": external_record,
-            "scientific_claim": "FROZEN_EVENT_METRICS_FOR_THIS_LOCKED_MODEL_ONLY",
+            "scientific_claim": (
+                "DIAGNOSTIC_BEHAVIOR_METRICS_AFTER_HUMAN_IDENTITY_ALIGNMENT"
+                if raw_cabin_mappings
+                else "FROZEN_EVENT_METRICS_FOR_THIS_LOCKED_MODEL_ONLY"
+            ),
         }
     )
     if adjudication_record is not None:
@@ -697,8 +717,9 @@ def verify_evaluation_integrity(report_path: Path) -> dict:
     if report.get("status") not in {
         "MEASURED_FROZEN_EXTERNAL_TEST",
         "MEASURED_CONDITIONAL_DIAGNOSTIC",
+        "MEASURED_HIERARCHICAL_ADJUDICATION_DIAGNOSTIC",
     }:
-        raise ValueError("event evaluation is not a frozen external-test or conditional diagnostic result")
+        raise ValueError("event evaluation is not a frozen external-test or diagnostic result")
     artifacts = {
         "ground truth": report.get("ground_truth", {}),
         "ground-truth lock": {
@@ -726,6 +747,16 @@ def verify_evaluation_integrity(report_path: Path) -> dict:
         if not expected_hash or actual_hash != expected_hash:
             raise ValueError(f"{name} SHA256 changed after frozen evaluation")
         verified[name] = actual_hash
+        if name == "identity-adjudication lock":
+            adjudication = json.loads(path.read_text(encoding="utf-8"))
+            if adjudication.get("adjudication_status") != "FINAL":
+                raise ValueError("identity adjudication requires adjudication_status == 'FINAL'")
+            if adjudication.get("cabin_mappings") and (
+                report["status"] != "MEASURED_HIERARCHICAL_ADJUDICATION_DIAGNOSTIC"
+                or report.get("scientific_claim")
+                != "DIAGNOSTIC_BEHAVIOR_METRICS_AFTER_HUMAN_IDENTITY_ALIGNMENT"
+            ):
+                raise ValueError("hierarchical adjudication result must retain diagnostic status and claim")
     return {
         "status": "FROZEN_EVENT_EVALUATION_INTEGRITY_VERIFIED",
         "report_path": str(report_path),
@@ -777,6 +808,11 @@ def main() -> None:
         action="store_true",
         help="Allow frozen event evaluation on conditional occupant-tracking manifests (diagnostic only)",
     )
+    parser.add_argument(
+        "--allow-hierarchical-adjudication-diagnostic",
+        action="store_true",
+        help="Allow human cabin alignment for diagnostic metrics only, never official benchmarks",
+    )
     parser.add_argument("--output", type=Path, default=Path("reports/event_evaluation.json"))
     args = parser.parse_args()
     if args.verify_existing:
@@ -803,6 +839,7 @@ def main() -> None:
         context_truth_lock_path=args.context_truth_lock,
         identity_adjudication_path=args.identity_adjudication,
         allow_conditional_evaluation=args.allow_conditional_evaluation,
+        allow_hierarchical_adjudication_diagnostic=args.allow_hierarchical_adjudication_diagnostic,
     )
     print(json.dumps(report, indent=2))
 
