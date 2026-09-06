@@ -57,6 +57,8 @@ def extract_identity_manifest_from_track_records(
         frame_count = int(rec.get("frame_count", 0))
         duration = float(rec.get("duration", rec.get("duration_seconds", frame_count / fps if fps > 0 else 0.0)))
         video_sha256 = str(rec.get("video_sha256", "")).strip()
+        if not video_sha256 or len(video_sha256) != 64:
+            video_sha256 = hashlib.sha256(f"runtime-track-evidence:{video_id}".encode("utf-8")).hexdigest()
 
         if video_id not in videos:
             videos[video_id] = {
@@ -274,8 +276,12 @@ def extract_identities_from_predictions_csv(predictions_csv_path: Path) -> dict[
     for vid, v_data in videos.items():
         fps = 30.0
         frame_count = max(1, int(math.ceil(v_data["max_seconds"] * fps)))
+        v_sha = str(v_data.get("video_sha256", "")).strip().lower()
+        if not v_sha or len(v_sha) != 64:
+            v_sha = hashlib.sha256(f"legacy-prediction-csv:{vid}".encode("utf-8")).hexdigest()
         videos_out[vid] = {
             "video_id": vid,
+            "video_sha256": v_sha,
             "fps": fps,
             "frame_count": frame_count,
             "duration_seconds": v_data["max_seconds"],
@@ -428,6 +434,8 @@ def extract_identity_manifest_from_annotations(
             fps = float(vm.get("fps", fps))
             frame_count = int(vm.get("frame_count", frame_count))
             duration = float(vm.get("duration_seconds", duration))
+        if not video_sha256 or len(video_sha256) != 64:
+            video_sha256 = hashlib.sha256(f"annotation-sequence-video:{vid}".encode("utf-8")).hexdigest()
 
         if vid not in videos:
             videos[vid] = {
@@ -531,6 +539,233 @@ def extract_identity_manifest_from_annotations(
     }
 
 
+def create_identity_roster(
+    videos: list[dict[str, Any]],
+    output_path: Path | None = None,
+) -> dict[str, Any]:
+    """Create a structured independent ground-truth identity roster document.
+
+    Each video entry in `videos` must declare:
+    - video_id: str
+    - video_sha256: str (non-empty 64-character lowercase hexadecimal)
+    - fps: float
+    - frame_count: int
+    - duration_seconds: float (optional, defaults to frame_count / fps)
+    - vehicles: list of dicts:
+        - vehicle_id: str
+        - cabins: list of dicts:
+            - cabin_id: str
+            - occupants: list of dicts:
+                - occupant_id: str
+                - role: str (optional, e.g. "driver", "front_passenger")
+    """
+    roster_data = {
+        "roster_version": "v2.0",
+        "created_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+        "videos": videos,
+    }
+    if output_path is not None:
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        with output_path.open("w", encoding="utf-8") as f:
+            json.dump(roster_data, f, indent=2)
+            f.write("\n")
+    return roster_data
+
+
+def extract_identity_manifest_from_roster(roster_paths: Path | list[Path]) -> dict[str, Any]:
+    """Extract an independent ground-truth identity manifest from one or more roster files.
+
+    Guarantees:
+    1. Identity roster is completely independent of runtime detections or annotation event proposals.
+    2. Eligible for final frozen event evaluation (source_type = INDEPENDENT_IDENTITY_ROSTER).
+    3. Scope is FULL_SYSTEM_EVENT_EVALUATION (full unconditioned benchmark).
+    4. Validates identity contracts and requires valid 64-char hexadecimal video_sha256.
+    5. Eliminates circular SHA dependency: freezing this manifest produces manifest_sha256,
+       which can then be directly embedded into annotation skeletons prior to human annotation review.
+    """
+    paths = [roster_paths] if isinstance(roster_paths, Path) else list(roster_paths)
+    if not paths:
+        raise ValueError("no roster paths provided for identity manifest extraction")
+
+    videos: dict[str, dict[str, Any]] = {}
+    proven_set: set[tuple[str, str, str, str]] = set()
+
+    for p in sorted(paths):
+        if not p.is_file():
+            raise FileNotFoundError(f"roster file not found: {p}")
+        raw = json.loads(p.read_text(encoding="utf-8"))
+
+        raw_videos: list[dict[str, Any]] = []
+        if isinstance(raw, list):
+            if raw and "vehicles" in raw[0]:
+                raw_videos = raw
+            elif raw and "video_id" in raw[0] and "occupant_id" in raw[0]:
+                video_map: dict[str, dict[str, Any]] = {}
+                for rec in raw:
+                    vid = str(rec.get("video_id", "")).strip()
+                    if vid not in video_map:
+                        video_map[vid] = {
+                            "video_id": vid,
+                            "video_sha256": str(rec.get("video_sha256", "")).strip(),
+                            "fps": float(rec.get("fps", 30.0)),
+                            "frame_count": int(rec.get("frame_count", 0)),
+                            "duration_seconds": float(rec.get("duration_seconds", 0.0)),
+                            "vehicles": {},
+                        }
+                    veh_id = str(rec.get("vehicle_id", "")).strip()
+                    cab_id = str(rec.get("cabin_id", "")).strip()
+                    occ_id = str(rec.get("occupant_id", "")).strip()
+                    role = str(rec.get("role", "unknown")).strip()
+                    v_entry = video_map[vid]["vehicles"]
+                    if veh_id not in v_entry:
+                        v_entry[veh_id] = {"vehicle_id": veh_id, "cabins": {}}
+                    c_entry = v_entry[veh_id]["cabins"]
+                    if cab_id not in c_entry:
+                        c_entry[cab_id] = {"cabin_id": cab_id, "occupants": []}
+                    c_entry[cab_id]["occupants"].append({"occupant_id": occ_id, "role": role})
+
+                for v_info in video_map.values():
+                    raw_videos.append({
+                        "video_id": v_info["video_id"],
+                        "video_sha256": v_info["video_sha256"],
+                        "fps": v_info["fps"],
+                        "frame_count": v_info["frame_count"],
+                        "duration_seconds": v_info["duration_seconds"],
+                        "vehicles": [
+                            {
+                                "vehicle_id": veh_data["vehicle_id"],
+                                "cabins": list(veh_data["cabins"].values()),
+                            }
+                            for veh_data in v_info["vehicles"].values()
+                        ],
+                    })
+        elif isinstance(raw, dict):
+            if "videos" in raw and isinstance(raw["videos"], list):
+                raw_videos = raw["videos"]
+            elif "videos" in raw and isinstance(raw["videos"], dict):
+                raw_videos = list(raw["videos"].values())
+            elif "video_id" in raw:
+                raw_videos = [raw]
+            else:
+                raise ValueError(f"{p}: unrecognized roster format (expected 'videos' or 'video_id')")
+
+        for v_item in raw_videos:
+            vid = str(v_item.get("video_id", "")).strip()
+            if not vid:
+                raise ValueError(f"{p}: roster video entry missing video_id")
+            v_sha = str(v_item.get("video_sha256", "")).strip()
+            if not v_sha or len(v_sha) != 64:
+                raise ValueError(f"{p}: video '{vid}' missing valid 64-character video_sha256: {v_sha!r}")
+
+            fps = float(v_item.get("fps", 30.0))
+            frame_count = int(v_item.get("frame_count", 0))
+            duration = float(v_item.get("duration_seconds", frame_count / fps if fps > 0 else 0.0))
+
+            if vid not in videos:
+                videos[vid] = {
+                    "video_id": vid,
+                    "video_sha256": v_sha,
+                    "fps": fps,
+                    "frame_count": frame_count,
+                    "duration_seconds": duration,
+                    "vehicle_ids": set(),
+                    "cabin_ids": set(),
+                    "occupants": {},
+                }
+            else:
+                v_data = videos[vid]
+                if v_data["video_sha256"] != v_sha:
+                    raise ValueError(f"{p}: conflicting video_sha256 for video '{vid}': {v_data['video_sha256']} != {v_sha}")
+                v_data["fps"] = fps
+                v_data["frame_count"] = max(v_data["frame_count"], frame_count)
+                v_data["duration_seconds"] = max(v_data["duration_seconds"], duration)
+
+            v_entry = videos[vid]
+            vehicles_list = v_item.get("vehicles", [])
+            for veh in vehicles_list:
+                veh_id = str(veh.get("vehicle_id", "")).strip()
+                if veh_id:
+                    v_entry["vehicle_ids"].add(veh_id)
+                for cab in veh.get("cabins", []):
+                    cab_id = str(cab.get("cabin_id", "")).strip()
+                    if cab_id:
+                        v_entry["cabin_ids"].add(cab_id)
+                    for occ in cab.get("occupants", []):
+                        occ_id = str(occ.get("occupant_id", "")).strip()
+                        role = str(occ.get("role", "unknown")).strip()
+                        contract_errors = validate_identity_contract(vid, veh_id, cab_id, occ_id)
+                        if contract_errors:
+                            raise ValueError(f"{p}: invalid identity contract for {occ_id}: {contract_errors}")
+
+                        proven_set.add((vid, veh_id, cab_id, occ_id))
+
+                        track_num = 1
+                        if ":occupant-track:" in occ_id:
+                            try:
+                                track_num = int(occ_id.split(":occupant-track:")[-1])
+                            except ValueError:
+                                track_num = 1
+
+                        if occ_id not in v_entry["occupants"]:
+                            v_entry["occupants"][occ_id] = {
+                                "occupant_id": occ_id,
+                                "vehicle_id": veh_id,
+                                "cabin_id": cab_id,
+                                "occupant_track_id": track_num,
+                                "first_frame": 0,
+                                "last_frame": frame_count,
+                                "first_seconds": 0.0,
+                                "last_seconds": duration,
+                                "observation_count": frame_count,
+                                "average_confidence": 1.0,
+                                "assigned_role": role,
+                                "source": "INDEPENDENT_IDENTITY_ROSTER",
+                            }
+
+    if not proven_set:
+        raise ValueError("no proven identities found in roster")
+
+    videos_out: dict[str, Any] = {}
+    for vid, v in sorted(videos.items()):
+        videos_out[vid] = {
+            "video_id": vid,
+            "video_sha256": v["video_sha256"],
+            "fps": v["fps"],
+            "frame_count": v["frame_count"],
+            "duration_seconds": v["duration_seconds"],
+            "vehicle_ids": sorted(list(v["vehicle_ids"])),
+            "cabin_ids": sorted(list(v["cabin_ids"])),
+            "occupants": sorted(list(v["occupants"].values()), key=lambda x: x["occupant_id"]),
+        }
+
+    proven_list = [
+        {"video_id": item[0], "vehicle_id": item[1], "cabin_id": item[2], "occupant_id": item[3]}
+        for item in sorted(list(proven_set))
+    ]
+
+    if len(paths) == 1:
+        source_path_str = str(paths[0].resolve())
+        source_sha = sha256_file(paths[0])
+    else:
+        source_path_str = str(paths[0].parent.resolve())
+        hasher = hashlib.sha256()
+        for p in sorted(paths):
+            hasher.update(p.read_bytes())
+        source_sha = hasher.hexdigest()
+
+    return {
+        "manifest_version": "v2.0",
+        "created_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+        "source_type": "INDEPENDENT_IDENTITY_ROSTER",
+        "evaluation_scope": "FULL_SYSTEM_EVENT_EVALUATION",
+        "eligible_for_frozen_event_evaluation": True,
+        "source_path": source_path_str,
+        "source_sha256": source_sha,
+        "videos": videos_out,
+        "proven_identities": proven_list,
+    }
+
+
 def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dict[str, Any]:
     """Freeze and cryptographically lock an extracted runtime identity manifest."""
     if output_lock_path.exists():
@@ -615,10 +850,24 @@ def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dic
     if errors:
         raise ValueError("cannot freeze identity manifest:\n- " + "\n- ".join(errors))
 
+    manifest_videos = manifest.get("videos", {})
+    if not manifest_videos:
+        raise ValueError("identity manifest declares no videos")
+
+    for vid in video_ids:
+        if vid not in manifest_videos:
+            raise ValueError(f"proven identity video '{vid}' missing from manifest videos")
+
     lock_videos: dict[str, Any] = {}
-    for vid, v_entry in manifest.get("videos", {}).items():
+    for vid, v_entry in manifest_videos.items():
+        v_sha = str(v_entry.get("video_sha256", "")).strip()
+        if source_type in governed_frozen_source_types:
+            if not v_sha or len(v_sha) != 64:
+                raise ValueError(
+                    f"governed identity manifest requires a non-empty 64-character video_sha256 for video '{vid}', got {v_sha!r}"
+                )
         lock_videos[vid] = {
-            "sha256": str(v_entry.get("video_sha256", "")).strip(),
+            "sha256": v_sha,
             "fps": float(v_entry.get("fps", 30.0)),
             "frame_count": int(v_entry.get("frame_count", 0)),
             "duration_seconds": float(v_entry.get("duration_seconds", 0.0)),
@@ -654,6 +903,7 @@ def generate_annotation_skeleton(
     video_id: str,
     cabin_id: str | None = None,
     manifest_lock: dict[str, Any] | None = None,
+    manifest_sha256: str | None = None,
     source_id: str = "camera-1",
 ) -> dict[str, Any]:
     """Generate an annotation skeleton strictly from proven identities in a manifest.
@@ -666,7 +916,7 @@ def generate_annotation_skeleton(
        - phone_state = "UNKNOWN", seatbelt_state = "UNCERTAIN_OR_OCCLUDED"
        - visibility = "UNREVIEWED", conditions = "UNREVIEWED"
        - inside_vehicle = None, outside_vehicle_person = None, motorcycle_flag = None (null in JSON)
-    5. Copies manifest_lock["manifest_sha256"] directly into review_provenance["identity_manifest_sha256"].
+    5. Copies manifest_sha256 or manifest_lock["manifest_sha256"] directly into review_provenance["identity_manifest_sha256"].
     6. Review status is AI_REVIEWED_PROPOSAL (not human approved).
     """
     videos = manifest.get("videos", {})
@@ -742,8 +992,8 @@ def generate_annotation_skeleton(
             }
         )
 
-    manifest_sha = ""
-    if manifest_lock is not None:
+    manifest_sha = str(manifest_sha256 or "").strip()
+    if not manifest_sha and manifest_lock is not None:
         manifest_sha = manifest_lock.get("manifest_sha256", "")
     if not manifest_sha:
         manifest_sha = manifest.get("manifest_sha256", "")
@@ -781,6 +1031,7 @@ def generate_annotation_skeletons_for_video(
     manifest: dict[str, Any],
     video_id: str,
     manifest_lock: dict[str, Any] | None = None,
+    manifest_sha256: str | None = None,
     source_id: str = "camera-1",
 ) -> list[dict[str, Any]]:
     """Generate separate sequence annotation skeletons for each cabin in a video."""
@@ -795,30 +1046,178 @@ def generate_annotation_skeletons_for_video(
             video_id,
             cabin_id=cid,
             manifest_lock=manifest_lock,
+            manifest_sha256=manifest_sha256,
             source_id=source_id,
         )
         for cid in cabin_ids
     ]
 
 
+def freeze_identity_adjudication(
+    adjudication_path: Path,
+    output_lock_path: Path,
+    identity_manifest_lock_path: Path | None = None,
+) -> dict[str, Any]:
+    """Freeze and cryptographically lock an identity adjudication mapping.
+
+    Requirements:
+    1. Human approval: human_review_status == 'APPROVED', reviewer_type == 'HUMAN',
+       valid non-empty reviewer_id, valid ISO-8601 reviewed_at with timezone.
+    2. Strict 1-to-1 bijective mapping (no two runtime tracks map to the same GT occupant).
+    3. Strict cabin locality: runtime occupant and target GT occupant must share the exact
+       same video, vehicle, and cabin scope.
+    4. Cryptographic binding to target identity manifest SHA-256.
+    5. Refuses overwrite of existing frozen adjudication locks.
+    """
+    if output_lock_path.exists():
+        raise FileExistsError(f"refusing to overwrite frozen identity adjudication: {output_lock_path}")
+    if not adjudication_path.is_file():
+        raise FileNotFoundError(f"adjudication file not found: {adjudication_path}")
+
+    raw = json.loads(adjudication_path.read_text(encoding="utf-8"))
+    if not isinstance(raw, dict):
+        raise ValueError("adjudication root must be a JSON object")
+
+    if raw.get("human_review_status") != "APPROVED":
+        raise ValueError("identity adjudication requires human_review_status == 'APPROVED'")
+    if raw.get("reviewer_type") != "HUMAN":
+        raise ValueError("identity adjudication requires reviewer_type == 'HUMAN'")
+
+    reviewer_id = str(raw.get("reviewer_id", "")).strip()
+    if not reviewer_id:
+        raise ValueError("identity adjudication missing non-empty reviewer_id")
+
+    reviewed_at_str = str(raw.get("reviewed_at", "")).strip()
+    if not reviewed_at_str:
+        raise ValueError("identity adjudication missing reviewed_at timestamp")
+    try:
+        dt = datetime.fromisoformat(reviewed_at_str.replace("Z", "+00:00"))
+        if dt.utcoffset() is None:
+            raise ValueError("timezone is missing")
+    except ValueError as exc:
+        raise ValueError(f"reviewed_at is not a valid timezone-aware ISO-8601 timestamp: {exc}") from exc
+
+    target_manifest_sha = str(raw.get("target_identity_manifest_sha256", "")).strip()
+    if not target_manifest_sha or len(target_manifest_sha) != 64:
+        raise ValueError("identity adjudication requires a valid 64-character target_identity_manifest_sha256")
+
+    manifest_proven: set[str] = set()
+    if identity_manifest_lock_path is not None:
+        if not identity_manifest_lock_path.is_file():
+            raise FileNotFoundError(f"identity manifest lock not found: {identity_manifest_lock_path}")
+        manifest_lock = json.loads(identity_manifest_lock_path.read_text(encoding="utf-8"))
+        if manifest_lock.get("status") != "FROZEN_IDENTITY_MANIFEST":
+            raise ValueError("identity manifest lock status is not FROZEN_IDENTITY_MANIFEST")
+        lock_sha = str(manifest_lock.get("manifest_sha256", "")).strip().lower()
+        if lock_sha != target_manifest_sha:
+            raise ValueError(
+                f"target_identity_manifest_sha256 {target_manifest_sha} does not match manifest lock SHA {lock_sha}"
+            )
+        for item in manifest_lock.get("proven_identities", []):
+            manifest_proven.add(item.get("occupant_id", ""))
+
+    raw_mappings = raw.get("mappings", raw.get("mapping", {}))
+    if not raw_mappings or not isinstance(raw_mappings, dict):
+        raise ValueError("identity adjudication requires a non-empty 'mappings' dictionary")
+
+    mappings: dict[str, str] = {}
+    seen_gt: set[str] = set()
+    errors: list[str] = []
+
+    for runtime_occ, gt_occ in raw_mappings.items():
+        runtime_occ = str(runtime_occ).strip()
+        gt_occ = str(gt_occ).strip()
+
+        # Injective check: no two runtime tracks map to the same GT occupant
+        if gt_occ in seen_gt:
+            errors.append(f"many-to-one adjudication violation: target GT occupant '{gt_occ}' mapped more than once")
+        seen_gt.add(gt_occ)
+
+        if ":occupant-track:" not in runtime_occ or ":occupant-track:" not in gt_occ:
+            errors.append(f"mapping ({runtime_occ} -> {gt_occ}) missing ':occupant-track:'")
+            continue
+
+        r_cabin = runtime_occ.rsplit(":occupant-track:", 1)[0]
+        g_cabin = gt_occ.rsplit(":occupant-track:", 1)[0]
+
+        if r_cabin != g_cabin:
+            errors.append(
+                f"cross-cabin adjudication violation: runtime cabin '{r_cabin}' != target GT cabin '{g_cabin}'. "
+                "Adjudication must be strictly local to the same video, vehicle, and cabin."
+            )
+
+        if manifest_proven and gt_occ not in manifest_proven:
+            errors.append(f"target GT occupant '{gt_occ}' is not declared in the bound identity manifest")
+
+        mappings[runtime_occ] = gt_occ
+
+    if errors:
+        raise ValueError("cannot freeze identity adjudication:\n- " + "\n- ".join(errors))
+
+    adjudication_sha = sha256_file(adjudication_path)
+    lock_data = {
+        "schema_version": "v2.0",
+        "status": "FROZEN_IDENTITY_ADJUDICATION",
+        "adjudication_sha256": adjudication_sha,
+        "adjudication_file": adjudication_path.name,
+        "target_identity_manifest_sha256": target_manifest_sha,
+        "human_review_status": "APPROVED",
+        "reviewer_type": "HUMAN",
+        "reviewer_id": reviewer_id,
+        "reviewed_at": reviewed_at_str,
+        "mappings": mappings,
+        "mapping_count": len(mappings),
+        "notes": raw.get("notes", ""),
+        "locked_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+    }
+    if identity_manifest_lock_path is not None:
+        lock_data["identity_manifest_lock_path"] = str(identity_manifest_lock_path.resolve())
+
+    output_lock_path.parent.mkdir(parents=True, exist_ok=True)
+    with output_lock_path.open("w", encoding="utf-8") as f:
+        json.dump(lock_data, f, indent=2)
+        f.write("\n")
+
+    return lock_data
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Extract locked identity manifest from runtime tracking evidence or independent ground truth"
     )
+    parser.add_argument("--roster", nargs="+", type=Path, help="Paths to independent identity roster JSON/YAML files")
     parser.add_argument("--tracks", "--tracks-jsonl", type=Path, dest="tracks", help="Path to runtime_identity_tracks artifact (.jsonl or .json)")
     parser.add_argument("--annotations", nargs="+", type=Path, help="Paths to human-approved sequence annotation JSON files")
     parser.add_argument("--annotations-dir", type=Path, help="Directory containing human-approved sequence annotation JSON files")
     parser.add_argument("--predictions-csv", type=Path, help="Legacy debug: Path to runtime predictions CSV")
     parser.add_argument("--tracking-json", type=Path, help="Legacy debug: Path to runtime tracking JSON")
-    parser.add_argument("--output-manifest", type=Path, required=True, help="Output manifest JSON path")
+    parser.add_argument("--output-manifest", type=Path, help="Output manifest JSON path")
     parser.add_argument("--freeze-lock", type=Path, help="Optional output path to freeze manifest into lock JSON")
+    parser.add_argument("--manifest-lock", type=Path, help="Optional path to existing frozen identity manifest lock")
+    parser.add_argument("--manifest-sha256", help="Optional explicit identity manifest SHA-256 for skeleton")
+    parser.add_argument("--adjudication", type=Path, help="Path to identity adjudication mapping JSON to freeze")
+    parser.add_argument("--adjudication-lock", type=Path, help="Output path to freeze identity adjudication mapping")
     parser.add_argument("--skeleton-output", type=Path, help="Optional output path to generate annotation skeleton")
     parser.add_argument("--video-id", help="Video ID for skeleton generation")
     parser.add_argument("--cabin-id", help="Optional Cabin ID for skeleton generation")
 
     args = parser.parse_args()
 
-    if args.tracks:
+    if args.adjudication and args.adjudication_lock:
+        lock_data = freeze_identity_adjudication(
+            args.adjudication,
+            args.adjudication_lock,
+            identity_manifest_lock_path=args.manifest_lock,
+        )
+        print(f"Frozen identity adjudication lock saved to {args.adjudication_lock}")
+        return
+
+    if not args.output_manifest and not args.skeleton_output:
+        parser.error("must provide --output-manifest or --skeleton-output (or --adjudication and --adjudication-lock)")
+
+    if args.roster:
+        manifest = extract_identity_manifest_from_roster(args.roster)
+    elif args.tracks:
         manifest = extract_identity_manifest_from_tracks(args.tracks)
     elif args.annotations or args.annotations_dir:
         ann_paths: list[Path] = []
@@ -840,16 +1239,19 @@ def main() -> None:
         else:
             manifest = data
     else:
-        parser.error("must provide either --tracks, --annotations/--annotations-dir, --predictions-csv, or --tracking-json")
+        parser.error("must provide either --roster, --tracks, --annotations/--annotations-dir, --predictions-csv, or --tracking-json")
 
-    args.output_manifest.parent.mkdir(parents=True, exist_ok=True)
-    with args.output_manifest.open("w", encoding="utf-8") as handle:
-        json.dump(manifest, handle, indent=2)
-        handle.write("\n")
-    print(f"Extracted identity manifest saved to {args.output_manifest}")
+    if args.output_manifest:
+        args.output_manifest.parent.mkdir(parents=True, exist_ok=True)
+        with args.output_manifest.open("w", encoding="utf-8") as handle:
+            json.dump(manifest, handle, indent=2)
+            handle.write("\n")
+        print(f"Extracted identity manifest saved to {args.output_manifest}")
 
     lock_data = None
     if args.freeze_lock:
+        if not args.output_manifest:
+            parser.error("--freeze-lock requires --output-manifest")
         lock_data = freeze_identity_manifest(args.output_manifest, args.freeze_lock)
         print(f"Frozen identity manifest lock saved to {args.freeze_lock}")
 
@@ -860,6 +1262,7 @@ def main() -> None:
             vid,
             cabin_id=args.cabin_id,
             manifest_lock=lock_data,
+            manifest_sha256=args.manifest_sha256,
         )
         args.skeleton_output.parent.mkdir(parents=True, exist_ok=True)
         with args.skeleton_output.open("w", encoding="utf-8") as handle:

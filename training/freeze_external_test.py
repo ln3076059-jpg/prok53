@@ -152,12 +152,18 @@ def freeze_external_test(
             manifest_videos = manifest_lock.get("videos", {})
             manifest_video_ids = set(manifest_lock.get("video_ids", []))
             item_vid = str(item.get("video_id", ""))
-            item_sha = str(item.get("sha256", ""))
-            if manifest_video_ids and item_vid not in manifest_video_ids:
+            item_sha = str(item.get("sha256", "")).strip().lower()
+            if not manifest_video_ids or item_vid not in manifest_video_ids:
                 errors.append(f"{sample_id}: video_id '{item_vid}' is not declared in frozen identity manifest video_ids")
-            if item_vid in manifest_videos:
-                m_sha = manifest_videos[item_vid].get("sha256", "")
-                if m_sha and m_sha != item_sha:
+            if item_vid not in manifest_videos:
+                errors.append(f"{sample_id}: video_id '{item_vid}' is missing from frozen identity manifest videos mapping")
+            else:
+                m_sha = str(manifest_videos[item_vid].get("sha256", "")).strip()
+                if not m_sha or len(m_sha) != 64:
+                    errors.append(
+                        f"{sample_id}: video SHA in identity manifest for '{item_vid}' is missing or not 64 characters ({m_sha!r})"
+                    )
+                elif m_sha.lower() != item_sha.lower():
                     errors.append(
                         f"{sample_id}: video SHA in identity manifest ({m_sha}) does not match external test video SHA ({item_sha})"
                     )
@@ -174,6 +180,21 @@ def freeze_external_test(
             conditions.update(item["conditions"])
         for dimension in disjoint_dimensions:
             external_values[dimension].add(str(item[dimension]))
+
+    if manifest_lock is not None:
+        external_vids = set(external_values["video_id"])
+        manifest_vids = set(manifest_lock.get("video_ids", []))
+        extra_manifest_vids = sorted(manifest_vids - external_vids)
+        if extra_manifest_vids:
+            errors.append(
+                f"frozen identity manifest covers videos not present in external test manifest: {extra_manifest_vids}"
+            )
+        if policy.get("require_full_system_evaluation") is True:
+            manifest_scope = manifest_lock.get("evaluation_scope")
+            if manifest_scope != "FULL_SYSTEM_EVENT_EVALUATION":
+                errors.append(
+                    f"external test policy requires FULL_SYSTEM_EVENT_EVALUATION but identity manifest has '{manifest_scope}'"
+                )
 
     overlaps = {
         dimension: sorted(external_values[dimension] & development_values[dimension])

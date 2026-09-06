@@ -7,14 +7,17 @@ import jsonschema
 import pytest
 
 from training.extract_identity_manifest import (
+    create_identity_roster,
     extract_identities_from_predictions_csv,
     extract_identity_manifest_from_annotations,
+    extract_identity_manifest_from_roster,
     extract_identity_manifest_from_tracks,
+    freeze_identity_adjudication,
     freeze_identity_manifest,
     generate_annotation_skeleton,
     generate_annotation_skeletons_for_video,
 )
-from training.evaluate_events import evaluate, evaluate_frozen
+from training.evaluate_events import evaluate, evaluate_frozen, verify_evaluation_integrity
 from training.freeze_external_test import freeze_external_test
 from training.build_event_truth_from_sequences import process_file
 from training.common import sha256_file
@@ -880,7 +883,7 @@ minimum_independent_groups: {source_id: 1, camera_id: 1, video_id: 1, vehicle_id
     dev_manifest_path = tmp_path / "dev_manifest.jsonl"
     dev_manifest_path.write_text("", encoding="utf-8")
 
-    # Identity manifest lock with MISMATCHED video SHA
+    # Identity manifest lock with MISMATCHED video SHA (64 characters)
     mismatched_lock = {
         "status": "FROZEN_IDENTITY_MANIFEST",
         "manifest_sha256": "m" * 64,
@@ -893,7 +896,7 @@ minimum_independent_groups: {source_id: 1, camera_id: 1, video_id: 1, vehicle_id
         "video_ids": ["vid-sha-bind"],
         "videos": {
             "vid-sha-bind": {
-                "sha256": "different_sha_from_tracking" + "0" * 36,
+                "sha256": "different_sha_from_tracking" + "0" * 37,
                 "fps": 30.0,
                 "frame_count": 300,
                 "duration_seconds": 10.0,
@@ -911,6 +914,28 @@ minimum_independent_groups: {source_id: 1, camera_id: 1, video_id: 1, vehicle_id
             policy_path,
             tmp_path / "frozen_ext.json",
             identity_manifest_lock_path=mismatched_lock_path,
+        )
+
+    # Empty video SHA in identity manifest lock -> REJECTED fail-closed
+    empty_sha_lock = dict(mismatched_lock)
+    empty_sha_lock["videos"] = {
+        "vid-sha-bind": {
+            "sha256": "",
+            "fps": 30.0,
+            "frame_count": 300,
+            "duration_seconds": 10.0,
+        }
+    }
+    empty_sha_lock_path = tmp_path / "empty_sha_id_lock.json"
+    empty_sha_lock_path.write_text(json.dumps(empty_sha_lock), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="is missing or not 64 characters"):
+        freeze_external_test(
+            ext_manifest_path,
+            dev_manifest_path,
+            policy_path,
+            tmp_path / "frozen_ext_empty.json",
+            identity_manifest_lock_path=empty_sha_lock_path,
         )
 
 
@@ -993,6 +1018,731 @@ def test_annotation_manifest_sha_chain_of_custody(tmp_path: Path):
             ext_lock,
             tmp_path / "frozen_out.json",
             identity_manifest_lock_path=manifest_lock,
+        )
+
+
+def test_extract_identity_manifest_from_roster(tmp_path: Path):
+    roster_file = tmp_path / "identity_roster.json"
+    video_sha = "a" * 64
+    roster_data = create_identity_roster(
+        [
+            {
+                "video_id": "vid-roster-1",
+                "video_sha256": video_sha,
+                "fps": 30.0,
+                "frame_count": 600,
+                "vehicles": [
+                    {
+                        "vehicle_id": "video:vid-roster-1:vehicle-track:1",
+                        "cabins": [
+                            {
+                                "cabin_id": "video:vid-roster-1:vehicle-track:1:cabin:0",
+                                "occupants": [
+                                    {
+                                        "occupant_id": "video:vid-roster-1:vehicle-track:1:cabin:0:occupant-track:1",
+                                        "role": "driver",
+                                    },
+                                    {
+                                        "occupant_id": "video:vid-roster-1:vehicle-track:1:cabin:0:occupant-track:2",
+                                        "role": "front_passenger",
+                                    },
+                                ],
+                            }
+                        ],
+                    }
+                ],
+            }
+        ],
+        output_path=roster_file,
+    )
+
+    manifest = extract_identity_manifest_from_roster(roster_file)
+    assert manifest["manifest_version"] == "v2.0"
+    assert manifest["source_type"] == "INDEPENDENT_IDENTITY_ROSTER"
+    assert manifest["evaluation_scope"] == "FULL_SYSTEM_EVENT_EVALUATION"
+    assert manifest["eligible_for_frozen_event_evaluation"] is True
+    assert len(manifest["proven_identities"]) == 2
+    assert manifest["videos"]["vid-roster-1"]["video_sha256"] == video_sha
+
+    manifest_file = tmp_path / "roster_manifest.json"
+    manifest_file.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    lock_file = tmp_path / "roster_manifest_lock.json"
+    lock = freeze_identity_manifest(manifest_file, lock_file)
+
+    assert lock["status"] == "FROZEN_IDENTITY_MANIFEST"
+    assert lock["source_type"] == "INDEPENDENT_IDENTITY_ROSTER"
+    assert lock["evaluation_scope"] == "FULL_SYSTEM_EVENT_EVALUATION"
+    assert lock["eligible_for_frozen_event_evaluation"] is True
+    assert len(lock["manifest_sha256"]) == 64
+
+    # Invalid video SHA in roster -> REJECTED
+    invalid_roster = tmp_path / "invalid_roster.json"
+    create_identity_roster(
+        [
+            {
+                "video_id": "vid-bad",
+                "video_sha256": "too_short",
+                "fps": 30.0,
+                "frame_count": 100,
+                "vehicles": [],
+            }
+        ],
+        output_path=invalid_roster,
+    )
+    with pytest.raises(ValueError, match="missing valid 64-character video_sha256"):
+        extract_identity_manifest_from_roster(invalid_roster)
+
+
+def test_roster_to_annotation_skeleton_pipeline_eliminates_circular_sha(tmp_path: Path):
+    # Step 1: Create independent roster and freeze identity manifest
+    roster_file = tmp_path / "roster.json"
+    v_sha = "f" * 64
+    create_identity_roster(
+        [
+            {
+                "video_id": "vid-streamline",
+                "video_sha256": v_sha,
+                "fps": 30.0,
+                "frame_count": 300,
+                "vehicles": [
+                    {
+                        "vehicle_id": "video:vid-streamline:vehicle-track:1",
+                        "cabins": [
+                            {
+                                "cabin_id": "video:vid-streamline:vehicle-track:1:cabin:0",
+                                "occupants": [
+                                    {
+                                        "occupant_id": "video:vid-streamline:vehicle-track:1:cabin:0:occupant-track:1",
+                                        "role": "driver",
+                                    }
+                                ],
+                            }
+                        ],
+                    }
+                ],
+            }
+        ],
+        output_path=roster_file,
+    )
+    manifest = extract_identity_manifest_from_roster(roster_file)
+    manifest_file = tmp_path / "man.json"
+    manifest_file.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    lock_file = tmp_path / "man_lock.json"
+    lock = freeze_identity_manifest(manifest_file, lock_file)
+    manifest_sha = lock["manifest_sha256"]
+
+    # Step 2: Generate skeleton with pre-bound manifest SHA
+    skeleton = generate_annotation_skeleton(manifest, "vid-streamline", manifest_sha256=manifest_sha)
+    assert skeleton["review_provenance"]["identity_manifest_sha256"] == manifest_sha
+
+    # Step 3: Human annotator reviews and fills in event ground truth
+    skeleton["review_provenance"]["status"] = "APPROVED"
+    skeleton["review_provenance"]["reviewer_type"] = "HUMAN"
+    skeleton["review_provenance"]["reviewer_id"] = "human-annotator-9"
+    skeleton["review_provenance"]["reviewed_at"] = "2026-09-06T00:00:00Z"
+    skeleton["occupants"][0]["reviewer_confirmed_role"] = True
+    skeleton["occupants"][0]["role"] = "driver"
+    skeleton["events"].append(
+        {
+            "event_id": "evt-phone-1",
+            "event_type": "PHONE",
+            "start_time": skeleton["start_time"],
+            "end_time": skeleton["end_time"],
+            "occupant_id": skeleton["occupants"][0]["occupant_id"],
+            "occupant_role": "driver",
+            "label": "PHONE_USE",
+            "visibility": "clear",
+            "confidence": 1.0,
+            "annotator_id": "human-annotator-9",
+        }
+    )
+    ann_file = tmp_path / "ann.json"
+    ann_file.write_text(json.dumps(skeleton, indent=2), encoding="utf-8")
+
+    # Step 4: Build ground-truth CSV (automatically carries forward identity_manifest_sha256)
+    truth_csv = tmp_path / "truth.csv"
+    truth_row = {
+        "video_id": "vid-streamline",
+        "event_id": "evt-phone-1",
+        "event_type": "PHONE",
+        "start_seconds": "0.0",
+        "end_seconds": "5.0",
+        "occupant_id": skeleton["occupants"][0]["occupant_id"],
+        "vehicle_id": skeleton["vehicle_id"],
+        "cabin_id": skeleton["cabin_id"],
+        "inside_vehicle": "true",
+        "outside_vehicle_person": "false",
+        "motorcycle_flag": "false",
+        "label": "PHONE_USE",
+        "occupant_role": "driver",
+        "visibility": "clear",
+        "conditions": "daylight",
+        "human_review_status": "APPROVED",
+        "reviewer_id": "human-annotator-9",
+        "reviewer_type": "HUMAN",
+        "reviewed_at": "2026-09-06T00:00:00Z",
+        "adjudication_status": "FINAL",
+        "notes": "streamline test",
+        "identity_manifest_sha256": skeleton["review_provenance"]["identity_manifest_sha256"],
+    }
+    with truth_csv.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=sorted(REQUIRED_COLUMNS))
+        writer.writeheader()
+        writer.writerow(truth_row)
+    with truth_csv.open(newline="", encoding="utf-8-sig") as f:
+        rows = list(csv.DictReader(f))
+    assert len(rows) == 1
+    assert rows[0]["identity_manifest_sha256"] == manifest_sha
+
+    # Step 5: Freeze event ground truth - succeeds with perfect cryptographic provenance
+    ext_lock = tmp_path / "ext_lock.json"
+    ext_lock.write_text(
+        json.dumps(
+            {
+                "status": "FROZEN_EXTERNAL_TEST",
+                "human_review_status": "ALL_APPROVED",
+                "video_ids": ["vid-streamline"],
+                "identity_manifest_sha256": manifest_sha,
+            }
+        ),
+        encoding="utf-8",
+    )
+    frozen_truth = freeze_event_ground_truth(
+        truth_csv,
+        ext_lock,
+        tmp_path / "frozen_event_truth.json",
+        identity_manifest_lock_path=lock_file,
+    )
+    assert frozen_truth["status"] == "FROZEN_EVENT_GROUND_TRUTH"
+    assert frozen_truth["identity_manifest_sha256"] == manifest_sha
+
+
+def test_evaluate_frozen_scope_guardrails(tmp_path: Path):
+    # Set up conditional manifest (RUNTIME_IDENTITY_TRACKS)
+    manifest_lock_path = tmp_path / "conditional_manifest_lock.json"
+    m_sha = "c" * 64
+    manifest_lock = {
+        "status": "FROZEN_IDENTITY_MANIFEST",
+        "manifest_sha256": m_sha,
+        "manifest_file": "man.json",
+        "source_type": "RUNTIME_IDENTITY_TRACKS",
+        "source_path": str(tmp_path / "tracks.jsonl"),
+        "source_sha256": "s" * 64,
+        "eligible_for_frozen_event_evaluation": True,
+        "evaluation_scope": "CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING",
+        "video_ids": ["vid-cond"],
+        "videos": {"vid-cond": {"sha256": "v" * 64, "fps": 30.0, "frame_count": 300, "duration_seconds": 10.0}},
+        "proven_identities": [
+            {
+                "video_id": "vid-cond",
+                "vehicle_id": "video:vid-cond:vehicle-track:1",
+                "cabin_id": "video:vid-cond:vehicle-track:1:cabin:0",
+                "occupant_id": "video:vid-cond:vehicle-track:1:cabin:0:occupant-track:1",
+            }
+        ],
+    }
+    manifest_lock_path.write_text(json.dumps(manifest_lock), encoding="utf-8")
+
+    truth_csv = tmp_path / "truth.csv"
+    truth_row = {
+        "video_id": "vid-cond",
+        "event_id": "evt-1",
+        "event_type": "PHONE",
+        "start_seconds": "1.0",
+        "end_seconds": "2.0",
+        "occupant_id": "video:vid-cond:vehicle-track:1:cabin:0:occupant-track:1",
+        "vehicle_id": "video:vid-cond:vehicle-track:1",
+        "cabin_id": "video:vid-cond:vehicle-track:1:cabin:0",
+        "inside_vehicle": "true",
+        "outside_vehicle_person": "false",
+        "motorcycle_flag": "false",
+        "label": "PHONE_USE",
+        "occupant_role": "driver",
+        "visibility": "clear",
+        "conditions": "daylight",
+        "human_review_status": "APPROVED",
+        "reviewer_id": "rev-1",
+        "reviewer_type": "HUMAN",
+        "reviewed_at": "2026-09-06T00:00:00Z",
+        "adjudication_status": "FINAL",
+        "notes": "test",
+        "identity_manifest_sha256": m_sha,
+    }
+    with truth_csv.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=sorted(REQUIRED_COLUMNS))
+        writer.writeheader()
+        writer.writerow(truth_row)
+
+    ext_lock_path = tmp_path / "ext_lock.json"
+    ext_lock = {
+        "status": "FROZEN_EXTERNAL_TEST",
+        "human_review_status": "ALL_APPROVED",
+        "video_ids": ["vid-cond"],
+        "identity_manifest_sha256": m_sha,
+    }
+    ext_lock_path.write_text(json.dumps(ext_lock), encoding="utf-8")
+
+    event_lock_path = tmp_path / "event_lock.json"
+    freeze_event_ground_truth(truth_csv, ext_lock_path, event_lock_path, identity_manifest_lock_path=manifest_lock_path)
+
+    context_csv = tmp_path / "context.csv"
+    context_row = {
+        "video_id": "vid-cond",
+        "context_id": "ctx-1",
+        "occupant_id": "video:vid-cond:vehicle-track:1:cabin:0:occupant-track:1",
+        "occupant_role": "driver",
+        "vehicle_id": "video:vid-cond:vehicle-track:1",
+        "cabin_id": "video:vid-cond:vehicle-track:1:cabin:0",
+        "start_seconds": "0.0",
+        "end_seconds": "10.0",
+        "timeline_end_seconds": "10.0",
+        "inside_vehicle": "true",
+        "outside_vehicle_person": "false",
+        "motorcycle_flag": "false",
+        "phone_state": "PHONE_USE",
+        "seatbelt_state": "FASTENED",
+        "visibility": "clear",
+        "conditions": "daylight",
+        "human_review_status": "APPROVED",
+        "reviewer_id": "rev-1",
+        "reviewer_type": "HUMAN",
+        "reviewed_at": "2026-09-06T00:00:00Z",
+        "adjudication_status": "FINAL",
+        "notes": "context test",
+        "identity_manifest_sha256": m_sha,
+    }
+    with context_csv.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=sorted(CONTEXT_REQUIRED_COLUMNS))
+        writer.writeheader()
+        writer.writerow(context_row)
+
+    context_lock_path = tmp_path / "context_lock.json"
+    freeze_context_ground_truth(context_csv, ext_lock_path, context_lock_path, identity_manifest_lock_path=manifest_lock_path)
+
+    pred_csv = tmp_path / "preds.csv"
+    pred_row = dict(truth_row)
+    pred_row["observation_count"] = "5"
+    pred_row["start_frame"] = "30"
+    pred_row["end_frame"] = "60"
+    with pred_csv.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=sorted(pred_row.keys()))
+        writer.writeheader()
+        writer.writerow(pred_row)
+
+    model_lock_path = tmp_path / "model_lock.json"
+    model_lock_path.write_text(
+        json.dumps(
+            {
+                "record_schema": "ROADWATCH_MODEL_VERSION_V2",
+                "activation_state": "ACTIVE",
+                "experiment_id": "exp-test",
+                "locked_at": "2026-09-06T00:00:00Z",
+                "weights_sha256": "w" * 64,
+                "config_sha256": "c" * 64,
+                "training_data_manifest_sha256": "t" * 64,
+                "validation_metric_artifact": {"sha256": "v" * 64},
+                "threshold_calibration_artifact": {"sha256": "k" * 64},
+                "human_review_readiness_artifact": {"governed_training_ready": True},
+                "code_commit": "abc1234",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    out_json = tmp_path / "eval_out.json"
+
+    # Default: hard reject conditional manifests
+    with pytest.raises(ValueError, match="refusing frozen event evaluation: manifest evaluation_scope is 'CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING'"):
+        evaluate_frozen(
+            truth_csv,
+            pred_csv,
+            event_lock_path,
+            model_lock_path,
+            out_json,
+            video_minutes=10.0 / 60.0,
+            context_truth_path=context_csv,
+            context_truth_lock_path=context_lock_path,
+            allow_conditional_evaluation=False,
+        )
+
+    # Opt-in diagnostic conditional evaluation succeeds with explicit caution recorded
+    out_cond_json = tmp_path / "eval_cond_out.json"
+    report = evaluate_frozen(
+        truth_csv,
+        pred_csv,
+        event_lock_path,
+        model_lock_path,
+        out_cond_json,
+        video_minutes=10.0 / 60.0,
+        context_truth_path=context_csv,
+        context_truth_lock_path=context_lock_path,
+        allow_conditional_evaluation=True,
+    )
+    assert report["status"] == "MEASURED_FROZEN_EXTERNAL_TEST"
+    assert report["identity_manifest"]["evaluation_scope"] == "CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING"
+    assert report["identity_manifest"]["conditional_evaluation_allowed"] is True
+    assert "scope_caution" in report["identity_manifest"]
+
+
+def test_freeze_identity_adjudication_bijective_and_locality(tmp_path: Path):
+    target_manifest_sha = "9" * 64
+    valid_adjudication = {
+        "human_review_status": "APPROVED",
+        "reviewer_type": "HUMAN",
+        "reviewer_id": "auditor-1",
+        "reviewed_at": "2026-09-06T00:00:00Z",
+        "target_identity_manifest_sha256": target_manifest_sha,
+        "mappings": {
+            "video:v1:vehicle-track:1:cabin:0:occupant-track:88": "video:v1:vehicle-track:1:cabin:0:occupant-track:1",
+            "video:v1:vehicle-track:1:cabin:0:occupant-track:89": "video:v1:vehicle-track:1:cabin:0:occupant-track:2",
+        },
+    }
+    adj_file = tmp_path / "adj.json"
+    adj_file.write_text(json.dumps(valid_adjudication, indent=2), encoding="utf-8")
+    lock_file = tmp_path / "adj_lock.json"
+    lock = freeze_identity_adjudication(adj_file, lock_file)
+
+    assert lock["status"] == "FROZEN_IDENTITY_ADJUDICATION"
+    assert lock["human_review_status"] == "APPROVED"
+    assert lock["mapping_count"] == 2
+    assert len(lock["adjudication_sha256"]) == 64
+
+    # Many-to-one mapping rejection
+    many_to_one = dict(valid_adjudication)
+    many_to_one["mappings"] = {
+        "video:v1:vehicle-track:1:cabin:0:occupant-track:88": "video:v1:vehicle-track:1:cabin:0:occupant-track:1",
+        "video:v1:vehicle-track:1:cabin:0:occupant-track:89": "video:v1:vehicle-track:1:cabin:0:occupant-track:1",  # Duplicate target!
+    }
+    m21_file = tmp_path / "m21.json"
+    m21_file.write_text(json.dumps(many_to_one), encoding="utf-8")
+    with pytest.raises(ValueError, match="many-to-one adjudication violation"):
+        freeze_identity_adjudication(m21_file, tmp_path / "m21_lock.json")
+
+    # Cross-cabin mapping rejection
+    cross_cabin = dict(valid_adjudication)
+    cross_cabin["mappings"] = {
+        "video:v1:vehicle-track:1:cabin:0:occupant-track:88": "video:v1:vehicle-track:1:cabin:1:occupant-track:1",  # Cabin 0 -> Cabin 1!
+    }
+    xcab_file = tmp_path / "xcab.json"
+    xcab_file.write_text(json.dumps(cross_cabin), encoding="utf-8")
+    with pytest.raises(ValueError, match="cross-cabin adjudication violation"):
+        freeze_identity_adjudication(xcab_file, tmp_path / "xcab_lock.json")
+
+    # Non-human review rejection
+    non_human = dict(valid_adjudication)
+    non_human["reviewer_type"] = "AI"
+    nh_file = tmp_path / "nh.json"
+    nh_file.write_text(json.dumps(non_human), encoding="utf-8")
+    with pytest.raises(ValueError, match="reviewer_type == 'HUMAN'"):
+        freeze_identity_adjudication(nh_file, tmp_path / "nh_lock.json")
+
+
+def test_evaluate_frozen_governed_identity_adjudication(tmp_path: Path):
+    m_sha = "8" * 64
+    manifest_lock_path = tmp_path / "full_manifest_lock.json"
+    manifest_lock = {
+        "status": "FROZEN_IDENTITY_MANIFEST",
+        "manifest_sha256": m_sha,
+        "manifest_file": "man.json",
+        "source_type": "INDEPENDENT_IDENTITY_ROSTER",
+        "source_path": str(tmp_path / "roster.json"),
+        "source_sha256": "s" * 64,
+        "eligible_for_frozen_event_evaluation": True,
+        "evaluation_scope": "FULL_SYSTEM_EVENT_EVALUATION",
+        "video_ids": ["vid-adj"],
+        "videos": {"vid-adj": {"sha256": "v" * 64, "fps": 30.0, "frame_count": 300, "duration_seconds": 10.0}},
+        "proven_identities": [
+            {
+                "video_id": "vid-adj",
+                "vehicle_id": "video:vid-adj:vehicle-track:1",
+                "cabin_id": "video:vid-adj:vehicle-track:1:cabin:0",
+                "occupant_id": "video:vid-adj:vehicle-track:1:cabin:0:occupant-track:1",
+            },
+            {
+                "video_id": "vid-adj",
+                "vehicle_id": "video:vid-adj:vehicle-track:1",
+                "cabin_id": "video:vid-adj:vehicle-track:1:cabin:0",
+                "occupant_id": "video:vid-adj:vehicle-track:1:cabin:0:occupant-track:77",
+            },
+        ],
+    }
+    manifest_lock_path.write_text(json.dumps(manifest_lock), encoding="utf-8")
+
+    truth_csv = tmp_path / "truth.csv"
+    truth_row = {
+        "video_id": "vid-adj",
+        "event_id": "evt-1",
+        "event_type": "PHONE",
+        "start_seconds": "1.0",
+        "end_seconds": "2.0",
+        "occupant_id": "video:vid-adj:vehicle-track:1:cabin:0:occupant-track:1",
+        "vehicle_id": "video:vid-adj:vehicle-track:1",
+        "cabin_id": "video:vid-adj:vehicle-track:1:cabin:0",
+        "inside_vehicle": "true",
+        "outside_vehicle_person": "false",
+        "motorcycle_flag": "false",
+        "label": "PHONE_USE",
+        "occupant_role": "driver",
+        "visibility": "clear",
+        "conditions": "daylight",
+        "human_review_status": "APPROVED",
+        "reviewer_id": "rev-1",
+        "reviewer_type": "HUMAN",
+        "reviewed_at": "2026-09-06T00:00:00Z",
+        "adjudication_status": "FINAL",
+        "notes": "test",
+        "identity_manifest_sha256": m_sha,
+    }
+    with truth_csv.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=sorted(REQUIRED_COLUMNS))
+        writer.writeheader()
+        writer.writerow(truth_row)
+
+    ext_lock_path = tmp_path / "ext_lock.json"
+    ext_lock_path.write_text(
+        json.dumps(
+            {
+                "status": "FROZEN_EXTERNAL_TEST",
+                "human_review_status": "ALL_APPROVED",
+                "video_ids": ["vid-adj"],
+                "identity_manifest_sha256": m_sha,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    event_lock_path = tmp_path / "event_lock.json"
+    freeze_event_ground_truth(truth_csv, ext_lock_path, event_lock_path, identity_manifest_lock_path=manifest_lock_path)
+
+    context_csv = tmp_path / "context.csv"
+    context_row_1 = {
+        "video_id": "vid-adj",
+        "context_id": "ctx-1",
+        "occupant_id": "video:vid-adj:vehicle-track:1:cabin:0:occupant-track:1",
+        "occupant_role": "driver",
+        "vehicle_id": "video:vid-adj:vehicle-track:1",
+        "cabin_id": "video:vid-adj:vehicle-track:1:cabin:0",
+        "start_seconds": "0.0",
+        "end_seconds": "10.0",
+        "timeline_end_seconds": "10.0",
+        "inside_vehicle": "true",
+        "outside_vehicle_person": "false",
+        "motorcycle_flag": "false",
+        "phone_state": "PHONE_USE",
+        "seatbelt_state": "FASTENED",
+        "visibility": "clear",
+        "conditions": "daylight",
+        "human_review_status": "APPROVED",
+        "reviewer_id": "rev-1",
+        "reviewer_type": "HUMAN",
+        "reviewed_at": "2026-09-06T00:00:00Z",
+        "adjudication_status": "FINAL",
+        "notes": "context test",
+        "identity_manifest_sha256": m_sha,
+    }
+    context_row_77 = dict(context_row_1)
+    context_row_77["context_id"] = "ctx-77"
+    context_row_77["occupant_id"] = "video:vid-adj:vehicle-track:1:cabin:0:occupant-track:77"
+    with context_csv.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=sorted(CONTEXT_REQUIRED_COLUMNS))
+        writer.writeheader()
+        writer.writerow(context_row_1)
+        writer.writerow(context_row_77)
+
+    context_lock_path = tmp_path / "context_lock.json"
+    freeze_context_ground_truth(context_csv, ext_lock_path, context_lock_path, identity_manifest_lock_path=manifest_lock_path)
+
+    # Model prediction has runtime track ID 77
+    pred_csv = tmp_path / "pred_77.csv"
+    pred_row = dict(truth_row)
+    pred_row["occupant_id"] = "video:vid-adj:vehicle-track:1:cabin:0:occupant-track:77"
+    pred_row["observation_count"] = "5"
+    pred_row["start_frame"] = "30"
+    pred_row["end_frame"] = "60"
+    with pred_csv.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=sorted(pred_row.keys()))
+        writer.writeheader()
+        writer.writerow(pred_row)
+
+    model_lock_path = tmp_path / "model_lock.json"
+    model_lock_path.write_text(
+        json.dumps(
+            {
+                "record_schema": "ROADWATCH_MODEL_VERSION_V2",
+                "activation_state": "ACTIVE",
+                "experiment_id": "exp-adj",
+                "locked_at": "2026-09-06T00:00:00Z",
+                "weights_sha256": "w" * 64,
+                "config_sha256": "c" * 64,
+                "training_data_manifest_sha256": "t" * 64,
+                "validation_metric_artifact": {"sha256": "v" * 64},
+                "threshold_calibration_artifact": {"sha256": "k" * 64},
+                "human_review_readiness_artifact": {"governed_training_ready": True},
+                "code_commit": "abc1234",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    # Un-adjudicated evaluate_frozen produces 0 TP, 1 Missed Event
+    unadj_report_path = tmp_path / "unadj_report.json"
+    unadj_report = evaluate_frozen(
+        truth_csv,
+        pred_csv,
+        event_lock_path,
+        model_lock_path,
+        unadj_report_path,
+        video_minutes=10.0 / 60.0,
+        context_truth_path=context_csv,
+        context_truth_lock_path=context_lock_path,
+    )
+    assert unadj_report["event_types"]["PHONE"]["true_positives"] == 0
+    assert unadj_report["event_types"]["PHONE"]["missed_events"] == 1
+
+    # Attempting to pass raw unfrozen mapping raises ValueError
+    raw_adj_path = tmp_path / "raw_adj.json"
+    raw_adj_path.write_text(json.dumps({"mappings": {"video:vid-adj:vehicle-track:1:cabin:0:occupant-track:77": "video:vid-adj:vehicle-track:1:cabin:0:occupant-track:1"}}))
+    with pytest.raises(ValueError, match="must be a FROZEN_IDENTITY_ADJUDICATION artifact"):
+        evaluate_frozen(
+            truth_csv,
+            pred_csv,
+            event_lock_path,
+            model_lock_path,
+            tmp_path / "err.json",
+            video_minutes=10.0 / 60.0,
+            context_truth_path=context_csv,
+            context_truth_lock_path=context_lock_path,
+            identity_adjudication_path=raw_adj_path,
+        )
+
+    # Create approved adjudication and freeze it
+    valid_adj = {
+        "human_review_status": "APPROVED",
+        "reviewer_type": "HUMAN",
+        "reviewer_id": "auditor-42",
+        "reviewed_at": "2026-09-06T00:00:00Z",
+        "target_identity_manifest_sha256": m_sha,
+        "mappings": {
+            "video:vid-adj:vehicle-track:1:cabin:0:occupant-track:77": "video:vid-adj:vehicle-track:1:cabin:0:occupant-track:1"
+        },
+    }
+    adj_in = tmp_path / "adj_in.json"
+    adj_in.write_text(json.dumps(valid_adj, indent=2))
+    adj_lock = tmp_path / "adj_lock.json"
+    freeze_identity_adjudication(adj_in, adj_lock, identity_manifest_lock_path=manifest_lock_path)
+
+    # Evaluated with frozen adjudication -> 1 TP, 0 Missed Events
+    adj_report_path = tmp_path / "adj_report.json"
+    adj_report = evaluate_frozen(
+        truth_csv,
+        pred_csv,
+        event_lock_path,
+        model_lock_path,
+        adj_report_path,
+        video_minutes=10.0 / 60.0,
+        context_truth_path=context_csv,
+        context_truth_lock_path=context_lock_path,
+        identity_adjudication_path=adj_lock,
+    )
+    assert adj_report["event_types"]["PHONE"]["true_positives"] == 1
+    assert adj_report["event_types"]["PHONE"]["missed_events"] == 0
+    assert "identity_adjudication_lock" in adj_report
+    assert adj_report["identity_adjudication_lock"]["reviewer_id"] == "auditor-42"
+
+    # Integrity verification verifies the adjudication lock artifact as well
+    integrity = verify_evaluation_integrity(adj_report_path)
+    assert integrity["status"] == "FROZEN_EVENT_EVALUATION_INTEGRITY_VERIFIED"
+    assert "identity-adjudication lock" in integrity["verified_artifacts"]
+
+
+def test_freeze_external_test_bijective_video_coverage(tmp_path: Path):
+    policy_path = tmp_path / "policy.yaml"
+    policy_path.write_text(
+        """schema_version: 1
+dataset_role: EXTERNAL_TEST
+require_identity_manifest: true
+required_fields:
+  - sample_id
+  - dataset_role
+  - source_id
+  - camera_id
+  - video_id
+  - vehicle_id
+  - person_id
+  - video_path
+  - sha256
+  - annotation_path
+  - annotation_sha256
+  - conditions
+  - human_review_status
+  - reviewer_id
+  - reviewer_type
+  - reviewed_at
+required_condition_coverage: [daylight]
+disjoint_dimensions: [sha256, source_id, camera_id, video_id, vehicle_id, person_id]
+minimum_independent_groups: {source_id: 1, camera_id: 1, video_id: 1, vehicle_id: 1, person_id: 1}
+""",
+        encoding="utf-8",
+    )
+
+    v1 = tmp_path / "v1.mp4"
+    v1.write_bytes(b"video 1")
+    v1_sha = sha256_file(v1)
+
+    ann1 = tmp_path / "ann1.json"
+    ann1.write_text("[]")
+    ann1_sha = sha256_file(ann1)
+
+    record1 = {
+        "sample_id": "s1",
+        "dataset_role": "EXTERNAL_TEST",
+        "source_id": "src1",
+        "camera_id": "cam1",
+        "video_id": "vid-1",
+        "vehicle_id": "veh1",
+        "person_id": "p1",
+        "video_path": str(v1.resolve()),
+        "sha256": v1_sha,
+        "annotation_path": str(ann1.resolve()),
+        "annotation_sha256": ann1_sha,
+        "conditions": ["daylight"],
+        "human_review_status": "APPROVED",
+        "reviewer_id": "rev1",
+        "reviewer_type": "HUMAN",
+        "reviewed_at": "2026-09-05T00:00:00Z",
+    }
+    ext_manifest_path = tmp_path / "ext_manifest.jsonl"
+    ext_manifest_path.write_text(json.dumps(record1) + "\n")
+    dev_manifest_path = tmp_path / "dev_manifest.jsonl"
+    dev_manifest_path.write_text("")
+
+    # Identity manifest lock has vid-1 AND extra vid-2
+    extra_vid_lock = {
+        "status": "FROZEN_IDENTITY_MANIFEST",
+        "manifest_sha256": "m" * 64,
+        "manifest_file": "man.json",
+        "source_type": "INDEPENDENT_IDENTITY_ROSTER",
+        "source_path": str(v1.resolve()),
+        "source_sha256": v1_sha,
+        "eligible_for_frozen_event_evaluation": True,
+        "evaluation_scope": "FULL_SYSTEM_EVENT_EVALUATION",
+        "video_ids": ["vid-1", "vid-2"],  # Extra video!
+        "videos": {
+            "vid-1": {"sha256": v1_sha, "fps": 30.0, "frame_count": 300, "duration_seconds": 10.0},
+            "vid-2": {"sha256": "2" * 64, "fps": 30.0, "frame_count": 300, "duration_seconds": 10.0},
+        },
+        "proven_identities": [],
+    }
+    extra_vid_lock_path = tmp_path / "extra_vid_lock.json"
+    extra_vid_lock_path.write_text(json.dumps(extra_vid_lock))
+
+    with pytest.raises(ValueError, match="frozen identity manifest covers videos not present in external test manifest: \\['vid-2'\\]"):
+        freeze_external_test(
+            ext_manifest_path,
+            dev_manifest_path,
+            policy_path,
+            tmp_path / "frozen_extra.json",
+            identity_manifest_lock_path=extra_vid_lock_path,
         )
 
 

@@ -407,6 +407,7 @@ def evaluate_frozen(
     context_truth_path: Path | None = None,
     context_truth_lock_path: Path | None = None,
     identity_adjudication_path: Path | None = None,
+    allow_conditional_evaluation: bool = False,
 ) -> dict:
     if output_path.exists():
         raise FileExistsError(f"refusing to overwrite frozen event evaluation: {output_path}")
@@ -496,27 +497,6 @@ def evaluate_frozen(
             f"({locked_minutes:.9f})"
         )
 
-    truth_rows, _ = _read(truth_path)
-    prediction_rows, pred_fields = _read(prediction_path)
-    context_rows, _ = _read(context_truth_path, CONTEXT_REQUIRED)
-
-    identity_mapping = None
-    if identity_adjudication_path is not None and identity_adjudication_path.is_file():
-        adj_data = json.loads(identity_adjudication_path.read_text(encoding="utf-8"))
-        identity_mapping = adj_data.get("mappings", adj_data)
-
-    report = evaluate(
-        truth_rows,
-        prediction_rows,
-        video_minutes,
-        tolerance_seconds,
-        prediction_fieldnames=pred_fields,
-        context_rows=context_rows,
-        identity_mapping=identity_mapping,
-    )
-    if report.get("safety_invariant_counters") == "NOT_EVALUABLE":
-        raise ValueError("frozen event evaluation requires evaluable safety metadata")
-
     manifest_sha = ground_truth_lock.get("identity_manifest_sha256")
     context_manifest_sha = context_lock.get("identity_manifest_sha256")
     external_manifest_sha = external_lock.get("identity_manifest_sha256")
@@ -533,6 +513,10 @@ def evaluate_frozen(
             "frozen identity manifest SHA mismatch across artifacts: "
             f"event={manifest_sha!r}, context={context_manifest_sha!r}, external={external_manifest_sha!r}"
         )
+
+    truth_rows, _ = _read(truth_path)
+    prediction_rows, pred_fields = _read(prediction_path)
+    context_rows, _ = _read(context_truth_path, CONTEXT_REQUIRED)
 
     # Check that truth rows with identity_manifest_sha256 match
     for t_row in truth_rows:
@@ -567,6 +551,74 @@ def evaluate_frozen(
     elif ground_truth_lock.get("evaluation_scope"):
         eval_scope = ground_truth_lock["evaluation_scope"]
 
+    if eval_scope != "FULL_SYSTEM_EVENT_EVALUATION":
+        if not allow_conditional_evaluation:
+            raise ValueError(
+                f"refusing frozen event evaluation: manifest evaluation_scope is '{eval_scope}'. "
+                "Final frozen event evaluation requires FULL_SYSTEM_EVENT_EVALUATION "
+                "(use an independent identity roster or independent ground-truth annotations). "
+                "To conduct diagnostic conditional evaluation on tracked occupants only, "
+                "explicitly specify allow_conditional_evaluation=True (or --allow-conditional-evaluation)."
+            )
+
+    identity_mapping = None
+    adjudication_record = None
+    if identity_adjudication_path is not None:
+        if not identity_adjudication_path.is_file():
+            raise FileNotFoundError(f"identity adjudication file not found: {identity_adjudication_path}")
+        adj_data = json.loads(identity_adjudication_path.read_text(encoding="utf-8"))
+        if adj_data.get("status") != "FROZEN_IDENTITY_ADJUDICATION":
+            raise ValueError("identity adjudication must be a FROZEN_IDENTITY_ADJUDICATION artifact")
+        if adj_data.get("human_review_status") != "APPROVED":
+            raise ValueError("identity adjudication is not human-approved (human_review_status must be 'APPROVED')")
+        if adj_data.get("reviewer_type") != "HUMAN":
+            raise ValueError("identity adjudication reviewer_type must be HUMAN")
+        target_manifest_sha = str(adj_data.get("target_identity_manifest_sha256", "")).strip().lower()
+        if target_manifest_sha != manifest_sha.lower():
+            raise ValueError(
+                f"identity adjudication targets manifest {target_manifest_sha}, but frozen truth binds {manifest_sha}"
+            )
+
+        raw_mappings = adj_data.get("mappings", {})
+        if not raw_mappings or not isinstance(raw_mappings, dict):
+            raise ValueError("identity adjudication has empty or invalid mappings")
+
+        seen_targets: set[str] = set()
+        for r_occ, g_occ in raw_mappings.items():
+            if g_occ in seen_targets:
+                raise ValueError(f"identity adjudication violation: duplicate target '{g_occ}' (many-to-one mapping)")
+            seen_targets.add(g_occ)
+            if ":occupant-track:" not in r_occ or ":occupant-track:" not in g_occ:
+                raise ValueError(f"identity adjudication mapping missing ':occupant-track:': {r_occ} -> {g_occ}")
+            r_cab = r_occ.rsplit(":occupant-track:", 1)[0]
+            g_cab = g_occ.rsplit(":occupant-track:", 1)[0]
+            if r_cab != g_cab:
+                raise ValueError(
+                    f"cross-cabin identity adjudication violation: {r_cab} != {g_cab}"
+                )
+
+        identity_mapping = raw_mappings
+        adjudication_record = {
+            "path": str(identity_adjudication_path.resolve()),
+            "sha256": sha256_file(identity_adjudication_path),
+            "target_identity_manifest_sha256": target_manifest_sha,
+            "human_review_status": adj_data.get("human_review_status"),
+            "reviewer_id": str(adj_data.get("reviewer_id")),
+            "mapping_count": len(raw_mappings),
+        }
+
+    report = evaluate(
+        truth_rows,
+        prediction_rows,
+        video_minutes,
+        tolerance_seconds,
+        prediction_fieldnames=pred_fields,
+        context_rows=context_rows,
+        identity_mapping=identity_mapping,
+    )
+    if report.get("safety_invariant_counters") == "NOT_EVALUABLE":
+        raise ValueError("frozen event evaluation requires evaluable safety metadata")
+
     report.update(
         {
             "status": "MEASURED_FROZEN_EXTERNAL_TEST",
@@ -599,10 +651,14 @@ def evaluate_frozen(
             "scientific_claim": "FROZEN_EVENT_METRICS_FOR_THIS_LOCKED_MODEL_ONLY",
         }
     )
+    if adjudication_record is not None:
+        report["identity_adjudication_lock"] = adjudication_record
+
     report["identity_manifest"] = {
         "status": "BOUND_FROZEN_IDENTITY_MANIFEST",
         "manifest_sha256": manifest_sha,
         "evaluation_scope": eval_scope,
+        "conditional_evaluation_allowed": allow_conditional_evaluation if eval_scope != "FULL_SYSTEM_EVENT_EVALUATION" else False,
     }
     if eval_scope == "CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING":
         report["identity_manifest"]["scope_caution"] = (
@@ -635,6 +691,8 @@ def verify_evaluation_integrity(report_path: Path) -> dict:
         "model lock": report.get("model_lock", {}),
         "external-test lock": report.get("external_test_lock", {}),
     }
+    if "identity_adjudication_lock" in report:
+        artifacts["identity-adjudication lock"] = report["identity_adjudication_lock"]
     verified: dict[str, str] = {}
     for name, record in artifacts.items():
         path = Path(str(record.get("path", "")))
@@ -689,7 +747,12 @@ def main() -> None:
     parser.add_argument(
         "--identity-adjudication",
         type=Path,
-        help="Optional path to identity adjudication mapping JSON",
+        help="Optional path to frozen identity adjudication mapping JSON (FROZEN_IDENTITY_ADJUDICATION)",
+    )
+    parser.add_argument(
+        "--allow-conditional-evaluation",
+        action="store_true",
+        help="Allow frozen event evaluation on conditional occupant-tracking manifests (diagnostic only)",
     )
     parser.add_argument("--output", type=Path, default=Path("reports/event_evaluation.json"))
     args = parser.parse_args()
@@ -716,6 +779,7 @@ def main() -> None:
         context_truth_path=args.context_truth,
         context_truth_lock_path=args.context_truth_lock,
         identity_adjudication_path=args.identity_adjudication,
+        allow_conditional_evaluation=args.allow_conditional_evaluation,
     )
     print(json.dumps(report, indent=2))
 
