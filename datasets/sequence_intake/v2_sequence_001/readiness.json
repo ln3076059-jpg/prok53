@@ -35,13 +35,13 @@
   "event_sequences_directory_exists": false,
   "external_policy": {
     "path": "datasets/v2_external_test_policy.yaml",
-    "sha256": "0b2bf2e26410918e02c0ce211db2c08c2149fb761ae4b16ee8cfeae19a666e35",
+    "sha256": "99107566ec2e8a1998687b0add8d1ff4e2dbc52f042aad0253a920a2f103f7f4",
     "minimum_independent_groups": {
       "source_id": 2,
       "camera_id": 3,
       "video_id": 12,
-      "vehicle_id": 8,
-      "person_id": 8
+      "physical_vehicle_group_id": 8,
+      "person_group_ids": 8
     },
     "required_condition_coverage": [
       "daylight",
@@ -65,8 +65,13 @@
       "camera_id",
       "video_id",
       "vehicle_id",
-      "person_id"
-    ]
+      "person_id",
+      "capture_session_id",
+      "physical_vehicle_group_id",
+      "person_group_ids"
+    ],
+    "require_full_system_evaluation": true,
+    "require_sequence_intake": true
   },
   "registered_video_sources": [
     {
@@ -81,5 +86,8 @@
   "temporal_calibration_run": false,
   "external_freeze_run": false,
   "event_evaluation_run": false,
-  "canonical_frozen_model_test_rerun": false
+  "canonical_frozen_model_test_rerun": false,
+  "policy_checked_at_utc": "2026-09-06T04:20:00.153386+00:00",
+  "intake_gate_status": "NOT_READY_FOR_UNTOUCHED_FREEZE",
+  "intake_gate_reason": "No real holdout videos or complete development physical lineage supplied."
 }

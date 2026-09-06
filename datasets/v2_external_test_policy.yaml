@@ -1,6 +1,8 @@
 schema_version: 1
 dataset_role: EXTERNAL_TEST
 require_identity_manifest: true
+require_full_system_evaluation: true
+require_sequence_intake: true
 required_fields:
   - sample_id
   - dataset_role
@@ -18,6 +20,16 @@ required_fields:
   - reviewer_id
   - reviewer_type
   - reviewed_at
+  - proposed_role
+  - capture_session_id
+  - physical_vehicle_group_id
+  - person_group_ids
+  - prior_usage
+  - model_predictions_seen
+  - rights_evidence_path
+  - rights_evidence_sha256
+  - independence_evidence_path
+  - independence_evidence_sha256
 required_condition_coverage:
   - daylight
   - night
@@ -40,12 +52,15 @@ disjoint_dimensions:
   - video_id
   - vehicle_id
   - person_id
+  - capture_session_id
+  - physical_vehicle_group_id
+  - person_group_ids
 minimum_independent_groups:
   source_id: 2
   camera_id: 3
   video_id: 12
-  vehicle_id: 8
-  person_id: 8
+  physical_vehicle_group_id: 8
+  person_group_ids: 8
 policy:
   - Every video and annotation must be human-reviewed before freezing.
   - Each annotation is a JSON list of PHONE/NO_SEATBELT intervals with occupant roles.

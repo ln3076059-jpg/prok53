@@ -9,6 +9,7 @@ from pathlib import Path
 import yaml
 
 from training.common import sha256_file, stable_json_hash
+from training.validate_sequence_intake import dimension_values, validate_sequence_intake
 
 
 def _read_jsonl(path: Path) -> list[dict]:
@@ -67,6 +68,10 @@ def freeze_external_test(
     records = _read_jsonl(manifest_path)
     development = _read_jsonl(development_manifest_path)
     errors: list[str] = []
+    intake_validation = None
+    if policy.get("require_sequence_intake") is True:
+        intake_validation = validate_sequence_intake(records, development)
+        errors.extend(intake_validation["errors"])
     required_fields = set(policy["required_fields"])
     disjoint_dimensions = tuple(policy["disjoint_dimensions"])
     external_values: defaultdict[str, set[str]] = defaultdict(set)
@@ -90,13 +95,19 @@ def freeze_external_test(
                 errors.append(
                     f"identity manifest source_type '{manifest_lock.get('source_type')}' is not eligible for frozen external test evaluation"
                 )
-    elif policy.get("require_identity_manifest") is True:
+    elif (
+        policy.get("require_identity_manifest") is True
+        or policy.get("require_full_system_evaluation") is True
+    ):
         errors.append("external test policy requires a frozen identity manifest lock")
 
     for item in development:
         for dimension in disjoint_dimensions:
             if item.get(dimension) not in (None, ""):
-                development_values[dimension].add(str(item[dimension]))
+                try:
+                    development_values[dimension].update(dimension_values(item, dimension))
+                except ValueError as exc:
+                    errors.append(f"development: {exc}")
 
     for item in records:
         sample_id = str(item.get("sample_id", "<missing>"))
@@ -179,7 +190,10 @@ def freeze_external_test(
         else:
             conditions.update(item["conditions"])
         for dimension in disjoint_dimensions:
-            external_values[dimension].add(str(item[dimension]))
+            try:
+                external_values[dimension].update(dimension_values(item, dimension))
+            except ValueError as exc:
+                errors.append(f"{sample_id}: {exc}")
 
     if manifest_lock is not None:
         external_vids = set(external_values["video_id"])
@@ -251,6 +265,9 @@ def freeze_external_test(
             "sha256": sha256_file(identity_manifest_lock_path),
         }
         frozen["require_identity_manifest"] = True
+
+    if intake_validation is not None:
+        frozen["sequence_intake_validation"] = intake_validation
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("x", encoding="utf-8") as handle:

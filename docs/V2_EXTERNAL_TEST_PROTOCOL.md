@@ -12,6 +12,21 @@ Required condition coverage and minimum independent groups are defined in
 `datasets/v2_external_test_policy.yaml`. Every video and event annotation needs a real file hash,
 human reviewer identity, explicit `reviewer_type: HUMAN`, and timezone-aware review timestamp.
 
+The official policy requires full-system identity scope and sequence intake validation.
+Both holdout and development manifests must supply `capture_session_id`,
+`physical_vehicle_group_id`, and `person_group_ids` in addition to SHA/source/camera/video.
+Person lists are compared member by member; physical group IDs must persist across videos.
+Missing or unknown physical lineage on either side blocks freezing. The eight-vehicle and
+eight-person minima count physical groups, not video-scoped canonical IDs.
+
+Holdout rows require `proposed_role=NEW_UNTOUCHED_HOLDOUT`, `prior_usage=NEVER_USED`,
+explicit `model_predictions_seen=false`, and non-empty rights/independence evidence files
+with matching `rights_evidence_sha256` and `independence_evidence_sha256`. The freezer
+reruns `training.validate_sequence_intake` on its actual inputs and stores the evidence
+path/hash records in the frozen artifact. Precheck reports cannot authorize a freeze.
+Evidence integrity does not establish the truth or completeness of human declarations.
+See `datasets/sequence_intake/v2_sequence_001/README.md` for the CSV/JSONL intake contract.
+
 ## Freeze sequence
 
 1. Capture and annotate external video without inspecting final-model predictions.

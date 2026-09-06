@@ -32,11 +32,14 @@ copy nó vào thư mục incoming trước khi điền thông tin thật.
   nhiều ID trong một ô ngăn cách bằng dấu `;`.
 - `video_id`: ID video duy nhất. ID nhóm xe/người vật lý ở bảng intake khác với
   canonical `vehicle_id`/`occupant_id` trong annotation, vốn có namespace theo video.
-- `prior_usage`: liệt kê việc dùng trước đây (train/validation/calibration/test hoặc
-  chưa dùng có bằng chứng). `model_predictions_seen`: ghi `true`, `false` hoặc `UNKNOWN`
+- `prior_usage`: dùng `NEVER_USED` khi chưa dùng và có bằng chứng; nếu đã dùng, ghi
+  train/validation/calibration/test tương ứng. `model_predictions_seen`: ghi `true`, `false` hoặc `UNKNOWN`
   theo thông tin thực; `UNKNOWN` chưa đủ để xác nhận untouched.
 - `independence_evidence_path`: hồ sơ đối chiếu nguồn/camera/video/xe/người với toàn bộ
   development và canonical test cũ. Khác SHA file không đủ chứng minh độc lập.
+- `rights_evidence_sha256`, `independence_evidence_sha256`: SHA-256 của hai file hồ sơ
+  không rỗng; validator kiểm tra lại nội dung từ disk. Đường dẫn tương đối được tính
+  từ working directory khi chạy lệnh (khuyến nghị chạy tại repo root).
 - `conditions`: điều kiện quan sát thực, ngăn cách bằng `;`. `assigned_reviewer` chỉ
   là người dự kiến duyệt; `human_review_status` giữ `PENDING` trước khi có review thật.
 
@@ -79,10 +82,43 @@ Các tình huống dàn dựng như dùng điện thoại hoặc tháo đai th�
 `tools/annotation_reviewer` hiện là luồng ảnh có hiển thị model proposals;
 không dùng queue đó để tạo independent sequence holdout truth.
 
-## 5. Bất biến của đợt tiếp nhận
+## 5. Machine gate trước freeze
+
+Chạy với hai file CSV hoặc JSONL riêng, không trộn role trong holdout input:
+
+```powershell
+py -m training.validate_sequence_intake `
+  datasets/incoming/v2_sequence_001/holdout_intake.csv `
+  datasets/incoming/v2_sequence_001/development_lineage.csv `
+  --output datasets/incoming/v2_sequence_001/intake_check.json
+```
+
+File development lineage phải bao phủ toàn bộ train/validation/calibration và dữ liệu
+đã dùng trước đây; mỗi dòng phải có SHA/source/camera/video/session/xe vật lý và tất cả
+người vật lý. Giữ group ID ổn định xuyên tập; không dùng namespace `video:...` cho
+session/xe vật lý/người vật lý. `person_group_ids` nhận JSON list hoặc chuỗi CSV
+ngăn cách bằng `;`; kiểm tra giao nhau trên từng ID, không so nguyên chuỗi danh sách.
+
+Holdout phải có `proposed_role=NEW_UNTOUCHED_HOLDOUT`, `prior_usage=NEVER_USED`,
+`model_predictions_seen=false`, video đúng SHA và hai hồ sơ đúng SHA. Thiếu metadata
+development, file/hồ sơ không tồn tại, ID không chứng minh được, overlap hoặc input rỗng
+đều trả `NOT_READY_FOR_UNTOUCHED_FREEZE` và exit code 1. File output không bị ghi đè.
+
+Khi chuẩn bị external manifest JSONL, giữ nguyên các field intake này, bổ sung field
+annotation/human review theo policy và đặt `dataset_role=EXTERNAL_TEST`.
+`freeze_external_test` tự chạy lại gate trên manifest thực và hồ sơ trên disk;
+không tin báo cáo precheck cũ. Official policy bắt `FULL_SYSTEM_EVENT_EVALUATION`.
+Số lượng tối thiểu 8 xe/8 người được đếm trên group vật lý, không trên ID theo video.
+
+`SEQUENCE_INTAKE_CHECKS_PASSED` chỉ chứng minh kiểm tra khai báo/đối chiếu/hash đã qua;
+nó không xác thực nội dung pháp lý, tính trung thực của hồ sơ hoặc sự đầy đủ của danh mục
+development. Những phần đó vẫn cần người duyệt độc lập. Kết quả không thay human approval,
+identity manifest, coverage gate hay frozen external-test artifact.
+
+## 6. Bất biến của đợt tiếp nhận
 
 - `FROZEN_TEST_RUN_COUNT = 1`: không rerun canonical frozen model test.
 - Temporal lock tiếp tục `PENDING_SEQUENCE_GROUND_TRUTH` khi chưa có GT hợp lệ.
 - Event evaluation tiếp tục `PENDING_NEW_UNTOUCHED_HOLDOUT` khi chưa đủ dữ liệu.
 - Không nâng `HUMAN_VERIFIED`, `PRODUCTION_READY` hay claim cross-camera từ gói này.
-- Gói tiếp nhận không tải dữ liệu, chạy inference, calibration, freeze hoặc evaluation.
+- Validator intake không tải dữ liệu, chạy inference, calibration, freeze hoặc evaluation.
