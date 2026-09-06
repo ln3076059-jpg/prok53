@@ -19,7 +19,11 @@ from training.extract_identity_manifest import (
 )
 from training.evaluate_events import evaluate, evaluate_frozen, verify_evaluation_integrity
 from training.freeze_external_test import freeze_external_test
-from training.build_event_truth_from_sequences import process_file
+from training.build_event_truth_from_sequences import (
+    process_file,
+    EVENT_FIELDNAMES,
+    CONTEXT_FIELDNAMES,
+)
 from training.common import sha256_file
 from training.freeze_event_ground_truth import REQUIRED_COLUMNS, freeze_event_ground_truth
 from training.freeze_context_ground_truth import (
@@ -653,8 +657,8 @@ def test_extract_identity_manifest_from_annotations(tmp_path: Path):
 
     assert manifest["manifest_version"] == "v2.0"
     assert manifest["source_type"] == "INDEPENDENT_GROUND_TRUTH_ANNOTATIONS"
-    assert manifest["evaluation_scope"] == "FULL_SYSTEM_EVENT_EVALUATION"
-    assert manifest["eligible_for_frozen_event_evaluation"] is True
+    assert manifest["evaluation_scope"] == "LEGACY_ANNOTATION_EXTRACTED_SCOPE"
+    assert manifest["eligible_for_frozen_event_evaluation"] is False
     assert len(manifest["proven_identities"]) == 2
     assert manifest["videos"]["vid-annotated"]["duration_seconds"] == 100.0
 
@@ -664,9 +668,17 @@ def test_extract_identity_manifest_from_annotations(tmp_path: Path):
     lock = freeze_identity_manifest(manifest_file, lock_file)
 
     assert lock["status"] == "FROZEN_IDENTITY_MANIFEST"
-    assert lock["eligible_for_frozen_event_evaluation"] is True
-    assert lock["evaluation_scope"] == "FULL_SYSTEM_EVENT_EVALUATION"
+    assert lock["eligible_for_frozen_event_evaluation"] is False
+    assert lock["evaluation_scope"] == "LEGACY_ANNOTATION_EXTRACTED_SCOPE"
     assert lock["videos"]["vid-annotated"]["sha256"] == "v" * 64
+
+    # Missing video SHA in annotation must fail-closed (no fake fallback!)
+    ann_no_sha = dict(ann_data)
+    del ann_no_sha["video_sha256"]
+    ann_no_sha_path = tmp_path / "ann_no_sha.json"
+    ann_no_sha_path.write_text(json.dumps(ann_no_sha, indent=2), encoding="utf-8")
+    with pytest.raises(ValueError, match="missing valid 64-character video_sha256"):
+        extract_identity_manifest_from_annotations([ann_no_sha_path])
 
 
 def test_freezer_and_evaluator_reject_legacy_manifest_locks(tmp_path: Path):
@@ -1074,6 +1086,70 @@ def test_extract_identity_manifest_from_roster(tmp_path: Path):
     assert lock["evaluation_scope"] == "FULL_SYSTEM_EVENT_EVALUATION"
     assert lock["eligible_for_frozen_event_evaluation"] is True
     assert len(lock["manifest_sha256"]) == 64
+    assert lock["review_provenance"]["human_review_status"] == "APPROVED"
+    assert lock["review_provenance"]["reviewer_type"] == "HUMAN"
+
+    # Human review enforcement: AI reviewer must be rejected
+    ai_roster = tmp_path / "ai_roster.json"
+    create_identity_roster(
+        [
+            {
+                "video_id": "vid-ai",
+                "video_sha256": "a" * 64,
+                "fps": 30.0,
+                "frame_count": 100,
+                "vehicles": [
+                    {
+                        "vehicle_id": "video:vid-ai:vehicle-track:1",
+                        "cabins": [
+                            {
+                                "cabin_id": "video:vid-ai:vehicle-track:1:cabin:0",
+                                "occupants": [{"occupant_id": "video:vid-ai:vehicle-track:1:cabin:0:occupant-track:1"}],
+                            }
+                        ],
+                    }
+                ],
+            }
+        ],
+        output_path=ai_roster,
+        reviewer_type="AI",
+    )
+    ai_man = extract_identity_manifest_from_roster(ai_roster)
+    ai_man_path = tmp_path / "ai_man.json"
+    ai_man_path.write_text(json.dumps(ai_man), encoding="utf-8")
+    with pytest.raises(ValueError, match="reviewer_type == 'HUMAN'"):
+        freeze_identity_manifest(ai_man_path, tmp_path / "ai_lock.json")
+
+    # Human review enforcement: Unapproved status must be rejected
+    unapp_roster = tmp_path / "unapp_roster.json"
+    create_identity_roster(
+        [
+            {
+                "video_id": "vid-unapp",
+                "video_sha256": "b" * 64,
+                "fps": 30.0,
+                "frame_count": 100,
+                "vehicles": [
+                    {
+                        "vehicle_id": "video:vid-unapp:vehicle-track:1",
+                        "cabins": [
+                            {
+                                "cabin_id": "video:vid-unapp:vehicle-track:1:cabin:0",
+                                "occupants": [{"occupant_id": "video:vid-unapp:vehicle-track:1:cabin:0:occupant-track:1"}],
+                            }
+                        ],
+                    }
+                ],
+            }
+        ],
+        output_path=unapp_roster,
+        human_review_status="PENDING",
+    )
+    unapp_man = extract_identity_manifest_from_roster(unapp_roster)
+    unapp_man_path = tmp_path / "unapp_man.json"
+    unapp_man_path.write_text(json.dumps(unapp_man), encoding="utf-8")
+    with pytest.raises(ValueError, match="human_review_status == 'APPROVED'"):
+        freeze_identity_manifest(unapp_man_path, tmp_path / "unapp_lock.json")
 
     # Invalid video SHA in roster -> REJECTED
     invalid_roster = tmp_path / "invalid_roster.json"
@@ -1136,65 +1212,96 @@ def test_roster_to_annotation_skeleton_pipeline_eliminates_circular_sha(tmp_path
     assert skeleton["review_provenance"]["identity_manifest_sha256"] == manifest_sha
 
     # Step 3: Human annotator reviews and fills in event ground truth
-    skeleton["review_provenance"]["status"] = "APPROVED"
+    skeleton["review_provenance"]["status"] = "HUMAN_APPROVED"
     skeleton["review_provenance"]["reviewer_type"] = "HUMAN"
     skeleton["review_provenance"]["reviewer_id"] = "human-annotator-9"
     skeleton["review_provenance"]["reviewed_at"] = "2026-09-06T00:00:00Z"
+    skeleton["review_provenance"]["evidence_hash"] = "e" * 64
+    skeleton["review_provenance"]["adjudication_status"] = "FINAL"
     skeleton["occupants"][0]["reviewer_confirmed_role"] = True
     skeleton["occupants"][0]["role"] = "driver"
+    skeleton["occupants"][0]["role_confidence"] = 1.0
+    skeleton["occupants"][0]["vehicle_context_confirmed"] = True
+
+    occ_id = skeleton["occupants"][0]["occupant_id"]
     skeleton["events"].append(
         {
             "event_id": "evt-phone-1",
             "event_type": "PHONE",
-            "start_time": skeleton["start_time"],
-            "end_time": skeleton["end_time"],
-            "occupant_id": skeleton["occupants"][0]["occupant_id"],
-            "occupant_role": "driver",
+            "start_frame": 0,
+            "end_frame": 100,
+            "start_time_sec": 0.0,
+            "end_time_sec": 100.0 / 30.0,
+            "occupant_id": occ_id,
             "label": "PHONE_USE",
-            "visibility": "clear",
-            "confidence": 1.0,
-            "annotator_id": "human-annotator-9",
         }
     )
+    # Split context interval into 2 valid contiguous intervals: [0, 150] with PHONE_USE, [150, 300] with NO_PHONE
+    skeleton["context_intervals"] = [
+        {
+            "context_id": "ctx-1",
+            "occupant_id": occ_id,
+            "start_frame": 0,
+            "end_frame": 150,
+            "inside_vehicle": True,
+            "outside_vehicle_person": False,
+            "motorcycle_flag": False,
+            "phone_state": "PHONE_USE",
+            "seatbelt_state": "FASTENED",
+            "visibility": "clear",
+            "conditions": "daylight",
+            "notes": "call active",
+        },
+        {
+            "context_id": "ctx-2",
+            "occupant_id": occ_id,
+            "start_frame": 150,
+            "end_frame": 300,
+            "inside_vehicle": True,
+            "outside_vehicle_person": False,
+            "motorcycle_flag": False,
+            "phone_state": "NO_PHONE",
+            "seatbelt_state": "FASTENED",
+            "visibility": "clear",
+            "conditions": "daylight",
+            "notes": "no call",
+        },
+    ]
+    skeleton["context"]["inside_vehicle"] = True
+    skeleton["context"]["outside_vehicle_person"] = False
+    skeleton["context"]["motorcycle_flag"] = False
+
     ann_file = tmp_path / "ann.json"
     ann_file.write_text(json.dumps(skeleton, indent=2), encoding="utf-8")
 
-    # Step 4: Build ground-truth CSV (automatically carries forward identity_manifest_sha256)
-    truth_csv = tmp_path / "truth.csv"
-    truth_row = {
-        "video_id": "vid-streamline",
-        "event_id": "evt-phone-1",
-        "event_type": "PHONE",
-        "start_seconds": "0.0",
-        "end_seconds": "5.0",
-        "occupant_id": skeleton["occupants"][0]["occupant_id"],
-        "vehicle_id": skeleton["vehicle_id"],
-        "cabin_id": skeleton["cabin_id"],
-        "inside_vehicle": "true",
-        "outside_vehicle_person": "false",
-        "motorcycle_flag": "false",
-        "label": "PHONE_USE",
-        "occupant_role": "driver",
-        "visibility": "clear",
-        "conditions": "daylight",
-        "human_review_status": "APPROVED",
-        "reviewer_id": "human-annotator-9",
-        "reviewer_type": "HUMAN",
-        "reviewed_at": "2026-09-06T00:00:00Z",
-        "adjudication_status": "FINAL",
-        "notes": "streamline test",
-        "identity_manifest_sha256": skeleton["review_provenance"]["identity_manifest_sha256"],
-    }
-    with truth_csv.open("w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=sorted(REQUIRED_COLUMNS))
-        writer.writeheader()
-        writer.writerow(truth_row)
-    with truth_csv.open(newline="", encoding="utf-8-sig") as f:
-        rows = list(csv.DictReader(f))
-    assert len(rows) == 1
-    assert rows[0]["identity_manifest_sha256"] == manifest_sha
+    # Step 4: Validate via JSON Schema and semantic validator
+    schema = load_schema("datasets/schemas/v2_event_sequence_annotation.schema.json")
+    val_errors = validate_annotation(skeleton, schema)
+    assert not val_errors, f"Schema/semantic validation failed: {val_errors}"
 
-    # Step 5: Freeze event ground truth - succeeds with perfect cryptographic provenance
+    # Step 5: Convert sequence to truth CSVs via process_file
+    truth_csv = tmp_path / "truth.csv"
+    context_csv = tmp_path / "context.csv"
+    with truth_csv.open("w", encoding="utf-8", newline="") as ef, context_csv.open("w", encoding="utf-8", newline="") as cf:
+        event_writer = csv.writer(ef)
+        event_writer.writerow(EVENT_FIELDNAMES)
+        context_writer = csv.writer(cf)
+        context_writer.writerow(CONTEXT_FIELDNAMES)
+        success = process_file(ann_file, event_writer, schema, context_writer=context_writer)
+    assert success, "process_file failed to convert sequence to event and context CSVs"
+
+    with truth_csv.open(newline="", encoding="utf-8-sig") as f:
+        event_rows = list(csv.DictReader(f))
+    assert len(event_rows) == 1
+    assert event_rows[0]["identity_manifest_sha256"] == manifest_sha
+
+    with context_csv.open(newline="", encoding="utf-8-sig") as f:
+        context_rows = list(csv.DictReader(f))
+    assert len(context_rows) == 2
+    assert context_rows[0]["identity_manifest_sha256"] == manifest_sha
+    assert context_rows[1]["identity_manifest_sha256"] == manifest_sha
+
+    # Step 6: Freeze event ground truth & context ground truth
     ext_lock = tmp_path / "ext_lock.json"
     ext_lock.write_text(
         json.dumps(
@@ -1203,6 +1310,14 @@ def test_roster_to_annotation_skeleton_pipeline_eliminates_circular_sha(tmp_path
                 "human_review_status": "ALL_APPROVED",
                 "video_ids": ["vid-streamline"],
                 "identity_manifest_sha256": manifest_sha,
+                "videos": {
+                    "vid-streamline": {
+                        "sha256": v_sha,
+                        "fps": 30.0,
+                        "frame_count": 300,
+                        "duration_seconds": 10.0,
+                    }
+                },
             }
         ),
         encoding="utf-8",
@@ -1215,6 +1330,15 @@ def test_roster_to_annotation_skeleton_pipeline_eliminates_circular_sha(tmp_path
     )
     assert frozen_truth["status"] == "FROZEN_EVENT_GROUND_TRUTH"
     assert frozen_truth["identity_manifest_sha256"] == manifest_sha
+
+    frozen_context = freeze_context_ground_truth(
+        context_csv,
+        ext_lock,
+        tmp_path / "frozen_context_truth.json",
+        identity_manifest_lock_path=lock_file,
+    )
+    assert frozen_context["status"] == "FROZEN_CONTEXT_GROUND_TRUTH"
+    assert frozen_context["identity_manifest_sha256"] == manifest_sha
 
 
 def test_evaluate_frozen_scope_guardrails(tmp_path: Path):
@@ -1378,10 +1502,12 @@ def test_evaluate_frozen_scope_guardrails(tmp_path: Path):
         context_truth_lock_path=context_lock_path,
         allow_conditional_evaluation=True,
     )
-    assert report["status"] == "MEASURED_FROZEN_EXTERNAL_TEST"
+    assert report["status"] == "MEASURED_CONDITIONAL_DIAGNOSTIC"
     assert report["identity_manifest"]["evaluation_scope"] == "CONDITIONAL_ON_SUCCESSFUL_OCCUPANT_TRACKING"
     assert report["identity_manifest"]["conditional_evaluation_allowed"] is True
     assert "scope_caution" in report["identity_manifest"]
+    integrity = verify_evaluation_integrity(out_cond_json)
+    assert integrity["status"] == "FROZEN_EVENT_EVALUATION_INTEGRITY_VERIFIED"
 
 
 def test_freeze_identity_adjudication_bijective_and_locality(tmp_path: Path):

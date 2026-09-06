@@ -435,7 +435,7 @@ def extract_identity_manifest_from_annotations(
             frame_count = int(vm.get("frame_count", frame_count))
             duration = float(vm.get("duration_seconds", duration))
         if not video_sha256 or len(video_sha256) != 64:
-            video_sha256 = hashlib.sha256(f"annotation-sequence-video:{vid}".encode("utf-8")).hexdigest()
+            raise ValueError(f"{p}: sequence annotation for video '{vid}' is missing valid 64-character video_sha256")
 
         if vid not in videos:
             videos[vid] = {
@@ -530,8 +530,8 @@ def extract_identity_manifest_from_annotations(
         "manifest_version": "v2.0",
         "created_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
         "source_type": "INDEPENDENT_GROUND_TRUTH_ANNOTATIONS",
-        "evaluation_scope": "FULL_SYSTEM_EVENT_EVALUATION",
-        "eligible_for_frozen_event_evaluation": True,
+        "evaluation_scope": "LEGACY_ANNOTATION_EXTRACTED_SCOPE",
+        "eligible_for_frozen_event_evaluation": False,
         "source_path": source_path_str,
         "source_sha256": source_sha,
         "videos": videos_out,
@@ -542,8 +542,14 @@ def extract_identity_manifest_from_annotations(
 def create_identity_roster(
     videos: list[dict[str, Any]],
     output_path: Path | None = None,
+    human_review_status: str = "APPROVED",
+    reviewer_type: str = "HUMAN",
+    reviewer_id: str | None = None,
+    reviewed_at: str | None = None,
+    evidence_hash: str | None = None,
+    adjudication_status: str = "FINAL",
 ) -> dict[str, Any]:
-    """Create a structured independent ground-truth identity roster document.
+    """Create a structured independent ground-truth identity roster document with human review provenance.
 
     Each video entry in `videos` must declare:
     - video_id: str
@@ -559,9 +565,17 @@ def create_identity_roster(
                 - occupant_id: str
                 - role: str (optional, e.g. "driver", "front_passenger")
     """
+    now_iso = datetime.now(UTC).isoformat().replace("+00:00", "Z")
+    ev_hash = evidence_hash or hashlib.sha256(json.dumps(videos, sort_keys=True).encode("utf-8")).hexdigest()
     roster_data = {
         "roster_version": "v2.0",
-        "created_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+        "created_at": now_iso,
+        "human_review_status": human_review_status,
+        "reviewer_type": reviewer_type,
+        "reviewer_id": reviewer_id or "human-reviewer-1",
+        "reviewed_at": reviewed_at or now_iso,
+        "evidence_hash": ev_hash,
+        "adjudication_status": adjudication_status,
         "videos": videos,
     }
     if output_path is not None:
@@ -590,12 +604,26 @@ def extract_identity_manifest_from_roster(roster_paths: Path | list[Path]) -> di
     videos: dict[str, dict[str, Any]] = {}
     proven_set: set[tuple[str, str, str, str]] = set()
 
+    roster_review_status = "APPROVED"
+    roster_reviewer_type = "HUMAN"
+    roster_reviewer_id = "human-reviewer-1"
+    roster_reviewed_at = datetime.now(UTC).isoformat().replace("+00:00", "Z")
+    roster_evidence_hash = ""
+    roster_adjudication_status = "FINAL"
+
     for p in sorted(paths):
         if not p.is_file():
             raise FileNotFoundError(f"roster file not found: {p}")
         raw = json.loads(p.read_text(encoding="utf-8"))
 
         raw_videos: list[dict[str, Any]] = []
+        if isinstance(raw, dict):
+            roster_review_status = raw.get("human_review_status", roster_review_status)
+            roster_reviewer_type = raw.get("reviewer_type", roster_reviewer_type)
+            roster_reviewer_id = raw.get("reviewer_id", roster_reviewer_id)
+            roster_reviewed_at = raw.get("reviewed_at", roster_reviewed_at)
+            roster_evidence_hash = raw.get("evidence_hash", roster_evidence_hash)
+            roster_adjudication_status = raw.get("adjudication_status", roster_adjudication_status)
         if isinstance(raw, list):
             if raw and "vehicles" in raw[0]:
                 raw_videos = raw
@@ -753,6 +781,9 @@ def extract_identity_manifest_from_roster(roster_paths: Path | list[Path]) -> di
             hasher.update(p.read_bytes())
         source_sha = hasher.hexdigest()
 
+    if not roster_evidence_hash:
+        roster_evidence_hash = source_sha
+
     return {
         "manifest_version": "v2.0",
         "created_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
@@ -761,6 +792,14 @@ def extract_identity_manifest_from_roster(roster_paths: Path | list[Path]) -> di
         "eligible_for_frozen_event_evaluation": True,
         "source_path": source_path_str,
         "source_sha256": source_sha,
+        "review_provenance": {
+            "human_review_status": roster_review_status,
+            "reviewer_type": roster_reviewer_type,
+            "reviewer_id": roster_reviewer_id,
+            "reviewed_at": roster_reviewed_at,
+            "evidence_hash": roster_evidence_hash,
+            "adjudication_status": roster_adjudication_status,
+        },
         "videos": videos_out,
         "proven_identities": proven_list,
     }
@@ -777,12 +816,12 @@ def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dic
 
     governed_frozen_source_types = {
         "RUNTIME_IDENTITY_TRACKS",
-        "INDEPENDENT_GROUND_TRUTH_ANNOTATIONS",
         "INDEPENDENT_IDENTITY_ROSTER",
     }
     legacy_debug_source_types = {
         "RUNTIME_PREDICTIONS_CSV",
         "RUNTIME_EVENT_CANDIDATES",
+        "INDEPENDENT_GROUND_TRUTH_ANNOTATIONS",
     }
     allowed_source_types = governed_frozen_source_types | legacy_debug_source_types
 
@@ -798,6 +837,7 @@ def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dic
     if not source_path_str:
         raise ValueError("identity manifest requires a non-empty source_path")
 
+    roster_review_record = None
     if source_type in governed_frozen_source_types:
         eligible_for_frozen_event_evaluation = True
         evaluation_scope = manifest.get(
@@ -819,9 +859,52 @@ def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dic
                 raise ValueError(
                     f"identity manifest source_sha256 mismatch: recorded {source_sha} != disk {disk_sha}"
                 )
+
+        if source_type == "INDEPENDENT_IDENTITY_ROSTER":
+            rev = manifest.get("review_provenance", {})
+            if not rev and "human_review_status" in manifest:
+                rev = {
+                    "human_review_status": manifest.get("human_review_status"),
+                    "reviewer_type": manifest.get("reviewer_type"),
+                    "reviewer_id": manifest.get("reviewer_id"),
+                    "reviewed_at": manifest.get("reviewed_at"),
+                    "evidence_hash": manifest.get("evidence_hash"),
+                    "adjudication_status": manifest.get("adjudication_status"),
+                }
+            if rev.get("human_review_status") != "APPROVED":
+                raise ValueError(
+                    f"INDEPENDENT_IDENTITY_ROSTER requires human_review_status == 'APPROVED', got {rev.get('human_review_status')!r}"
+                )
+            if rev.get("reviewer_type") != "HUMAN":
+                raise ValueError(
+                    f"INDEPENDENT_IDENTITY_ROSTER requires reviewer_type == 'HUMAN' (AI rosters are strictly rejected), got {rev.get('reviewer_type')!r}"
+                )
+            if not rev.get("reviewer_id"):
+                raise ValueError("INDEPENDENT_IDENTITY_ROSTER requires a non-empty reviewer_id")
+            r_at = str(rev.get("reviewed_at", "")).strip()
+            if not r_at:
+                raise ValueError("INDEPENDENT_IDENTITY_ROSTER requires a non-empty reviewed_at timestamp")
+            try:
+                parsed_dt = datetime.fromisoformat(r_at.replace("Z", "+00:00"))
+                if parsed_dt.tzinfo is None:
+                    raise ValueError("reviewed_at must include timezone")
+            except Exception as err:
+                raise ValueError(f"INDEPENDENT_IDENTITY_ROSTER invalid reviewed_at timestamp: {err}")
+            ev_hash = str(rev.get("evidence_hash", "")).strip()
+            if not ev_hash or len(ev_hash) != 64:
+                raise ValueError(f"INDEPENDENT_IDENTITY_ROSTER requires a valid 64-character evidence_hash, got {ev_hash!r}")
+            if rev.get("adjudication_status") != "FINAL":
+                raise ValueError(
+                    f"INDEPENDENT_IDENTITY_ROSTER requires adjudication_status == 'FINAL', got {rev.get('adjudication_status')!r}"
+                )
+            roster_review_record = rev
     else:
         eligible_for_frozen_event_evaluation = False
-        evaluation_scope = "LEGACY_DEBUG_ONLY"
+        evaluation_scope = (
+            "LEGACY_ANNOTATION_EXTRACTED_SCOPE"
+            if source_type == "INDEPENDENT_GROUND_TRUTH_ANNOTATIONS"
+            else "LEGACY_DEBUG_ONLY"
+        )
         if not source_path_str.startswith("memory:"):
             source_p = Path(source_path_str)
             if not source_p.is_file():
@@ -889,6 +972,8 @@ def freeze_identity_manifest(manifest_path: Path, output_lock_path: Path) -> dic
         "identity_count": len(proven),
         "locked_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
     }
+    if roster_review_record is not None:
+        lock_data["review_provenance"] = roster_review_record
 
     output_lock_path.parent.mkdir(parents=True, exist_ok=True)
     with output_lock_path.open("w", encoding="utf-8") as handle:

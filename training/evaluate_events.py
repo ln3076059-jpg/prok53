@@ -619,9 +619,14 @@ def evaluate_frozen(
     if report.get("safety_invariant_counters") == "NOT_EVALUABLE":
         raise ValueError("frozen event evaluation requires evaluable safety metadata")
 
+    report_status = (
+        "MEASURED_CONDITIONAL_DIAGNOSTIC"
+        if eval_scope != "FULL_SYSTEM_EVENT_EVALUATION"
+        else "MEASURED_FROZEN_EXTERNAL_TEST"
+    )
     report.update(
         {
-            "status": "MEASURED_FROZEN_EXTERNAL_TEST",
+            "status": report_status,
             "measured_at_utc": datetime.now(UTC).isoformat(),
             "ground_truth": {
                 "path": str(truth_path),
@@ -674,8 +679,11 @@ def evaluate_frozen(
 
 def verify_evaluation_integrity(report_path: Path) -> dict:
     report = json.loads(report_path.read_text(encoding="utf-8"))
-    if report.get("status") != "MEASURED_FROZEN_EXTERNAL_TEST":
-        raise ValueError("event evaluation is not a frozen external-test result")
+    if report.get("status") not in {
+        "MEASURED_FROZEN_EXTERNAL_TEST",
+        "MEASURED_CONDITIONAL_DIAGNOSTIC",
+    }:
+        raise ValueError("event evaluation is not a frozen external-test or conditional diagnostic result")
     artifacts = {
         "ground truth": report.get("ground_truth", {}),
         "ground-truth lock": {

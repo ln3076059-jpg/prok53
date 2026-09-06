@@ -254,7 +254,10 @@ def process_file(json_path, csv_writer, schema, context_writer=None):
             print(f"Skipping {json_path} due to context conversion error: {e}")
             return False
         for row in context_rows:
-            context_writer.writerow(row)
+            if hasattr(context_writer, "fieldnames"):
+                context_writer.writerow(row)
+            else:
+                context_writer.writerow([row[field] for field in CONTEXT_FIELDNAMES])
     return True
 
 
