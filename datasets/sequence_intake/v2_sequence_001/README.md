@@ -90,6 +90,7 @@ Chạy với hai file CSV hoặc JSONL riêng, không trộn role trong holdout 
 py -m training.validate_sequence_intake `
   datasets/incoming/v2_sequence_001/holdout_intake.csv `
   datasets/incoming/v2_sequence_001/development_lineage.csv `
+  --development-lineage-lock datasets/incoming/v2_sequence_001/development_lineage_frozen.json `
   --output datasets/incoming/v2_sequence_001/intake_check.json
 ```
 
@@ -99,6 +100,13 @@ người vật lý. Giữ group ID ổn định xuyên tập; không dùng names
 session/xe vật lý/người vật lý. `person_group_ids` nhận JSON list hoặc chuỗi CSV
 ngăn cách bằng `;`; kiểm tra giao nhau trên từng ID, không so nguyên chuỗi danh sách.
 
+Trước precheck chính thức, người duyệt phải xác nhận completeness của toàn bộ lineage,
+gắn SHA file với bản duyệt HUMAN/APPROVED/FINAL và hồ sơ đối chiếu. Tạo lock bằng
+`training.freeze_development_lineage`; xem contract và lệnh đầy đủ trong
+`docs/V2_EXTERNAL_TEST_PROTOCOL.md`. CLI intake và official freezer đều bắt lock này,
+kiểm tra lại file lineage, bản duyệt và evidence trên disk. Đổi CSV sang JSONL cũng đổi
+hash, nên phải review/lock đúng file sẽ truyền vào freezer.
+
 Holdout phải có `proposed_role=NEW_UNTOUCHED_HOLDOUT`, `prior_usage=NEVER_USED`,
 `model_predictions_seen=false`, video đúng SHA và hai hồ sơ đúng SHA. Thiếu metadata
 development, file/hồ sơ không tồn tại, ID không chứng minh được, overlap hoặc input rỗng
@@ -106,6 +114,11 @@ development, file/hồ sơ không tồn tại, ID không chứng minh được, 
 
 Khi chuẩn bị external manifest JSONL, giữ nguyên các field intake này, bổ sung field
 annotation/human review theo policy và đặt `dataset_role=EXTERNAL_TEST`.
+`annotation_path` trỏ thẳng tới sequence JSON chuẩn đã human-review, không tạo JSON
+event-list riêng. Với nhiều cabin, thêm `additional_sequence_annotations` chứa các
+object `path`/`sha256` của sequence chuẩn cho những cabin còn lại. Freezer kiểm tra cùng
+schema/semantic validator, HUMAN/FINAL, video/manifest binding và đủ mọi occupant.
+CSV event/context được export từ chính các sequence này.
 `freeze_external_test` tự chạy lại gate trên manifest thực và hồ sơ trên disk;
 không tin báo cáo precheck cũ. Official policy bắt `FULL_SYSTEM_EVENT_EVALUATION`.
 Số lượng tối thiểu 8 xe/8 người được đếm trên group vật lý, không trên ID theo video.

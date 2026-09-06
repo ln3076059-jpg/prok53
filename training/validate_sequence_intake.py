@@ -7,7 +7,8 @@ import json
 import re
 from pathlib import Path
 
-from training.common import sha256_file
+from training.common import sha256_file, stable_json_hash
+from training.freeze_development_lineage import verify_development_lineage
 
 DISJOINT_DIMENSIONS = (
     "sha256", "source_id", "camera_id", "video_id", "capture_session_id",
@@ -42,8 +43,26 @@ def dimension_values(item: dict, dimension: str) -> set[str]:
     return result
 
 
-def validate_sequence_intake(holdout: list[dict], development: list[dict]) -> dict:
+def validate_sequence_intake(
+    holdout: list[dict], development: list[dict], *,
+    development_manifest_path: Path | None = None,
+    development_lineage_lock_path: Path | None = None,
+    require_development_lineage_lock: bool = False,
+) -> dict:
     errors: list[str] = []
+    lineage_binding = None
+    if require_development_lineage_lock or development_lineage_lock_path is not None:
+        if development_manifest_path is None or development_lineage_lock_path is None:
+            errors.append("official intake requires a frozen development lineage lock")
+        else:
+            try:
+                lineage_binding = verify_development_lineage(
+                    development_manifest_path, development_lineage_lock_path,
+                )
+                if stable_json_hash(development) != stable_json_hash(read_intake(development_manifest_path)):
+                    raise ValueError("development rows do not match the locked input file")
+            except (OSError, ValueError) as exc:
+                errors.append(f"development lineage: {exc}")
     values = {
         role: {dimension: set() for dimension in DISJOINT_DIMENSIONS}
         for role in ("holdout", "development")
@@ -107,6 +126,7 @@ def validate_sequence_intake(holdout: list[dict], development: list[dict]) -> di
         "errors": errors,
         "development_overlap": overlaps,
         "evidence_files": evidence,
+        "development_lineage_lock": lineage_binding,
         "scientific_claim": "DECLARED_LINEAGE_AND_EVIDENCE_INTEGRITY_ONLY",
     }
 
@@ -124,8 +144,14 @@ def main() -> None:
     parser.add_argument("holdout", type=Path, help="Holdout-only CSV or JSONL intake")
     parser.add_argument("development", type=Path, help="Complete development lineage CSV or JSONL")
     parser.add_argument("--output", type=Path, help="New path for the validation report")
+    parser.add_argument("--development-lineage-lock", type=Path)
     args = parser.parse_args()
-    report = validate_sequence_intake(read_intake(args.holdout), read_intake(args.development))
+    report = validate_sequence_intake(
+        read_intake(args.holdout), read_intake(args.development),
+        development_manifest_path=args.development,
+        development_lineage_lock_path=args.development_lineage_lock,
+        require_development_lineage_lock=True,
+    )
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         with args.output.open("x", encoding="utf-8") as handle:

@@ -10,6 +10,7 @@ import yaml
 
 from training.common import sha256_file, stable_json_hash
 from training.validate_sequence_intake import dimension_values, validate_sequence_intake
+from training.validate_event_sequence_annotations import load_schema, validate_annotation
 
 
 def _read_jsonl(path: Path) -> list[dict]:
@@ -57,12 +58,92 @@ def _validate_event_annotation(path: Path, sample_id: str) -> list[str]:
     return errors
 
 
+def _validate_sequence_annotations(item: dict, manifest_lock: dict | None) -> tuple[list[str], list[dict]]:
+    """Bind every cabin's canonical sequence source; no second event-list truth is needed."""
+    errors: list[str] = []
+    bindings: list[dict] = []
+    sample_id = item["sample_id"]
+    extra = item.get("additional_sequence_annotations", [])
+    if not isinstance(extra, list):
+        return [f"{sample_id}: additional_sequence_annotations must be a list"], []
+    sources = [{"path": item["annotation_path"], "sha256": item["annotation_sha256"]}, *extra]
+    if manifest_lock is None:
+        return [f"{sample_id}: canonical sequences require a frozen identity manifest"], []
+    schema = load_schema(
+        Path(__file__).resolve().parents[1] / "datasets/schemas/v2_event_sequence_annotation.schema.json"
+    )
+    video_id = item["video_id"]
+    metadata = manifest_lock.get("videos", {}).get(video_id, {})
+    expected = {
+        (p["vehicle_id"], p["cabin_id"], p["occupant_id"])
+        for p in manifest_lock.get("proven_identities", []) if p.get("video_id") == video_id
+    }
+    observed: set[tuple[str, str, str]] = set()
+    seen_paths: set[Path] = set()
+    for record in sources:
+        if not isinstance(record, dict):
+            errors.append(f"{sample_id}: sequence reference must be a path/SHA256 object")
+            continue
+        path = Path(str(record.get("path", "")))
+        if path.resolve() in seen_paths:
+            errors.append(f"{sample_id}: duplicate sequence annotation path")
+            continue
+        seen_paths.add(path.resolve())
+        if not path.is_file() or record.get("sha256") != sha256_file(path):
+            errors.append(f"{sample_id}: sequence annotation missing or SHA256 mismatch: {path}")
+            continue
+        try:
+            annotation = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError) as exc:
+            errors.append(f"{sample_id}: invalid sequence JSON: {exc}")
+            continue
+        if not isinstance(annotation, dict):
+            errors.append(f"{sample_id}: canonical sequence annotation must be a JSON object")
+            continue
+        annotation_errors = validate_annotation(annotation, schema)
+        if annotation_errors:
+            errors.extend(f"{sample_id}: {error}" for error in annotation_errors)
+            continue
+        for field, value in (
+            ("video_id", video_id), ("video_sha256", item["sha256"]),
+            ("source_id", item["source_id"]), ("camera_id", item["camera_id"]),
+            ("fps", metadata.get("fps")), ("frame_count", metadata.get("frame_count")),
+        ):
+            if value is None or annotation.get(field) != value:
+                errors.append(f"{sample_id}: sequence {field} does not match frozen video/manifest")
+        review = annotation["review_provenance"]
+        if review.get("reviewer_type") != "HUMAN" or review.get("adjudication_status") != "FINAL":
+            errors.append(f"{sample_id}: sequence requires HUMAN review and FINAL adjudication")
+        if str(review.get("reviewer_id", "")).strip().lower() in {
+            "", "unknown", "none", "placeholder", "human-reviewer-1",
+        }:
+            errors.append(f"{sample_id}: sequence requires a real reviewer_id")
+        if review.get("identity_manifest_sha256") != manifest_lock["manifest_sha256"]:
+            errors.append(f"{sample_id}: sequence identity manifest SHA256 mismatch")
+        try:
+            reviewed = datetime.fromisoformat(str(review.get("reviewed_at", "")).replace("Z", "+00:00"))
+            if reviewed.utcoffset() is None:
+                raise ValueError("missing timezone")
+        except ValueError:
+            errors.append(f"{sample_id}: sequence reviewed_at must be timezone-aware")
+        for occupant in annotation["occupants"]:
+            identity = (annotation["vehicle_id"], annotation["cabin_id"], occupant["occupant_id"])
+            if identity in observed:
+                errors.append(f"{sample_id}: occupant repeated across sequence annotations")
+            observed.add(identity)
+        bindings.append({"path": str(path.resolve()), "sha256": sha256_file(path)})
+    if not expected or observed != expected:
+        errors.append(f"{sample_id}: sequences must cover exactly the frozen video's proven occupants")
+    return errors, bindings
+
+
 def freeze_external_test(
     manifest_path: Path,
     development_manifest_path: Path,
     policy_path: Path,
     output_path: Path,
     identity_manifest_lock_path: Path | None = None,
+    development_lineage_lock_path: Path | None = None,
 ) -> dict:
     policy = yaml.safe_load(policy_path.read_text(encoding="utf-8"))
     records = _read_jsonl(manifest_path)
@@ -70,7 +151,12 @@ def freeze_external_test(
     errors: list[str] = []
     intake_validation = None
     if policy.get("require_sequence_intake") is True:
-        intake_validation = validate_sequence_intake(records, development)
+        intake_validation = validate_sequence_intake(
+            records, development,
+            development_manifest_path=development_manifest_path,
+            development_lineage_lock_path=development_lineage_lock_path,
+            require_development_lineage_lock=policy.get("require_development_lineage_lock") is True,
+        )
         errors.extend(intake_validation["errors"])
     required_fields = set(policy["required_fields"])
     disjoint_dimensions = tuple(policy["disjoint_dimensions"])
@@ -80,6 +166,7 @@ def freeze_external_test(
     file_hashes: dict[str, dict[str, str]] = {}
     seen_sample_ids: set[str] = set()
     seen_unique: defaultdict[str, set[str]] = defaultdict(set)
+    sequence_bindings: dict[str, list[dict]] = {}
 
     manifest_lock = None
     if identity_manifest_lock_path is not None:
@@ -156,8 +243,13 @@ def freeze_external_test(
             errors.append(f"{sample_id}: annotation not found {annotation_path}")
         elif sha256_file(annotation_path) != item["annotation_sha256"]:
             errors.append(f"{sample_id}: annotation SHA mismatch")
-        else:
+        elif policy.get("require_canonical_sequence_annotations") is not True:
             errors.extend(_validate_event_annotation(annotation_path, sample_id))
+
+        if policy.get("require_canonical_sequence_annotations") is True:
+            sequence_errors, bindings = _validate_sequence_annotations(item, manifest_lock)
+            errors.extend(sequence_errors)
+            sequence_bindings[sample_id] = bindings
 
         if manifest_lock is not None:
             manifest_videos = manifest_lock.get("videos", {})
@@ -268,6 +360,10 @@ def freeze_external_test(
 
     if intake_validation is not None:
         frozen["sequence_intake_validation"] = intake_validation
+        if intake_validation.get("development_lineage_lock"):
+            frozen["development_lineage_lock"] = intake_validation["development_lineage_lock"]
+    if sequence_bindings:
+        frozen["sequence_annotations"] = sequence_bindings
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("x", encoding="utf-8") as handle:
@@ -296,6 +392,10 @@ def main() -> None:
         default=None,
         help="Optional path to frozen identity manifest lock JSON",
     )
+    parser.add_argument(
+        "--development-lineage-lock", type=Path,
+        help="Frozen human-reviewed completeness attestation for the exact development manifest",
+    )
     args = parser.parse_args()
     report = freeze_external_test(
         args.manifest,
@@ -303,6 +403,7 @@ def main() -> None:
         args.policy,
         args.output,
         args.identity_manifest_lock,
+        args.development_lineage_lock,
     )
     print(json.dumps(report, indent=2))
 

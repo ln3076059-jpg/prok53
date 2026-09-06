@@ -3,6 +3,8 @@ dataset_role: EXTERNAL_TEST
 require_identity_manifest: true
 require_full_system_evaluation: true
 require_sequence_intake: true
+require_canonical_sequence_annotations: true
+require_development_lineage_lock: true
 required_fields:
   - sample_id
   - dataset_role
@@ -63,6 +65,8 @@ minimum_independent_groups:
   person_group_ids: 8
 policy:
   - Every video and annotation must be human-reviewed before freezing.
-  - Each annotation is a JSON list of PHONE/NO_SEATBELT intervals with occupant roles.
+  - Each annotation binds a canonical human-reviewed sequence JSON with full-timeline context.
+  - Additional cabins use additional_sequence_annotations path/SHA references to canonical sequences.
+  - Development lineage completeness must be human-attested and frozen before official external freeze.
   - External sources and cameras must not appear in training, validation, or calibration data.
   - A frozen artifact records integrity and isolation; it does not claim model accuracy.

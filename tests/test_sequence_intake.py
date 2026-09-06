@@ -5,6 +5,7 @@ import pytest
 
 from training.common import sha256_file
 from training.freeze_external_test import freeze_external_test
+from training.freeze_development_lineage import COVERED_USAGE, freeze_development_lineage
 from training.validate_sequence_intake import (
     DISJOINT_DIMENSIONS,
     read_intake,
@@ -121,6 +122,52 @@ def test_cli_records_not_ready_and_does_not_overwrite(tmp_path, monkeypatch):
         main()
 
 
+def freeze_test_lineage(path):
+    evidence = path.with_suffix(".evidence.txt")
+    evidence.write_text("Synthetic completeness evidence for tests only", encoding="utf-8")
+    review = path.with_suffix(".review.json")
+    review.write_text(json.dumps({
+        "lineage_sha256": sha256_file(path), "completeness_status": "COMPLETE",
+        "covered_usage": sorted(COVERED_USAGE),
+        "human_review_status": "APPROVED", "reviewer_type": "HUMAN",
+        "reviewer_id": "test-auditor", "reviewed_at": "2026-09-06T00:00:00Z",
+        "adjudication_status": "FINAL",
+        "completeness_evidence": {"path": str(evidence), "sha256": sha256_file(evidence)},
+    }), encoding="utf-8")
+    lock = path.with_suffix(".lock.json")
+    freeze_development_lineage(path, review, lock)
+    return lock
+
+
+def canonical_sequence(item):
+    cabin = f"video:{item['video_id']}:provided-cabin"
+    occupant = f"{cabin}:occupant-track:1"
+    return {
+        "sequence_id": f"seq-{item['video_id']}", "video_id": item["video_id"],
+        "video_sha256": item["sha256"], "vehicle_id": item["vehicle_id"], "cabin_id": cabin,
+        "source_id": item["source_id"], "camera_id": item["camera_id"],
+        "fps": 30.0, "frame_count": 300,
+        "start_time": "2026-09-06T00:00:00Z", "end_time": "2026-09-06T00:00:10Z",
+        "occupants": [{"occupant_id": occupant, "role": "driver"}],
+        "events": [{"event_type": "PHONE", "occupant_id": occupant,
+                    "start_frame": 0, "end_frame": 299, "label": "PHONE_USE"}],
+        "context_intervals": [{
+            "context_id": f"ctx-{item['video_id']}", "occupant_id": occupant,
+            "start_frame": 0, "end_frame": 300, "inside_vehicle": True,
+            "outside_vehicle_person": False, "motorcycle_flag": False,
+            "phone_state": "PHONE_USE", "seatbelt_state": "FASTENED",
+            "visibility": "clear", "conditions": "daylight",
+        }],
+        "context": {"inside_vehicle": True, "outside_vehicle_person": False, "motorcycle_flag": False},
+        "review_provenance": {
+            "reviewer_type": "HUMAN", "status": "HUMAN_APPROVED", "reviewer_id": "test-auditor",
+            "reviewed_at": "2026-09-06T00:00:00Z", "adjudication_status": "FINAL",
+            "annotation_version": "v2.0", "identity_manifest_sha256": "a" * 64,
+            "evidence_hash": "b" * 64,
+        },
+    }
+
+
 @pytest.fixture
 def official_freeze(intake, tmp_path):
     import yaml
@@ -149,12 +196,23 @@ def official_freeze(intake, tmp_path):
     manifest = tmp_path / "external.jsonl"
     development = tmp_path / "development.jsonl"
     development.write_text(json.dumps(dev) + "\n", encoding="utf-8")
+    freeze_test_lineage(development)
+    for record in records:
+        annotation = tmp_path / f"sequence-{record['video_id']}.json"
+        annotation.write_text(json.dumps(canonical_sequence(record)), encoding="utf-8")
+        record["annotation_path"] = str(annotation)
+        record["annotation_sha256"] = sha256_file(annotation)
     lock = {
         "status": "FROZEN_IDENTITY_MANIFEST", "manifest_sha256": "a" * 64,
         "eligible_for_frozen_event_evaluation": True,
         "evaluation_scope": "FULL_SYSTEM_EVENT_EVALUATION",
         "video_ids": [r["video_id"] for r in records],
-        "videos": {r["video_id"]: {"sha256": r["sha256"]} for r in records},
+        "videos": {r["video_id"]: {"sha256": r["sha256"], "fps": 30.0, "frame_count": 300} for r in records},
+        "proven_identities": [{
+            "video_id": r["video_id"], "vehicle_id": r["vehicle_id"],
+            "cabin_id": f"video:{r['video_id']}:provided-cabin",
+            "occupant_id": f"video:{r['video_id']}:provided-cabin:occupant-track:1",
+        } for r in records],
     }
     lock_path = tmp_path / "identity.json"
     return records, manifest, development, policy, tmp_path / "frozen.json", lock, lock_path
@@ -190,11 +248,161 @@ def test_official_freezer_enforces_intake_without_precheck(official_freeze, case
     lock_path.write_text(json.dumps(lock), encoding="utf-8")
     if case != "valid":
         with pytest.raises(ValueError, match="cannot freeze external test"):
-            freeze_external_test(manifest, development, policy, output, lock_path)
+            freeze_external_test(manifest, development, policy, output, lock_path,
+                                 development.with_suffix(".lock.json"))
         assert not output.exists()
     else:
-        result = freeze_external_test(manifest, development, policy, output, lock_path)
+        result = freeze_external_test(manifest, development, policy, output, lock_path,
+                                      development.with_suffix(".lock.json"))
         assert result["sequence_intake_validation"]["status"] == "SEQUENCE_INTAKE_CHECKS_PASSED"
         assert result["independent_group_coverage"]["person_group_ids"]["actual"] == 8
         assert result["independent_group_coverage"]["physical_vehicle_group_id"]["actual"] == 8
         assert len(result["sequence_intake_validation"]["evidence_files"]) == 24
+
+
+@pytest.mark.parametrize("mutation", [
+    "legacy_list", "gap", "ai", "pending", "wrong_video", "wrong_hash", "wrong_fps",
+    "wrong_manifest", "missing_occupant", "file_changed", "extra_file_changed", "blank_reviewer",
+])
+def test_official_freeze_rejects_invalid_canonical_truth(official_freeze, mutation):
+    rows, manifest, development, policy, output, lock, lock_path = official_freeze
+    row = rows[0]
+    path = Path(row["annotation_path"])
+    annotation = json.loads(path.read_text(encoding="utf-8"))
+    if mutation == "legacy_list":
+        annotation = []
+    elif mutation == "gap":
+        annotation["context_intervals"][0]["start_frame"] = 1
+    elif mutation == "ai":
+        annotation["review_provenance"]["reviewer_type"] = "AI"
+        annotation["review_provenance"]["status"] = "AI_REVIEWED_PROPOSAL"
+    elif mutation == "pending":
+        annotation["review_provenance"]["adjudication_status"] = "PENDING"
+    elif mutation == "wrong_video":
+        annotation["video_id"] = "different-video"
+    elif mutation == "wrong_hash":
+        annotation["video_sha256"] = "f" * 64
+    elif mutation == "wrong_fps":
+        annotation["fps"] = 25.0
+    elif mutation == "wrong_manifest":
+        annotation["review_provenance"]["identity_manifest_sha256"] = "f" * 64
+    elif mutation == "missing_occupant":
+        annotation["occupants"] = []
+        annotation["events"] = []
+        annotation["context_intervals"] = []
+    elif mutation == "file_changed":
+        annotation["context_intervals"][0]["notes"] = "tampered"
+    elif mutation == "extra_file_changed":
+        extra_path = path.with_name("extra-tampered.json")
+        extra_path.write_bytes(path.read_bytes())
+        row["additional_sequence_annotations"] = [{"path": str(extra_path), "sha256": "f" * 64}]
+    elif mutation == "blank_reviewer":
+        annotation["review_provenance"]["reviewer_id"] = " "
+    path.write_text(json.dumps(annotation), encoding="utf-8")
+    if mutation != "file_changed":
+        row["annotation_sha256"] = sha256_file(path)
+    manifest.write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
+    lock_path.write_text(json.dumps(lock), encoding="utf-8")
+    with pytest.raises(ValueError, match="cannot freeze external test"):
+        freeze_external_test(manifest, development, policy, output, lock_path,
+                             development.with_suffix(".lock.json"))
+    assert not output.exists()
+
+
+@pytest.mark.parametrize("multiple_cabins", [False, True])
+def test_canonical_truth_flows_through_external_event_and_context_freeze(
+    official_freeze, tmp_path, multiple_cabins,
+):
+    import csv
+
+    from training.build_event_truth_from_sequences import (
+        CONTEXT_FIELDNAMES, EVENT_FIELDNAMES, process_file,
+    )
+    from training.freeze_context_ground_truth import freeze_context_ground_truth
+    from training.freeze_event_ground_truth import freeze_event_ground_truth
+    from training.validate_event_sequence_annotations import load_schema
+
+    rows, manifest, development, policy, output, lock, lock_path = official_freeze
+    if multiple_cabins:
+        row = rows[0]
+        extra = canonical_sequence(row)
+        vehicle = f"video:{row['video_id']}:vehicle-track:2"
+        cabin = f"{vehicle}:cabin:0"
+        occupant = f"{cabin}:occupant-track:1"
+        extra.update(sequence_id="extra-cabin", vehicle_id=vehicle, cabin_id=cabin)
+        extra["occupants"][0]["occupant_id"] = occupant
+        extra["events"][0]["occupant_id"] = occupant
+        extra["context_intervals"][0].update(occupant_id=occupant, context_id="extra-context")
+        path = tmp_path / "extra-cabin.json"
+        path.write_text(json.dumps(extra), encoding="utf-8")
+        row["additional_sequence_annotations"] = [{"path": str(path), "sha256": sha256_file(path)}]
+        lock["proven_identities"].append({
+            "video_id": row["video_id"], "vehicle_id": vehicle,
+            "cabin_id": cabin, "occupant_id": occupant,
+        })
+    manifest.write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
+    lock_path.write_text(json.dumps(lock), encoding="utf-8")
+    external = freeze_external_test(manifest, development, policy, output, lock_path,
+                                    development.with_suffix(".lock.json"))
+    event_csv = tmp_path / "event.csv"
+    context_csv = tmp_path / "context.csv"
+    schema = load_schema("datasets/schemas/v2_event_sequence_annotation.schema.json")
+    with event_csv.open("w", newline="", encoding="utf-8") as ef, context_csv.open("w", newline="", encoding="utf-8") as cf:
+        ew = csv.DictWriter(ef, fieldnames=EVENT_FIELDNAMES)
+        cw = csv.DictWriter(cf, fieldnames=CONTEXT_FIELDNAMES)
+        ew.writeheader()
+        cw.writeheader()
+        for references in external["sequence_annotations"].values():
+            for reference in references:
+                assert process_file(Path(reference["path"]), ew, schema, cw)
+    events = freeze_event_ground_truth(event_csv, output, tmp_path / "event-lock.json")
+    context = freeze_context_ground_truth(context_csv, output, tmp_path / "context-lock.json")
+    assert events["status"] == "FROZEN_EVENT_GROUND_TRUTH"
+    assert context["coverage_status"] == "FULL_TIMELINE_NO_GAPS_OR_OVERLAPS"
+    assert sum(len(refs) for refs in external["sequence_annotations"].values()) == 12 + multiple_cabins
+
+
+@pytest.mark.parametrize("mutation", [
+    "no_lock", "changed_lineage", "changed_review", "changed_evidence", "wrong_lock",
+])
+def test_official_freeze_requires_exact_development_lineage(official_freeze, mutation, tmp_path):
+    rows, manifest, development, policy, output, lock, lock_path = official_freeze
+    lineage_lock = development.with_suffix(".lock.json")
+    if mutation == "no_lock":
+        lineage_lock = None
+    elif mutation == "changed_lineage":
+        development.write_bytes(development.read_bytes() + b"\n")
+    elif mutation == "changed_review":
+        review = development.with_suffix(".review.json")
+        review.write_bytes(review.read_bytes() + b"\n")
+    elif mutation == "changed_evidence":
+        development.with_suffix(".evidence.txt").write_text("changed", encoding="utf-8")
+    elif mutation == "wrong_lock":
+        other = tmp_path / "other.jsonl"
+        other.write_bytes(development.read_bytes())
+        lineage_lock = freeze_test_lineage(other)
+    manifest.write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
+    lock_path.write_text(json.dumps(lock), encoding="utf-8")
+    with pytest.raises(ValueError, match="development lineage"):
+        freeze_external_test(manifest, development, policy, output, lock_path, lineage_lock)
+    assert not output.exists()
+
+
+@pytest.mark.parametrize("field,value", [
+    ("completeness_status", "PENDING"), ("reviewer_type", "AI"),
+    ("reviewer_id", "unknown"), ("reviewed_at", "2026-09-06T00:00:00"),
+    ("adjudication_status", "PENDING"), ("covered_usage", ["TRAIN"]),
+    ("lineage_sha256", "f" * 64),
+])
+def test_lineage_freeze_requires_complete_human_attestation(intake, tmp_path, field, value):
+    _, dev = intake
+    path = tmp_path / "lineage.jsonl"
+    path.write_text(json.dumps(dev) + "\n", encoding="utf-8")
+    freeze_test_lineage(path)
+    review_path = path.with_suffix(".review.json")
+    review = json.loads(review_path.read_text(encoding="utf-8"))
+    review[field] = value
+    review_path.write_text(json.dumps(review), encoding="utf-8")
+    with pytest.raises(ValueError):
+        freeze_development_lineage(path, review_path, tmp_path / "invalid-lock.json")
+    assert not (tmp_path / "invalid-lock.json").exists()

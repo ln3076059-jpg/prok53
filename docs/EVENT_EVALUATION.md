@@ -120,11 +120,16 @@ Freeze only after every asset and event annotation has been human-approved:
 
 ```powershell
 py -m training.freeze_external_test `
-  datasets/manifests/v2_external_test.jsonl `
-  datasets/manifests/v2_development.jsonl `
-  --output datasets/manifests/v2_external_test_frozen.json
+  datasets/manifests/v2_sequence_001_external.jsonl `
+  datasets/manifests/v2_sequence_001_development.jsonl `
+  --identity-manifest-lock datasets/manifests/v2_sequence_001_identity_frozen.json `
+  --development-lineage-lock datasets/manifests/v2_sequence_001_development_frozen.json `
+  --output datasets/manifests/v2_sequence_001_external_frozen.json
 ```
 
 The command verifies file hashes, reviewer provenance, condition coverage, policy minimums, and
 source/camera/video/hash disjointness. It fails without writing a frozen artifact when any gate
 is unmet and refuses to overwrite an existing freeze.
+The official policy binds canonical sequence JSON annotations and a frozen, human-reviewed
+development completeness attestation. Prepare these locks and export both truth CSVs from
+the same canonical sequences using the versioned workflow in `docs/V2_EXTERNAL_TEST_PROTOCOL.md`.
