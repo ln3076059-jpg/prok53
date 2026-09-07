@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Duyệt video · Roadwatch</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <script src="/assets/app.js" defer></script>
+</head>
+<body>
+  <!-- THESIS: A human-operated video and proposal review desk.
+  OWN-WORLD: Roadwatch cool paper, graphite rules, safety green, existing Plex headings.
+  STORY: View the original, inspect an item, explicitly submit a named decision.
+  FIRST VIEWPORT: Video left; scoped queue and approval actions right; clip navigation above.
+  FORM: A focused extension of the existing review workflow; no new visual identity.
+  FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md -->
+  <header class="topbar"><span class="brand">ROADWATCH</span><span>Không gian duyệt dữ liệu</span><a href="/api/export" download>Tải bảng kết quả CSV</a></header>
+  <main>
+    <header class="page-heading"><div><h1>Duyệt video temporal</h1><p>Xem video gốc, đối chiếu đề xuất AI và ghi quyết định của bạn.</p></div><button id="reload">Tải lại hàng đợi</button></header>
+    <div id="message" role="status" aria-live="polite">Đang tải hàng đợi local…</div>
+    <section class="review-status" aria-label="Tiến độ duyệt"><strong id="progress">Chưa tải dữ liệu</strong><span>Quyền sử dụng và nguồn gốc vật lý cần bằng chứng riêng.</span></section>
+    <nav id="clips" aria-label="Chọn video"></nav>
+    <div class="workspace">
+      <section class="viewer sheet" aria-labelledby="video-title">
+        <div class="panel-heading"><h2 id="video-title">Video gốc</h2><span id="video-meta"></span></div>
+        <video id="video" controls preload="metadata" playsinline aria-label="Video gốc để người thật duyệt"></video>
+        <div class="video-tools"><button id="previous-frame" aria-label="Lùi một khung hình">Lùi 1 khung</button><button id="next-frame" aria-label="Tiến một khung hình">Tiến 1 khung</button><span id="clock">0,00 giây</span><label>Tốc độ <select id="speed"><option value="0.25">0,25×</option><option value="0.5">0,5×</option><option value="1" selected>1×</option><option value="1.5">1,5×</option></select></label></div>
+        <div class="viewer-note">Hãy xem toàn bộ video gốc trước khi xác nhận. Nút khung hình bước theo FPS danh định; dùng mốc thời gian của đề xuất để đối chiếu.</div>
+        <div class="panel-heading"><h2>Mục cần đối chiếu</h2><button id="jump" disabled>Đến thời điểm bắt đầu</button></div>
+        <article id="detail" class="detail" tabindex="-1"><p>Chọn một mục trong danh sách.</p></article>
+      </section>
+      <section class="queue sheet" aria-labelledby="queue-title">
+        <div class="panel-heading"><h2 id="queue-title">Danh sách đề xuất</h2><span id="clip-count"></span></div>
+        <div class="queue-filter"><label for="filter">Hiển thị</label><select id="filter"><option value="all">Tất cả mục</option><option value="pending">Chưa có quyết định</option><option value="done">Đã có quyết định</option></select></div>
+        <div id="items" class="item-list"></div>
+        <div class="bulk"><button id="approve-clip" disabled class="primary">Phê duyệt tất cả mục đang chờ của clip</button><button id="approve-all" disabled>Phê duyệt tất cả mục đang chờ · mọi clip</button><p>Chỉ chấp nhận nội dung đề xuất hiện tại. Không thay thế quyết định cũ hoặc tự xác nhận quyền sử dụng.</p></div>
+      </section>
+    </div>
+    <footer>Đây là công cụ ghi nhận quyết định của người duyệt. Không tạo ground truth chuẩn, không chạy mô hình, calibration hoặc đánh giá.</footer>
+  </main>
+  <dialog id="confirmation" aria-labelledby="confirmation-title">
+    <form id="decision-form">
+      <header class="dialog-heading"><h2 id="confirmation-title">Xác nhận quyết định</h2><button type="button" id="close-dialog" aria-label="Đóng xác nhận">Đóng</button></header>
+      <p id="scope"></p><div id="scope-items" class="scope-items"></div>
+      <p class="notice">Phê duyệt đề xuất “chưa chứng minh được nguồn gốc” vẫn giữ nguyên trạng thái đó. Biên nhận thao tác không thay thế bằng chứng quyền sử dụng hoặc định danh vật lý.</p>
+      <label for="reviewer">Họ tên hoặc mã định danh người duyệt thật</label><input id="reviewer" required minlength="3" autocomplete="name" placeholder="Nhập danh tính của bạn">
+      <label for="reviewed-at">Thời điểm bạn xác nhận, có múi giờ</label><div class="time-field"><input id="reviewed-at" required placeholder="YYYY-MM-DDTHH:mm:ss+07:00"><button id="time-now" type="button">Điền giờ hiện tại</button></div>
+      <label for="notes">Ghi chú và căn cứ cho quyết định</label><textarea id="notes" required minlength="10" rows="3" placeholder="Nêu nội dung đã kiểm tra và lý do cho quyết định này"></textarea>
+      <div id="edit-wrap" hidden><label for="edited">Toàn bộ nội dung mục đã sửa (JSON)</label><textarea id="edited" rows="12" spellcheck="false"></textarea><p>Giữ đủ các trường. Thời gian, vai trò và khoảng liên tục sẽ được kiểm tra khi lưu.</p></div>
+      <label class="attestation"><input type="checkbox" id="attested" required><span>Tôi là người trực tiếp duyệt. Tôi đã xem toàn bộ video gốc của các clip được chọn, kiểm tra các mục liệt kê và xác nhận quyết định này theo đúng nội dung đề xuất hoặc bản sửa.</span></label>
+      <p>Chỉ khi bấm nút lưu bên dưới, hệ thống mới ghi quyết định và biên nhận kèm SHA256. Chưa có dữ liệu nào được phê duyệt khi mở màn hình này.</p>
+      <p id="form-error" role="alert"></p>
+      <div class="dialog-actions"><button type="button" id="cancel">Hủy</button><button type="submit" id="save" class="primary">Lưu quyết định của tôi</button></div>
+    </form>
+  </dialog>
+</body>
+</html>

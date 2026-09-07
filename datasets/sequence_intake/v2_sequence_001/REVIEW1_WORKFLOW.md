@@ -173,6 +173,21 @@ It records the tested code HEAD, pytest counts and log SHA in
 resulting log/metadata. Do not describe dirty-tree tests as testing exact HEAD;
 do not rerun pytest just to make the later provenance-only commit the tested SHA.
 
+## Giao diện xác nhận bằng tiếng Việt
+
+Người duyệt có thể dùng [công cụ duyệt video local](../../../tools/temporal_reviewer/README.md):
+
+```powershell
+py -m tools.temporal_reviewer.app
+```
+
+Mở `http://127.0.0.1:8766` để xem video gốc, duyệt từng mục hoặc phê duyệt tất cả
+mục đang chờ trong clip / toàn queue. Mỗi lần lưu cần người thật nhập danh tính,
+thời điểm có múi giờ, ghi chú và xác nhận nội dung đã xem. Công cụ ghi biên nhận
+cấp item và 7 cột HUMAN; không sửa proposal AI, không ghi đè mục đã có human input.
+Biên nhận thao tác không thay thế evidence rights/lineage hoặc final receipt toàn
+payload; không tự chuyển canonical và không thay đổi các trạng thái governance.
+
 ## Stages still prohibited
 
 Do not run inference, temporal calibration, external/truth freeze, final event
