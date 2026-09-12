@@ -19,6 +19,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
+from tools.temporal_reviewer.final_review import attach_final_review
 from training.validate_review1 import digest, payload_digest, validate_record
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -115,8 +116,8 @@ def create_app(queue_path=QUEUE, root=ROOT):
 
     @app.get("/assets/{name}")
     def asset(name: str):
-        if name in {"app.js", "style.css"}:
-            media_type = "text/javascript" if name == "app.js" else "text/css"
+        if name in {"app.js", "style.css", "final.js", "final.css"}:
+            media_type = "text/javascript" if name.endswith(".js") else "text/css"
             return FileResponse(STATIC / name, media_type=media_type)
         if name == "heading.woff2":
             return FileResponse(ROOT / "frontend/src/assets/IBMPlexSansCondensed-SemiBold.woff2")
@@ -305,6 +306,7 @@ def create_app(queue_path=QUEUE, root=ROOT):
             os.replace(temp, queue_path)
             return {"saved": len(changes), "batch_id": batch_id, "governance_promotion": False}
 
+    attach_final_review(app, root, queue_path, lock, token, STATIC)
     return app
 
 

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Xác nhận hồ sơ cuối · Roadwatch</title>
+  <link rel="stylesheet" href="/assets/style.css"><link rel="stylesheet" href="/assets/final.css">
+  <script src="/assets/final.js" defer></script>
+</head>
+<body>
+  <!-- Existing Roadwatch Operate surface: a readable complete-payload dossier beside
+  a human confirmation form. Three independent tasks; no automatic gate promotion. -->
+  <header class="topbar"><span class="brand">ROADWATCH</span><span>Hồ sơ sau duyệt</span><a href="/">Về 37 đề xuất đã duyệt</a></header>
+  <main>
+    <header class="page-heading"><div><h1>Xác nhận hồ sơ cuối</h1><p>Chọn video, đọc bản tổng hợp rồi xác nhận. Bổ sung bằng chứng ở hai phần kế tiếp.</p></div><button id="refresh">Tải lại hồ sơ</button></header>
+    <div id="message" role="status" aria-live="polite">Đang tải bốn hồ sơ local…</div>
+    <section class="review-status" aria-label="Tiến độ"><strong id="progress">Chưa tải dữ liệu</strong><span>Các quyết định cấp item được giữ nguyên.</span></section>
+    <section class="quick-review" aria-labelledby="quick-title">
+      <div class="quick-heading">
+        <div><p class="eyebrow">REVIEW1 ĐÃ HOÀN TẤT</p><h2 id="quick-title">Admin đọc và xác nhận cho cả 4 clip</h2></div>
+        <p>Ba quyết định được tách riêng. Không có nút nào tự tạo bằng chứng hoặc tự mở khóa governance.</p>
+      </div>
+      <div class="quick-grid">
+        <article>
+          <span class="step-number">01</span>
+          <h3>Xác nhận 4 bản tổng hợp</h3>
+          <p>Hệ thống đã ghép đủ 37 mục Review1 đã duyệt vào 4 hồ sơ. Admin đọc nội dung bên dưới trước khi xác nhận.</p>
+          <label class="check-row"><input id="quick-payload-check" type="checkbox"><span>Tôi đã đọc 4 bản tổng hợp C01, C07, C10, C11.</span></label>
+          <button id="quick-payload" class="primary" type="button">Xác nhận 4 bản tổng hợp</button>
+          <small id="quick-payload-state">Chưa xác nhận</small>
+        </article>
+        <article>
+          <span class="step-number">02</span>
+          <h3>Giữ quyền sử dụng ở trạng thái chờ</h3>
+          <p>Hiện chưa có tệp bằng chứng quyền sử dụng. Hành động này chỉ ghi nhận thiếu căn cứ, không phê duyệt quyền.</p>
+          <label class="check-row"><input id="quick-rights-check" type="checkbox"><span>Tôi xác nhận 4 clip chưa đủ bằng chứng để quyết định quyền sử dụng.</span></label>
+          <button id="quick-rights" type="button">Ghi nhận rights còn chờ bằng chứng</button>
+          <small id="quick-rights-state">Chưa ghi nhận</small>
+        </article>
+        <article>
+          <span class="step-number">03</span>
+          <h3>Giữ nguồn gốc vật lý chưa chứng minh</h3>
+          <p>Không có tài liệu xác nhận phiên quay, xe và người vật lý. Không suy ID từ tên clip, URL hoặc hình ảnh.</p>
+          <label class="check-row"><input id="quick-lineage-check" type="checkbox"><span>Tôi xác nhận lineage của 4 clip hiện là NOT_PROVABLE.</span></label>
+          <button id="quick-lineage" type="button">Giữ NOT_PROVABLE cho 4 clip</button>
+          <small id="quick-lineage-state">Chưa ghi nhận</small>
+        </article>
+      </div>
+      <div class="quick-all">
+        <label class="check-row"><input id="quick-all-check" type="checkbox"><span>Tôi đã đọc cả ba nội dung trên và đồng ý lưu đúng các trạng thái được mô tả cho 4 clip.</span></label>
+        <button id="quick-all" class="primary" type="button">Lưu toàn bộ xác nhận cho 4 clip</button>
+        <small id="quick-all-state">12 hồ sơ đang chờ thao tác của admin</small>
+      </div>
+      <p class="quick-footnote">Các nút chỉ lưu sau thao tác trực tiếp của admin. Nội dung nguồn vẫn thuộc Review1; người xác nhận hồ sơ cuối là admin.</p>
+    </section>
+    <nav id="clips" aria-label="Chọn video"></nav>
+    <nav id="stages" aria-label="Phần hồ sơ cần hoàn thiện">
+      <button data-stage="payload" aria-current="step"><strong>Xác nhận bản tổng hợp</strong><span>Đọc và ký toàn bộ nội dung</span></button>
+      <button data-stage="rights"><strong>Quyền sử dụng</strong><span>Tài liệu và quyết định sử dụng</span></button>
+      <button data-stage="lineage"><strong>Nguồn gốc vật lý</strong><span>Bằng chứng hoặc chưa chứng minh</span></button>
+    </nav>
+    <div id="content" hidden class="final-workspace">
+      <section class="sheet dossier" aria-labelledby="dossier-title">
+        <div class="panel-heading"><h2 id="dossier-title">Bản tổng hợp</h2><a id="candidate-download">Tải bản gốc JSON</a></div>
+        <div id="dossier" class="dossier-body"></div>
+      </section>
+      <section class="sheet confirmation-panel" aria-labelledby="form-title">
+        <div class="panel-heading"><h2 id="form-title">Xác nhận của bạn</h2><span id="record-state"></span></div>
+        <div id="saved-record" hidden></div>
+        <form id="review-form" class="review-form">
+          <fieldset id="form-fields">
+            <div id="stage-fields"></div>
+            <div id="upload-section" hidden>
+              <label for="evidence">Tệp bằng chứng</label>
+              <input id="evidence" class="visually-hidden" type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.txt,.md,.json,.csv,.html">
+              <div class="file-picker"><label for="evidence" class="file-button">Chọn tệp bằng chứng</label><span id="file-summary">Chưa chọn tệp mới</span></div>
+              <p class="help">Chọn tài liệu thật từ máy. Tối đa 10 tệp, mỗi tệp 20 MB. Chỉ tải lên khi bạn bấm lưu.</p>
+              <ul id="file-list" class="file-list"></ul>
+              <label class="check-row"><input id="evidence-confirmed" type="checkbox"><span>Tôi đã đọc các tệp, xác nhận chúng liên quan đến video và nội dung khai báo.</span></label>
+            </div>
+            <div class="person-fields">
+              <h3>Người xác nhận</h3>
+              <label for="reviewer">Tên hoặc mã người duyệt <span class="required">Bắt buộc</span></label>
+              <input id="reviewer" required minlength="3" autocomplete="name" placeholder="Nhập mã bạn dùng để duyệt">
+              <p class="help">Nếu bạn là người đã duyệt bằng mã admin, có thể tiếp tục dùng mã đó.</p>
+              <label for="reviewed-at">Thời điểm xác nhận <span class="required">Bắt buộc</span></label>
+              <div class="time-field"><input id="reviewed-at" required placeholder="YYYY-MM-DDTHH:mm:ss+07:00"><button id="now" type="button">Điền giờ hiện tại</button></div>
+              <label for="notes">Ghi chú và căn cứ <span class="required">Ít nhất 10 ký tự</span></label>
+              <textarea id="notes" required minlength="10" rows="3" placeholder="Nêu điều bạn đã kiểm tra và lý do xác nhận"></textarea>
+              <label class="check-row"><input type="checkbox" id="attested" required><span id="attestation-copy"></span></label>
+            </div>
+            <p id="form-error" role="alert"></p>
+            <button type="submit" class="primary submit-button" id="save">Lưu xác nhận bản tổng hợp</button>
+            <p class="help">Lưu tạo hồ sơ có người duyệt, thời điểm và SHA256. Không tự chạy mô hình, chuyển ground truth chuẩn hay mở calibration.</p>
+          </fieldset>
+        </form>
+      </section>
+    </div>
+    <footer id="footer">Quyền sử dụng, nguồn gốc, roster định danh và tính đầy đủ của dữ liệu vẫn cần được kiểm tra riêng.</footer>
+  </main>
+</body>
+</html>

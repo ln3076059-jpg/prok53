@@ -39,6 +39,29 @@ yêu cầu bị từ chối. Chỉ chạy một instance công cụ, không sử
 Đây là công cụ local một người vận hành, không có đăng nhập hay chứng thực danh tính:
 biên nhận chứng minh thao tác gửi có khai danh tính, không tự chứng minh người đó là ai.
 
+## Xác nhận hồ sơ cuối
+
+Sau khi toàn bộ item Review1 đã được người thật duyệt, mở
+**http://127.0.0.1:8766/final**. Trang này hiển thị bốn payload của C01, C07, C10 và
+C11, các khoảng thời gian đầy đủ, metadata và SHA256 đang được xác nhận.
+
+Khối đầu trang cho phép admin lưu ba nhóm xác nhận cho cả bốn clip:
+
+1. Xác nhận nguyên trạng bốn payload đã ghép từ Review1.
+2. Khi chưa có bằng chứng quyền sử dụng, ghi nhận `NEEDS_HUMAN_DECISION` và giữ
+   `project_use_review=PENDING`.
+3. Khi chưa có@enduml bằng chứng nguồn/camera/phiên quay/người/xe vật lý, ghi nhận
+   `NOT_PROVABLE` và để trống toàn bộ ID vật lý.
+
+Mỗi thao tác hàng loạt chỉ mở sau khi admin tích xác nhận phạm vi. Nút
+**Lưu toàn bộ xác nhận cho 4 clip** thực hiện cả ba nhóm theo đúng các trạng thái trên.
+Nó không tạo evidence, không chứng minh rights/lineage và không mở gate governance.
+
+Hồ sơ final payload được ghi vào `final_payload_review/`. Khai báo rights và lineage
+được ghi vào `human_review_return/governance_ui/`; evidence tải từ giao diện được lưu
+theo nội dung và SHA256 trong thư mục `uploads/`. Tất cả vẫn ở dưới
+`datasets/incoming/` đã gitignore.
+
 ## Các gate giữ riêng
 
 Phê duyệt đề xuất rights `NEEDS_HUMAN_DECISION` không xác nhận quyền sử dụng.
@@ -63,5 +86,5 @@ FROZEN_TEST_RUN_COUNT = 1
 Kiểm tra code giao diện với fixture tạm, không ghi vào queue thật:
 
 ```powershell
-py -m pytest tests/test_temporal_reviewer.py tests/test_review1_contract.py -q
+py -m pytest tests/test_temporal_final_review.py tests/test_temporal_reviewer.py tests/test_review1_contract.py -q
 ```
