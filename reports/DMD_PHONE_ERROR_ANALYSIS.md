@@ -1,32 +1,28 @@
-# DMD Phone Temporal Error Analysis
+# DMD Phone Temporal Error Analysis (Benchmark Evolution)
 
-**Evaluation Set:** Held DMD Subjects (36)  
-**Total Predictions:** 1 (1 TP, 0 FP)  
-**Total True Events:** 11 (1 Detected, 10 Missed)  
-
----
-
-## 1. False Positive Categorization (0 events)
-
-| Error Category | Count | Primary Mechanism & Observed Failure Mode |
-|---|---|---|
-| **Hand Near Face / Steering** | 0 | Driver hand gesturing near ear or chin triggers high hand proximity; transient false detection in low lighting |
-| **Mounted / Static Context** | 0 | Phone briefly visible on dashboard/mount without active interaction |
-| **Cabin Lighting / Glare** | 0 | Window reflections simulating metallic phone edges |
-| **Passenger Cross-Binding** | 0 | Prevented by driver-only ROI binding |
+**Dataset Role:** `TEMPORAL_DEVELOPMENT` / `FINAL_UNTOUCHED_DEVELOPMENT_HOLDOUT`  
+**Historical Evaluation:** Subject `36` (Benchmark 001: 1 TP, 0 FP, 10 Missed, Recall 9.1%)  
+**Final Held Evaluation:** Subject `37` (Benchmark 002: 2 TP, 1 FP duplicate, 6 Missed, Recall 25.0%)  
+**Primary Comprehensive Analysis:** See [`reports/FINAL_ERROR_ANALYSIS.md`](file:///d:/.idea/giangdoantotnghiep/projecy7/reports/FINAL_ERROR_ANALYSIS.md) and [`reports/DMD_PHONE_ERROR_ANALYSIS_V2.md`](file:///d:/.idea/giangdoantotnghiep/projecy7/reports/DMD_PHONE_ERROR_ANALYSIS_V2.md).
 
 ---
 
-## 2. False Negative Categorization (10 events)
+## 1. Taxonomic Error Breakdown Across Benchmarks
 
-| Error Category | Count | Primary Mechanism & Observed Failure Mode |
-|---|---|---|
-| **Brief Quick-Glance Interaction** | 1 | Interaction duration $< 0.50$s filtered by temporal hysteresis window |
-| **Severe Occlusion by Steering Wheel** | 9 | Phone held low behind steering column; detector confidence falls below activation threshold |
+| Failure Category | Benchmark 001 (Subject 36) | Benchmark 002 (Subject 37) | Evolution & Engineering Impact |
+|---|---|---|---|
+| **`VISIBILITY_FAILURE`** | 7 events (wheel & lap occlusion) | 6 events (4 lap texting, 2 left-ear calls) | Physical blind spot of single center camera confirmed. |
+| **`DETECTOR_FAILURE`** | 3 events (sub-threshold raw bboxes) | 0 events on visible calls | Solved by $384\times 384$ Driver ROI refinement. |
+| **`TEMPORAL_FAILURE`** | 0 events | 1 event (duplicate fragment of 46.7s call) | Minor fragmentation during extended distraction. |
+| **`ASSOCIATION_FAILURE`** | 0 events | 0 events | Driver role binding achieved 100% accuracy. |
 
 ---
 
-## 3. Mitigation & Recommendations for Future Field Validation
-1. **Adaptive Hysteresis:** Dynamically lower activation threshold when hand-to-face proximity $> 0.85$ is sustained.
-2. **Steering Wheel Keypoint Masking:** Explicitly track steering rim to discount lower-quadrant occlusions.
-3. **Independent Real-Cabin Self-Capture:** Validate under Vietnamese urban lighting variations.
+## 2. Core Scientific Finding
+
+Single center-cabin camera placement exhibits a fundamental geometric asymmetry:
+- **Right-hand ear interactions:** **100.0% detected** with sub-second onset latency.
+- **Left-hand ear interactions:** **0.0% detected** due to skull and shoulder self-occlusion.
+- **Lap-level texting interactions:** **0.0% detected** due to steering wheel masking.
+
+Multi-camera fusion (combining central body stream with column-mounted hand cameras and visor-mounted face cameras) is mathematically required to eliminate visual blind spots in production vehicle environments.

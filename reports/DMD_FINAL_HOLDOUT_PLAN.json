@@ -1,8 +1,11 @@
 {
-  "status": "FROZEN_HOLDOUT_SELECTION",
-  "governance_note": "Strict holdout plan established BEFORE final tuning and evaluation. Zero model predictions or threshold tuning have touched this subject.",
+  "status": "CONSUMED_ONE_SHOT_HOLDOUT",
+  "governance_note": "Subject 37 was strictly held out with zero model exposure prior to software freeze. Benchmark 002 was executed exactly once (run count = 1). Subject 37 is now permanently consumed and ineligible for future retraining or tuning.",
+  "benchmark_execution_count": 1,
+  "final_benchmark_id": "DMD_EXTERNAL_DEVELOPMENT_BENCHMARK_002",
   "selection_timestamp": "2026-09-13T12:47:00+07:00",
-  "git_head": "bc7d2938878ed54419d3c3330d473a48c93615a4",
+  "execution_timestamp": "2026-09-13T08:27:57.928205+00:00",
+  "git_head_at_freeze": "e31829d68a1d9311669332921b0ec11586439291",
   "development_subjects_pool": [
     "14",
     "36"
