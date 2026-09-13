@@ -7,16 +7,20 @@ class_names:
   1: seatbelt_fastened
   2: seatbelt_unfastened
 thresholds:
-  phone: 0.25
+  phone: 0.20
   seatbelt_fastened: 0.45
   seatbelt_unfastened: 0.40
 threshold_status: CALIBRATED_DEVELOPMENT_V2
+driver_roi_refinement:
+  enabled: true
+  normalized_xyxy: [0.0, 0.10, 0.65, 0.95]
+  imgsz: 384
 specialized_detectors:
   enabled: true
   models:
     - name: phone_detector
       weights: models/active/v2/phone_detector.pt
-      threshold: 0.25
+      threshold: 0.20
       class_map:
         0: phone
     - name: seatbelt_detector
@@ -94,15 +98,16 @@ seatbelt_policy:
 temporal:
   window_seconds: 2.0
   smoothing_alpha: 0.35
-  feature_positive_score: 0.28
-  min_positive_seconds: 0.35
-  min_observations: 3
-  cooldown_seconds: 4.0
-  positive_ratio: 0.50
-  gap_tolerance_seconds: 0.75
-  candidate_threshold: 0.30
-  activation_threshold: 0.35
-  release_threshold: 0.20
+  feature_positive_score: 0.18
+  min_positive_seconds: 0.50
+  min_observations: 2
+  cooldown_seconds: 3.0
+  positive_ratio: 0.40
+  gap_tolerance_seconds: 3.0
+  candidate_threshold: 0.18
+  activation_threshold: 0.25
+  release_threshold: 0.15
+  occlusion_bridge_seconds: 4.0
 tracking:
   vehicle: BYTE_TRACK
   occupants_and_phone: TRACK_BY_DETECTION

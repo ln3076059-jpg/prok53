@@ -1,0 +1,14 @@
+{
+  "name": "deep_bridge_40",
+  "window_seconds": 2.0,
+  "min_positive_seconds": 0.5,
+  "min_observations": 2,
+  "positive_ratio": 0.4,
+  "cooldown_seconds": 3.0,
+  "gap_tolerance_seconds": 3.0,
+  "feature_positive_score": 0.18,
+  "candidate_threshold": 0.18,
+  "activation_threshold": 0.25,
+  "release_threshold": 0.15,
+  "occlusion_bridge_seconds": 4.0
+}

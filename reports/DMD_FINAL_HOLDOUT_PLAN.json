@@ -1,0 +1,37 @@
+{
+  "status": "FROZEN_HOLDOUT_SELECTION",
+  "governance_note": "Strict holdout plan established BEFORE final tuning and evaluation. Zero model predictions or threshold tuning have touched this subject.",
+  "selection_timestamp": "2026-09-13T12:47:00+07:00",
+  "git_head": "bc7d2938878ed54419d3c3330d473a48c93615a4",
+  "development_subjects_pool": [
+    "14",
+    "36"
+  ],
+  "final_held_evaluation_subjects": [
+    "37"
+  ],
+  "subject_overlap": 0,
+  "sha_overlap": 0,
+  "selection_criteria": {
+    "availability": "Confirmed active presigned archive in .dmd_urls.json",
+    "camera_channel": "RGB BODY (Session s2)",
+    "target_actions_present": "phonecall_right, phonecall_left, texting_right, texting_left",
+    "model_blindness_enforced": true,
+    "never_inspected_prior_to_freeze": true
+  },
+  "held_subjects_manifest": [
+    {
+      "source_participant_id": "37",
+      "source_group": "gZ",
+      "source_session_id": "s2",
+      "source_stream": "BODY",
+      "archive_filename": "dmd-dataset-distraction-gZ-37.tar.gz",
+      "expected_archive_size_bytes": 4882642095,
+      "member_video_pattern": "gZ_37_s2_*_rgb_body.mp4",
+      "member_annotation_pattern": "gZ_37_s2_*_rgb_ann_distraction.json",
+      "dataset_role": "FINAL_UNTOUCHED_DEVELOPMENT_HOLDOUT",
+      "reason_for_selection": "Independent subject with complete s2 distraction sequence, matching session protocol of development subjects 14 and 36 while maintaining strict zero-contamination isolation."
+    }
+  ],
+  "holdout_blindness_declaration": "No model inference, threshold evaluation, error browsing, or parameter tuning will be executed on Subject 37 until the software, model weights, and temporal configuration V2 are committed and frozen."
+}

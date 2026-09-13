@@ -42,3 +42,4 @@ driver_safety.db
 *.db
 *.db-journal
 *.progress.json
+reports/cache_observations_sub_*.json

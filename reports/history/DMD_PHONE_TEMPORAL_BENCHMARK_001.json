@@ -1,0 +1,45 @@
+{
+  "status": "COMPLETE",
+  "benchmark_type": "DMD_EXTERNAL_DEVELOPMENT_BENCHMARK",
+  "governance_note": "Development temporal benchmark on held subject. NOT the canonical frozen model test.",
+  "evaluation_subjects": [
+    "36"
+  ],
+  "video_sha256_list": [
+    "039d494e15f0f72864e815999c76aadbce84b2d58c0c011374975e4e77ec0ef4"
+  ],
+  "phone_model_sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+  "temporal_configuration_hash": "5d70dc287251f79cdf3ecf5019f007cf80d4a7a4162bb49e1bf22e496549199c",
+  "selected_configuration": {
+    "name": "window_15f_fast",
+    "window_seconds": 1.5,
+    "min_positive_seconds": 0.5,
+    "min_observations": 2,
+    "positive_ratio": 0.5,
+    "cooldown_seconds": 3.0,
+    "gap_tolerance_seconds": 1.5,
+    "feature_positive_score": 0.28,
+    "candidate_threshold": 0.28,
+    "activation_threshold": 0.32,
+    "release_threshold": 0.2
+  },
+  "metrics": {
+    "phone_temporal_event_precision": 1.0,
+    "phone_temporal_event_recall": 0.0909,
+    "phone_temporal_event_f1": 0.1667,
+    "false_alarms_per_minute": 0.0,
+    "start_latency_mean_seconds": 10.383,
+    "end_latency_mean_seconds": -40.457,
+    "true_positive_events": 1,
+    "false_positive_events": 0,
+    "false_negative_events": 10,
+    "total_ground_truth_events": 11,
+    "total_evaluated_minutes": 8.6
+  },
+  "association_diagnostics": {
+    "pose_availability_rate": 1.0,
+    "unknown_occupant_rate": 0.0,
+    "phone_context_unknown_rate": 0.0,
+    "association_accuracy": "NOT_EVALUABLE_NO_BOUNDING_BOX_ASSOCIATION_GT"
+  }
+}

@@ -217,6 +217,9 @@ class PoseEstimator:
                     xyxy=(tuple(float(value) for value in pose_box) if pose_box else None),
                 )
             )
+        del result
+        if hasattr(self._model, "predictor") and self._model.predictor is not None:
+            self._model.predictor.results = None
         return evidence
 
 

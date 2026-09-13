@@ -1,0 +1,59 @@
+{
+  "dataset_pool": "DMD_TEMPORAL_DEVELOPMENT_POOL",
+  "subjects": [
+    "gC-14",
+    "gZ-36"
+  ],
+  "total_gt_positive_frames": 512,
+  "total_non_target_frames": 398,
+  "stages": {
+    "STAGE_A_RAW_DETECTOR": {
+      "name": "Raw Physical Phone Detector (conf >= 0.05)",
+      "positive_observations": 129,
+      "recall": 0.252,
+      "drop_from_previous": 0.748
+    },
+    "STAGE_B_CANDIDATE_THRESHOLD": {
+      "name": "Phone Candidate Threshold (conf >= 0.25)",
+      "positive_observations": 40,
+      "recall": 0.0781,
+      "drop_from_previous": 0.1738
+    },
+    "STAGE_C_DRIVER_CABIN_ROI": {
+      "name": "Driver Cabin ROI Containment",
+      "positive_observations": 40,
+      "recall": 0.0781,
+      "drop_from_previous": 0.0
+    },
+    "STAGE_D_OCCUPANT_ASSOCIATION": {
+      "name": "Occupant Association (Driver Binding)",
+      "positive_observations": 40,
+      "recall": 0.0781,
+      "drop_from_previous": 0.0
+    },
+    "STAGE_E_POSE_GATE": {
+      "name": "Pose / Hand / Face Context Gate",
+      "positive_observations": 40,
+      "recall": 0.0781,
+      "drop_from_previous": 0.0
+    },
+    "STAGE_F_CONTEXT_SCORE": {
+      "name": "Phone Context Score Fusion",
+      "positive_observations": 40,
+      "recall": 0.0781,
+      "drop_from_previous": 0.0
+    },
+    "STAGE_G_TEMPORAL_CANDIDATE": {
+      "name": "Temporal Window Candidate Accumulation",
+      "positive_observations": 18,
+      "recall": 0.0352,
+      "drop_from_previous": 0.043
+    },
+    "STAGE_H_ACTIVATED_EVENT": {
+      "name": "Activated Temporal Event (Benchmark 001)",
+      "positive_observations": 14,
+      "recall": 0.0273,
+      "drop_from_previous": 0.0078
+    }
+  }
+}

@@ -12,6 +12,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from dataclasses import asdict
+from backend.ai.events import Observation
 from backend.ai.auxiliary import PoseEstimator
 from backend.ai.detector import SafetyDetector
 from training.common import sha256_file
@@ -25,9 +27,9 @@ from training.dmd.temporal_eval import (
 
 
 CANDIDATE_CONFIGS = [
-    # 1.5s window baseline (~45 video frames at 30 fps)
+    # 1. Baseline historical setting without occlusion bridge (ablation reference)
     {
-        "name": "window_15f_fast",
+        "name": "baseline_001_no_bridge",
         "window_seconds": 1.50,
         "min_positive_seconds": 0.50,
         "min_observations": 2,
@@ -38,48 +40,67 @@ CANDIDATE_CONFIGS = [
         "candidate_threshold": 0.28,
         "activation_threshold": 0.32,
         "release_threshold": 0.20,
+        "occlusion_bridge_seconds": 0.0,
     },
-    # 2.0s window balanced (~60 video frames at 30 fps)
+    # 2. Fast window with 2.5s occlusion bridge
     {
-        "name": "window_20f_balanced",
-        "window_seconds": 2.00,
-        "min_positive_seconds": 0.60,
+        "name": "fast_bridge_25",
+        "window_seconds": 1.50,
+        "min_positive_seconds": 0.40,
         "min_observations": 2,
-        "positive_ratio": 0.50,
-        "cooldown_seconds": 4.0,
-        "gap_tolerance_seconds": 1.50,
-        "feature_positive_score": 0.28,
-        "candidate_threshold": 0.30,
-        "activation_threshold": 0.35,
-        "release_threshold": 0.20,
+        "positive_ratio": 0.40,
+        "cooldown_seconds": 3.0,
+        "gap_tolerance_seconds": 2.00,
+        "feature_positive_score": 0.20,
+        "candidate_threshold": 0.20,
+        "activation_threshold": 0.28,
+        "release_threshold": 0.16,
+        "occlusion_bridge_seconds": 2.50,
     },
-    # 2.5s window conservative (~75 video frames at 30 fps)
+    # 3. Balanced window with 3.5s occlusion bridge
     {
-        "name": "window_30f_conservative",
+        "name": "balanced_bridge_35",
+        "window_seconds": 2.00,
+        "min_positive_seconds": 0.50,
+        "min_observations": 2,
+        "positive_ratio": 0.45,
+        "cooldown_seconds": 3.0,
+        "gap_tolerance_seconds": 2.50,
+        "feature_positive_score": 0.20,
+        "candidate_threshold": 0.20,
+        "activation_threshold": 0.28,
+        "release_threshold": 0.18,
+        "occlusion_bridge_seconds": 3.50,
+    },
+    # 4. Deep bridge (4.0s) with sensitive thresholds
+    {
+        "name": "deep_bridge_40",
+        "window_seconds": 2.00,
+        "min_positive_seconds": 0.50,
+        "min_observations": 2,
+        "positive_ratio": 0.40,
+        "cooldown_seconds": 3.0,
+        "gap_tolerance_seconds": 3.00,
+        "feature_positive_score": 0.18,
+        "candidate_threshold": 0.18,
+        "activation_threshold": 0.25,
+        "release_threshold": 0.15,
+        "occlusion_bridge_seconds": 4.00,
+    },
+    # 5. Conservative bridge (3.0s)
+    {
+        "name": "conservative_bridge_30",
         "window_seconds": 2.50,
         "min_positive_seconds": 0.80,
         "min_observations": 3,
-        "positive_ratio": 0.55,
+        "positive_ratio": 0.50,
         "cooldown_seconds": 4.0,
-        "gap_tolerance_seconds": 1.50,
-        "feature_positive_score": 0.28,
-        "candidate_threshold": 0.32,
-        "activation_threshold": 0.38,
-        "release_threshold": 0.20,
-    },
-    # 3.0s window strict (~90 video frames at 30 fps)
-    {
-        "name": "window_45f_strict",
-        "window_seconds": 3.00,
-        "min_positive_seconds": 1.00,
-        "min_observations": 3,
-        "positive_ratio": 0.60,
-        "cooldown_seconds": 5.0,
-        "gap_tolerance_seconds": 1.50,
-        "feature_positive_score": 0.28,
-        "candidate_threshold": 0.35,
-        "activation_threshold": 0.40,
-        "release_threshold": 0.20,
+        "gap_tolerance_seconds": 2.50,
+        "feature_positive_score": 0.22,
+        "candidate_threshold": 0.22,
+        "activation_threshold": 0.30,
+        "release_threshold": 0.18,
+        "occlusion_bridge_seconds": 3.00,
     },
 ]
 
@@ -88,8 +109,8 @@ def run_calibration_sweep(
     calibration_items: list[dict[str, Any]],
     phone_model_path: Path,
     pose_model_path: Path | None = None,
-    output_json_path: Path = Path("reports/DMD_PHONE_TEMPORAL_CALIBRATION.json"),
-    output_md_path: Path = Path("reports/DMD_PHONE_TEMPORAL_CALIBRATION.md"),
+    output_json_path: Path = Path("reports/DMD_PHONE_TEMPORAL_CALIBRATION_V2.json"),
+    output_md_path: Path = Path("reports/DMD_PHONE_TEMPORAL_CALIBRATION_V2.md"),
     stride: int = 15,
 ) -> dict[str, Any]:
     output_json_path.parent.mkdir(parents=True, exist_ok=True)
@@ -105,13 +126,32 @@ def run_calibration_sweep(
     for item in calibration_items:
         vid = Path(item["member_path"])
         ann_path = Path(item["annotation_member_path"])
-        print(f"  Extracting observations from: {vid.name} (stride={stride})...")
-        obs, diag = extract_sequence_observations(
-            video_path=vid,
-            detector=detector,
-            pose_estimator=pose_estimator,
-            sample_stride_frames=stride,
-        )
+        sub_id = str(item.get("source_participant_id"))
+        cache_file = Path(f"reports/cache_observations_sub_{sub_id}.json")
+
+        if cache_file.exists():
+            print(f"  Loading cached observations from: {cache_file}...")
+            cached_payload = json.loads(cache_file.read_text(encoding="utf-8"))
+            obs = [Observation(**o) for o in cached_payload["observations"]]
+            diag = cached_payload["diagnostics"]
+        else:
+            print(f"  Extracting observations from: {vid.name} (stride={stride})...")
+            obs, diag = extract_sequence_observations(
+                video_path=vid,
+                detector=detector,
+                pose_estimator=pose_estimator,
+                sample_stride_frames=stride,
+            )
+            cache_file.write_text(
+                json.dumps({
+                    "video": str(vid),
+                    "observations": [asdict(o) for o in obs],
+                    "diagnostics": diag,
+                }, indent=2),
+                encoding="utf-8"
+            )
+            print(f"  Saved {len(obs)} observations to {cache_file}")
+
         ann = parse_dmd_openlabel(ann_path, fps=diag["fps"], total_frames=diag["total_frames"])
         gt_list = [i.to_dict() for i in ann.phone_intervals]
         video_data.append({
@@ -119,7 +159,7 @@ def run_calibration_sweep(
             "diagnostics": diag,
             "gt_list": gt_list,
         })
-        print(f"  Extracted {len(obs)} observations, {len(gt_list)} GT intervals.")
+        print(f"  Loaded {len(obs)} observations, {len(gt_list)} GT intervals for subject {sub_id}.")
 
     # Step 2: In-memory evaluation over candidate configurations
     results_by_config = []
@@ -153,7 +193,7 @@ def run_calibration_sweep(
             end_lats.append(metrics.end_latency_mean)
 
         prec = total_tp / (total_tp + total_fp) if (total_tp + total_fp) > 0 else 0.0
-        rec = total_tp / (total_tp + total_fn) if (total_tp + total_fn) > 0 else 0.0
+        rec = total_tp / total_gt if total_gt > 0 else 0.0
         f1 = (2 * prec * rec / (prec + rec)) if (prec + rec) > 0 else 0.0
         fa_per_min = total_fp / max(total_mins, 0.1)
 
@@ -257,8 +297,8 @@ def main() -> None:
             if line:
                 items.append(json.loads(line))
 
-    # Calibration items are subjects != 36 (e.g., 14, 37)
-    cal_items = [x for x in items if str(x.get("source_participant_id")) != "36"]
+    # Development pool calibration items: subjects 14 and 36
+    cal_items = [x for x in items if str(x.get("source_participant_id")) in ("14", "36")]
     if not cal_items:
         print("No calibration items found.")
         return

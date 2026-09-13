@@ -1,0 +1,13 @@
+{
+  "policy_id": "DMD_TEMPORAL_MATCHING_POLICY_V2",
+  "status": "FROZEN_BEFORE_BENCHMARK_002",
+  "iou_threshold": 0.3,
+  "onset_tolerance_seconds": 2.5,
+  "offset_tolerance_seconds": 3.5,
+  "containment_overlap_threshold": 0.4,
+  "containment_min_duration_seconds": 0.8,
+  "cooldown_merge_seconds": 3.0,
+  "duplicate_prediction_policy": "COUNT_AS_FALSE_POSITIVE",
+  "governance_rule": "Frozen prior to final held evaluation. Policy must not be altered post-evaluation.",
+  "policy_sha256": "a6e743b41e912ff962bbb7495d284f98b1d9b07f8064131ac20ceae6621420fe"
+}

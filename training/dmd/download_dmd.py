@@ -55,27 +55,22 @@ def download_chunk(
                 if resp.status not in (200, 206):
                     raise IOError(f"HTTP {resp.status} for range {start}-{end}")
 
-                pos = start
-                remaining = expected
-                buf_size = 128 * 1024
-
-                while remaining > 0:
-                    to_read = min(remaining, buf_size)
-                    data = resp.read(to_read)
-                    if not data:
+                buffer = bytearray()
+                while len(buffer) < expected:
+                    chunk = resp.read(min(expected - len(buffer), 256 * 1024))
+                    if not chunk:
                         break
-                    with file_lock:
-                        shared_f.seek(pos)
-                        shared_f.write(data)
-                    pos += len(data)
-                    remaining -= len(data)
-                    progress_cb(len(data))
+                    buffer.extend(chunk)
 
-                if remaining == 0:
+                if len(buffer) == expected:
+                    with file_lock:
+                        shared_f.seek(start)
+                        shared_f.write(buffer)
+                    progress_cb(expected)
                     on_chunk_done(chunk_id)
                     return expected
 
-                print(f"Warning: chunk {chunk_id} incomplete ({expected - remaining}/{expected}), retrying attempt {attempt+1}...", flush=True)
+                print(f"Warning: chunk {chunk_id} incomplete ({len(buffer)}/{expected}), retrying attempt {attempt+1}...", flush=True)
         except Exception as e:
             if attempt == max_retries - 1:
                 raise IOError(f"Failed chunk {chunk_id} ({start}-{end}) after {max_retries} attempts: {e}") from e

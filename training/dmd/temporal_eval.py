@@ -142,9 +142,9 @@ def extract_sequence_observations(
     total_processed_frames = 0
     observations: list[Observation] = []
 
+    torch.set_num_threads(2)
     with torch.inference_mode():
-        while frame_idx < total_frames:
-            cap.set(cv2.CAP_PROP_POS_FRAMES, frame_idx)
+        while True:
             ok, frame = cap.read()
             if not ok or frame is None:
                 break
@@ -152,13 +152,8 @@ def extract_sequence_observations(
             timestamp = frame_idx / fps
             total_processed_frames += 1
 
-            detections = detector.predict(frame, track=False)
+            detections = detector.predict(frame, track=False, specialist_filter=["phone_detector"])
             phone_dets = [d for d in detections if d.class_name == "phone"]
-
-            pose_res = pose_estimator.predict(frame) if pose_estimator else []
-            pose_item = pose_res[0] if pose_res else None
-            if pose_item is not None:
-                pose_seen += 1
 
             if not phone_dets:
                 empty_obs = Observation(
@@ -178,6 +173,11 @@ def extract_sequence_observations(
                 )
                 observations.append(empty_obs)
             else:
+                pose_res = pose_estimator.predict(frame) if pose_estimator else []
+                pose_item = pose_res[0] if pose_res else None
+                if pose_item is not None:
+                    pose_seen += 1
+
                 for d in phone_dets:
                     role = "driver"
                     role_conf = 0.95
@@ -207,10 +207,23 @@ def extract_sequence_observations(
                     )
                     observations.append(obs)
 
-            if total_processed_frames % 50 == 0:
-                gc.collect()
+            del frame
+            del detections
+            del phone_dets
+            if "pose_res" in locals():
+                del pose_res
 
-            frame_idx += sample_stride_frames
+            # Advance by sample_stride_frames using grab() without decoding pixel buffers
+            skipped = 0
+            for _ in range(sample_stride_frames - 1):
+                if not cap.grab():
+                    break
+                skipped += 1
+            frame_idx += 1 + skipped
+
+            if total_processed_frames % 50 == 0:
+                print(f"    Processed {total_processed_frames} frames ({timestamp:.1f}s / {total_seconds:.1f}s)...", flush=True)
+                gc.collect()
 
     cap.release()
 
@@ -247,6 +260,7 @@ def evaluate_temporal_engine_on_observations(
         "candidate_threshold",
         "activation_threshold",
         "release_threshold",
+        "occlusion_bridge_seconds",
     }
     engine_kwargs = {k: v for k, v in temporal_config.items() if k in supported}
     engine = TemporalEventEngine(**engine_kwargs)
@@ -284,13 +298,23 @@ def evaluate_temporal_engine_on_observations(
         policy=matching_policy,
     )
 
-    tp = len(matched)
-    fp = len(unmatched_preds)
+    # Standard temporal action detection metrics:
+    # tp is the number of distinct GT events successfully matched (at most 1 per GT)
+    matched_gt_set = set()
+    for m in matched:
+        gt_item = m["ground_truth"]
+        matched_gt_set.add((float(gt_item["start_seconds"]), float(gt_item["end_seconds"])))
+
+    tp = len(matched_gt_set)
     fn = len(unmatched_gts)
     total_gt = len(gt_intervals)
 
+    # Extra predictions matching already-detected GT events are duplicate predictions
+    duplicate_preds = max(0, len(matched) - tp)
+    fp = len(unmatched_preds) + duplicate_preds
+
     prec = tp / (tp + fp) if (tp + fp) > 0 else 0.0
-    rec = (total_gt - fn) / total_gt if total_gt > 0 else 0.0
+    rec = tp / total_gt if total_gt > 0 else 0.0
     f1 = (2 * prec * rec / (prec + rec)) if (prec + rec) > 0 else 0.0
 
     total_seconds = diagnostics["total_seconds"]

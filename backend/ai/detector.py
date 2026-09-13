@@ -204,18 +204,18 @@ class SafetyDetector:
             return bool(entries) and all(Path(item["weights"]).is_file() for item in entries)
         return self.weights.exists()
 
-    def load(self) -> None:
+    def load(self, specialist_filter: list[str] | None = None) -> None:
         if not self.available:
             raise FileNotFoundError(f"locked model weights not installed: {self.weights}")
         if self.specialists.get("enabled"):
             with self._lock:
-                if not self._specialist_models:
-                    from ultralytics import YOLO
-
-                    self._specialist_models = {
-                        item["name"]: YOLO(str(Path(item["weights"])))
-                        for item in self.specialists["models"]
-                    }
+                from ultralytics import YOLO
+                for item in self.specialists["models"]:
+                    name = item["name"]
+                    if specialist_filter and name not in specialist_filter:
+                        continue
+                    if name not in self._specialist_models:
+                        self._specialist_models[name] = YOLO(str(Path(item["weights"])))
             return
         if self._model is None:
             with self._lock:
@@ -224,10 +224,15 @@ class SafetyDetector:
 
                     self._model = YOLO(str(self.weights))
 
-    def predict(self, frame: np.ndarray, track: bool = True) -> list[NormalizedDetection]:
-        self.load()
+    def predict(
+        self,
+        frame: np.ndarray,
+        track: bool = True,
+        specialist_filter: list[str] | None = None,
+    ) -> list[NormalizedDetection]:
+        self.load(specialist_filter=specialist_filter)
         if self.specialists.get("enabled"):
-            return self._predict_specialists(frame, track)
+            return self._predict_specialists(frame, track, specialist_filter=specialist_filter)
         minimum = min(self.thresholds.values())
         imgsz = int(self.config.get("imgsz", 640))
         if track:
@@ -243,10 +248,19 @@ class SafetyDetector:
             results = self._model.predict(frame, conf=minimum, imgsz=imgsz, verbose=False)
         return self.normalize(results[0])
 
-    def _predict_specialists(self, frame: np.ndarray, track: bool) -> list[NormalizedDetection]:
+    def _predict_specialists(
+        self,
+        frame: np.ndarray,
+        track: bool,
+        specialist_filter: list[str] | None = None,
+    ) -> list[NormalizedDetection]:
         output: list[NormalizedDetection] = []
         imgsz = int(self.config.get("imgsz", 640))
         for model_index, item in enumerate(self.specialists["models"]):
+            if specialist_filter and item["name"] not in specialist_filter:
+                continue
+            if item["name"] not in self._specialist_models:
+                continue
             model = self._specialist_models[item["name"]]
             source_map = {int(key): value for key, value in item["class_map"].items()}
             mapped_thresholds = [
@@ -291,6 +305,77 @@ class SafetyDetector:
                         track_id,
                     )
                 )
+
+            # Level 2: Driver Phone ROI second pass at higher effective resolution
+            driver_roi_cfg = self.config.get("driver_roi_refinement", {})
+            if item["name"] == "phone_detector" and driver_roi_cfg.get("enabled", False):
+                h, w = frame.shape[:2]
+                roi_box = driver_roi_cfg.get("normalized_xyxy", [0.0, 0.10, 0.65, 0.95])
+                rx1, ry1 = max(0, int(w * roi_box[0])), max(0, int(h * roi_box[1]))
+                rx2, ry2 = min(w, int(w * roi_box[2])), min(h, int(h * roi_box[3]))
+                crop = frame[ry1:ry2, rx1:rx2]
+                if crop.size > 0 and crop.shape[0] > 32 and crop.shape[1] > 32:
+                    crop_imgsz = int(driver_roi_cfg.get("imgsz", 384))
+                    crop_res = model.predict(crop, conf=minimum, imgsz=crop_imgsz, verbose=False)[0]
+                    c_boxes = getattr(crop_res, "boxes", None)
+                    if c_boxes is not None and len(c_boxes) > 0:
+                        for cb_xyxy, cb_conf, cb_cls in zip(
+                            c_boxes.xyxy.cpu().tolist(),
+                            c_boxes.conf.cpu().tolist(),
+                            c_boxes.cls.cpu().tolist(),
+                        ):
+                            c_class_name = source_map.get(int(cb_cls))
+                            c_thresh = float(self.thresholds.get(c_class_name, item.get("threshold", 0.25)))
+                            if c_class_name == "phone" and float(cb_conf) >= c_thresh:
+                                full_box = (
+                                    rx1 + cb_xyxy[0],
+                                    ry1 + cb_xyxy[1],
+                                    rx1 + cb_xyxy[2],
+                                    ry1 + cb_xyxy[3],
+                                )
+                                # Merge via IoU / NMS
+                                merged = False
+                                for ex_idx, existing in enumerate(output):
+                                    if existing.class_name == "phone":
+                                        ex = existing.xyxy
+                                        ix1 = max(ex[0], full_box[0])
+                                        iy1 = max(ex[1], full_box[1])
+                                        ix2 = min(ex[2], full_box[2])
+                                        iy2 = min(ex[3], full_box[3])
+                                        inter = max(0.0, ix2 - ix1) * max(0.0, iy2 - iy1)
+                                        area1 = max(1.0, (ex[2] - ex[0]) * (ex[3] - ex[1]))
+                                        area2 = max(1.0, (full_box[2] - full_box[0]) * (full_box[3] - full_box[1]))
+                                        union = area1 + area2 - inter
+                                        iou = inter / union if union > 0 else 0.0
+                                        if iou >= 0.40:
+                                            if float(cb_conf) > existing.confidence:
+                                                output[ex_idx] = NormalizedDetection(
+                                                    existing.class_id,
+                                                    "phone",
+                                                    float(cb_conf),
+                                                    full_box,
+                                                    existing.track_id,
+                                                )
+                                            merged = True
+                                            break
+                                if not merged:
+                                    cid = next((key for key, name in self.names.items() if name == "phone"), 0)
+                                    output.append(
+                                        NormalizedDetection(
+                                            cid,
+                                            "phone",
+                                            float(cb_conf),
+                                            full_box,
+                                            None,
+                                        )
+                                    )
+                        del c_boxes
+                    del crop_res
+                    del crop
+            del boxes
+            del result
+            if hasattr(model, "predictor") and model.predictor is not None:
+                model.predictor.results = None
         return output
 
     def normalize(self, result) -> list[NormalizedDetection]:

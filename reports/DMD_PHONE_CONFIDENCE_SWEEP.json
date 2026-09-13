@@ -1,0 +1,58 @@
+[
+  {
+    "threshold": 0.05,
+    "frame_recall": 0.252,
+    "gt_positive_frames": 129,
+    "non_target_false_frames": 15,
+    "false_alarms_per_minute": 0.99
+  },
+  {
+    "threshold": 0.1,
+    "frame_recall": 0.1836,
+    "gt_positive_frames": 94,
+    "non_target_false_frames": 9,
+    "false_alarms_per_minute": 0.59
+  },
+  {
+    "threshold": 0.15,
+    "frame_recall": 0.1348,
+    "gt_positive_frames": 69,
+    "non_target_false_frames": 3,
+    "false_alarms_per_minute": 0.2
+  },
+  {
+    "threshold": 0.2,
+    "frame_recall": 0.0977,
+    "gt_positive_frames": 50,
+    "non_target_false_frames": 2,
+    "false_alarms_per_minute": 0.13
+  },
+  {
+    "threshold": 0.25,
+    "frame_recall": 0.0781,
+    "gt_positive_frames": 40,
+    "non_target_false_frames": 1,
+    "false_alarms_per_minute": 0.07
+  },
+  {
+    "threshold": 0.3,
+    "frame_recall": 0.0566,
+    "gt_positive_frames": 29,
+    "non_target_false_frames": 0,
+    "false_alarms_per_minute": 0.0
+  },
+  {
+    "threshold": 0.4,
+    "frame_recall": 0.0215,
+    "gt_positive_frames": 11,
+    "non_target_false_frames": 0,
+    "false_alarms_per_minute": 0.0
+  },
+  {
+    "threshold": 0.5,
+    "frame_recall": 0.0078,
+    "gt_positive_frames": 4,
+    "non_target_false_frames": 0,
+    "false_alarms_per_minute": 0.0
+  }
+]

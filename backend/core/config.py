@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     secret_key: str = DEVELOPMENT_SECRET_KEY
     database_url: str = "sqlite:///./driver_safety.db"
     model_path: Path = Path("models/active/best.pt")
-    model_config_path: Path = Path("models/model_config.yaml")
+    model_config_path: Path = Path("models/model_config_v2.yaml")
     upload_dir: Path = Path("uploads")
     evidence_dir: Path = Path("evidence")
     max_upload_mb: int = 1024

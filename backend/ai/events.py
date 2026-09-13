@@ -64,6 +64,7 @@ class TemporalEventEngine:
         candidate_threshold: float = 0.45,
         activation_threshold: float = 0.55,
         release_threshold: float = 0.35,
+        occlusion_bridge_seconds: float = 3.5,
         **_: object,
     ):
         self.window_seconds = float(window_seconds)
@@ -77,12 +78,14 @@ class TemporalEventEngine:
         self.candidate_threshold = float(candidate_threshold)
         self.activation_threshold = float(activation_threshold)
         self.release_threshold = float(release_threshold)
+        self.occlusion_bridge_seconds = float(occlusion_bridge_seconds)
         self.windows: defaultdict[tuple[str, int | None, str], deque[Observation]] = defaultdict(
             deque
         )
         self.last_event: dict[tuple[str, str, int | None, str], float] = {}
         self.smoothed: dict[tuple[str, int | None, str], float] = {}
         self.active_events: set[tuple[str, str, int | None, str]] = set()
+        self.last_physical_phone: dict[tuple[str, int | None, str], tuple[float, float, float]] = {}
 
     def add(self, observation: Observation) -> list[EventCandidate]:
         if observation.vehicle_context_id is None:
@@ -91,8 +94,50 @@ class TemporalEventEngine:
         if observation.class_name == "phone" and role != "driver":
             return []
         occupant_group = observation.occupant_id if observation.occupant_id else role
+        window_track_id = observation.track_id if observation.class_name == "phone" else None
+        phone_key = (observation.vehicle_context_id, window_track_id, occupant_group)
+
+        # Level 3: Temporal phone track memory & occlusion bridging
+        if observation.class_name == "phone" and role == "driver":
+            score_val = (
+                observation.fusion_score
+                if observation.fusion_score is not None
+                else observation.confidence
+            )
+            prox_val = max(observation.phone_hand_proximity or 0.0, observation.phone_face_proximity or 0.0)
+
+            if score_val >= self.candidate_threshold and observation.evidence_source != "OCCLUSION_BRIDGE":
+                # Confidently observed physical phone
+                self.last_physical_phone[phone_key] = (observation.timestamp, score_val, prox_val)
+            elif score_val <= self.release_threshold and phone_key in self.last_physical_phone:
+                last_t, last_s, last_p = self.last_physical_phone[phone_key]
+                gap = observation.timestamp - last_t
+                current_prox = prox_val or last_p
+                # Occlusion bridge requires: prior physical phone observation + ongoing hand/face proximity
+                if 0.0 < gap <= self.occlusion_bridge_seconds and last_s >= self.candidate_threshold and current_prox >= 0.25:
+                    decay = max(self.release_threshold + 0.02, last_s * (1.0 - 0.4 * (gap / (self.occlusion_bridge_seconds + 0.1))))
+                    observation = Observation(
+                        timestamp=observation.timestamp,
+                        class_name="phone",
+                        confidence=decay,
+                        track_id=observation.track_id,
+                        occupant_role=observation.occupant_role,
+                        vehicle_context_id=observation.vehicle_context_id,
+                        phone_context="HANDHELD_USE",
+                        fusion_score=decay,
+                        phone_hand_proximity=current_prox,
+                        phone_face_proximity=observation.phone_face_proximity,
+                        pose_confidence=observation.pose_confidence,
+                        occupant_role_confidence=observation.occupant_role_confidence,
+                        vehicle_context_confidence=observation.vehicle_context_confidence,
+                        evidence_source="OCCLUSION_BRIDGE",
+                    )
+                elif gap > self.occlusion_bridge_seconds:
+                    self.last_physical_phone.pop(phone_key, None)
+
         if observation.class_name == "phone" and observation.phone_context == "MOUNTED_OR_STATIC":
             self._release("PHONE", observation)
+            self.last_physical_phone.pop(phone_key, None)
             self.windows.pop((observation.vehicle_context_id, observation.track_id, occupant_group), None)
             return []
         if (
@@ -172,6 +217,15 @@ class TemporalEventEngine:
         positive_ratio = sum(score >= self.feature_positive_score for score in scores) / len(scores)
         if positive_ratio < self.minimum_positive_ratio:
             return False
+        if observations[0].class_name == "phone":
+            # Safety gate (Section 10 Level 3): pose alone without physical phone evidence cannot create PHONE_USE
+            has_physical = any(
+                item.evidence_source != "OCCLUSION_BRIDGE"
+                and (item.fusion_score if item.fusion_score is not None else item.confidence) >= self.candidate_threshold
+                for item in observations
+            )
+            if not has_physical:
+                return False
         occupant_group = observations[-1].occupant_id if observations[-1].occupant_id else (observations[-1].occupant_role or "unknown")
         window_track_id = observations[-1].track_id if observations[-1].class_name == "phone" else None
         key = (
