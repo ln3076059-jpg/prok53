@@ -1,0 +1,31 @@
+{
+  "label": "DMD_END_TO_END_DEVELOPMENT_SMOKE_TEST",
+  "status": "PASS",
+  "video_source": "datasets/external_dmd/original/extracted/gC_14_s2_2019-03-04T11;48;02+01;00_rgb_body.mp4",
+  "subclip_path": "evidence/smoke_test/dmd_smoke_clip.mp4",
+  "subclip_sha256": "ca98825fb8ce6a76b44280d26f487714812bcbaedac592369077f1f050f623b5",
+  "processed_frames": 90,
+  "job_id": "2c625347a34448a4920c23a48e8e2cac",
+  "job_status": "COMPLETED",
+  "events_generated_count": 1,
+  "events": [
+    {
+      "event_id": "32ff408267c34641aa0ed9c862d377e9",
+      "event_type": "PHONE",
+      "confidence": 0.3776425987482071,
+      "frame_number": 56,
+      "timestamp_seconds": 1.8817204301075268,
+      "occupant_role": "driver",
+      "review_status": "PENDING",
+      "evidence_count": 1
+    }
+  ],
+  "human_review_workflow": {
+    "review_id": "d58f093e861849f5862321751c700c82",
+    "reviewer_user_id": "b187ac3a9fed47ad8c10be43862d5832",
+    "reviewer_email": "reviewer@example.org",
+    "previous_status": "PENDING",
+    "new_status": "CONFIRMED",
+    "event_review_status": "CONFIRMED"
+  }
+}

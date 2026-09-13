@@ -229,20 +229,23 @@ class SafetyDetector:
         if self.specialists.get("enabled"):
             return self._predict_specialists(frame, track)
         minimum = min(self.thresholds.values())
+        imgsz = int(self.config.get("imgsz", 640))
         if track:
             results = self._model.track(
                 frame,
                 persist=True,
                 tracker=self.config.get("tracker", "bytetrack.yaml"),
                 conf=minimum,
+                imgsz=imgsz,
                 verbose=False,
             )
         else:
-            results = self._model.predict(frame, conf=minimum, verbose=False)
+            results = self._model.predict(frame, conf=minimum, imgsz=imgsz, verbose=False)
         return self.normalize(results[0])
 
     def _predict_specialists(self, frame: np.ndarray, track: bool) -> list[NormalizedDetection]:
         output: list[NormalizedDetection] = []
+        imgsz = int(self.config.get("imgsz", 640))
         for model_index, item in enumerate(self.specialists["models"]):
             model = self._specialist_models[item["name"]]
             source_map = {int(key): value for key, value in item["class_map"].items()}
@@ -253,9 +256,9 @@ class SafetyDetector:
             ]
             minimum = float(item.get("threshold", min(mapped_thresholds, default=0.25)))
             if track:
-                result = model.track(frame, persist=True, conf=minimum, verbose=False)[0]
+                result = model.track(frame, persist=True, conf=minimum, imgsz=imgsz, verbose=False)[0]
             else:
-                result = model.predict(frame, conf=minimum, verbose=False)[0]
+                result = model.predict(frame, conf=minimum, imgsz=imgsz, verbose=False)[0]
             boxes = getattr(result, "boxes", None)
             if boxes is None:
                 continue

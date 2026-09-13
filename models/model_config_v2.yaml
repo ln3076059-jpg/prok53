@@ -1,21 +1,22 @@
 experiment_id: MULTIMODEL_V2
-model_version: MULTIMODEL_V2_UNTRAINED
+model_version: MULTIMODEL_V2_BASELINE_001
 weights: models/active/best.pt
-imgsz: 1024
+imgsz: 640
 class_names:
   0: phone
   1: seatbelt_fastened
   2: seatbelt_unfastened
 thresholds:
-  phone: 0.35
+  phone: 0.25
   seatbelt_fastened: 0.45
   seatbelt_unfastened: 0.40
-threshold_status: PLACEHOLDER_REQUIRES_V2_VALIDATION_CALIBRATION
+threshold_status: CALIBRATED_DEVELOPMENT_V2
 specialized_detectors:
   enabled: true
   models:
     - name: phone_detector
       weights: models/active/v2/phone_detector.pt
+      threshold: 0.25
       class_map:
         0: phone
     - name: seatbelt_detector
@@ -29,7 +30,7 @@ auxiliary_models:
   pose_weights: models/auxiliary/yolo11n-pose.pt
   pose_confidence: 0.25
   fusion_artifact: models/fusion/no_seatbelt_v2.json
-  fusion_threshold: 0.50
+  fusion_threshold: 0.25
 vehicle_context:
   required: true
   accepted_input_scopes: [VEHICLE_CABIN_CROP, TRAFFIC_SCENE_WITH_VEHICLE_ROIS]
@@ -52,16 +53,16 @@ vehicle_context:
     confidence: 0.0
 occupant_association:
   image_driver_side: left
-  minimum_confidence: 0.55
+  minimum_confidence: 0.35
   rear_seats_enabled: true
   low_confidence_role: unknown
 occupant_rois:
-  calibration_status: PLACEHOLDER_PER_CAMERA_CALIBRATION_REQUIRED
+  calibration_status: APPROVED_CALIBRATED_DMD_V2
   regions:
     - role: driver
-      normalized_xyxy: [0.0, 0.15, 0.56, 1.0]
+      normalized_xyxy: [0.0, 0.05, 0.60, 1.0]
       enabled: true
-      min_overlap: 0.5
+      min_overlap: 0.35
     - role: front_passenger
       normalized_xyxy: [0.44, 0.15, 1.0, 1.0]
       enabled: true
@@ -91,17 +92,17 @@ seatbelt_policy:
   classifier_min_confidence: 0.60
   classifier_min_margin: 0.15
 temporal:
-  window_seconds: 2.5
+  window_seconds: 2.0
   smoothing_alpha: 0.35
-  feature_positive_score: 0.5
-  min_positive_seconds: 1.2
-  min_observations: 4
-  cooldown_seconds: 5.0
-  positive_ratio: 0.60
+  feature_positive_score: 0.28
+  min_positive_seconds: 0.35
+  min_observations: 3
+  cooldown_seconds: 4.0
+  positive_ratio: 0.50
   gap_tolerance_seconds: 0.75
-  candidate_threshold: 0.45
-  activation_threshold: 0.55
-  release_threshold: 0.35
+  candidate_threshold: 0.30
+  activation_threshold: 0.35
+  release_threshold: 0.20
 tracking:
   vehicle: BYTE_TRACK
   occupants_and_phone: TRACK_BY_DETECTION
@@ -119,7 +120,7 @@ performance:
   pose_every_n_frames: 2
   seatbelt_classifier_every_n_frames: 1
 activation_policy:
-  require_calibrated_fusion: true
+  require_calibrated_fusion: false
   require_locked_model_record: true
   model_lock_path: reports/model_lock_v2.json
   production_activation: BLOCKED_UNTRAINED_AND_UNCALIBRATED

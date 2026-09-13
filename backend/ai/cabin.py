@@ -78,7 +78,7 @@ class CabinLocalizer:
         self._load()
         if self._model is None:
             return None
-        result = self._model.predict(crop, verbose=False)[0]
+        result = self._model.predict(crop, imgsz=640, verbose=False)[0]
         boxes = getattr(result, "boxes", None)
         if boxes is None or len(boxes) == 0:
             return CabinRegion(None, 0.0, "CABIN_MODEL", "UNKNOWN_CABIN", "no windshield detected")

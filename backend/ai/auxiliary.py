@@ -179,7 +179,7 @@ class PoseEstimator:
         self._load()
         if self._model is None:
             return []
-        result = self._model.predict(frame, conf=self.confidence, verbose=False)[0]
+        result = self._model.predict(frame, conf=self.confidence, imgsz=480, verbose=False)[0]
         keypoints = getattr(result, "keypoints", None)
         if keypoints is None or keypoints.xy is None:
             return []
@@ -243,7 +243,7 @@ class SeatbeltClassifier:
         self._load()
         if self._model is None or crop.size == 0:
             return None
-        result = self._model.predict(crop, verbose=False)[0]
+        result = self._model.predict(crop, imgsz=224, verbose=False)[0]
         probabilities = getattr(result, "probs", None)
         if probabilities is None:
             return None

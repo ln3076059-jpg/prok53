@@ -1,60 +1,44 @@
-# Product
+# Product Specification — Roadwatch Driver Safety
 
 <!-- impeccable:product-schema 1 -->
 
 ## Platform
+Web (Operations Dashboard & Human Review Interface)
 
-web
-
-## Stack
-
-Confirmed by the project brief: React with TypeScript, FastAPI, MySQL, Ultralytics YOLO11s, OpenCV, and a single canonical Kaggle GPU training workflow.
+## Technology Stack
+React with TypeScript, Vite, IBM Carbon Design System, FastAPI, SQLAlchemy (SQLite / MySQL), Ultralytics YOLO11s, ByteTrack, and OpenCV.
 
 ## Users
-
-- Safety reviewers inspect evidence and confirm or reject detected violations.
-- Operations analysts upload recordings, monitor analysis jobs, search events, export records, and review system statistics.
-- ML engineers govern datasets, run the single approved training experiment, lock artifacts, and audit reproducibility.
+- **Safety Reviewers:** Inspect temporal event evidence packages and confirm, reject, or request review for detected violations.
+- **Operations Analysts:** Upload vehicle cabin recordings, monitor processing jobs, search confirmed events, and export audit trails.
+- **ML Engineers:** Audit model weights, manage subject-disjoint splits, calibrate temporal parameters, and verify cryptographic locks.
 
 ## Product Purpose
+Detect visible handheld phone use and unfastened seatbelt states in vehicle cabin camera feeds through a multi-stage decoupled architecture. The system applies vehicle tracking, cabin localization, occupant-role association, pose-guided hand/face proximity context, and temporal hysteresis to generate reviewable `PHONE` and `NO_SEATBELT` events.
 
-Detect visible phones and explicit fastened or unfastened seatbelt states with one three-class detector, then apply vehicle context, occupant-role association, and temporal confirmation to create reviewable PHONE and NO_SEATBELT events.
+## Positioning & Architecture
+Rather than a naive monolithic detector, Roadwatch employs specialized decoupled models:
+1. **Phone Detector:** YOLO11s (image size 960) localizing physical handheld devices.
+2. **Seatbelt Detector:** YOLO11s (image size 1280) localizing occupant upper-body torso ROIs.
+3. **Seatbelt Classifier:** YOLO11s-cls evaluating three discrete states (`seatbelt_fastened`, `seatbelt_unfastened`, `uncertain_or_occluded`).
+4. **Pose & Context Reasoning:** YOLO11n-pose evaluating hand and facial proximity to distinguish handheld phone use from dashboard mounts.
+5. **Temporal Event Engine:** Stateful sliding window with parameter-controlled activation and release thresholds.
 
-Success requires legal data provenance, group-clean evaluation, reproducible model artifacts, usable evidence, and an end-to-end application. Detector metrics and event metrics remain separate.
+## Capabilities and Operational Constraints
+- **Phone Violations:** Evaluated strictly for the resolved `driver` role. Passenger phone interactions never trigger driver violations.
+- **Seatbelt Violations:** Evaluated across all configured occupant ROIs. `uncertain_or_occluded` states route to `NEEDS_REVIEW` and never default to unfastened violations.
+- **Temporal Persistence:** Violations require multi-frame confirmation with defined positive ratio and cooldown periods.
+- **Evidence Bundles:** All candidate triggers generate immutable evidence frames, bounding box crops, and metadata JSON traces.
 
-## Positioning
-
-One governed YOLO11s detector produces object and upper-body state observations on a vehicle/cabin crop. A transparent event layer associates detections with configured occupant regions, confirms them over time, preserves evidence, and keeps uncertain cases in human review.
-
-## Operating Context
-
-Inputs are uploaded images or video files and, where safely configured, camera streams. Reviewers work from event queues, evidence frames, source metadata, model versions, and review history. ML engineers work from immutable raw assets, source manifests, review decisions, group-aware splits, frozen-test controls, and a locked experiment record.
-
-## Capabilities and Constraints
-
-- Canonical detection classes are `phone`, `seatbelt_fastened`, and `seatbelt_unfastened`.
-- Phone boxes cover the visible physical phone. Seatbelt-state boxes cover comparable person upper-body regions.
-- Missing or unclear belt evidence is never converted to `seatbelt_unfastened`.
-- A detection without a tracked vehicle/cabin context never creates an event.
-- Driver phone use is a violation; passenger phone use is not. Visible unfastened occupants, including passengers, are violations.
-- Only human-approved seatbelt annotations can enter the governed dataset.
-- The primary experiment is MC_001 using `yolo11s.pt`, image size 640, seed 42, and one serious Kaggle GPU run.
-- Validation alone selects thresholds. The frozen test is used once after model lock.
-- Runtime violations are `PHONE` and `NO_SEATBELT`; review states are `PENDING`, `CONFIRMED`, `REJECTED`, and `NEEDS_REVIEW`.
-- Real dataset acquisition, human semantic review, Kaggle execution, trained weights, and measured metrics are not yet available and must not be simulated.
-
-## Evidence on Hand
-
-The attached master specification is the sole confirmed project brief. No approved dataset, trained model, human event ground truth, production camera, customer claims, or measured performance evidence was supplied.
+## Verified Evidence on Hand
+- **Component Weights:** Verified baseline `V2_BASELINE_001` (`models/locked/v2_baseline_001/model_lock.json`).
+- **Validation Metrics:** Phone mAP50 94.48%, Seatbelt Det mAP50 94.73%, Seatbelt Cls Top-1 80.97%.
+- **Frozen Test:** Phone mAP50 90.50%, Seatbelt Det mAP50 92.70%, Seatbelt Cls Top-1 78.90% (`FROZEN_TEST_RUN_COUNT = 1`).
+- **Temporal Benchmark:** Evaluated on external Vicomtech DMD driver monitoring continuous sequences (`reports/DMD_PHONE_TEMPORAL_BENCHMARK.json`).
+- **Runtime Performance:** Measured on local CPU execution (`reports/V2_RUNTIME_BENCHMARK_FINAL.md`).
 
 ## Product Principles
-
-- Prefer traceable evidence over confident guesses.
-- Preserve ambiguity for human review.
-- Keep train, validation, frozen test, and event evaluation boundaries explicit.
-- Make every model and dataset claim reproducible by hash and version.
-- Use one simple deployable model and one canonical training workflow.
-
-## Accessibility & Inclusion
-
-The web interfaces must support keyboard operation, visible focus, readable contrast, reduced motion, clear status text that does not rely on color alone, and responsive layouts suitable for review work.
+- Prefer traceable, tamper-evident evidence over confident heuristic guesses.
+- Fail closed on uncertainty: ambiguous context routes to human review.
+- Strictly separate component detection metrics, temporal event metrics, and runtime benchmarks.
+- Transparently state academic prototype completion without falsely claiming production certification.

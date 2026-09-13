@@ -1,11 +1,14 @@
 from __future__ import annotations
 
-import json
 from collections import defaultdict, deque
 from dataclasses import dataclass, replace
 from datetime import UTC, datetime
+import gc
+import json
 from pathlib import Path
 from typing import Any
+
+import torch
 
 from sqlalchemy.orm import Session
 
@@ -376,44 +379,46 @@ class VideoAnalyzer:
         previous_vehicles: set[str] = set()
         pose_cache: dict[str, list] = {}
         try:
-            while True:
-                ok, frame = source.read()
-                if not ok:
-                    break
-                timestamp = frame_number / fps
-                self._persist_artifacts(session, evidence_buffer.add_frame(timestamp, frame))
-                contexts = self._frame_contexts(frame, video, frame_number)
-                active_contexts = {context.context_id for context in contexts}
-                active_vehicles = {context.vehicle_id for context in contexts}
-                for lost_context in previous_contexts - active_contexts:
-                    self.local_tracker.reset_vehicle(lost_context)
-                    pose_cache.pop(lost_context, None)
-                    self._reset_context_caches(lost_context)
-                for lost_vehicle in previous_vehicles - active_vehicles:
-                    engine.reset_vehicle(lost_vehicle)
-                previous_contexts = active_contexts
-                previous_vehicles = active_vehicles
+            with torch.inference_mode():
+                while True:
+                    ok, frame = source.read()
+                    if not ok:
+                        break
+                    timestamp = frame_number / fps
+                    self._persist_artifacts(session, evidence_buffer.add_frame(timestamp, frame))
+                    contexts = self._frame_contexts(frame, video, frame_number)
+                    active_contexts = {context.context_id for context in contexts}
+                    active_vehicles = {context.vehicle_id for context in contexts}
+                    for lost_context in previous_contexts - active_contexts:
+                        self.local_tracker.reset_vehicle(lost_context)
+                        pose_cache.pop(lost_context, None)
+                        self._reset_context_caches(lost_context)
+                    for lost_vehicle in previous_vehicles - active_vehicles:
+                        engine.reset_vehicle(lost_vehicle)
+                    previous_contexts = active_contexts
+                    previous_vehicles = active_vehicles
 
-                if frame_number % self.behavior_interval == 0:
-                    for context in contexts:
-                        self._analyze_context(
-                            session,
-                            job,
-                            video,
-                            frame,
-                            frame_number,
-                            timestamp,
-                            context,
-                            engine,
-                            evidence_buffer,
-                            pose_cache,
-                            identity_tracker=identity_tracker,
-                        )
-                engine.expire(timestamp)
-                frame_number += 1
-                if frame_number % 30 == 0:
-                    job.progress = min(0.99, frame_number / total)
-                    session.commit()
+                    if frame_number % self.behavior_interval == 0:
+                        for context in contexts:
+                            self._analyze_context(
+                                session,
+                                job,
+                                video,
+                                frame,
+                                frame_number,
+                                timestamp,
+                                context,
+                                engine,
+                                evidence_buffer,
+                                pose_cache,
+                                identity_tracker=identity_tracker,
+                            )
+                    engine.expire(timestamp)
+                    frame_number += 1
+                    if frame_number % 30 == 0:
+                        job.progress = min(0.99, frame_number / total)
+                        session.commit()
+                        gc.collect()
 
             self._persist_artifacts(session, evidence_buffer.flush())
             if identity_tracks_output_path is not None:

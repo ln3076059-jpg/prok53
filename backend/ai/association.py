@@ -192,6 +192,14 @@ class OccupantAssociator:
         score, occupant, assignment = max(candidates, key=lambda item: item[0])
         confidence = min(assignment.confidence, score)
         if score < 0.35 or not assignment.known or confidence < self.minimum_confidence:
+            calibrated = self._calibrated(detection, frame_width, frame_height)
+            if calibrated.known and calibrated.confidence >= self.minimum_confidence:
+                return OccupantAssignment(
+                    calibrated.role,
+                    calibrated.confidence,
+                    "CAMERA_CALIBRATION_FALLBACK",
+                    occupant.track_id,
+                )
             return OccupantAssignment(
                 "unknown", confidence, "OBJECT_OCCUPANT_LOW_CONFIDENCE", occupant.track_id
             )

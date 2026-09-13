@@ -1,4 +1,65 @@
 {
-  "reason": "pass --video to measure real runtime",
-  "status": "NOT_RUN"
+  "behavior_detector_latency": {
+    "p50_ms": 1060.1978999993662,
+    "p95_ms": 1564.800699999978,
+    "samples": 50,
+    "status": "MEASURED"
+  },
+  "cabin_localizer_latency": {
+    "p50_ms": null,
+    "p95_ms": null,
+    "status": "NOT_RUN"
+  },
+  "component_inference_latency": {
+    "p50_ms": 1241.0937000004196,
+    "p95_ms": 1744.9011000007886,
+    "samples": 50,
+    "status": "MEASURED"
+  },
+  "cpu_ram_mb": 233.09375,
+  "decode_fps": 63.86130754411794,
+  "decode_latency": {
+    "p50_ms": 13.890900000660622,
+    "p95_ms": 16.587100000833743,
+    "samples": 50,
+    "status": "MEASURED"
+  },
+  "frames": 50,
+  "fusion_latency": {
+    "p50_ms": 0.02530000074330019,
+    "p95_ms": 0.036899999031447805,
+    "samples": 50,
+    "status": "MEASURED"
+  },
+  "gpu_vram_peak_mb": null,
+  "input_scope": "VEHICLE_CABIN_CROP",
+  "measurement_scope": "Decoded-frame component benchmark; excludes database writes, evidence encoding, queue latency, and network transport. Model cold-start is included.",
+  "pose_latency": {
+    "p50_ms": 122.47014999957173,
+    "p95_ms": 203.2930999994278,
+    "samples": 50,
+    "status": "MEASURED"
+  },
+  "seatbelt_classifier_latency": {
+    "p50_ms": 49.52549999961775,
+    "p95_ms": 97.48190000027535,
+    "samples": 46,
+    "status": "MEASURED"
+  },
+  "serial_component_fps": 0.6488606474857711,
+  "serial_decode_plus_component_latency": {
+    "p50_ms": 1254.2983500015907,
+    "p95_ms": 1759.8013000006176,
+    "samples": 50,
+    "status": "MEASURED"
+  },
+  "status": "MEASURED",
+  "total_p50_ms": 1254.2983500015907,
+  "total_p95_ms": 1759.8013000006176,
+  "vehicle_detector_latency": {
+    "p50_ms": null,
+    "p95_ms": null,
+    "status": "NOT_RUN"
+  },
+  "video": "datasets\\external_dmd\\original\\extracted\\gC_14_s2_2019-03-04T11;48;02+01;00_rgb_body.mp4"
 }

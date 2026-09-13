@@ -1,20 +1,25 @@
 from datetime import UTC, datetime, timedelta
 
 from jose import JWTError, jwt
-from passlib.context import CryptContext
 
 from backend.core.config import get_settings
 
+import bcrypt
+
 ALGORITHM = "HS256"
-password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def hash_password(password: str) -> str:
-    return password_context.hash(password)
+    pwd_bytes = password.encode("utf-8")[:72]
+    return bcrypt.hashpw(pwd_bytes, bcrypt.gensalt()).decode("utf-8")
 
 
 def verify_password(password: str, hashed: str) -> bool:
-    return password_context.verify(password, hashed)
+    try:
+        pwd_bytes = password.encode("utf-8")[:72]
+        return bcrypt.checkpw(pwd_bytes, hashed.encode("utf-8"))
+    except Exception:
+        return False
 
 
 def create_access_token(subject: str) -> str:

@@ -32,3 +32,13 @@ kaggle/portable_bundle/
 kaggle/eval_datasets/
 kaggle_log.txt
 metrics_output.txt
+linkdmd.md
+*.tar.gz
+datasets/external_dmd/original/
+datasets/external_dmd/derivatives/
+datasets/external_dmd/test_extract/
+.dmd_urls.json
+driver_safety.db
+*.db
+*.db-journal
+*.progress.json
