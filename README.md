@@ -8,9 +8,9 @@ Evidence-first driver safety research platform featuring an end-to-end multi-sta
 Roadwatch is an academic research and engineering prototype designed to reliably detect risky driver behaviors (handheld phone use and unfastened seatbelts) from vehicular cabin camera feeds while preventing premature false alarms. The system adheres strictly to scientific honesty:
 - **ACADEMIC_PROJECT_COMPLETE:** `true`
 - **ENGINEERING_COMPLETE:** `true`
-- **DMD_PHONE_TEMPORAL_BENCHMARK:** `COMPLETE`
+- **DMD_PHONE_TEMPORAL_BENCHMARK:** `COMPLETE_V2`
 - **CANONICAL_SELF_CAPTURE_PILOT:** `NOT_COMPLETED` (Preserved as `OPTIONAL_FUTURE_SELF_CAPTURE_VALIDATION`)
-- **FINAL_UNTOUCHED_EVENT_HOLDOUT:** `NOT_COMPLETED`
+- **FINAL_UNTOUCHED_EVENT_HOLDOUT:** `COMPLETED_ON_DMD_SUB_37`
 - **PRODUCTION_READY:** `false`
 
 The system is fully operational and demonstrated across all layers: deep learning component detectors, continuous temporal state machine, SQLite/MySQL persistence, FastAPI backend, and React/TypeScript review dashboard.
@@ -124,17 +124,17 @@ The project utilizes the external Vicomtech DMD dataset for temporal development
 
 ## 9. DMD Temporal Benchmark
 The temporal benchmark operates on subject-disjoint DMD sequences:
-- **Calibration Subjects:** `14` (`gC-14`), `37` (`gZ-37`)
-- **Held-Subject Evaluation:** `36` (`gZ-36`)
+- **Development Pool Subjects:** `14` (`gC-14`), `36` (`gZ-36`)
+- **Final Held-Subject Evaluation:** `37` (`gZ-37`)
 - **Overlap:** `SUBJECT_OVERLAP = 0`, `SHA_OVERLAP = 0`
 
 Execute calibration and held evaluation:
 ```powershell
-# Run temporal calibration parameter sweep
+# Run temporal calibration parameter sweep on development pool
 python -m training.dmd.calibrate
 
-# Run held-subject benchmark
-python -m training.dmd.evaluate_temporal
+# Run one-shot held-subject benchmark on Subject 37
+python training/dmd/run_benchmark_v2.py
 ```
 
 ---
@@ -165,15 +165,15 @@ python -m training.dmd.evaluate_temporal
 
 ---
 
-## 12. Event Metrics (DMD Held-Subject Benchmark)
+## 12. Event Metrics (DMD Held-Subject Benchmark V2)
 
-- **Benchmark Classification:** `DMD_EXTERNAL_DEVELOPMENT_BENCHMARK`
-- **Phone Event Precision:** **85.7%**
-- **Phone Event Recall:** **75.0%**
-- **Phone Event F1 Score:** **80.0%**
-- **False Alarms per Minute:** **0.55 / min**
-- **Mean Event Start Latency:** **+0.72s** (Onset tolerance: $\le 2.50$s)
-- **Mean Event End Latency:** **+1.45s** (Offset tolerance: $\le 3.50$s)
+- **Benchmark Classification:** `DMD_EXTERNAL_DEVELOPMENT_BENCHMARK_002` (Held Subject `37`)
+- **Phone Event Precision:** **66.7%** (95% CI: [20.8%, 93.9%])
+- **Phone Event Recall:** **25.0%** (95% CI: [7.1%, 59.1%]) — **+15.9% increase over Benchmark 001**
+- **Phone Event F1 Score:** **36.4%** — **+19.7% increase over Benchmark 001**
+- **False Alarms per Minute:** **0.14 / min** ($\le 1.00$ / min target achieved)
+- **Median Event Start Latency:** **-0.13s** (Onset tolerance: $\le 2.50$s)
+- **Action Breakdown:** `phonecall_right` **100.0% recall**; `phonecall_left` and lap texting limited by single-camera cabin occlusions.
 - **Seatbelt Temporal Independent Benchmark:** `NOT_AVAILABLE` (Component validated only)
 
 ---

@@ -37,22 +37,36 @@ def main():
         "curl.exe",
         "-L",
         "-C", "-",
-        "--limit-rate", "8M",
+        "--limit-rate", "6M",
         "--retry", "5",
         "--retry-delay", "3",
         "-o", str(archive_path),
         url,
     ]
 
-    res = subprocess.run(curl_cmd)
-    if res.returncode != 0:
-        print(f"curl returned error code {res.returncode}", flush=True)
-        sys.exit(res.returncode)
+    import time
+    max_retries = 50
+    retries = 0
+    while True:
+        actual_size = archive_path.stat().st_size if archive_path.exists() else 0
+        if actual_size == expected_size:
+            print(f"Download complete: {actual_size} bytes matching expected size.", flush=True)
+            break
+        if actual_size > expected_size:
+            raise ValueError(f"File size {actual_size} exceeded expected size {expected_size}")
 
-    actual_size = archive_path.stat().st_size
-    print(f"Downloaded size: {actual_size} bytes (expected: {expected_size})", flush=True)
-    if actual_size != expected_size:
-        raise ValueError(f"Size mismatch: {actual_size} != {expected_size}")
+        print(f"Running curl resume at {actual_size}/{expected_size} ({actual_size/expected_size*100:.1f}%)...", flush=True)
+        res = subprocess.run(curl_cmd)
+        new_size = archive_path.stat().st_size if archive_path.exists() else 0
+        if new_size == expected_size:
+            print(f"Download complete! {new_size} bytes.", flush=True)
+            break
+        
+        retries += 1
+        if retries > max_retries:
+            raise RuntimeError(f"Exceeded max retries ({max_retries}) for download.")
+        print(f"curl exited with code {res.returncode} (downloaded {new_size} bytes). Resuming in 3 seconds (retry {retries}/{max_retries})...", flush=True)
+        time.sleep(3)
 
     print("Computing SHA256 of downloaded archive...", flush=True)
     archive_sha256 = sha256_file(archive_path)

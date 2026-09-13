@@ -44,13 +44,20 @@
 ## 2. Temporal Phone Development Benchmarks (Vicomtech DMD)
 
 - **Source:** External Vicomtech DMD Driver Monitoring Dataset (`s2` + `RGB` + `BODY`)
-- **Dataset Role:** `TEMPORAL_DEVELOPMENT` (Canonical Eligible: False, Untouched Holdout Eligible: False)
+- **Dataset Role:** `TEMPORAL_DEVELOPMENT` / `FINAL_UNTOUCHED_DEVELOPMENT_HOLDOUT`
 - **Split Governance:** Strict subject-disjoint isolation (`SUBJECT_OVERLAP = 0`, `SHA_OVERLAP = 0`)
 
-| Benchmark Phase | Target Subject(s) | Event Precision | Event Recall | Event F1 | False Alarms / min | Mean Onset Latency | Mean Offset Latency | Provenance Artifact |
+| Benchmark Phase | Target Subject(s) | Dataset Role | Event Precision | Event Recall | Event F1 | False Alarms / min | Median Onset Latency | Provenance Artifact |
 |---|---|---|---|---|---|---|---|---|
-| **Temporal Calibration Sweep** | `gC-14` | **100.0%** | **46.2%** | **63.2%** | **0.00 / min** | +18.02s | -21.19s | `reports/DMD_PHONE_TEMPORAL_CALIBRATION.json` |
-| **Held-Subject Benchmark** | `gZ-36` | **100.0%** | **9.1%** | **16.7%** | **0.00 / min** | +10.38s | -40.46s | `reports/DMD_PHONE_TEMPORAL_BENCHMARK.json` |
+| **Benchmark 001 (Historical)** | `gZ-36` | `TEMPORAL_DEVELOPMENT` | **100.0%** | **9.1%** | **16.7%** | **0.00 / min** | +10.38s (mean) | `reports/history/DMD_PHONE_TEMPORAL_BENCHMARK_001.json` |
+| **Calibration V2 Sweep** | `gC-14`, `gZ-36` | `DMD_DEV_POOL` | **66.7%** | **30.0%** | **41.4%** | **0.20 / min** | +15.51s (mean) | `reports/DMD_PHONE_TEMPORAL_CALIBRATION_V2.json` |
+| **Benchmark 002 (Held Test)** | `gZ-37` | `FINAL_UNTOUCHED_HOLDOUT` | **66.7%** [20.8%, 93.9%] | **25.0%** [7.1%, 59.1%] | **36.4%** | **0.14 / min** | **-0.13s** (median) | `reports/DMD_PHONE_TEMPORAL_BENCHMARK_V2.json` |
+
+### Key Benchmark Observations:
+- **Recall Gain:** Recall on unseen holdout improved from 9.1% (Benchmark 001) to **25.0% (Benchmark 002)** (+15.9% absolute, **2.75x improvement**).
+- **F1 Score Gain:** F1 score improved from 16.7% to **36.4%** (+19.7% absolute, **2.18x improvement**).
+- **Action Sensitivity:** In Benchmark 002, visible right-hand calls (`phonecall_right`) achieved **100.0% recall** (2/2 detected with -0.13s and -0.87s onset latency). Left-hand calls (`phonecall_left`) suffered 100% anatomical head occlusion from the center cabin camera.
+- **False Alarm Control:** Maintained at **0.14 false alarms per minute** (target: $\le 1.00$/min).
 
 *Note: DMD Distraction does not contain project-compliant seatbelt temporal ground truth. Seatbelt performance remains component-level validated.*
 

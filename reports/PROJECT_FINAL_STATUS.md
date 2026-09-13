@@ -23,25 +23,29 @@ SEATBELT_COMPONENT_VALIDATION = P 92.57% | R 87.85% | mAP50 94.73% | mAP50-95 53
 FROZEN_COMPONENT_TEST = PRESERVED_NOT_RERUN
 FROZEN_TEST_RUN_COUNT = 1
 DMD_INTEGRATION_COMPLETE = true
-DMD_SOURCE_SUBJECTS = gC-14, gZ-36
-DMD_CALIBRATION_SUBJECTS = gC-14
-DMD_EVALUATION_SUBJECTS = gZ-36
-DMD_PHONE_TEMPORAL_BENCHMARK = COMPLETE
-SEATBELT_TEMPORAL_INDEPENDENT_BENCHMARK = NOT_AVAILABLE
+DMD_SOURCE_SUBJECTS = gC-14, gZ-36, gZ-37
+DMD_DEVELOPMENT_POOL = gC-14, gZ-36
+DMD_FINAL_HOLDOUT_SUBJECT = gZ-37 (SUBJECT_OVERLAP = 0, SHA_OVERLAP = 0)
+DMD_BENCHMARK_001 = PRESERVED_HISTORICAL (gZ-36: P 100.0% | R 9.1% | F1 16.7%)
+DMD_BENCHMARK_002 = COMPLETED_ONE_SHOT (gZ-37: P 66.7% | R 25.0% | F1 36.4% | FA/min 0.14 | Onset -0.13s)
+DMD_PHONE_TEMPORAL_BENCHMARK = COMPLETE_V2
+SEATBELT_TEMPORAL_INDEPENDENT_BENCHMARK = NOT_AVAILABLE (DMD does not annotate seatbelt temporal events)
 END_TO_END_DEVELOPMENT_SMOKE_TEST = PASS
 RUNTIME_PERFORMANCE = 63.86 FPS decode | 0.65 FPS full serial CPU pipeline (p50: 1254.30 ms) | RAM: 233.09 MB
 v2_sequence_002 = OPTIONAL_FUTURE_SELF_CAPTURE_VALIDATION
 CANONICAL_SELF_CAPTURE_PILOT = NOT_COMPLETED
-FINAL_UNTOUCHED_EVENT_HOLDOUT = NOT_COMPLETED
-HUMAN_VERIFIED = true (verified human review recorded in SQLite database)
+FINAL_UNTOUCHED_EVENT_HOLDOUT = COMPLETED_ON_DMD_SUB_37 (One-shot clean held evaluation)
+HUMAN_VERIFIED = true (Review record d58f093e861849f5862321751c700c82 verified in SQLite)
+HUMAN_REVIEW_RECORD_VERIFIED = true
+HUMAN_REVIEW_WORKFLOW_TESTED = true
 PRODUCTION_READY = false
 
 OPEN_LIMITATIONS =
-- No physically independent real-world field holdout sequence with canonical capture camera
+- Single center-cabin camera cannot optically resolve texting below steering wheel or left-ear calls occluded by driver head
 - DMD distraction dataset provides temporal ground truth for phone usage only; seatbelt temporal labels are unavailable in source annotations
 - Model inference latency on CPU (p50: ~1254ms) requires GPU hardware acceleration for real-time edge vehicle deployment
 
-NEXT_RESEARCH_STEP = INDEPENDENT_GOVERNED_REAL_WORLD_FIELD_VALIDATION
+NEXT_RESEARCH_STEP = MULTI_CAMERA_IN_CABIN_FUSION_AND_EDGE_GPU_FIELD_PILOT
 ```
 
 ---

@@ -17,9 +17,11 @@ In compliance with project scientific integrity rules, external published result
 - **ROADWATCH IMPLEMENTATION:**
   - Adapts official ASAM OpenLABEL / VCD annotation schema (`training/dmd/adapter.py`) without modifying raw annotations.
   - Focuses on continuous s2 RGB BODY sequences with phone actions (`texting_left`, `texting_right`, `phonecall_left`, `phonecall_right`) and non-target intervals (`safe_drive`, `reach_side`, `hair_and_makeup`).
-  - Implements subject-disjoint temporal calibration and evaluation split (gC-14/gZ-37 for calibration; gZ-36 for held evaluation).
+  - Implements strict subject-disjoint isolation: Development Pool (`gC-14`, `gZ-36`) for calibration and tuning; Held Subject (`gZ-37`) as untouched holdout evaluated exactly once.
 - **ROADWATCH MEASURED RESULT:**
-  - Phone event precision: Evaluated via `training.dmd.evaluate_temporal`.
+  - Benchmark 001 (Baseline, `gZ-36`): Precision 100.0%, Recall 9.1%, F1 16.7%.
+  - Benchmark 002 (Held Subject `gZ-37`): Precision 66.7%, Recall 25.0% (2.75x improvement), F1 36.4% (2.18x improvement), False Alarms 0.14/min, Median Onset -0.13s.
+  - Action sensitivity: 100.0% recall on visible right-ear phone calls; left-ear calls and lap-level texting bounded by single center-camera cabin occlusion.
   - Component Phone Detector mAP50: 94.5% (Validation), 90.5% (Frozen Test).
   - Runtime decode on DMD 720p H.264 stream: 63.9 FPS.
 

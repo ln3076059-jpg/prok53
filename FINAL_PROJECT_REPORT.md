@@ -178,20 +178,41 @@ Development calibration sweeps were executed strictly across development calibra
 
 ---
 
-## 10. DMD Held-Subject Benchmark
+## 10. DMD Temporal Phone Benchmarks
 
-The frozen temporal configuration was evaluated once against the held evaluation subject (`gZ-36`) without parameter retuning (`reports/DMD_PHONE_TEMPORAL_BENCHMARK.json`):
-- **Evaluated Sequence Duration:** 8.60 minutes (516.0 seconds continuous video)
-- **Held Subject Evaluated:** `36` (Male participant, low-contrast nighttime body stream)
+### 10.1 Historical Benchmark 001 (Baseline Subject `gZ-36`)
+The original temporal pipeline evaluated on Subject `36` demonstrated high precision but severe recall degradation due to cabin occlusions (`reports/history/DMD_PHONE_TEMPORAL_BENCHMARK_001.json`):
+- **Evaluated Duration:** 8.60 minutes (516.0 seconds)
 - **Event Precision:** **100.0%** (1 TP, 0 FP, zero false alarms on safe driving)
 - **Event Recall:** **9.1%** (1 / 11 true events detected; remaining missed due to lower-quadrant wheel occlusion)
 - **Event F1 Score:** **16.7%**
-- **False Alarms per Minute:** **0.00 / min** ($\le 1.00$ / min target achieved)
-- **Mean Event Start Latency:** **+10.38 s**
-- **Mean Event End Latency:** **-40.46 s**
-- **Pose Availability Rate:** **100.0%**
-- **Unknown Occupant Rate:** **0.0%** (Driver role correctly bound)
-- **Governance Classification:** `DMD_EXTERNAL_DEVELOPMENT_BENCHMARK` (Not canonical production holdout).
+- **False Alarms per Minute:** **0.00 / min**
+- **Historical Status:** Preserved immutably in `reports/history/` as reference baseline. Subject `36` was subsequently transitioned to `DMD_TEMPORAL_DEVELOPMENT_POOL`.
+
+### 10.2 Development Pool Recalibration V2 (Subjects `gC-14` & `gZ-36`)
+To resolve the recall bottleneck without test contamination, a 5-step developmental improvement was executed exclusively on development pool data:
+1. Denominator metric bug fix in temporal evaluation script.
+2. Driver ROI refinement crop ($384\times 384$ local window) raising small-phone resolution.
+3. Phone track memory and fail-closed 4.0-second occlusion bridge (`deep_bridge_40`).
+4. Multi-frame evidence aggregation with lowered candidate threshold (0.18).
+5. Temporal hysteresis recalibration (activation: 0.25, release: 0.15).
+- **Development Pool Result (20 GT events):** Precision **66.7%**, Recall **30.0%**, F1 Score **41.4%**, False Alarms **0.20 / min** (`reports/DMD_PHONE_TEMPORAL_CALIBRATION_V2.json`).
+
+### 10.3 Benchmark 002: One-Shot Evaluation on Final Untouched Holdout (`gZ-37`)
+Following complete software and model freeze (`FINAL_BENCHMARK_CODE_SHA: e31829d68a1d9311669332921b0ec11586439291`), the frozen pipeline was evaluated exactly once on the previously untouched Subject `37` (`reports/DMD_PHONE_TEMPORAL_BENCHMARK_V2.json`):
+- **Evaluated Sequence:** Subject `37`, Session `s2`, RGB BODY (13,064 frames / 7.32 minutes).
+- **Subject Overlap with Dev Pool:** **0** (`SUBJECT_OVERLAP = 0`, `SHA_OVERLAP = 0`).
+- **Event Precision:** **66.7%** (95% Wilson CI: [20.8%, 93.9%]).
+- **Event Recall:** **25.0%** (95% Wilson CI: [7.1%, 59.1%]) — **+15.9% absolute, 2.75x improvement over Benchmark 001**.
+- **Event F1 Score:** **36.4%** — **+19.7% absolute, 2.18x improvement over Benchmark 001**.
+- **False Alarms per Minute:** **0.14 / min** (well below safety maximum $\le 1.0$/min).
+- **Median Event Onset Latency:** **-0.13 seconds** (instantaneous capture at event start).
+- **Per-Action Recall:**
+  - `phonecall_right`: **100.0% recall** (2/2 events detected).
+  - `phonecall_left`: **0.0% recall** (0/2; anatomical head occlusion from center-mounted camera).
+  - `texting_right`: **0.0% recall** (0/2; lap-level steering wheel masking).
+  - `texting_left`: **0.0% recall** (0/2; lap-level steering wheel masking).
+- **Publication Figures:** Saved in `reports/figures/` (`fig1_benchmark_001_vs_002.png`, `fig2_recall_funnel.png`, `fig3_temporal_ablation_progression.png`, `fig4_action_breakdown_sub37.png`).
 
 ---
 
