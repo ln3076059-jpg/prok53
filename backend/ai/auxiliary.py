@@ -222,6 +222,40 @@ class PoseEstimator:
             self._model.predictor.results = None
         return evidence
 
+    def predict_raw_keypoints(
+        self, frame: np.ndarray
+    ) -> list[tuple[list[tuple[float, float]], list[float], tuple[float, float, float, float] | None]]:
+        """Return raw 17 COCO keypoints (x, y), confidences, and bounding box for V3 pose analysis."""
+        self._load()
+        if self._model is None:
+            return []
+        result = self._model.predict(frame, conf=self.confidence, imgsz=480, verbose=False)[0]
+        keypoints = getattr(result, "keypoints", None)
+        if keypoints is None or keypoints.xy is None:
+            return []
+        xy_rows = keypoints.xy.cpu().tolist()
+        pose_boxes = (
+            result.boxes.xyxy.cpu().tolist()
+            if getattr(result, "boxes", None) is not None
+            else [None] * len(xy_rows)
+        )
+        confidence_rows = (
+            keypoints.conf.cpu().tolist()
+            if keypoints.conf is not None
+            else [[1.0] * len(row) for row in xy_rows]
+        )
+        output = []
+        for points, confs, box in zip(xy_rows, confidence_rows, pose_boxes):
+            pts = [(float(pt[0]), float(pt[1])) for pt in points]
+            c_list = [float(c) for c in confs]
+            b_tuple = tuple(float(v) for v in box) if box else None
+            output.append((pts, c_list, b_tuple))
+        del result
+        if hasattr(self._model, "predictor") and self._model.predictor is not None:
+            self._model.predictor.results = None
+        return output
+
+
 
 class SeatbeltClassifier:
     CLASS_NAMES = ("seatbelt_fastened", "seatbelt_unfastened", "uncertain_or_occluded")

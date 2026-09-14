@@ -1,0 +1,22 @@
+{
+  "status": "FROZEN_AND_AUTHORIZED",
+  "frozen_at": "2026-09-14T03:48:41.791425+00:00",
+  "git_head_commit": "85505fb4310205d3d271b8a3280e559d4f482f84",
+  "governance_rule": "Subject gE-28 is unlocked exclusively for exactly ONE benchmark evaluation.",
+  "model_hashes": {
+    "phone_detector": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+    "seatbelt_detector": "361436ab073c8fcc17a041f098285efdd0cf6775a8970be2ffada4e45c6bc500",
+    "pose_model": "869e83fcdffdc7371fa4e34cd8e51c838cc729571d1635e5141e3075e9319dc0"
+  },
+  "config_hashes": {
+    "temporal_config_v2": "191918e41e5715008a3a90c03aa062d86c4fe7086401f55c2fa55d5d1c189b4f",
+    "model_config_v2": "7755de7b47ba57cd55e7bca86895e998710386103844cb4be7dd67106f02be63"
+  },
+  "development_pool_validated": [
+    "gC-14",
+    "gZ-36",
+    "gB-9"
+  ],
+  "historical_benchmark_preserved": "gZ-37 (Benchmark 002 immutable)",
+  "GE28_HOLDOUT_UNLOCK": "AUTHORIZED_FOR_ONE_SHOT_EVALUATION"
+}

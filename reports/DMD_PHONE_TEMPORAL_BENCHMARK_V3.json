@@ -1,0 +1,36 @@
+{
+  "benchmark_id": "DMD_PHONE_TEMPORAL_BENCHMARK_003",
+  "phase": "ROADWATCH_V3_FINAL_HOLDOUT_EVALUATION",
+  "evaluated_at": "2026-09-14T05:36:27.302688+00:00",
+  "subject_id": "gE-28",
+  "configuration": "A7_MULTIVIEW_POSE_TEMPORAL",
+  "sample_stride_frames": 15,
+  "wall_time_seconds": 1022.54,
+  "metrics": {
+    "precision": 30.8,
+    "recall": 40.0,
+    "f1": 34.8,
+    "false_alarms_per_minute": 1.116,
+    "true_positives": 4,
+    "false_positives": 9,
+    "false_negatives": 6,
+    "total_gt_events": 10,
+    "start_latency_mean": 19.433,
+    "end_latency_mean": 19.063,
+    "evaluated_minutes": 8.06,
+    "fps": 0.9,
+    "latency_ms_per_frame": 1060.84
+  },
+  "action_breakdown": {
+    "phonecall_right_recall": 100.0,
+    "phonecall_left_recall": 50.0,
+    "texting_right_recall": 33.3,
+    "texting_left_recall": 0.0,
+    "raw": {
+      "phonecall_right": 1.0,
+      "texting_right": 0.3333,
+      "phonecall_left": 0.5,
+      "texting_left": 0.0
+    }
+  }
+}
