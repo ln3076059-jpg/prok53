@@ -6,8 +6,10 @@ from training.dmd.holdout_guard import HoldoutAccessError
 from training.dmd.v3_evaluator import run_v3_evaluation_on_subject
 
 
-def test_evaluator_blocks_ge28_before_freeze(tmp_path):
+def test_evaluator_blocks_ge28_before_freeze(tmp_path, monkeypatch):
     """Calling run_v3_evaluation_on_subject on gE-28 before freeze must raise HoldoutAccessError."""
+    fake_freeze = tmp_path / "non_existent_freeze.json"
+    monkeypatch.setattr("training.dmd.holdout_guard.FREEZE_FILE_PATH", fake_freeze)
     with pytest.raises(HoldoutAccessError):
         run_v3_evaluation_on_subject(
             subject_dir=tmp_path / "gE-28",

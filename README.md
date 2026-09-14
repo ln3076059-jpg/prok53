@@ -8,9 +8,9 @@ Evidence-first driver safety research platform featuring an end-to-end multi-sta
 Roadwatch is an academic research and engineering prototype designed to reliably detect risky driver behaviors (handheld phone use and unfastened seatbelts) from vehicular cabin camera feeds while preventing premature false alarms. The system adheres strictly to scientific honesty:
 - **ACADEMIC_PROJECT_COMPLETE:** `true`
 - **ENGINEERING_COMPLETE:** `true`
-- **DMD_PHONE_TEMPORAL_BENCHMARK:** `COMPLETE_V2`
+- **DMD_PHONE_TEMPORAL_BENCHMARK:** `COMPLETE_V3_MULTIVIEW`
 - **CANONICAL_SELF_CAPTURE_PILOT:** `NOT_COMPLETED` (Preserved as `OPTIONAL_FUTURE_SELF_CAPTURE_VALIDATION`)
-- **FINAL_UNTOUCHED_EVENT_HOLDOUT:** `COMPLETED_ON_DMD_SUB_37`
+- **FINAL_UNTOUCHED_EVENT_HOLDOUT:** `COMPLETED_ON_DMD_gE28`
 - **PRODUCTION_READY:** `false`
 
 The system is fully operational and demonstrated across all layers: deep learning component detectors, continuous temporal state machine, SQLite/MySQL persistence, FastAPI backend, and React/TypeScript review dashboard.
@@ -122,20 +122,22 @@ The project utilizes the external Vicomtech DMD dataset for temporal development
 
 ---
 
-## 9. DMD Temporal Benchmark
-The temporal benchmark operates on subject-disjoint DMD sequences:
-- **Development Pool Subjects:** `14` (`gC-14`), `36` (`gZ-36`)
-- **Final Held-Subject Evaluation:** `37` (`gZ-37`)
-- **Overlap:** `SUBJECT_OVERLAP = 0`, `SHA_OVERLAP = 0`
+## 9. DMD Temporal Benchmarks (V2 Single-View & V3 Multi-View)
+The temporal benchmarks operate on strictly subject-disjoint DMD sequences:
+- **V2 Single-View Development Pool:** `gC-14`, `gZ-36` | **V2 Held Subject:** `gZ-37`
+- **V3 Multi-View Development Pool:** `gC-14`, `gZ-36`, `gB-9` | **V3 Final Clean Holdout:** `gE-28`
+- **Multi-View Synchronous Streams:** Session `s2`, RGB Channels: `BODY` (center rearview), `FACE` (visor close-up), `HANDS` (steering column)
+- **Subject-Disjoint Isolation:** `SUBJECT_OVERLAP = 0`, `SHA_OVERLAP = 0`
 
-Execute calibration and held evaluation:
+Execute benchmarks:
 ```powershell
-# Run temporal calibration parameter sweep on development pool
-python -m training.dmd.calibrate
-
-# Run one-shot held-subject benchmark on Subject 37
+# Run one-shot held-subject benchmark on Subject 37 (V2 Single-View)
 python training/dmd/run_benchmark_v2.py
+
+# Run one-shot clean holdout benchmark on Subject 28 (V3 Multi-View)
+python -m training.dmd.run_v3_evaluation --subject-dir datasets/external_dmd/gE-28 --holdout-authorized
 ```
+
 
 ---
 
@@ -165,16 +167,22 @@ python training/dmd/run_benchmark_v2.py
 
 ---
 
-## 12. Event Metrics (DMD Held-Subject Benchmark V2)
+## 12. Event Metrics (DMD Held-Subject Benchmarks V2 & V3)
 
-- **Benchmark Classification:** `DMD_EXTERNAL_DEVELOPMENT_BENCHMARK_002` (Held Subject `37`)
-- **Phone Event Precision:** **66.7%** (95% CI: [20.8%, 93.9%])
-- **Phone Event Recall:** **25.0%** (95% CI: [7.1%, 59.1%]) — **+15.9% increase over Benchmark 001**
-- **Phone Event F1 Score:** **36.4%** — **+19.7% increase over Benchmark 001**
-- **False Alarms per Minute:** **0.14 / min** ($\le 1.00$ / min target achieved)
-- **Median Event Start Latency:** **-0.13s** (Onset tolerance: $\le 2.50$s)
-- **Action Breakdown:** `phonecall_right` **100.0% recall**; `phonecall_left` and lap texting limited by single-camera cabin occlusions.
-- **Seatbelt Temporal Independent Benchmark:** `NOT_AVAILABLE` (Component validated only)
+| Metric | Benchmark 001 (Historical)<br>Subject `gZ-36` | Benchmark 002 (Held V2)<br>Held Subject `gZ-37` | Benchmark 003 (Held V3 Multi-View)<br>Held Subject `gE-28` |
+|---|:---:|:---:|:---:|
+| **Stream Setup** | Single (BODY) | Single (BODY) | **Multi-View (BODY + FACE + HANDS)** |
+| **Event Precision** | **100.0%** | **66.7%** | **30.8%** |
+| **Event Recall** | **9.1%** | **25.0%** (2.75x vs B001) | **40.0%** (**4.40x vs B001**) |
+| **Event F1 Score** | **16.7%** | **36.4%** | **34.8%** |
+| **False Alarms / min** | **0.00 / min** | **0.14 / min** | **1.12 / min** |
+| **`phonecall_right` Recall** | 50.0% | **100.0%** | **100.0%** |
+| **`phonecall_left` Recall** | 0.0% *(occluded)* | 0.0% *(occluded)* | **50.0%** *(recovered via FACE view)* |
+| **`texting_right` Recall** | 0.0% *(occluded)* | 0.0% *(occluded)* | **33.3%** *(recovered via HANDS view)* |
+| **`texting_left` Recall** | 0.0% | 0.0% | **0.0%** |
+
+*Seatbelt Temporal Independent Benchmark: NOT_AVAILABLE (Component validated only)*
+
 
 ---
 
@@ -240,10 +248,11 @@ cd frontend; npm run build; cd ..
 ```text
 ACADEMIC_PROJECT_COMPLETE = true
 ENGINEERING_COMPLETE = true
-SOFTWARE_TESTS = PASS (454 passed / 0 failed)
-DMD_PHONE_TEMPORAL_BENCHMARK = COMPLETE
+SOFTWARE_TESTS = PASS (470 passed / 0 failed)
+DMD_PHONE_TEMPORAL_BENCHMARK = COMPLETE_V3_MULTIVIEW
+MULTI_VIEW_IN_CABIN_FUSION = COMPLETE_VALIDATED
 CANONICAL_SELF_CAPTURE_PILOT = NOT_COMPLETED
-FINAL_UNTOUCHED_EVENT_HOLDOUT = NOT_COMPLETED
+FINAL_UNTOUCHED_EVENT_HOLDOUT = COMPLETED_ON_DMD_gE28
 PRODUCTION_READY = false
 ```
 

@@ -19,8 +19,9 @@ def test_holdout_detection():
     assert not is_holdout_subject("gC-14")
 
 
-def test_assert_holdout_untouched_raises_before_freeze(tmp_path):
-    fake_freeze = tmp_path / "freeze.json"
+def test_assert_holdout_untouched_raises_before_freeze(tmp_path, monkeypatch):
+    fake_freeze = tmp_path / "non_existent_freeze.json"
+    monkeypatch.setattr("training.dmd.holdout_guard.FREEZE_FILE_PATH", fake_freeze)
     with pytest.raises(HoldoutAccessError) as exc_info:
         assert_holdout_untouched("gE-28", caller_action="decode_frame")
     assert "HOLDOUT ISOLATION BREACH PREVENTED" in str(exc_info.value)

@@ -5,8 +5,10 @@ from training.dmd.multiview import MultiViewSynchronizer, MultiViewFramePackage
 from training.dmd.holdout_guard import HoldoutAccessError
 
 
-def test_holdout_guard_blocks_ge28(tmp_path):
+def test_holdout_guard_blocks_ge28(tmp_path, monkeypatch):
     """Attempting to initialize MultiViewSynchronizer on gE-28 before freeze must raise HoldoutAccessError."""
+    fake_freeze = tmp_path / "non_existent_freeze.json"
+    monkeypatch.setattr("training.dmd.holdout_guard.FREEZE_FILE_PATH", fake_freeze)
     with pytest.raises(HoldoutAccessError):
         MultiViewSynchronizer(tmp_path / "gE-28", "gE-28")
 

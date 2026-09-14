@@ -31,12 +31,13 @@ def is_holdout_subject(subject_or_path: Union[str, Path]) -> bool:
     return False
 
 
-def is_holdout_unlocked(freeze_path: Path = FREEZE_FILE_PATH) -> bool:
+def is_holdout_unlocked(freeze_path: Path | None = None) -> bool:
     """Return True if pre-holdout freeze has been formally recorded and authorized."""
-    if not freeze_path.exists():
+    target = freeze_path if freeze_path is not None else FREEZE_FILE_PATH
+    if not target.exists():
         return False
     try:
-        with open(freeze_path, "r", encoding="utf-8") as f:
+        with open(target, "r", encoding="utf-8") as f:
             data = json.load(f)
         return data.get("GE28_HOLDOUT_UNLOCK") == AUTHORIZED_FLAG
     except Exception:
