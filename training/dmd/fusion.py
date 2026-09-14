@@ -66,11 +66,15 @@ class MultiViewFusionEngine:
         enable_face_fusion: bool = True,
         enable_hands_fusion: bool = True,
         enable_pose_fusion: bool = True,
+        auxiliary_rescue_mode: bool = False,
+        aux_rescue_min_conf: float = 0.35,
     ):
         self.phone_conf_threshold = phone_conf_threshold
         self.enable_face_fusion = enable_face_fusion
         self.enable_hands_fusion = enable_hands_fusion
         self.enable_pose_fusion = enable_pose_fusion
+        self.auxiliary_rescue_mode = auxiliary_rescue_mode
+        self.aux_rescue_min_conf = aux_rescue_min_conf
 
         self.pose_classifier = RuleGuidedPoseClassifier()
         self.temporal_aggregator = TemporalWindowAggregator(window_size=temporal_window)
@@ -111,14 +115,55 @@ class MultiViewFusionEngine:
             )
 
         # 2. Multi-view phone detection evidence fusion
-        # Effective view confidences gated by enabled flags and availability
         eff_face = face_phone_conf if (self.enable_face_fusion and face_available) else 0.0
         eff_hands = hands_phone_conf if (self.enable_hands_fusion and hands_available) else 0.0
         eff_body = body_phone_conf
 
-        # Highest detection confidence across active views
-        # Multi-view insight: phone can be occluded in BODY but visible in FACE (e.g. left ear) or HANDS (lap)
-        max_view_phone_conf = max(eff_body, eff_face * 0.90, eff_hands * 0.90)
+        two_view_agree = False
+        if not self.auxiliary_rescue_mode:
+            # Baseline V3: un-gated max across active views
+            max_view_phone_conf = max(eff_body, eff_face * 0.90, eff_hands * 0.90)
+        else:
+            # V3.1 Auxiliary Rescue Mode: BODY is primary; FACE/HANDS rescue line-of-sight occlusions
+            two_view_agree = (
+                (eff_body >= 0.20 and eff_face >= 0.25)
+                or (eff_body >= 0.20 and eff_hands >= 0.25)
+                or (eff_face >= 0.30 and eff_hands >= 0.30)
+            )
+
+            face_rescues = False
+            hands_rescues = False
+            if body_pose_features:
+                p_vec = body_pose_features
+                near_ear = min(p_vec.left_wrist_to_left_ear, p_vec.left_wrist_to_nose) < 0.50
+                if eff_face >= self.aux_rescue_min_conf and (near_ear or eff_face >= 0.55):
+                    face_rescues = True
+
+                in_lap = (
+                    p_vec.phone_to_left_wrist < 0.60
+                    or p_vec.phone_to_right_wrist < 0.60
+                    or (p_vec.left_wrist_to_left_shoulder > 0.40 and p_vec.right_wrist_to_right_shoulder > 0.40)
+                )
+                if eff_hands >= self.aux_rescue_min_conf and (in_lap or eff_hands >= 0.55):
+                    hands_rescues = True
+            else:
+                face_rescues = eff_face >= 0.50
+                hands_rescues = eff_hands >= 0.50
+
+            if eff_body >= 0.25:
+                max_view_phone_conf = eff_body
+                if face_rescues:
+                    max_view_phone_conf = max(max_view_phone_conf, eff_face * 0.90)
+                if hands_rescues:
+                    max_view_phone_conf = max(max_view_phone_conf, eff_hands * 0.90)
+            elif two_view_agree:
+                max_view_phone_conf = max(eff_body, eff_face * 0.90, eff_hands * 0.90)
+            elif face_rescues:
+                max_view_phone_conf = eff_face * 0.85
+            elif hands_rescues:
+                max_view_phone_conf = eff_hands * 0.85
+            else:
+                max_view_phone_conf = eff_body
 
         # 3. Pose features and Action classification
         pose_arr = body_pose_features.to_array() if (self.enable_pose_fusion and body_pose_features) else None
@@ -158,11 +203,13 @@ class MultiViewFusionEngine:
             # Phone is visible in at least one view:
             # Combine multi-view detector score with pose and temporal support
             action_support = max(probs.phonecall, probs.texting)
+            consensus_bonus = 0.10 if (self.auxiliary_rescue_mode and two_view_agree) else 0.0
             fused_score = min(
                 1.0,
                 0.55 * max_view_phone_conf
                 + 0.25 * action_support
                 + 0.20 * temporal_persist
+                + consensus_bonus
             )
             phone_detected = fused_score >= self.phone_conf_threshold
             governance_status = "CONFIRMED" if phone_detected else "FAIL_CLOSED_LOW_CONF"

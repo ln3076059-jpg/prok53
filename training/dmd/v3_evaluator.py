@@ -94,10 +94,41 @@ def calculate_per_action_recall(
     return recalls
 
 
+def deduplicate_and_merge_events(
+    candidates: List[Dict[str, Any]],
+    merge_gap_seconds: float = 3.0,
+    min_event_duration: float = 0.8,
+) -> List[Dict[str, Any]]:
+    """Cross-view deduplication and temporal fragmentation merge.
+
+    Merges adjacent or overlapping candidate intervals belonging to the same driver
+    when the intervening gap is <= merge_gap_seconds.
+    """
+    if not candidates:
+        return []
+    sorted_cands = sorted(candidates, key=lambda x: (x["start_seconds"], x["end_seconds"]))
+    merged: List[Dict[str, Any]] = []
+    for cand in sorted_cands:
+        item = dict(cand)
+        item["duration"] = round(item["end_seconds"] - item["start_seconds"], 2)
+        if not merged:
+            merged.append(item)
+            continue
+        last = merged[-1]
+        if item["start_seconds"] <= last["end_seconds"] + merge_gap_seconds:
+            # Overlapping or within gap tolerance: merge into single continuous event
+            last["end_seconds"] = max(last["end_seconds"], item["end_seconds"])
+            last["confidence"] = max(last.get("confidence", 0.0), item.get("confidence", 0.0))
+            last["duration"] = round(last["end_seconds"] - last["start_seconds"], 2)
+        else:
+            merged.append(item)
+    return [e for e in merged if e.get("duration", 0.0) >= min_event_duration]
+
+
 def run_v3_evaluation_on_subject(
     subject_dir: Path,
     subject_id: str,
-    detector: SafetyDetector,
+    detector: Optional[SafetyDetector] = None,
     pose_estimator: Optional[PoseEstimator] = None,
     sample_stride_frames: int = 15,
     config_id: str = "A7",
@@ -109,8 +140,12 @@ def run_v3_evaluation_on_subject(
     min_event_duration: float = 0.8,
     start_confirm_seconds: float = 0.5,
     end_clear_seconds: float = 0.8,
+    auxiliary_rescue_mode: bool = False,
+    merge_gap_seconds: float = 3.0,
+    occlusion_bridge_seconds: Optional[float] = None,
+    use_cached_features: bool = True,
 ) -> Tuple[TemporalEvaluationMetrics, Dict[str, float], V3AblationResult]:
-    """Execute complete V3 evaluation on a DMD subject."""
+    """Execute complete V3 / V3.1 evaluation on a DMD subject."""
     assert_holdout_untouched(subject_id, caller_action="run_v3_evaluation_on_subject")
 
     sync = MultiViewSynchronizer(subject_dir, subject_id)
@@ -126,6 +161,7 @@ def run_v3_evaluation_on_subject(
         enable_face_fusion=enable_face,
         enable_hands_fusion=enable_hands,
         enable_pose_fusion=enable_pose,
+        auxiliary_rescue_mode=auxiliary_rescue_mode,
     )
 
     cfg_path = Path("models/temporal_config_v2.json")
@@ -145,6 +181,8 @@ def run_v3_evaluation_on_subject(
         "occlusion_bridge_seconds",
     }
     engine_kwargs = {k: v for k, v in t_cfg.items() if k in supported}
+    if occlusion_bridge_seconds is not None:
+        engine_kwargs["occlusion_bridge_seconds"] = float(occlusion_bridge_seconds)
     event_engine = TemporalEventEngine(**engine_kwargs)
 
     t0 = time.perf_counter()
@@ -245,20 +283,12 @@ def run_v3_evaluation_on_subject(
     eval_fps = processed_frames / elapsed_sec if elapsed_sec > 0 else 0.0
     latency_ms = (elapsed_sec / processed_frames * 1000.0) if processed_frames > 0 else 0.0
 
-    # Cooldown deduplication matching V2 benchmark standard
-    predicted_events = []
-    cooldown = float(t_cfg.get("cooldown_seconds", 3.0))
-    for cand in generated_candidates:
-        if not predicted_events:
-            predicted_events.append(dict(cand))
-        else:
-            last = predicted_events[-1]
-            if cand["start_seconds"] <= last["end_seconds"] + cooldown:
-                if cand["end_seconds"] > last["end_seconds"]:
-                    last["end_seconds"] = cand["end_seconds"]
-                    last["duration"] = round(last["end_seconds"] - last["start_seconds"], 2)
-            else:
-                predicted_events.append(dict(cand))
+    # Cross-view deduplication and temporal fragmentation merge
+    predicted_events = deduplicate_and_merge_events(
+        generated_candidates,
+        merge_gap_seconds=merge_gap_seconds,
+        min_event_duration=min_event_duration,
+    )
 
     policy = TemporalMatchingPolicy()
     matched, unmatched_preds, unmatched_gts = match_temporal_events(
@@ -323,6 +353,13 @@ def run_v3_evaluation_on_subject(
         "A5": "BODY + FACE + HANDS",
         "A6": "Multi-View + Pose Features",
         "A7": "Multi-View + Pose + 30-Frame Temporal Action Model",
+        "B0": "Current V3 A7 Baseline",
+        "B1": "A7 + Cross-View Deduplication",
+        "B2": "B1 + Shorter Phone-Track Memory (2.0s)",
+        "B3": "B2 + Auxiliary Rescue Mode",
+        "B4": "B3 + Pose Negative Filtering",
+        "B5": "B4 + Temporal Fragmentation Merge",
+        "B6": "Full V3.1 Consensus & Precision Recovery",
     }
 
     ablation_res = V3AblationResult(

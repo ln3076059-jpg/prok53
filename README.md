@@ -175,11 +175,13 @@ python -m training.dmd.run_v3_evaluation --subject-dir datasets/external_dmd/gE-
 | **Event Precision** | **100.0%** | **66.7%** | **30.8%** |
 | **Event Recall** | **9.1%** | **25.0%** (2.75x vs B001) | **40.0%** (**4.40x vs B001**) |
 | **Event F1 Score** | **16.7%** | **36.4%** | **34.8%** |
-| **False Alarms / min** | **0.00 / min** | **0.14 / min** | **1.12 / min** |
+| **False Alarms / min** | **0.00 / min** | **0.14 / min** | **1.12 / min** *(target $\le 1.0$: FAIL)* |
 | **`phonecall_right` Recall** | 50.0% | **100.0%** | **100.0%** |
 | **`phonecall_left` Recall** | 0.0% *(occluded)* | 0.0% *(occluded)* | **50.0%** *(recovered via FACE view)* |
 | **`texting_right` Recall** | 0.0% *(occluded)* | 0.0% *(occluded)* | **33.3%** *(recovered via HANDS view)* |
 | **`texting_left` Recall** | 0.0% | 0.0% | **0.0%** |
+
+*Scientific Interpretation: V3 demonstrates partial generalization — multi-view fusion successfully recovers line-of-sight occlusions, but increased multi-stream permissiveness degrades precision (30.8%) and raises false alarms (1.12/min, failing the $\le 1.00$/min target). V3 does NOT outperform V2 overall.*
 
 *Seatbelt Temporal Independent Benchmark: NOT_AVAILABLE (Component validated only)*
 

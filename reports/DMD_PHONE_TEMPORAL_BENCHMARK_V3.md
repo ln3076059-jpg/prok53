@@ -12,14 +12,23 @@
 
 | Metric | Benchmark 001 (gZ-36 V1) | Benchmark 002 (gZ-37 V2) | Benchmark 003 (gE-28 V3) | V3 Target | Status |
 | :--- | :---: | :---: | :---: | :---: | :---: |
-| **Precision** | 100.0% | 66.7% | **30.8%** | $\ge 60.0\%$ | CHECK |
+| **Precision** | 100.0% | 66.7% | **30.8%** | $\ge 60.0\%$ | NOT MET |
 | **Recall** | 9.1% | 25.0% | **40.0%** | $\ge 25.0\%$ | PASS |
-| **F1-Score** | 16.7% | 36.4% | **34.8%** | $\ge 35.0\%$ | CHECK |
-| **False Alarms / min** | 0.00 | 0.14 | **1.116** | $\le 1.0$ / min | PASS |
+| **F1-Score** | 16.7% | 36.4% | **34.8%** | $\ge 35.0\%$ | NOT MET |
+| **False Alarms / min** | 0.00 | 0.14 | **1.116** | $\le 1.0$ / min | FAIL |
 | **True Positives** | 1 | 2 | **4** | — | — |
 | **False Positives** | 0 | 1 | **9** | — | — |
 | **False Negatives** | 10 | 6 | **6** | — | — |
 | **Total GT Events** | 11 | 8 | **10** | — | — |
+
+### Scientific Verdict:
+- `V3_RECALL_IMPROVED = true` (25.0% -> 40.0%, 1.6x vs V2, 4.4x vs V1 baseline)
+- `OCCLUSION_RECOVERY = true` (phonecall_left: 0% -> 50%, texting_right: 0% -> 33.3%)
+- `V3_PRECISION_IMPROVED = false` (66.7% -> 30.8%)
+- `V3_F1_IMPROVED = false` (36.4% -> 34.8%)
+- `V3_FALSE_ALARM_TARGET_MET = false` (1.116 > 1.00 / min)
+- `V3_GENERALIZATION_IMPROVEMENT = PARTIAL`
+- `V3_OUTPERFORMS_V2_OVERALL = false` (V3 improves physical visibility/recall but degrades precision and false-alarm rate)
 
 ---
 

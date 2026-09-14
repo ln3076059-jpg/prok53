@@ -11,7 +11,7 @@
 ```ini
 ACADEMIC_PROJECT_COMPLETE = true
 ENGINEERING_COMPLETE = true
-SOFTWARE_TESTS = 470 PASSED / 0 FAILED
+SOFTWARE_TESTS = 497 PASSED / 0 FAILED
 BACKEND = PASS
 FRONTEND = PASS
 DATABASE = PASS
@@ -28,10 +28,17 @@ DMD_HELD_SUBJECT_V2 = gZ-37
 DMD_FINAL_HELD_SUBJECT_V3 = gE-28
 DMD_BENCHMARK_001 = PRESERVED_HISTORICAL (gZ-36, R=9.1%)
 DMD_BENCHMARK_002 = COMPLETED_ONE_SHOT (gZ-37, R=25.0%)
-DMD_BENCHMARK_003 = COMPLETED_ONE_SHOT (gE-28, R=40.0%)
+DMD_BENCHMARK_003 = COMPLETED_ONE_SHOT (gE-28, R=40.0%, P=30.8%, F1=34.8%, FA/min=1.116)
 DMD_PHONE_TEMPORAL_BENCHMARK = COMPLETE_V3_MULTIVIEW
 MULTI_VIEW_IN_CABIN_FUSION = COMPLETE_VALIDATED
 PHYSICAL_OCCLUSION_RECOVERY = VALIDATED (phonecall_left: 50.0%, texting_right: 33.3%)
+V3_RECALL_IMPROVED = true
+V3_PRECISION_IMPROVED = false
+V3_F1_IMPROVED = false
+V3_FALSE_ALARM_TARGET_MET = false
+V3_GENERALIZATION_IMPROVEMENT = PARTIAL
+V3_OUTPERFORMS_V2_OVERALL = false
+BENCHMARK_004 = BLOCKED_PENDING_NEW_UNTOUCHED_DMD_SUBJECT
 SEATBELT_TEMPORAL_INDEPENDENT_BENCHMARK = NOT_AVAILABLE
 END_TO_END_DEVELOPMENT_SMOKE_TEST = PASS
 RUNTIME_PERFORMANCE = 63.86 FPS decode | 0.65 FPS full serial CPU pipeline (p50: 1254.30 ms) | RAM: 233.09 MB
@@ -73,16 +80,20 @@ All component models have verified cryptographic hashes in `models/locked/v2_bas
 
 ---
 
-## 3. DMD-First Temporal Development
+## 3. DMD Dataset Partitions (Historical V2 vs Current V3)
 
 - **Official Source:** `EXTERNAL_DMD_VICOMTECH` (Vicomtech Driver Monitoring Dataset)
 - **Governance Role:** `TEMPORAL_DEVELOPMENT` (`CANONICAL_ELIGIBLE = false`, `UNTOUCHED_HOLDOUT_ELIGIBLE = false`)
-- **Streams:** Session `s2`, Channel `RGB`, Stream `BODY` (native resolution 1280x720)
+- **Streams:** Session `s2`, Channel `RGB`, Synchronous Streams: `BODY`, `FACE`, `HANDS` (native 1280x720)
 - **Phone Actions:** `phonecall_right`, `phonecall_left`, `texting_right`, `texting_left` $\to$ `PHONE_USE`
-- **Subject-Disjoint Split:**
-  - Calibration: Subject `14` (`gC-14`)
-  - Evaluation: Subject `36` (`gZ-36`)
-  - `SUBJECT_OVERLAP = 0`, `SHA_OVERLAP = 0`
+- **Historical V2 Single-View Partition:**
+  - Calibration / Dev: `gC-14`, `gZ-36` (Session `s2` BODY only)
+  - Held Benchmark 002: `gZ-37` (Consumed, permanently immutable)
+- **Current V3 Multi-View Partition:**
+  - Development Pool: `gC-14`, `gZ-36`, `gB-9` (Session `s2` BODY + FACE + HANDS)
+  - Consumed V3 Holdout: `gE-28` (Evaluated once in Benchmark 003, permanently immutable)
+  - Future Benchmark 004: `BLOCKED_PENDING_NEW_UNTOUCHED_DMD_SUBJECT`
+- **Strict Isolation:** `SUBJECT_OVERLAP = 0`, `SHA_OVERLAP = 0` across development pool and holdouts.
 
 ---
 

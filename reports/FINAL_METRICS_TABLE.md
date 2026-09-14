@@ -65,7 +65,7 @@
   - `phonecall_left`: **50.0%** (recovered via **FACE camera** bypassing driver head/shoulder occlusion)
   - `texting_right`: **33.3%** (recovered via **HANDS camera** bypassing steering wheel rim)
   - `texting_left`: **0.0%** (lap interaction)
-- **False Alarm Control:** Maintained at **1.12 false alarms per minute** in V3 multi-view multi-stream evaluation.
+- **False Alarm & Precision Trade-off (Target Missed):** In Benchmark 003, false alarms rose to **1.12 / min** (1.116 / min, exceeding the $\le 1.00$ / min target $\rightarrow$ **FAIL**), and precision fell to **30.8%** due to multi-stream permissiveness and event fragmentation, yielding an F1 score of **34.8%** (missing the $\ge 35.0\%$ target). Hence, V3 achieved `PARTIAL_GENERALIZATION_IMPROVEMENT` (successful physical occlusion recovery, but degraded precision and higher false alarms); V3 does NOT outperform V2 overall.
 
 ### 2.1 Multi-View Action Recovery (Benchmark 003 vs Single-View Baselines)
 

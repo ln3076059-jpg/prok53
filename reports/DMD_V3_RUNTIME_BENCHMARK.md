@@ -27,11 +27,15 @@ Measured across 1,000 continuous frames using high-resolution monotonic timers (
 
 ## 2. End-to-End Pipeline Throughput Comparison
 
-| Pipeline Configuration | Mean Latency | Median p50 | Tail p95 | Effective FPS | Real-Time Capable? |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **V2 Baseline (BODY-Only)** | **26.0 ms** | **24.8 ms** | **29.5 ms** | **38.5 FPS** | **YES** (Standard 30 FPS exceeded) |
-| **V3 Multi-View Synchronous (Full)** | **53.7 ms** | **51.2 ms** | **61.4 ms** | **18.6 FPS** | **YES** (Sufficient for real-time safety alert) |
-| **V3 Multi-View Alternating / Staggered** | **32.4 ms** | **30.5 ms** | **37.0 ms** | **30.8 FPS** | **YES** (Full 30 FPS sustained) |
+> [!NOTE]
+> Values below represent **SYNTHETIC_STAGE_SUM_ESTIMATE** under hypothetical GPU acceleration (component forward pass sums). For verified CPU hardware execution, refer to `reports/V3_RUNTIME_TRUTH_AUDIT.md`.
+
+| Pipeline Configuration | Mean Latency | Median p50 | Tail p95 | Effective FPS | Evidence Category | Real-Time Capable? |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **V2 Baseline (BODY-Only)** | **26.0 ms** | **24.8 ms** | **29.5 ms** | **38.5 FPS** | SYNTHETIC_STAGE_SUM | Estimated (GPU required) |
+| **V3 Multi-View Synchronous (Full)** | **53.7 ms** | **51.2 ms** | **61.4 ms** | **18.6 FPS** | SYNTHETIC_STAGE_SUM | Estimated (GPU required) |
+| **V3 Multi-View Alternating / Staggered** | **32.4 ms** | **30.5 ms** | **37.0 ms** | **30.8 FPS** | SYNTHETIC_STAGE_SUM | Estimated (GPU required) |
+| **Actual Benchmark 003 (Measured CPU)** | **1060.8 ms** | **1050.2 ms** | **1240.0 ms** | **0.9 FPS** | **FULL_E2E_MEASURED** | **NO (Requires Edge GPU)** |
 
 ---
 

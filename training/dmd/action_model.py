@@ -100,14 +100,24 @@ class RuleGuidedPoseClassifier:
             # Physical phone is detected: elevate call or text depending on geometry
             p_call = call_geom_score * min(1.0, phone_detector_conf * 1.5)
             p_text = texting_geom_score * min(1.0, phone_detector_conf * 1.5)
-            # If phone is detected but neither call nor text geometry matches strongly,
-            # assign to texting if below shoulder or calling if near face
-            if p_call < 0.2 and p_text < 0.2:
-                if ph_face < 1.0:
-                    p_call = 0.4
-                else:
-                    p_text = 0.4
             p_other = 0.05
+            # If phone is detected but neither call nor text geometry matches strongly
+            if p_call < 0.2 and p_text < 0.2:
+                if phone_detector_conf >= 0.40:
+                    if ph_face < 0.75:
+                        p_call = 0.35
+                    elif min_wrist_phone < 0.65:
+                        p_text = 0.35
+                    else:
+                        p_other = 0.45
+                        p_call = 0.05
+                        p_text = 0.05
+                else:
+                    # Weak detector confidence + weak geometry: suppress false alarm
+                    p_other = 0.45
+                    p_normal = 0.50
+                    p_call = 0.02
+                    p_text = 0.03
             p_normal = max(0.0, 1.0 - (p_call + p_text + p_other))
         else:
             # No phone detected: hand near ear is scratching/hair adjust (OTHER_GESTURE)
