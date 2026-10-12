@@ -1,0 +1,20 @@
+{
+  "status": "BLOCKED",
+  "created_at": "2026-10-12T10:27:19.289344+00:00",
+  "git_head": "925e81a5a76fcf6bcadb32ba9e9633011d12e572",
+  "dataset_role": "DEVELOPMENT_ONLY",
+  "consumed_holdouts_forbidden": [
+    "gZ-37",
+    "gE-28"
+  ],
+  "config_path": "models\\model_config_v4_candidate.yaml",
+  "config_sha256": "bef3b6f6e66266aa3e7f4c8d63dd413ce94129bfc1a3c51aef93e4e19267780a",
+  "inputs": [],
+  "input_set_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "blockers": [
+    "missing cached development features: datasets\\external_dmd\\derivatives\\v3_features_gB-9.json",
+    "missing cached development features: datasets\\external_dmd\\derivatives\\v3_features_gZ-36.json",
+    "missing cached development features: datasets\\external_dmd\\derivatives\\v3_features_gC-14.json"
+  ],
+  "generalization_claim": "NOT_ESTABLISHED"
+}

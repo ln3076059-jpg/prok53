@@ -21,6 +21,23 @@ class Settings(BaseSettings):
     allow_camera_streams: bool = False
     cors_origins: str = "http://localhost:5173"
     access_token_minutes: int = 480
+    analysis_queue_backend: str = "background"
+
+    @field_validator("app_env")
+    @classmethod
+    def supported_environment(cls, value: str) -> str:
+        normalized = value.strip().lower()
+        if normalized not in {"development", "testing", "production"}:
+            raise ValueError("APP_ENV must be development, testing, or production")
+        return normalized
+
+    @field_validator("analysis_queue_backend")
+    @classmethod
+    def supported_queue_backend(cls, value: str) -> str:
+        normalized = value.strip().lower()
+        if normalized not in {"background", "database"}:
+            raise ValueError("ANALYSIS_QUEUE_BACKEND must be background or database")
+        return normalized
 
     @field_validator("secret_key")
     @classmethod
@@ -36,6 +53,12 @@ class Settings(BaseSettings):
             and self.secret_key == DEVELOPMENT_SECRET_KEY
         ):
             raise ValueError("production cannot use the public development SECRET_KEY")
+        if self.app_env == "production" and self.secret_key.lower().startswith("replace-"):
+            raise ValueError("production cannot use a placeholder SECRET_KEY")
+        if self.app_env == "production" and "replace-me" in self.database_url.lower():
+            raise ValueError("production cannot use placeholder database credentials")
+        if self.app_env == "production" and self.analysis_queue_backend != "database":
+            raise ValueError("production requires ANALYSIS_QUEUE_BACKEND=database")
         return self
 
     @property
@@ -46,4 +69,3 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
-

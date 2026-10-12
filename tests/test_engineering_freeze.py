@@ -10,14 +10,30 @@ import numpy as np
 import pytest
 import yaml
 from fastapi import HTTPException
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 from backend.ai.detector import SafetyDetector
 from backend.ai.evidence import EventEvidenceBuffer
 from backend.api import routes as api_routes
+from backend.api.dependencies import export_user, reviewer_user
 from backend.core.config import DEVELOPMENT_SECRET_KEY, Settings
-from backend.models.entities import AnalysisJob
+from backend.database import Base
+from backend.models.entities import (
+    AnalysisJob,
+    Event,
+    EventType,
+    JobStatus,
+    Review,
+    ReviewStatus,
+    User,
+    Video,
+)
+from backend.schemas import ReviewRequest
 from backend.services import analysis_worker
+from backend.services.analysis_queue import DurableAnalysisQueue
 from backend.services.analysis_worker import InferenceWorker
+from backend.services.uploads import validate_video_container
 from backend.services.video_source import OpenCVVideoSource, RTSPSource, WebcamSource
 from training.common import sha256_file
 from training.lock_model import validate_calibration_binding
@@ -116,6 +132,108 @@ def test_csv_export_escapes_spreadsheet_formulas(value):
     assert api_routes._csv_safe(value).startswith("'")
 
 
+def test_review_and_export_dependencies_enforce_roles():
+    reviewer = User(email="reviewer@example.test", password_hash="x", role="reviewer")
+    auditor = User(email="auditor@example.test", password_hash="x", role="auditor")
+    viewer = User(email="viewer@example.test", password_hash="x", role="viewer")
+
+    assert reviewer_user(user=reviewer) is reviewer
+    assert export_user(user=auditor) is auditor
+    with pytest.raises(HTTPException) as exc:
+        reviewer_user(user=auditor)
+    assert exc.value.status_code == 403
+    with pytest.raises(HTTPException) as exc:
+        export_user(user=viewer)
+    assert exc.value.status_code == 403
+
+
+@pytest.mark.parametrize(
+    ("suffix", "header"),
+    [
+        (".mp4", b"\x00\x00\x00\x18ftypisom"),
+        (".avi", b"RIFF\x10\x00\x00\x00AVI "),
+        (".webm", b"\x1a\x45\xdf\xa3\x00\x00\x00\x00"),
+    ],
+)
+def test_video_container_validation_accepts_matching_signatures(tmp_path, suffix, header):
+    path = tmp_path / f"video{suffix}"
+    path.write_bytes(header)
+    validate_video_container(path)
+
+
+def test_video_container_validation_rejects_spoofed_and_empty_files(tmp_path):
+    spoofed = tmp_path / "not-a-video.mp4"
+    spoofed.write_bytes(b"this is plain text")
+    with pytest.raises(HTTPException) as exc:
+        validate_video_container(spoofed)
+    assert exc.value.status_code == 415
+
+    empty = tmp_path / "empty.mp4"
+    empty.touch()
+    with pytest.raises(HTTPException) as exc:
+        validate_video_container(empty)
+    assert exc.value.status_code == 400
+
+
+def test_review_transition_rejects_stale_concurrent_writer(tmp_path):
+    engine = create_engine(f"sqlite:///{tmp_path / 'review.db'}")
+    Base.metadata.create_all(engine)
+    session_factory = sessionmaker(bind=engine)
+    with session_factory() as seed:
+        user = User(id="reviewer", email="reviewer@example.test", password_hash="x")
+        video = Video(
+            id="video",
+            original_name="video.mp4",
+            storage_path="video.mp4",
+            sha256="a" * 64,
+            size_bytes=12,
+            mime_type="video/mp4",
+        )
+        job = AnalysisJob(id="job", video_id="video", status=JobStatus.COMPLETED)
+        event = Event(
+            id="event",
+            job_id="job",
+            video_id="video",
+            event_type=EventType.PHONE,
+            confidence=0.8,
+            frame_number=1,
+            timestamp_seconds=1.0,
+            occupant_role="driver",
+            vehicle_context_id="vehicle",
+            model_version="test",
+        )
+        seed.add_all([user, video, job, event])
+        seed.commit()
+
+    first = session_factory()
+    second = session_factory()
+    try:
+        first_event = first.get(Event, "event")
+        second_event = second.get(Event, "event")
+        first_user = first.get(User, "reviewer")
+        second_user = second.get(User, "reviewer")
+        api_routes._commit_review_transition(
+            first,
+            first_event,
+            first_user,
+            ReviewRequest(status=ReviewStatus.NEEDS_REVIEW, notes="ambiguous"),
+        )
+        with pytest.raises(HTTPException) as exc:
+            api_routes._commit_review_transition(
+                second,
+                second_event,
+                second_user,
+                ReviewRequest(status=ReviewStatus.REJECTED, notes="stale"),
+            )
+        assert exc.value.status_code == 409
+        with session_factory() as check:
+            assert check.get(Event, "event").review_status == ReviewStatus.NEEDS_REVIEW
+            assert len(list(check.query(Review))) == 1
+    finally:
+        first.close()
+        second.close()
+
+
 def test_production_settings_reject_public_development_secret():
     with pytest.raises(ValueError, match="public development SECRET_KEY"):
         Settings(
@@ -123,6 +241,66 @@ def test_production_settings_reject_public_development_secret():
             app_env="production",
             secret_key=DEVELOPMENT_SECRET_KEY,
         )
+
+
+def test_production_settings_require_durable_queue():
+    with pytest.raises(ValueError, match="ANALYSIS_QUEUE_BACKEND=database"):
+        Settings(
+            _env_file=None,
+            app_env="production",
+            secret_key="x" * 32,
+            analysis_queue_backend="background",
+        )
+
+
+def test_production_settings_reject_placeholder_secrets_and_database_passwords():
+    with pytest.raises(ValueError, match="placeholder SECRET_KEY"):
+        Settings(
+            _env_file=None,
+            app_env="production",
+            secret_key="replace-with-a-random-secret-of-at-least-32-characters",
+            database_url="mysql+pymysql://roadwatch:strong@mysql/roadwatch",
+            analysis_queue_backend="database",
+        )
+    with pytest.raises(ValueError, match="placeholder database credentials"):
+        Settings(
+            _env_file=None,
+            app_env="production",
+            secret_key="x" * 32,
+            database_url="mysql+pymysql://roadwatch:replace-me@mysql/roadwatch",
+            analysis_queue_backend="database",
+        )
+
+
+def test_durable_queue_claims_each_persisted_job_once(tmp_path):
+    engine = create_engine(f"sqlite:///{tmp_path / 'queue.db'}")
+    Base.metadata.create_all(engine)
+    session_factory = sessionmaker(bind=engine)
+    with session_factory() as session:
+        session.add(
+            Video(
+                id="video",
+                original_name="video.mp4",
+                storage_path="video.mp4",
+                sha256="b" * 64,
+                size_bytes=12,
+                mime_type="video/mp4",
+            )
+        )
+        session.add_all(
+            [AnalysisJob(id="job-1", video_id="video"), AnalysisJob(id="job-2", video_id="video")]
+        )
+        session.commit()
+
+    queue = DurableAnalysisQueue(session_factory)
+    queue.enqueue("job-1")
+    claimed = {queue.claim_next(), queue.claim_next()}
+    assert claimed == {"job-1", "job-2"}
+    assert queue.claim_next() is None
+    with session_factory() as session:
+        assert {session.get(AnalysisJob, job_id).status for job_id in claimed} == {
+            JobStatus.RUNNING
+        }
 
 
 def test_calibration_binding_rejects_model_and_threshold_mismatch():

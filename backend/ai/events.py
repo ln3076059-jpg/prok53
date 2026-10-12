@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections import defaultdict, deque
 from dataclasses import dataclass
+from enum import StrEnum
 
 
 @dataclass(frozen=True)
@@ -50,6 +51,16 @@ class EventCandidate:
     occupant_id: str = ""
 
 
+class TemporalState(StrEnum):
+    IDLE = "IDLE"
+    CANDIDATE = "CANDIDATE"
+    ACTIVE = "ACTIVE"
+    OCCLUDED = "OCCLUDED"
+    ENDING = "ENDING"
+    CLOSED = "CLOSED"
+    NEEDS_REVIEW = "NEEDS_REVIEW"
+
+
 class TemporalEventEngine:
     def __init__(
         self,
@@ -65,6 +76,7 @@ class TemporalEventEngine:
         activation_threshold: float = 0.55,
         release_threshold: float = 0.35,
         occlusion_bridge_seconds: float = 3.5,
+        strict_phone_context: bool = False,
         **_: object,
     ):
         self.window_seconds = float(window_seconds)
@@ -79,6 +91,7 @@ class TemporalEventEngine:
         self.activation_threshold = float(activation_threshold)
         self.release_threshold = float(release_threshold)
         self.occlusion_bridge_seconds = float(occlusion_bridge_seconds)
+        self.strict_phone_context = bool(strict_phone_context)
         self.windows: defaultdict[tuple[str, int | None, str], deque[Observation]] = defaultdict(
             deque
         )
@@ -86,6 +99,7 @@ class TemporalEventEngine:
         self.smoothed: dict[tuple[str, int | None, str], float] = {}
         self.active_events: set[tuple[str, str, int | None, str]] = set()
         self.last_physical_phone: dict[tuple[str, int | None, str], tuple[float, float, float]] = {}
+        self.states: dict[tuple[str, int | None, str], TemporalState] = {}
 
     def add(self, observation: Observation) -> list[EventCandidate]:
         if observation.vehicle_context_id is None:
@@ -94,8 +108,33 @@ class TemporalEventEngine:
         if observation.class_name == "phone" and role != "driver":
             return []
         occupant_group = observation.occupant_id if observation.occupant_id else role
-        window_track_id = observation.track_id if observation.class_name == "phone" else None
+        window_track_id = (
+            observation.track_id
+            if observation.class_name == "phone" and not observation.occupant_id
+            else None
+        )
         phone_key = (observation.vehicle_context_id, window_track_id, occupant_group)
+
+        non_use_contexts = {
+            "NO_PHONE",
+            "PHONE_VISIBLE_NOT_USED",
+            "MOUNTED_PHONE",
+            "MOUNTED_OR_STATIC",
+        }
+        if observation.class_name == "phone" and observation.phone_context in non_use_contexts:
+            self._release("PHONE", observation)
+            self.last_physical_phone.pop(phone_key, None)
+            self.windows.pop(phone_key, None)
+            self.states[phone_key] = TemporalState.CLOSED
+            return []
+        if (
+            observation.class_name == "phone"
+            and self.strict_phone_context
+            and observation.phone_context
+            not in {"HANDHELD", "HANDHELD_USE", "HANDHELD_PHONE_USE", "POSSIBLE_PHONE_USE"}
+        ):
+            self.states[phone_key] = TemporalState.NEEDS_REVIEW
+            return []
 
         # Level 3: Temporal phone track memory & occlusion bridging
         if observation.class_name == "phone" and role == "driver":
@@ -104,9 +143,14 @@ class TemporalEventEngine:
                 if observation.fusion_score is not None
                 else observation.confidence
             )
-            prox_val = max(observation.phone_hand_proximity or 0.0, observation.phone_face_proximity or 0.0)
+            prox_val = max(
+                observation.phone_hand_proximity or 0.0, observation.phone_face_proximity or 0.0
+            )
 
-            if score_val >= self.candidate_threshold and observation.evidence_source != "OCCLUSION_BRIDGE":
+            if (
+                score_val >= self.candidate_threshold
+                and observation.evidence_source != "OCCLUSION_BRIDGE"
+            ):
                 # Confidently observed physical phone
                 self.last_physical_phone[phone_key] = (observation.timestamp, score_val, prox_val)
             elif score_val <= self.release_threshold and phone_key in self.last_physical_phone:
@@ -114,8 +158,15 @@ class TemporalEventEngine:
                 gap = observation.timestamp - last_t
                 current_prox = prox_val or last_p
                 # Occlusion bridge requires: prior physical phone observation + ongoing hand/face proximity
-                if 0.0 < gap <= self.occlusion_bridge_seconds and last_s >= self.candidate_threshold and current_prox >= 0.25:
-                    decay = max(self.release_threshold + 0.02, last_s * (1.0 - 0.4 * (gap / (self.occlusion_bridge_seconds + 0.1))))
+                if (
+                    0.0 < gap <= self.occlusion_bridge_seconds
+                    and last_s >= self.candidate_threshold
+                    and current_prox >= 0.25
+                ):
+                    decay = max(
+                        self.release_threshold + 0.02,
+                        last_s * (1.0 - 0.4 * (gap / (self.occlusion_bridge_seconds + 0.1))),
+                    )
                     observation = Observation(
                         timestamp=observation.timestamp,
                         class_name="phone",
@@ -123,7 +174,7 @@ class TemporalEventEngine:
                         track_id=observation.track_id,
                         occupant_role=observation.occupant_role,
                         vehicle_context_id=observation.vehicle_context_id,
-                        phone_context="HANDHELD_USE",
+                        phone_context="HANDHELD_PHONE_USE",
                         fusion_score=decay,
                         phone_hand_proximity=current_prox,
                         phone_face_proximity=observation.phone_face_proximity,
@@ -132,14 +183,10 @@ class TemporalEventEngine:
                         vehicle_context_confidence=observation.vehicle_context_confidence,
                         evidence_source="OCCLUSION_BRIDGE",
                     )
+                    self.states[phone_key] = TemporalState.OCCLUDED
                 elif gap > self.occlusion_bridge_seconds:
                     self.last_physical_phone.pop(phone_key, None)
 
-        if observation.class_name == "phone" and observation.phone_context == "MOUNTED_OR_STATIC":
-            self._release("PHONE", observation)
-            self.last_physical_phone.pop(phone_key, None)
-            self.windows.pop((observation.vehicle_context_id, observation.track_id, occupant_group), None)
-            return []
         if (
             observation.class_name.startswith("seatbelt_")
             and observation.vehicle_type == "motorcycle"
@@ -159,10 +206,16 @@ class TemporalEventEngine:
             self._release(event_type, observation)
         # Belt classes describe the same occupant ROI but a class flip can receive a new
         # tracker ID. Group belt evidence by vehicle+seat so contradictions remain visible.
-        window_track_id = observation.track_id if observation.class_name == "phone" else None
+        window_track_id = (
+            observation.track_id
+            if observation.class_name == "phone" and not observation.occupant_id
+            else None
+        )
         occupant_group = observation.occupant_id if observation.occupant_id else role
         window = self.windows[(observation.vehicle_context_id, window_track_id, occupant_group)]
         window.append(observation)
+        if self.states.get(phone_key) not in {TemporalState.ACTIVE, TemporalState.OCCLUDED}:
+            self.states[phone_key] = TemporalState.CANDIDATE
         while window and observation.timestamp - window[0].timestamp > self.window_seconds:
             window.popleft()
         return self._evaluate(window, observation)
@@ -177,7 +230,10 @@ class TemporalEventEngine:
             phone_status = (
                 "PENDING"
                 if role == "driver"
-                and all(item.phone_context in {"HANDHELD", "HANDHELD_USE"} for item in phone)
+                and all(
+                    item.phone_context in {"HANDHELD", "HANDHELD_USE", "HANDHELD_PHONE_USE"}
+                    for item in phone
+                )
                 and all(item.evidence_source != "FUSION_REJECTED" for item in phone)
                 else "NEEDS_REVIEW"
             )
@@ -221,13 +277,22 @@ class TemporalEventEngine:
             # Safety gate (Section 10 Level 3): pose alone without physical phone evidence cannot create PHONE_USE
             has_physical = any(
                 item.evidence_source != "OCCLUSION_BRIDGE"
-                and (item.fusion_score if item.fusion_score is not None else item.confidence) >= self.candidate_threshold
+                and (item.fusion_score if item.fusion_score is not None else item.confidence)
+                >= self.candidate_threshold
                 for item in observations
             )
             if not has_physical:
                 return False
-        occupant_group = observations[-1].occupant_id if observations[-1].occupant_id else (observations[-1].occupant_role or "unknown")
-        window_track_id = observations[-1].track_id if observations[-1].class_name == "phone" else None
+        occupant_group = (
+            observations[-1].occupant_id
+            if observations[-1].occupant_id
+            else (observations[-1].occupant_role or "unknown")
+        )
+        window_track_id = (
+            observations[-1].track_id
+            if observations[-1].class_name == "phone" and not observations[-1].occupant_id
+            else None
+        )
         key = (
             observations[-1].vehicle_context_id or "",
             window_track_id,
@@ -284,7 +349,12 @@ class TemporalEventEngine:
             behavior_label=current.behavior_label,
             vehicle_type=current.vehicle_type,
             temporal_score=self.smoothed.get(
-                (current.vehicle_context_id, current.track_id if event_type == "PHONE" else None, occupant_group), scores[-1]
+                (
+                    current.vehicle_context_id,
+                    current.track_id if event_type == "PHONE" and not occupant_id else None,
+                    occupant_group,
+                ),
+                scores[-1],
             ),
             occupant_id=occupant_id,
         )
@@ -301,6 +371,12 @@ class TemporalEventEngine:
         if key in self.active_events or not self._cooldown_allows(candidate):
             return False
         self.active_events.add(key)
+        state_key = (
+            candidate.vehicle_context_id,
+            None if candidate.occupant_id else candidate.track_id,
+            candidate.occupant_id if candidate.occupant_id else candidate.occupant_role,
+        )
+        self.states[state_key] = TemporalState.ACTIVE
         return True
 
     @staticmethod
@@ -308,7 +384,11 @@ class TemporalEventEngine:
         return (
             candidate.event_type,
             candidate.vehicle_context_id,
-            candidate.track_id if candidate.event_type == "PHONE" else None,
+            (
+                candidate.track_id
+                if candidate.event_type == "PHONE" and not candidate.occupant_id
+                else None
+            ),
             candidate.occupant_id if candidate.occupant_id else candidate.occupant_role,
         )
 
@@ -318,15 +398,20 @@ class TemporalEventEngine:
         key = (
             event_type,
             observation.vehicle_context_id,
-            observation.track_id if event_type == "PHONE" else None,
-            observation.occupant_id if observation.occupant_id else (observation.occupant_role or "unknown"),
+            observation.track_id if event_type == "PHONE" and not observation.occupant_id else None,
+            observation.occupant_id
+            if observation.occupant_id
+            else (observation.occupant_role or "unknown"),
         )
         self.active_events.discard(key)
+        state_key = (key[1], key[2], key[3])
+        self.states[state_key] = TemporalState.CLOSED
 
     def reset_vehicle(self, vehicle_context_id: str) -> None:
         for key in [key for key in self.windows if key[0] == vehicle_context_id]:
             del self.windows[key]
             self.smoothed.pop(key, None)
+            self.states[key] = TemporalState.CLOSED
         for key in [key for key in self.last_event if key[1] == vehicle_context_id]:
             del self.last_event[key]
         self.active_events = {key for key in self.active_events if key[1] != vehicle_context_id}
@@ -345,3 +430,4 @@ class TemporalEventEngine:
             vehicle_context_id, track_id, occupant_group = key
             self.active_events.discard(("PHONE", vehicle_context_id, track_id, occupant_group))
             self.active_events.discard(("NO_SEATBELT", vehicle_context_id, None, occupant_group))
+            self.states[key] = TemporalState.CLOSED

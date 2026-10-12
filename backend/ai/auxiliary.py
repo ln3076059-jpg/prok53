@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from enum import StrEnum
 from pathlib import Path
 
 import numpy as np
@@ -38,6 +39,24 @@ class SeatbeltEvidence:
     source: str
 
 
+class PhoneContext(StrEnum):
+    NO_PHONE = "NO_PHONE"
+    PHONE_VISIBLE_NOT_USED = "PHONE_VISIBLE_NOT_USED"
+    MOUNTED_PHONE = "MOUNTED_PHONE"
+    HANDHELD_PHONE_USE = "HANDHELD_PHONE_USE"
+    POSSIBLE_PHONE_USE = "POSSIBLE_PHONE_USE"
+    UNKNOWN_CONTEXT = "UNKNOWN_CONTEXT"
+
+
+@dataclass(frozen=True)
+class PhoneContextEvidence:
+    context: PhoneContext
+    hand_proximity: float
+    face_proximity: float
+    physical_phone_confidence: float
+    reason: str
+
+
 def _point_box_proximity(
     points: tuple[tuple[float, float], ...],
     box: tuple[float, float, float, float],
@@ -70,6 +89,47 @@ def classify_phone_context(
     if hand >= hand_threshold or face >= face_threshold:
         return "HANDHELD_USE", hand, face
     return "MOUNTED_OR_STATIC", hand, face
+
+
+def reason_phone_context(
+    detection: NormalizedDetection | None,
+    pose: PoseEvidence | None,
+    *,
+    occupant_confidence: float,
+    mounted_evidence: bool = False,
+    hand_threshold: float = 0.55,
+    face_threshold: float = 0.55,
+) -> PhoneContextEvidence:
+    """Classify phone-use context while keeping visibility separate from use."""
+    if detection is None or detection.confidence < 0.10:
+        return PhoneContextEvidence(PhoneContext.NO_PHONE, 0.0, 0.0, 0.0, "NO_PHYSICAL_PHONE")
+    if occupant_confidence < 0.55:
+        return PhoneContextEvidence(
+            PhoneContext.UNKNOWN_CONTEXT,
+            0.0,
+            0.0,
+            detection.confidence,
+            "OCCUPANT_ASSOCIATION_UNCERTAIN",
+        )
+    if not pose or (not pose.hand_points and not pose.face_points):
+        return PhoneContextEvidence(
+            PhoneContext.UNKNOWN_CONTEXT,
+            0.0,
+            0.0,
+            detection.confidence,
+            "POSE_UNAVAILABLE",
+        )
+    hand = _point_box_proximity(pose.hand_points, detection.xyxy, pose.xyxy)
+    face = _point_box_proximity(pose.face_points, detection.xyxy, pose.xyxy)
+    if mounted_evidence:
+        context, reason = PhoneContext.MOUNTED_PHONE, "EXPLICIT_MOUNTED_EVIDENCE"
+    elif hand >= hand_threshold or face >= face_threshold:
+        context, reason = PhoneContext.HANDHELD_PHONE_USE, "PHONE_NEAR_HAND_OR_FACE"
+    elif max(hand, face) >= min(hand_threshold, face_threshold) * 0.70:
+        context, reason = PhoneContext.POSSIBLE_PHONE_USE, "BORDERLINE_PHONE_BODY_PROXIMITY"
+    else:
+        context, reason = PhoneContext.PHONE_VISIBLE_NOT_USED, "PHONE_VISIBLE_WITHOUT_USE_GEOMETRY"
+    return PhoneContextEvidence(context, hand, face, detection.confidence, reason)
 
 
 def phone_context(
@@ -224,7 +284,9 @@ class PoseEstimator:
 
     def predict_raw_keypoints(
         self, frame: np.ndarray
-    ) -> list[tuple[list[tuple[float, float]], list[float], tuple[float, float, float, float] | None]]:
+    ) -> list[
+        tuple[list[tuple[float, float]], list[float], tuple[float, float, float, float] | None]
+    ]:
         """Return raw 17 COCO keypoints (x, y), confidences, and bounding box for V3 pose analysis."""
         self._load()
         if self._model is None:
@@ -254,7 +316,6 @@ class PoseEstimator:
         if hasattr(self._model, "predictor") and self._model.predictor is not None:
             self._model.predictor.results = None
         return output
-
 
 
 class SeatbeltClassifier:

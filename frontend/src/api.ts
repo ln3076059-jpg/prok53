@@ -109,5 +109,14 @@ export const api = {
     if (!response.ok) throw new Error(`Evidence could not be loaded (${response.status})`);
     return response.blob();
   },
-  exportUrl: `${API}/exports/events.csv`,
+  async exportEvents() {
+    const response = await fetch(`${API}/exports/events.csv`, { headers: authHeaders() });
+    if (!response.ok) {
+      const body = await response.json().catch(() => ({ detail: response.statusText }));
+      throw new Error(body.detail ?? "Export failed");
+    }
+    const disposition = response.headers.get("Content-Disposition") ?? "";
+    const filename = disposition.match(/filename="?([^";]+)"?/i)?.[1] ?? "events.csv";
+    return { blob: await response.blob(), filename };
+  },
 };

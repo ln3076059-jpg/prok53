@@ -294,9 +294,18 @@ function UploadPage() {
 }
 
 function EventsPage() {
-  const [events, setEvents] = useState<SafetyEvent[]>([]); const [loading, setLoading] = useState(true); const [error, setError] = useState(""); const [type, setType] = useState(""); const [status, setStatus] = useState("");
+  const [events, setEvents] = useState<SafetyEvent[]>([]); const [loading, setLoading] = useState(true); const [error, setError] = useState(""); const [type, setType] = useState(""); const [status, setStatus] = useState(""); const [exporting, setExporting] = useState(false);
   useEffect(() => { const query = new URLSearchParams(); if (type) query.set("event_type", type); if (status) query.set("review_status", status); api.events(`?${query}`).then(setEvents).catch((reason) => setError(reason.message)).finally(() => setLoading(false)); }, [type, status]);
-  return <Shell><main><PageHeader title="Events" description="Search detections, inspect evidence, and record review decisions." action={<Button kind="tertiary" renderIcon={DocumentExport} href={api.exportUrl}>Export CSV</Button>} />
+  async function exportCsv() {
+    setExporting(true); setError("");
+    try {
+      const { blob, filename } = await api.exportEvents();
+      const url = URL.createObjectURL(blob); const anchor = document.createElement("a");
+      anchor.href = url; anchor.download = filename; anchor.click(); URL.revokeObjectURL(url);
+    } catch (reason) { setError(reason instanceof Error ? reason.message : "Export failed"); }
+    finally { setExporting(false); }
+  }
+  return <Shell><main><PageHeader title="Events" description="Search detections, inspect evidence, and record review decisions." action={<Button kind="tertiary" renderIcon={DocumentExport} disabled={exporting} onClick={exportCsv}>{exporting ? "Exporting" : "Export CSV"}</Button>} />
     <section className="filter-sheet"><Select id="event-type" labelText="Event type" value={type} onChange={(event) => setType(event.target.value)}><SelectItem value="" text="All types" /><SelectItem value="PHONE" text="Phone" /><SelectItem value="NO_SEATBELT" text="No seatbelt" /></Select><Select id="review-status" labelText="Review state" value={status} onChange={(event) => setStatus(event.target.value)}><SelectItem value="" text="All states" /><SelectItem value="PENDING" text="Pending" /><SelectItem value="NEEDS_REVIEW" text="Needs review" /><SelectItem value="CONFIRMED" text="Confirmed" /><SelectItem value="REJECTED" text="Rejected" /></Select></section>
     <section className="record-panel full-table"><div className="panel-heading"><div><h2>Event ledger</h2><p>{events.length} matching records</p></div></div>{error && <InlineNotification kind="error" title="Events unavailable" subtitle={error} lowContrast hideCloseButton />}{loading ? <TableSkeleton /> : <EventTable events={events} />}</section>
   </main></Shell>;

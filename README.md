@@ -129,14 +129,17 @@ The temporal benchmarks operate on strictly subject-disjoint DMD sequences:
 - **Multi-View Synchronous Streams:** Session `s2`, RGB Channels: `BODY` (center rearview), `FACE` (visor close-up), `HANDS` (steering column)
 - **Subject-Disjoint Isolation:** `SUBJECT_OVERLAP = 0`, `SHA_OVERLAP = 0`
 
-Execute benchmarks:
+Execute development ablations only (consumed holdouts must not be rerun or tuned):
 ```powershell
-# Run one-shot held-subject benchmark on Subject 37 (V2 Single-View)
-python training/dmd/run_benchmark_v2.py
+# Run A7 on an approved development subject
+python training/dmd/run_v3_ablation.py --subject gC-14 --configs A7 --stride 15 --output reports/ablation_v3_gC-14.json
 
-# Run one-shot clean holdout benchmark on Subject 28 (V3 Multi-View)
-python -m training.dmd.run_v3_evaluation --subject-dir datasets/external_dmd/gE-28 --holdout-authorized
+# Run the V3.1 subject-disjoint development suite (requires cached development features)
+python training/dmd/run_v31_ablation.py
 ```
+
+`gZ-37` and `gE-28` are consumed historical holdouts. Their checked-in reports are immutable
+records, not commands to repeat. A final V4 evaluation requires a new approved independent holdout.
 
 
 ---
@@ -221,7 +224,7 @@ Each confirmed event generates an immutable evidence bundle:
 ## 16. Testing
 
 ```powershell
-# Run full software test suite (450+ tests)
+# Run full software test suite
 python -m pytest -q
 
 # Run DMD pipeline unit tests
@@ -235,7 +238,14 @@ cd frontend; npm run build; cd ..
 
 ## 17. Deployment
 - **Database:** Defaults to SQLite for local development; supports MySQL via `DATABASE_URL`.
-- **Security:** Reject development secrets in production (`APP_ENV=production`), password hashing via Passlib/Bcrypt, CORS domain restriction, and upload MIME validation.
+- **Environment profiles:** Start from `.env.example` for development,
+  `.env.testing.example` for isolated tests, or `.env.production.example` for production.
+- **Security:** Reject development secrets in production (`APP_ENV=production`), password hashing via Bcrypt, role-based review/export authorization, authenticated CSV Blob export, CORS domain restriction, and video extension/MIME/container-signature validation.
+- **V4 candidate:** Set `MODEL_CONFIG_PATH=models/model_config_v4_candidate.yaml` only in a
+  development environment. The candidate is deliberately blocked from production pending
+  development metrics and a new independent holdout.
+- **Durable worker:** With `ANALYSIS_QUEUE_BACKEND=database`, run
+  `python tools/run_analysis_worker.py`; `--once` is available for supervised batch execution.
 
 ---
 

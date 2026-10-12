@@ -19,6 +19,27 @@ def safe_upload_name(original: str) -> str:
     return f"{stem}{suffix}"
 
 
+def validate_video_container(path: Path) -> None:
+    """Reject empty files and obvious extension/container mismatches before decoding."""
+    try:
+        header = path.read_bytes()[:32]
+    except OSError as exc:
+        raise HTTPException(status_code=400, detail="Uploaded video could not be read") from exc
+
+    suffix = path.suffix.lower()
+    matches = {
+        ".mp4": len(header) >= 12 and header[4:8] == b"ftyp",
+        ".mov": len(header) >= 12 and header[4:8] == b"ftyp",
+        ".avi": len(header) >= 12 and header[:4] == b"RIFF" and header[8:12] == b"AVI ",
+        ".mkv": header.startswith(b"\x1a\x45\xdf\xa3"),
+        ".webm": header.startswith(b"\x1a\x45\xdf\xa3"),
+    }
+    if not header:
+        raise HTTPException(status_code=400, detail="Uploaded video is empty")
+    if not matches.get(suffix, False):
+        raise HTTPException(status_code=415, detail="Video container does not match its extension")
+
+
 async def save_upload(upload: UploadFile, destination: Path, maximum_bytes: int) -> tuple[int, str]:
     if upload.content_type:
         media_type = upload.content_type.split(";", 1)[0].strip().lower()
@@ -35,8 +56,8 @@ async def save_upload(upload: UploadFile, destination: Path, maximum_bytes: int)
                     raise HTTPException(status_code=413, detail="Upload exceeds configured maximum")
                 digest.update(chunk)
                 handle.write(chunk)
+        validate_video_container(destination)
     except Exception:
         destination.unlink(missing_ok=True)
         raise
     return size, digest.hexdigest()
-

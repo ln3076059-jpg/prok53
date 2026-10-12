@@ -1,18 +1,15 @@
 from __future__ import annotations
 
+import gc
+import json
 from collections import defaultdict, deque
 from dataclasses import dataclass, replace
 from datetime import UTC, datetime
-import gc
-import json
 from pathlib import Path
 from typing import Any
 
 import torch
-
 from sqlalchemy.orm import Session
-
-from training.common import sha256_file
 
 from backend.ai.association import OccupantAssignment, OccupantAssociator
 from backend.ai.auxiliary import (
@@ -20,8 +17,8 @@ from backend.ai.auxiliary import (
     SeatbeltClassifier,
     SeatbeltEvidence,
     VehicleDetector,
-    classify_phone_context,
     crop_box,
+    reason_phone_context,
 )
 from backend.ai.cabin import CabinLocalizer, crop_cabin
 from backend.ai.detector import NormalizedDetection, SafetyDetector
@@ -47,6 +44,7 @@ from backend.models.entities import (
     Video,
 )
 from backend.services.video_source import FileVideoSource
+from training.common import sha256_file
 
 
 @dataclass(frozen=True)
@@ -471,9 +469,7 @@ class VideoAnalyzer:
                                 item, cabin.shape[1], cabin.shape[0]
                             )
                             if assignment.occupant_track_id is not None:
-                                occ_id = (
-                                    f"{context.cabin_id}:occupant-track:{assignment.occupant_track_id}"
-                                )
+                                occ_id = f"{context.cabin_id}:occupant-track:{assignment.occupant_track_id}"
                                 tracker.observe(
                                     context.vehicle_id,
                                     context.cabin_id,
@@ -595,10 +591,24 @@ class VideoAnalyzer:
                         pose_detection, cabin.shape[1], cabin.shape[0]
                     )
                     if assignment.role == "unknown" or pose_assignment.role == assignment.role:
-                        pose_options.append((pose, classify_phone_context(detection, pose)))
+                        pose_options.append(
+                            (
+                                pose,
+                                reason_phone_context(
+                                    detection,
+                                    pose,
+                                    occupant_confidence=assignment.confidence,
+                                ),
+                            )
+                        )
                 if pose_options:
-                    pose, result = max(pose_options, key=lambda item: max(item[1][1], item[1][2]))
-                    phone_state, hand_proximity, face_proximity = result
+                    pose, result = max(
+                        pose_options,
+                        key=lambda item: max(item[1].hand_proximity, item[1].face_proximity),
+                    )
+                    phone_state = result.context.value
+                    hand_proximity = result.hand_proximity
+                    face_proximity = result.face_proximity
                     pose_confidence = pose.confidence
                     pose_points = {
                         "face": [list(point) for point in pose.face_points],
@@ -613,7 +623,9 @@ class VideoAnalyzer:
             )
             classifier_fastened = seatbelt_evidence.fastened if seatbelt_evidence else 0.0
             classifier_unfastened = seatbelt_evidence.unfastened if seatbelt_evidence else 0.0
-            occupant_identity_key = occupant_id if occupant_id else f"detection-track:{detection.track_id}"
+            occupant_identity_key = (
+                occupant_id if occupant_id else f"detection-track:{detection.track_id}"
+            )
             sequence_key = (
                 context.cabin_id,
                 occupant_identity_key,
@@ -722,7 +734,11 @@ class VideoAnalyzer:
                     vehicle_context_id=context.vehicle_id,
                 )
             )
-            occupant_id = f"{context.cabin_id}:occupant-track:{assignment.occupant_track_id}" if assignment.occupant_track_id is not None else ""
+            occupant_id = (
+                f"{context.cabin_id}:occupant-track:{assignment.occupant_track_id}"
+                if assignment.occupant_track_id is not None
+                else ""
+            )
             candidates = engine.add(
                 Observation(
                     timestamp=timestamp,
@@ -898,6 +914,7 @@ def extract_runtime_identity_tracks_from_video(
     input_scope: InputScope = InputScope.VEHICLE_CABIN_CROP,
 ) -> list[dict[str, Any]]:
     """Standalone helper to extract runtime identity tracks across video frames without DB session."""
+
     class _StandaloneVideo:
         def __init__(self, vid_id: str, path: Path, scope: InputScope):
             self.id = vid_id
@@ -906,4 +923,3 @@ def extract_runtime_identity_tracks_from_video(
 
     standalone_video = _StandaloneVideo(video_id, video_path, input_scope)
     return analyzer.extract_runtime_identity_tracks(standalone_video, output_path=output_path)
-

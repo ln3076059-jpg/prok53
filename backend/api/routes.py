@@ -19,12 +19,12 @@ from fastapi import (
     UploadFile,
 )
 from fastapi.responses import FileResponse
-from sqlalchemy import func, select
+from sqlalchemy import func, select, update
 from sqlalchemy.orm import Session
 
 from backend.ai.detector import SafetyDetector
 from backend.ai.evidence import evidence_package_sha256, sha256_file
-from backend.api.dependencies import current_user
+from backend.api.dependencies import current_user, export_user, reviewer_user
 from backend.core.config import get_settings
 from backend.core.security import create_access_token, verify_password
 from backend.database import SessionLocal, get_db
@@ -49,7 +49,7 @@ from backend.schemas import (
     TokenResponse,
     VideoResponse,
 )
-from backend.services.analysis_queue import BackgroundTaskAnalysisQueue
+from backend.services.analysis_queue import BackgroundTaskAnalysisQueue, DurableAnalysisQueue
 from backend.services.analysis_worker import InferenceWorker
 from backend.services.uploads import safe_upload_name, save_upload
 from backend.services.video_analyzer import VideoAnalyzer
@@ -153,6 +153,33 @@ def _evidence_integrity(event_id: str, evidence: Evidence | None, trace: dict) -
     }
 
 
+def _commit_review_transition(
+    db: Session, event: Event, user: User, payload: ReviewRequest
+) -> Event:
+    """Append a review and change event state only if its observed state is still current."""
+    previous_status = event.review_status
+    transition = db.execute(
+        update(Event)
+        .where(Event.id == event.id, Event.review_status == previous_status)
+        .values(review_status=payload.status)
+    )
+    if transition.rowcount != 1:
+        db.rollback()
+        raise HTTPException(status_code=409, detail="Review state changed concurrently")
+    db.add(
+        Review(
+            event_id=event.id,
+            user_id=user.id,
+            previous_status=previous_status.value,
+            new_status=payload.status.value,
+            notes=payload.notes,
+        )
+    )
+    db.commit()
+    db.refresh(event)
+    return event
+
+
 @router.post("/auth/login", response_model=TokenResponse, tags=["auth"])
 def login(payload: LoginRequest, db: Session = Depends(get_db)):
     user = db.scalar(select(User).where(User.email == payload.email.lower()))
@@ -220,8 +247,32 @@ def analyze_video(
     db.add(job)
     db.commit()
     db.refresh(job)
-    BackgroundTaskAnalysisQueue(tasks, worker.run).enqueue(job.id)
+    if settings.analysis_queue_backend == "database":
+        DurableAnalysisQueue(SessionLocal).enqueue(job.id)
+    else:
+        BackgroundTaskAnalysisQueue(tasks, worker.run).enqueue(job.id)
     return job
+
+
+@router.get("/health/live", tags=["health"])
+def liveness():
+    return {"status": "LIVE"}
+
+
+@router.get("/health/ready", tags=["health"])
+def readiness():
+    model = detector.status()
+    ready = model["available"] and not (
+        settings.app_env == "production" and model["activation_state"] != "PRODUCTION_APPROVED"
+    )
+    payload = {
+        "status": "READY" if ready else "NOT_READY",
+        "queue_backend": settings.analysis_queue_backend,
+        "model": model,
+    }
+    if not ready:
+        return Response(content=json.dumps(payload), status_code=503, media_type="application/json")
+    return payload
 
 
 @router.get("/jobs/{job_id}", response_model=JobResponse, tags=["analysis"])
@@ -351,7 +402,7 @@ def review_event(
     event_id: str,
     payload: ReviewRequest,
     db: Session = Depends(get_db),
-    user: User = Depends(current_user),
+    user: User = Depends(reviewer_user),
 ):
     if payload.status == ReviewStatus.PENDING:
         raise HTTPException(status_code=422, detail="A review cannot return an event to PENDING")
@@ -371,19 +422,7 @@ def review_event(
                     f"temporal evidence: {', '.join(integrity['confirmation_blockers'])}"
                 ),
             )
-    db.add(
-        Review(
-            event_id=event.id,
-            user_id=user.id,
-            previous_status=event.review_status.value,
-            new_status=payload.status.value,
-            notes=payload.notes,
-        )
-    )
-    event.review_status = payload.status
-    db.commit()
-    db.refresh(event)
-    return event
+    return _commit_review_transition(db, event, user, payload)
 
 
 @router.get("/statistics", tags=["statistics"])
@@ -418,7 +457,7 @@ def statistics(db: Session = Depends(get_db), _: User = Depends(current_user)):
 
 
 @router.get("/exports/events.csv", tags=["exports"])
-def export_events(db: Session = Depends(get_db), _: User = Depends(current_user)):
+def export_events(db: Session = Depends(get_db), _: User = Depends(export_user)):
     buffer = io.StringIO()
     writer = csv.writer(buffer)
     writer.writerow(
@@ -440,16 +479,16 @@ def export_events(db: Session = Depends(get_db), _: User = Depends(current_user)
             [
                 _csv_safe(value)
                 for value in (
-                event.id,
-                event.event_type.value,
-                event.timestamp_seconds,
-                "",
-                event.video_id,
-                event.vehicle_context_id,
-                event.occupant_role,
-                f"{event.confidence:.6f}",
-                event.review_status.value,
-                event.model_version,
+                    event.id,
+                    event.event_type.value,
+                    event.timestamp_seconds,
+                    "",
+                    event.video_id,
+                    event.vehicle_context_id,
+                    event.occupant_role,
+                    f"{event.confidence:.6f}",
+                    event.review_status.value,
+                    event.model_version,
                 )
             ]
         )

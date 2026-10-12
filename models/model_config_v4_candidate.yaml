@@ -1,0 +1,120 @@
+experiment_id: ROADWATCH_V4_CANDIDATE
+model_version: ROADWATCH_V4_CANDIDATE_001
+activation_state: DEVELOPMENT_ONLY_NOT_VALIDATED
+weights: models/active/best.pt
+imgsz: 640
+class_names:
+  0: phone
+  1: seatbelt_fastened
+  2: seatbelt_unfastened
+thresholds:
+  phone: 0.20
+  seatbelt_fastened: 0.45
+  seatbelt_unfastened: 0.40
+threshold_status: INHERITED_FROM_V2_DEVELOPMENT_NOT_V4_VALIDATED
+driver_roi_refinement:
+  enabled: true
+  normalized_xyxy: [0.0, 0.10, 0.65, 0.95]
+  imgsz: 384
+specialized_detectors:
+  enabled: true
+  models:
+    - name: phone_detector
+      weights: models/active/v2/phone_detector.pt
+      threshold: 0.20
+      class_map: {0: phone}
+    - name: seatbelt_detector
+      weights: models/active/v2/seatbelt_detector.pt
+      threshold: 0.30
+      class_map: {0: occupant_upper_body}
+auxiliary_models:
+  enabled: true
+  seatbelt_classifier_weights: models/active/v2/seatbelt_classifier.pt
+  pose_weights: models/auxiliary/yolo11n-pose.pt
+  pose_confidence: 0.25
+  fusion_artifact: models/fusion/no_seatbelt_v2.json
+  fusion_threshold: 0.25
+vehicle_context:
+  required: true
+  accepted_input_scopes: [VEHICLE_CABIN_CROP, TRAFFIC_SCENE_WITH_VEHICLE_ROIS]
+  traffic_scene_mode: OPTIONAL_REQUIRES_LOCAL_VEHICLE_WEIGHTS
+  vehicle_weights: models/auxiliary/yolo11n.pt
+  vehicle_confidence: 0.35
+  cabin_localizer:
+    weights: models/active/v2/windshield_detector.pt
+    minimum_confidence: 0.60
+    geometry_confidence: 0.45
+    geometry_rois:
+      car: [0.12, 0.05, 0.88, 0.58]
+      truck: [0.08, 0.03, 0.92, 0.62]
+      bus: [0.05, 0.02, 0.95, 0.58]
+    fallback_policy: UNKNOWN_CABIN
+  camera_cabin_calibration:
+    approved: false
+    status: PENDING_PER_CAMERA_CALIBRATION
+    normalized_xyxy: [0.12, 0.05, 0.88, 0.58]
+    confidence: 0.0
+occupant_association:
+  image_driver_side: left
+  minimum_confidence: 0.55
+  rear_seats_enabled: true
+  low_confidence_role: unknown
+occupant_rois:
+  calibration_status: APPROVED_CALIBRATED_DMD_V2
+  regions:
+    - {role: driver, normalized_xyxy: [0.0, 0.05, 0.60, 1.0], enabled: true, min_overlap: 0.35}
+    - {role: front_passenger, normalized_xyxy: [0.44, 0.15, 1.0, 1.0], enabled: true, min_overlap: 0.5}
+    - {role: rear_left, normalized_xyxy: [0.0, 0.2, 0.38, 1.0], enabled: false, min_overlap: 0.5}
+    - {role: rear_center, normalized_xyxy: [0.3, 0.2, 0.7, 1.0], enabled: false, min_overlap: 0.5}
+    - {role: rear_right, normalized_xyxy: [0.62, 0.2, 1.0, 1.0], enabled: false, min_overlap: 0.5}
+phone_policy:
+  violation_role: driver
+  contexts:
+    no_phone: NO_EVENT
+    phone_visible_not_used: NO_EVENT
+    mounted_phone: NO_EVENT
+    handheld_phone_use: PENDING
+    possible_phone_use: NEEDS_REVIEW
+    unknown_context: ABSTAIN
+  pose_gate_status: REQUIRED_FOR_CONTEXT_CLASSIFICATION
+seatbelt_policy:
+  violation_roles: [driver, front_passenger, rear_left, rear_center, rear_right]
+  invisible_or_occluded_belt: NO_AUTOMATIC_UNFASTENED_LABEL
+  detector_classifier_disagreement: NEEDS_REVIEW
+  classifier_min_confidence: 0.60
+  classifier_min_margin: 0.15
+temporal:
+  window_seconds: 2.0
+  smoothing_alpha: 0.35
+  feature_positive_score: 0.18
+  min_positive_seconds: 0.50
+  min_observations: 2
+  cooldown_seconds: 3.0
+  positive_ratio: 0.40
+  gap_tolerance_seconds: 3.0
+  candidate_threshold: 0.18
+  activation_threshold: 0.25
+  release_threshold: 0.15
+  occlusion_bridge_seconds: 2.0
+  strict_phone_context: true
+tracking:
+  vehicle: BYTE_TRACK
+  occupants_and_phone: STABLE_OCCUPANT_ID_THEN_TRACK_ID
+  max_gap_frames: 12
+  minimum_iou: 0.10
+  maximum_center_distance: 0.25
+  cabin_signature_max_delta: 0.20
+evidence:
+  pre_seconds: 2.0
+  post_seconds: 2.5
+  trace_sha256: true
+performance:
+  vehicle_detector_every_n_frames: 1
+  behavior_detector_every_n_frames: 1
+  pose_every_n_frames: 2
+  seatbelt_classifier_every_n_frames: 1
+activation_policy:
+  require_calibrated_fusion: false
+  require_locked_model_record: false
+  production_activation: BLOCKED_PENDING_V4_DEVELOPMENT_AND_INDEPENDENT_HOLDOUT_VALIDATION
+tracker: bytetrack.yaml
