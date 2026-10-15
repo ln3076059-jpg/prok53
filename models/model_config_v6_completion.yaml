@@ -1,0 +1,56 @@
+experiment_id: ROADWATCH_V6_CLASS_COLLAPSE_RECOVERY
+activation_state: DEVELOPMENT_ONLY_NOT_VALIDATED
+dataset_role: DEVELOPMENT_ONLY_ITERATIVE
+development_subjects: [gB-9, gZ-36, gC-14]
+forbidden_consumed_holdouts: [gZ-37, gE-28]
+
+backbone:
+  architecture: FROZEN_RESNET18_BIDIRECTIONAL_GRU
+  pretrained_weights: IMAGENET1K_V1
+  sequence_length: 9
+  training_stride: 2
+  hidden_size: 64
+  epochs: 25
+  # Reduced before any completed V6 result after the first run hit a local RAM limit.
+  batch_size: 16
+  learning_rate: 0.0005
+  seed: 7305
+
+ablation_variants:
+  - id: FLAT_UNWEIGHTED
+    architecture: flat
+    sampling_mode: none
+    loss_mode: none
+    hypothesis: Preserve observed class priors and recover SAFE_DRIVING recall.
+  - id: FLAT_LOSS_ONLY
+    architecture: flat
+    sampling_mode: none
+    loss_mode: sqrt_inverse
+    hypothesis: Mild loss weighting can improve minority actions without replacement sampling.
+  - id: FLAT_SAMPLER_ONLY
+    architecture: flat
+    sampling_mode: sqrt_inverse
+    loss_mode: none
+    hypothesis: Replacement sampling alone is less aggressive than the V5 double-balanced objective.
+  - id: HIERARCHICAL_LOSS_ONLY
+    architecture: hierarchical
+    sampling_mode: none
+    loss_mode: sqrt_inverse
+    hypothesis: A SAFE/PHONE/OTHER gate reduces SAFE_DRIVING-to-phone confusion before fine action classification.
+
+event_decision:
+  fixed_action_threshold: 0.80
+  threshold_provenance: PRE_REGISTERED_FROM_V5_B3; NOT_TUNED_PER_V6_VARIANT
+  minimum_positive_samples: 2
+  release_ratio: 0.65
+  merge_gap_seconds: 2.0
+  action_only_status: NEEDS_REVIEW
+  object_plus_action_status: PENDING
+  automatic_violation: false
+
+selection:
+  maximum_false_alarms_per_minute: 0.30
+  maximum_worst_subject_false_alarms_per_minute: 0.60
+  minimum_safe_driving_recall: 0.20
+  primary_metric: event_f1
+  tie_breakers: [event_recall, lower_false_alarms_per_minute]

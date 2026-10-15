@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "git_head": "9c0e872277a02ae99f30dbecad2195333d23423a",
+  "entries": [
+    {
+      "id": "MULTIMODEL_V2_RUNTIME",
+      "config": "models/model_config_v2.yaml",
+      "state": "VALIDATION_PENDING",
+      "production_approved": false,
+      "note": "Current development runtime; production validator remains fail-closed."
+    },
+    {
+      "id": "V5_B2_SELECTED_RESEARCH",
+      "config": "models/model_config_v5_research.yaml",
+      "state": "DEVELOPMENT_ONLY",
+      "production_approved": false
+    },
+    {
+      "id": "V5_B3_B8_COMPARATOR",
+      "config": "models/model_config_v5_research.yaml",
+      "state": "DEVELOPMENT_ONLY",
+      "production_approved": false
+    },
+    {
+      "id": "V6_NO_ELIGIBLE_CANDIDATE",
+      "config": "models/model_config_v6_completion.yaml",
+      "state": "DEVELOPMENT_ONLY",
+      "production_approved": false
+    }
+  ],
+  "allowed_states": [
+    "DEVELOPMENT_ONLY",
+    "VALIDATION_PENDING",
+    "HOLDOUT_EVALUATED",
+    "HUMAN_REVIEW_REQUIRED",
+    "PRODUCTION_APPROVED"
+  ]
+}

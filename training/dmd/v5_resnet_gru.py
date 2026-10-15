@@ -212,18 +212,37 @@ def train_resnet_gru(
     batch_size: int,
     learning_rate: float,
     seed: int,
+    sampling_mode: str = "sqrt_inverse",
+    loss_mode: str = "sqrt_inverse",
 ) -> tuple[ResNetGRUClassifier, dict[str, Any]]:
     set_deterministic(seed)
     model = ResNetGRUClassifier()
     generator = torch.Generator().manual_seed(seed)
-    sampler = WeightedRandomSampler(
-        dataset.sample_weights(),
-        num_samples=len(dataset),
-        replacement=True,
-        generator=generator,
-    )
-    loader = DataLoader(dataset, batch_size=batch_size, sampler=sampler, num_workers=0)
-    criterion = nn.CrossEntropyLoss(weight=dataset.loss_weights(), label_smoothing=0.05)
+    if sampling_mode == "sqrt_inverse":
+        sampler = WeightedRandomSampler(
+            dataset.sample_weights(),
+            num_samples=len(dataset),
+            replacement=True,
+            generator=generator,
+        )
+        loader = DataLoader(dataset, batch_size=batch_size, sampler=sampler, num_workers=0)
+    elif sampling_mode == "none":
+        loader = DataLoader(
+            dataset,
+            batch_size=batch_size,
+            shuffle=True,
+            generator=generator,
+            num_workers=0,
+        )
+    else:
+        raise ValueError(f"unsupported sampling mode: {sampling_mode}")
+    if loss_mode == "sqrt_inverse":
+        loss_weights = dataset.loss_weights()
+    elif loss_mode == "none":
+        loss_weights = None
+    else:
+        raise ValueError(f"unsupported loss mode: {loss_mode}")
+    criterion = nn.CrossEntropyLoss(weight=loss_weights, label_smoothing=0.05)
     optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate, weight_decay=1e-3)
     history: list[dict[str, float]] = []
     started = time.perf_counter()
@@ -255,7 +274,8 @@ def train_resnet_gru(
         "batch_size": batch_size,
         "learning_rate": learning_rate,
         "training_seconds": round(time.perf_counter() - started, 3),
-        "sampling": "SQRT_INVERSE_CLASS_WEIGHTED_WITH_REPLACEMENT",
+        "sampling": sampling_mode,
+        "loss_weighting": loss_mode,
         "history": history,
     }
 

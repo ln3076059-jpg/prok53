@@ -1,0 +1,224 @@
+{
+  "variant_id": "FLAT_SAMPLER_ONLY",
+  "heldout_subject": "gC-14",
+  "training_subjects": [
+    "gB-9",
+    "gZ-36"
+  ],
+  "training": {
+    "epochs": 25,
+    "samples": 909,
+    "batch_size": 16,
+    "learning_rate": 0.0005,
+    "training_seconds": 42.451,
+    "sampling": "sqrt_inverse",
+    "loss_weighting": "none",
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.884297,
+        "sampled_training_accuracy": 0.782178
+      },
+      {
+        "epoch": 2,
+        "loss": 0.378373,
+        "sampled_training_accuracy": 0.952695
+      },
+      {
+        "epoch": 3,
+        "loss": 0.332693,
+        "sampled_training_accuracy": 0.972497
+      },
+      {
+        "epoch": 4,
+        "loss": 0.323932,
+        "sampled_training_accuracy": 0.975798
+      },
+      {
+        "epoch": 5,
+        "loss": 0.311689,
+        "sampled_training_accuracy": 0.973597
+      },
+      {
+        "epoch": 6,
+        "loss": 0.302671,
+        "sampled_training_accuracy": 0.985699
+      },
+      {
+        "epoch": 7,
+        "loss": 0.298148,
+        "sampled_training_accuracy": 0.982398
+      },
+      {
+        "epoch": 8,
+        "loss": 0.28861,
+        "sampled_training_accuracy": 0.988999
+      },
+      {
+        "epoch": 9,
+        "loss": 0.27078,
+        "sampled_training_accuracy": 0.9978
+      },
+      {
+        "epoch": 10,
+        "loss": 0.271562,
+        "sampled_training_accuracy": 0.993399
+      },
+      {
+        "epoch": 11,
+        "loss": 0.26413,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 12,
+        "loss": 0.269542,
+        "sampled_training_accuracy": 0.9967
+      },
+      {
+        "epoch": 13,
+        "loss": 0.264661,
+        "sampled_training_accuracy": 0.9978
+      },
+      {
+        "epoch": 14,
+        "loss": 0.256909,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 15,
+        "loss": 0.256724,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 16,
+        "loss": 0.253311,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 17,
+        "loss": 0.25342,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 18,
+        "loss": 0.254177,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 19,
+        "loss": 0.252422,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 20,
+        "loss": 0.251973,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 21,
+        "loss": 0.252503,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 22,
+        "loss": 0.250739,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 23,
+        "loss": 0.251308,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 24,
+        "loss": 0.250367,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 25,
+        "loss": 0.251,
+        "sampled_training_accuracy": 1.0
+      }
+    ]
+  },
+  "checkpoint_path": "models\\candidate\\v6_action_ablation_001\\flat_sampler_only_loso_gC-14.pt",
+  "checkpoint_sha256": "5e7f2fc1e4b74c1524aa4139228f9edfbcb0f73e55f0a938fe7dcdfcc5ba2ae5",
+  "prediction_path": "reports\\v6_completion\\folds\\flat_sampler_only_loso_gC-14.npz",
+  "prediction_sha256": "e1b719ba3ae487c56daa3fbedd6e3c4fc86fcd83735f16f3e487fa592cfb7156",
+  "fixed_action_threshold": 0.8,
+  "events": [
+    {
+      "event_type": "PHONE",
+      "start_seconds": 78.125,
+      "end_seconds": 81.653,
+      "confidence": 0.8061,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 3.528
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 94.758,
+      "end_seconds": 109.375,
+      "confidence": 0.8911,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 14.617
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 127.52,
+      "end_seconds": 155.242,
+      "confidence": 0.9089,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 27.722
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 179.436,
+      "end_seconds": 194.052,
+      "confidence": 0.9046,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 14.616
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 229.335,
+      "end_seconds": 268.145,
+      "confidence": 0.9054,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 38.81
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 278.73,
+      "end_seconds": 288.81,
+      "confidence": 0.8286,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 10.08
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 314.516,
+      "end_seconds": 323.589,
+      "confidence": 0.8446,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 9.073
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 340.726,
+      "end_seconds": 354.839,
+      "confidence": 0.8444,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 14.113
+    }
+  ],
+  "resource_control": "ISOLATED_PROCESS; torch_threads=1; batch_size=16"
+}

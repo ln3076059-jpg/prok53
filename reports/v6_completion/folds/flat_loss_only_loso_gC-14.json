@@ -1,0 +1,179 @@
+{
+  "variant_id": "FLAT_LOSS_ONLY",
+  "heldout_subject": "gC-14",
+  "training_subjects": [
+    "gB-9",
+    "gZ-36"
+  ],
+  "training": {
+    "epochs": 25,
+    "samples": 909,
+    "batch_size": 16,
+    "learning_rate": 0.0005,
+    "training_seconds": 37.148,
+    "sampling": "none",
+    "loss_weighting": "sqrt_inverse",
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.909634,
+        "sampled_training_accuracy": 0.790979
+      },
+      {
+        "epoch": 2,
+        "loss": 0.408296,
+        "sampled_training_accuracy": 0.948295
+      },
+      {
+        "epoch": 3,
+        "loss": 0.365069,
+        "sampled_training_accuracy": 0.961496
+      },
+      {
+        "epoch": 4,
+        "loss": 0.346363,
+        "sampled_training_accuracy": 0.973597
+      },
+      {
+        "epoch": 5,
+        "loss": 0.330784,
+        "sampled_training_accuracy": 0.981298
+      },
+      {
+        "epoch": 6,
+        "loss": 0.324735,
+        "sampled_training_accuracy": 0.982398
+      },
+      {
+        "epoch": 7,
+        "loss": 0.306507,
+        "sampled_training_accuracy": 0.994499
+      },
+      {
+        "epoch": 8,
+        "loss": 0.300709,
+        "sampled_training_accuracy": 0.9978
+      },
+      {
+        "epoch": 9,
+        "loss": 0.294101,
+        "sampled_training_accuracy": 0.9989
+      },
+      {
+        "epoch": 10,
+        "loss": 0.290016,
+        "sampled_training_accuracy": 0.9967
+      },
+      {
+        "epoch": 11,
+        "loss": 0.287752,
+        "sampled_training_accuracy": 0.9989
+      },
+      {
+        "epoch": 12,
+        "loss": 0.282924,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 13,
+        "loss": 0.280673,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 14,
+        "loss": 0.280745,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 15,
+        "loss": 0.278855,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 16,
+        "loss": 0.278612,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 17,
+        "loss": 0.277372,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 18,
+        "loss": 0.275132,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 19,
+        "loss": 0.276128,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 20,
+        "loss": 0.276299,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 21,
+        "loss": 0.27455,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 22,
+        "loss": 0.273786,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 23,
+        "loss": 0.27293,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 24,
+        "loss": 0.273191,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 25,
+        "loss": 0.272949,
+        "sampled_training_accuracy": 1.0
+      }
+    ]
+  },
+  "checkpoint_path": "models\\candidate\\v6_action_ablation_001\\flat_loss_only_loso_gC-14.pt",
+  "checkpoint_sha256": "289f578663c540f52f6f75dc3b059fd869c6885f3c4105fda03ce269a9b31a41",
+  "prediction_path": "reports\\v6_completion\\folds\\flat_loss_only_loso_gC-14.npz",
+  "prediction_sha256": "8ef7cf765ef122a214a29e630bca443399c10198a526dfc476cf1ef5104730e0",
+  "fixed_action_threshold": 0.8,
+  "events": [
+    {
+      "event_type": "PHONE",
+      "start_seconds": 99.798,
+      "end_seconds": 107.359,
+      "confidence": 0.8432,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 7.561
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 287.298,
+      "end_seconds": 293.851,
+      "confidence": 0.826,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 6.553
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 349.798,
+      "end_seconds": 354.839,
+      "confidence": 0.9015,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 5.041
+    }
+  ],
+  "resource_control": "ISOLATED_PROCESS; torch_threads=1; batch_size=16"
+}

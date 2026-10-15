@@ -1,0 +1,188 @@
+{
+  "variant_id": "FLAT_SAMPLER_ONLY",
+  "heldout_subject": "gB-9",
+  "training_subjects": [
+    "gZ-36",
+    "gC-14"
+  ],
+  "training": {
+    "epochs": 25,
+    "samples": 902,
+    "batch_size": 16,
+    "learning_rate": 0.0005,
+    "training_seconds": 36.342,
+    "sampling": "sqrt_inverse",
+    "loss_weighting": "none",
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.915597,
+        "sampled_training_accuracy": 0.748337
+      },
+      {
+        "epoch": 2,
+        "loss": 0.426753,
+        "sampled_training_accuracy": 0.923503
+      },
+      {
+        "epoch": 3,
+        "loss": 0.357692,
+        "sampled_training_accuracy": 0.960089
+      },
+      {
+        "epoch": 4,
+        "loss": 0.352386,
+        "sampled_training_accuracy": 0.961197
+      },
+      {
+        "epoch": 5,
+        "loss": 0.333545,
+        "sampled_training_accuracy": 0.968958
+      },
+      {
+        "epoch": 6,
+        "loss": 0.322447,
+        "sampled_training_accuracy": 0.978936
+      },
+      {
+        "epoch": 7,
+        "loss": 0.30705,
+        "sampled_training_accuracy": 0.980044
+      },
+      {
+        "epoch": 8,
+        "loss": 0.287113,
+        "sampled_training_accuracy": 0.992239
+      },
+      {
+        "epoch": 9,
+        "loss": 0.281677,
+        "sampled_training_accuracy": 0.994457
+      },
+      {
+        "epoch": 10,
+        "loss": 0.281118,
+        "sampled_training_accuracy": 0.992239
+      },
+      {
+        "epoch": 11,
+        "loss": 0.270673,
+        "sampled_training_accuracy": 0.997783
+      },
+      {
+        "epoch": 12,
+        "loss": 0.274353,
+        "sampled_training_accuracy": 0.996674
+      },
+      {
+        "epoch": 13,
+        "loss": 0.265087,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 14,
+        "loss": 0.263844,
+        "sampled_training_accuracy": 0.997783
+      },
+      {
+        "epoch": 15,
+        "loss": 0.260307,
+        "sampled_training_accuracy": 0.998891
+      },
+      {
+        "epoch": 16,
+        "loss": 0.257761,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 17,
+        "loss": 0.256335,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 18,
+        "loss": 0.25619,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 19,
+        "loss": 0.254315,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 20,
+        "loss": 0.253149,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 21,
+        "loss": 0.253882,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 22,
+        "loss": 0.253891,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 23,
+        "loss": 0.252614,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 24,
+        "loss": 0.250862,
+        "sampled_training_accuracy": 1.0
+      },
+      {
+        "epoch": 25,
+        "loss": 0.250109,
+        "sampled_training_accuracy": 1.0
+      }
+    ]
+  },
+  "checkpoint_path": "models\\candidate\\v6_action_ablation_001\\flat_sampler_only_loso_gB-9.pt",
+  "checkpoint_sha256": "f608fc54bd4a1a0f2590bae6c839812abd49125e90c2e6752d877bb273f1530c",
+  "prediction_path": "reports\\v6_completion\\folds\\flat_sampler_only_loso_gB-9.npz",
+  "prediction_sha256": "c23c7c1495dd72ba556d40507c58fdeed77ed17e11228a8349d5e135e5e4b879",
+  "fixed_action_threshold": 0.8,
+  "events": [
+    {
+      "event_type": "PHONE",
+      "start_seconds": 87.702,
+      "end_seconds": 101.814,
+      "confidence": 0.9476,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 14.112
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 165.827,
+      "end_seconds": 177.923,
+      "confidence": 0.905,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 12.096
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 233.367,
+      "end_seconds": 263.609,
+      "confidence": 0.8739,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 30.242
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 342.238,
+      "end_seconds": 352.823,
+      "confidence": 0.8696,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 10.585
+    }
+  ],
+  "resource_control": "ISOLATED_PROCESS; torch_threads=1; batch_size=16"
+}

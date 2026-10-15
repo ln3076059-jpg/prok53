@@ -1,0 +1,170 @@
+{
+  "variant_id": "HIERARCHICAL_LOSS_ONLY",
+  "heldout_subject": "gB-9",
+  "training_subjects": [
+    "gZ-36",
+    "gC-14"
+  ],
+  "training": {
+    "epochs": 25,
+    "samples": 902,
+    "batch_size": 16,
+    "learning_rate": 0.0005,
+    "training_seconds": 43.265,
+    "sampling": "none",
+    "loss_weighting": "sqrt_inverse",
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 1.161066,
+        "sampled_coarse_accuracy": 0.773836
+      },
+      {
+        "epoch": 2,
+        "loss": 0.51719,
+        "sampled_coarse_accuracy": 0.919069
+      },
+      {
+        "epoch": 3,
+        "loss": 0.442218,
+        "sampled_coarse_accuracy": 0.945676
+      },
+      {
+        "epoch": 4,
+        "loss": 0.413192,
+        "sampled_coarse_accuracy": 0.954545
+      },
+      {
+        "epoch": 5,
+        "loss": 0.396301,
+        "sampled_coarse_accuracy": 0.961197
+      },
+      {
+        "epoch": 6,
+        "loss": 0.360946,
+        "sampled_coarse_accuracy": 0.985588
+      },
+      {
+        "epoch": 7,
+        "loss": 0.34506,
+        "sampled_coarse_accuracy": 0.988914
+      },
+      {
+        "epoch": 8,
+        "loss": 0.339898,
+        "sampled_coarse_accuracy": 0.990022
+      },
+      {
+        "epoch": 9,
+        "loss": 0.332833,
+        "sampled_coarse_accuracy": 0.992239
+      },
+      {
+        "epoch": 10,
+        "loss": 0.321144,
+        "sampled_coarse_accuracy": 0.993348
+      },
+      {
+        "epoch": 11,
+        "loss": 0.310358,
+        "sampled_coarse_accuracy": 0.998891
+      },
+      {
+        "epoch": 12,
+        "loss": 0.302706,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 13,
+        "loss": 0.308098,
+        "sampled_coarse_accuracy": 0.998891
+      },
+      {
+        "epoch": 14,
+        "loss": 0.300469,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 15,
+        "loss": 0.296068,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 16,
+        "loss": 0.295902,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 17,
+        "loss": 0.295034,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 18,
+        "loss": 0.294347,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 19,
+        "loss": 0.292299,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 20,
+        "loss": 0.291664,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 21,
+        "loss": 0.290424,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 22,
+        "loss": 0.290304,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 23,
+        "loss": 0.289815,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 24,
+        "loss": 0.288884,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 25,
+        "loss": 0.290047,
+        "sampled_coarse_accuracy": 1.0
+      }
+    ]
+  },
+  "checkpoint_path": "models\\candidate\\v6_action_ablation_001\\hierarchical_loss_only_loso_gB-9.pt",
+  "checkpoint_sha256": "d78e906dbf927cdd37f37231b7e5c81d69c1532b8bccf5b20e100e90f5245b8c",
+  "prediction_path": "reports\\v6_completion\\folds\\hierarchical_loss_only_loso_gB-9.npz",
+  "prediction_sha256": "a52bc67cc957d39d6cafd65ef902bb1ed10b90d93aac42f6aae40b2afd49e94c",
+  "fixed_action_threshold": 0.8,
+  "events": [
+    {
+      "event_type": "PHONE",
+      "start_seconds": 88.71,
+      "end_seconds": 102.318,
+      "confidence": 0.9523,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 13.608
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 165.827,
+      "end_seconds": 178.932,
+      "confidence": 0.9435,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 13.105
+    }
+  ],
+  "resource_control": "ISOLATED_PROCESS; torch_threads=1; batch_size=16"
+}

@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "checks": {
+    "required_reports": {
+      "expected": 15,
+      "missing_or_empty": []
+    },
+    "ablation_folds": 12,
+    "historical_baselines": "MATCHED",
+    "eligible_candidate_count": 0,
+    "seatbelt_samples": 641,
+    "full_pipeline_fps": 1.833,
+    "governance": {
+      "activation_state": "DEVELOPMENT_ONLY_NOT_VALIDATED",
+      "action_event_status": "NEEDS_REVIEW",
+      "fusion_event_status": "PENDING",
+      "automatic_violation": false,
+      "production_changed": false
+    }
+  },
+  "errors": []
+}
