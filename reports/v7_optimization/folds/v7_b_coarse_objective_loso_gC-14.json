@@ -1,0 +1,253 @@
+{
+  "variant_id": "V7_B_COARSE_OBJECTIVE",
+  "heldout_subject": "gC-14",
+  "training_subjects": [
+    "gB-9",
+    "gZ-36"
+  ],
+  "training": {
+    "epochs": 25,
+    "samples": 909,
+    "batch_size": 16,
+    "learning_rate": 0.0005,
+    "training_seconds": 37.102,
+    "sampling": "none",
+    "coarse_loss_mode": "none",
+    "fine_loss_mode": "sqrt_inverse",
+    "coarse_loss_coefficient": 2.0,
+    "fine_loss_coefficient": 1.0,
+    "hard_negative_count": 0,
+    "hard_negative_weight": 1.0,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 1.642422,
+        "sampled_coarse_accuracy": 0.79978
+      },
+      {
+        "epoch": 2,
+        "loss": 0.695743,
+        "sampled_coarse_accuracy": 0.927393
+      },
+      {
+        "epoch": 3,
+        "loss": 0.604753,
+        "sampled_coarse_accuracy": 0.957096
+      },
+      {
+        "epoch": 4,
+        "loss": 0.545667,
+        "sampled_coarse_accuracy": 0.962596
+      },
+      {
+        "epoch": 5,
+        "loss": 0.50118,
+        "sampled_coarse_accuracy": 0.983498
+      },
+      {
+        "epoch": 6,
+        "loss": 0.484501,
+        "sampled_coarse_accuracy": 0.983498
+      },
+      {
+        "epoch": 7,
+        "loss": 0.451184,
+        "sampled_coarse_accuracy": 0.9956
+      },
+      {
+        "epoch": 8,
+        "loss": 0.430471,
+        "sampled_coarse_accuracy": 0.9989
+      },
+      {
+        "epoch": 9,
+        "loss": 0.423764,
+        "sampled_coarse_accuracy": 0.9978
+      },
+      {
+        "epoch": 10,
+        "loss": 0.412826,
+        "sampled_coarse_accuracy": 0.9978
+      },
+      {
+        "epoch": 11,
+        "loss": 0.411397,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 12,
+        "loss": 0.405893,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 13,
+        "loss": 0.40065,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 14,
+        "loss": 0.39868,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 15,
+        "loss": 0.396445,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 16,
+        "loss": 0.390921,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 17,
+        "loss": 0.393553,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 18,
+        "loss": 0.389625,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 19,
+        "loss": 0.389729,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 20,
+        "loss": 0.388449,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 21,
+        "loss": 0.389858,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 22,
+        "loss": 0.387381,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 23,
+        "loss": 0.38614,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 24,
+        "loss": 0.386147,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 25,
+        "loss": 0.385816,
+        "sampled_coarse_accuracy": 1.0
+      }
+    ]
+  },
+  "mining": {
+    "enabled": false,
+    "count": 0
+  },
+  "checkpoint_path": "models\\candidate\\v7_research\\v7_b_coarse_objective_loso_gC-14.pt",
+  "checkpoint_sha256": "7418d47ad1ad3569c7ed06e78b13fa01142fc8d6d6220bc8863b6595d725f383",
+  "prediction_path": "reports\\v7_optimization\\folds\\v7_b_coarse_objective_loso_gC-14.npz",
+  "prediction_sha256": "80a9c6eeaede9f1c9dc3d6b339c335e6f269382c343b21123b94d7d9baaa3e04",
+  "fixed_action_threshold": 0.8,
+  "inference_seconds": 0.446747,
+  "clips_per_second": 1761.622,
+  "events": [
+    {
+      "event_type": "PHONE",
+      "start_seconds": 44.355,
+      "end_seconds": 65.524,
+      "confidence": 0.8721,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 21.169
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 74.093,
+      "end_seconds": 79.637,
+      "confidence": 0.8277,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 5.544
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 119.96,
+      "end_seconds": 121.976,
+      "confidence": 0.8267,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 2.016
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 128.024,
+      "end_seconds": 138.609,
+      "confidence": 0.848,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 10.585
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 147.682,
+      "end_seconds": 156.25,
+      "confidence": 0.8577,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 8.568
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 185.484,
+      "end_seconds": 192.54,
+      "confidence": 0.8572,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 7.056
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 228.831,
+      "end_seconds": 267.641,
+      "confidence": 0.9141,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 38.81
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 277.722,
+      "end_seconds": 292.843,
+      "confidence": 0.9248,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 15.121
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 300.907,
+      "end_seconds": 325.101,
+      "confidence": 0.9475,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 24.194
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 348.79,
+      "end_seconds": 361.895,
+      "confidence": 0.9549,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 13.105
+    }
+  ],
+  "resource_control": "ISOLATED_PROCESS; torch_threads=1; batch_size=16"
+}

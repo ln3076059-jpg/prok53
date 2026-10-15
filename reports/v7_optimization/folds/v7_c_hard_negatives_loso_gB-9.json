@@ -1,0 +1,276 @@
+{
+  "variant_id": "V7_C_HARD_NEGATIVES",
+  "heldout_subject": "gB-9",
+  "training_subjects": [
+    "gZ-36",
+    "gC-14"
+  ],
+  "training": {
+    "epochs": 25,
+    "samples": 902,
+    "batch_size": 16,
+    "learning_rate": 0.0005,
+    "training_seconds": 36.943,
+    "sampling": "none",
+    "coarse_loss_mode": "none",
+    "fine_loss_mode": "sqrt_inverse",
+    "coarse_loss_coefficient": 2.0,
+    "fine_loss_coefficient": 1.0,
+    "hard_negative_count": 0,
+    "hard_negative_weight": 2.0,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 1.795105,
+        "sampled_coarse_accuracy": 0.779379
+      },
+      {
+        "epoch": 2,
+        "loss": 0.773623,
+        "sampled_coarse_accuracy": 0.923503
+      },
+      {
+        "epoch": 3,
+        "loss": 0.632914,
+        "sampled_coarse_accuracy": 0.947894
+      },
+      {
+        "epoch": 4,
+        "loss": 0.566578,
+        "sampled_coarse_accuracy": 0.967849
+      },
+      {
+        "epoch": 5,
+        "loss": 0.569142,
+        "sampled_coarse_accuracy": 0.963415
+      },
+      {
+        "epoch": 6,
+        "loss": 0.517148,
+        "sampled_coarse_accuracy": 0.980044
+      },
+      {
+        "epoch": 7,
+        "loss": 0.495772,
+        "sampled_coarse_accuracy": 0.982262
+      },
+      {
+        "epoch": 8,
+        "loss": 0.457335,
+        "sampled_coarse_accuracy": 0.993348
+      },
+      {
+        "epoch": 9,
+        "loss": 0.443722,
+        "sampled_coarse_accuracy": 0.996674
+      },
+      {
+        "epoch": 10,
+        "loss": 0.429199,
+        "sampled_coarse_accuracy": 0.997783
+      },
+      {
+        "epoch": 11,
+        "loss": 0.424874,
+        "sampled_coarse_accuracy": 0.997783
+      },
+      {
+        "epoch": 12,
+        "loss": 0.411535,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 13,
+        "loss": 0.407289,
+        "sampled_coarse_accuracy": 0.998891
+      },
+      {
+        "epoch": 14,
+        "loss": 0.408245,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 15,
+        "loss": 0.40299,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 16,
+        "loss": 0.398031,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 17,
+        "loss": 0.397784,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 18,
+        "loss": 0.392664,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 19,
+        "loss": 0.392823,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 20,
+        "loss": 0.393157,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 21,
+        "loss": 0.393879,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 22,
+        "loss": 0.393729,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 23,
+        "loss": 0.390828,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 24,
+        "loss": 0.390462,
+        "sampled_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 25,
+        "loss": 0.390204,
+        "sampled_coarse_accuracy": 1.0
+      }
+    ]
+  },
+  "mining": {
+    "enabled": true,
+    "scope": "TRAINING_SUBJECTS_ONLY; VERIFIED_GROUND_TRUTH_SAFE_OR_OTHER",
+    "outer_heldout_accessed": false,
+    "count": 0,
+    "minimum_phone_probability": 0.5,
+    "miner_training": {
+      "epochs": 8,
+      "samples": 902,
+      "batch_size": 16,
+      "learning_rate": 0.0005,
+      "training_seconds": 13.233,
+      "sampling": "none",
+      "coarse_loss_mode": "none",
+      "fine_loss_mode": "sqrt_inverse",
+      "coarse_loss_coefficient": 2.0,
+      "fine_loss_coefficient": 1.0,
+      "hard_negative_count": 0,
+      "hard_negative_weight": 1.0,
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 1.82753,
+          "sampled_coarse_accuracy": 0.750554
+        },
+        {
+          "epoch": 2,
+          "loss": 0.781649,
+          "sampled_coarse_accuracy": 0.913525
+        },
+        {
+          "epoch": 3,
+          "loss": 0.678125,
+          "sampled_coarse_accuracy": 0.937916
+        },
+        {
+          "epoch": 4,
+          "loss": 0.574282,
+          "sampled_coarse_accuracy": 0.964523
+        },
+        {
+          "epoch": 5,
+          "loss": 0.529883,
+          "sampled_coarse_accuracy": 0.978936
+        },
+        {
+          "epoch": 6,
+          "loss": 0.522017,
+          "sampled_coarse_accuracy": 0.976718
+        },
+        {
+          "epoch": 7,
+          "loss": 0.475381,
+          "sampled_coarse_accuracy": 0.990022
+        },
+        {
+          "epoch": 8,
+          "loss": 0.456561,
+          "sampled_coarse_accuracy": 0.993348
+        }
+      ]
+    }
+  },
+  "checkpoint_path": "models\\candidate\\v7_research\\v7_c_hard_negatives_loso_gB-9.pt",
+  "checkpoint_sha256": "39703c79332c229fa13b8e618cef5f6c9feff6b9ed14929c7d35ba0cff9d02c9",
+  "prediction_path": "reports\\v7_optimization\\folds\\v7_c_hard_negatives_loso_gB-9.npz",
+  "prediction_sha256": "2c271a3e04099f4979fddd07e7302bc99c4e1a4811db79a5a2197b724ff95947",
+  "fixed_action_threshold": 0.8,
+  "inference_seconds": 0.297467,
+  "clips_per_second": 2692.737,
+  "events": [
+    {
+      "event_type": "PHONE",
+      "start_seconds": 88.206,
+      "end_seconds": 104.839,
+      "confidence": 0.9333,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 16.633
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 114.919,
+      "end_seconds": 136.593,
+      "confidence": 0.9258,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 21.674
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 166.331,
+      "end_seconds": 179.939,
+      "confidence": 0.9377,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 13.608
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 235.887,
+      "end_seconds": 263.609,
+      "confidence": 0.8626,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 27.722
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 339.214,
+      "end_seconds": 351.815,
+      "confidence": 0.8566,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 12.601
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 402.218,
+      "end_seconds": 404.738,
+      "confidence": 0.8657,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 2.52
+    }
+  ],
+  "resource_control": "ISOLATED_PROCESS; torch_threads=1; batch_size=16"
+}
