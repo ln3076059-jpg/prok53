@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "model_version": "ROADWATCH_V5_TINY_TEMPORAL_CNN_001",
+  "architecture": "TinyTemporalCNN",
+  "activation_state": "DEVELOPMENT_ONLY_NOT_VALIDATED",
+  "dataset_role": "DEVELOPMENT_ONLY",
+  "action_classes": [
+    "SAFE_DRIVING",
+    "TEXTING_LEFT",
+    "TEXTING_RIGHT",
+    "PHONECALL_LEFT",
+    "PHONECALL_RIGHT",
+    "OTHER_ACTIVITY"
+  ],
+  "evaluation_protocol": "LEAVE_ONE_SUBJECT_OUT",
+  "forbidden_consumed_holdouts": [
+    "gZ-37",
+    "gE-28"
+  ],
+  "automatic_violation": false,
+  "folds": [
+    {
+      "heldout_subject": "gB-9",
+      "training_subjects": [
+        "gZ-36",
+        "gC-14"
+      ],
+      "action_threshold": 0.5,
+      "checkpoint_path": "models\\candidate\\v5_tiny_temporal_cnn_001\\loso_gB-9.pt",
+      "checkpoint_sha256": "5374cdc989b920ef0724807d82f3177af2b7ce7f8224e206a2af55edd2abc881"
+    },
+    {
+      "heldout_subject": "gZ-36",
+      "training_subjects": [
+        "gB-9",
+        "gC-14"
+      ],
+      "action_threshold": 0.7,
+      "checkpoint_path": "models\\candidate\\v5_tiny_temporal_cnn_001\\loso_gZ-36.pt",
+      "checkpoint_sha256": "74ee3d31a1c157c217ded6fe75a0a53e5add182be6f6154dfc5d0adc04ad7159"
+    },
+    {
+      "heldout_subject": "gC-14",
+      "training_subjects": [
+        "gB-9",
+        "gZ-36"
+      ],
+      "action_threshold": 0.8,
+      "checkpoint_path": "models\\candidate\\v5_tiny_temporal_cnn_001\\loso_gC-14.pt",
+      "checkpoint_sha256": "107323111fc919c603b85c6c86091a040ac3a006f3b77dde1d79df8373406b55"
+    }
+  ]
+}
