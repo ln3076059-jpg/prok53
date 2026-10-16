@@ -3,28 +3,28 @@
   "case_id": "gB-9-phone-03",
   "reviewer_id": "68980dcda19d4dfbab8003d9adfec32c",
   "reviewer_type": "HUMAN",
-  "reviewed_at_utc": "2026-10-16T15:40:29.408420+00:00",
+  "reviewed_at_utc": "2026-10-16T15:51:47.895886+00:00",
   "phone_visibility": "PHONE_VISIBLE",
   "phone_use_assessment": "PHONE_USE_CONFIRMED",
-  "selected_proposal_id": "f4230-C5",
+  "selected_proposal_id": "f3705-C2",
   "selected_proposal": {
-    "proposal_id": "f4230-C5",
-    "frame_index": 4230,
-    "timestamp_seconds": 142.1371,
+    "proposal_id": "f3705-C2",
+    "frame_index": 3705,
+    "timestamp_seconds": 124.496,
     "source": "coco_cell_phone",
-    "confidence": 0.0738091915845871,
+    "confidence": 0.2869783341884613,
     "geometry_context": "HANDHELD_USE",
-    "hand_proximity": 0.3365582408341584,
-    "face_proximity": 0.9286471135888985,
-    "nearest_cross_model_iou": 0.49912261230353144,
+    "hand_proximity": 0.40090863361594276,
+    "face_proximity": 0.8726695545847559,
+    "nearest_cross_model_iou": 0.40159939409988876,
     "xyxy_in_driver_roi": [
-      254.154541015625,
-      95.7363052368164,
-      332.0630187988281,
-      159.67254638671875
+      241.97225952148438,
+      98.27901458740234,
+      390.00390625,
+      220.9855194091797
     ]
   },
-  "notes": "A phone is visible at the right ear with partial hand overlap. Proposal f4230-C5 is tighter on the device region than the surrounding hand-and-face proposals.",
+  "notes": "The original ROI clearly shows a phone at the right ear. Proposal f3705-C2 follows the full handset more closely than the smaller boxes, which cover only part of it.",
   "source": {
     "proposal_artifact": "reports/v9_research/phone_proposal_mining.json",
     "proposal_artifact_sha256": "9f710bfaf22c19fc143875a3832258935d6fb4d8db17dfd96e83bfee0718665e",
@@ -32,14 +32,14 @@
     "contact_sheet_sha256": "64b53b9bbbb71fedc7cb9b85450432876df1e9d7b79a62f06e3210b3626b0e07",
     "experiment_scope": "FN-selected development proposal mining for human review only"
   },
-  "previous_revision": null,
+  "previous_revision": "6713b1fbbe6c1fcc254a41af9edd5ee8ede892a9b338e3ae08330cb9705f9546",
   "training_admission": "NOT_AUTOMATIC_REQUIRES_GOVERNED_MATERIALIZATION",
   "production_approval": false,
   "review_assistance": {
     "type": "AI_PRE_REVIEW",
     "reviewer_id": "openai-codex",
-    "revision": "45f2ce2a65f8a80534ed9c2b6552bdc19389cc855004e6ddf804a7b978c339a7",
+    "revision": "1e99ef3c0c4663c82196a06af92cd9cb755be2ad7874430629cb260105d88a5e",
     "accepted_without_changes": true
   },
-  "revision": "6713b1fbbe6c1fcc254a41af9edd5ee8ede892a9b338e3ae08330cb9705f9546"
+  "revision": "ba7f00c3e4547db76c65985b69a9879cae97f230a198156eb2a0465a94dada56"
 }

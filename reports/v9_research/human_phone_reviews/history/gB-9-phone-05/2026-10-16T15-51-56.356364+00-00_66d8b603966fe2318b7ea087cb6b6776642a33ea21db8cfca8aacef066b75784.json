@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "case_id": "gB-9-phone-05",
+  "reviewer_id": "68980dcda19d4dfbab8003d9adfec32c",
+  "reviewer_type": "HUMAN",
+  "reviewed_at_utc": "2026-10-16T15:51:56.356364+00:00",
+  "phone_visibility": "PHONE_VISIBLE",
+  "phone_use_assessment": "PHONE_USE_CONFIRMED",
+  "selected_proposal_id": "f7560-C1",
+  "selected_proposal": {
+    "proposal_id": "f7560-C1",
+    "frame_index": 7560,
+    "timestamp_seconds": 254.0323,
+    "source": "coco_cell_phone",
+    "confidence": 0.5435135364532471,
+    "geometry_context": "HANDHELD_USE",
+    "hand_proximity": 0.8386520392568535,
+    "face_proximity": 0.8578511894193382,
+    "nearest_cross_model_iou": 0.0,
+    "xyxy_in_driver_roi": [
+      450.63763427734375,
+      105.35657501220703,
+      481.7338562011719,
+      166.07186889648438
+    ]
+  },
+  "notes": "A phone is visible at the left ear. Proposal f7560-C1 closely follows the narrow device region and excludes most of the hand.",
+  "source": {
+    "proposal_artifact": "reports/v9_research/phone_proposal_mining.json",
+    "proposal_artifact_sha256": "9f710bfaf22c19fc143875a3832258935d6fb4d8db17dfd96e83bfee0718665e",
+    "source_case_sha256": "c7b8bfc7c8e8fdf188c5a15b4e760fa9527d01111a11b8640b9d5ad1b93aeed0",
+    "contact_sheet_sha256": "251f2b0c715d4b67ed51a34b7318b6be175ebcca824fafc6205f1664cac64878",
+    "experiment_scope": "FN-selected development proposal mining for human review only"
+  },
+  "previous_revision": "877e7bf687bb1386f043ad03561019d7f77c80c8df8d7426e6e2a85aceb86e0e",
+  "training_admission": "NOT_AUTOMATIC_REQUIRES_GOVERNED_MATERIALIZATION",
+  "production_approval": false,
+  "review_assistance": {
+    "type": "AI_PRE_REVIEW",
+    "reviewer_id": "openai-codex",
+    "revision": "97a2f361c2eb77b38b357612fe994287c3ce94214fcd910e883f8f2098abcf3f",
+    "accepted_without_changes": false
+  },
+  "revision": "66d8b603966fe2318b7ea087cb6b6776642a33ea21db8cfca8aacef066b75784"
+}
