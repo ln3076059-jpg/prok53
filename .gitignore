@@ -45,6 +45,7 @@ driver_safety.db
 *.progress.json
 reports/cache_observations_sub_*.json
 reports/v6_completion/logs/
+reports/v9_research/web_*.log
 
 # Local AI85 dataset media and extracted feature caches
 reports/ai85_upgrade/fn_original_rois/

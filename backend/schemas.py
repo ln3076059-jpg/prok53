@@ -96,6 +96,7 @@ class PhoneResearchReviewRequest(BaseModel):
     selected_proposal_id: str = Field(min_length=1, max_length=128)
     notes: str = Field(min_length=12, max_length=2000)
     expected_revision: str | None = Field(default=None, min_length=64, max_length=64)
+    pre_review_revision: str | None = Field(default=None, min_length=64, max_length=64)
 
     @model_validator(mode="after")
     def consistent_decision(self):

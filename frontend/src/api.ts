@@ -96,6 +96,19 @@ export interface PhoneReviewDecision {
   phone_use_assessment: PhoneUseAssessment;
   selected_proposal_id: string;
   notes: string;
+  review_assistance?: { type: "AI_PRE_REVIEW"; reviewer_id: string; revision: string; accepted_without_changes: boolean };
+}
+
+export interface PhonePreReview {
+  reviewer_type: "AI";
+  reviewer_id: string;
+  status: "AI_PRE_REVIEW";
+  phone_visibility: PhoneVisibility;
+  phone_use_assessment: PhoneUseAssessment;
+  selected_proposal_id: string;
+  confidence: "HIGH" | "MEDIUM" | "LOW";
+  rationale: string;
+  revision: string;
 }
 
 export interface PhoneReviewCase {
@@ -106,6 +119,7 @@ export interface PhoneReviewCase {
   auxiliary_proposals: number;
   cross_model_agreement: boolean;
   auxiliary_review_candidate: boolean;
+  pre_review_available: boolean;
   review_status: "PENDING" | "REVIEWED";
   decision: PhoneReviewDecision | null;
 }
@@ -119,6 +133,7 @@ export interface PhoneReviewQueue {
 export interface PhoneReviewDetail extends Omit<PhoneReviewCase, "review_status"> {
   contact_sheet_sha256: string;
   proposals: PhoneProposal[];
+  pre_review: PhonePreReview | null;
 }
 
 export interface PhoneReviewInput {
@@ -127,6 +142,7 @@ export interface PhoneReviewInput {
   selected_proposal_id: string;
   notes: string;
   expected_revision: string | null;
+  pre_review_revision: string | null;
 }
 
 const API = import.meta.env.VITE_API_URL ?? "http://localhost:8000";

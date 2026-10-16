@@ -194,6 +194,11 @@ dd { margin: 0; overflow-wrap: anywhere; }
 .decision-form, .proposal-register { padding: 20px; min-width: 0; }
 .decision-form { display: grid; align-content: start; gap: 17px; border-right: 1px solid var(--rule); }
 .decision-form h3, .proposal-register h3 { margin: 0; font: 600 20px/1.1 "IBM Plex Sans Condensed", sans-serif; text-transform: uppercase; }
+.pre-review-card { padding: 14px; background: #edf5ff; border-left: 3px solid #0f62fe; }
+.pre-review-card > div { display: flex; align-items: center; gap: 10px; }
+.pre-review-card strong { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+.pre-review-card p { margin: 10px 0 7px; color: var(--ink); font-size: 13px; line-height: 1.45; }
+.pre-review-card small { display: block; color: var(--muted); font-size: 11px; line-height: 1.45; }
 .proposal-register > p { margin: 6px 0 14px; color: var(--muted); font-size: 12px; }
 .proposal-register > div { max-height: 465px; overflow-y: auto; border: 1px solid var(--rule); }
 .proposal-register button { width: 100%; min-height: 58px; padding: 9px 11px; display: grid; grid-template-columns: minmax(90px, 1fr) 74px 48px; gap: 8px; align-items: center; color: var(--ink); background: var(--paper); border: 0; border-bottom: 1px solid #e0e0e0; text-align: left; cursor: pointer; }

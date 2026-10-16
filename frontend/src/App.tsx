@@ -376,6 +376,7 @@ function ResearchReviewPage() {
   const [phoneUse, setPhoneUse] = useState<PhoneUseAssessment>("UNRESOLVED");
   const [proposalId, setProposalId] = useState("NO_VALID_PROPOSAL");
   const [notes, setNotes] = useState("");
+  const [preReviewRevision, setPreReviewRevision] = useState<string | null>(null);
 
   function loadQueue(preferredCase?: string) {
     setLoading(true);
@@ -406,10 +407,12 @@ function ResearchReviewPage() {
         objectUrl = URL.createObjectURL(blob);
         setDetail(record);
         setImageUrl(objectUrl);
-        setVisibility(record.decision?.phone_visibility ?? "UNRESOLVED");
-        setPhoneUse(record.decision?.phone_use_assessment ?? "UNRESOLVED");
-        setProposalId(record.decision?.selected_proposal_id ?? "NO_VALID_PROPOSAL");
-        setNotes(record.decision?.notes ?? "");
+        const startingPoint = record.decision ?? record.pre_review;
+        setVisibility(startingPoint?.phone_visibility ?? "UNRESOLVED");
+        setPhoneUse(startingPoint?.phone_use_assessment ?? "UNRESOLVED");
+        setProposalId(startingPoint?.selected_proposal_id ?? "NO_VALID_PROPOSAL");
+        setNotes(record.decision?.notes ?? record.pre_review?.rationale ?? "");
+        setPreReviewRevision(record.decision ? null : record.pre_review?.revision ?? null);
       })
       .catch((reason) => {
         if (reason instanceof DOMException && reason.name === "AbortError") return;
@@ -445,6 +448,7 @@ function ResearchReviewPage() {
       selected_proposal_id: proposalId,
       notes: notes.trim(),
       expected_revision: detail.decision?.revision ?? null,
+      pre_review_revision: preReviewRevision,
     };
     try {
       await api.savePhoneReview(detail.case_id, payload);
@@ -496,6 +500,11 @@ function ResearchReviewPage() {
           <div className="review-record-grid">
             <div className="decision-form">
               <h3>Human decision</h3>
+              {detail.pre_review && !detail.decision && <div className="pre-review-card">
+                <div><Tag type="blue">AI PRE-REVIEW</Tag><strong>{detail.pre_review.confidence} confidence</strong></div>
+                <p>{detail.pre_review.rationale}</p>
+                <small>Codex filled the controls below as a suggestion. Inspect the evidence and edit anything incorrect before confirming. The final receipt records your authenticated human account and the AI assistance separately.</small>
+              </div>}
               <Select id="phone-visibility" labelText="Is a phone visible?" value={visibility} onChange={(event) => changeVisibility(event.target.value as PhoneVisibility)}>
                 <SelectItem value="UNRESOLVED" text="Unresolved — needs more evidence" />
                 <SelectItem value="PHONE_VISIBLE" text="Yes — phone is visible" />
@@ -511,7 +520,7 @@ function ResearchReviewPage() {
                 {detail.proposals.map((proposal) => <SelectItem key={proposal.proposal_id} value={proposal.proposal_id} text={`${proposal.proposal_id} · ${proposal.source === "specialist" ? "Specialist" : "COCO"} · ${(proposal.confidence * 100).toFixed(1)}% · ${proposal.geometry_context.replaceAll("_", " ")}`} />)}
               </Select>
               <TextArea id="review-notes" labelText="Review rationale" helperText="Required. Describe the visible phone, occlusion, false proposal, or missing evidence." rows={4} value={notes} onChange={(event) => setNotes(event.target.value)} />
-              <Button renderIcon={Save} onClick={saveReview} disabled={saving || notes.trim().length < 12}>{saving ? "Saving decision" : detail.decision ? "Save revised decision" : "Record human decision"}</Button>
+              <Button renderIcon={Save} onClick={saveReview} disabled={saving || notes.trim().length < 12}>{saving ? "Saving decision" : detail.decision ? "Save revised decision" : detail.pre_review ? "Confirm as human reviewer" : "Record human decision"}</Button>
               <p className="decision-guard">Saving creates an immutable audit snapshot. It does not admit the sample into training or approve production use.</p>
             </div>
             <aside className="proposal-register">

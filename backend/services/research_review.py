@@ -96,6 +96,32 @@ def _flatten_proposals(row: dict[str, Any]) -> list[dict[str, Any]]:
     return sorted(proposals, key=lambda item: (item["frame_index"], -item["confidence"]))
 
 
+def _pre_reviews(source: Path, indexed: dict[str, dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    path = source.parent / "codex_phone_pre_reviews.json"
+    if not path.is_file():
+        return {}
+    payload = _read_json(path)
+    rows = payload.get("rows")
+    if not isinstance(rows, list):
+        raise ResearchReviewError("AI pre-review artifact has no rows")
+    suggestions = {str(item.get("case_id")): item for item in rows}
+    if set(suggestions) != set(indexed):
+        raise ResearchReviewError("AI pre-review cases do not match the frozen review queue")
+    for case_id, suggestion in suggestions.items():
+        proposals = {item["proposal_id"] for item in _flatten_proposals(indexed[case_id])}
+        selected_id = suggestion.get("selected_proposal_id")
+        if selected_id != "NO_VALID_PROPOSAL" and selected_id not in proposals:
+            raise ResearchReviewError(f"AI pre-review selects an unknown proposal for {case_id}")
+        if suggestion.get("reviewer_type") != "AI" or suggestion.get("status") != "AI_PRE_REVIEW":
+            raise ResearchReviewError("AI pre-review provenance is invalid")
+        expected_revision = _canonical_sha256(
+            {key: value for key, value in suggestion.items() if key != "revision"}
+        )
+        if suggestion.get("revision") != expected_revision:
+            raise ResearchReviewError(f"AI pre-review revision is invalid for {case_id}")
+    return suggestions
+
+
 def _safe_contact_sheet(source: Path, row: dict[str, Any]) -> Path:
     reports_root = source.parent.resolve()
     path = Path(str(row["contact_sheet"]))
@@ -109,6 +135,7 @@ def _safe_contact_sheet(source: Path, row: dict[str, Any]) -> Path:
 
 def list_phone_reviews(source: Path, decisions_dir: Path) -> dict[str, Any]:
     payload, indexed = _cases(source)
+    pre_reviews = _pre_reviews(source, indexed)
     cases = []
     for case_id, row in indexed.items():
         decision = _current_decision(decisions_dir, case_id)
@@ -121,6 +148,7 @@ def list_phone_reviews(source: Path, decisions_dir: Path) -> dict[str, Any]:
                 "auxiliary_proposals": int(row["auxiliary_proposals"]),
                 "cross_model_agreement": bool(row["cross_model_agreement"]),
                 "auxiliary_review_candidate": bool(row["auxiliary_review_candidate"]),
+                "pre_review_available": case_id in pre_reviews,
                 "review_status": "REVIEWED" if decision else "PENDING",
                 "decision": decision,
             }
@@ -139,6 +167,7 @@ def phone_review_detail(source: Path, decisions_dir: Path, case_id: str) -> dict
     if case_id not in indexed:
         raise ResearchReviewError("Research review case not found")
     row = indexed[case_id]
+    pre_review = _pre_reviews(source, indexed).get(case_id)
     contact_sheet = _safe_contact_sheet(source, row)
     return {
         "case_id": case_id,
@@ -148,8 +177,10 @@ def phone_review_detail(source: Path, decisions_dir: Path, case_id: str) -> dict
         "auxiliary_proposals": int(row["auxiliary_proposals"]),
         "cross_model_agreement": bool(row["cross_model_agreement"]),
         "auxiliary_review_candidate": bool(row["auxiliary_review_candidate"]),
+        "pre_review_available": pre_review is not None,
         "contact_sheet_sha256": _file_sha256(contact_sheet),
         "proposals": _flatten_proposals(row),
+        "pre_review": pre_review,
         "decision": _current_decision(decisions_dir, case_id),
     }
 
@@ -172,10 +203,16 @@ def save_phone_review(
     if case_id not in indexed:
         raise ResearchReviewError("Research review case not found")
     row = indexed[case_id]
+    pre_review = _pre_reviews(source, indexed).get(case_id)
     proposals = {item["proposal_id"]: item for item in _flatten_proposals(row)}
     selected_id = decision["selected_proposal_id"]
     if selected_id != "NO_VALID_PROPOSAL" and selected_id not in proposals:
         raise ResearchReviewError("Selected proposal does not belong to this case")
+    pre_review_revision = decision.get("pre_review_revision")
+    if pre_review_revision and (
+        pre_review is None or pre_review_revision != pre_review.get("revision")
+    ):
+        raise ResearchReviewConflict("AI pre-review changed; reload before confirming")
 
     with _WRITE_LOCK:
         current = _current_decision(decisions_dir, case_id)
@@ -205,6 +242,20 @@ def save_phone_review(
             "training_admission": "NOT_AUTOMATIC_REQUIRES_GOVERNED_MATERIALIZATION",
             "production_approval": False,
         }
+        if pre_review_revision:
+            compared_fields = (
+                "phone_visibility",
+                "phone_use_assessment",
+                "selected_proposal_id",
+            )
+            receipt["review_assistance"] = {
+                "type": "AI_PRE_REVIEW",
+                "reviewer_id": pre_review["reviewer_id"],
+                "revision": pre_review_revision,
+                "accepted_without_changes": all(
+                    decision[field] == pre_review[field] for field in compared_fields
+                ),
+            }
         receipt["revision"] = _canonical_sha256(receipt)
         latest = _decision_path(decisions_dir, case_id)
         history = decisions_dir / "history" / case_id

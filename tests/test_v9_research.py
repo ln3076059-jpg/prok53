@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -159,6 +160,62 @@ def test_research_review_writes_versioned_human_receipts(tmp_path: Path):
     second = save_phone_review(source, decisions, "case-00", revised, "reviewer-2")
     assert second["previous_revision"] == first["revision"]
     assert len(list((decisions / "history" / "case-00").glob("*.json"))) == 2
+
+
+def test_research_review_exposes_ai_suggestion_but_receipt_remains_human(tmp_path: Path):
+    source, decisions = _research_review_fixture(tmp_path)
+    source_rows = json.loads(source.read_text(encoding="utf-8"))["rows"]
+    suggestions = []
+    for row in source_rows:
+        proposal_id = row["samples"][0]["proposals"][0]["proposal_id"]
+        suggestion = {
+            "case_id": row["case_id"],
+            "reviewer_type": "AI",
+            "reviewer_id": "openai-codex",
+            "status": "AI_PRE_REVIEW",
+            "phone_visibility": "PHONE_VISIBLE",
+            "phone_use_assessment": "PHONE_USE_CONFIRMED",
+            "selected_proposal_id": proposal_id,
+            "confidence": "HIGH",
+            "rationale": "The phone and proposed box are visible in the contact sheet.",
+        }
+        canonical = json.dumps(
+            suggestion, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+        ).encode()
+        suggestion["revision"] = hashlib.sha256(canonical).hexdigest()
+        suggestions.append(suggestion)
+    (source.parent / "codex_phone_pre_reviews.json").write_text(
+        json.dumps({"rows": suggestions}), encoding="utf-8"
+    )
+
+    detail = phone_review_detail(source, decisions, "case-00")
+    suggestion = detail["pre_review"]
+    assert suggestion["reviewer_type"] == "AI"
+    assert detail["pre_review_available"] is True
+
+    receipt = save_phone_review(
+        source,
+        decisions,
+        "case-00",
+        {
+            "phone_visibility": suggestion["phone_visibility"],
+            "phone_use_assessment": suggestion["phone_use_assessment"],
+            "selected_proposal_id": suggestion["selected_proposal_id"],
+            "notes": suggestion["rationale"],
+            "expected_revision": None,
+            "pre_review_revision": suggestion["revision"],
+        },
+        "human-reviewer-1",
+    )
+
+    assert receipt["reviewer_type"] == "HUMAN"
+    assert receipt["reviewer_id"] == "human-reviewer-1"
+    assert receipt["review_assistance"] == {
+        "type": "AI_PRE_REVIEW",
+        "reviewer_id": "openai-codex",
+        "revision": suggestion["revision"],
+        "accepted_without_changes": True,
+    }
 
 
 def test_research_review_rejects_foreign_proposal_and_inconsistent_decision(tmp_path: Path):
