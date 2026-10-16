@@ -1,0 +1,38 @@
+{
+  "subject_id": "gC-14",
+  "records": 795,
+  "image_size": 112,
+  "roi_xyxy": [
+    0.0,
+    0.1,
+    0.65,
+    0.95
+  ],
+  "normalization": "IMAGENET1K_V1",
+  "source_video": {
+    "path": "dataset/external_dmd/subjects/gC-14/gC_14_s2_2019-03-04T11;48;02+01;00_rgb_body.mp4",
+    "exists": true,
+    "bytes": 767936358,
+    "sha256": "bb7c567eea366afba4f2b329142e181333ce62c7ac7085bccebd6daa9ec8694e"
+  },
+  "source_cache": {
+    "path": "dataset/external_dmd/derivatives/v5_rgb_cache/v5_rgb_gC-14_64.npz",
+    "exists": true,
+    "bytes": 8323162,
+    "sha256": "fddbcb1b7087da8664482a49ad70b22079f129b4de9d7147e9d3fab0de2d5521"
+  },
+  "weights": {
+    "path": "C:/Users/TSC/.cache/torch/hub/checkpoints/resnet18-f37072fd.pth",
+    "exists": true,
+    "bytes": 46830571,
+    "sha256": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec"
+  },
+  "output": {
+    "path": "reports/ai85_upgrade/native112/embeddings/v5_resnet18_gC-14.npz",
+    "exists": true,
+    "bytes": 720836,
+    "sha256": "4839fe94d177d663be7da01a76b4fcee28c77d36d6f99b6b3323265793e51137"
+  },
+  "extraction_seconds": 69.82434160000003,
+  "labels_and_timestamps_inherited_without_changes": true
+}

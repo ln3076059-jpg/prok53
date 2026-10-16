@@ -1,0 +1,275 @@
+{
+  "rows": [
+    {
+      "experiment_id": "V7_A_V6_BASELINE_ACTION",
+      "recovered_ground_truth_events": [],
+      "lost_ground_truth_events": [
+        [
+          "gC-14",
+          41.4651,
+          81.0484
+        ]
+      ],
+      "net_fp_change": 0,
+      "new_fp_without_baseline_pair": 0,
+      "precision_wilson95": [
+        0.531299122381256,
+        0.8881382985923343
+      ],
+      "recall_wilson95": [
+        0.34431021881994717,
+        0.6861390984731652
+      ]
+    },
+    {
+      "experiment_id": "V7_A_V6_BASELINE_FUSION",
+      "recovered_ground_truth_events": [],
+      "lost_ground_truth_events": [],
+      "net_fp_change": 0,
+      "new_fp_without_baseline_pair": 0,
+      "precision_wilson95": [
+        0.5490882631704924,
+        0.8937198697736354
+      ],
+      "recall_wilson95": [
+        0.37547963210970914,
+        0.7158683197696281
+      ]
+    },
+    {
+      "experiment_id": "BASELINE_NEGATIVE_FUSION",
+      "recovered_ground_truth_events": [],
+      "lost_ground_truth_events": [],
+      "net_fp_change": 0,
+      "new_fp_without_baseline_pair": 0,
+      "precision_wilson95": [
+        0.5490882631704924,
+        0.8937198697736354
+      ],
+      "recall_wilson95": [
+        0.37547963210970914,
+        0.7158683197696281
+      ]
+    },
+    {
+      "experiment_id": "MEAN_FINETUNE_ACTION",
+      "recovered_ground_truth_events": [],
+      "lost_ground_truth_events": [
+        [
+          "gC-14",
+          41.4651,
+          81.0484
+        ]
+      ],
+      "net_fp_change": 1,
+      "new_fp_without_baseline_pair": 1,
+      "precision_wilson95": [
+        0.5004361928391441,
+        0.8618613704787788
+      ],
+      "recall_wilson95": [
+        0.34431021881994717,
+        0.6861390984731652
+      ]
+    },
+    {
+      "experiment_id": "MEAN_FINETUNE_FUSION",
+      "recovered_ground_truth_events": [],
+      "lost_ground_truth_events": [],
+      "net_fp_change": 1,
+      "new_fp_without_baseline_pair": 1,
+      "precision_wilson95": [
+        0.5184826598759762,
+        0.8684923971201053
+      ],
+      "recall_wilson95": [
+        0.37547963210970914,
+        0.7158683197696281
+      ]
+    },
+    {
+      "experiment_id": "MEAN_FINETUNE_NEGATIVE_FUSION",
+      "recovered_ground_truth_events": [],
+      "lost_ground_truth_events": [],
+      "net_fp_change": 1,
+      "new_fp_without_baseline_pair": 1,
+      "precision_wilson95": [
+        0.5184826598759762,
+        0.8684923971201053
+      ],
+      "recall_wilson95": [
+        0.37547963210970914,
+        0.7158683197696281
+      ]
+    },
+    {
+      "experiment_id": "ATTENTION_FINETUNE_ACTION",
+      "recovered_ground_truth_events": [],
+      "lost_ground_truth_events": [
+        [
+          "gC-14",
+          41.4651,
+          81.0484
+        ]
+      ],
+      "net_fp_change": 1,
+      "new_fp_without_baseline_pair": 1,
+      "precision_wilson95": [
+        0.5004361928391441,
+        0.8618613704787788
+      ],
+      "recall_wilson95": [
+        0.34431021881994717,
+        0.6861390984731652
+      ]
+    },
+    {
+      "experiment_id": "ATTENTION_FINETUNE_FUSION",
+      "recovered_ground_truth_events": [],
+      "lost_ground_truth_events": [],
+      "net_fp_change": 1,
+      "new_fp_without_baseline_pair": 1,
+      "precision_wilson95": [
+        0.5184826598759762,
+        0.8684923971201053
+      ],
+      "recall_wilson95": [
+        0.37547963210970914,
+        0.7158683197696281
+      ]
+    },
+    {
+      "experiment_id": "ATTENTION_FINETUNE_NEGATIVE_FUSION",
+      "recovered_ground_truth_events": [],
+      "lost_ground_truth_events": [],
+      "net_fp_change": 1,
+      "new_fp_without_baseline_pair": 1,
+      "precision_wilson95": [
+        0.5184826598759762,
+        0.8684923971201053
+      ],
+      "recall_wilson95": [
+        0.37547963210970914,
+        0.7158683197696281
+      ]
+    },
+    {
+      "experiment_id": "NATIVE112_FINETUNE_ACTION",
+      "recovered_ground_truth_events": [
+        [
+          "gB-9",
+          219.3884,
+          265.9946
+        ]
+      ],
+      "lost_ground_truth_events": [
+        [
+          "gC-14",
+          41.4651,
+          81.0484
+        ],
+        [
+          "gC-14",
+          178.5282,
+          192.7419
+        ],
+        [
+          "gZ-36",
+          356.3844,
+          380.0067
+        ],
+        [
+          "gZ-36",
+          469.4556,
+          486.9624
+        ]
+      ],
+      "net_fp_change": 2,
+      "new_fp_without_baseline_pair": 7,
+      "precision_wilson95": [
+        0.43285427668523624,
+        0.818808175898918
+      ],
+      "recall_wilson95": [
+        0.28413168023037194,
+        0.6245203678902909
+      ]
+    },
+    {
+      "experiment_id": "NATIVE112_FINETUNE_FUSION",
+      "recovered_ground_truth_events": [
+        [
+          "gB-9",
+          219.3884,
+          265.9946
+        ]
+      ],
+      "lost_ground_truth_events": [
+        [
+          "gC-14",
+          178.5282,
+          192.7419
+        ],
+        [
+          "gZ-36",
+          356.3844,
+          380.0067
+        ],
+        [
+          "gZ-36",
+          469.4556,
+          486.9624
+        ]
+      ],
+      "net_fp_change": 2,
+      "new_fp_without_baseline_pair": 7,
+      "precision_wilson95": [
+        0.4537345197425524,
+        0.8280524739491653
+      ],
+      "recall_wilson95": [
+        0.3138609015268349,
+        0.6556897811800528
+      ]
+    },
+    {
+      "experiment_id": "NATIVE112_FINETUNE_NEGATIVE_FUSION",
+      "recovered_ground_truth_events": [
+        [
+          "gB-9",
+          219.3884,
+          265.9946
+        ]
+      ],
+      "lost_ground_truth_events": [
+        [
+          "gC-14",
+          178.5282,
+          192.7419
+        ],
+        [
+          "gZ-36",
+          356.3844,
+          380.0067
+        ],
+        [
+          "gZ-36",
+          469.4556,
+          486.9624
+        ]
+      ],
+      "net_fp_change": 2,
+      "new_fp_without_baseline_pair": 7,
+      "precision_wilson95": [
+        0.4537345197425524,
+        0.8280524739491653
+      ],
+      "recall_wilson95": [
+        0.3138609015268349,
+        0.6556897811800528
+      ]
+    }
+  ],
+  "interval_limitation": "Nominal Wilson intervals assume independent events; three clustered, repeatedly used subjects make them optimistic descriptions, not evidence of generalization.",
+  "new_fp_pairing_rule": "Diagnostic-only pairing within subject and FP kind at temporal IoU >=0.5, one to one. This does not change ground-truth matching or event metrics."
+}

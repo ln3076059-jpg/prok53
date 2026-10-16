@@ -1,0 +1,113 @@
+{
+  "status": "MEASURED_LOCAL_CPU",
+  "generated_at_utc": "2026-10-16T00:20:10.519622+00:00",
+  "hardware": {
+    "logical_cpu_count": 12,
+    "physical_cpu_count": 6,
+    "total_ram_mb": 6005.7,
+    "cuda_available": false,
+    "vram_peak_mb": 0.0
+  },
+  "source": {
+    "path": "dataset\\external_dmd\\subjects\\gB-9\\gB_9_s2_2019-03-07T16;21;20+01;00_rgb_body.mp4",
+    "sha256": "36bc2bcd2547033424833207fa6f4694fbf29fdfad2d305c30adb77639924b23",
+    "scope": "AUTHORIZED_DMD_CABIN_BODY_VIDEO; DEVELOPMENT_SUBJECT_gB-9"
+  },
+  "video_decode": {
+    "count": 300,
+    "mean_ms": 12.7914,
+    "p50_ms": 11.8699,
+    "p95_ms": 15.5925,
+    "elapsed_seconds": 3.8594,
+    "decode_fps": 77.733
+  },
+  "detector": {
+    "count": 12,
+    "mean_ms": 604.7913,
+    "p50_ms": 404.9894,
+    "p95_ms": 1468.2771
+  },
+  "seatbelt_classifier_in_pipeline": {
+    "count": 0,
+    "mean_ms": null,
+    "p50_ms": null,
+    "p95_ms": null
+  },
+  "seatbelt_classifier_direct_full_frame_probe": {
+    "count": 12,
+    "mean_ms": 77.4475,
+    "p50_ms": 53.6178,
+    "p95_ms": 182.0352
+  },
+  "fusion_in_pipeline": {
+    "count": 0,
+    "mean_ms": null,
+    "p50_ms": null,
+    "p95_ms": null
+  },
+  "fusion_direct": {
+    "count": 1000,
+    "mean_ms": 0.0058,
+    "p50_ms": 0.0056,
+    "p95_ms": 0.0072
+  },
+  "evidence_persist_calls": {
+    "count": 13,
+    "mean_ms": 0.0035,
+    "p50_ms": 0.0035,
+    "p95_ms": 0.0042
+  },
+  "evidence_jpeg_write": {
+    "count": 12,
+    "mean_ms": 7.7363,
+    "p50_ms": 7.9142,
+    "p95_ms": 8.96
+  },
+  "resnet_embedding": {
+    "subject_id": "gB-9",
+    "status": "EXTRACTED",
+    "rgb_cache_path": "dataset\\external_dmd\\derivatives\\v5_rgb_cache\\v5_rgb_gB-9_64.npz",
+    "rgb_cache_sha256": "226309334f239a30f5b73195fad3f3350f401a5c151dbe437d28da5db271ede3",
+    "output_path": "D:\\temp\\roadwatch-v6-benchmark-96gsgtxd\\resnet18_embeddings.npz",
+    "output_sha256": "39b6e61f8560c8d4f8ea64dcf52e559c41e1f43250619f28865173a97b1aacc7",
+    "backbone": "torchvision_resnet18_imagenet1k_v1",
+    "weights_path": "torch_hub/checkpoints/resnet18-f37072fd.pth",
+    "weights_sha256": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec",
+    "records": 809,
+    "embedding_dim": 512,
+    "extraction_seconds": 5.774,
+    "frames_per_second": 140.111
+  },
+  "temporal_head": {
+    "status": "MEASURED",
+    "checkpoint": "models\\candidate\\v6_action_ablation_001\\flat_unweighted_loso_gB-9.pt",
+    "checkpoint_sha256": "e01a9bf04d8b4088c2d68d2e3de22419d9218fc462058c875df1580fd9143b3e",
+    "clips": 801,
+    "clips_per_second": 3593.351,
+    "milliseconds_per_clip": 0.278,
+    "p50_latency_ms": 0.216,
+    "p95_latency_ms": 0.284
+  },
+  "full_backend_pipeline": {
+    "frames": 12,
+    "source_fps": 29.76,
+    "processing_seconds": 8.2044,
+    "processing_fps": 1.463,
+    "real_time_factor": 20.347,
+    "per_context_latency": {
+      "count": 12,
+      "mean_ms": 671.3897,
+      "p50_ms": 457.4039,
+      "p95_ms": 1714.1354
+    },
+    "database_detection_rows": 0,
+    "database_event_rows": 0,
+    "scope": "ACTUAL VideoAnalyzer + SQLite + evidence path on a cabin clip"
+  },
+  "memory": {
+    "rss_start_mb": 311.3,
+    "rss_peak_mb": 624.2,
+    "rss_end_mb": 534.6
+  },
+  "interpretation": "This is a local cabin-video benchmark, not roadside accuracy evidence. Cached temporal-head throughput is reported separately from full-pipeline FPS."
+}

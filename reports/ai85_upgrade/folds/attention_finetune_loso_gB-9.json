@@ -1,0 +1,118 @@
+{
+  "variant_id": "ATTENTION_FINETUNE",
+  "pooling": "attention",
+  "heldout_subject": "gB-9",
+  "training_subjects": [
+    "gZ-36",
+    "gC-14"
+  ],
+  "training": {
+    "epochs": 5,
+    "samples": 902,
+    "seed": 8516,
+    "batch_size": 16,
+    "learning_rate": 0.0001,
+    "loss_weighting": "sqrt_inverse",
+    "sampling": "none",
+    "checkpoint_selection": "FIXED_FINAL_EPOCH_NO_OUTER_LABEL_SELECTION",
+    "optimizer": "FRESH_ADAMW_CONTINUATION_NOT_EXACT_OPTIMIZER_RESUME",
+    "training_seconds": 7.079341600000134,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.28826927603480557,
+        "training_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 2,
+        "loss": 0.2879336747586595,
+        "training_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 3,
+        "loss": 0.2883529910227148,
+        "training_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 4,
+        "loss": 0.2880904035531232,
+        "training_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 5,
+        "loss": 0.28788631031095585,
+        "training_coarse_accuracy": 1.0
+      }
+    ]
+  },
+  "inherited_checkpoint": {
+    "path": "models/candidate/v6_action_ablation_001/hierarchical_loss_only_loso_gB-9.pt",
+    "exists": true,
+    "bytes": 1104453,
+    "sha256": "d78e906dbf927cdd37f37231b7e5c81d69c1532b8bccf5b20e100e90f5245b8c"
+  },
+  "config": {
+    "path": "models/model_config_ai85_upgrade.yaml",
+    "exists": true,
+    "bytes": 1509,
+    "sha256": "2ad0ecb145e4289f61b0a513e5daea428ea8027f17d8db2ab8d46000e0e28c71"
+  },
+  "source_code": [
+    {
+      "path": "D:/.idea/giangdoantotnghiep/training/dmd/run_ai85_upgrade.py",
+      "exists": true,
+      "bytes": 13183,
+      "sha256": "aa16556961f1eafb933cb95bb6049c6b5471bf765b771803c2efae59debaa0cc"
+    },
+    {
+      "path": "training/dmd/ai85_action.py",
+      "exists": true,
+      "bytes": 6676,
+      "sha256": "da01d1be2f27d0a9d93a0649594c8d23f742af58fa77474ccd89c7e3c3b59be4"
+    }
+  ],
+  "git_head": "967bdebf0bdfea953d84fca8a8b969d223a81d72",
+  "forbidden_consumed_holdouts": [
+    "gZ-37",
+    "gE-28"
+  ],
+  "outer_labels_used_for_training_or_selection": false,
+  "checkpoint": {
+    "path": "models/candidate/ai85_upgrade/attention_finetune_loso_gB-9.pt",
+    "exists": true,
+    "bytes": 1105143,
+    "sha256": "6758ae007429361281225b0ced0ff6ab94c251bb996cce767af0550d94cbdd80"
+  },
+  "prediction": {
+    "path": "reports/ai85_upgrade/folds/attention_finetune_loso_gB-9.npz",
+    "exists": true,
+    "bytes": 31381,
+    "sha256": "94d5e11aa1bd9d71ab32cb34c0ca6a6f71882ca450c7fe4433b76367421ac5cd"
+  },
+  "events": [
+    {
+      "event_type": "PHONE",
+      "start_seconds": 88.71,
+      "end_seconds": 102.823,
+      "confidence": 0.9519,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 14.113
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 165.827,
+      "end_seconds": 179.436,
+      "confidence": 0.9378,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 13.609
+    }
+  ],
+  "inference": {
+    "subject_id": "gB-9",
+    "inference_seconds": 0.251921,
+    "clips_per_second": 3179.567
+  },
+  "centered_clip_lookahead_seconds": 2.0159912109375
+}

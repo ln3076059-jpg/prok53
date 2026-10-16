@@ -1,0 +1,18 @@
+{
+  "active_models": [
+    {
+      "path": "models\\active\\v2\\phone_detector.pt",
+      "unchanged_sha256": true
+    },
+    {
+      "path": "models\\active\\v2\\seatbelt_classifier.pt",
+      "unchanged_sha256": true
+    },
+    {
+      "path": "models\\active\\v2\\seatbelt_detector.pt",
+      "unchanged_sha256": true
+    }
+  ],
+  "modified_historical_v6_v7_report_paths": [],
+  "historical_reports_unchanged": true
+}

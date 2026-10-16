@@ -1,0 +1,48 @@
+experiment_id: ROADWATCH_AI85_NATIVE112_RECOVERY
+dataset_role: DEVELOPMENT_ONLY_ITERATIVE
+activation_state: DEVELOPMENT_ONLY_NOT_VALIDATED
+development_subjects:
+- gB-9
+- gZ-36
+- gC-14
+forbidden_consumed_holdouts:
+- gZ-37
+- gE-28
+backbone:
+  architecture: FROZEN_RESNET18_BIDIRECTIONAL_GRU
+  embedding_dim: 512
+  hidden_size: 64
+  sequence_length: 9
+  training_stride: 2
+  epochs: 5
+  batch_size: 16
+  learning_rate: 0.0001
+  seed: 8516
+  source_checkpoint_dir: models/candidate/v6_action_ablation_001
+  source_checkpoint_stem: hierarchical_loss_only_loso_
+ablation_variants:
+- id: NATIVE112_FINETUNE
+  pooling: mean
+  embedding_dir: reports/ai85_upgrade/native112/embeddings
+  hypothesis: Restore original ROI detail before frozen ResNet encoding, controlling
+    the inherited checkpoint, objective and additional updates against MEAN_FINETUNE.
+event_decision:
+  fixed_action_threshold: 0.8
+  release_ratio: 0.65
+  minimum_positive_samples: 2
+  merge_gap_seconds: 2.0
+  threshold_provenance: INHERITED_V6_FIXED_NO_OUTER_LABEL_TUNING
+fusion:
+  negative_evidence_minimum: 0.5
+  negative_evidence_fraction: 0.5
+  policy: Veto an object event only when at least half of its sampled clips favor
+    SAFE with probability >=0.5 over PHONE.
+selection:
+  minimum_precision: 0.85
+  minimum_recall: 0.85
+  minimum_f1: 0.85
+  maximum_false_alarms_per_minute: 0.15
+  minimum_safe_driving_recall: 0.85
+  minimum_action_macro_f1: 0.85
+  independent_holdout_required: true
+  production_approved: false

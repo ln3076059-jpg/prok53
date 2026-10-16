@@ -1,0 +1,217 @@
+{
+  "variant_id": "ATTENTION_FINETUNE",
+  "pooling": "attention",
+  "heldout_subject": "gZ-36",
+  "training_subjects": [
+    "gB-9",
+    "gC-14"
+  ],
+  "training": {
+    "epochs": 5,
+    "samples": 795,
+    "seed": 8517,
+    "batch_size": 16,
+    "learning_rate": 0.0001,
+    "loss_weighting": "sqrt_inverse",
+    "sampling": "none",
+    "checkpoint_selection": "FIXED_FINAL_EPOCH_NO_OUTER_LABEL_SELECTION",
+    "optimizer": "FRESH_ADAMW_CONTINUATION_NOT_EXACT_OPTIMIZER_RESUME",
+    "training_seconds": 6.306392799999912,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.2857370433567455,
+        "training_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 2,
+        "loss": 0.2843577315972286,
+        "training_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 3,
+        "loss": 0.28418838134351765,
+        "training_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 4,
+        "loss": 0.28470183693387974,
+        "training_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 5,
+        "loss": 0.2853318640271073,
+        "training_coarse_accuracy": 1.0
+      }
+    ]
+  },
+  "inherited_checkpoint": {
+    "path": "models/candidate/v6_action_ablation_001/hierarchical_loss_only_loso_gZ-36.pt",
+    "exists": true,
+    "bytes": 1104477,
+    "sha256": "ebb0835a3bec116377e27b5bf8881a4efe43ce7bca4c0b912ab2544e416b78c3"
+  },
+  "config": {
+    "path": "models/model_config_ai85_upgrade.yaml",
+    "exists": true,
+    "bytes": 1509,
+    "sha256": "2ad0ecb145e4289f61b0a513e5daea428ea8027f17d8db2ab8d46000e0e28c71"
+  },
+  "source_code": [
+    {
+      "path": "D:/.idea/giangdoantotnghiep/training/dmd/run_ai85_upgrade.py",
+      "exists": true,
+      "bytes": 13183,
+      "sha256": "aa16556961f1eafb933cb95bb6049c6b5471bf765b771803c2efae59debaa0cc"
+    },
+    {
+      "path": "training/dmd/ai85_action.py",
+      "exists": true,
+      "bytes": 6676,
+      "sha256": "da01d1be2f27d0a9d93a0649594c8d23f742af58fa77474ccd89c7e3c3b59be4"
+    }
+  ],
+  "git_head": "967bdebf0bdfea953d84fca8a8b969d223a81d72",
+  "forbidden_consumed_holdouts": [
+    "gZ-37",
+    "gE-28"
+  ],
+  "outer_labels_used_for_training_or_selection": false,
+  "checkpoint": {
+    "path": "models/candidate/ai85_upgrade/attention_finetune_loso_gZ-36.pt",
+    "exists": true,
+    "bytes": 1105168,
+    "sha256": "57a66d216c21e0d9e0160d7d838e51b93b4fc8663b36bee1f622ea3ab51a3035"
+  },
+  "prediction": {
+    "path": "reports/ai85_upgrade/folds/attention_finetune_loso_gZ-36.npz",
+    "exists": true,
+    "bytes": 39638,
+    "sha256": "a07ee936ca56016c097de9954ad794b46f2cdf0b3e1618b32f5d77593a8e6a50"
+  },
+  "events": [
+    {
+      "event_type": "PHONE",
+      "start_seconds": 25.202,
+      "end_seconds": 35.786,
+      "confidence": 0.9487,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 10.584
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 53.931,
+      "end_seconds": 111.895,
+      "confidence": 0.9739,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 57.964
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 120.968,
+      "end_seconds": 156.25,
+      "confidence": 0.8913,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 35.282
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 162.298,
+      "end_seconds": 217.742,
+      "confidence": 0.9676,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 55.444
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 228.327,
+      "end_seconds": 263.609,
+      "confidence": 0.899,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 35.282
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 272.177,
+      "end_seconds": 280.746,
+      "confidence": 0.9309,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 8.569
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 298.891,
+      "end_seconds": 344.758,
+      "confidence": 0.9752,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 45.867
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 358.871,
+      "end_seconds": 374.496,
+      "confidence": 0.954,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 15.625
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 377.016,
+      "end_seconds": 383.065,
+      "confidence": 0.8479,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 6.049
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 392.137,
+      "end_seconds": 395.161,
+      "confidence": 0.8623,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 3.024
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 399.194,
+      "end_seconds": 465.222,
+      "confidence": 0.9666,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 66.028
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 471.774,
+      "end_seconds": 486.895,
+      "confidence": 0.9705,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 15.121
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 503.024,
+      "end_seconds": 507.056,
+      "confidence": 0.8741,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 4.032
+    }
+  ],
+  "inference": {
+    "subject_id": "gZ-36",
+    "inference_seconds": 0.336346,
+    "clips_per_second": 3020.701
+  },
+  "centered_clip_lookahead_seconds": 2.0159912109375
+}

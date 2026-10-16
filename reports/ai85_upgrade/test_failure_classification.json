@@ -1,0 +1,9 @@
+{
+  "missing_legacy_artifact_groups": {
+    "v2_event_sequence_annotation.schema.json": 24,
+    "v2_review1.schema.json": 31,
+    "v2_external_test_policy.yaml": 56
+  },
+  "all_111_failures_or_errors_reference_missing_legacy_artifacts": true,
+  "restored_or_modified_deleted_user_data": false
+}

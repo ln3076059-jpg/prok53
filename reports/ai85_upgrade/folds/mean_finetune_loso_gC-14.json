@@ -1,0 +1,154 @@
+{
+  "variant_id": "MEAN_FINETUNE",
+  "pooling": "mean",
+  "heldout_subject": "gC-14",
+  "training_subjects": [
+    "gB-9",
+    "gZ-36"
+  ],
+  "training": {
+    "epochs": 5,
+    "samples": 909,
+    "seed": 8518,
+    "batch_size": 16,
+    "learning_rate": 0.0001,
+    "loss_weighting": "sqrt_inverse",
+    "sampling": "none",
+    "checkpoint_selection": "FIXED_FINAL_EPOCH_NO_OUTER_LABEL_SELECTION",
+    "optimizer": "FRESH_ADAMW_CONTINUATION_NOT_EXACT_OPTIMIZER_RESUME",
+    "training_seconds": 7.178259700000126,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.2853870027267238,
+        "training_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 2,
+        "loss": 0.28561670135612405,
+        "training_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 3,
+        "loss": 0.28424985865817476,
+        "training_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 4,
+        "loss": 0.2846535134761378,
+        "training_coarse_accuracy": 1.0
+      },
+      {
+        "epoch": 5,
+        "loss": 0.2842653740619538,
+        "training_coarse_accuracy": 1.0
+      }
+    ]
+  },
+  "inherited_checkpoint": {
+    "path": "models/candidate/v6_action_ablation_001/hierarchical_loss_only_loso_gC-14.pt",
+    "exists": true,
+    "bytes": 1104477,
+    "sha256": "a804687c6d2268a88801441e46cc7fa358c27ca15d74086d6bda53828a3ad080"
+  },
+  "config": {
+    "path": "models/model_config_ai85_upgrade.yaml",
+    "exists": true,
+    "bytes": 1509,
+    "sha256": "2ad0ecb145e4289f61b0a513e5daea428ea8027f17d8db2ab8d46000e0e28c71"
+  },
+  "source_code": [
+    {
+      "path": "D:/.idea/giangdoantotnghiep/training/dmd/run_ai85_upgrade.py",
+      "exists": true,
+      "bytes": 13183,
+      "sha256": "aa16556961f1eafb933cb95bb6049c6b5471bf765b771803c2efae59debaa0cc"
+    },
+    {
+      "path": "training/dmd/ai85_action.py",
+      "exists": true,
+      "bytes": 6676,
+      "sha256": "da01d1be2f27d0a9d93a0649594c8d23f742af58fa77474ccd89c7e3c3b59be4"
+    }
+  ],
+  "git_head": "967bdebf0bdfea953d84fca8a8b969d223a81d72",
+  "forbidden_consumed_holdouts": [
+    "gZ-37",
+    "gE-28"
+  ],
+  "outer_labels_used_for_training_or_selection": false,
+  "checkpoint": {
+    "path": "models/candidate/ai85_upgrade/mean_finetune_loso_gC-14.pt",
+    "exists": true,
+    "bytes": 1104197,
+    "sha256": "2b5194abaa106003ab8f62ae3be6c4d7e2344c8c7c26b339dfcad115f98b1cef"
+  },
+  "prediction": {
+    "path": "reports/ai85_upgrade/folds/mean_finetune_loso_gC-14.npz",
+    "exists": true,
+    "bytes": 31312,
+    "sha256": "e03136634ebe5aa3c159f0657714d543e7e022eb96e4161d9857eb692572ed7c"
+  },
+  "events": [
+    {
+      "event_type": "PHONE",
+      "start_seconds": 136.089,
+      "end_seconds": 137.601,
+      "confidence": 0.8211,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 1.512
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 153.73,
+      "end_seconds": 155.746,
+      "confidence": 0.8342,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 2.016
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 185.988,
+      "end_seconds": 191.532,
+      "confidence": 0.872,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 5.544
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 278.73,
+      "end_seconds": 293.347,
+      "confidence": 0.9186,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 14.617
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 300.403,
+      "end_seconds": 321.573,
+      "confidence": 0.9416,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 21.17
+    },
+    {
+      "event_type": "PHONE",
+      "start_seconds": 346.27,
+      "end_seconds": 354.839,
+      "confidence": 0.9425,
+      "source": "VIDEO_ACTION",
+      "review_status": "NEEDS_REVIEW",
+      "duration": 8.569
+    }
+  ],
+  "inference": {
+    "subject_id": "gC-14",
+    "inference_seconds": 0.241661,
+    "clips_per_second": 3256.629
+  },
+  "centered_clip_lookahead_seconds": 2.0159912109375
+}

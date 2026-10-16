@@ -1,0 +1,79 @@
+{
+  "folds": [
+    {
+      "fold": "reports/ai85_upgrade/folds/attention_finetune_loso_gB-9.json",
+      "artifact_hashes_match": true,
+      "executed_sources_archived": true,
+      "subject_isolation": true
+    },
+    {
+      "fold": "reports/ai85_upgrade/folds/attention_finetune_loso_gC-14.json",
+      "artifact_hashes_match": true,
+      "executed_sources_archived": true,
+      "subject_isolation": true
+    },
+    {
+      "fold": "reports/ai85_upgrade/folds/attention_finetune_loso_gZ-36.json",
+      "artifact_hashes_match": true,
+      "executed_sources_archived": true,
+      "subject_isolation": true
+    },
+    {
+      "fold": "reports/ai85_upgrade/folds/mean_finetune_loso_gB-9.json",
+      "artifact_hashes_match": true,
+      "executed_sources_archived": true,
+      "subject_isolation": true
+    },
+    {
+      "fold": "reports/ai85_upgrade/folds/mean_finetune_loso_gC-14.json",
+      "artifact_hashes_match": true,
+      "executed_sources_archived": true,
+      "subject_isolation": true
+    },
+    {
+      "fold": "reports/ai85_upgrade/folds/mean_finetune_loso_gZ-36.json",
+      "artifact_hashes_match": true,
+      "executed_sources_archived": true,
+      "subject_isolation": true
+    },
+    {
+      "fold": "reports/ai85_upgrade/native112/folds/native112_finetune_loso_gB-9.json",
+      "artifact_hashes_match": true,
+      "executed_sources_archived": true,
+      "subject_isolation": true
+    },
+    {
+      "fold": "reports/ai85_upgrade/native112/folds/native112_finetune_loso_gC-14.json",
+      "artifact_hashes_match": true,
+      "executed_sources_archived": true,
+      "subject_isolation": true
+    },
+    {
+      "fold": "reports/ai85_upgrade/native112/folds/native112_finetune_loso_gZ-36.json",
+      "artifact_hashes_match": true,
+      "executed_sources_archived": true,
+      "subject_isolation": true
+    }
+  ],
+  "native112_alignment": [
+    {
+      "subject": "gB-9",
+      "labels_identical": true,
+      "timestamps_identical": true
+    },
+    {
+      "subject": "gZ-36",
+      "labels_identical": true,
+      "timestamps_identical": true
+    },
+    {
+      "subject": "gC-14",
+      "labels_identical": true,
+      "timestamps_identical": true
+    }
+  ],
+  "all_remote_heads": [
+    "925e81a5a76fcf6bcadb32ba9e9633011d12e572\trefs/heads/main",
+    "967bdebf0bdfea953d84fca8a8b969d223a81d72\trefs/heads/roadwatch-v4-candidate"
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "git_head": "967bdebf0bdfea953d84fca8a8b969d223a81d72",
+  "branch": "roadwatch-v4-candidate",
+  "status_counts": {
+    " M": 8,
+    " D": 3558,
+    "??": 14
+  },
+  "modified_source_paths": [
+    "PRODUCT.md",
+    "backend/services/analysis_queue.py",
+    "backend/services/uploads.py",
+    "reports/v4_upgrade/experiment_preflight.json",
+    "tests/test_engineering_freeze.py",
+    "tests/test_v4_experiment_runner.py",
+    "training/dmd/run_v31_ablation.py",
+    "training/dmd/run_v4_experiments.py"
+  ],
+  "remote_exit_code": 0,
+  "remote_refs": [
+    "925e81a5a76fcf6bcadb32ba9e9633011d12e572\tHEAD",
+    "925e81a5a76fcf6bcadb32ba9e9633011d12e572\trefs/heads/main",
+    "967bdebf0bdfea953d84fca8a8b969d223a81d72\trefs/heads/roadwatch-v4-candidate"
+  ],
+  "platform": "Windows-10-10.0.26200-SP0",
+  "python": "3.11.9",
+  "torch": "2.13.0+cpu",
+  "cuda_available": false,
+  "memory": {
+    "total": 6297477120,
+    "available": 253583360,
+    "percent": 96.0,
+    "used": 6043893760,
+    "free": 253583360
+  },
+  "disk": {
+    "total": 323389222912,
+    "used": 312580788224,
+    "free": 10808434688
+  },
+  "active_models": [
+    {
+      "path": "models/active/v2/phone_detector.pt",
+      "exists": true,
+      "bytes": 19209626,
+      "sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54"
+    },
+    {
+      "path": "models/active/v2/seatbelt_classifier.pt",
+      "exists": true,
+      "bytes": 11028162,
+      "sha256": "e55158e3f152922e710ad260295da16488ffc2c6a145b8dfdc5c4ce323392bd4"
+    },
+    {
+      "path": "models/active/v2/seatbelt_detector.pt",
+      "exists": true,
+      "bytes": 19345306,
+      "sha256": "361436ab073c8fcc17a041f098285efdd0cf6775a8970be2ffada4e45c6bc500"
+    }
+  ],
+  "working_tree_preserved": true
+}
