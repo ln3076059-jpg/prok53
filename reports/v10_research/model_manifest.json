@@ -1,0 +1,1071 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-10-16T22:29:39.787913+00:00",
+  "checkpoint_count": 64,
+  "total_bytes": 426325047,
+  "known_runtime_roles": {
+    "active_phone_detector": "models/active/v2/phone_detector.pt",
+    "active_seatbelt_detector": "models/active/v2/seatbelt_detector.pt",
+    "active_seatbelt_classifier": "models/active/v2/seatbelt_classifier.pt",
+    "active_combined": "models/active/best.pt",
+    "auxiliary_coco": "models/auxiliary/yolo11n.pt",
+    "auxiliary_pose": "models/auxiliary/yolo11n-pose.pt"
+  },
+  "runtime_config": "models/model_config_v2.yaml",
+  "checkpoints": [
+    {
+      "path": "kaggle/ai85_plus_private_bundle/phone_detector.pt",
+      "bytes": 19209626,
+      "sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+      "provenance_status": "PROVENANCE_INCOMPLETE",
+      "metadata_files": [],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "kaggle/ai85_plus_private_bundle/phone_detector.pt",
+        "kaggle/v2_baseline_001/v2_baseline_001/phone_detector/best.pt",
+        "models/active/best.pt",
+        "models/active/v2/phone_detector.pt",
+        "models/candidate/v2_baseline_001/phone_detector/best.pt",
+        "models/locked/v2_baseline_001/phone_detector/best.pt",
+        "models/recovery_extracted/phone_detector/best.pt"
+      ]
+    },
+    {
+      "path": "kaggle/v2_baseline_001/v2_baseline_001/phone_detector/best.pt",
+      "bytes": 19209626,
+      "sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "kaggle/v2_baseline_001/v2_baseline_001/dataset_lock.json",
+        "kaggle/v2_baseline_001/v2_baseline_001/environment.json",
+        "kaggle/v2_baseline_001/v2_baseline_001/model_lock.json",
+        "kaggle/v2_baseline_001/v2_baseline_001/phone_detector/sha256.txt"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "kaggle/ai85_plus_private_bundle/phone_detector.pt",
+        "kaggle/v2_baseline_001/v2_baseline_001/phone_detector/best.pt",
+        "models/active/best.pt",
+        "models/active/v2/phone_detector.pt",
+        "models/candidate/v2_baseline_001/phone_detector/best.pt",
+        "models/locked/v2_baseline_001/phone_detector/best.pt",
+        "models/recovery_extracted/phone_detector/best.pt"
+      ]
+    },
+    {
+      "path": "kaggle/v2_baseline_001/v2_baseline_001/seatbelt_classifier/best.pt",
+      "bytes": 11028162,
+      "sha256": "e55158e3f152922e710ad260295da16488ffc2c6a145b8dfdc5c4ce323392bd4",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "kaggle/v2_baseline_001/v2_baseline_001/dataset_lock.json",
+        "kaggle/v2_baseline_001/v2_baseline_001/environment.json",
+        "kaggle/v2_baseline_001/v2_baseline_001/model_lock.json",
+        "kaggle/v2_baseline_001/v2_baseline_001/seatbelt_classifier/sha256.txt"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "kaggle/v2_baseline_001/v2_baseline_001/seatbelt_classifier/best.pt",
+        "models/active/v2/seatbelt_classifier.pt",
+        "models/candidate/v2_baseline_001/seatbelt_classifier/best.pt",
+        "models/locked/v2_baseline_001/seatbelt_classifier/best.pt",
+        "models/recovery_extracted/seatbelt_classifier/best.pt"
+      ]
+    },
+    {
+      "path": "kaggle/v2_baseline_001/v2_baseline_001/seatbelt_detector/best.pt",
+      "bytes": 19345306,
+      "sha256": "361436ab073c8fcc17a041f098285efdd0cf6775a8970be2ffada4e45c6bc500",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "kaggle/v2_baseline_001/v2_baseline_001/dataset_lock.json",
+        "kaggle/v2_baseline_001/v2_baseline_001/environment.json",
+        "kaggle/v2_baseline_001/v2_baseline_001/model_lock.json",
+        "kaggle/v2_baseline_001/v2_baseline_001/seatbelt_detector/sha256.txt"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "kaggle/v2_baseline_001/v2_baseline_001/seatbelt_detector/best.pt",
+        "models/active/v2/seatbelt_detector.pt",
+        "models/candidate/v2_baseline_001/seatbelt_detector/best.pt",
+        "models/locked/v2_baseline_001/seatbelt_detector/best.pt",
+        "models/recovery_extracted/seatbelt_detector/best.pt"
+      ]
+    },
+    {
+      "path": "models/active/best.pt",
+      "bytes": 19209626,
+      "sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+      "provenance_status": "PROVENANCE_INCOMPLETE",
+      "metadata_files": [],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "kaggle/ai85_plus_private_bundle/phone_detector.pt",
+        "kaggle/v2_baseline_001/v2_baseline_001/phone_detector/best.pt",
+        "models/active/best.pt",
+        "models/active/v2/phone_detector.pt",
+        "models/candidate/v2_baseline_001/phone_detector/best.pt",
+        "models/locked/v2_baseline_001/phone_detector/best.pt",
+        "models/recovery_extracted/phone_detector/best.pt"
+      ]
+    },
+    {
+      "path": "models/active/v2/phone_detector.pt",
+      "bytes": 19209626,
+      "sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+      "provenance_status": "PROVENANCE_INCOMPLETE",
+      "metadata_files": [],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "kaggle/ai85_plus_private_bundle/phone_detector.pt",
+        "kaggle/v2_baseline_001/v2_baseline_001/phone_detector/best.pt",
+        "models/active/best.pt",
+        "models/active/v2/phone_detector.pt",
+        "models/candidate/v2_baseline_001/phone_detector/best.pt",
+        "models/locked/v2_baseline_001/phone_detector/best.pt",
+        "models/recovery_extracted/phone_detector/best.pt"
+      ]
+    },
+    {
+      "path": "models/active/v2/seatbelt_classifier.pt",
+      "bytes": 11028162,
+      "sha256": "e55158e3f152922e710ad260295da16488ffc2c6a145b8dfdc5c4ce323392bd4",
+      "provenance_status": "PROVENANCE_INCOMPLETE",
+      "metadata_files": [],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "kaggle/v2_baseline_001/v2_baseline_001/seatbelt_classifier/best.pt",
+        "models/active/v2/seatbelt_classifier.pt",
+        "models/candidate/v2_baseline_001/seatbelt_classifier/best.pt",
+        "models/locked/v2_baseline_001/seatbelt_classifier/best.pt",
+        "models/recovery_extracted/seatbelt_classifier/best.pt"
+      ]
+    },
+    {
+      "path": "models/active/v2/seatbelt_detector.pt",
+      "bytes": 19345306,
+      "sha256": "361436ab073c8fcc17a041f098285efdd0cf6775a8970be2ffada4e45c6bc500",
+      "provenance_status": "PROVENANCE_INCOMPLETE",
+      "metadata_files": [],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "kaggle/v2_baseline_001/v2_baseline_001/seatbelt_detector/best.pt",
+        "models/active/v2/seatbelt_detector.pt",
+        "models/candidate/v2_baseline_001/seatbelt_detector/best.pt",
+        "models/locked/v2_baseline_001/seatbelt_detector/best.pt",
+        "models/recovery_extracted/seatbelt_detector/best.pt"
+      ]
+    },
+    {
+      "path": "models/auxiliary/yolo11n-pose.pt",
+      "bytes": 6255593,
+      "sha256": "869e83fcdffdc7371fa4e34cd8e51c838cc729571d1635e5141e3075e9319dc0",
+      "provenance_status": "PUBLIC_PRETRAINED_LINEAGE_ASSERTED_LOCALLY_LICENSE_NOT_REVERIFIED",
+      "metadata_files": [],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/auxiliary/yolo11n-pose.pt"
+      ]
+    },
+    {
+      "path": "models/auxiliary/yolo11n.pt",
+      "bytes": 5613764,
+      "sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1",
+      "provenance_status": "PUBLIC_PRETRAINED_LINEAGE_ASSERTED_LOCALLY_LICENSE_NOT_REVERIFIED",
+      "metadata_files": [],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/auxiliary/yolo11n.pt",
+        "yolo11n.pt"
+      ]
+    },
+    {
+      "path": "models/base/yolo11s-cls.pt",
+      "bytes": 13630112,
+      "sha256": "e2b605d1c8c212b434a75a32759a6f7adf1d2b29c35f76bdccd4c794cb653cf2",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/base/yolo11s-cls.provenance.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/base/yolo11s-cls.pt"
+      ]
+    },
+    {
+      "path": "models/base/yolo11s.pt",
+      "bytes": 19313732,
+      "sha256": "85a76fe86dd8afe384648546b56a7a78580c7cb7b404fc595f97969322d502d5",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/base/yolo11s.provenance.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/base/yolo11s.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/ai85_upgrade/attention_finetune_loso_gB-9.pt",
+      "bytes": 1105143,
+      "sha256": "6758ae007429361281225b0ced0ff6ab94c251bb996cce767af0550d94cbdd80",
+      "provenance_status": "PROVENANCE_INCOMPLETE",
+      "metadata_files": [],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/ai85_upgrade/attention_finetune_loso_gB-9.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/ai85_upgrade/attention_finetune_loso_gC-14.pt",
+      "bytes": 1105168,
+      "sha256": "a4b0280aa8eabed623f94eb91a670f716a2317a121004227132f13f20d39b4ed",
+      "provenance_status": "PROVENANCE_INCOMPLETE",
+      "metadata_files": [],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/ai85_upgrade/attention_finetune_loso_gC-14.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/ai85_upgrade/attention_finetune_loso_gZ-36.pt",
+      "bytes": 1105168,
+      "sha256": "57a66d216c21e0d9e0160d7d838e51b93b4fc8663b36bee1f622ea3ab51a3035",
+      "provenance_status": "PROVENANCE_INCOMPLETE",
+      "metadata_files": [],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/ai85_upgrade/attention_finetune_loso_gZ-36.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/ai85_upgrade/mean_finetune_loso_gB-9.pt",
+      "bytes": 1104173,
+      "sha256": "d8a8946a47c9e3b22906bfebf4d1187e9d4fe7bf35d61b97c684ce7b84d5a238",
+      "provenance_status": "PROVENANCE_INCOMPLETE",
+      "metadata_files": [],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/ai85_upgrade/mean_finetune_loso_gB-9.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/ai85_upgrade/mean_finetune_loso_gC-14.pt",
+      "bytes": 1104197,
+      "sha256": "2b5194abaa106003ab8f62ae3be6c4d7e2344c8c7c26b339dfcad115f98b1cef",
+      "provenance_status": "PROVENANCE_INCOMPLETE",
+      "metadata_files": [],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/ai85_upgrade/mean_finetune_loso_gC-14.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/ai85_upgrade/mean_finetune_loso_gZ-36.pt",
+      "bytes": 1104197,
+      "sha256": "6501abd8c078200ff616958d7c387bac6c307bb356dc7a84ba3c4acbfeeb070f",
+      "provenance_status": "PROVENANCE_INCOMPLETE",
+      "metadata_files": [],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/ai85_upgrade/mean_finetune_loso_gZ-36.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/ai85_upgrade/native112_finetune_loso_gB-9.pt",
+      "bytes": 1104293,
+      "sha256": "85da907e038a01f3a20ed3b0567dece86307d2dcb82be688d9f965d2957c8bc4",
+      "provenance_status": "PROVENANCE_INCOMPLETE",
+      "metadata_files": [],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/ai85_upgrade/native112_finetune_loso_gB-9.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/ai85_upgrade/native112_finetune_loso_gC-14.pt",
+      "bytes": 1104317,
+      "sha256": "526d336e53d7e8b977cc06795ffb353becdcb2103eb38cfafdd72846547a9bb4",
+      "provenance_status": "PROVENANCE_INCOMPLETE",
+      "metadata_files": [],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/ai85_upgrade/native112_finetune_loso_gC-14.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/ai85_upgrade/native112_finetune_loso_gZ-36.pt",
+      "bytes": 1104317,
+      "sha256": "04ef557604a6cdf1f49f3ca5d86519af0958601e0a471b80a911b628de28ef92",
+      "provenance_status": "PROVENANCE_INCOMPLETE",
+      "metadata_files": [],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/ai85_upgrade/native112_finetune_loso_gZ-36.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v2_baseline_001/phone_detector/best.pt",
+      "bytes": 19209626,
+      "sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v2_baseline_001/dataset_lock.json",
+        "models/candidate/v2_baseline_001/environment.json",
+        "models/candidate/v2_baseline_001/model_lock.json",
+        "models/candidate/v2_baseline_001/phone_detector/sha256.txt"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "kaggle/ai85_plus_private_bundle/phone_detector.pt",
+        "kaggle/v2_baseline_001/v2_baseline_001/phone_detector/best.pt",
+        "models/active/best.pt",
+        "models/active/v2/phone_detector.pt",
+        "models/candidate/v2_baseline_001/phone_detector/best.pt",
+        "models/locked/v2_baseline_001/phone_detector/best.pt",
+        "models/recovery_extracted/phone_detector/best.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v2_baseline_001/seatbelt_classifier/best.pt",
+      "bytes": 11028162,
+      "sha256": "e55158e3f152922e710ad260295da16488ffc2c6a145b8dfdc5c4ce323392bd4",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v2_baseline_001/dataset_lock.json",
+        "models/candidate/v2_baseline_001/environment.json",
+        "models/candidate/v2_baseline_001/model_lock.json",
+        "models/candidate/v2_baseline_001/seatbelt_classifier/sha256.txt"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "kaggle/v2_baseline_001/v2_baseline_001/seatbelt_classifier/best.pt",
+        "models/active/v2/seatbelt_classifier.pt",
+        "models/candidate/v2_baseline_001/seatbelt_classifier/best.pt",
+        "models/locked/v2_baseline_001/seatbelt_classifier/best.pt",
+        "models/recovery_extracted/seatbelt_classifier/best.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v2_baseline_001/seatbelt_detector/best.pt",
+      "bytes": 19345306,
+      "sha256": "361436ab073c8fcc17a041f098285efdd0cf6775a8970be2ffada4e45c6bc500",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v2_baseline_001/dataset_lock.json",
+        "models/candidate/v2_baseline_001/environment.json",
+        "models/candidate/v2_baseline_001/model_lock.json",
+        "models/candidate/v2_baseline_001/seatbelt_detector/sha256.txt"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "kaggle/v2_baseline_001/v2_baseline_001/seatbelt_detector/best.pt",
+        "models/active/v2/seatbelt_detector.pt",
+        "models/candidate/v2_baseline_001/seatbelt_detector/best.pt",
+        "models/locked/v2_baseline_001/seatbelt_detector/best.pt",
+        "models/recovery_extracted/seatbelt_detector/best.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v5_resnet18_gru_001/loso_gB-9.pt",
+      "bytes": 1102111,
+      "sha256": "4578e9f1b148a8724966eaa1e2b6f1b2e5d798b16443f07f383b29affd1e82a1",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v5_resnet18_gru_001/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v5_resnet18_gru_001/loso_gB-9.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v5_resnet18_gru_001/loso_gC-14.pt",
+      "bytes": 1102133,
+      "sha256": "72e5ab0e7b8d47b99fca558b7aa0b3462a6b4939c0e7811b2d3e283475d8cef9",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v5_resnet18_gru_001/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v5_resnet18_gru_001/loso_gC-14.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v5_resnet18_gru_001/loso_gZ-36.pt",
+      "bytes": 1102133,
+      "sha256": "cf3b9fc414766976cf08d3c59f5809ebcb9c48fe8680a26f62465afe7c22876f",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v5_resnet18_gru_001/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v5_resnet18_gru_001/loso_gZ-36.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v5_tiny_temporal_cnn_001/loso_gB-9.pt",
+      "bytes": 76118,
+      "sha256": "5374cdc989b920ef0724807d82f3177af2b7ce7f8224e206a2af55edd2abc881",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v5_tiny_temporal_cnn_001/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v5_tiny_temporal_cnn_001/loso_gB-9.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v5_tiny_temporal_cnn_001/loso_gC-14.pt",
+      "bytes": 76149,
+      "sha256": "107323111fc919c603b85c6c86091a040ac3a006f3b77dde1d79df8373406b55",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v5_tiny_temporal_cnn_001/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v5_tiny_temporal_cnn_001/loso_gC-14.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v5_tiny_temporal_cnn_001/loso_gZ-36.pt",
+      "bytes": 76149,
+      "sha256": "74ee3d31a1c157c217ded6fe75a0a53e5add182be6f6154dfc5d0adc04ad7159",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v5_tiny_temporal_cnn_001/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v5_tiny_temporal_cnn_001/loso_gZ-36.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v6_action_ablation_001/flat_loss_only_loso_gB-9.pt",
+      "bytes": 1103145,
+      "sha256": "e949f1e8c7d15b23cbb63db6d0fd8c17b35859e2938466f029c48cd0fd164e17",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v6_action_ablation_001/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v6_action_ablation_001/flat_loss_only_loso_gB-9.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v6_action_ablation_001/flat_loss_only_loso_gC-14.pt",
+      "bytes": 1103167,
+      "sha256": "289f578663c540f52f6f75dc3b059fd869c6885f3c4105fda03ce269a9b31a41",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v6_action_ablation_001/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v6_action_ablation_001/flat_loss_only_loso_gC-14.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v6_action_ablation_001/flat_loss_only_loso_gZ-36.pt",
+      "bytes": 1103167,
+      "sha256": "5ddecf7792dfc53a493184ae034730971b5082506b70606c91fb6deadf61e9fa",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v6_action_ablation_001/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v6_action_ablation_001/flat_loss_only_loso_gZ-36.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v6_action_ablation_001/flat_sampler_only_loso_gB-9.pt",
+      "bytes": 1103211,
+      "sha256": "f608fc54bd4a1a0f2590bae6c839812abd49125e90c2e6752d877bb273f1530c",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v6_action_ablation_001/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v6_action_ablation_001/flat_sampler_only_loso_gB-9.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v6_action_ablation_001/flat_sampler_only_loso_gC-14.pt",
+      "bytes": 1103233,
+      "sha256": "5e7f2fc1e4b74c1524aa4139228f9edfbcb0f73e55f0a938fe7dcdfcc5ba2ae5",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v6_action_ablation_001/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v6_action_ablation_001/flat_sampler_only_loso_gC-14.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v6_action_ablation_001/flat_sampler_only_loso_gZ-36.pt",
+      "bytes": 1103233,
+      "sha256": "47c9334c6d9bf0215a7212cd09175c719780484b3b6d3ca08dce8a0bed5c0a65",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v6_action_ablation_001/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v6_action_ablation_001/flat_sampler_only_loso_gZ-36.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v6_action_ablation_001/flat_unweighted_loso_gB-9.pt",
+      "bytes": 1103167,
+      "sha256": "e01a9bf04d8b4088c2d68d2e3de22419d9218fc462058c875df1580fd9143b3e",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v6_action_ablation_001/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v6_action_ablation_001/flat_unweighted_loso_gB-9.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v6_action_ablation_001/flat_unweighted_loso_gC-14.pt",
+      "bytes": 1103189,
+      "sha256": "ecb5149a38dcd88846e1d7f078df23e6f7527be1c82a13d4d9e56578d1ed5861",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v6_action_ablation_001/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v6_action_ablation_001/flat_unweighted_loso_gC-14.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v6_action_ablation_001/flat_unweighted_loso_gZ-36.pt",
+      "bytes": 1103189,
+      "sha256": "4efac82e5f29cd0d680f61a1bfca861f2e2947c9377ad9d8d9ef76769bf3d567",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v6_action_ablation_001/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v6_action_ablation_001/flat_unweighted_loso_gZ-36.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v6_action_ablation_001/hierarchical_loss_only_loso_gB-9.pt",
+      "bytes": 1104453,
+      "sha256": "d78e906dbf927cdd37f37231b7e5c81d69c1532b8bccf5b20e100e90f5245b8c",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v6_action_ablation_001/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v6_action_ablation_001/hierarchical_loss_only_loso_gB-9.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v6_action_ablation_001/hierarchical_loss_only_loso_gC-14.pt",
+      "bytes": 1104477,
+      "sha256": "a804687c6d2268a88801441e46cc7fa358c27ca15d74086d6bda53828a3ad080",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v6_action_ablation_001/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v6_action_ablation_001/hierarchical_loss_only_loso_gC-14.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v6_action_ablation_001/hierarchical_loss_only_loso_gZ-36.pt",
+      "bytes": 1104477,
+      "sha256": "ebb0835a3bec116377e27b5bf8881a4efe43ce7bca4c0b912ab2544e416b78c3",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v6_action_ablation_001/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v6_action_ablation_001/hierarchical_loss_only_loso_gZ-36.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v7_research/v7_b_coarse_objective_loso_gB-9.pt",
+      "bytes": 1104749,
+      "sha256": "735852d27d777238f0f38c60d8f4167491e3f60e75bd9bc5354edba2faba693c",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v7_research/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v7_research/v7_b_coarse_objective_loso_gB-9.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v7_research/v7_b_coarse_objective_loso_gC-14.pt",
+      "bytes": 1104773,
+      "sha256": "7418d47ad1ad3569c7ed06e78b13fa01142fc8d6d6220bc8863b6595d725f383",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v7_research/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v7_research/v7_b_coarse_objective_loso_gC-14.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v7_research/v7_b_coarse_objective_loso_gZ-36.pt",
+      "bytes": 1104773,
+      "sha256": "6edfc31ce2954c34299e453fee3a347e0d1a5b1b91c4dc6740d9dee2c21f308e",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v7_research/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v7_research/v7_b_coarse_objective_loso_gZ-36.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v7_research/v7_c_hard_negatives_loso_gB-9.pt",
+      "bytes": 1105405,
+      "sha256": "39703c79332c229fa13b8e618cef5f6c9feff6b9ed14929c7d35ba0cff9d02c9",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v7_research/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v7_research/v7_c_hard_negatives_loso_gB-9.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v7_research/v7_c_hard_negatives_loso_gC-14.pt",
+      "bytes": 1105429,
+      "sha256": "a3ffa28b86ba17214bb44b8b682f93cc371499406a2437e71e5e623b80ac523b",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v7_research/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v7_research/v7_c_hard_negatives_loso_gC-14.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v7_research/v7_c_hard_negatives_loso_gZ-36.pt",
+      "bytes": 1105429,
+      "sha256": "08f5d1a89a3d470e4c78aac2a384aaec1524e2bfdb984f3a2fee0d615dc02f3b",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v7_research/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v7_research/v7_c_hard_negatives_loso_gZ-36.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v7_research/v7_d_binary_gate_loso_gB-9.pt",
+      "bytes": 1105493,
+      "sha256": "f2cb86bc8d98714c9707f084b9e4b47aca17aa5329e4b551520f18d09aa67760",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v7_research/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v7_research/v7_d_binary_gate_loso_gB-9.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v7_research/v7_d_binary_gate_loso_gC-14.pt",
+      "bytes": 1105519,
+      "sha256": "51be9451758ef8dded2835b90eb604e573d184660db8acffe3d8a9f707a5edb8",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v7_research/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v7_research/v7_d_binary_gate_loso_gC-14.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v7_research/v7_d_binary_gate_loso_gZ-36.pt",
+      "bytes": 1105519,
+      "sha256": "fbf0d41ccff5d2801764259a636ac5abf8268945e15fddd3fe6ed6e8353133ad",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v7_research/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v7_research/v7_d_binary_gate_loso_gZ-36.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v7_research/v7_e_longer_context_loso_gB-9.pt",
+      "bytes": 1104701,
+      "sha256": "597d25e31ba4bf552e749cae4aefa4789e56bfbe540104999e2eadceff8ba5d0",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v7_research/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v7_research/v7_e_longer_context_loso_gB-9.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v7_research/v7_e_longer_context_loso_gC-14.pt",
+      "bytes": 1104725,
+      "sha256": "413dfd216bdee61ef2d9c46fb32b6cf87ddde87b9fb4f3cb785e43d2d0b9955b",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v7_research/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v7_research/v7_e_longer_context_loso_gC-14.pt"
+      ]
+    },
+    {
+      "path": "models/candidate/v7_research/v7_e_longer_context_loso_gZ-36.pt",
+      "bytes": 1104725,
+      "sha256": "ef951ccdbdac78611300c2b40e6b6676af675f3757f36f6807205e2eb186b1cc",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/candidate/v7_research/metadata.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/candidate/v7_research/v7_e_longer_context_loso_gZ-36.pt"
+      ]
+    },
+    {
+      "path": "models/locked/v2_baseline_001/phone_detector/best.pt",
+      "bytes": 19209626,
+      "sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/locked/v2_baseline_001/dataset_lock.json",
+        "models/locked/v2_baseline_001/environment.json",
+        "models/locked/v2_baseline_001/model_lock.json",
+        "models/locked/v2_baseline_001/phone_detector/sha256.txt"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "kaggle/ai85_plus_private_bundle/phone_detector.pt",
+        "kaggle/v2_baseline_001/v2_baseline_001/phone_detector/best.pt",
+        "models/active/best.pt",
+        "models/active/v2/phone_detector.pt",
+        "models/candidate/v2_baseline_001/phone_detector/best.pt",
+        "models/locked/v2_baseline_001/phone_detector/best.pt",
+        "models/recovery_extracted/phone_detector/best.pt"
+      ]
+    },
+    {
+      "path": "models/locked/v2_baseline_001/seatbelt_classifier/best.pt",
+      "bytes": 11028162,
+      "sha256": "e55158e3f152922e710ad260295da16488ffc2c6a145b8dfdc5c4ce323392bd4",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/locked/v2_baseline_001/dataset_lock.json",
+        "models/locked/v2_baseline_001/environment.json",
+        "models/locked/v2_baseline_001/model_lock.json",
+        "models/locked/v2_baseline_001/seatbelt_classifier/sha256.txt"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "kaggle/v2_baseline_001/v2_baseline_001/seatbelt_classifier/best.pt",
+        "models/active/v2/seatbelt_classifier.pt",
+        "models/candidate/v2_baseline_001/seatbelt_classifier/best.pt",
+        "models/locked/v2_baseline_001/seatbelt_classifier/best.pt",
+        "models/recovery_extracted/seatbelt_classifier/best.pt"
+      ]
+    },
+    {
+      "path": "models/locked/v2_baseline_001/seatbelt_detector/best.pt",
+      "bytes": 19345306,
+      "sha256": "361436ab073c8fcc17a041f098285efdd0cf6775a8970be2ffada4e45c6bc500",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/locked/v2_baseline_001/dataset_lock.json",
+        "models/locked/v2_baseline_001/environment.json",
+        "models/locked/v2_baseline_001/model_lock.json",
+        "models/locked/v2_baseline_001/seatbelt_detector/sha256.txt"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "kaggle/v2_baseline_001/v2_baseline_001/seatbelt_detector/best.pt",
+        "models/active/v2/seatbelt_detector.pt",
+        "models/candidate/v2_baseline_001/seatbelt_detector/best.pt",
+        "models/locked/v2_baseline_001/seatbelt_detector/best.pt",
+        "models/recovery_extracted/seatbelt_detector/best.pt"
+      ]
+    },
+    {
+      "path": "models/recovery_extracted/phone_detector/best.pt",
+      "bytes": 19209626,
+      "sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/recovery_extracted/phone_detector/args.yaml",
+        "models/recovery_extracted/phone_detector/plan.json",
+        "models/recovery_extracted/phone_detector/report.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "kaggle/ai85_plus_private_bundle/phone_detector.pt",
+        "kaggle/v2_baseline_001/v2_baseline_001/phone_detector/best.pt",
+        "models/active/best.pt",
+        "models/active/v2/phone_detector.pt",
+        "models/candidate/v2_baseline_001/phone_detector/best.pt",
+        "models/locked/v2_baseline_001/phone_detector/best.pt",
+        "models/recovery_extracted/phone_detector/best.pt"
+      ]
+    },
+    {
+      "path": "models/recovery_extracted/phone_detector/last.pt",
+      "bytes": 19209626,
+      "sha256": "efbe872c833f6c936c765e024f87efb1dab29f86abbb1a802122edb51d9bbd95",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/recovery_extracted/phone_detector/args.yaml",
+        "models/recovery_extracted/phone_detector/plan.json",
+        "models/recovery_extracted/phone_detector/report.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/recovery_extracted/phone_detector/last.pt"
+      ]
+    },
+    {
+      "path": "models/recovery_extracted/seatbelt_classifier/best.pt",
+      "bytes": 11028162,
+      "sha256": "e55158e3f152922e710ad260295da16488ffc2c6a145b8dfdc5c4ce323392bd4",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/recovery_extracted/seatbelt_classifier/args.yaml",
+        "models/recovery_extracted/seatbelt_classifier/plan.json",
+        "models/recovery_extracted/seatbelt_classifier/report.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "kaggle/v2_baseline_001/v2_baseline_001/seatbelt_classifier/best.pt",
+        "models/active/v2/seatbelt_classifier.pt",
+        "models/candidate/v2_baseline_001/seatbelt_classifier/best.pt",
+        "models/locked/v2_baseline_001/seatbelt_classifier/best.pt",
+        "models/recovery_extracted/seatbelt_classifier/best.pt"
+      ]
+    },
+    {
+      "path": "models/recovery_extracted/seatbelt_classifier/last.pt",
+      "bytes": 11029314,
+      "sha256": "6f3d5258597ffd3fda1dac653ce51ca3c72074e409ec6d48f77406c531c2583b",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/recovery_extracted/seatbelt_classifier/args.yaml",
+        "models/recovery_extracted/seatbelt_classifier/plan.json",
+        "models/recovery_extracted/seatbelt_classifier/report.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/recovery_extracted/seatbelt_classifier/last.pt"
+      ]
+    },
+    {
+      "path": "models/recovery_extracted/seatbelt_detector/best.pt",
+      "bytes": 19345306,
+      "sha256": "361436ab073c8fcc17a041f098285efdd0cf6775a8970be2ffada4e45c6bc500",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/recovery_extracted/seatbelt_detector/args.yaml",
+        "models/recovery_extracted/seatbelt_detector/plan.json",
+        "models/recovery_extracted/seatbelt_detector/report.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "kaggle/v2_baseline_001/v2_baseline_001/seatbelt_detector/best.pt",
+        "models/active/v2/seatbelt_detector.pt",
+        "models/candidate/v2_baseline_001/seatbelt_detector/best.pt",
+        "models/locked/v2_baseline_001/seatbelt_detector/best.pt",
+        "models/recovery_extracted/seatbelt_detector/best.pt"
+      ]
+    },
+    {
+      "path": "models/recovery_extracted/seatbelt_detector/last.pt",
+      "bytes": 19345306,
+      "sha256": "4653aea4c77180deb54eb67439851ef4e5e330889c36c4700b5ecbc62c32dd21",
+      "provenance_status": "LOCAL_METADATA_PRESENT_NOT_RIGHTS_APPROVAL",
+      "metadata_files": [
+        "models/recovery_extracted/seatbelt_detector/args.yaml",
+        "models/recovery_extracted/seatbelt_detector/plan.json",
+        "models/recovery_extracted/seatbelt_detector/report.json"
+      ],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/recovery_extracted/seatbelt_detector/last.pt"
+      ]
+    },
+    {
+      "path": "yolo11n.pt",
+      "bytes": 5613764,
+      "sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1",
+      "provenance_status": "PUBLIC_PRETRAINED_LINEAGE_ASSERTED_LOCALLY_LICENSE_NOT_REVERIFIED",
+      "metadata_files": [],
+      "architecture": "NOT_SAFELY_INSPECTED_FROM_PICKLE",
+      "class_mapping": "SEE_LOCAL_METADATA_OR_MODEL_CONFIG",
+      "load_executed": false,
+      "byte_identical_paths": [
+        "models/auxiliary/yolo11n.pt",
+        "yolo11n.pt"
+      ]
+    }
+  ],
+  "safety": {
+    "pickle_load_performed": false,
+    "checkpoint_download_performed": false,
+    "production_activation_changed": false
+  }
+}

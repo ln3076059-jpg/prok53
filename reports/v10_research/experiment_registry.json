@@ -1,0 +1,411 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-10-16T22:29:39.808050+00:00",
+  "production_approved": false,
+  "experiments": [
+    {
+      "experiment_id": "V10-P0-AUDIT",
+      "commit_sha": "01c9161c2535206225e1165c0c0880874458b9eb",
+      "hypothesis": "Local assets and governance can be verified without model loading or holdout access.",
+      "independent_variable": "None; audit only",
+      "controlled_variables": [
+        "No checkpoint load",
+        "No protected holdout read"
+      ],
+      "dataset_hash": "9e9dbc03c371ec6cab1bcffe81955339e0a38dc7ab9080e107cf3bdd67b69aac",
+      "license_status": "PENDING_PROJECT_REVIEW",
+      "config": "models/model_config_v2.yaml",
+      "training_seed": null,
+      "compute": "CPU_AUDIT_ONLY",
+      "predictions": [],
+      "metrics": {},
+      "limitations": [
+        "Rights unaccepted",
+        "No independent holdout"
+      ],
+      "evidence_level": "LEVEL_1_DIAGNOSTIC",
+      "decision": "KEEP"
+    },
+    {
+      "experiment_id": "V10-D0-D5-REPRESENTATION",
+      "commit_sha": "01c9161c2535206225e1165c0c0880874458b9eb",
+      "hypothesis": "Fixed behavior-region shape and temporal residual features reduce subject/background dominance and improve SAFE/PHONE/OTHER LOSO separability over frozen full-ROI ResNet.",
+      "independent_variable": "Frozen representation",
+      "controlled_variables": {
+        "split": "OUTER_LOSO_THREE_SUBJECTS",
+        "head": "STANDARD_SCALER_PLUS_BALANCED_LOGISTIC_REGRESSION",
+        "C": 1.0,
+        "solver": "liblinear",
+        "max_iter": 500,
+        "seed": 20261017,
+        "feature_training": "NONE"
+      },
+      "model_checkpoint_hash": "FROZEN_RESNET_HASH_RECORDED_IN_SOURCE_CACHE_METADATA",
+      "dataset_hash": "3cddbd465f133fa83ea7d2281c79c462a0aa6abb71a7f5a138e3073e20d1d13e",
+      "split_definition": "OUTER_LOSO_THREE_REPEATED_DEVELOPMENT_SUBJECTS",
+      "license_status": "RIGHTS_ACCEPTED_FALSE_TEMPORAL_DEVELOPMENT_ELIGIBLE_TRUE",
+      "training_seed": 20261017,
+      "compute": {
+        "python": "3.11.9",
+        "platform": "Windows-10-10.0.26200-SP0",
+        "compute": "CPU_ONLY"
+      },
+      "predictions": [
+        "reports/v10_research/predictions/d0_frozen_resnet_full_roi_loso_gB-9.npz",
+        "reports/v10_research/predictions/d0_frozen_resnet_full_roi_loso_gC-14.npz",
+        "reports/v10_research/predictions/d0_frozen_resnet_full_roi_loso_gZ-36.npz",
+        "reports/v10_research/predictions/d1_behavior_two_region_hog_loso_gB-9.npz",
+        "reports/v10_research/predictions/d1_behavior_two_region_hog_loso_gC-14.npz",
+        "reports/v10_research/predictions/d1_behavior_two_region_hog_loso_gZ-36.npz",
+        "reports/v10_research/predictions/d2_temporal_residual_loso_gB-9.npz",
+        "reports/v10_research/predictions/d2_temporal_residual_loso_gC-14.npz",
+        "reports/v10_research/predictions/d2_temporal_residual_loso_gZ-36.npz",
+        "reports/v10_research/predictions/d5_behavior_hog_plus_motion_loso_gB-9.npz",
+        "reports/v10_research/predictions/d5_behavior_hog_plus_motion_loso_gC-14.npz",
+        "reports/v10_research/predictions/d5_behavior_hog_plus_motion_loso_gZ-36.npz"
+      ],
+      "metrics": {
+        "D0_FROZEN_RESNET_FULL_ROI": {
+          "samples": 2625,
+          "macro_f1": 0.1756,
+          "balanced_accuracy": 0.3235,
+          "safe_recall": 0.0682,
+          "confusion_matrix": [
+            [
+              47,
+              12,
+              630
+            ],
+            [
+              45,
+              94,
+              1300
+            ],
+            [
+              23,
+              58,
+              416
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.4087,
+              "recall": 0.0682,
+              "f1": 0.1169,
+              "support": 689
+            },
+            "PHONE_USE": {
+              "precision": 0.5732,
+              "recall": 0.0653,
+              "f1": 0.1173,
+              "support": 1439
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.1773,
+              "recall": 0.837,
+              "f1": 0.2926,
+              "support": 497
+            }
+          }
+        },
+        "D1_BEHAVIOR_TWO_REGION_HOG": {
+          "samples": 2625,
+          "macro_f1": 0.4517,
+          "balanced_accuracy": 0.483,
+          "safe_recall": 0.3556,
+          "confusion_matrix": [
+            [
+              245,
+              149,
+              295
+            ],
+            [
+              1,
+              566,
+              872
+            ],
+            [
+              19,
+              130,
+              348
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.9245,
+              "recall": 0.3556,
+              "f1": 0.5136,
+              "support": 689
+            },
+            "PHONE_USE": {
+              "precision": 0.6698,
+              "recall": 0.3933,
+              "f1": 0.4956,
+              "support": 1439
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.2297,
+              "recall": 0.7002,
+              "f1": 0.3459,
+              "support": 497
+            }
+          }
+        },
+        "D2_TEMPORAL_RESIDUAL": {
+          "samples": 2625,
+          "macro_f1": 0.5154,
+          "balanced_accuracy": 0.5357,
+          "safe_recall": 0.4427,
+          "confusion_matrix": [
+            [
+              305,
+              285,
+              99
+            ],
+            [
+              339,
+              804,
+              296
+            ],
+            [
+              60,
+              136,
+              301
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.4332,
+              "recall": 0.4427,
+              "f1": 0.4379,
+              "support": 689
+            },
+            "PHONE_USE": {
+              "precision": 0.6563,
+              "recall": 0.5587,
+              "f1": 0.6036,
+              "support": 1439
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.4325,
+              "recall": 0.6056,
+              "f1": 0.5046,
+              "support": 497
+            }
+          }
+        },
+        "D5_BEHAVIOR_HOG_PLUS_MOTION": {
+          "samples": 2625,
+          "macro_f1": 0.4863,
+          "balanced_accuracy": 0.5604,
+          "safe_recall": 0.4325,
+          "confusion_matrix": [
+            [
+              298,
+              84,
+              307
+            ],
+            [
+              77,
+              491,
+              871
+            ],
+            [
+              8,
+              38,
+              451
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.7781,
+              "recall": 0.4325,
+              "f1": 0.556,
+              "support": 689
+            },
+            "PHONE_USE": {
+              "precision": 0.801,
+              "recall": 0.3412,
+              "f1": 0.4786,
+              "support": 1439
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.2769,
+              "recall": 0.9074,
+              "f1": 0.4243,
+              "support": 497
+            }
+          }
+        }
+      },
+      "runtime_seconds": 34.772,
+      "limitations": [
+        "Only three repeatedly used development subjects are available.",
+        "The cached RGB input is 64x64 and cannot support true pose-aligned hand/face crops.",
+        "D2 includes a future residual and is an offline non-causal representation.",
+        "Clip-level linear-probe gains do not imply event-level gains.",
+        "No independent holdout or accepted canonical dataset is available."
+      ],
+      "evidence_level": "LEVEL_2_DEVELOPMENT_ABLATION",
+      "decision": "REJECT",
+      "decision_detail": "REJECT_FOR_PROMOTION"
+    },
+    {
+      "experiment_id": "V10-PB-13FN-ROOT-CAUSE",
+      "commit_sha": "01c9161c2535206225e1165c0c0880874458b9eb",
+      "hypothesis": "The frozen 13 phone FNs contain failures beyond detector misses.",
+      "independent_variable": "None; evidence consolidation",
+      "controlled_variables": [
+        "Frozen ground truth",
+        "Frozen matcher",
+        "Frozen 13-case population"
+      ],
+      "model_checkpoint_hash": null,
+      "dataset_hash": {
+        "reports/v9_research/v9_diagnostics.json": "17c8ba1f6f24caff917becb5cb86cd1cf8b0da7a34e2180c81fde10a9b826a10",
+        "reports/v9_research/human_phone_review_summary.json": "44d35f903ce741af2ca248f1173a8eb1db8a0d5d58eb13187c709b1936f611a7",
+        "reports/ai85_next/fn_recovery.json": "94fe1befc59eabab8c83049940280db6a618b796330ebcbec41cb7312c7b9844"
+      },
+      "split_definition": "THIRTEEN_SELECTED_DEVELOPMENT_FALSE_NEGATIVES",
+      "license_status": "PENDING_PROJECT_REVIEW",
+      "config": null,
+      "training_seed": null,
+      "compute": "CPU_ARTIFACT_AUDIT",
+      "predictions": [],
+      "metrics": {
+        "cases": 13,
+        "visible_phone": 13,
+        "valid_proposal": 12,
+        "verified_occupant_tracks": 0,
+        "T0_reaches_action_gate": 3,
+        "T1_reaches_action_gate": 4,
+        "failure_stage_counts_nonexclusive": {
+          "ACTION_REPRESENTATION_OR_CALIBRATION_UNDER_GATE": 9,
+          "DETECTOR_MISS": 1,
+          "DRIVER_OCCUPANT_ASSOCIATION_UNVERIFIED": 13,
+          "MISSING_PHONE_BOXES": 1,
+          "OCCLUSION": 1,
+          "SHORT_EVENT_TEMPORAL_RISK": 5,
+          "SPECIALIST_DETECTOR_MISS_AUXILIARY_CANDIDATE_RECOVERED": 10
+        }
+      },
+      "runtime_seconds": null,
+      "limitations": [
+        "Selected false negatives are diagnostic-only",
+        "No verified occupant tracks",
+        "Candidate yield is not event recall"
+      ],
+      "evidence_level": "LEVEL_1_DIAGNOSTIC_WITH_AUTHENTICATED_HUMAN_REVIEW",
+      "decision": "KEEP"
+    },
+    {
+      "experiment_id": "V10-G3-INHERITED-CONTEXT-REPLAY",
+      "commit_sha": "01c9161c2535206225e1165c0c0880874458b9eb",
+      "hypothesis": "Mounted/static negative context removes false alarms without losing TP.",
+      "independent_variable": "Stored phone context admission",
+      "controlled_variables": "Stored context-aware observations versus the same positive observations forced to HANDHELD_USE. Only phone_context changes.",
+      "model_checkpoint_hash": null,
+      "dataset_hash": "4033c8e896a8466d3b82c8777de578058bc930ccbc238ea8f58c3d94ec43eea4",
+      "split_definition": "TWO_REPEATED_DEVELOPMENT_SUBJECTS",
+      "license_status": "PENDING_PROJECT_REVIEW",
+      "config": "191918e41e5715008a3a90c03aa062d86c4fe7086401f55c2fa55d5d1c189b4f",
+      "training_seed": null,
+      "compute": "CACHED_EVENT_REPLAY",
+      "predictions": [],
+      "metrics": {
+        "context_naive": {
+          "true_positives": 6,
+          "false_positives": 4,
+          "false_negatives": 14,
+          "total_gt_events": 20,
+          "evaluated_minutes": 15.27,
+          "precision": 0.6,
+          "recall": 0.3,
+          "f1": 0.4,
+          "false_alarms_per_minute": 0.262
+        },
+        "context_aware": {
+          "true_positives": 6,
+          "false_positives": 3,
+          "false_negatives": 14,
+          "total_gt_events": 20,
+          "evaluated_minutes": 15.27,
+          "precision": 0.6667,
+          "recall": 0.3,
+          "f1": 0.4138,
+          "false_alarms_per_minute": 0.1965
+        },
+        "delta_context_aware_minus_naive": {
+          "true_positives": 0,
+          "false_positives": -1,
+          "false_negatives": 0,
+          "precision": 0.0667,
+          "recall": 0.0,
+          "f1": 0.0138,
+          "false_alarms_per_minute": -0.0655
+        }
+      },
+      "runtime_seconds": null,
+      "limitations": [
+        "Only gC-14 and gZ-36 have eligible stored observation caches.",
+        "gB-9 is absent, so this is not the 29-event controlled V9 comparator.",
+        "The same development subjects have been used repeatedly and are not independent.",
+        "The replay tests stored context policy, not the newly added multiview fusion API directly."
+      ],
+      "evidence_level": "LEVEL_2_DEVELOPMENT_ABLATION",
+      "decision": "INCONCLUSIVE"
+    },
+    {
+      "experiment_id": "V10-H-INHERITED-SEATBELT-FROZEN",
+      "commit_sha": "01c9161c2535206225e1165c0c0880874458b9eb",
+      "hypothesis": "Frozen ROI/TTA variants may improve three-state seatbelt classification.",
+      "independent_variable": "Resolution and horizontal-flip TTA",
+      "controlled_variables": [
+        "Frozen checkpoint",
+        "Frozen labels",
+        "Three-state semantics"
+      ],
+      "model_checkpoint_hash": "SEE_MODEL_MANIFEST_ACTIVE_SEATBELT_CLASSIFIER",
+      "dataset_hash": "17c8ba1f6f24caff917becb5cb86cd1cf8b0da7a34e2180c81fde10a9b826a10",
+      "split_definition": "INHERITED_DEVELOPMENT_SPLIT",
+      "license_status": "PENDING_PROJECT_REVIEW",
+      "config": "INHERITED_V9_FROZEN_VARIANTS",
+      "training_seed": null,
+      "compute": "FROZEN_INFERENCE",
+      "predictions": [],
+      "metrics": [
+        {
+          "id": "S0_original_224",
+          "macro_f1": 0.568041,
+          "balanced_accuracy": 0.567519,
+          "uncertain_recall": 0.04,
+          "false_unfastened_rate": 0.091429,
+          "abstention_rate": 0.068643
+        },
+        {
+          "id": "S1_resolution_320",
+          "macro_f1": 0.519467,
+          "balanced_accuracy": 0.529875,
+          "uncertain_recall": 0.0,
+          "false_unfastened_rate": 0.151429,
+          "abstention_rate": 0.043682
+        },
+        {
+          "id": "S2_horizontal_flip_TTA_224",
+          "macro_f1": 0.585181,
+          "balanced_accuracy": 0.58396,
+          "uncertain_recall": 0.04,
+          "false_unfastened_rate": 0.08,
+          "abstention_rate": 0.054602
+        }
+      ],
+      "runtime_seconds": null,
+      "limitations": [
+        "500 labels remain pending",
+        "No independent holdout"
+      ],
+      "evidence_level": "LEVEL_2_DEVELOPMENT_ABLATION",
+      "decision": "BLOCKED"
+    }
+  ]
+}

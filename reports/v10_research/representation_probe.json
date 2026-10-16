@@ -1,0 +1,934 @@
+{
+  "schema_version": 1,
+  "experiment_family": "V10_BEHAVIOR_CENTRIC_REPRESENTATION_PROBE",
+  "evidence_level": "LEVEL_2_DEVELOPMENT_ABLATION",
+  "git_head_before_experiment": "01c9161c2535206225e1165c0c0880874458b9eb",
+  "hypothesis": "Fixed behavior-region shape and temporal residual features reduce subject/background dominance and improve SAFE/PHONE/OTHER LOSO separability over frozen full-ROI ResNet.",
+  "subjects": [
+    "gB-9",
+    "gC-14",
+    "gZ-36"
+  ],
+  "protected_holdouts": [
+    "gE-28",
+    "gZ-37"
+  ],
+  "protected_holdouts_accessed": false,
+  "dataset_role": "REPEATEDLY_USED_DEVELOPMENT_ONLY",
+  "rights_accepted": false,
+  "temporal_development_eligible": true,
+  "dataset_sources": [
+    {
+      "path": "dataset/external_dmd/derivatives/v5_rgb_cache/v5_rgb_gB-9_64.npz",
+      "bytes": 8204332,
+      "sha256": "226309334f239a30f5b73195fad3f3350f401a5c151dbe437d28da5db271ede3"
+    },
+    {
+      "path": "dataset/external_dmd/derivatives/v5_resnet18_embeddings/v5_resnet18_gB-9.npz",
+      "bytes": 735144,
+      "sha256": "c2351b2ae7c8086ff416b056cfd30fda60f503497b28af154a98f28cc3b82b91"
+    },
+    {
+      "path": "dataset/external_dmd/derivatives/v5_rgb_cache/v5_rgb_gC-14_64.npz",
+      "bytes": 8323162,
+      "sha256": "fddbcb1b7087da8664482a49ad70b22079f129b4de9d7147e9d3fab0de2d5521"
+    },
+    {
+      "path": "dataset/external_dmd/derivatives/v5_resnet18_embeddings/v5_resnet18_gC-14.npz",
+      "bytes": 715502,
+      "sha256": "a72f1843a45dda45b8bbc975fbd76af6328d045c8b2bbd0060471141296323ae"
+    },
+    {
+      "path": "dataset/external_dmd/derivatives/v5_rgb_cache/v5_rgb_gZ-36_64.npz",
+      "bytes": 10600958,
+      "sha256": "4b53384d9304dd31147f0c6072dc055fcc94f766894754ff67a909e029efb1ed"
+    },
+    {
+      "path": "dataset/external_dmd/derivatives/v5_resnet18_embeddings/v5_resnet18_gZ-36.npz",
+      "bytes": 928170,
+      "sha256": "cf702e344821721f2f99a311011a789eee0fbc9bd8e3d4090a8c2a50601c1d29"
+    }
+  ],
+  "dataset_hash": "3cddbd465f133fa83ea7d2281c79c462a0aa6abb71a7f5a138e3073e20d1d13e",
+  "class_order": [
+    "SAFE_DRIVING",
+    "PHONE_USE",
+    "OTHER_ACTIVITY"
+  ],
+  "fine_class_order": [
+    "SAFE_DRIVING",
+    "TEXTING_LEFT",
+    "TEXTING_RIGHT",
+    "PHONECALL_LEFT",
+    "PHONECALL_RIGHT",
+    "OTHER_ACTIVITY"
+  ],
+  "controlled_variables": {
+    "split": "OUTER_LOSO_THREE_SUBJECTS",
+    "head": "STANDARD_SCALER_PLUS_BALANCED_LOGISTIC_REGRESSION",
+    "C": 1.0,
+    "solver": "liblinear",
+    "max_iter": 500,
+    "seed": 20261017,
+    "feature_training": "NONE"
+  },
+  "representations": [
+    {
+      "representation_id": "D0_FROZEN_RESNET_FULL_ROI",
+      "feature_dimensions": 512,
+      "folds": [
+        {
+          "heldout_subject": "gB-9",
+          "training_subjects": [
+            "gC-14",
+            "gZ-36"
+          ],
+          "samples": 808,
+          "macro_f1": 0.1622,
+          "balanced_accuracy": 0.2857,
+          "safe_recall": 0.0,
+          "confusion_matrix": [
+            [
+              0,
+              5,
+              235
+            ],
+            [
+              0,
+              61,
+              355
+            ],
+            [
+              1,
+              43,
+              108
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "support": 240
+            },
+            "PHONE_USE": {
+              "precision": 0.5596,
+              "recall": 0.1466,
+              "f1": 0.2324,
+              "support": 416
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.1547,
+              "recall": 0.7105,
+              "f1": 0.2541,
+              "support": 152
+            }
+          },
+          "fit_predict_seconds": 1.841,
+          "prediction_path": "reports/v10_research/predictions/d0_frozen_resnet_full_roi_loso_gB-9.npz",
+          "prediction_sha256": "e0092e137614aaedd86641db834a6315768a03c825efa2cb0d3a83c5558cb6dc"
+        },
+        {
+          "heldout_subject": "gC-14",
+          "training_subjects": [
+            "gB-9",
+            "gZ-36"
+          ],
+          "samples": 794,
+          "macro_f1": 0.1463,
+          "balanced_accuracy": 0.3427,
+          "safe_recall": 0.0385,
+          "confusion_matrix": [
+            [
+              8,
+              0,
+              200
+            ],
+            [
+              0,
+              3,
+              413
+            ],
+            [
+              3,
+              0,
+              167
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.7273,
+              "recall": 0.0385,
+              "f1": 0.0731,
+              "support": 208
+            },
+            "PHONE_USE": {
+              "precision": 1.0,
+              "recall": 0.0072,
+              "f1": 0.0143,
+              "support": 416
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.2141,
+              "recall": 0.9824,
+              "f1": 0.3516,
+              "support": 170
+            }
+          },
+          "fit_predict_seconds": 1.727,
+          "prediction_path": "reports/v10_research/predictions/d0_frozen_resnet_full_roi_loso_gC-14.npz",
+          "prediction_sha256": "936992449f18043b19597bb69b534ae26f1e05b8fc6870a47d71493c899104e6"
+        },
+        {
+          "heldout_subject": "gZ-36",
+          "training_subjects": [
+            "gB-9",
+            "gC-14"
+          ],
+          "samples": 1023,
+          "macro_f1": 0.1961,
+          "balanced_accuracy": 0.339,
+          "safe_recall": 0.1618,
+          "confusion_matrix": [
+            [
+              39,
+              7,
+              195
+            ],
+            [
+              45,
+              30,
+              532
+            ],
+            [
+              19,
+              15,
+              141
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.3786,
+              "recall": 0.1618,
+              "f1": 0.2267,
+              "support": 241
+            },
+            "PHONE_USE": {
+              "precision": 0.5769,
+              "recall": 0.0494,
+              "f1": 0.091,
+              "support": 607
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.1624,
+              "recall": 0.8057,
+              "f1": 0.2704,
+              "support": 175
+            }
+          },
+          "fit_predict_seconds": 1.685,
+          "prediction_path": "reports/v10_research/predictions/d0_frozen_resnet_full_roi_loso_gZ-36.npz",
+          "prediction_sha256": "e4101821645b684576ca1b66958396a3ea2557916e4d0475c13d859c0f50f21e"
+        }
+      ],
+      "pooled": {
+        "samples": 2625,
+        "macro_f1": 0.1756,
+        "balanced_accuracy": 0.3235,
+        "safe_recall": 0.0682,
+        "confusion_matrix": [
+          [
+            47,
+            12,
+            630
+          ],
+          [
+            45,
+            94,
+            1300
+          ],
+          [
+            23,
+            58,
+            416
+          ]
+        ],
+        "per_class": {
+          "SAFE_DRIVING": {
+            "precision": 0.4087,
+            "recall": 0.0682,
+            "f1": 0.1169,
+            "support": 689
+          },
+          "PHONE_USE": {
+            "precision": 0.5732,
+            "recall": 0.0653,
+            "f1": 0.1173,
+            "support": 1439
+          },
+          "OTHER_ACTIVITY": {
+            "precision": 0.1773,
+            "recall": 0.837,
+            "f1": 0.2926,
+            "support": 497
+          }
+        }
+      },
+      "separability": {
+        "action_silhouette_cosine": 0.02777,
+        "subject_silhouette_cosine": 0.401411,
+        "subject_to_action_ratio": 14.4547,
+        "sample_size": 900
+      }
+    },
+    {
+      "representation_id": "D1_BEHAVIOR_TWO_REGION_HOG",
+      "feature_dimensions": 648,
+      "folds": [
+        {
+          "heldout_subject": "gB-9",
+          "training_subjects": [
+            "gC-14",
+            "gZ-36"
+          ],
+          "samples": 808,
+          "macro_f1": 0.6656,
+          "balanced_accuracy": 0.7316,
+          "safe_recall": 0.9542,
+          "confusion_matrix": [
+            [
+              229,
+              1,
+              10
+            ],
+            [
+              1,
+              174,
+              241
+            ],
+            [
+              13,
+              14,
+              125
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.9424,
+              "recall": 0.9542,
+              "f1": 0.9482,
+              "support": 240
+            },
+            "PHONE_USE": {
+              "precision": 0.9206,
+              "recall": 0.4183,
+              "f1": 0.5752,
+              "support": 416
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.3324,
+              "recall": 0.8224,
+              "f1": 0.4735,
+              "support": 152
+            }
+          },
+          "fit_predict_seconds": 2.485,
+          "prediction_path": "reports/v10_research/predictions/d1_behavior_two_region_hog_loso_gB-9.npz",
+          "prediction_sha256": "87784748bb7dbce6af42587ebb1f0d7babd454b6739319b857f337395cce70f9"
+        },
+        {
+          "heldout_subject": "gC-14",
+          "training_subjects": [
+            "gB-9",
+            "gZ-36"
+          ],
+          "samples": 794,
+          "macro_f1": 0.4053,
+          "balanced_accuracy": 0.4381,
+          "safe_recall": 0.0721,
+          "confusion_matrix": [
+            [
+              15,
+              148,
+              45
+            ],
+            [
+              0,
+              392,
+              24
+            ],
+            [
+              3,
+              116,
+              51
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.8333,
+              "recall": 0.0721,
+              "f1": 0.1327,
+              "support": 208
+            },
+            "PHONE_USE": {
+              "precision": 0.5976,
+              "recall": 0.9423,
+              "f1": 0.7313,
+              "support": 416
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.425,
+              "recall": 0.3,
+              "f1": 0.3517,
+              "support": 170
+            }
+          },
+          "fit_predict_seconds": 2.794,
+          "prediction_path": "reports/v10_research/predictions/d1_behavior_two_region_hog_loso_gC-14.npz",
+          "prediction_sha256": "dabedad07e64489e96941ddbe42a9939fdb7859b06811fb388f3136efe1b51ab"
+        },
+        {
+          "heldout_subject": "gZ-36",
+          "training_subjects": [
+            "gB-9",
+            "gC-14"
+          ],
+          "samples": 1023,
+          "macro_f1": 0.0988,
+          "balanced_accuracy": 0.329,
+          "safe_recall": 0.0041,
+          "confusion_matrix": [
+            [
+              1,
+              0,
+              240
+            ],
+            [
+              0,
+              0,
+              607
+            ],
+            [
+              3,
+              0,
+              172
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.25,
+              "recall": 0.0041,
+              "f1": 0.0082,
+              "support": 241
+            },
+            "PHONE_USE": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "support": 607
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.1688,
+              "recall": 0.9829,
+              "f1": 0.2881,
+              "support": 175
+            }
+          },
+          "fit_predict_seconds": 2.383,
+          "prediction_path": "reports/v10_research/predictions/d1_behavior_two_region_hog_loso_gZ-36.npz",
+          "prediction_sha256": "2b35d6a443f0e0365d8e5e347af32bdc7bded2eeb66f56ef237bd53fd8f2d575"
+        }
+      ],
+      "pooled": {
+        "samples": 2625,
+        "macro_f1": 0.4517,
+        "balanced_accuracy": 0.483,
+        "safe_recall": 0.3556,
+        "confusion_matrix": [
+          [
+            245,
+            149,
+            295
+          ],
+          [
+            1,
+            566,
+            872
+          ],
+          [
+            19,
+            130,
+            348
+          ]
+        ],
+        "per_class": {
+          "SAFE_DRIVING": {
+            "precision": 0.9245,
+            "recall": 0.3556,
+            "f1": 0.5136,
+            "support": 689
+          },
+          "PHONE_USE": {
+            "precision": 0.6698,
+            "recall": 0.3933,
+            "f1": 0.4956,
+            "support": 1439
+          },
+          "OTHER_ACTIVITY": {
+            "precision": 0.2297,
+            "recall": 0.7002,
+            "f1": 0.3459,
+            "support": 497
+          }
+        }
+      },
+      "separability": {
+        "action_silhouette_cosine": 0.043198,
+        "subject_silhouette_cosine": 0.407688,
+        "subject_to_action_ratio": 9.4376,
+        "sample_size": 900
+      }
+    },
+    {
+      "representation_id": "D2_TEMPORAL_RESIDUAL",
+      "feature_dimensions": 512,
+      "folds": [
+        {
+          "heldout_subject": "gB-9",
+          "training_subjects": [
+            "gC-14",
+            "gZ-36"
+          ],
+          "samples": 808,
+          "macro_f1": 0.5471,
+          "balanced_accuracy": 0.5705,
+          "safe_recall": 0.7042,
+          "confusion_matrix": [
+            [
+              169,
+              48,
+              23
+            ],
+            [
+              195,
+              181,
+              40
+            ],
+            [
+              38,
+              27,
+              87
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.4204,
+              "recall": 0.7042,
+              "f1": 0.5265,
+              "support": 240
+            },
+            "PHONE_USE": {
+              "precision": 0.707,
+              "recall": 0.4351,
+              "f1": 0.5387,
+              "support": 416
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.58,
+              "recall": 0.5724,
+              "f1": 0.5762,
+              "support": 152
+            }
+          },
+          "fit_predict_seconds": 2.083,
+          "prediction_path": "reports/v10_research/predictions/d2_temporal_residual_loso_gB-9.npz",
+          "prediction_sha256": "f6c3447aff68112d5c74d07c3571a176da2500ee55dbc0235a092dfeee3a8b5b"
+        },
+        {
+          "heldout_subject": "gC-14",
+          "training_subjects": [
+            "gB-9",
+            "gZ-36"
+          ],
+          "samples": 794,
+          "macro_f1": 0.5048,
+          "balanced_accuracy": 0.5874,
+          "safe_recall": 0.6346,
+          "confusion_matrix": [
+            [
+              132,
+              30,
+              46
+            ],
+            [
+              135,
+              124,
+              157
+            ],
+            [
+              9,
+              20,
+              141
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.4783,
+              "recall": 0.6346,
+              "f1": 0.5455,
+              "support": 208
+            },
+            "PHONE_USE": {
+              "precision": 0.7126,
+              "recall": 0.2981,
+              "f1": 0.4203,
+              "support": 416
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.4099,
+              "recall": 0.8294,
+              "f1": 0.5486,
+              "support": 170
+            }
+          },
+          "fit_predict_seconds": 2.365,
+          "prediction_path": "reports/v10_research/predictions/d2_temporal_residual_loso_gC-14.npz",
+          "prediction_sha256": "959bcdf22eba35eb4628cff1ead2ef06778f32ae09f447823694123e391a103e"
+        },
+        {
+          "heldout_subject": "gZ-36",
+          "training_subjects": [
+            "gB-9",
+            "gC-14"
+          ],
+          "samples": 1023,
+          "macro_f1": 0.3764,
+          "balanced_accuracy": 0.4186,
+          "safe_recall": 0.0166,
+          "confusion_matrix": [
+            [
+              4,
+              207,
+              30
+            ],
+            [
+              9,
+              499,
+              99
+            ],
+            [
+              13,
+              89,
+              73
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.1538,
+              "recall": 0.0166,
+              "f1": 0.03,
+              "support": 241
+            },
+            "PHONE_USE": {
+              "precision": 0.6277,
+              "recall": 0.8221,
+              "f1": 0.7118,
+              "support": 607
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.3614,
+              "recall": 0.4171,
+              "f1": 0.3873,
+              "support": 175
+            }
+          },
+          "fit_predict_seconds": 2.117,
+          "prediction_path": "reports/v10_research/predictions/d2_temporal_residual_loso_gZ-36.npz",
+          "prediction_sha256": "2a8228607f3d85aa730f1e5f59ccc934fe1d74a6ed7c8f3425cd6bcd5e296a83"
+        }
+      ],
+      "pooled": {
+        "samples": 2625,
+        "macro_f1": 0.5154,
+        "balanced_accuracy": 0.5357,
+        "safe_recall": 0.4427,
+        "confusion_matrix": [
+          [
+            305,
+            285,
+            99
+          ],
+          [
+            339,
+            804,
+            296
+          ],
+          [
+            60,
+            136,
+            301
+          ]
+        ],
+        "per_class": {
+          "SAFE_DRIVING": {
+            "precision": 0.4332,
+            "recall": 0.4427,
+            "f1": 0.4379,
+            "support": 689
+          },
+          "PHONE_USE": {
+            "precision": 0.6563,
+            "recall": 0.5587,
+            "f1": 0.6036,
+            "support": 1439
+          },
+          "OTHER_ACTIVITY": {
+            "precision": 0.4325,
+            "recall": 0.6056,
+            "f1": 0.5046,
+            "support": 497
+          }
+        }
+      },
+      "separability": {
+        "action_silhouette_cosine": 0.004616,
+        "subject_silhouette_cosine": 0.0895,
+        "subject_to_action_ratio": 19.391,
+        "sample_size": 900
+      }
+    },
+    {
+      "representation_id": "D5_BEHAVIOR_HOG_PLUS_MOTION",
+      "feature_dimensions": 1160,
+      "folds": [
+        {
+          "heldout_subject": "gB-9",
+          "training_subjects": [
+            "gC-14",
+            "gZ-36"
+          ],
+          "samples": 808,
+          "macro_f1": 0.5657,
+          "balanced_accuracy": 0.6955,
+          "safe_recall": 0.9125,
+          "confusion_matrix": [
+            [
+              219,
+              0,
+              21
+            ],
+            [
+              75,
+              97,
+              244
+            ],
+            [
+              7,
+              2,
+              143
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.7276,
+              "recall": 0.9125,
+              "f1": 0.8096,
+              "support": 240
+            },
+            "PHONE_USE": {
+              "precision": 0.9798,
+              "recall": 0.2332,
+              "f1": 0.3767,
+              "support": 416
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.3505,
+              "recall": 0.9408,
+              "f1": 0.5107,
+              "support": 152
+            }
+          },
+          "fit_predict_seconds": 3.884,
+          "prediction_path": "reports/v10_research/predictions/d5_behavior_hog_plus_motion_loso_gB-9.npz",
+          "prediction_sha256": "6222b2a062d4a0ab227554d55b619299c7a937f8c77307efee7eca1502978e93"
+        },
+        {
+          "heldout_subject": "gC-14",
+          "training_subjects": [
+            "gB-9",
+            "gZ-36"
+          ],
+          "samples": 794,
+          "macro_f1": 0.6832,
+          "balanced_accuracy": 0.6874,
+          "safe_recall": 0.3654,
+          "confusion_matrix": [
+            [
+              76,
+              84,
+              48
+            ],
+            [
+              0,
+              378,
+              38
+            ],
+            [
+              0,
+              36,
+              134
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 1.0,
+              "recall": 0.3654,
+              "f1": 0.5352,
+              "support": 208
+            },
+            "PHONE_USE": {
+              "precision": 0.759,
+              "recall": 0.9087,
+              "f1": 0.8271,
+              "support": 416
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.6091,
+              "recall": 0.7882,
+              "f1": 0.6872,
+              "support": 170
+            }
+          },
+          "fit_predict_seconds": 3.754,
+          "prediction_path": "reports/v10_research/predictions/d5_behavior_hog_plus_motion_loso_gC-14.npz",
+          "prediction_sha256": "35850c705dd47b39c0b75099bdcadf2df97c4a437c2a22463f157f4fb3b5cc45"
+        },
+        {
+          "heldout_subject": "gZ-36",
+          "training_subjects": [
+            "gB-9",
+            "gC-14"
+          ],
+          "samples": 1023,
+          "macro_f1": 0.1239,
+          "balanced_accuracy": 0.3444,
+          "safe_recall": 0.0124,
+          "confusion_matrix": [
+            [
+              3,
+              0,
+              238
+            ],
+            [
+              2,
+              16,
+              589
+            ],
+            [
+              1,
+              0,
+              174
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.5,
+              "recall": 0.0124,
+              "f1": 0.0243,
+              "support": 241
+            },
+            "PHONE_USE": {
+              "precision": 1.0,
+              "recall": 0.0264,
+              "f1": 0.0514,
+              "support": 607
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.1738,
+              "recall": 0.9943,
+              "f1": 0.2959,
+              "support": 175
+            }
+          },
+          "fit_predict_seconds": 3.987,
+          "prediction_path": "reports/v10_research/predictions/d5_behavior_hog_plus_motion_loso_gZ-36.npz",
+          "prediction_sha256": "2e30e98bf7e5c49e0a7ac69dc1453159a4a18dbbfd23cf1c9b6db9a10daba5e6"
+        }
+      ],
+      "pooled": {
+        "samples": 2625,
+        "macro_f1": 0.4863,
+        "balanced_accuracy": 0.5604,
+        "safe_recall": 0.4325,
+        "confusion_matrix": [
+          [
+            298,
+            84,
+            307
+          ],
+          [
+            77,
+            491,
+            871
+          ],
+          [
+            8,
+            38,
+            451
+          ]
+        ],
+        "per_class": {
+          "SAFE_DRIVING": {
+            "precision": 0.7781,
+            "recall": 0.4325,
+            "f1": 0.556,
+            "support": 689
+          },
+          "PHONE_USE": {
+            "precision": 0.801,
+            "recall": 0.3412,
+            "f1": 0.4786,
+            "support": 1439
+          },
+          "OTHER_ACTIVITY": {
+            "precision": 0.2769,
+            "recall": 0.9074,
+            "f1": 0.4243,
+            "support": 497
+          }
+        }
+      },
+      "separability": {
+        "action_silhouette_cosine": 0.024454,
+        "subject_silhouette_cosine": 0.253083,
+        "subject_to_action_ratio": 10.3495,
+        "sample_size": 900
+      }
+    }
+  ],
+  "selection_rule": "KEEP only if pooled Macro-F1 exceeds D0 and pooled SAFE recall does not decrease.",
+  "selected_candidate": "D2_TEMPORAL_RESIDUAL",
+  "hypothesis_outcome": "PARTIALLY_SUPPORTED",
+  "model_selection_decision": "REJECT_FOR_PROMOTION",
+  "decision": "KEEP_AS_FOLLOW_UP_DEVELOPMENT_HYPOTHESIS",
+  "governance_reasons": [
+    "The pooled selection rule identifies a development candidate, but its worst fold is gZ-36 with SAFE recall 0.0166.",
+    "The selected candidate lowers subject silhouette but also lowers action silhouette relative to D0.",
+    "All evaluated representations remain below the 85% pooled Macro-F1 and SAFE-recall research targets.",
+    "No independent holdout, event-level validation, or accepted canonical dataset is available."
+  ],
+  "runtime_seconds": 34.772,
+  "environment": {
+    "python": "3.11.9",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "compute": "CPU_ONLY"
+  },
+  "limitations": [
+    "Only three repeatedly used development subjects are available.",
+    "The cached RGB input is 64x64 and cannot support true pose-aligned hand/face crops.",
+    "D2 includes a future residual and is an offline non-causal representation.",
+    "Clip-level linear-probe gains do not imply event-level gains.",
+    "No independent holdout or accepted canonical dataset is available."
+  ],
+  "production_approved": false
+}
