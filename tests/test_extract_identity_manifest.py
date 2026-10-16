@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import json
 from pathlib import Path
+from training.data_paths import data_path
 import jsonschema
 import pytest
 
@@ -168,7 +169,7 @@ def test_generate_annotation_skeleton_no_fabrication_and_semantic_valid(tmp_path
     assert skeleton["review_provenance"]["status"] == "AI_REVIEWED_PROPOSAL"
 
     # 3. Validates against schema
-    schema_path = Path("datasets/schemas/v2_event_sequence_annotation.schema.json")
+    schema_path = data_path("schemas/v2_event_sequence_annotation.schema.json")
     schema = load_schema(schema_path)
     jsonschema.validate(instance=skeleton, schema=schema)
 
@@ -569,7 +570,7 @@ def test_multi_cabin_video_generates_isolated_skeletons(tmp_path: Path):
     )
     assert len(skeletons) == 2
 
-    schema_path = Path("datasets/schemas/v2_event_sequence_annotation.schema.json")
+    schema_path = data_path("schemas/v2_event_sequence_annotation.schema.json")
     schema = load_schema(schema_path)
 
     sk1, sk2 = skeletons[0], skeletons[1]
@@ -626,7 +627,7 @@ def test_proposal_skeleton_no_fabrication_and_binds_lock_sha(tmp_path: Path):
         assert interval["conditions"] == "UNREVIEWED"
 
     assert skeleton["review_provenance"]["identity_manifest_sha256"] == lock["manifest_sha256"]
-    schema = load_schema(Path("datasets/schemas/v2_event_sequence_annotation.schema.json"))
+    schema = load_schema(data_path("schemas/v2_event_sequence_annotation.schema.json"))
     assert validate_annotation(skeleton, schema, allow_proposal=True) == []
 
 
@@ -1290,7 +1291,7 @@ def test_roster_to_annotation_skeleton_pipeline_eliminates_circular_sha(tmp_path
     ann_file.write_text(json.dumps(skeleton, indent=2), encoding="utf-8")
 
     # Step 4: Validate via JSON Schema and semantic validator
-    schema = load_schema("datasets/schemas/v2_event_sequence_annotation.schema.json")
+    schema = load_schema(data_path("schemas/v2_event_sequence_annotation.schema.json"))
     val_errors = validate_annotation(skeleton, schema)
     assert not val_errors, f"Schema/semantic validation failed: {val_errors}"
 

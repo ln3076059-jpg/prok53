@@ -9,6 +9,7 @@ from training.build_event_truth_from_sequences import (
     CONTEXT_FIELDNAMES, EVENT_FIELDNAMES, convert_sequence_to_context, convert_sequence_to_events,
 )
 from training.common import sha256_file, stable_json_hash
+from training.data_paths import data_path
 from training.validate_event_sequence_annotations import load_schema, validate_annotation
 
 
@@ -51,7 +52,7 @@ def verify_truth_source_binding(
     ) and external_lock.get("source_sequence_set_sha256") != digest:
         raise ValueError("external source_sequence_set_sha256 mismatch")
     schema = load_schema(
-        Path(__file__).resolve().parents[1] / "datasets/schemas/v2_event_sequence_annotation.schema.json"
+        data_path("schemas/v2_event_sequence_annotation.schema.json")
     )
     if kind == "event":
         fields, convert = EVENT_FIELDNAMES, convert_sequence_to_events

@@ -9,6 +9,7 @@ from pathlib import Path
 import yaml
 
 from training.common import sha256_file, stable_json_hash
+from training.data_paths import data_path
 from training.validate_sequence_intake import dimension_values, validate_sequence_intake
 from training.validate_event_sequence_annotations import load_schema, validate_annotation
 from training.sequence_truth_binding import sequence_bindings as canonical_sequence_bindings
@@ -73,7 +74,7 @@ def _validate_sequence_annotations(
     if manifest_lock is None:
         return [f"{sample_id}: canonical sequences require a frozen identity manifest"], []
     schema = load_schema(
-        Path(__file__).resolve().parents[1] / "datasets/schemas/v2_event_sequence_annotation.schema.json"
+        data_path("schemas/v2_event_sequence_annotation.schema.json")
     )
     video_id = item["video_id"]
     metadata = manifest_lock.get("videos", {}).get(video_id, {})
@@ -393,7 +394,7 @@ def main() -> None:
     parser.add_argument(
         "--policy",
         type=Path,
-        default=Path("datasets/v2_external_test_policy.yaml"),
+        default=data_path("v2_external_test_policy.yaml"),
     )
     parser.add_argument(
         "--output",

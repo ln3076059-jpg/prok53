@@ -1,0 +1,544 @@
+{
+  "byte_mismatches": 67,
+  "newline_only": 67,
+  "json_semantically_equal": 65,
+  "other_differences": 0,
+  "files": [
+    {
+      "old_path": "datasets/manifests/ingest_adt_seatbelt_v1.jsonl",
+      "counterpart": "dataset/manifests/ingest_adt_seatbelt_v1.jsonl",
+      "old_bytes": 3050232,
+      "local_bytes": 3052936,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/ingest_anywaylabs_synthetic_dms.jsonl",
+      "counterpart": "dataset/manifests/ingest_anywaylabs_synthetic_dms.jsonl",
+      "old_bytes": 1376622,
+      "local_bytes": 1377978,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/ingest_c3rl_seatbelt_v1.jsonl",
+      "counterpart": "dataset/manifests/ingest_c3rl_seatbelt_v1.jsonl",
+      "old_bytes": 4917500,
+      "local_bytes": 4922500,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/ingest_dms.jsonl",
+      "counterpart": "dataset/manifests/ingest_dms.jsonl",
+      "old_bytes": 10486268,
+      "local_bytes": 10496152,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/ingest_mendeley_driver_risk_v1.jsonl",
+      "counterpart": "dataset/manifests/ingest_mendeley_driver_risk_v1.jsonl",
+      "old_bytes": 1299486,
+      "local_bytes": 1300718,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/ingest_roboflow_seatbelttraining_v4.jsonl",
+      "counterpart": "dataset/manifests/ingest_roboflow_seatbelttraining_v4.jsonl",
+      "old_bytes": 9878627,
+      "local_bytes": 9886998,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/ingest_sintes.jsonl",
+      "counterpart": "dataset/manifests/ingest_sintes.jsonl",
+      "old_bytes": 6837,
+      "local_bytes": 6845,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/phone_proposals_mendeley_driver_risk_v1.json",
+      "counterpart": "dataset/manifests/phone_proposals_mendeley_driver_risk_v1.json",
+      "old_bytes": 172090,
+      "local_bytes": 175865,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/pretrain_pending_approval/v2_adt_external.json",
+      "counterpart": "dataset/manifests/pretrain_pending_approval/v2_adt_external.json",
+      "old_bytes": 15176979,
+      "local_bytes": 15631954,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/pretrain_pending_approval/v2_hard_examples.json",
+      "counterpart": "dataset/manifests/pretrain_pending_approval/v2_hard_examples.json",
+      "old_bytes": 6628894,
+      "local_bytes": 6810849,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/pretrain_pending_approval/v2_phone_external_mendeley.json",
+      "counterpart": "dataset/manifests/pretrain_pending_approval/v2_phone_external_mendeley.json",
+      "old_bytes": 1291151,
+      "local_bytes": 1326065,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/pretrain_pending_approval/v2_phone_negative.json",
+      "counterpart": "dataset/manifests/pretrain_pending_approval/v2_phone_negative.json",
+      "old_bytes": 10181135,
+      "local_bytes": 10466674,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/pretrain_pending_approval/v2_phone_positive.json",
+      "counterpart": "dataset/manifests/pretrain_pending_approval/v2_phone_positive.json",
+      "old_bytes": 4286844,
+      "local_bytes": 4413783,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/pretrain_pending_approval/v2_seatbelt_roi_state.json",
+      "counterpart": "dataset/manifests/pretrain_pending_approval/v2_seatbelt_roi_state.json",
+      "old_bytes": 16500635,
+      "local_bytes": 16956387,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/pretrain_pending_approval/v2_seatbelt_uncertain.json",
+      "counterpart": "dataset/manifests/pretrain_pending_approval/v2_seatbelt_uncertain.json",
+      "old_bytes": 1980331,
+      "local_bytes": 2034020,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/pretrain_pending_approval/v2_seatbelt_uncertain_visual_decisions.json",
+      "counterpart": "dataset/manifests/pretrain_pending_approval/v2_seatbelt_uncertain_visual_decisions.json",
+      "old_bytes": 140470,
+      "local_bytes": 143365,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review1_phone_negative_decisions.checkpoints.jsonl",
+      "counterpart": "dataset/manifests/review1_phone_negative_decisions.checkpoints.jsonl",
+      "old_bytes": 3529,
+      "local_bytes": 3538,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review1_phone_negative_decisions.jsonl",
+      "counterpart": "dataset/manifests/review1_phone_negative_decisions.jsonl",
+      "old_bytes": 6437762,
+      "local_bytes": 6440775,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review1_phone_negative_visual_batch_001.jsonl",
+      "counterpart": "dataset/manifests/review1_phone_negative_visual_batch_001.jsonl",
+      "old_bytes": 91775,
+      "local_bytes": 91875,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review1_phone_negative_visual_batch_002.jsonl",
+      "counterpart": "dataset/manifests/review1_phone_negative_visual_batch_002.jsonl",
+      "old_bytes": 96944,
+      "local_bytes": 97044,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review1_phone_negative_visual_batch_003.jsonl",
+      "counterpart": "dataset/manifests/review1_phone_negative_visual_batch_003.jsonl",
+      "old_bytes": 84651,
+      "local_bytes": 84738,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review1_phone_negative_visual_batch_004.jsonl",
+      "counterpart": "dataset/manifests/review1_phone_negative_visual_batch_004.jsonl",
+      "old_bytes": 541413,
+      "local_bytes": 541913,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review1_phone_negative_visual_batch_005.jsonl",
+      "counterpart": "dataset/manifests/review1_phone_negative_visual_batch_005.jsonl",
+      "old_bytes": 547288,
+      "local_bytes": 547788,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review1_phone_negative_visual_batch_006.jsonl",
+      "counterpart": "dataset/manifests/review1_phone_negative_visual_batch_006.jsonl",
+      "old_bytes": 547500,
+      "local_bytes": 548000,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review1_phone_negative_visual_batch_007.jsonl",
+      "counterpart": "dataset/manifests/review1_phone_negative_visual_batch_007.jsonl",
+      "old_bytes": 547500,
+      "local_bytes": 548000,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review1_phone_negative_visual_batch_008.jsonl",
+      "counterpart": "dataset/manifests/review1_phone_negative_visual_batch_008.jsonl",
+      "old_bytes": 547500,
+      "local_bytes": 548000,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review1_phone_negative_visual_batch_009.jsonl",
+      "counterpart": "dataset/manifests/review1_phone_negative_visual_batch_009.jsonl",
+      "old_bytes": 247283,
+      "local_bytes": 247509,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review1_phone_positive_decisions.checkpoints.jsonl",
+      "counterpart": "dataset/manifests/review1_phone_positive_decisions.checkpoints.jsonl",
+      "old_bytes": 1179,
+      "local_bytes": 1182,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review1_phone_positive_decisions.jsonl",
+      "counterpart": "dataset/manifests/review1_phone_positive_decisions.jsonl",
+      "old_bytes": 3746349,
+      "local_bytes": 3747565,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review1_phone_positive_visual_batch_001.jsonl",
+      "counterpart": "dataset/manifests/review1_phone_positive_visual_batch_001.jsonl",
+      "old_bytes": 656605,
+      "local_bytes": 657105,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review1_phone_positive_visual_batch_002.jsonl",
+      "counterpart": "dataset/manifests/review1_phone_positive_visual_batch_002.jsonl",
+      "old_bytes": 672539,
+      "local_bytes": 673039,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review1_phone_positive_visual_batch_003.jsonl",
+      "counterpart": "dataset/manifests/review1_phone_positive_visual_batch_003.jsonl",
+      "old_bytes": 283612,
+      "local_bytes": 283828,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review_pending_approval_admin_acknowledgements.jsonl",
+      "counterpart": "dataset/manifests/review_pending_approval_admin_acknowledgements.jsonl",
+      "old_bytes": 356269,
+      "local_bytes": 356276,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review_queue_adt_seatbelt_v1.json",
+      "counterpart": "dataset/manifests/review_queue_adt_seatbelt_v1.json",
+      "old_bytes": 9311915,
+      "local_bytes": 9615639,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review_queue_anywaylabs_synthetic_dms.json",
+      "counterpart": "dataset/manifests/review_queue_anywaylabs_synthetic_dms.json",
+      "old_bytes": 1394029,
+      "local_bytes": 1436061,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review_queue_c3rl_seatbelt_v1.json",
+      "counterpart": "dataset/manifests/review_queue_c3rl_seatbelt_v1.json",
+      "old_bytes": 4140002,
+      "local_bytes": 4235003,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review_queue_dms.json",
+      "counterpart": "dataset/manifests/review_queue_dms.json",
+      "old_bytes": 13739136,
+      "local_bytes": 14181571,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review_queue_mendeley_driver_risk_v1.json",
+      "counterpart": "dataset/manifests/review_queue_mendeley_driver_risk_v1.json",
+      "old_bytes": 1346316,
+      "local_bytes": 1385928,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review_queue_roboflow_seatbelttraining_v4.json",
+      "counterpart": "dataset/manifests/review_queue_roboflow_seatbelttraining_v4.json",
+      "old_bytes": 10805171,
+      "local_bytes": 11107568,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/review_queue_sintes.json",
+      "counterpart": "dataset/manifests/review_queue_sintes.json",
+      "old_bytes": 5680,
+      "local_bytes": 5817,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/seatbelt_uncertain_review_v2.json",
+      "counterpart": "dataset/manifests/seatbelt_uncertain_review_v2.json",
+      "old_bytes": 621199,
+      "local_bytes": 636714,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/v2_admin_confirm_ready.json",
+      "counterpart": "dataset/manifests/v2_admin_confirm_ready.json",
+      "old_bytes": 3,
+      "local_bytes": 4,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/v2_auto_exclude_candidates.json",
+      "counterpart": "dataset/manifests/v2_auto_exclude_candidates.json",
+      "old_bytes": 10671671,
+      "local_bytes": 10924293,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/v2_correction_manual_required.json",
+      "counterpart": "dataset/manifests/v2_correction_manual_required.json",
+      "old_bytes": 3,
+      "local_bytes": 4,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/v2_hard_review_queue.json",
+      "counterpart": "dataset/manifests/v2_hard_review_queue.json",
+      "old_bytes": 2189607,
+      "local_bytes": 2248738,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/v2_human_attention_after_review1.json",
+      "counterpart": "dataset/manifests/v2_human_attention_after_review1.json",
+      "old_bytes": 10671670,
+      "local_bytes": 10924291,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/v2_phone_external_mendeley_review.json",
+      "counterpart": "dataset/manifests/v2_phone_external_mendeley_review.json",
+      "old_bytes": 606655,
+      "local_bytes": 623473,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/v2_phone_negative_priority_review.json",
+      "counterpart": "dataset/manifests/v2_phone_negative_priority_review.json",
+      "old_bytes": 10810424,
+      "local_bytes": 11131012,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/v2_phone_negative_review.json",
+      "counterpart": "dataset/manifests/v2_phone_negative_review.json",
+      "old_bytes": 4022532,
+      "local_bytes": 4145483,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/v2_phone_positive_review.json",
+      "counterpart": "dataset/manifests/v2_phone_positive_review.json",
+      "old_bytes": 1540165,
+      "local_bytes": 1588976,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/v2_review1_reviewed_bootstrap.jsonl",
+      "counterpart": "dataset/manifests/v2_review1_reviewed_bootstrap.jsonl",
+      "old_bytes": 326642,
+      "local_bytes": 326842,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/v2_seatbelt_roi_state_review.json",
+      "counterpart": "dataset/manifests/v2_seatbelt_roi_state_review.json",
+      "old_bytes": 6318652,
+      "local_bytes": 6494694,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/manifests/v2_seatbelt_uncertain_ui_review.json",
+      "counterpart": "dataset/manifests/v2_seatbelt_uncertain_ui_review.json",
+      "old_bytes": 941964,
+      "local_bytes": 967465,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/review_worklists/v2_pending_approval/00_user_reviewed_pending_identity/manifest.jsonl",
+      "counterpart": "dataset/review_worklists/v2_pending_approval/00_user_reviewed_pending_identity/manifest.jsonl",
+      "old_bytes": 3725,
+      "local_bytes": 3733,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/review_worklists/v2_pending_approval/01_phone_negative_model_conflict/manifest.jsonl",
+      "counterpart": "dataset/review_worklists/v2_pending_approval/01_phone_negative_model_conflict/manifest.jsonl",
+      "old_bytes": 283075,
+      "local_bytes": 283655,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/review_worklists/v2_pending_approval/02_phone_negative_low_visibility/manifest.jsonl",
+      "counterpart": "dataset/review_worklists/v2_pending_approval/02_phone_negative_low_visibility/manifest.jsonl",
+      "old_bytes": 236563,
+      "local_bytes": 237064,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/review_worklists/v2_pending_approval/03_phone_positive_low_visibility/manifest.jsonl",
+      "counterpart": "dataset/review_worklists/v2_pending_approval/03_phone_positive_low_visibility/manifest.jsonl",
+      "old_bytes": 55176,
+      "local_bytes": 55291,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/review_worklists/v2_pending_approval/04_seatbelt_roi_low_visibility/manifest.jsonl",
+      "counterpart": "dataset/review_worklists/v2_pending_approval/04_seatbelt_roi_low_visibility/manifest.jsonl",
+      "old_bytes": 11635,
+      "local_bytes": 11658,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/review_worklists/v2_pending_approval/05_seatbelt_uncertain_classifier_candidates/manifest.jsonl",
+      "counterpart": "dataset/review_worklists/v2_pending_approval/05_seatbelt_uncertain_classifier_candidates/manifest.jsonl",
+      "old_bytes": 266580,
+      "local_bytes": 267080,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/review_worklists/v2_pending_approval/06_external_adt_uncertain/manifest.jsonl",
+      "counterpart": "dataset/review_worklists/v2_pending_approval/06_external_adt_uncertain/manifest.jsonl",
+      "old_bytes": 168339,
+      "local_bytes": 168690,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/review_worklists/v2_pending_approval/07_external_mendeley_uncertain/manifest.jsonl",
+      "counterpart": "dataset/review_worklists/v2_pending_approval/07_external_mendeley_uncertain/manifest.jsonl",
+      "old_bytes": 73351,
+      "local_bytes": 73502,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/review_worklists/v2_pending_approval/08_hard_examples_uncertain/manifest.jsonl",
+      "counterpart": "dataset/review_worklists/v2_pending_approval/08_hard_examples_uncertain/manifest.jsonl",
+      "old_bytes": 537326,
+      "local_bytes": 538452,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/review_worklists/v2_pending_approval/WORKLIST_REPORT.json",
+      "counterpart": "dataset/review_worklists/v2_pending_approval/WORKLIST_REPORT.json",
+      "old_bytes": 2418,
+      "local_bytes": 2488,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/schemas/v2_review1.schema.json",
+      "counterpart": "dataset/schemas/v2_review1.schema.json",
+      "old_bytes": 19519,
+      "local_bytes": 20395,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    },
+    {
+      "old_path": "datasets/sequence_intake/v2_sequence_001/holdout_coverage.csv",
+      "counterpart": "dataset/sequence_intake/v2_sequence_001/holdout_coverage.csv",
+      "old_bytes": 393,
+      "local_bytes": 408,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": null
+    },
+    {
+      "old_path": "datasets/sequence_intake/v2_sequence_001/intake.csv",
+      "counterpart": "dataset/sequence_intake/v2_sequence_001/intake.csv",
+      "old_bytes": 404,
+      "local_bytes": 405,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": null
+    },
+    {
+      "old_path": "datasets/sequence_intake/v2_sequence_001/readiness.json",
+      "counterpart": "dataset/sequence_intake/v2_sequence_001/readiness.json",
+      "old_bytes": 9452,
+      "local_bytes": 9676,
+      "only_newline_or_outer_whitespace": true,
+      "json_semantic_equality": true
+    }
+  ]
+}

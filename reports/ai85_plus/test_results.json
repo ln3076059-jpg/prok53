@@ -1,0 +1,78 @@
+{
+  "compile": {
+    "status": "PASS",
+    "returncode": 0,
+    "seconds": 0.6893465000002834,
+    "command": "C:\\Users\\TSC\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -m compileall -q backend training tests kaggle/ai85_plus_gpu",
+    "evidence": "compile_20261016T103107Z.log",
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "ruff_critical": {
+    "status": "PASS",
+    "returncode": 0,
+    "seconds": 0.3787763999998788,
+    "command": "C:\\Users\\TSC\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -m ruff check backend training tests kaggle/ai85_plus_gpu --select E9,F63,F7,F82",
+    "evidence": "ruff_critical_20261016T103107Z.log",
+    "log_sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+  },
+  "ruff_new_core": {
+    "status": "PASS",
+    "returncode": 0,
+    "seconds": 0.2849518999992142,
+    "command": "C:\\Users\\TSC\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -m ruff check training/data_paths.py training/dmd/adaptive_sampling.py training/dmd/run_ai85_plus_temporal.py training/dmd/audit_ai85_plus.py training/dmd/ai85_plus_visual.py training/dmd/ai85_plus_diagnostics.py training/dmd/ai85_plus_system_smoke.py tests/test_ai85_plus.py",
+    "evidence": "ruff_new_core_20261016T103107Z.log",
+    "log_sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+  },
+  "targeted": {
+    "status": "PASS",
+    "returncode": 0,
+    "seconds": 28.97537360000024,
+    "command": "C:\\Users\\TSC\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -m pytest tests/test_ai85_plus.py tests/test_ai85_next.py tests/test_ai85_upgrade.py tests/test_holdout_guard.py tests/test_v6_seatbelt_evaluation.py -q --junitxml=reports\\ai85_plus/pytest_targeted_20261016T103107Z.xml",
+    "evidence": "targeted_20261016T103107Z.log",
+    "log_sha256": "50c2f1242da14e1d54f838700f429293b6edf2eb73c04cf497d87a9933d555b3",
+    "counts": {
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 32
+    }
+  },
+  "full_pytest": {
+    "status": "PASS",
+    "returncode": 0,
+    "seconds": 93.13716870000007,
+    "command": "C:\\Users\\TSC\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -m pytest tests -q --junitxml=reports\\ai85_plus/pytest_full_20261016T103107Z.xml",
+    "evidence": "full_pytest_20261016T103107Z.log",
+    "log_sha256": "79de132c365e6d56f98c527864e0076efe6fec97931f28ee487df0a8525e1f43",
+    "counts": {
+      "tests": 552,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 552
+    }
+  },
+  "frontend_build": {
+    "status": "PASS",
+    "returncode": 0,
+    "seconds": 29.485587699999996,
+    "command": "\"C:\\Program Files\\nodejs\\npm.cmd\" run build",
+    "evidence": "frontend_build_20261016T103107Z.log",
+    "log_sha256": "e924c2db2537fadc8231f93fad57c7463b97e263a9ad9eaf9227435e0262cc2b",
+    "index_sha256": "e269449d283b3681c34f0dbd4ea3b7b9b25e251c3dffe2f85066a9d65c692c87"
+  },
+  "backend_smoke": {
+    "status": "PASS",
+    "evidence": "backend_smoke.json",
+    "command": "py -3.11 -m training.dmd.ai85_plus_system_smoke"
+  },
+  "inference_smoke": {
+    "status": "PASS",
+    "evidence": "runtime_benchmark.json; phone_spatial_probes.json; seatbelt_results.json"
+  },
+  "browser_E2E": {
+    "status": "BLOCKED",
+    "evidence": "No configured browser E2E harness"
+  }
+}

@@ -10,8 +10,9 @@ from datetime import datetime
 from pathlib import Path
 
 from jsonschema import Draft7Validator
+from training.data_paths import data_path
 
-SCHEMA = Path(__file__).resolve().parents[1] / "datasets/schemas/v2_review1.schema.json"
+SCHEMA = data_path("schemas/v2_review1.schema.json")
 
 
 def digest(path):

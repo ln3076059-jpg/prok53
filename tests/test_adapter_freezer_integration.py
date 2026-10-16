@@ -1,6 +1,7 @@
 import json
 import csv
 from pathlib import Path
+from training.data_paths import data_path
 import tempfile
 import pytest
 
@@ -146,7 +147,7 @@ def test_adapter_freezer_integration(tmp_path: Path):
     seq_path = tmp_path / "seq.json"
     create_valid_sequence(seq_path, video_id)
     
-    schema = load_schema("datasets/schemas/v2_event_sequence_annotation.schema.json")
+    schema = load_schema(data_path("schemas/v2_event_sequence_annotation.schema.json"))
     
     from training.build_event_truth_from_sequences import EVENT_FIELDNAMES
     csv_path = tmp_path / "events.csv"

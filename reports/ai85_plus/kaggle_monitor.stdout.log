@@ -1,0 +1,586 @@
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T10:43:20.361603+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T10:44:10.719406+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T10:45:01.376616+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T10:45:54.939992+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T10:46:46.033236+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T10:47:36.676585+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T10:48:28.008363+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T10:49:17.754716+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T10:50:08.749434+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T10:51:01.188810+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T10:51:51.686638+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T10:52:41.931012+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T10:53:32.131483+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T10:54:24.652404+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T10:55:14.927979+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T10:56:04.867395+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T10:56:55.433825+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T10:57:45.456754+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T10:58:36.097425+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T10:59:26.018952+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T11:00:16.562345+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T11:01:07.063714+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T11:01:57.456835+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T11:02:47.840216+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T11:03:38.772431+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T11:04:30.086230+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T11:05:20.268915+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T11:06:10.854097+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T11:07:00.865452+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T11:07:52.801028+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T11:08:42.850510+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T11:09:34.442469+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T11:10:25.935892+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T11:11:17.488668+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T11:12:08.520073+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "kernel": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "version": 1,
+  "private": true,
+  "status": "RUNNING",
+  "url": "https://www.kaggle.com/code/longngoc11/roadwatch-ai85-plus-frozen-gpu-v8",
+  "updated_at_utc": "2026-10-16T11:12:59.048535+00:00",
+  "status_message": "longngoc11/roadwatch-ai85-plus-frozen-gpu-v8 has status \"KernelWorkerStatus.RUNNING\"",
+  "source_file": "kaggle/ai85_plus_gpu/run_frozen_gpu.py",
+  "source_sha256": "d78d8f4b30eb5a59c9a7b77ab2499f0da3d6bbc9f831883e19f7ec0d2395751c",
+  "training_performed": false,
+  "DMD_uploaded": false,
+  "holdouts_attached": false,
+  "credential_storage": "restricted user-profile file outside the repository"
+}
+
+{
+  "status": "PASS",
+  "failures": [],
+  "historical_files_preserved": 119,
+  "event_variants_reconciled": 6,
+  "reports": 16,
+  "artifacts_hashed": 108,
+  "consumed_holdouts_accessed": false,
+  "independent_status": "INDEPENDENT_AI85_NOT_ESTABLISHED"
+}

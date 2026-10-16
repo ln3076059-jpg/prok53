@@ -49,3 +49,8 @@ reports/v6_completion/logs/
 # Local AI85 dataset media and extracted feature caches
 reports/ai85_upgrade/fn_original_rois/
 reports/ai85_upgrade/native112/embeddings/*.npz
+reports/ai85_plus/temporal/*_dense.npz
+reports/ai85_plus*/temporal/*_dense.npz
+reports/ai85_plus/evidence_images/
+reports/ai85_plus/kaggle_remote/
+kaggle/ai85_plus_private_bundle/*.pt

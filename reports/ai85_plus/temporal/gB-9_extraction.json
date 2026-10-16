@@ -1,0 +1,59 @@
+{
+  "subject": "gB-9",
+  "fps": 29.76,
+  "video_frames": 12129,
+  "dense_samples": 4043,
+  "inherited_embeddings": 809,
+  "visual_labels_used": false,
+  "decode": {
+    "count": 12129,
+    "total_seconds": 38.47538560001976,
+    "p50_ms": 0.20459999996091938,
+    "p95_ms": 9.772899999916262
+  },
+  "motion": {
+    "count": 4043,
+    "total_seconds": 3.3852490999606744,
+    "p50_ms": 0.8041999999477412,
+    "p95_ms": 1.0879599998588667
+  },
+  "encoder_batches": {
+    "count": 203,
+    "total_seconds": 61.90003219999926,
+    "p50_ms": 305.3208999999697,
+    "p95_ms": 338.92608000005566
+  },
+  "batch_size": 16,
+  "peak_rss_mb": 542.95703125,
+  "seconds": 111.04016749999937,
+  "video": {
+    "path": "dataset/external_dmd/subjects/gB-9/gB_9_s2_2019-03-07T16;21;20+01;00_rgb_body.mp4",
+    "exists": true,
+    "bytes": 783497406,
+    "sha256": "36bc2bcd2547033424833207fa6f4694fbf29fdfad2d305c30adb77639924b23"
+  },
+  "annotation": {
+    "path": "dataset/external_dmd/subjects/gB-9/gB_9_s2_2019-03-07T16;21;20+01;00_rgb_ann_distraction.json",
+    "exists": true,
+    "bytes": 3864849,
+    "sha256": "a6febae9d122092d1ebb360f51b83705378417b9b3289b9dea0d7bde1bdbd37e"
+  },
+  "weights": {
+    "path": "C:/Users/TSC/.cache/torch/hub/checkpoints/resnet18-f37072fd.pth",
+    "exists": true,
+    "bytes": 46830571,
+    "sha256": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec"
+  },
+  "inherited_cache": {
+    "path": "dataset/external_dmd/derivatives/v5_resnet18_embeddings/v5_resnet18_gB-9.npz",
+    "exists": true,
+    "bytes": 735144,
+    "sha256": "c2351b2ae7c8086ff416b056cfd30fda60f503497b28af154a98f28cc3b82b91"
+  },
+  "output": {
+    "path": "reports/ai85_plus/temporal/gB-9_dense.npz",
+    "exists": true,
+    "bytes": 3686692,
+    "sha256": "3a9cb218e6384ad6c58b9bc0b5a745368b3738bd369c8c5becfb6e94d981aba6"
+  }
+}

@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 from training.validate_event_sequence_annotations import load_schema, validate_annotation
+from training.data_paths import data_path
 
 EVENT_FIELDNAMES = [
     "video_id",
@@ -274,7 +275,7 @@ def main():
     )
     parser.add_argument(
         "--schema",
-        default="datasets/schemas/v2_event_sequence_annotation.schema.json",
+        default=data_path("schemas/v2_event_sequence_annotation.schema.json"),
         help="Path to sequence schema JSON",
     )
 

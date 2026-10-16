@@ -1,11 +1,12 @@
 import json
 from pathlib import Path
+from training.data_paths import data_path
 import pytest
 from jsonschema import Draft7Validator, FormatChecker, ValidationError
 
 @pytest.fixture
 def schema():
-    schema_path = Path("datasets/schemas/v2_event_sequence_annotation.schema.json")
+    schema_path = data_path("schemas/v2_event_sequence_annotation.schema.json")
     with open(schema_path, "r", encoding="utf-8") as f:
         return json.load(f)
 

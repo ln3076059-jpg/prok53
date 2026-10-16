@@ -7,6 +7,7 @@ from jsonschema import Draft7Validator, FormatChecker
 
 from training.identity_contract import validate_identity_contract
 from training.common import sha256_file
+from training.data_paths import data_path
 
 UNKNOWN_IDENTITIES = {"", "UNKNOWN"}
 
@@ -276,7 +277,7 @@ def main():
     parser.add_argument("annotation_file", help="Path to annotation JSON file")
     parser.add_argument(
         "--schema",
-        default="datasets/schemas/v2_event_sequence_annotation.schema.json",
+        default=data_path("schemas/v2_event_sequence_annotation.schema.json"),
         help="Path to schema JSON file",
     )
     args = parser.parse_args()

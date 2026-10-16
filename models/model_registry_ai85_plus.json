@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "source_git_head": "43b87ee3151060a9dd2b1b2d02ca26c0a45c138e",
+  "experiment": "ROADWATCH_AI85_PLUS_V8",
+  "config": "models/model_config_ai85_plus.yaml",
+  "state": "DEVELOPMENT_ONLY",
+  "production_approved": false,
+  "independent_validation_status": "INDEPENDENT_AI85_NOT_ESTABLISHED",
+  "selected_candidate": null,
+  "reason": "Adaptive variants did not improve the historical event F1 and independent licensed holdout is absent.",
+  "historical_controlled_binary_comparator": "reports/ai85_next/representation_experiment.json",
+  "new_checkpoint_created": false
+}

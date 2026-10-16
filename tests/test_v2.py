@@ -24,6 +24,7 @@ from training.build_adt_review_queue import build as build_adt_review_queue
 from training.build_seatbelt_classifier import build as build_classifier
 from training.build_seatbelt_v2 import build as build_seatbelt
 from training.common import perceptual_hash, sha256_file
+from training.data_paths import data_path
 from training.convert_uncertain_review_decisions import convert as convert_uncertain_decisions
 from training.evaluate_v2 import classification_report
 from training.pretrain_review_v2 import review_item as pretrain_review_item
@@ -497,7 +498,7 @@ def test_uncertain_reviewer_conversion_preserves_audit_identity(tmp_path):
 
 
 @pytest.mark.skipif(
-    not Path("datasets/derived/phone_bootstrap_v2/manifest.jsonl").is_file(),
+    not data_path("derived/phone_bootstrap_v2/manifest.jsonl").is_file(),
     reason="requires local ignored V2 proposal datasets",
 )
 def test_current_v2_readiness_distinguishes_proposal_from_governed_training():

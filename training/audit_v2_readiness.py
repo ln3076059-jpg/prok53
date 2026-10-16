@@ -8,6 +8,7 @@ from pathlib import Path
 import yaml
 
 from training.common import sha256_file
+from training.data_paths import data_path
 
 DIVERSITY_FIELDS = ("video_id", "vehicle_id", "person_id", "camera_id")
 REQUIRED_CONDITIONS = {
@@ -84,9 +85,9 @@ def _model_placeholders(model_config: Path) -> list[str]:
 
 
 def audit(
-    phone_dataset: Path = Path("datasets/derived/phone_bootstrap_v2"),
-    seatbelt_dataset: Path = Path("datasets/derived/seatbelt_v2_balanced"),
-    classifier_dataset: Path = Path("datasets/derived/seatbelt_classifier_v2"),
+    phone_dataset: Path = data_path("derived/phone_bootstrap_v2"),
+    seatbelt_dataset: Path = data_path("derived/seatbelt_v2_balanced"),
+    classifier_dataset: Path = data_path("derived/seatbelt_classifier_v2"),
     phone_audit_path: Path = Path("reports/phone_bootstrap_v2/data_quality.json"),
     seatbelt_audit_path: Path = Path("reports/seatbelt_v2/audit.json"),
     model_config: Path = Path("models/model_config_v2.yaml"),

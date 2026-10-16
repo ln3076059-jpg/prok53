@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from training.data_paths import data_path
 
 import pytest
 
@@ -177,7 +178,7 @@ def official_freeze(intake, tmp_path):
     import yaml
 
     row, dev = intake
-    policy = Path("datasets/v2_external_test_policy.yaml")
+    policy = data_path("v2_external_test_policy.yaml")
     settings = yaml.safe_load(policy.read_text(encoding="utf-8"))
     annotation = tmp_path / "events.json"
     annotation.write_text("[]", encoding="utf-8")
@@ -370,7 +371,7 @@ def test_canonical_truth_flows_through_external_event_and_context_freeze(
                                     development.with_suffix(".lock.json"))
     event_csv = tmp_path / "event.csv"
     context_csv = tmp_path / "context.csv"
-    schema = load_schema("datasets/schemas/v2_event_sequence_annotation.schema.json")
+    schema = load_schema(data_path("schemas/v2_event_sequence_annotation.schema.json"))
     with event_csv.open("w", newline="", encoding="utf-8") as ef, context_csv.open("w", newline="", encoding="utf-8") as cf:
         ew = csv.DictWriter(ef, fieldnames=EVENT_FIELDNAMES)
         cw = csv.DictWriter(cf, fieldnames=CONTEXT_FIELDNAMES)

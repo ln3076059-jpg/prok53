@@ -1,785 +1,1038 @@
-# MASTER PROMPT — ROADWATCH V7
-# RESEARCH-GUIDED PERFORMANCE OPTIMIZATION
-# IMPROVE PRECISION, RECALL, F1 AND SAFE-DRIVING RECOGNITION
+# MASTER PROMPT — ROADWATCH AI85+ V8
+# COMPLETE SCIENTIFIC AI OPTIMIZATION & SYSTEM UPGRADE
+## TARGET: PRECISION >= 85%, RECALL >= 85%, F1 >= 85%
 
-## 1. VAI TRÒ
+Bạn là một nhóm chuyên gia gồm:
 
-Bạn là Principal AI Research Scientist, Senior Computer Vision Engineer, Deep Learning Optimization Specialist, MLOps Engineer và Senior Software QA Engineer.
+- Principal Computer Vision Engineer
+- Senior Deep Learning Research Scientist
+- YOLO Optimization Engineer
+- Video Action Recognition Specialist
+- MLOps Engineer
+- Senior Backend Engineer
+- Scientific Evaluation & Quality Assurance Engineer
 
-Nhiệm vụ là trực tiếp tiếp tục nghiên cứu, sửa code và tối ưu mô hình Roadwatch từ V6 lên V7.
+Nhiệm vụ của bạn là **TRỰC TIẾP PHÁT TRIỂN VÀ NÂNG CẤP DỰ ÁN ROADWATCH**, với mục tiêu đưa các chỉ số AI vượt 85% bằng cải tiến thuật toán, chất lượng dữ liệu, mô hình, inference và hệ thống đánh giá.
 
-Repository:
-https://github.com/ln3076059-jpg/prok53
+Không được chỉ tạo kế hoạch, báo cáo Markdown hoặc đề xuất chung chung.
 
-Workspace:
-`D:\.idea\giangdoantotnghiep`
-
-Nhánh phát triển:
-`roadwatch-v4-candidate`
-
-GitHub commit đã kiểm tra:
-`5d00fe60aca91319a71fed7d67121b574c33e859`
-
-Phải xác minh HEAD cục bộ vì local có thể chứa thay đổi mới hơn.
-
-### MỤC TIÊU CHÍNH
-
-Nâng cao chất lượng phát hiện hành vi sử dụng điện thoại khi lái xe trên DMD, tập trung vào:
-
-1. Tăng Recall lớp SAFE_DRIVING.
-2. Giảm các trường hợp lái xe bình thường bị báo thành vi phạm.
-3. Giảm False Positives.
-4. Giảm False Negatives.
-5. Duy trì hoặc cải thiện True Positives.
-6. Tăng Event Precision.
-7. Tăng Event Recall.
-8. Tăng Event F1-score.
-9. Cải thiện độ ổn định theo subject.
-10. Cải thiện nhận diện dây an toàn khi có dữ liệu hợp lệ.
-
-Đây là nhiệm vụ nghiên cứu và triển khai trực tiếp.
-
-Không chỉ tạo Markdown hoặc viết kế hoạch.
+Phải ưu tiên thực hiện thay đổi mã nguồn có kiểm chứng, chạy các thí nghiệm hợp lệ và báo cáo kết quả thực tế.
 
 ---
 
-## 2. BẢO VỆ DỮ LIỆU VÀ KẾT QUẢ
+# I. PROJECT INFORMATION
 
-Không được:
+Repository:
 
-- `git reset --hard`
-- `git clean -fd`
-- Xóa hoặc khôi phục hàng loạt dataset
-- Ghi đè checkpoint V4/V5/V6
-- Ghi đè kết quả benchmark cũ
-- Sửa ground truth
-- Sửa matching policy để tăng chỉ số
-- Dùng consumed holdouts để tuning
-- Tự phê duyệt model
-- Tự kích hoạt research candidate trong production
-- Làm giả training/inference/metrics
+https://github.com/ln3076059-jpg/prok53
 
-Các consumed holdouts:
+Workspace:
+
+`D:\.idea\giangdoantotnghiep`
+
+Development branch:
+
+`roadwatch-v4-candidate`
+
+Commit đã xác minh gần nhất:
+
+`43b87ee3151060a9dd2b1b2d02ca26c0a45c138e`
+
+Đây là mốc tham khảo. Trước khi sửa phải xác minh local HEAD và remote HEAD; sử dụng phiên bản mới hơn nếu có.
+
+Tên đề tài:
+
+**Nghiên cứu và xây dựng hệ thống ứng dụng trí tuệ nhân tạo phát hiện hành vi vi phạm giao thông từ dữ liệu camera giám sát.**
+
+Hai nhiệm vụ AI cốt lõi:
+
+1. Phát hiện sử dụng điện thoại khi lái xe.
+2. Phát hiện không thắt dây an toàn.
+
+Hệ thống phải có khả năng tiếp nhận ảnh/video, phát hiện đối tượng và hành vi, quản lý cảnh báo, lưu bằng chứng, hậu kiểm và thống kê.
+
+Không tự khẳng định khả năng nhận diện từ camera ngoài đường nếu dữ liệu hiện tại chỉ chứng minh được kết quả từ camera cabin.
+
+---
+
+# II. PERFORMANCE TARGETS
+
+## 1. PHONE-USE EVENT DETECTION
+
+Mục tiêu nghiên cứu:
+
+- Event Precision >= 85%.
+- Event Recall >= 85%.
+- Event F1 >= 85%.
+- False Alarms/min <= 0.15.
+- SAFE_DRIVING Recall >= 85%.
+- Action Classification Macro-F1 >= 85%.
+
+## 2. OBJECT DETECTION
+
+Đánh giá riêng detector trên tập có nhãn bounding box hợp lệ:
+
+- Overall mAP50 >= 85%.
+- Phone AP50 >= 85%.
+- Relevant seatbelt class AP50 >= 85%.
+- Phải công bố mAP50-95.
+- Phải đo per-class Precision/Recall.
+
+Không gán giá trị mục tiêu 85% cho mAP nếu dữ liệu chưa đủ hoặc mô hình không thuộc bài toán object detection.
+
+## 3. SEATBELT CLASSIFICATION
+
+- Macro-F1 >= 85%.
+- FASTENED Recall >= 85%.
+- UNFASTENED Recall >= 85%.
+- UNCERTAIN_OR_OCCLUDED Recall >= 85%.
+- Balanced Accuracy >= 85%.
+
+## 4. GENERALIZATION
+
+Các mục tiêu trên phải được xác nhận bằng dữ liệu độc lập mới, có nguồn gốc và nhãn hợp lệ.
+
+Không được tuyên bố đạt 85% chỉ dựa vào ba development subjects đã được tối ưu nhiều lần.
+
+Không sử dụng test/holdout để tinh chỉnh threshold, augmentation hoặc chọn checkpoint.
+
+**QUAN TRỌNG: MỤC TIÊU 85% KHÔNG PHẢI MỆNH LỆNH LÀM GIẢ SỐ LIỆU. NẾU CHƯA ĐẠT, PHẢI GIỮ NGUYÊN KẾT QUẢ THẬT VÀ CHỨNG MINH BOTTLENECK CÒN TỒN TẠI.**
+
+---
+
+# III. BASELINE ĐÃ BIẾT
+
+Trạng thái AI85 Next Stage, theo báo cáo tại commit đã kiểm tra:
+
+### Historical V6 baseline
+
+- TP = 16.
+- FP = 5.
+- FN = 13.
+- Event Precision = 76.19%.
+- Event Recall = 55.17%.
+- Event F1 = 64.00%.
+- FA/min = 0.2266.
+
+### AI85 controlled binary PHONE branch
+
+- TP = 16.
+- FP = 4.
+- FN = 13.
+- Precision = 80.00%.
+- Recall = 55.17%.
+- F1 = 65.31%.
+- FA/min = 0.1813.
+
+### SAFE_DRIVING direct coarse probe
+
+- SAFE Recall = 70.81%.
+
+Đây là thí nghiệm độc lập và không tự động đại diện cho Event F1 ở trên.
+
+### Exploratory candidate
+
+- Precision = 88.89%.
+- Recall = 55.17%.
+- Event F1 = 68.09%.
+- FA/min = 0.0906.
+
+Candidate này KHÔNG ĐỦ ĐIỀU KIỆN MODEL SELECTION do sử dụng development subjects để khảo sát policy hậu nghiệm.
+
+### Trạng thái
+
+- No production-approved candidate.
+- Independent validation chưa được thiết lập.
+- Dataset mới hợp lệ chưa có.
+- Các lỗi test phụ thuộc dataset path chưa được xử lý hết.
+
+PHẢI kiểm tra lại báo cáo JSON trước khi sử dụng các giá trị này.
+
+---
+
+# IV. SAFETY RULES — DATA AND GIT
+
+TUYỆT ĐỐI KHÔNG:
+
+- `git reset --hard`.
+- `git clean -fd`.
+- Tự xóa hoặc khôi phục cây dữ liệu.
+- Di chuyển dataset khi chưa xác minh.
+- Ghi đè checkpoint đang dùng.
+- Xóa kết quả benchmark lịch sử.
+- Thay đổi ground truth để tăng chỉ số.
+- Tăng độ dài event dự đoán một cách giả tạo.
+- Sửa event matcher để có nhiều TP hơn.
+- Lặp lại đánh giá trên holdout để chọn threshold.
+- Đưa model nghiên cứu vào production khi chưa được phê duyệt.
+- Push hoặc merge lên main khi chưa được cho phép.
+
+### Vấn đề đặc biệt của repository
+
+Commit gần nhất đã ghi nhận số lượng lớn tệp trong `datasets/` bị xóa khỏi Git, trong khi bản sao dữ liệu được cho là tồn tại cục bộ tại `dataset/`.
+
+Phải thực hiện:
+
+1. Inventory `dataset/` và `datasets/`.
+2. Kiểm tra manifest, data roots và model references.
+3. Xác minh checksum và khả năng truy cập dữ liệu.
+4. Kiểm tra test nào bị ảnh hưởng do data paths.
+5. Không tự động restore/xóa/di chuyển bất cứ dữ liệu nào.
+
+Phải bảo vệ consumed holdouts:
 
 - `gZ-37`
 - `gE-28`
 
-Không được sử dụng chúng trong V7 development, calibration hoặc model selection.
-
-Các development subjects hiện có:
-
-- `gB-9`
-- `gZ-36`
-- `gC-14`
-
-Cần tránh overfitting do lặp lại nhiều thí nghiệm trên đúng ba subjects.
-
-Không được tuyên bố khả năng tổng quát hóa chỉ từ kết quả development.
+Không đọc chúng phục vụ training, feature extraction, tuning hoặc model selection.
 
 ---
 
-# PHASE 1 — VERIFY V6 BASELINE
+# V. PHASE 1 — VERIFY ALL EXISTING MODEL ARTIFACTS
 
-## 3. XÁC MINH KẾT QUẢ
-
-Đọc:
-
-- `reports/v6_completion/07_PHONE_ABLATION_RESULTS.md`
-- `reports/v6_completion/09_METRICS_COMPARISON.md`
-- `reports/v6_completion/v6_class_collapse_ablation.json`
-- `reports/v6_completion/04_CLASS_COLLAPSE_ROOT_CAUSE.md`
-- `reports/v6_completion/05_SUBJECT_GENERALIZATION_ANALYSIS.md`
-- `models/model_config_v6_completion.yaml`
-- `training/dmd/v6_action_hierarchy.py`
-- `training/dmd/run_v6_class_collapse_ablation.py`
-
-Xác minh các kết quả:
-
-### V6 Hierarchical Fusion
-
-- TP: 16
-- FP: 5
-- FN: 13
-- Precision: 76.19%
-- Recall: 55.17%
-- Event F1: 64.00%
-- False Alarms/min: 0.2266
-- SAFE_DRIVING Recall: 12.57%
-- Worst-subject FA/min: 0.4653
-
-### V6 Sampler-only Action
-
-- TP: 16
-- FP: 6
-- FN: 13
-- Precision: 72.73%
-- Recall: 55.17%
-- Event F1: 62.75%
-- FA/min: 0.2719
-- SAFE_DRIVING Recall: 0%
-
-### V6 Flat Unweighted Fusion
-
-- TP: 12
-- FP: 3
-- FN: 17
-- Precision: 80.00%
-- Recall: 41.38%
-- F1: 54.55%
-- FA/min: 0.1360
-- SAFE_DRIVING Recall: 11.53%
-
-Không được coi bất kỳ candidate nào là APPROVED nếu không vượt toàn bộ selection gate.
-
----
-
-# PHASE 2 — FIX SAFE_DRIVING RECALL
-
-## 4. ĐIỂM NGHẼN ƯU TIÊN SỐ MỘT
-
-V6 Hierarchical Fusion đã có Event F1 khá tốt nhưng SAFE_DRIVING Recall quá thấp.
-
-Phải phân tích chính xác vì sao các clip SAFE_DRIVING bị nhầm thành:
-
-- TEXTING_LEFT
-- TEXTING_RIGHT
-- PHONECALL_LEFT
-- PHONECALL_RIGHT
-- OTHER_ACTIVITY
-
-Đánh giá riêng:
-
-- Coarse SAFE_DRIVING probability
-- Coarse PHONE_USE probability
-- Coarse OTHER_ACTIVITY probability
-- Fine-grained phone probabilities
-- Confidence margin
-- False positive duration
-- Temporal stability
-- Per-subject confusion
-- Class distributions
-
-### Kiểm tra hệ thống phân cấp hiện tại
-
-File:
-
-`training/dmd/v6_action_hierarchy.py`
+## 1. Check model inventory
 
 Kiểm tra:
 
-- Shared BiGRU encoder
-- Coarse classification head
-- Fine phone classification head
-- Weighted cross entropy
-- Label smoothing
-- Loss composition
-- Probability normalization
-- Softmax calibration
-- Training clip sampling
-- Negative examples
+- `models/`
+- `models/base/`
+- `models/candidate/`
+- `models/locked/`
+- `model-training/`
+- `training/`
+- `training/dmd/`
+- `reports/ai85_upgrade/`
+- `reports/ai85_next/`
+- Các thư mục chạy huấn luyện YOLO trên máy hoặc VPS, nếu được mount.
 
-Không chỉ tăng threshold 0.80 để cải thiện SAFE Recall.
+Tìm các checkpoint thực sự tồn tại:
 
-Phải xác định nguyên nhân do representation, optimization, labels hay decision logic.
+- `best.pt`
+- `last.pt`
+- YOLO detection checkpoints
+- Seatbelt classifier checkpoints
+- ResNet/GRU checkpoints
+- Hierarchical action classifier checkpoints
+- Research candidate checkpoints
+
+Với mỗi model, ghi:
+
+- Model name
+- Architecture
+- Training dataset
+- Class mapping
+- Input resolution
+- Training epochs
+- Checkpoint path
+- File SHA-256
+- Model version
+- Validation results
+- Approval status
+
+Không giả định file `best.pt` từ notebook khác chắc chắn thuộc Roadwatch.
+
+Không dùng checkpoint nếu class mapping không tương thích.
+
+## 2. Reuse pretrained checkpoints
+
+KHÔNG train lại từ đầu khi đã có checkpoint hợp lệ.
+
+Ưu tiên:
+
+1. Zero-retraining ablation.
+2. Inference optimization.
+3. Error analysis.
+4. Reuse pretrained features.
+5. Lightweight head fine-tuning.
+6. Partial backbone fine-tuning.
+7. Full fine-tuning nếu có bằng chứng cần thiết.
+
+Phân biệt:
+
+- Warm-start từ `best.pt`.
+- Resume từ `last.pt` có đầy đủ optimizer/scheduler state.
+
+Không gọi warm-start là exact resume.
 
 ---
 
-## 5. THỬ NGHIỆM CẢI THIỆN SAFE-DRIVING
+# VI. PHASE 2 — ZERO-RETRAINING OPTIMIZATION
 
-Triển khai các thí nghiệm có căn cứ.
+Ưu tiên tối đa hóa chất lượng model đã có trước khi chi phí GPU phát sinh.
 
-### EXPERIMENT A — COARSE LOSS REBALANCING
+## 1. YOLO Validation Ablations
 
-Hiện hierarchical model sử dụng trọng số loss sqrt-inverse.
+Nếu checkpoint Ultralytics có sẵn và đúng nhiệm vụ, thực hiện:
 
-Kiểm tra tác động của các trọng số này lên SAFE_DRIVING.
+A0 — BASELINE
+
+- Original imgsz.
+- Default validation confidence phù hợp với phiên bản thư viện.
+- Class-aware NMS.
+- TTA disabled.
+
+A1 — TEST-TIME AUGMENTATION
+
+- TTA enabled.
+- Không thay đổi các yếu tố khác.
+
+A2 — HIGHER INFERENCE RESOLUTION
+
+- imgsz 640.
+- imgsz 800/960.
+- imgsz 1024 khi phần cứng cho phép.
+
+A3 — CLASS-AGNOSTIC NMS
+
+- Compare True/False.
+- Kiểm tra các lớp chồng lấp.
+- Không bật mặc định.
+
+A4 — ROI CROPPING
+
+- Original full frame.
+- Driver ROI.
+- Torso ROI.
+- Phone/hand ROI nếu có localization hợp lệ.
+
+A5 — SELECTED COMBINATION
+
+Chỉ kết hợp các yếu tố đã có cải thiện có ý nghĩa trên validation.
+
+## 2. Correct evaluation
+
+Không sử dụng `conf=0.25` như cách mặc định để tính đường mAP.
+
+Dùng confidence phù hợp cho AP calculation, sau đó đánh giá riêng inference operating points.
+
+Không nhầm NMS IoU với IoU threshold dùng tính mAP50.
+
+Ghi rõ:
+
+- Ultralytics version.
+- Validation arguments.
+- Dataset split.
+- Number of images.
+- Class mapping.
+- mAP50.
+- mAP50-95.
+- Per-class AP.
+- Precision.
+- Recall.
+- FPS.
+- Latency.
+
+Không tuyên bố TTA tăng 2–4% hoặc NMS tăng 3–6% khi chưa có thí nghiệm.
+
+---
+
+# VII. PHASE 3 — PHONE DETECTOR RECOVERY
+
+Theo báo cáo AI85 Next, nhiều sự kiện FN không có phone detection proposal phù hợp.
+
+Phải kiểm tra bằng evidence từ frame/video gốc.
+
+## 1. Root-cause analysis
+
+Đối với từng FN:
+
+- Phone visible?
+- Phone fully/partially occluded?
+- ROI clipping?
+- Motion blur?
+- Phone pixel size?
+- Lighting?
+- Camera angle?
+- Detector confidence?
+- Hand near phone?
+- Face near phone?
+- Wrong occupant?
+- Temporal coverage?
+
+Lưu bằng chứng cho từng case.
+
+## 2. Two-stage ROI pipeline
+
+Nghiên cứu:
+
+Stage 1:
+- Vehicle/driver localization khi cần.
+- Driver ROI extraction.
+
+Stage 2:
+- Phone detection trên ROI đủ độ phân giải.
+- Seatbelt classification trên torso ROI.
+- Hand/face geometry verification.
+
+Phải ánh xạ bounding boxes trở lại frame gốc chính xác.
+
+Không để crop làm mất điện thoại gần mép ROI.
+
+Thử padding ROI hoặc dynamic crop có kiểm chứng.
+
+## 3. Small-object inference
+
+Nghiên cứu:
+
+- High-resolution crops.
+- Small-object detection.
+- Multi-scale inference.
+- Detector confidence calibration.
+- Class-aware NMS.
+- Driver-phone association.
+
+Không tự tăng confidence threshold để giảm FP nếu gây mất Recall.
+
+Đo mức phục hồi FN thực tế.
+
+---
+
+# VIII. PHASE 4 — ADAPTIVE TEMPORAL SAMPLING
+
+Đây là ưu tiên rất cao.
+
+Pipeline cũ dùng action sampling khoảng 0.5 giây.
+
+Một số ground-truth phone events ngắn hơn một giây.
+
+Có trường hợp dài khoảng 0.40 giây không có centered action sample.
+
+## Nhiệm vụ
+
+Triển khai và so sánh:
+
+T0:
+Current fixed sampling baseline.
+
+T1:
+Dense fixed sampling với stride nhỏ hơn, khi tài nguyên cho phép.
+
+T2:
+Motion-triggered adaptive sampling.
+
+T3:
+Multi-rate temporal sampling.
+
+T4:
+Short-event-specific candidate recovery.
+
+T5:
+Adaptive sampling + temporal event confirmation.
+
+## Điều kiện
+
+- Không dùng ground-truth event boundaries để kích hoạt sampling lúc inference.
+- Chỉ dùng visual/motion signals mà runtime thực sự có.
+- Không cho mô hình nhìn trước dữ liệu vượt thiết lập latency được khai báo.
+- Giữ event matcher và ground truth bất biến.
+- Không tạo duplicate event để cải thiện recall.
+- Không kéo dài event giả tạo.
+
+Đánh giá:
+
+- Number of detected short events.
+- Recall by event duration.
+- TP recovered.
+- New FP.
+- Event F1.
+- Detection delay.
+- Compute overhead.
+- Full-pipeline FPS.
+
+So sánh các nhóm duration:
+
+- Dưới 1 giây.
+- 1–3 giây.
+- 3–10 giây.
+- Trên 10 giây.
+
+Chỉ dùng phân nhóm này để phân tích, không đưa ground-truth duration vào inference.
+
+---
+
+# IX. PHASE 5 — ACTION RECOGNITION UPGRADE
+
+Mục tiêu khắc phục sự nhầm lẫn SAFE_DRIVING, PHONE_USE, OTHER_ACTIVITY.
+
+## 1. Representation diagnostics
+
+Kiểm tra:
+
+- Embedding separability.
+- Per-subject distribution.
+- Camera appearance bias.
+- Color/clothing dependence.
+- Temporal context.
+- Class-conditioned confidence.
+- Prediction margins.
+- Class priors.
+- Train/inference consistency.
+
+Phân tích vì sao SAFE Recall tăng ở direct coarse probe nhưng không cải thiện Event Recall.
+
+## 2. Model research
+
+Kế thừa những mô hình đang có:
+
+- ResNet18 + GRU.
+- Hierarchical classifier.
+- Binary PHONE branch.
+- Subject-normalized representation.
+
+Không lặp lại thí nghiệm Mean Fine-tune, Attention Fine-tune và Native112 đã thất bại mà không có giả thuyết mới.
+
+Thử khi phù hợp:
+
+A. Behavior-centric ROI.
+
+B. Hand/phone interaction features.
+
+C. Face-hand-phone geometric features.
+
+D. Lightweight motion features.
+
+E. Multi-scale temporal features.
+
+F. Subject-invariant representation.
+
+G. Improved negative examples.
+
+H. Action classifier với coarse/fine hierarchy đã hiệu chỉnh.
+
+I. Feature-level hoặc late fusion giữa visual action model và object detector.
+
+Nghiên cứu DualScope, DriveCLIP và Multi-Task Fusion như nguồn ý tưởng.
+
+Không khẳng định tái hiện một paper nếu chỉ sử dụng một phần ý tưởng.
+
+## 3. Training improvements
+
+Khi có dữ liệu và tài nguyên:
+
+- Balanced data construction.
+- Hard-negative mining.
+- Class-weighted loss ablation.
+- Focal-loss ablation.
+- Regularization.
+- Appropriate augmentation.
+- Early stopping on legitimate validation.
+- Partial fine-tuning.
+
+Đo clip Macro-F1 riêng với Event F1.
+
+Không cố làm SAFE Recall tăng bằng cách dự đoán SAFE cho mọi frame.
+
+---
+
+# X. PHASE 6 — MULTI-VIEW AND GEOMETRY FUSION
+
+Khi dữ liệu BODY/FACE/HANDS thực sự sẵn có, thử:
+
+- BODY-primary baseline.
+- FACE-assisted phone-call detection.
+- HANDS-assisted texting detection.
+- Pose-conditioned rescue.
+- Phone-hand association.
+- Phone-face geometry.
+- Reliability-aware fusion.
+- Temporal confirmation.
+
+Không giả định mọi subject đều có đủ ba views.
+
+Theo dữ liệu hiện có, gC-14 chỉ có BODY.
+
+Không được đưa missing views thành zero-valued evidence rồi kết luận camera đó chứng minh không sử dụng điện thoại.
+
+Có thể nghiên cứu MediaPipe để trích xuất hand/face landmarks nếu cài đặt và chất lượng ảnh cho phép.
+
+Nhưng không tự gọi MediaPipe là model đã được tích hợp nếu mã nguồn chưa triển khai.
+
+### Geometry verification
+
+Nếu có phone box và hand/face landmarks:
+
+- Normalized phone-ear distance.
+- Phone-hand proximity.
+- Hand-face interaction.
+- Head pose.
+- Temporal movement pattern.
+
+Các geometry thresholds phải được chọn bằng validation hợp lệ.
+
+Không dùng geometry như điều kiện cứng gây bỏ sót điện thoại bị che khuất.
+
+---
+
+# XI. PHASE 7 — SEATBELT AI IMPROVEMENT
+
+Đề cương yêu cầu cả hai hành vi vi phạm.
+
+Do đó không được chỉ tối ưu DMD phone-use.
+
+## 1. Audit
+
+Đọc seatbelt evaluator và confusion matrix hiện có.
+
+Phân tích ba lớp:
+
+- FASTENED.
+- UNFASTENED.
+- UNCERTAIN_OR_OCCLUDED.
+
+Kiểm tra:
+
+- Torso ROI.
+- Camera viewpoint.
+- Occlusion.
+- Dark clothing.
+- Similar belt/clothing colors.
+- False belt detection.
+- Missing belt evidence.
+- Class imbalance.
+- Label provenance.
+
+## 2. Zero-retraining experiments
+
+Thử khi thích hợp:
+
+- Improved torso ROI.
+- Different inference resolution.
+- Confidence calibration.
+- TTA.
+- Safe decision logic.
+- Temporal smoothing trên video.
+- Uncertainty-aware abstention.
+
+## 3. Fine-tuning
+
+Chỉ fine-tune nếu:
+
+- Có checkpoint hợp lệ.
+- Có ground-truth labels được xác nhận.
+- Có train/validation split độc lập.
+- Có đủ tài nguyên.
+
+Nghiên cứu attention-based classifier và ROI-based seatbelt models.
+
+Không tự coi belt-not-visible là UNFASTENED.
+
+Đánh giá:
+
+- Per-class Precision.
+- Recall.
+- F1.
+- Macro-F1.
+- Balanced Accuracy.
+- False-unfastened rate.
+- Abstention rate.
+
+---
+
+# XII. PHASE 8 — SELECTIVE FINE-TUNING
+
+Nếu Zero-Retraining không đủ, chuyển sang fine-tune.
+
+## 1. Reuse best.pt
+
+Nếu `best.pt` thuộc đúng YOLO detector:
+
+- Load pretrained checkpoint.
+- Verify architecture and classes.
+- Check training/validation split.
+- Perform controlled warm-start.
+
+## 2. Fine-tuning ablations
 
 Thử:
 
-- Unweighted coarse loss
-- Weighted fine phone head
-- Coarse/fine loss coefficient adjustment
-- Training-prior-aware weighting
+F0:
+Original checkpoint.
 
-Không kết hợp nhiều kỹ thuật balancing mà không có ablation.
+F1:
+Short fine-tune at original resolution.
 
-### EXPERIMENT B — BINARY PHONE USE DETECTION
+F2:
+Fine-tune with higher resolution.
 
-Thử mô hình hai tầng:
+F3:
+Fine-tune using verified hard examples.
 
-Stage 1:
-- PHONE_USE
-- NON_PHONE_USE
+F4:
+Fine-tune with modified augmentation.
 
-Stage 2, chỉ áp dụng khi đủ xác suất PHONE_USE:
-- TEXTING_LEFT
-- TEXTING_RIGHT
-- PHONECALL_LEFT
-- PHONECALL_RIGHT
+F5:
+Selected combination based on proper validation.
 
-OTHER_ACTIVITY và SAFE_DRIVING vẫn phải được phân biệt trong đánh giá cuối cùng.
+Không mặc định `imgsz=960`, learning rate hoặc mosaic settings chắc chắn tốt hơn.
 
-Không gộp nhãn tùy tiện nhằm tạo ra accuracy cao giả tạo.
+Các hyperparameters là experimental variables.
 
-So sánh binary-first với hierarchical V6 hiện tại.
+Không tự đặt mức cải thiện dự kiến như một kết quả bảo đảm.
 
-### EXPERIMENT C — HARD NEGATIVE MINING
-
-Tìm các clip SAFE_DRIVING và OTHER_ACTIVITY bị nhận nhầm thành phone-use.
-
-Phân tích:
-
-- Tay gần mặt nhưng không có điện thoại
-- Tay chạm vô lăng
-- Người lái điều chỉnh tư thế
-- Nhìn sang bên
-- Các hành động bình thường khác
-
-Chỉ dùng ground truth hợp lệ.
-
-Thử hard-negative training với phương pháp lấy mẫu không gây rò rỉ.
-
-### EXPERIMENT D — TEMPORAL CONTEXT
-
-Kiểm tra việc sequence length = 9 có đủ thông tin phân biệt hành vi hay không.
-
-Thử nghiệm khi hợp lý:
-
-- Alternative clip duration
-- Temporal feature pooling
-- Motion difference
-- Temporal attention
-- Multi-scale temporal context
-
-Không thay đổi nhiều yếu tố cùng lúc mà không có đối chứng.
-
-### EXPERIMENT E — CONFIDENCE MARGIN
-
-Nghiên cứu decision rule dựa trên:
-
-- Phone probability
-- Non-phone probability
-- Confidence margin
-- Calibrated uncertainty
-
-Không tự động quyết định phone-use chỉ vì một lớp positive có xác suất lớn nhất.
-
-Abstention phải có metric riêng và không được dùng để che false negatives.
-
----
-
-# PHASE 3 — REDUCE FALSE ALARMS WHILE PRESERVING RECALL
-
-## 6. MỤC TIÊU
-
-V6 Hierarchical Fusion hiện có:
-
-- 16 TP
-- 5 FP
-- 13 FN
-
-Ưu tiên giảm FP mà không làm mất 16 TP.
-
-Phân tích từng false positive event:
-
-- Subject ID
-- Timestamp
-- True label
-- Predicted label
-- Action probability
-- SAFE probability
-- OTHER probability
-- Event duration
-- Ground-truth overlap
-- Fusion evidence
-- Temporal state
-
-Phân biệt lỗi:
-
-1. Safe-driving confusion
-2. Other-activity confusion
-3. Event overmerge
-4. Duplicate prediction
-5. False activation
-6. Incorrect driver association
-7. Confidence miscalibration
-8. Evaluation implementation error
-
-Lưu bằng chứng.
-
-### Temporal overmerge
-
-Repository V6 đã xác định đây là một failure mode.
+## 3. Resource governance
 
 Kiểm tra:
 
-- `merge_gap_seconds`
-- Minimum positive samples
-- Hysteresis
-- Release ratio
-- Event boundaries
-- Long continuous predictions
-- Distinct events within one interval
+- GPU availability.
+- VRAM.
+- CUDA.
+- Training dataset size.
+- Disk space.
+- Checkpoint compatibility.
 
-Không được sửa frozen event matcher.
+Nếu chỉ có CPU, thực hiện các phần phù hợp và chuẩn bị cấu hình GPU.
 
-Thay vào đó hãy cải thiện prediction segmentation nếu có bằng chứng rằng mô hình đang gộp các hành vi độc lập.
+Nếu có RTX 5090 hợp lệ, đo tốc độ thực tế chứ không giả định số phút cho mỗi epoch.
 
-Chỉ điều chỉnh temporal policy bằng development data hợp lệ và giao thức lựa chọn được định trước.
-
-Không dùng outer heldout labels để chọn policy cho chính outer fold đó.
+Không huấn luyện từ đầu khi fine-tuning hợp lệ và đủ cho giả thuyết đang kiểm tra.
 
 ---
 
-# PHASE 4 — IMPROVE SUBJECT GENERALIZATION
+# XIII. PHASE 9 — DATA QUALITY AND GENERALIZATION
 
-## 7. NGUYÊN TẮC
+Đây là yêu cầu cực kỳ quan trọng để chứng minh các chỉ số trên 85%.
 
-Mô hình phải có khả năng phân biệt hành vi, không chỉ học đặc trưng của từng người lái.
+## 1. Dataset audit
 
-Các subject hiện tại có khác biệt về:
+Kiểm tra:
 
-- ROI appearance
-- Lighting
-- Temporal patterns
-- Feature embeddings
-- Class prevalence
+- Number of subjects.
+- Number of videos.
+- Number of frames.
+- Number of annotations.
+- Class distribution.
+- Subject overlap.
+- Camera overlap.
+- Near-duplicates.
+- Timestamp accuracy.
+- License.
+- Human-review status.
+- Missing labels.
 
-Chỉ kết luận nguyên nhân khi có bằng chứng.
+## 2. Development split
 
-### Phương pháp thử nghiệm
+Giữ nguyên và không tái sử dụng consumed holdouts.
 
-- Training-only normalization
-- Subject-independent augmentation
-- Mild photometric augmentation
-- Temporal jitter
-- ROI perturbation
-- Regularization
-- Early stopping theo validation hợp lệ
-- Feature robustness testing
-- Model capacity reduction khi overfitting
+Không dùng:
 
-Không được làm thay đổi outer heldout data.
+- gZ-37.
+- gE-28.
 
-Không được đưa cùng subject vào cả train và test.
+để tuning hoặc model selection.
 
-Với chỉ ba subject, mọi kết luận về generalization phải ghi nhận bất định lớn.
+## 3. New development subjects
 
-### Dữ liệu mới
+Nếu có dữ liệu mới hợp lệ:
 
-Kiểm tra khả năng bổ sung các development subjects hợp pháp.
+- Chia theo subject.
+- Khóa split trước training.
+- Tách validation.
+- Chọn model và threshold chỉ bằng validation.
+- Freeze model.
+- Đánh giá trên untouched independent holdout.
 
-Nếu có dữ liệu mới, phải:
+Nếu chưa có subject mới:
 
-- Xác minh license
-- Kiểm tra subject identity
-- Kiểm tra video duplicates
-- Kiểm tra annotation
-- Thiết lập group-disjoint splits
-- Tạo data manifest
-- Khóa split trước thực nghiệm
+- Không công bố independent 85%.
+- Không tiếp tục threshold search vô hạn trên ba subjects cũ.
+- Hoàn thiện các diagnostics, tests và training preparation có thể xác minh.
 
-Không tự lấy `gZ-37` và `gE-28` để mở rộng development.
-
-Nếu không có dữ liệu mới, chỉ tiếp tục các kiểm tra kỹ thuật và thí nghiệm giới hạn; không tuyên bố đạt độ chính xác độc lập.
-
----
-
-# PHASE 5 — TRAINING AND CALIBRATION VALIDITY
-
-## 8. EVALUATION CORRECTNESS
-
-Audit:
-
-- Label-index mapping
-- Prediction timestamps
-- Event intervals
-- Clip-to-event conversion
-- Pooled metrics
-- Confusion matrix
-- Probability calibration
-- Train/validation isolation
-
-V5 đã có vấn đề training-subject in-sample threshold calibration.
-
-V6 đã dùng fixed threshold 0.80.
-
-Không quay lại phương pháp lựa chọn threshold có optimistic in-sample bias.
-
-Nếu cần threshold mới:
-
-- Chỉ lựa chọn bằng validation độc lập với dữ liệu fit model.
-- Ghi rõ subject IDs.
-- Không dùng outer test labels.
-- Không dùng consumed holdouts.
-- Không thay policy sau khi xem kết quả cuối cùng.
-
-Khi thiếu số subject để nested validation đáng tin cậy, phải giữ nguyên giới hạn và không đưa ra kết luận quá mức.
-
----
-
-# PHASE 6 — NEW SCIENTIFIC ABLATIONS
-
-## 9. THỰC NGHIỆM CẦN CHẠY
-
-Xây dựng V7 trên V6, không thay thế baseline.
-
-Các cấu hình dự kiến:
-
-V7-A:
-Hierarchical V6 baseline, không thay đổi.
-
-V7-B:
-Hierarchical + adjusted coarse loss.
-
-V7-C:
-Hierarchical + verified hard negatives.
-
-V7-D:
-Binary phone/non-phone gate.
-
-V7-E:
-Hierarchical + temporal context improvement.
-
-V7-F:
-Training-only calibrated negative-evidence fusion.
-
-V7-G:
-Selected combined model, chỉ khi từng thay đổi có bằng chứng hữu ích.
-
-Có thể thực hiện ít cấu hình hơn nếu các điều kiện dữ liệu hoặc compute không đáp ứng.
-
-Không tạo cấu hình chỉ để tăng số lượng thí nghiệm.
-
-### Sau mỗi experiment
-
-Báo cáo:
-
-- Clip Accuracy
-- Six-class Macro-F1
-- Coarse Macro-F1
-- SAFE_DRIVING Recall
-- OTHER_ACTIVITY Recall
-- Phone-use Recall
-- TP
-- FP
-- FN
-- Event Precision
-- Event Recall
-- Event F1
-- FA/min
-- Worst-subject FA/min
-- Detection latency
-
-Phải lưu confusion matrix theo từng subject.
-
-Không được lựa chọn candidate chỉ dựa vào pooled F1.
-
----
-
-# PHASE 7 — MODEL SELECTION
-
-## 10. GIỮ NGUYÊN GATE V6
-
-Gate hiện có:
-
-- False Alarms/min <= 0.30
-- Worst-subject FA/min <= 0.60
-- SAFE_DRIVING Recall >= 20%
-- Maximum Event F1 trong số candidate đủ điều kiện
-
-Không tự giảm yêu cầu SAFE Recall để chọn model.
-
-Không nới lỏng giới hạn cảnh báo sai.
-
-Đánh giá riêng độ ổn định khi thay đổi subject.
-
-### Mục tiêu nghiên cứu V7
-
-Các target tham vọng trên development:
-
-- Event Precision >= 80%
-- Event Recall >= 60%
-- Event F1 >= 70%
-- False Alarms/min <= 0.20
-- SAFE_DRIVING Recall >= 40%
-- Worst-subject FA/min <= 0.30
-
-Đây là research targets, không phải tiêu chí được phép ép kết quả.
-
-Mục tiêu tối thiểu đầu tiên là đáp ứng gate V6 mà vẫn bảo toàn mức Event F1 hiện có càng nhiều càng tốt.
-
-Không được đánh đổi toàn bộ Event Recall lấy SAFE Recall.
-
-Không được sử dụng việc lựa chọn lại benchmark để làm tăng số liệu.
-
-Nếu mục tiêu chưa đạt, báo cáo giá trị thực tế.
-
----
-
-# PHASE 8 — SEATBELT METRICS
-
-## 11. NHÁNH DÂY AN TOÀN
-
-Theo V6:
-
-- 641 validation samples
-- Raw Accuracy khoảng 80.97%
-- Macro-F1 khoảng 57.28%
-- UNCERTAIN_OR_OCCLUDED Recall 4%
-- False-unfastened rate 10.29% trên các true-fastened samples sau policy
-
-Phải cải thiện nhánh này khi có dữ liệu và nhãn hợp lệ.
-
-Ưu tiên:
-
-1. Phân tích 24/25 trường hợp uncertain chưa được nhận đúng.
-2. Kiểm tra ROI quality.
-3. Xây dựng danh sách hard examples.
-4. Hỗ trợ human review.
-5. Tạo split theo video/camera/subject.
-6. Nghiên cứu class-balanced training.
-7. Kiểm tra attention-based classifier.
-8. Đánh giá selective prediction.
-
-Tham khảo:
-
-- RST-Net / Triplet Attention
-- Overhead YOLOv7 seatbelt detection
-
-Không sao chép số liệu của bài báo thành kết quả Roadwatch.
-
-Không huấn luyện từ nhãn chưa được xác nhận.
-
-Không biến belt-not-visible thành unfastened.
-
-Nếu chưa có thêm nhãn, hoàn thiện data audit, review tooling và báo cáo blocker; không tuyên bố đã nâng chỉ số.
-
----
-
-# PHASE 9 — PERFORMANCE OPTIMIZATION
-
-## 12. BASELINE
-
-V6 full backend cabin context:
-
-- 1.833 FPS trên CPU
-- YOLO detector khoảng 489.6 ms/call
-- Seatbelt classifier khoảng 78.1 ms/call
-
-Đây là các giá trị từ báo cáo thực nghiệm trên máy đã kiểm tra.
-
-Cần tối ưu dựa trên profiler.
-
-Ưu tiên:
-
-- Driver ROI
-- Avoid redundant detections
-- Reuse valid tracking states
-- Efficient frame preprocessing
-- Batch processing khi phù hợp
-- Model input sizing
-- ONNX Runtime benchmark nếu có lợi ích thực tế
-- CPU threading optimization
-
-Không tự động bỏ frame nếu điều đó làm mất hành vi ngắn.
-
-Không giảm độ phân giải đến mức mất điện thoại nhỏ.
-
-Báo cáo accuracy–latency trade-off.
-
-Các chỉ số của pretrained embedding hoặc cached temporal head không thay thế full-pipeline FPS.
-
----
-
-# PHASE 10 — SOURCE CODE IMPLEMENTATION
-
-## 13. FILES TO INSPECT AND MODIFY WHEN NECESSARY
-
-Ưu tiên:
-
-- `training/dmd/v6_action_hierarchy.py`
-- `training/dmd/run_v6_class_collapse_ablation.py`
-- `training/dmd/v5_resnet_gru.py`
-- `training/dmd/v5_video_action.py`
-- `training/dmd/run_v5_experiments.py`
-- `training/dmd/run_v5_b3_experiment.py`
-- `backend/ai/events.py`
-- `backend/ai/fusion.py`
-- `backend/ai/auxiliary.py`
-- `training/evaluate_seatbelt_v6.py`
-
-Không chỉnh module không liên quan nếu không có lý do.
-
-### Yêu cầu kỹ thuật
-
-- Đưa thay đổi vào module thực tế.
-- Sử dụng config riêng cho V7.
-- Ghi lại training seed.
-- Ghi Git SHA.
-- Ghi dataset hash.
-- Ghi model hash.
-- Bổ sung unit tests.
-- Bổ sung regression tests.
-- Lưu predictions cho từng subject.
-- Không ghi đè historical results.
-
-Nên dùng thư mục:
-
-`reports/v7_optimization/`
-
-và:
-
-`models/candidate/v7_research/`
-
-Checkpoint lớn được lưu qua artifact store hoặc local path thích hợp, không tự đưa dữ liệu nhạy cảm vào Git.
-
----
-
-# PHASE 11 — REQUIRED TESTS
-
-## 14. CODE VERIFICATION
-
-Chạy tối thiểu:
-
-- Python compile
-- Ruff critical gate
-- Relevant unit tests
-- Existing V6 regression tests
-- New V7 tests
-- Training/evaluation integrity tests
-- Holdout protection tests
-- Metric reconciliation tests
-
-Full Pytest từng thất bại vì các schema/policy liên quan dataset.
-
-Phải phân loại rõ:
-
-- Lỗi code
-- Sai đường dẫn
-- Thiếu dữ liệu
-- Test cần external artifacts
-- Environment blocker
-
-Không xóa test đang fail.
-
-Không khôi phục dữ liệu người dùng trái ý muốn.
-
-Không ghi PASS khi chưa chạy.
-
----
-
-# PHASE 12 — SCIENTIFIC VALIDATION
-
-## 15. CHỐNG OVERFITTING
-
-Chỉ có ba development subjects.
-
-V6 đã dùng chúng để nghiên cứu và lựa chọn kiến trúc.
-
-V7 không được tiếp tục tinh chỉnh lặp vô hạn trên chính các kết quả LOSO đó rồi tuyên bố có một phép đo test độc lập.
+## 4. Scientific validity
 
 Phải phân biệt:
 
-- Iterative development score
-- Subject-level cross-validation score
-- Model selection result
-- Independent holdout result
+- Training metrics.
+- Development metrics.
+- Cross-validation metrics.
+- Selected validation metrics.
+- Independent holdout metrics.
 
-Nếu bổ sung được dữ liệu mới hợp lệ, cần xây dựng evaluation protocol mới trước khi huấn luyện.
-
-Báo cáo:
-
-- Per-subject event counts
-- P/R/F1
-- False alarms
-- Confidence intervals phù hợp
-- Variance across folds
-- Worst-case subject
-- Number of tested hypotheses
-
-Nếu không có holdout mới:
-
-`INDEPENDENT_GENERALIZATION = NOT_ESTABLISHED`
-
-Không tự động promote model.
+Không được gộp thành một bảng kết quả duy nhất mà thiếu nhãn nguồn.
 
 ---
 
-# PHASE 13 — OUTPUT
+# XIV. PHASE 10 — OPTIMIZE EVENT F1
 
-## 16. BÁO CÁO BẮT BUỘC
+Sau mỗi thay đổi, phải báo cáo:
 
-Tạo:
+| Candidate | TP | FP | FN | Precision | Recall | Event F1 | FA/min | SAFE Recall |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
 
-`reports/v7_optimization/`
+### Important rule
 
-Các kết quả:
+Nếu candidate phục hồi 5 FN nhưng mất 5 TP, đó KHÔNG phải cải thiện Event Recall.
 
-1. `01_CURRENT_BASELINE_AUDIT.md`
-2. `02_SAFE_DRIVING_FAILURE_ANALYSIS.md`
-3. `03_FALSE_POSITIVE_ROOT_CAUSES.md`
-4. `04_SUBJECT_GENERALIZATION.md`
-5. `05_TRAINING_ABLATIONS.md`
-6. `06_EVENT_METRICS_COMPARISON.md`
-7. `07_SEATBELT_STATUS.md`
-8. `08_RUNTIME_BENCHMARK.md`
-9. `09_TEST_RESULTS.md`
-10. `10_SCIENTIFIC_VALIDITY.md`
-11. `11_FINAL_REPORT.md`
-12. `v7_experiments.json`
+Phải so sánh:
 
-Không tạo file rỗng hoặc báo cáo tuyên bố chung.
+- Recovered events.
+- Lost events.
+- New false positives.
+- Removed false positives.
+- Duplicate events.
+- Short-event coverage.
+- Per-subject metrics.
 
-Mỗi kết quả phải có bằng chứng chạy thực tế.
+Không chỉ báo cáo số sự kiện được cứu mà bỏ qua số sự kiện bị mất.
 
-### Comparison Table
+### Model selection
 
-| Version | TP | FP | FN | Precision | Recall | Event F1 | FA/min | SAFE Recall | Worst-subject FA/min |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+Ưu tiên candidate có:
 
-Báo cáo kết quả thật, kể cả khi xấu hơn baseline.
+1. Evaluation hợp lệ.
+2. Precision tốt.
+3. Recall tốt.
+4. Event F1 cao.
+5. False alarms thấp.
+6. Per-subject stability.
+7. SAFE_DRIVING reliability.
+8. Runtime phù hợp.
+
+Không chấp nhận nghiên cứu chỉ vì nó đạt một metric cao trong khi các metric khác sụp đổ.
 
 ---
 
-# PHASE 14 — EXECUTION ORDER
+# XV. PHASE 11 — FULL-PIPELINE PERFORMANCE
 
-**STEP 1:** Kiểm tra local HEAD, Git status, dữ liệu, checkpoint và môi trường.
+Đo riêng:
 
-**STEP 2:** Xác minh toàn bộ V6 metrics, config và pre-registered selection gate.
+- Object detector FPS.
+- Action encoder latency.
+- Temporal model latency.
+- Fusion latency.
+- Seatbelt classifier latency.
+- Video decode time.
+- Evidence processing time.
+- Full-pipeline FPS.
+- p50/p95 latency.
+- RAM/VRAM.
 
-**STEP 3:** Phân tích SAFE_DRIVING Recall thấp.
+Không lấy tốc độ cached features làm full-system FPS.
 
-**STEP 4:** Phân tích từng False Positive và False Negative quan trọng.
+Đo chênh lệch giữa:
 
-**STEP 5:** Xác định tác động của coarse loss và negative examples.
+- Original resolution.
+- High-resolution inference.
+- ROI cropping.
+- TTA.
+- Adaptive sampling.
 
-**STEP 6:** Triển khai controlled ablations về hierarchical classification.
+Chỉ giữ optimization nếu cải thiện chất lượng xứng đáng với chi phí tính toán.
 
-**STEP 7:** Chạy training/evaluation với dữ liệu hợp lệ, không dùng holdouts đã khóa.
+---
 
-**STEP 8:** Tối ưu negative-evidence fusion và temporal segmentation nếu có bằng chứng.
+# XVI. PHASE 12 — SOFTWARE INTEGRATION
 
-**STEP 9:** So sánh tất cả cấu hình theo Event F1, SAFE Recall và worst-subject FA/min.
+Sau khi có candidate được đánh giá hợp lệ, kiểm tra khả năng tích hợp với Roadwatch.
 
-**STEP 10:** Phân tích trade-off và chỉ chọn candidate đạt gate.
+Backend:
 
-**STEP 11:** Kiểm tra seatbelt evaluation và khả năng cải thiện bằng human-verified data.
+- FastAPI inference.
+- Model loading.
+- Video processing.
+- Event storage.
+- Job queue.
+- Authentication.
+- Review workflow.
+- Evidence metadata.
+- Error logging.
 
-**STEP 12:** Chạy code tests, regression tests và benchmark phù hợp.
+Frontend:
 
-**STEP 13:** Xuất các báo cáo có thể tái lập.
+- Video upload.
+- Prediction overlay.
+- Event timeline.
+- Confidence/uncertainty display.
+- Alerts.
+- Human review.
+- Statistics.
+- Export.
 
-**STEP 14:** Báo cáo các mục tiêu đạt/chưa đạt và nguyên nhân.
+Không tự thay model production bằng experimental checkpoint.
 
-Không dừng chỉ sau khi viết tài liệu.
+Phải có model registry và approval status rõ ràng.
 
-Không lặp lại bốn ablation V6 đã có nếu không có giả thuyết mới.
+Không tự động gán trạng thái HUMAN_CONFIRMED cho AI prediction.
 
-Không ép chỉ số bằng cách làm thay đổi ground truth hoặc evaluation rules.
+---
 
-Không claim production-ready khi thiếu independent validation.
+# XVII. PHASE 13 — TESTING
 
-**BẮT ĐẦU NGAY BẰNG VIỆC PHÂN TÍCH SAFE_DRIVING RECALL 12.57% TRONG V6 HIERARCHICAL MODEL, SAU ĐÓ TRIỂN KHAI CẢI TIẾN CODE VÀ CHẠY CÁC THỰC NGHIỆM CÓ KIỂM SOÁT.**
+Chạy:
 
-Mục tiêu là tạo ra một V7 có khả năng nhận diện hành vi tốt hơn, ít báo sai hơn, giữ được Recall trên nhiều người lái và có kết quả khoa học đáng tin cậy để sử dụng trong đồ án tốt nghiệp.
+- Python compile.
+- Ruff critical gate.
+- Targeted tests.
+- DMD regression tests.
+- Seatbelt tests.
+- Metric reconciliation tests.
+- Data-split protection tests.
+- Full Pytest.
+- Frontend build.
+- Backend smoke tests.
+- Inference smoke tests nếu có checkpoint.
+- End-to-end tests nếu môi trường hỗ trợ.
+
+Các lỗi liên quan cây `datasets/` phải được phân biệt với source-code regressions.
+
+Không xóa test để được kết quả PASS.
+
+Phải báo cáo số lượng:
+
+- PASSED.
+- FAILED.
+- ERROR.
+- SKIPPED.
+- BLOCKED.
+
+---
+
+# XVIII. PHASE 14 — REQUIRED DELIVERABLES
+
+Tạo thư mục:
+
+`reports/ai85_plus/`
+
+Các báo cáo:
+
+1. `01_PROJECT_AUDIT.md`
+2. `02_MODEL_WEIGHT_INVENTORY.md`
+3. `03_DATASET_VALIDATION.md`
+4. `04_ZERO_RETRAINING_ABLATIONS.md`
+5. `05_PHONE_FALSE_NEGATIVE_ANALYSIS.md`
+6. `06_ADAPTIVE_TEMPORAL_SAMPLING.md`
+7. `07_OBJECT_DETECTION_EXPERIMENTS.md`
+8. `08_ACTION_CLASSIFICATION_EXPERIMENTS.md`
+9. `09_MULTI_VIEW_FUSION.md`
+10. `10_FINE_TUNING_RESULTS.md`
+11. `11_SEATBELT_RESULTS.md`
+12. `12_METRICS_COMPARISON.md`
+13. `13_GENERALIZATION_VALIDATION.md`
+14. `14_RUNTIME_BENCHMARK.md`
+15. `15_TEST_RESULTS.md`
+16. `16_FINAL_RESEARCH_REPORT.md`
+
+Kèm:
+
+- Machine-readable experiment JSON.
+- Model checkpoint metadata.
+- Config files.
+- Prediction artifacts.
+- Confusion matrices.
+- Per-subject metrics.
+- Event matching evidence.
+- Input hashes.
+- Model hashes.
+- Git commit.
+- Reproduction commands.
+
+Không tạo file báo cáo rỗng.
+
+Không ghi kết quả chưa được đo.
+
+---
+
+# XIX. IMPLEMENTATION PRIORITIES
+
+Thực hiện theo thứ tự:
+
+### PRIORITY 0 — SAFETY
+
+Kiểm tra Git, checkpoint, dataset, training environment và backup.
+
+### PRIORITY 1 — ZERO-RETRAINING
+
+Thử nghiệm checkpoint hiện có, ROI, TTA, resolution và NMS có kiểm soát.
+
+### PRIORITY 2 — DMD EVENT RECALL
+
+Điều tra 13 FN, cải thiện adaptive sampling và action evidence.
+
+### PRIORITY 3 — VISUAL REPRESENTATION
+
+Cải thiện Phone ROI, Hand/Face Association và action classifier.
+
+### PRIORITY 4 — FUSION & TEMPORAL
+
+Giảm FN nhưng không làm tăng FP quá mức.
+
+### PRIORITY 5 — SELECTIVE FINE-TUNING
+
+Chỉ huấn luyện thêm khi có đủ dữ liệu và bằng chứng cần thiết.
+
+### PRIORITY 6 — SEATBELT
+
+Nâng cấp mô hình dây an toàn và uncertainty handling.
+
+### PRIORITY 7 — SCIENTIFIC VALIDATION
+
+Kiểm tra độc lập với subject mới được cấp phép.
+
+### PRIORITY 8 — SYSTEM COMPLETION
+
+Đảm bảo backend/frontend hoạt động và có thể trình diễn đúng phạm vi đề cương.
+
+---
+
+# XX. FINAL TARGET VERIFICATION
+
+Mục tiêu nghiên cứu:
+
+- Event Precision >= 85%.
+- Event Recall >= 85%.
+- Event F1 >= 85%.
+- SAFE_DRIVING Recall >= 85%.
+- FA/min <= 0.15.
+- Object Detection mAP50 >= 85%.
+- Seatbelt Macro-F1 >= 85%.
+
+Mỗi chỉ số phải được tính trên bài toán, bộ dữ liệu và giao thức tương ứng.
+
+Không coi mAP50 của detector là Event F1 của hệ thống.
+
+Không coi Top-1 Accuracy là Macro-F1.
+
+Không coi kết quả đã đạt trên development là independent holdout performance.
+
+Không sửa ground truth, threshold bằng nhãn test hoặc evaluation rules để ép đạt 85%.
+
+Nếu chỉ số không tăng, phải xác định nguyên nhân và đề xuất/triển khai bước cải thiện tiếp theo có bằng chứng.
+
+Nếu thiếu independent holdout, đánh dấu:
+
+`INDEPENDENT_AI85_NOT_ESTABLISHED`
+
+Không tự động phê duyệt production.
+
+---
+
+# XXI. EXECUTE NOW
+
+Bắt đầu trực tiếp trong workspace.
+
+1. Kiểm tra repository hiện tại.
+2. Xác minh checkpoint và dataset.
+3. Kiểm tra baseline metrics.
+4. Thực hiện Zero-Retraining Ablation.
+5. Phân tích FN/FP theo bằng chứng.
+6. Cải thiện adaptive temporal sampling.
+7. Cải thiện Phone ROI/Hand/Face evidence.
+8. Cải thiện action classification và fusion.
+9. Fine-tune hợp lệ khi cần thiết.
+10. Đánh giá seatbelt.
+11. Kiểm tra generalization và data validity.
+12. Chạy tests.
+13. Đo lại tất cả metrics.
+14. Tổng hợp ablation và báo cáo.
+15. Xác định candidate tốt nhất đủ điều kiện.
+
+Không dừng ở kế hoạch nếu có thể sửa code và chạy thí nghiệm.
+
+Không lặp lại các experiment đã thất bại mà không có giả thuyết mới.
+
+Không cam kết thời gian huấn luyện khi chưa có profiler.
+
+Không tuyên bố đạt 85% khi chưa có kết quả độc lập đáng tin cậy.
+
+**MỤC TIÊU CUỐI CÙNG: XÂY DỰNG ROADWATCH AI CÓ ĐỘ CHÍNH XÁC CAO, PHÁT HIỆN ĐƯỢC NHIỀU HÀNH VI THỰC TẾ, ÍT CẢNH BÁO SAI, TÁI LẬP ĐƯỢC THỰC NGHIỆM VÀ CÓ ĐỦ CƠ SỞ KHOA HỌC ĐỂ BẢO VỆ ĐỒ ÁN TỐT NGHIỆP.**
+
+BẮT ĐẦU NGAY BẰNG MODEL/DATA AUDIT VÀ ZERO-RETRAINING EXPERIMENTS, SAU ĐÓ TẬP TRUNG PHỤC HỒI 13 FALSE NEGATIVES CỦA DMD.
