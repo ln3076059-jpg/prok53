@@ -3,7 +3,7 @@
   "case_id": "gB-9-phone-01",
   "reviewer_id": "68980dcda19d4dfbab8003d9adfec32c",
   "reviewer_type": "HUMAN",
-  "reviewed_at_utc": "2026-10-16T15:39:57.650712+00:00",
+  "reviewed_at_utc": "2026-10-16T15:50:39.778653+00:00",
   "phone_visibility": "PHONE_VISIBLE",
   "phone_use_assessment": "PHONE_USE_CONFIRMED",
   "selected_proposal_id": "f1200-C3",
@@ -32,14 +32,14 @@
     "contact_sheet_sha256": "8953646bc68844681b75e9546c1976efae476eaf68ee48f482a8bd3650aa939b",
     "experiment_scope": "FN-selected development proposal mining for human review only"
   },
-  "previous_revision": null,
+  "previous_revision": "b4d11e329f6af31d07ac2bd9dd1208cd3b82f1d27ec419e0f4610a9152517b52",
   "training_admission": "NOT_AUTOMATIC_REQUIRES_GOVERNED_MATERIALIZATION",
   "production_approval": false,
   "review_assistance": {
     "type": "AI_PRE_REVIEW",
     "reviewer_id": "openai-codex",
-    "revision": "036eac33c708b22a999be002630b51c6e26a057397f70e344ec53c0886d8e6b7",
-    "accepted_without_changes": true
+    "revision": "fc8deca84a4dd1f3a0cb6ee1953f69ed0454610ac35e4b35adf72648663f3f53",
+    "accepted_without_changes": false
   },
-  "revision": "b4d11e329f6af31d07ac2bd9dd1208cd3b82f1d27ec419e0f4610a9152517b52"
+  "revision": "bd8ed3cef5d52696829bf41ad00b13f420d5705005c40b0c942c66b4d1abcf1b"
 }
