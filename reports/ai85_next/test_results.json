@@ -1,0 +1,37 @@
+{
+  "targeted": {
+    "command": "py -3.11 -m pytest tests/test_ai85_next.py -q --junitxml=reports/ai85_next/pytest_targeted.xml",
+    "summary": "PASS: 7 passed",
+    "counts": {"tests": 7, "passed": 7, "failures": 0, "errors": 0, "skipped": 0},
+    "junit_sha256": "37c009ff8b5f535b780a20545cb6af66545f96958ee4aba2a1afab050183753b"
+  },
+  "combined": {
+    "command": "py -3.11 -m pytest tests/test_ai85_upgrade.py tests/test_ai85_next.py -q --junitxml=reports/ai85_next/pytest_combined.xml",
+    "summary": "PASS: 16 passed",
+    "counts": {"tests": 16, "passed": 16, "failures": 0, "errors": 0, "skipped": 0},
+    "junit_sha256": "80ce7b8d5e647d5876252ce71c45133d0ff8c1e50d16088ced2fb49430acb11f"
+  },
+  "ruff": {
+    "command": "py -3.11 -m ruff check training/dmd/ai85_next.py training/dmd/run_ai85_next.py training/dmd/ai85_next_detector_trace.py training/dmd/render_ai85_next_reports.py tests/test_ai85_next.py",
+    "summary": "PASS"
+  },
+  "compile": {
+    "command": "py -3.11 -m compileall -q training/dmd/ai85_next.py training/dmd/run_ai85_next.py training/dmd/ai85_next_detector_trace.py training/dmd/render_ai85_next_reports.py",
+    "summary": "PASS"
+  },
+  "full": {
+    "command": "py -3.11 -m pytest tests -q --continue-on-collection-errors --junitxml=reports/ai85_next/pytest_full.xml",
+    "summary": "FAIL: 432 passed, 37 failed, 74 errors, 1 skipped",
+    "counts": {"tests": 544, "passed": 432, "failures": 37, "errors": 74, "skipped": 1},
+    "junit_sha256": "a532c6dfd570acb719716a2003273a96b664cb4b9e992b5cea13fa71b04cb47c",
+    "classification": {
+      "new_ai85_next_regressions": 0,
+      "preexisting_missing_inputs": [
+        "datasets/v2_external_test_policy.yaml",
+        "datasets/schemas/v2_review1.schema.json",
+        "datasets/schemas/v2_event_sequence_annotation.schema.json"
+      ],
+      "comparison_to_ai85_upgrade_full_suite": "Failure and error counts are unchanged; seven new passing tests increase passed from 425 to 432."
+    }
+  }
+}

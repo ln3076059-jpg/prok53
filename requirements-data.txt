@@ -2,3 +2,4 @@
 kaggle==1.7.4.5
 huggingface-hub==0.34.4
 roboflow==1.2.9
+scikit-learn==1.9.1

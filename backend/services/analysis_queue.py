@@ -37,24 +37,32 @@ class DurableAnalysisQueue:
             if not job or job.status != JobStatus.QUEUED:
                 raise ValueError("durable queue requires a persisted QUEUED job")
 
-    def claim_next(self) -> str | None:
-        """Atomically claim the oldest queued job; competing workers receive another job."""
-        with self.session_factory() as session:
-            job_id = session.scalar(
-                select(AnalysisJob.id)
-                .where(AnalysisJob.status == JobStatus.QUEUED)
-                .order_by(AnalysisJob.created_at, AnalysisJob.id)
-                .limit(1)
-            )
-            if job_id is None:
-                return None
-            result = session.execute(
-                update(AnalysisJob)
-                .where(AnalysisJob.id == job_id, AnalysisJob.status == JobStatus.QUEUED)
-                .values(status=JobStatus.RUNNING, error=None)
-            )
-            if result.rowcount != 1:
+    def claim_next(self, contention_retries: int = 8) -> str | None:
+        """Atomically claim the oldest queued job without treating contention as an empty queue."""
+        if contention_retries < 1:
+            raise ValueError("contention_retries must be positive")
+
+        # SELECT + conditional UPDATE is portable across the supported SQLite/MySQL setups. A
+        # competing worker may win the conditional UPDATE after both selected the same oldest
+        # row. Re-open the transaction and look for the next job instead of incorrectly telling
+        # the caller that the durable queue is empty.
+        for _ in range(contention_retries):
+            with self.session_factory() as session:
+                job_id = session.scalar(
+                    select(AnalysisJob.id)
+                    .where(AnalysisJob.status == JobStatus.QUEUED)
+                    .order_by(AnalysisJob.created_at, AnalysisJob.id)
+                    .limit(1)
+                )
+                if job_id is None:
+                    return None
+                result = session.execute(
+                    update(AnalysisJob)
+                    .where(AnalysisJob.id == job_id, AnalysisJob.status == JobStatus.QUEUED)
+                    .values(status=JobStatus.RUNNING, error=None)
+                )
+                if result.rowcount == 1:
+                    session.commit()
+                    return job_id
                 session.rollback()
-                return None
-            session.commit()
-            return job_id
+        return None

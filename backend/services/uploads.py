@@ -22,7 +22,10 @@ def safe_upload_name(original: str) -> str:
 def validate_video_container(path: Path) -> None:
     """Reject empty files and obvious extension/container mismatches before decoding."""
     try:
-        header = path.read_bytes()[:32]
+        # Do not load the complete upload into memory just to inspect its signature. The
+        # configured upload limit can be hundreds of MiB (or more) in production.
+        with path.open("rb") as handle:
+            header = handle.read(32)
     except OSError as exc:
         raise HTTPException(status_code=400, detail="Uploaded video could not be read") from exc
 

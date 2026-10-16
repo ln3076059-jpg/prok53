@@ -1,20 +1,49 @@
 {
-  "status": "BLOCKED",
-  "created_at": "2026-10-12T10:27:19.289344+00:00",
-  "git_head": "925e81a5a76fcf6bcadb32ba9e9633011d12e572",
+  "status": "READY",
+  "created_at": "2026-10-15T01:54:33.850196+00:00",
+  "git_head": "1938d23ffd555e193b77c8f3f0c2a3ea153e5551",
   "dataset_role": "DEVELOPMENT_ONLY",
+  "development_subjects": [
+    "gB-9",
+    "gZ-36",
+    "gC-14"
+  ],
   "consumed_holdouts_forbidden": [
     "gZ-37",
     "gE-28"
   ],
   "config_path": "models\\model_config_v4_candidate.yaml",
   "config_sha256": "bef3b6f6e66266aa3e7f4c8d63dd413ce94129bfc1a3c51aef93e4e19267780a",
-  "inputs": [],
-  "input_set_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-  "blockers": [
-    "missing cached development features: datasets\\external_dmd\\derivatives\\v3_features_gB-9.json",
-    "missing cached development features: datasets\\external_dmd\\derivatives\\v3_features_gZ-36.json",
-    "missing cached development features: datasets\\external_dmd\\derivatives\\v3_features_gC-14.json"
+  "inputs": [
+    {
+      "subject_id": "gB-9",
+      "features_path": "dataset\\external_dmd\\derivatives\\v3_features_gB-9.json",
+      "features_sha256": "1469b556d354024a1357d86ab1bbd4151ed3164aac7ae8fa5564d8cb4eaba8c2",
+      "annotation_path": "dataset\\external_dmd\\subjects\\gB-9\\gB_9_s2_2019-03-07T16;21;20+01;00_rgb_ann_distraction.json",
+      "annotation_sha256": "a6febae9d122092d1ebb360f51b83705378417b9b3289b9dea0d7bde1bdbd37e",
+      "records": 809,
+      "duration_seconds": 407.56
+    },
+    {
+      "subject_id": "gZ-36",
+      "features_path": "dataset\\external_dmd\\derivatives\\v3_features_gZ-36.json",
+      "features_sha256": "0e54e246d25d3175ef7d221e20c041b30b4a1e20eb060931448a1bbfcd693dc5",
+      "annotation_path": "dataset\\external_dmd\\subjects\\gZ-36\\gZ_36_s2_2019-04-09T10;39;38+02;00_rgb_ann_distraction.json",
+      "annotation_sha256": "45c1d8257fc4a800d52748a7615a243fc222d0a8e84766987ada65a5b08a8291",
+      "records": 1024,
+      "duration_seconds": 515.827
+    },
+    {
+      "subject_id": "gC-14",
+      "features_path": "dataset\\external_dmd\\derivatives\\v3_features_gC-14.json",
+      "features_sha256": "acdf2d4a88bee1a3fce3d39095b3c3059c77e9f3edb10a89ecffb60518644803",
+      "annotation_path": "dataset\\external_dmd\\subjects\\gC-14\\gC_14_s2_2019-03-04T11;48;02+01;00_rgb_ann_distraction.json",
+      "annotation_sha256": "25aa157587dd283e4550b9129321fa9a1fc1889cc7cc1819c7e58d74e3089089",
+      "records": 795,
+      "duration_seconds": 400.403
+    }
   ],
+  "input_set_sha256": "3a87ccb6f59532ca612ef1e62d4993c7f2544d2351042447321981342d267892",
+  "blockers": [],
   "generalization_claim": "NOT_ESTABLISHED"
 }

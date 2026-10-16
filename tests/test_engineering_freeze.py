@@ -161,6 +161,17 @@ def test_video_container_validation_accepts_matching_signatures(tmp_path, suffix
     validate_video_container(path)
 
 
+def test_video_container_validation_does_not_read_entire_upload(tmp_path, monkeypatch):
+    path = tmp_path / "video.mp4"
+    path.write_bytes(b"\x00\x00\x00\x18ftypisom" + b"payload")
+
+    def fail_full_read(_):
+        raise AssertionError("validate_video_container must not call Path.read_bytes")
+
+    monkeypatch.setattr(type(path), "read_bytes", fail_full_read)
+    validate_video_container(path)
+
+
 def test_video_container_validation_rejects_spoofed_and_empty_files(tmp_path):
     spoofed = tmp_path / "not-a-video.mp4"
     spoofed.write_bytes(b"this is plain text")

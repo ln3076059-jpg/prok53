@@ -125,6 +125,8 @@ def evaluate_config_on_subject_features(
     subject_dir: Path,
     cached_data: Dict[str, Any],
     spec: Dict[str, Any],
+    *,
+    include_evidence: bool = False,
 ) -> Dict[str, Any]:
     assert_not_consumed_holdout_for_development(subject_id, caller_action="ablation_eval")
 
@@ -158,6 +160,9 @@ def evaluate_config_on_subject_features(
         "occlusion_bridge_seconds",
     }
     engine_kwargs = {k: v for k, v in t_cfg.items() if k in supported}
+    for key in supported:
+        if key in spec:
+            engine_kwargs[key] = spec[key]
     engine_kwargs["occlusion_bridge_seconds"] = float(spec["occlusion_bridge_seconds"])
     event_engine = TemporalEventEngine(**engine_kwargs)
 
@@ -251,7 +256,7 @@ def evaluate_config_on_subject_features(
     end_lat = [abs(float(m.get("end_latency", 0.0))) for m in matched]
     per_action = calculate_per_action_recall(gt_intervals, matched)
 
-    return {
+    result = {
         "subject_id": subject_id,
         "precision": round(prec * 100.0, 1),
         "recall": round(rec * 100.0, 1),
@@ -271,6 +276,14 @@ def evaluate_config_on_subject_features(
         "texting_left_recall": round(per_action.get("texting_left", 0.0) * 100.0, 1),
         "per_action": per_action,
     }
+    if include_evidence:
+        result["evaluation_evidence"] = {
+            "predicted_events": predicted_events,
+            "matches": matched,
+            "unmatched_predictions": unmatched_preds,
+            "unmatched_ground_truth": unmatched_gts,
+        }
+    return result
 
 
 def run_v31_ablation_suite(

@@ -1,0 +1,51 @@
+experiment_id: ROADWATCH_AI85_NEXT_DATA_CENTRIC
+dataset_role: DEVELOPMENT_ONLY_ITERATIVE
+activation_state: DEVELOPMENT_ONLY_NOT_VALIDATED
+development_subjects: [gB-9, gZ-36, gC-14]
+forbidden_consumed_holdouts: [gZ-37, gE-28]
+seed: 8516
+representation:
+  source: frozen_resnet18_imagenet_embeddings
+  normalization: per_video_unlabeled_feature_zscore
+  epsilon: 0.0001
+  note: Batch video normalization is valid for the offline analyzer but needs a causal running-statistics study for streaming use.
+classifiers:
+  coarse_three_class:
+    type: balanced_multinomial_logistic_regression
+    c: 0.00003
+    max_iter: 300
+    tolerance: 0.001
+  flat_six_class:
+    type: balanced_multinomial_logistic_regression
+    c: 0.0001
+    max_iter: 300
+    tolerance: 0.001
+  phone_binary:
+    type: balanced_binary_logistic_regression
+    c: 0.001
+    max_iter: 300
+    tolerance: 0.001
+event_policies:
+  inherited_fixed:
+    threshold: 0.80
+    release_ratio: 0.65
+    minimum_positive_samples: 2
+    merge_gap_seconds: 2.0
+  nested_candidates:
+    thresholds: [0.70, 0.74, 0.78, 0.80, 0.82, 0.84]
+    minimum_positive_samples: [2, 3, 4]
+    merge_gap_seconds: [1.0, 2.0]
+    maximum_false_alarms_per_minute: 0.15
+  exploratory_development_only:
+    threshold: 0.78
+    release_ratio: 0.65
+    minimum_positive_samples: 3
+    merge_gap_seconds: 2.0
+selection_targets:
+  minimum_precision: 0.85
+  minimum_recall: 0.85
+  minimum_f1: 0.85
+  maximum_false_alarms_per_minute: 0.15
+  minimum_safe_driving_recall: 0.85
+independent_validation_required: true
+production_approved: false
