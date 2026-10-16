@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "case_id": "gC-14-phone-06",
+  "reviewer_id": "68980dcda19d4dfbab8003d9adfec32c",
+  "reviewer_type": "HUMAN",
+  "reviewed_at_utc": "2026-10-16T16:27:08.604612+00:00",
+  "phone_visibility": "PHONE_VISIBLE",
+  "phone_use_assessment": "PHONE_USE_CONFIRMED",
+  "selected_proposal_id": "f7710-C1",
+  "selected_proposal": {
+    "proposal_id": "f7710-C1",
+    "frame_index": 7710,
+    "timestamp_seconds": 259.0726,
+    "source": "coco_cell_phone",
+    "confidence": 0.7437580227851868,
+    "geometry_context": "HANDHELD_USE",
+    "hand_proximity": 0.6848512333699297,
+    "face_proximity": 0.9420066102039047,
+    "nearest_cross_model_iou": 0.0,
+    "xyxy_in_driver_roi": [
+      437.4648742675781,
+      18.915708541870117,
+      489.6875915527344,
+      108.07337188720703
+    ]
+  },
+  "notes": "The phone is clearly visible at the right ear. Proposal f7710-C1 provides a complete, close box around the handset.",
+  "source": {
+    "proposal_artifact": "reports/v9_research/phone_proposal_mining.json",
+    "proposal_artifact_sha256": "9f710bfaf22c19fc143875a3832258935d6fb4d8db17dfd96e83bfee0718665e",
+    "source_case_sha256": "4d5f50f84c268b758117d0d4110d029014ed5f4ccef4ca6facad59f964a282d7",
+    "contact_sheet_sha256": "b4741e37057d1011581a37d4b295d4a6d56a3f02e7c9ab12a6a5ddd8b0aaf71e",
+    "experiment_scope": "FN-selected development proposal mining for human review only"
+  },
+  "previous_revision": null,
+  "training_admission": "NOT_AUTOMATIC_REQUIRES_GOVERNED_MATERIALIZATION",
+  "production_approval": false,
+  "review_assistance": {
+    "type": "AI_PRE_REVIEW",
+    "reviewer_id": "openai-codex",
+    "revision": "280fff83af159d7f0d8e618aef65ca4d6eed26afd5e9a1c88da3a16b3df97810",
+    "accepted_without_changes": true
+  },
+  "revision": "8c0ebc18e0c307d23ca02e0dd1dec9f0560f0b4202fec39735f5bc4917904886"
+}

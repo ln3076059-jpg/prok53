@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "case_id": "gB-9-phone-09",
+  "reviewer_id": "68980dcda19d4dfbab8003d9adfec32c",
+  "reviewer_type": "HUMAN",
+  "reviewed_at_utc": "2026-10-16T16:25:59.725152+00:00",
+  "phone_visibility": "PHONE_VISIBLE",
+  "phone_use_assessment": "PHONE_USE_CONFIRMED",
+  "selected_proposal_id": "f11040-C1",
+  "selected_proposal": {
+    "proposal_id": "f11040-C1",
+    "frame_index": 11040,
+    "timestamp_seconds": 370.9677,
+    "source": "coco_cell_phone",
+    "confidence": 0.8258090615272522,
+    "geometry_context": "HANDHELD_USE",
+    "hand_proximity": 0.7794944401993742,
+    "face_proximity": 0.32544312388355834,
+    "nearest_cross_model_iou": 0.0,
+    "xyxy_in_driver_roi": [
+      667.5377197265625,
+      176.577880859375,
+      762.3348388671875,
+      297.0003967285156
+    ]
+  },
+  "notes": "The phone is clearly visible in the left hand near the torso. Proposal f11040-C1 covers the full handset; f11040-C2 covers only part of it.",
+  "source": {
+    "proposal_artifact": "reports/v9_research/phone_proposal_mining.json",
+    "proposal_artifact_sha256": "9f710bfaf22c19fc143875a3832258935d6fb4d8db17dfd96e83bfee0718665e",
+    "source_case_sha256": "b64d77cf41492cf1e1086f09552c5efa9b359d031a96c3b4d636e83017d0f9e7",
+    "contact_sheet_sha256": "b9d25a3b99ea0602caa150de789277721cca3b463472a99af15a8c594f307e83",
+    "experiment_scope": "FN-selected development proposal mining for human review only"
+  },
+  "previous_revision": null,
+  "training_admission": "NOT_AUTOMATIC_REQUIRES_GOVERNED_MATERIALIZATION",
+  "production_approval": false,
+  "review_assistance": {
+    "type": "AI_PRE_REVIEW",
+    "reviewer_id": "openai-codex",
+    "revision": "7d9b519c839169fd7fbc01198029cf30e517bc54382bd051a2be8a2b23f3b397",
+    "accepted_without_changes": true
+  },
+  "revision": "848230ec6257e9628c5c90b178d27cc43c58c58553478644f0b894d0d9379ab8"
+}

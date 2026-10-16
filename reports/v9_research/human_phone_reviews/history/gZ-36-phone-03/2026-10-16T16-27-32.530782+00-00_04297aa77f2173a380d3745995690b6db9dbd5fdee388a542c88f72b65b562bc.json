@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "case_id": "gZ-36-phone-03",
+  "reviewer_id": "68980dcda19d4dfbab8003d9adfec32c",
+  "reviewer_type": "HUMAN",
+  "reviewed_at_utc": "2026-10-16T16:27:32.530782+00:00",
+  "phone_visibility": "PHONE_VISIBLE",
+  "phone_use_assessment": "PHONE_USE_CONFIRMED",
+  "selected_proposal_id": "f3300-C1",
+  "selected_proposal": {
+    "proposal_id": "f3300-C1",
+    "frame_index": 3300,
+    "timestamp_seconds": 110.8871,
+    "source": "coco_cell_phone",
+    "confidence": 0.5724798440933228,
+    "geometry_context": "HANDHELD_USE",
+    "hand_proximity": 0.7019707037605839,
+    "face_proximity": 0.19387122581236726,
+    "nearest_cross_model_iou": 0.44857980669873715,
+    "xyxy_in_driver_roi": [
+      734.5238037109375,
+      270.45343017578125,
+      831.7405395507812,
+      329.5016784667969
+    ]
+  },
+  "notes": "The phone is clearly visible in the right hand near the torso. Proposal f3300-C1 is the closest available fit to the visible device.",
+  "source": {
+    "proposal_artifact": "reports/v9_research/phone_proposal_mining.json",
+    "proposal_artifact_sha256": "9f710bfaf22c19fc143875a3832258935d6fb4d8db17dfd96e83bfee0718665e",
+    "source_case_sha256": "605d8aed8ef2a84bf835c62fb2e2b16ce3365c20d8a763950ab07d1f644f8a4a",
+    "contact_sheet_sha256": "f34339cfe85ec01192265ec4a9072e7ffa85baf1c20c7e5b2c32e880253a3adb",
+    "experiment_scope": "FN-selected development proposal mining for human review only"
+  },
+  "previous_revision": null,
+  "training_admission": "NOT_AUTOMATIC_REQUIRES_GOVERNED_MATERIALIZATION",
+  "production_approval": false,
+  "review_assistance": {
+    "type": "AI_PRE_REVIEW",
+    "reviewer_id": "openai-codex",
+    "revision": "5f923cfaba6dee974f43f85527de34f95ae230b3e31c67666ce6f7ec28045de1",
+    "accepted_without_changes": true
+  },
+  "revision": "04297aa77f2173a380d3745995690b6db9dbd5fdee388a542c88f72b65b562bc"
+}

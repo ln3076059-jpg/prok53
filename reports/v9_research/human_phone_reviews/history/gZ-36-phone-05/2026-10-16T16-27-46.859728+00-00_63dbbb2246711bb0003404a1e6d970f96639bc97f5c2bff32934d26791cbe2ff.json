@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "case_id": "gZ-36-phone-05",
+  "reviewer_id": "68980dcda19d4dfbab8003d9adfec32c",
+  "reviewer_type": "HUMAN",
+  "reviewed_at_utc": "2026-10-16T16:27:46.859728+00:00",
+  "phone_visibility": "PHONE_VISIBLE",
+  "phone_use_assessment": "PHONE_USE_CONFIRMED",
+  "selected_proposal_id": "f4830-C2",
+  "selected_proposal": {
+    "proposal_id": "f4830-C2",
+    "frame_index": 4830,
+    "timestamp_seconds": 162.2984,
+    "source": "coco_cell_phone",
+    "confidence": 0.02651839703321457,
+    "geometry_context": "HANDHELD_USE",
+    "hand_proximity": 0.7554944342014006,
+    "face_proximity": 0.19964483120439658,
+    "nearest_cross_model_iou": 0.0,
+    "xyxy_in_driver_roi": [
+      676.9156494140625,
+      299.4471740722656,
+      829.3572998046875,
+      388.6444396972656
+    ]
+  },
+  "notes": "The bright phone screen is visible in the right hand with glare. Proposal f4830-C2 is the only handheld proposal and covers the device, although it also includes some hand.",
+  "source": {
+    "proposal_artifact": "reports/v9_research/phone_proposal_mining.json",
+    "proposal_artifact_sha256": "9f710bfaf22c19fc143875a3832258935d6fb4d8db17dfd96e83bfee0718665e",
+    "source_case_sha256": "84f384300f68dd2bd2fa35616d8ad0c3a1a3ceb60c15233f45d97acf15f0b751",
+    "contact_sheet_sha256": "feb783936fa39282199fed7908d9ee4c1c6b5c204352756e5c3098f973cb3bd6",
+    "experiment_scope": "FN-selected development proposal mining for human review only"
+  },
+  "previous_revision": null,
+  "training_admission": "NOT_AUTOMATIC_REQUIRES_GOVERNED_MATERIALIZATION",
+  "production_approval": false,
+  "review_assistance": {
+    "type": "AI_PRE_REVIEW",
+    "reviewer_id": "openai-codex",
+    "revision": "af006e0d0891e48aead7fff8103016454a21cef9f5befe7589edb90d0ccb2184",
+    "accepted_without_changes": true
+  },
+  "revision": "63dbbb2246711bb0003404a1e6d970f96639bc97f5c2bff32934d26791cbe2ff"
+}

@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "case_id": "gZ-36-phone-01",
+  "reviewer_id": "68980dcda19d4dfbab8003d9adfec32c",
+  "reviewer_type": "HUMAN",
+  "reviewed_at_utc": "2026-10-16T16:27:23.889897+00:00",
+  "phone_visibility": "PHONE_VISIBLE",
+  "phone_use_assessment": "PHONE_USE_CONFIRMED",
+  "selected_proposal_id": "f1575-C1",
+  "selected_proposal": {
+    "proposal_id": "f1575-C1",
+    "frame_index": 1575,
+    "timestamp_seconds": 52.9234,
+    "source": "coco_cell_phone",
+    "confidence": 0.3928089141845703,
+    "geometry_context": "HANDHELD_USE",
+    "hand_proximity": 0.5939104431423108,
+    "face_proximity": 0.18654961466493725,
+    "nearest_cross_model_iou": 0.0,
+    "xyxy_in_driver_roi": [
+      786.7926635742188,
+      264.4727783203125,
+      831.7011108398438,
+      331.3764953613281
+    ]
+  },
+  "notes": "The phone is visible in the right hand near the clipped ROI boundary. Proposal f1575-C1 is the tightest box on the visible handset portion; larger alternatives include more hand area.",
+  "source": {
+    "proposal_artifact": "reports/v9_research/phone_proposal_mining.json",
+    "proposal_artifact_sha256": "9f710bfaf22c19fc143875a3832258935d6fb4d8db17dfd96e83bfee0718665e",
+    "source_case_sha256": "5799c64035990d2d0a75962ea5b38a89776a448ce047caa4730a2dc888ce7e9a",
+    "contact_sheet_sha256": "62da3a9b77d8c1bf28337ea0204bd760c44633175e4420a8b71b824a77ff547a",
+    "experiment_scope": "FN-selected development proposal mining for human review only"
+  },
+  "previous_revision": null,
+  "training_admission": "NOT_AUTOMATIC_REQUIRES_GOVERNED_MATERIALIZATION",
+  "production_approval": false,
+  "review_assistance": {
+    "type": "AI_PRE_REVIEW",
+    "reviewer_id": "openai-codex",
+    "revision": "b135e064473d36f3039923fae1382e5afb466e3bcb61e25ff59747bda44078fc",
+    "accepted_without_changes": true
+  },
+  "revision": "68bda3dd53b7c044c50f71b71b541715cf3e2ca4794e56b20eac9505adbd9d56"
+}

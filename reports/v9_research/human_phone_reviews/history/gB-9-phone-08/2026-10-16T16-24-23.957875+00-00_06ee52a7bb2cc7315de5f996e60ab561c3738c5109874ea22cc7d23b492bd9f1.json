@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "case_id": "gB-9-phone-08",
+  "reviewer_id": "68980dcda19d4dfbab8003d9adfec32c",
+  "reviewer_type": "HUMAN",
+  "reviewed_at_utc": "2026-10-16T16:24:23.957875+00:00",
+  "phone_visibility": "PHONE_VISIBLE",
+  "phone_use_assessment": "PHONE_USE_CONFIRMED",
+  "selected_proposal_id": "f9390-C1",
+  "selected_proposal": {
+    "proposal_id": "f9390-C1",
+    "frame_index": 9390,
+    "timestamp_seconds": 315.5242,
+    "source": "coco_cell_phone",
+    "confidence": 0.535801351070404,
+    "geometry_context": "HANDHELD_USE",
+    "hand_proximity": 0.7297624404507657,
+    "face_proximity": 0.6562265119003874,
+    "nearest_cross_model_iou": 0.0,
+    "xyxy_in_driver_roi": [
+      563.1622924804688,
+      89.63098907470703,
+      602.7528076171875,
+      187.94189453125
+    ]
+  },
+  "notes": "A phone is visible at the left ear with substantial hand occlusion. Proposal f9390-C1 is the best available box around the exposed vertical handset region.",
+  "source": {
+    "proposal_artifact": "reports/v9_research/phone_proposal_mining.json",
+    "proposal_artifact_sha256": "9f710bfaf22c19fc143875a3832258935d6fb4d8db17dfd96e83bfee0718665e",
+    "source_case_sha256": "9b2e0d602adadf893a8740f9f5dfc331aba6039bf584f9f66923ae5e48dc26fb",
+    "contact_sheet_sha256": "63ac070eae543ce75fcc1180f250569a4b3adde69c38219ff6130a372df5aba4",
+    "experiment_scope": "FN-selected development proposal mining for human review only"
+  },
+  "previous_revision": null,
+  "training_admission": "NOT_AUTOMATIC_REQUIRES_GOVERNED_MATERIALIZATION",
+  "production_approval": false,
+  "review_assistance": {
+    "type": "AI_PRE_REVIEW",
+    "reviewer_id": "openai-codex",
+    "revision": "9ca46e0347852459722456ceab5e3b576ccb8a4e046ff4e2954ed9d5537c7f61",
+    "accepted_without_changes": true
+  },
+  "revision": "06ee52a7bb2cc7315de5f996e60ab561c3738c5109874ea22cc7d23b492bd9f1"
+}

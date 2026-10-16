@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "case_id": "gC-14-phone-05",
+  "reviewer_id": "68980dcda19d4dfbab8003d9adfec32c",
+  "reviewer_type": "HUMAN",
+  "reviewed_at_utc": "2026-10-16T16:26:59.076504+00:00",
+  "phone_visibility": "PHONE_VISIBLE",
+  "phone_use_assessment": "PHONE_USE_CONFIRMED",
+  "selected_proposal_id": "f6735-C1",
+  "selected_proposal": {
+    "proposal_id": "f6735-C1",
+    "frame_index": 6735,
+    "timestamp_seconds": 226.3105,
+    "source": "coco_cell_phone",
+    "confidence": 0.19581378996372223,
+    "geometry_context": "HANDHELD_USE",
+    "hand_proximity": 0.7753726174231241,
+    "face_proximity": 0.4923799660183872,
+    "nearest_cross_model_iou": 0.0,
+    "xyxy_in_driver_roi": [
+      601.619873046875,
+      136.0725860595703,
+      719.534912109375,
+      273.061279296875
+    ]
+  },
+  "notes": "The phone is visible during rapid hand motion with substantial blur. Proposal f6735-C1 best covers the blurred handset near the face.",
+  "source": {
+    "proposal_artifact": "reports/v9_research/phone_proposal_mining.json",
+    "proposal_artifact_sha256": "9f710bfaf22c19fc143875a3832258935d6fb4d8db17dfd96e83bfee0718665e",
+    "source_case_sha256": "3f16f01ca01f69e646204dab1d3ac55ab696ecfe07834d9bb0afe0a9a5c76532",
+    "contact_sheet_sha256": "8f1ef36ba0487a1807ee24b6ceef1c8f4ddb74e3d80f45fe3170a11ebc903958",
+    "experiment_scope": "FN-selected development proposal mining for human review only"
+  },
+  "previous_revision": null,
+  "training_admission": "NOT_AUTOMATIC_REQUIRES_GOVERNED_MATERIALIZATION",
+  "production_approval": false,
+  "review_assistance": {
+    "type": "AI_PRE_REVIEW",
+    "reviewer_id": "openai-codex",
+    "revision": "fd690999e26ef53cf8c30554948b8eb7e6efd52527e00960c453b550d8739d63",
+    "accepted_without_changes": true
+  },
+  "revision": "2b41ec1927f47aee5d99472cac9913a9eb70f2677e195c9f6f1e17873ad8a354"
+}

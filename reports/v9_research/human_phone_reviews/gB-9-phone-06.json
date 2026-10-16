@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "case_id": "gB-9-phone-06",
+  "reviewer_id": "68980dcda19d4dfbab8003d9adfec32c",
+  "reviewer_type": "HUMAN",
+  "reviewed_at_utc": "2026-10-16T15:53:05.055033+00:00",
+  "phone_visibility": "PHONE_VISIBLE",
+  "phone_use_assessment": "PHONE_USE_CONFIRMED",
+  "selected_proposal_id": "NO_VALID_PROPOSAL",
+  "selected_proposal": null,
+  "notes": "The original ROI and three-frame sequence show the driver handling a partly occluded phone near the lap. Phone use is visible, but every available proposal covers the mounted cabin camera, so no valid phone box exists.",
+  "source": {
+    "proposal_artifact": "reports/v9_research/phone_proposal_mining.json",
+    "proposal_artifact_sha256": "9f710bfaf22c19fc143875a3832258935d6fb4d8db17dfd96e83bfee0718665e",
+    "source_case_sha256": "2a0131eed385cf0376d3f6c3d4be3f9d97e3b9fa036262727294dfd007895524",
+    "contact_sheet_sha256": "f3fe18321c2655c5d5c7771e5fc2471341ae60a97f18c5289b7119029d6b765d",
+    "experiment_scope": "FN-selected development proposal mining for human review only"
+  },
+  "previous_revision": null,
+  "training_admission": "NOT_AUTOMATIC_REQUIRES_GOVERNED_MATERIALIZATION",
+  "production_approval": false,
+  "review_assistance": {
+    "type": "AI_PRE_REVIEW",
+    "reviewer_id": "openai-codex",
+    "revision": "8ea96c32bd11efdedf45770d5e463c2e8a306d5205833504dcab4a02a42193d4",
+    "accepted_without_changes": true
+  },
+  "revision": "ef6a79ccf7008014659e1236d840eead806baa4c1a8f583006c7b3813a79b7c0"
+}

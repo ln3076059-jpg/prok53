@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "case_id": "gB-9-phone-07",
+  "reviewer_id": "68980dcda19d4dfbab8003d9adfec32c",
+  "reviewer_type": "HUMAN",
+  "reviewed_at_utc": "2026-10-16T15:53:28.856128+00:00",
+  "phone_visibility": "PHONE_VISIBLE",
+  "phone_use_assessment": "PHONE_USE_CONFIRMED",
+  "selected_proposal_id": "f8610-C1",
+  "selected_proposal": {
+    "proposal_id": "f8610-C1",
+    "frame_index": 8610,
+    "timestamp_seconds": 289.3145,
+    "source": "coco_cell_phone",
+    "confidence": 0.6290241479873657,
+    "geometry_context": "HANDHELD_USE",
+    "hand_proximity": 0.8219802294600808,
+    "face_proximity": 0.25935125711677964,
+    "nearest_cross_model_iou": 0.0,
+    "xyxy_in_driver_roi": [
+      665.9033203125,
+      202.28257751464844,
+      774.8209838867188,
+      334.3108825683594
+    ]
+  },
+  "notes": "The phone is clearly visible in the left hand. Proposal f8610-C1 covers the complete handset; f8610-C2 crops away its lower portion.",
+  "source": {
+    "proposal_artifact": "reports/v9_research/phone_proposal_mining.json",
+    "proposal_artifact_sha256": "9f710bfaf22c19fc143875a3832258935d6fb4d8db17dfd96e83bfee0718665e",
+    "source_case_sha256": "4d231c6818fb334a2379be868d503e688b5d6be032a4e02bf14476faef6d58bc",
+    "contact_sheet_sha256": "eb2c5cca97acb38948b77305d33196d9bf9024f2c807e7353f9d3e1064915341",
+    "experiment_scope": "FN-selected development proposal mining for human review only"
+  },
+  "previous_revision": null,
+  "training_admission": "NOT_AUTOMATIC_REQUIRES_GOVERNED_MATERIALIZATION",
+  "production_approval": false,
+  "review_assistance": {
+    "type": "AI_PRE_REVIEW",
+    "reviewer_id": "openai-codex",
+    "revision": "49f813a31419e13907a9030bba257cf9719abd6ba1c230fd63f890d683bca16b",
+    "accepted_without_changes": true
+  },
+  "revision": "2002bbb62999346d2142213b4f9ec3f0deb3600d18209715e0884cd92e3a1c01"
+}

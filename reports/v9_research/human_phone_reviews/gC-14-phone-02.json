@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "case_id": "gC-14-phone-02",
+  "reviewer_id": "68980dcda19d4dfbab8003d9adfec32c",
+  "reviewer_type": "HUMAN",
+  "reviewed_at_utc": "2026-10-16T16:26:21.165382+00:00",
+  "phone_visibility": "PHONE_VISIBLE",
+  "phone_use_assessment": "PHONE_USE_CONFIRMED",
+  "selected_proposal_id": "f3135-C1",
+  "selected_proposal": {
+    "proposal_id": "f3135-C1",
+    "frame_index": 3135,
+    "timestamp_seconds": 105.3427,
+    "source": "coco_cell_phone",
+    "confidence": 0.2404431700706482,
+    "geometry_context": "HANDHELD_USE",
+    "hand_proximity": 0.8242219125376536,
+    "face_proximity": 0.0,
+    "nearest_cross_model_iou": 0.0,
+    "xyxy_in_driver_roi": [
+      739.6477661132812,
+      519.4361572265625,
+      831.765625,
+      604.7833862304688
+    ]
+  },
+  "notes": "The phone is visible but partly clipped at the lower-right ROI boundary. Proposal f3135-C1 covers the complete visible portion; f3135-C2 misses the right edge of the handset.",
+  "source": {
+    "proposal_artifact": "reports/v9_research/phone_proposal_mining.json",
+    "proposal_artifact_sha256": "9f710bfaf22c19fc143875a3832258935d6fb4d8db17dfd96e83bfee0718665e",
+    "source_case_sha256": "017cd06ac36981c534310382bdd9f657a04ba3e9034ab34bcaee9fa623e410d4",
+    "contact_sheet_sha256": "c937ca2865e0bee291d3472896a8952f469e5f1297f014d06d4722832a66465e",
+    "experiment_scope": "FN-selected development proposal mining for human review only"
+  },
+  "previous_revision": null,
+  "training_admission": "NOT_AUTOMATIC_REQUIRES_GOVERNED_MATERIALIZATION",
+  "production_approval": false,
+  "review_assistance": {
+    "type": "AI_PRE_REVIEW",
+    "reviewer_id": "openai-codex",
+    "revision": "5a0d4b4af72bf2b28f63c003521374e464eff24c0b1f587e0f0b8be06f9ea955",
+    "accepted_without_changes": true
+  },
+  "revision": "bc5a04845bd676eac7bc8ab15ef402981a983784b393412997953afe6ecbfb85"
+}
