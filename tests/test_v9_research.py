@@ -10,6 +10,7 @@ from training.dmd.v9_diagnostics import (
     classify_fn_bottleneck,
     summarize_detection_row,
 )
+from training.dmd.v9_phone_proposal_mining import intersection_over_union
 
 
 def test_missing_phone_box_is_explicit_and_blocks_geometry():
@@ -65,3 +66,9 @@ def test_v9_source_artifacts_share_exact_thirteen_fn_cases():
     assert expected == {item["case_id"] for item in detector["rows"]}
     assert expected == {item["case_id"] for item in manifest}
     assert not any(name in json.dumps(evidence) for name in ("gZ-37", "gE-28"))
+
+
+def test_phone_proposal_iou_supports_review_without_false_overlap():
+    assert intersection_over_union([0, 0, 10, 10], [5, 5, 15, 15]) == pytest.approx(25 / 175)
+    assert intersection_over_union([0, 0, 10, 10], [11, 11, 20, 20]) == 0.0
+    assert intersection_over_union([1, 1, 1, 1], [1, 1, 1, 1]) == 0.0

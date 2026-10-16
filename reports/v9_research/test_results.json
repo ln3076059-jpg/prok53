@@ -1,5 +1,5 @@
 {
-  "created_at_utc": "2026-10-16T12:15:23.513791+00:00",
+  "created_at_utc": "2026-10-16T12:29:40.659960+00:00",
   "status": "PASS",
   "checks": [
     {
@@ -14,7 +14,7 @@
         "tests"
       ],
       "returncode": 0,
-      "seconds": 0.40407170000071346,
+      "seconds": 0.524622900000395,
       "log": "reports/v9_research/compile.log",
       "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
@@ -32,7 +32,7 @@
         "tests"
       ],
       "returncode": 0,
-      "seconds": 0.2642237000000023,
+      "seconds": 0.2900305000002845,
       "log": "reports/v9_research/ruff_critical.log",
       "log_sha256": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0"
     },
@@ -46,10 +46,11 @@
         "training/dmd/v9_diagnostics.py",
         "training/dmd/render_v9_reports.py",
         "training/dmd/verify_v9.py",
+        "training/dmd/v9_phone_proposal_mining.py",
         "tests/test_v9_research.py"
       ],
       "returncode": 0,
-      "seconds": 0.1422443999999814,
+      "seconds": 0.2043761999993876,
       "log": "reports/v9_research/ruff_v9.log",
       "log_sha256": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0"
     },
@@ -64,9 +65,9 @@
         "--junitxml=D:\\.idea\\giangdoantotnghiep\\reports\\v9_research\\pytest_v9.xml"
       ],
       "returncode": 0,
-      "seconds": 2.470937199999753,
+      "seconds": 9.908897099998285,
       "log": "reports/v9_research/pytest_v9.log",
-      "log_sha256": "f3434982222d8e75bd007392269fdb4bd02b11eeb586a3b6d55c07f27ba7399e"
+      "log_sha256": "a9253090c2a66cb7c7138359b25fe6f3ad282c742532cde4e18d2edccd6b1ce7"
     },
     {
       "name": "pytest_full",
@@ -78,19 +79,19 @@
         "--junitxml=D:\\.idea\\giangdoantotnghiep\\reports\\v9_research\\pytest_full.xml"
       ],
       "returncode": 0,
-      "seconds": 60.43079779999971,
+      "seconds": 66.73883019999994,
       "log": "reports/v9_research/pytest_full.log",
-      "log_sha256": "eeaa081de3f6c1cf83f19b38f086f3b9b8539a92d04f7fbb34bf9f20daaf1003"
+      "log_sha256": "a047b72e7d301b69b56004f48f11b5a387c3213bcdd3378adcd670bac7f30fb3"
     }
   ],
   "targeted_pytest": {
-    "tests": 6,
+    "tests": 7,
     "failures": 0,
     "errors": 0,
     "skipped": 0
   },
   "full_pytest": {
-    "tests": 558,
+    "tests": 559,
     "failures": 0,
     "errors": 0,
     "skipped": 0

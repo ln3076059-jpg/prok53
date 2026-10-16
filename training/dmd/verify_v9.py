@@ -27,6 +27,7 @@ REPORTS = (
     "08_RUNTIME_BENCHMARK.md",
     "09_TEST_RESULTS.md",
     "10_FINAL_SCIENTIFIC_REPORT.md",
+    "11_PHONE_PROPOSAL_MINING.md",
 )
 
 
@@ -98,6 +99,7 @@ def run_checks(output: Path) -> dict[str, Any]:
                 "training/dmd/v9_diagnostics.py",
                 "training/dmd/render_v9_reports.py",
                 "training/dmd/verify_v9.py",
+                "training/dmd/v9_phone_proposal_mining.py",
                 "tests/test_v9_research.py",
             ],
         ),
@@ -165,8 +167,10 @@ model accuracy or production readiness.
 
 def verify(output: Path = DEFAULT_OUTPUT) -> dict[str, Any]:
     diagnostics_path = output / "v9_diagnostics.json"
+    proposals_path = output / "phone_proposal_mining.json"
     tests_path = output / "test_results.json"
     diagnostics = json.loads(diagnostics_path.read_text(encoding="utf-8"))
+    proposals = json.loads(proposals_path.read_text(encoding="utf-8"))
     tests = json.loads(tests_path.read_text(encoding="utf-8"))
     _render_test_report(output, tests)
     failures = []
@@ -179,6 +183,20 @@ def verify(output: Path = DEFAULT_OUTPUT) -> dict[str, Any]:
         failures.append("ground truth or event matcher changed")
     if diagnostics["fine_tuning_performed"] or diagnostics["production_approved"]:
         failures.append("fine-tuning or production approval was claimed")
+    if proposals["summary"]["cases"] != 13:
+        failures.append("phone proposal mining did not preserve the 13-case FN set")
+    if proposals["summary"]["verified_occupant_tracks"] != 0:
+        failures.append("phone proposal mining claimed an unverified occupant track")
+    if any(
+        proposals[key]
+        for key in (
+            "ground_truth_changed",
+            "event_matcher_changed",
+            "fine_tuning_performed",
+            "production_approved",
+        )
+    ):
+        failures.append("phone proposal mining changed a protected scientific invariant")
     if tests["status"] != "PASS":
         failures.append("one or more software checks failed")
     missing = [name for name in REPORTS if not (output / name).is_file()]
