@@ -23,3 +23,15 @@ were unchanged.
 
 Fine-tuning is `BLOCKED_PENDING_HUMAN_APPROVAL`. Invisible belt evidence remains
 `UNCERTAIN_OR_OCCLUDED`; it is never converted automatically to `UNFASTENED`.
+
+
+## Completed phone review
+
+- Authenticated human receipts: 13/13.
+- Phone visible and phone use confirmed: 13/13.
+- Valid selected proposals: 12/13; visible-phone hard examples
+  without a valid box: 1.
+- Selected proposal sources: `{'coco_cell_phone': 12}`; verified occupant tracks: 0/13.
+
+The governed materialization is development-diagnostic only. It contributes zero automatic training
+items because all cases were selected from the same three repeatedly used development subjects.

@@ -4,12 +4,12 @@
     "sha256": "fbce253c1e51ddde382dda95a397b65a24ac3aeadbaf08aff919c6bec08e95e1"
   },
   "reports/v9_research/02_DATA_LABEL_QUALITY_AUDIT.md": {
-    "bytes": 982,
-    "sha256": "3406ad1010693f25a6aa70d6b4689801d2717c4fa8454495603e006bb23960b2"
+    "bytes": 1484,
+    "sha256": "9956e2d21d220c2d9c9303caf3b0ee0d89d3b43a7ac83ac7187250c710c7d591"
   },
   "reports/v9_research/03_FN_FP_ROOT_CAUSES.md": {
-    "bytes": 2226,
-    "sha256": "987a90b4a942e2132b013015a6f59bc06af62f06361a98fa6fde402386b47881"
+    "bytes": 2619,
+    "sha256": "403c4c1a372ab6118c2de8825c7410da89b235da1912d0426433b20cd2a60fa7"
   },
   "reports/v9_research/04_REPRESENTATION_EXPERIMENTS.md": {
     "bytes": 686,
@@ -32,28 +32,164 @@
     "sha256": "5b5c63ec5bf1f2057aaf3c1b6f677824ba70ca2ed459d4d2a2cf1d4d2d08f20c"
   },
   "reports/v9_research/09_TEST_RESULTS.md": {
-    "bytes": 812,
-    "sha256": "568aeb8897f65404ceed488373b4cc43738ba44c2b8005e7593c5cb4566f86ec"
+    "bytes": 813,
+    "sha256": "bf17cf8f3205020c035ae97daa660b07c843d1f23d75800b82b5c79246fbe012"
   },
   "reports/v9_research/10_FINAL_SCIENTIFIC_REPORT.md": {
-    "bytes": 1125,
-    "sha256": "4cfea2ca545b84bd1c49575a27573fd4b01288d2bbe91bc4508558b6b7a6526d"
+    "bytes": 1476,
+    "sha256": "bae71f6fba8deb26def476e72d237f97334e1ec6d716ea7b9eae42ec2ec4bd0c"
   },
   "reports/v9_research/11_PHONE_PROPOSAL_MINING.md": {
     "bytes": 984,
     "sha256": "de6ea3d7f6d2536b526d83c8f949b7e640ede59a7b34e8be101733ff2ece06da"
   },
   "reports/v9_research/12_HUMAN_REVIEW_WEB.md": {
-    "bytes": 1396,
-    "sha256": "9149eb6df329f0f98736f7fe5a06a6000b90d3f8221bb8244445d34cdc029e02"
+    "bytes": 2101,
+    "sha256": "487b131416d1dd2adb864b36400fe6bb2aff69f1661d81896b34f55df2893e2b"
+  },
+  "reports/v9_research/13_HUMAN_PHONE_REVIEW_RESULTS.md": {
+    "bytes": 2651,
+    "sha256": "133a00cd83102e82ac23dcfdeda553c0625c34d2b546f17d21670d5b8de84ecc"
+  },
+  "reports/v9_research/codex_phone_pre_reviews.json": {
+    "bytes": 9256,
+    "sha256": "420013b7be96e1bfd73893db48bb1f260f2b5e8e7603b459825863d2fedd012c"
   },
   "reports/v9_research/compile.log": {
     "bytes": 0,
     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   },
   "reports/v9_research/frontend_build.log": {
-    "bytes": 854,
-    "sha256": "98ae2f4046f513e23054b8f73ce8602a678dfbae1757afb256c7cd2deafa5952"
+    "bytes": 639,
+    "sha256": "c6ae0d87c7c953f0f2225583bede1ac14cfc5549ded5c9b83e68ef6223967dda"
+  },
+  "reports/v9_research/human_phone_review_materialization.json": {
+    "bytes": 15450,
+    "sha256": "a3f8e7bc003764b19eed74bdd8db1faff786de0d757832820a022c78aec910fb"
+  },
+  "reports/v9_research/human_phone_review_summary.json": {
+    "bytes": 23995,
+    "sha256": "44d35f903ce741af2ca248f1173a8eb1db8a0d5d58eb13187c709b1936f611a7"
+  },
+  "reports/v9_research/human_phone_reviews/gB-9-phone-01.json": {
+    "bytes": 1982,
+    "sha256": "8b91ed436b0afdbe73d88c7654fa7907426cc0afffed928ac0c862a54a33b23b"
+  },
+  "reports/v9_research/human_phone_reviews/gB-9-phone-03.json": {
+    "bytes": 2009,
+    "sha256": "60ff288e81faddc3571ed0736bb1f8116bba6eb05195934c7686d6bce3367d39"
+  },
+  "reports/v9_research/human_phone_reviews/gB-9-phone-05.json": {
+    "bytes": 1961,
+    "sha256": "cb31d415792320007dc84fcb2849fd81704f63fd948782b9ecf0810f156de723"
+  },
+  "reports/v9_research/human_phone_reviews/gB-9-phone-06.json": {
+    "bytes": 1525,
+    "sha256": "278f4c68913d3fa3e497ad053c00d5b9095b7e92740845c4d10dfff5c2c254eb"
+  },
+  "reports/v9_research/human_phone_reviews/gB-9-phone-07.json": {
+    "bytes": 1901,
+    "sha256": "22c84f2bcb88284eda35f546be47541bafae367864c75b0719dabb579052921f"
+  },
+  "reports/v9_research/human_phone_reviews/gB-9-phone-08.json": {
+    "bytes": 1922,
+    "sha256": "519f09ce34f0ab43b2f063e508291b6a8515bb30660d853cdb4d82a4db41553d"
+  },
+  "reports/v9_research/human_phone_reviews/gB-9-phone-09.json": {
+    "bytes": 1912,
+    "sha256": "66a1479665c533f0fae6a96bbcea8d8cf52d99c69152fddb182d0cec95f25aa9"
+  },
+  "reports/v9_research/human_phone_reviews/gC-14-phone-02.json": {
+    "bytes": 1923,
+    "sha256": "1fc0b17bcdb06824806553dbd804165cf5feec7f851cbc7a612ecf35504f5862"
+  },
+  "reports/v9_research/human_phone_reviews/gC-14-phone-05.json": {
+    "bytes": 1902,
+    "sha256": "38a829612c078dbd436fdacaf04bcfaad0602935fd33185a212b08684e4dcb18"
+  },
+  "reports/v9_research/human_phone_reviews/gC-14-phone-06.json": {
+    "bytes": 1888,
+    "sha256": "bcbfb842131d7ed6006fbf3fc44ab0132dee7e7b7c050bdbd0a58dcc17519b10"
+  },
+  "reports/v9_research/human_phone_reviews/gZ-36-phone-01.json": {
+    "bytes": 1954,
+    "sha256": "3db58ee93b30a49f24db1e2d920179aca444477f82ae24c612f803f69fcefa3e"
+  },
+  "reports/v9_research/human_phone_reviews/gZ-36-phone-03.json": {
+    "bytes": 1921,
+    "sha256": "d43f031742f564e218a15c922ad7e7855d9c656c6c6def00a052ee7a19d62b37"
+  },
+  "reports/v9_research/human_phone_reviews/gZ-36-phone-05.json": {
+    "bytes": 2007,
+    "sha256": "15121a126e7d779f2a2f4ad4915d438a0f465482e04cd60120fc35b7606b2b47"
+  },
+  "reports/v9_research/human_phone_reviews/history/gB-9-phone-01/2026-10-16T15-39-57.650712+00-00_b4d11e329f6af31d07ac2bd9dd1208cd3b82f1d27ec419e0f4610a9152517b52.json": {
+    "bytes": 1919,
+    "sha256": "4894f44258613b27aa0178661712938807fe688710a47b420fe6355c12132090"
+  },
+  "reports/v9_research/human_phone_reviews/history/gB-9-phone-01/2026-10-16T15-50-39.778653+00-00_bd8ed3cef5d52696829bf41ad00b13f420d5705005c40b0c942c66b4d1abcf1b.json": {
+    "bytes": 1982,
+    "sha256": "8b91ed436b0afdbe73d88c7654fa7907426cc0afffed928ac0c862a54a33b23b"
+  },
+  "reports/v9_research/human_phone_reviews/history/gB-9-phone-03/2026-10-16T15-40-29.408420+00-00_6713b1fbbe6c1fcc254a41af9edd5ee8ede892a9b338e3ae08330cb9705f9546.json": {
+    "bytes": 1943,
+    "sha256": "3731706d080fdad67096ec9c27687b8f21be32622deb0702de1140274da5f559"
+  },
+  "reports/v9_research/human_phone_reviews/history/gB-9-phone-03/2026-10-16T15-51-47.895886+00-00_ba7f00c3e4547db76c65985b69a9879cae97f230a198156eb2a0465a94dada56.json": {
+    "bytes": 2009,
+    "sha256": "60ff288e81faddc3571ed0736bb1f8116bba6eb05195934c7686d6bce3367d39"
+  },
+  "reports/v9_research/human_phone_reviews/history/gB-9-phone-05/2026-10-16T15-40-19.772283+00-00_877e7bf687bb1386f043ad03561019d7f77c80c8df8d7426e6e2a85aceb86e0e.json": {
+    "bytes": 1898,
+    "sha256": "fbcb3e6d15fb5c1c6ea8f353351513c6ac35d173c105807c90e949195eae7e50"
+  },
+  "reports/v9_research/human_phone_reviews/history/gB-9-phone-05/2026-10-16T15-51-56.356364+00-00_66d8b603966fe2318b7ea087cb6b6776642a33ea21db8cfca8aacef066b75784.json": {
+    "bytes": 1961,
+    "sha256": "cb31d415792320007dc84fcb2849fd81704f63fd948782b9ecf0810f156de723"
+  },
+  "reports/v9_research/human_phone_reviews/history/gB-9-phone-06/2026-10-16T15-53-05.055033+00-00_ef6a79ccf7008014659e1236d840eead806baa4c1a8f583006c7b3813a79b7c0.json": {
+    "bytes": 1525,
+    "sha256": "278f4c68913d3fa3e497ad053c00d5b9095b7e92740845c4d10dfff5c2c254eb"
+  },
+  "reports/v9_research/human_phone_reviews/history/gB-9-phone-07/2026-10-16T15-53-28.856128+00-00_2002bbb62999346d2142213b4f9ec3f0deb3600d18209715e0884cd92e3a1c01.json": {
+    "bytes": 1901,
+    "sha256": "22c84f2bcb88284eda35f546be47541bafae367864c75b0719dabb579052921f"
+  },
+  "reports/v9_research/human_phone_reviews/history/gB-9-phone-08/2026-10-16T16-24-23.957875+00-00_06ee52a7bb2cc7315de5f996e60ab561c3738c5109874ea22cc7d23b492bd9f1.json": {
+    "bytes": 1922,
+    "sha256": "519f09ce34f0ab43b2f063e508291b6a8515bb30660d853cdb4d82a4db41553d"
+  },
+  "reports/v9_research/human_phone_reviews/history/gB-9-phone-09/2026-10-16T16-25-59.725152+00-00_848230ec6257e9628c5c90b178d27cc43c58c58553478644f0b894d0d9379ab8.json": {
+    "bytes": 1912,
+    "sha256": "66a1479665c533f0fae6a96bbcea8d8cf52d99c69152fddb182d0cec95f25aa9"
+  },
+  "reports/v9_research/human_phone_reviews/history/gC-14-phone-02/2026-10-16T16-26-21.165382+00-00_bc5a04845bd676eac7bc8ab15ef402981a983784b393412997953afe6ecbfb85.json": {
+    "bytes": 1923,
+    "sha256": "1fc0b17bcdb06824806553dbd804165cf5feec7f851cbc7a612ecf35504f5862"
+  },
+  "reports/v9_research/human_phone_reviews/history/gC-14-phone-05/2026-10-16T16-26-59.076504+00-00_2b41ec1927f47aee5d99472cac9913a9eb70f2677e195c9f6f1e17873ad8a354.json": {
+    "bytes": 1902,
+    "sha256": "38a829612c078dbd436fdacaf04bcfaad0602935fd33185a212b08684e4dcb18"
+  },
+  "reports/v9_research/human_phone_reviews/history/gC-14-phone-06/2026-10-16T16-27-08.604612+00-00_8c0ebc18e0c307d23ca02e0dd1dec9f0560f0b4202fec39735f5bc4917904886.json": {
+    "bytes": 1888,
+    "sha256": "bcbfb842131d7ed6006fbf3fc44ab0132dee7e7b7c050bdbd0a58dcc17519b10"
+  },
+  "reports/v9_research/human_phone_reviews/history/gZ-36-phone-01/2026-10-16T16-27-23.889897+00-00_68bda3dd53b7c044c50f71b71b541715cf3e2ca4794e56b20eac9505adbd9d56.json": {
+    "bytes": 1954,
+    "sha256": "3db58ee93b30a49f24db1e2d920179aca444477f82ae24c612f803f69fcefa3e"
+  },
+  "reports/v9_research/human_phone_reviews/history/gZ-36-phone-03/2026-10-16T16-27-32.530782+00-00_04297aa77f2173a380d3745995690b6db9dbd5fdee388a542c88f72b65b562bc.json": {
+    "bytes": 1921,
+    "sha256": "d43f031742f564e218a15c922ad7e7855d9c656c6c6def00a052ee7a19d62b37"
+  },
+  "reports/v9_research/human_phone_reviews/history/gZ-36-phone-05/2026-10-16T16-27-46.859728+00-00_63dbbb2246711bb0003404a1e6d970f96639bc97f5c2bff32934d26791cbe2ff.json": {
+    "bytes": 1945,
+    "sha256": "d319d3cc91e053c34f4f3e934d076122cd5b018fbb41a52e16441cc117d25848"
+  },
+  "reports/v9_research/human_phone_reviews/history/gZ-36-phone-05/2026-10-16T16-27-50.550500+00-00_8cd71b84049557e244ecb7ddb28085765d4316fe1cf4c242e2eed82db2a4c18d.json": {
+    "bytes": 2007,
+    "sha256": "15121a126e7d779f2a2f4ad4915d438a0f465482e04cd60120fc35b7606b2b47"
   },
   "reports/v9_research/phone_fn_human_review_queue.csv": {
     "bytes": 3396,
@@ -121,23 +257,23 @@
   },
   "reports/v9_research/pytest_full.log": {
     "bytes": 737,
-    "sha256": "aac46a7bb72163d3ca8f836fe211e89a087d33b3e4153f378a908d93d8c1c3bc"
+    "sha256": "56053eabd772bb4f06d6ff0e568f73fcab0032e810805fa204a34fec45aed855"
   },
   "reports/v9_research/pytest_full.xml": {
-    "bytes": 72371,
-    "sha256": "dde258ac474391213da3e8617e48cde813ae2b6c5e6a5c7eab8a740d0af35851"
+    "bytes": 72651,
+    "sha256": "a8c5c4ec8d193fe0190ecbff09a779670e5e21a79d9dc3f1cae2392027439688"
   },
   "reports/v9_research/pytest_v9.log": {
     "bytes": 168,
-    "sha256": "d5364e71b0983adc69efd68e9e36ef63e01b03d8cc32a6c6299496655f21203d"
+    "sha256": "72492511f4e086bff25810e5b2e8837af29160ad0ef37198e189a5a9f69d9df8"
   },
   "reports/v9_research/pytest_v9.xml": {
-    "bytes": 1365,
-    "sha256": "0bf7dc553693335b51812c09e106fa16e92cb8582d066e481d9fc87bf57f873d"
+    "bytes": 1646,
+    "sha256": "89972023688c7dcd6a156bd2011c395894670ba733817eaa22913fbf2e7384c1"
   },
   "reports/v9_research/reproduce.ps1": {
-    "bytes": 613,
-    "sha256": "a2918916ee867de265d595b147e68ec0fc551011dc5fa7ea73a60c111691d09b"
+    "bytes": 1064,
+    "sha256": "a6a039a6b67054c25af47a6eb54e76f4a5345dc0419ef5f70fb8371f26846c7b"
   },
   "reports/v9_research/ruff_critical.log": {
     "bytes": 20,
@@ -148,8 +284,8 @@
     "sha256": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0"
   },
   "reports/v9_research/test_results.json": {
-    "bytes": 3433,
-    "sha256": "63258d23b7a46f6b8c782e8a9587087198f8f3f010a24cd964abb2ae27a66eb3"
+    "bytes": 3488,
+    "sha256": "09991680490d6b7b32be06769ab9eef001570fde3962ce75d551acbe8b0cdf2c"
   },
   "reports/v9_research/ui_review_desktop.png": {
     "bytes": 315983,
@@ -162,5 +298,21 @@
   "reports/v9_research/v9_diagnostics.json": {
     "bytes": 137306,
     "sha256": "17c8ba1f6f24caff917becb5cb86cd1cf8b0da7a34e2180c81fde10a9b826a10"
+  },
+  "reports/v9_research/web_backend.err.log": {
+    "bytes": 202,
+    "sha256": "a0f99379964ecd0037d4138ad2e671c0c488256324602fb6af338915f3eede79"
+  },
+  "reports/v9_research/web_backend.out.log": {
+    "bytes": 10366,
+    "sha256": "93d94c76a4035c052846c31a3809ed10e22294961a2ff677f3c1f84454e43b8f"
+  },
+  "reports/v9_research/web_frontend.err.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "reports/v9_research/web_frontend.out.log": {
+    "bytes": 497,
+    "sha256": "2f88677b363b90d4dc9866b64b19b90d2129eee31e422c01f3acdc4e58e21684"
   }
 }

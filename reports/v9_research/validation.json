@@ -1,8 +1,8 @@
 {
   "status": "PASS",
   "failures": [],
-  "reports": 12,
-  "artifacts_hashed": 41,
+  "reports": 13,
+  "artifacts_hashed": 79,
   "phone_fn_cases": 13,
   "protected_holdouts_accessed": false,
   "fine_tuning_performed": false,

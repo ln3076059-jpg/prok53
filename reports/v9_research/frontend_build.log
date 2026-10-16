@@ -10,11 +10,6 @@ computing gzip size...
 dist/index.html                                             1.18 kB │ gzip:   0.70 kB
 dist/assets/IBMPlexSansCondensed-Regular-CNjkQu2k.woff2    36.47 kB
 dist/assets/IBMPlexSansCondensed-SemiBold-EL3iN54-.woff2   37.42 kB
-dist/assets/index-BHgjYsMU.css                            927.51 kB │ gzip:  98.76 kB
-dist/assets/index-C0yxNEAO.js                             379.38 kB │ gzip: 118.30 kB
-✓ built in 6.72s
-npm notice
-npm notice New minor version of npm available! 11.6.2 -> 11.21.1
-npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.21.1
-npm notice To update run: npm install -g npm@11.21.1
-npm notice
+dist/assets/index-Dh8q8OhF.css                            928.15 kB │ gzip:  98.88 kB
+dist/assets/index-CK1fXhCE.js                             380.93 kB │ gzip: 118.71 kB
+✓ built in 11.42s

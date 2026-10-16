@@ -19,6 +19,7 @@ from training.dmd.v9_diagnostics import (
     classify_fn_bottleneck,
     summarize_detection_row,
 )
+from training.dmd.v9_human_review_results import validate_reviews
 from training.dmd.v9_phone_proposal_mining import intersection_over_union
 
 
@@ -81,6 +82,18 @@ def test_phone_proposal_iou_supports_review_without_false_overlap():
     assert intersection_over_union([0, 0, 10, 10], [5, 5, 15, 15]) == pytest.approx(25 / 175)
     assert intersection_over_union([0, 0, 10, 10], [11, 11, 20, 20]) == 0.0
     assert intersection_over_union([1, 1, 1, 1], [1, 1, 1, 1]) == 0.0
+
+
+def test_v9_completed_human_review_is_hash_valid_and_keeps_hard_example_positive():
+    result = validate_reviews(Path("reports/v9_research"))
+
+    assert result["summary"]["human_reviewed"] == 13
+    assert result["summary"]["valid_phone_proposals"] == 12
+    assert result["summary"]["no_valid_proposal_hard_examples"] == 1
+    hard = [item for item in result["cases"] if item["selected_proposal"] is None]
+    assert [item["case_id"] for item in hard] == ["gB-9-phone-06"]
+    assert hard[0]["phone_visibility"] == "PHONE_VISIBLE"
+    assert result["governance"]["training_admission"].endswith("NOT_TRAINING_READY")
 
 
 def _research_review_fixture(tmp_path: Path) -> tuple[Path, Path]:

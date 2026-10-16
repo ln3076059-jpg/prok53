@@ -36,6 +36,8 @@ def _table(headers: list[str], rows: list[list[Any]]) -> str:
 
 def render(output: Path = DEFAULT_OUTPUT) -> list[Path]:
     diagnostics = _read(output / "v9_diagnostics.json")
+    human_review_path = output / "human_phone_review_summary.json"
+    human_review = _read(human_review_path) if human_review_path.is_file() else None
     fn = diagnostics["phone_false_negatives"]
     seatbelt = diagnostics["seatbelt"]
     representation = diagnostics["representation"]
@@ -120,6 +122,39 @@ Transferable hypotheses are behavior-centric crops, explicit motion differences,
 context, small-object feature pyramids, and reliability-aware fusion. Each requires a Roadwatch ablation.
 """
 
+    human_review_audit = ""
+    human_review_root_cause = ""
+    human_review_final = ""
+    if human_review:
+        reviewed = human_review["summary"]
+        human_review_audit = f"""
+
+## Completed phone review
+
+- Authenticated human receipts: {reviewed['human_reviewed']}/13.
+- Phone visible and phone use confirmed: {reviewed['phone_use_confirmed']}/13.
+- Valid selected proposals: {reviewed['valid_phone_proposals']}/13; visible-phone hard examples
+  without a valid box: {reviewed['no_valid_proposal_hard_examples']}.
+- Selected proposal sources: `{reviewed['selected_sources']}`; verified occupant tracks: 0/13.
+
+The governed materialization is development-diagnostic only. It contributes zero automatic training
+items because all cases were selected from the same three repeatedly used development subjects.
+"""
+        human_review_root_cause = f"""
+
+Human adjudication later confirmed phone visibility and use in all 13 cases. Reviewers selected a valid
+proposal for {reviewed['valid_phone_proposals']}/13 cases; all selected boxes came from the auxiliary COCO
+phone model. `gB-9-phone-06` remained a visible-phone hard example with no valid proposal and was not
+written as an empty-label negative. These FN-selected results measure review yield, not detector recall.
+"""
+        human_review_final = f"""
+
+Human review is now complete for 13/13 FN cases: {reviewed['valid_phone_proposals']} selected boxes and
+{reviewed['no_valid_proposal_hard_examples']} visible-phone case without a valid box. The resulting lane is
+hash-registered and excluded from automatic training. This resolves the review prerequisite but does not
+provide an independent subject for model selection or evaluation.
+"""
+
     pending = seatbelt["pending_uncertain_review_manifest"]
     data_audit = f"""# V9 data and label quality audit
 
@@ -146,6 +181,7 @@ were unchanged.
 
 Fine-tuning is `{seatbelt["fine_tuning_status"]}`. Invisible belt evidence remains
 `UNCERTAIN_OR_OCCLUDED`; it is never converted automatically to `UNFASTENED`.
+{human_review_audit}
 """
 
     fn_rows = []
@@ -181,6 +217,7 @@ only {handheld_context} proposal has hand/face proximity consistent with handhel
 The visual audit contains clear large phones at the ear, partial occlusion, ROI-edge placement, glare and
 motion blur. Detector domain/representation failure dominates sampling density. The generated
 `phone_fn_human_review_queue.csv` preserves every case for human adjudication.
+{human_review_root_cause}
 """
 
     representation_report = f"""# V9 representation experiments
@@ -279,6 +316,7 @@ so no CPU/GPU speedup is claimed. V9 diagnostics add offline analysis only.
 V9 completed the prerequisite investigation and reproducible instrumentation; it did not fine-tune or
 approve a model. Only {fn["summary"]["cases_with_any_phone_box"]}/13 FN events have any sampled phone box,
 and none has verified occupant identity. Sampling density is downstream of this dominant failure.
+{human_review_final}
 
 Frozen embeddings separate subject identity {representation["subject_to_action_separability_ratio"]:.2f}×
 more strongly than action. Dense sampling recovered one long event but raised false alarms. Seatbelt
@@ -291,9 +329,10 @@ development Macro-F1 peaks at {_pct(seatbelt["best_development_macro_f1"])}; 500
 - Independent generalization: **not established**.
 - Production approval: **false**.
 
-The next model-changing run requires human-approved labels and a frozen representation protocol. Prioritize
-a driver-centric phone detector, measure box recall and occupant association, then evaluate fusion. Keep
-`gZ-37` and `gE-28` sealed until model, threshold and event policy are frozen.
+The next model-changing run requires new group-disjoint subjects plus a frozen representation protocol.
+The reviewed three-subject error lane can guide ROI and small-object hypotheses but cannot be used to
+claim recovery on those same cases. Keep `gZ-37` and `gE-28` sealed until model, threshold and event policy
+are frozen.
 """
 
     reports = {

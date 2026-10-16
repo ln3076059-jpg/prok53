@@ -30,6 +30,7 @@ REPORTS = (
     "10_FINAL_SCIENTIFIC_REPORT.md",
     "11_PHONE_PROPOSAL_MINING.md",
     "12_HUMAN_REVIEW_WEB.md",
+    "13_HUMAN_PHONE_REVIEW_RESULTS.md",
 )
 
 
@@ -103,6 +104,7 @@ def run_checks(output: Path) -> dict[str, Any]:
                 "training/dmd/render_v9_reports.py",
                 "training/dmd/verify_v9.py",
                 "training/dmd/v9_phone_proposal_mining.py",
+                "training/dmd/v9_human_review_results.py",
                 "backend/services/research_review.py",
                 "backend/schemas.py",
                 "tests/test_v9_research.py",
@@ -177,6 +179,9 @@ def verify(output: Path = DEFAULT_OUTPUT) -> dict[str, Any]:
     tests_path = output / "test_results.json"
     diagnostics = json.loads(diagnostics_path.read_text(encoding="utf-8"))
     proposals = json.loads(proposals_path.read_text(encoding="utf-8"))
+    human_review = json.loads(
+        (output / "human_phone_review_summary.json").read_text(encoding="utf-8")
+    )
     tests = json.loads(tests_path.read_text(encoding="utf-8"))
     _render_test_report(output, tests)
     failures = []
@@ -193,6 +198,16 @@ def verify(output: Path = DEFAULT_OUTPUT) -> dict[str, Any]:
         failures.append("phone proposal mining did not preserve the 13-case FN set")
     if proposals["summary"]["verified_occupant_tracks"] != 0:
         failures.append("phone proposal mining claimed an unverified occupant track")
+    if human_review["summary"]["human_reviewed"] != 13:
+        failures.append("human phone review is incomplete")
+    if human_review["summary"]["valid_phone_proposals"] != 12:
+        failures.append("unexpected human-reviewed phone proposal count")
+    if human_review["summary"]["no_valid_proposal_hard_examples"] != 1:
+        failures.append("visible-phone hard-example count is invalid")
+    if human_review["governance"]["training_admission"] != (
+        "DEVELOPMENT_DIAGNOSTIC_ONLY_NOT_TRAINING_READY"
+    ):
+        failures.append("human review lane bypasses development-only governance")
     if any(
         proposals[key]
         for key in (

@@ -28,3 +28,9 @@ only 1 proposal has hand/face proximity consistent with handheld use.
 The visual audit contains clear large phones at the ear, partial occlusion, ROI-edge placement, glare and
 motion blur. Detector domain/representation failure dominates sampling density. The generated
 `phone_fn_human_review_queue.csv` preserves every case for human adjudication.
+
+
+Human adjudication later confirmed phone visibility and use in all 13 cases. Reviewers selected a valid
+proposal for 12/13 cases; all selected boxes came from the auxiliary COCO
+phone model. `gB-9-phone-06` remained a visible-phone hard example with no valid proposal and was not
+written as an empty-label negative. These FN-selected results measure review yield, not detector recall.
