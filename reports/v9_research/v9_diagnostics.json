@@ -1,0 +1,3702 @@
+{
+  "schema_version": 1,
+  "scope": "development-only frozen diagnostics; no training or policy search",
+  "development_subjects": [
+    "gB-9",
+    "gZ-36",
+    "gC-14"
+  ],
+  "protected_holdouts": [
+    "gZ-37",
+    "gE-28"
+  ],
+  "protected_holdouts_accessed": false,
+  "ground_truth_changed": false,
+  "event_matcher_changed": false,
+  "phone_false_negatives": {
+    "cases": [
+      {
+        "case_id": "gB-9-phone-01",
+        "subject_id": "gB-9",
+        "action": "driver_actions/phonecall_right",
+        "duration_seconds": 29.8387,
+        "visual_review": "Phone clearly visible at right ear; hand and device occupy a large region.",
+        "visual_review_scope": "inherited original BODY midpoint inspection, not human label approval",
+        "roi_source": "reports/ai85_upgrade/fn_original_rois/gB-9-phone-01.jpg",
+        "roi_sha256": "601bd71dd204a268b2e47a65da191c9602d1cc1c0eb8e3906b349df0b50c0945",
+        "quality": {
+          "brightness_mean": 83.17776677978884,
+          "contrast_std": 74.20639229913552,
+          "laplacian_variance": 140.1989063282898,
+          "dark_fraction": 0.1978263260432378,
+          "highlight_fraction": 0.099019215057818,
+          "three_frame_motion_mean": 0.015506297966018986
+        },
+        "pose": {
+          "status": "AVAILABLE",
+          "confidence": 0.8460996896028519,
+          "face_points": 4,
+          "hand_points": 2
+        },
+        "detector": {
+          "decoded_samples": 5,
+          "samples_with_phone_box": 0,
+          "phone_box_coverage": 0.0,
+          "phone_proposals": 0,
+          "maximum_phone_confidence": null,
+          "phone_box_status": "MISSING_ALL_SAMPLED_FRAMES",
+          "occupant_id_status": "BLOCKED_NO_PHONE_BOX",
+          "geometry_status": "BLOCKED_NO_PHONE_BOX",
+          "occupant_association_values": []
+        },
+        "proposal_geometry": {
+          "status": "BLOCKED_NO_PHONE_BOX"
+        },
+        "action_probability": {
+          "T0_max": 0.4227624535560608,
+          "T1_dense_max": 0.43777573108673096,
+          "fixed_gate": 0.8,
+          "T0_reaches_gate": false,
+          "T1_reaches_gate": false
+        },
+        "root_cause": "PHONE_DETECTOR_NO_PROPOSAL",
+        "human_review_required": true
+      },
+      {
+        "case_id": "gB-9-phone-03",
+        "subject_id": "gB-9",
+        "action": "driver_actions/phonecall_right",
+        "duration_seconds": 36.1223,
+        "visual_review": "Phone clearly visible at right ear; little occlusion.",
+        "visual_review_scope": "inherited original BODY midpoint inspection, not human label approval",
+        "roi_source": "reports/ai85_upgrade/fn_original_rois/gB-9-phone-03.jpg",
+        "roi_sha256": "d85d91b180cd1f42244d887108efd62ec5dffad45e72888d71f1ecc1fb9d6ca1",
+        "quality": {
+          "brightness_mean": 82.37144529286073,
+          "contrast_std": 75.61727092822595,
+          "laplacian_variance": 136.4596541196016,
+          "dark_fraction": 0.21725937971342382,
+          "highlight_fraction": 0.10212418300653595,
+          "three_frame_motion_mean": 0.014730038650075414
+        },
+        "pose": {
+          "status": "AVAILABLE",
+          "confidence": 0.8597798709358487,
+          "face_points": 4,
+          "hand_points": 2
+        },
+        "detector": {
+          "decoded_samples": 5,
+          "samples_with_phone_box": 0,
+          "phone_box_coverage": 0.0,
+          "phone_proposals": 0,
+          "maximum_phone_confidence": null,
+          "phone_box_status": "MISSING_ALL_SAMPLED_FRAMES",
+          "occupant_id_status": "BLOCKED_NO_PHONE_BOX",
+          "geometry_status": "BLOCKED_NO_PHONE_BOX",
+          "occupant_association_values": []
+        },
+        "proposal_geometry": {
+          "status": "BLOCKED_NO_PHONE_BOX"
+        },
+        "action_probability": {
+          "T0_max": 0.7218237519264221,
+          "T1_dense_max": 0.7543731927871704,
+          "fixed_gate": 0.8,
+          "T0_reaches_gate": false,
+          "T1_reaches_gate": false
+        },
+        "root_cause": "PHONE_DETECTOR_NO_PROPOSAL",
+        "human_review_required": true
+      },
+      {
+        "case_id": "gB-9-phone-05",
+        "subject_id": "gB-9",
+        "action": "driver_actions/phonecall_left",
+        "duration_seconds": 46.6062,
+        "visual_review": "Phone clearly visible at left ear; strong behavior evidence.",
+        "visual_review_scope": "inherited original BODY midpoint inspection, not human label approval",
+        "roi_source": "reports/ai85_upgrade/fn_original_rois/gB-9-phone-05.jpg",
+        "roi_sha256": "a75b18d7182f67476ece1f58c52356b80ba8807ef1886416e4e73dda9b1e73fb",
+        "quality": {
+          "brightness_mean": 84.44159478695325,
+          "contrast_std": 71.9901956439379,
+          "laplacian_variance": 139.7020229412351,
+          "dark_fraction": 0.16065901520864756,
+          "highlight_fraction": 0.09194318753142283,
+          "three_frame_motion_mean": 0.028194850322607677
+        },
+        "pose": {
+          "status": "AVAILABLE",
+          "confidence": 0.8392333214481672,
+          "face_points": 4,
+          "hand_points": 2
+        },
+        "detector": {
+          "decoded_samples": 5,
+          "samples_with_phone_box": 0,
+          "phone_box_coverage": 0.0,
+          "phone_proposals": 0,
+          "maximum_phone_confidence": null,
+          "phone_box_status": "MISSING_ALL_SAMPLED_FRAMES",
+          "occupant_id_status": "BLOCKED_NO_PHONE_BOX",
+          "geometry_status": "BLOCKED_NO_PHONE_BOX",
+          "occupant_association_values": []
+        },
+        "proposal_geometry": {
+          "status": "BLOCKED_NO_PHONE_BOX"
+        },
+        "action_probability": {
+          "T0_max": 0.6306087374687195,
+          "T1_dense_max": 0.7238595485687256,
+          "fixed_gate": 0.8,
+          "T0_reaches_gate": false,
+          "T1_reaches_gate": false
+        },
+        "root_cause": "PHONE_DETECTOR_NO_PROPOSAL",
+        "human_review_required": true
+      },
+      {
+        "case_id": "gB-9-phone-06",
+        "subject_id": "gB-9",
+        "action": "driver_actions/texting_left",
+        "duration_seconds": 1.0081,
+        "visual_review": "Short interval; gaze and hands move toward lap, but phone is occluded.",
+        "visual_review_scope": "inherited original BODY midpoint inspection, not human label approval",
+        "roi_source": "reports/ai85_upgrade/fn_original_rois/gB-9-phone-06.jpg",
+        "roi_sha256": "b25d8f76ccdaa071c392d936bb24659f0382335a79fd62b1b16446cc97a4c82c",
+        "quality": {
+          "brightness_mean": 85.78807071706888,
+          "contrast_std": 73.14806347641715,
+          "laplacian_variance": 176.21097445108623,
+          "dark_fraction": 0.1580744878079437,
+          "highlight_fraction": 0.08965324912016089,
+          "three_frame_motion_mean": 0.013808456467680084
+        },
+        "pose": {
+          "status": "AVAILABLE",
+          "confidence": 0.881678389178382,
+          "face_points": 3,
+          "hand_points": 2
+        },
+        "detector": {
+          "decoded_samples": 3,
+          "samples_with_phone_box": 0,
+          "phone_box_coverage": 0.0,
+          "phone_proposals": 0,
+          "maximum_phone_confidence": null,
+          "phone_box_status": "MISSING_ALL_SAMPLED_FRAMES",
+          "occupant_id_status": "BLOCKED_NO_PHONE_BOX",
+          "geometry_status": "BLOCKED_NO_PHONE_BOX",
+          "occupant_association_values": []
+        },
+        "proposal_geometry": {
+          "status": "BLOCKED_NO_PHONE_BOX"
+        },
+        "action_probability": {
+          "T0_max": 0.03696706146001816,
+          "T1_dense_max": 0.13816387951374054,
+          "fixed_gate": 0.8,
+          "T0_reaches_gate": false,
+          "T1_reaches_gate": false
+        },
+        "root_cause": "PHONE_DETECTOR_NO_PROPOSAL",
+        "human_review_required": true
+      },
+      {
+        "case_id": "gB-9-phone-07",
+        "subject_id": "gB-9",
+        "action": "driver_actions/texting_left",
+        "duration_seconds": 16.5323,
+        "visual_review": "Phone clearly visible in left hand near torso.",
+        "visual_review_scope": "inherited original BODY midpoint inspection, not human label approval",
+        "roi_source": "reports/ai85_upgrade/fn_original_rois/gB-9-phone-07.jpg",
+        "roi_sha256": "38522cab4a478bcbeee3141bd21c7de7c6ab5298549acf945191762326737f21",
+        "quality": {
+          "brightness_mean": 87.40544675402212,
+          "contrast_std": 74.02642808379017,
+          "laplacian_variance": 179.199409195339,
+          "dark_fraction": 0.16053725175967823,
+          "highlight_fraction": 0.10192779034690799,
+          "three_frame_motion_mean": 0.009043485339711551
+        },
+        "pose": {
+          "status": "AVAILABLE",
+          "confidence": 0.8523354053497314,
+          "face_points": 4,
+          "hand_points": 2
+        },
+        "detector": {
+          "decoded_samples": 5,
+          "samples_with_phone_box": 0,
+          "phone_box_coverage": 0.0,
+          "phone_proposals": 0,
+          "maximum_phone_confidence": null,
+          "phone_box_status": "MISSING_ALL_SAMPLED_FRAMES",
+          "occupant_id_status": "BLOCKED_NO_PHONE_BOX",
+          "geometry_status": "BLOCKED_NO_PHONE_BOX",
+          "occupant_association_values": []
+        },
+        "proposal_geometry": {
+          "status": "BLOCKED_NO_PHONE_BOX"
+        },
+        "action_probability": {
+          "T0_max": 0.46719834208488464,
+          "T1_dense_max": 0.5525065660476685,
+          "fixed_gate": 0.8,
+          "T0_reaches_gate": false,
+          "T1_reaches_gate": false
+        },
+        "root_cause": "PHONE_DETECTOR_NO_PROPOSAL",
+        "human_review_required": true
+      },
+      {
+        "case_id": "gB-9-phone-08",
+        "subject_id": "gB-9",
+        "action": "driver_actions/phonecall_left",
+        "duration_seconds": 39.0121,
+        "visual_review": "Phone at left ear, partly behind hand but behavior is clear.",
+        "visual_review_scope": "inherited original BODY midpoint inspection, not human label approval",
+        "roi_source": "reports/ai85_upgrade/fn_original_rois/gB-9-phone-08.jpg",
+        "roi_sha256": "7838c9c48cfa8fc0da649e901be837b90ff31662288f9b3972bfe603705d6748",
+        "quality": {
+          "brightness_mean": 81.81462496857718,
+          "contrast_std": 71.61016311191779,
+          "laplacian_variance": 171.58500404520353,
+          "dark_fraction": 0.17929078682755153,
+          "highlight_fraction": 0.09206691490698844,
+          "three_frame_motion_mean": 0.018598708337030135
+        },
+        "pose": {
+          "status": "AVAILABLE",
+          "confidence": 0.8071076969305674,
+          "face_points": 4,
+          "hand_points": 2
+        },
+        "detector": {
+          "decoded_samples": 5,
+          "samples_with_phone_box": 2,
+          "phone_box_coverage": 0.4,
+          "phone_proposals": 2,
+          "maximum_phone_confidence": 0.3239066004753113,
+          "phone_box_status": "AVAILABLE_ON_SUBSET",
+          "occupant_id_status": "MISSING_TRACK_ID",
+          "geometry_status": "UNVERIFIED_ROI_LEVEL_ASSOCIATION",
+          "occupant_association_values": [
+            "DRIVER_ROI_LEVEL_ONLY_NO_TRACK_ID"
+          ]
+        },
+        "proposal_geometry": {
+          "status": "UNVERIFIED_NO_OCCUPANT_TRACK",
+          "frame_index": 9390,
+          "phone_confidence": 0.3239066004753113,
+          "pose_confidence": 0.857158163189888,
+          "hand_proximity": 0.8407647202932664,
+          "face_proximity": 0.5899611293792006,
+          "geometry_context": "HANDHELD_USE"
+        },
+        "action_probability": {
+          "T0_max": 0.67585289478302,
+          "T1_dense_max": 0.6858704090118408,
+          "fixed_gate": 0.8,
+          "T0_reaches_gate": false,
+          "T1_reaches_gate": false
+        },
+        "root_cause": "PHONE_BOX_PRESENT_ACTION_UNDER_GATE",
+        "human_review_required": true
+      },
+      {
+        "case_id": "gB-9-phone-09",
+        "subject_id": "gB-9",
+        "action": "driver_actions/texting_left",
+        "duration_seconds": 12.3656,
+        "visual_review": "Phone clearly visible in left hand near torso.",
+        "visual_review_scope": "inherited original BODY midpoint inspection, not human label approval",
+        "roi_source": "reports/ai85_upgrade/fn_original_rois/gB-9-phone-09.jpg",
+        "roi_sha256": "b61c272093c0f8545a8cab3076a20eb9172b04cb466d1334189da007124f7a98",
+        "quality": {
+          "brightness_mean": 81.7836813411262,
+          "contrast_std": 72.96490075865054,
+          "laplacian_variance": 177.4810048819661,
+          "dark_fraction": 0.1960332610608346,
+          "highlight_fraction": 0.09308619281045752,
+          "three_frame_motion_mean": 0.008568496214473724
+        },
+        "pose": {
+          "status": "AVAILABLE",
+          "confidence": 0.7690232247114182,
+          "face_points": 4,
+          "hand_points": 2
+        },
+        "detector": {
+          "decoded_samples": 5,
+          "samples_with_phone_box": 5,
+          "phone_box_coverage": 1.0,
+          "phone_proposals": 5,
+          "maximum_phone_confidence": 0.21571119129657745,
+          "phone_box_status": "AVAILABLE_ALL",
+          "occupant_id_status": "MISSING_TRACK_ID",
+          "geometry_status": "UNVERIFIED_ROI_LEVEL_ASSOCIATION",
+          "occupant_association_values": [
+            "DRIVER_ROI_LEVEL_ONLY_NO_TRACK_ID"
+          ]
+        },
+        "proposal_geometry": {
+          "status": "UNVERIFIED_NO_OCCUPANT_TRACK",
+          "frame_index": 11205,
+          "phone_confidence": 0.21571119129657745,
+          "pose_confidence": 0.7690232247114182,
+          "hand_proximity": 0.0,
+          "face_proximity": 0.0,
+          "geometry_context": "MOUNTED_OR_STATIC"
+        },
+        "action_probability": {
+          "T0_max": 0.4168599545955658,
+          "T1_dense_max": 0.45249930024147034,
+          "fixed_gate": 0.8,
+          "T0_reaches_gate": false,
+          "T1_reaches_gate": false
+        },
+        "root_cause": "PHONE_BOX_PRESENT_ACTION_UNDER_GATE",
+        "human_review_required": true
+      },
+      {
+        "case_id": "gZ-36-phone-01",
+        "subject_id": "gZ-36",
+        "action": "driver_actions/texting_right",
+        "duration_seconds": 0.8064,
+        "visual_review": "Phone clearly visible in right hand near lap.",
+        "visual_review_scope": "inherited original BODY midpoint inspection, not human label approval",
+        "roi_source": "reports/ai85_upgrade/fn_original_rois/gZ-36-phone-01.jpg",
+        "roi_sha256": "029b8cb64aa9c7b1ec5295490f6162891b2f53704c1d4254de38391d844cfac0",
+        "quality": {
+          "brightness_mean": 85.18787707390649,
+          "contrast_std": 71.54644684285573,
+          "laplacian_variance": 327.5256547041177,
+          "dark_fraction": 0.11245050904977376,
+          "highlight_fraction": 0.09418402777777778,
+          "three_frame_motion_mean": 0.015000421281509083
+        },
+        "pose": {
+          "status": "AVAILABLE",
+          "confidence": 0.8049347644502466,
+          "face_points": 4,
+          "hand_points": 2
+        },
+        "detector": {
+          "decoded_samples": 3,
+          "samples_with_phone_box": 0,
+          "phone_box_coverage": 0.0,
+          "phone_proposals": 0,
+          "maximum_phone_confidence": null,
+          "phone_box_status": "MISSING_ALL_SAMPLED_FRAMES",
+          "occupant_id_status": "BLOCKED_NO_PHONE_BOX",
+          "geometry_status": "BLOCKED_NO_PHONE_BOX",
+          "occupant_association_values": []
+        },
+        "proposal_geometry": {
+          "status": "BLOCKED_NO_PHONE_BOX"
+        },
+        "action_probability": {
+          "T0_max": 0.5471053719520569,
+          "T1_dense_max": 0.7452247738838196,
+          "fixed_gate": 0.8,
+          "T0_reaches_gate": false,
+          "T1_reaches_gate": false
+        },
+        "root_cause": "PHONE_DETECTOR_NO_PROPOSAL",
+        "human_review_required": true
+      },
+      {
+        "case_id": "gZ-36-phone-03",
+        "subject_id": "gZ-36",
+        "action": "driver_actions/texting_right",
+        "duration_seconds": 0.6048,
+        "visual_review": "Phone clearly visible in right hand near torso.",
+        "visual_review_scope": "inherited original BODY midpoint inspection, not human label approval",
+        "roi_source": "reports/ai85_upgrade/fn_original_rois/gZ-36-phone-03.jpg",
+        "roi_sha256": "25888fe4748250ea90b4b0bf2021a3ec6b1718fd96c1a1e6606786e459740a8e",
+        "quality": {
+          "brightness_mean": 86.91753079436903,
+          "contrast_std": 73.25869710399833,
+          "laplacian_variance": 310.638129461218,
+          "dark_fraction": 0.1150370003770739,
+          "highlight_fraction": 0.09989119846656612,
+          "three_frame_motion_mean": 0.015563043892142076
+        },
+        "pose": {
+          "status": "AVAILABLE",
+          "confidence": 0.8770081460475921,
+          "face_points": 4,
+          "hand_points": 2
+        },
+        "detector": {
+          "decoded_samples": 2,
+          "samples_with_phone_box": 0,
+          "phone_box_coverage": 0.0,
+          "phone_proposals": 0,
+          "maximum_phone_confidence": null,
+          "phone_box_status": "MISSING_ALL_SAMPLED_FRAMES",
+          "occupant_id_status": "BLOCKED_NO_PHONE_BOX",
+          "geometry_status": "BLOCKED_NO_PHONE_BOX",
+          "occupant_association_values": []
+        },
+        "proposal_geometry": {
+          "status": "BLOCKED_NO_PHONE_BOX"
+        },
+        "action_probability": {
+          "T0_max": 0.8559412956237793,
+          "T1_dense_max": 0.8854799866676331,
+          "fixed_gate": 0.8,
+          "T0_reaches_gate": true,
+          "T1_reaches_gate": true
+        },
+        "root_cause": "PHONE_DETECTOR_NO_PROPOSAL",
+        "human_review_required": true
+      },
+      {
+        "case_id": "gZ-36-phone-05",
+        "subject_id": "gZ-36",
+        "action": "driver_actions/texting_right",
+        "duration_seconds": 0.9072,
+        "visual_review": "Phone clearly visible in right hand; bright screen and partial glare.",
+        "visual_review_scope": "inherited original BODY midpoint inspection, not human label approval",
+        "roi_source": "reports/ai85_upgrade/fn_original_rois/gZ-36-phone-05.jpg",
+        "roi_sha256": "d3317180dd09b2ab60ec7aa5357b2cc445b9a9a425219aadc862cb0dabc5142f",
+        "quality": {
+          "brightness_mean": 83.22433147938662,
+          "contrast_std": 70.88767711059853,
+          "laplacian_variance": 256.196633926655,
+          "dark_fraction": 0.12367827740070388,
+          "highlight_fraction": 0.08904835972850679,
+          "three_frame_motion_mean": 0.034473450485020554
+        },
+        "pose": {
+          "status": "AVAILABLE",
+          "confidence": 0.8588552296161651,
+          "face_points": 4,
+          "hand_points": 2
+        },
+        "detector": {
+          "decoded_samples": 2,
+          "samples_with_phone_box": 0,
+          "phone_box_coverage": 0.0,
+          "phone_proposals": 0,
+          "maximum_phone_confidence": null,
+          "phone_box_status": "MISSING_ALL_SAMPLED_FRAMES",
+          "occupant_id_status": "BLOCKED_NO_PHONE_BOX",
+          "geometry_status": "BLOCKED_NO_PHONE_BOX",
+          "occupant_association_values": []
+        },
+        "proposal_geometry": {
+          "status": "BLOCKED_NO_PHONE_BOX"
+        },
+        "action_probability": {
+          "T0_max": 0.9157363176345825,
+          "T1_dense_max": 0.9352058172225952,
+          "fixed_gate": 0.8,
+          "T0_reaches_gate": true,
+          "T1_reaches_gate": true
+        },
+        "root_cause": "PHONE_DETECTOR_NO_PROPOSAL",
+        "human_review_required": true
+      },
+      {
+        "case_id": "gC-14-phone-02",
+        "subject_id": "gC-14",
+        "action": "driver_actions/texting_right",
+        "duration_seconds": 12.6345,
+        "visual_review": "Phone is small and partly clipped at the lower-right ROI boundary.",
+        "visual_review_scope": "inherited original BODY midpoint inspection, not human label approval",
+        "roi_source": "reports/ai85_upgrade/fn_original_rois/gC-14-phone-02.jpg",
+        "roi_sha256": "2ae3bb08b38a20d370cb87f93eebc508205239a0257b81d193ed737aa95edc23",
+        "quality": {
+          "brightness_mean": 76.27809396995978,
+          "contrast_std": 71.69048836096067,
+          "laplacian_variance": 218.24973285373974,
+          "dark_fraction": 0.23392918866264453,
+          "highlight_fraction": 0.07519482151835093,
+          "three_frame_motion_mean": 0.014500432525951555
+        },
+        "pose": {
+          "status": "AVAILABLE",
+          "confidence": 0.8059945826729139,
+          "face_points": 4,
+          "hand_points": 2
+        },
+        "detector": {
+          "decoded_samples": 5,
+          "samples_with_phone_box": 0,
+          "phone_box_coverage": 0.0,
+          "phone_proposals": 0,
+          "maximum_phone_confidence": null,
+          "phone_box_status": "MISSING_ALL_SAMPLED_FRAMES",
+          "occupant_id_status": "BLOCKED_NO_PHONE_BOX",
+          "geometry_status": "BLOCKED_NO_PHONE_BOX",
+          "occupant_association_values": []
+        },
+        "proposal_geometry": {
+          "status": "BLOCKED_NO_PHONE_BOX"
+        },
+        "action_probability": {
+          "T0_max": 0.7713298797607422,
+          "T1_dense_max": 0.8423033356666565,
+          "fixed_gate": 0.8,
+          "T0_reaches_gate": false,
+          "T1_reaches_gate": true
+        },
+        "root_cause": "PHONE_DETECTOR_NO_PROPOSAL",
+        "human_review_required": true
+      },
+      {
+        "case_id": "gC-14-phone-05",
+        "subject_id": "gC-14",
+        "action": "driver_actions/texting_left",
+        "duration_seconds": 0.4032,
+        "visual_review": "Phone is visible during rapid hand motion with substantial motion blur.",
+        "visual_review_scope": "inherited original BODY midpoint inspection, not human label approval",
+        "roi_source": "reports/ai85_upgrade/fn_original_rois/gC-14-phone-05.jpg",
+        "roi_sha256": "4538cb2d73b70bee57b67849a3138b74609e532a4f5d725a6ce2cb8d32b7e1f9",
+        "quality": {
+          "brightness_mean": 74.70556616075918,
+          "contrast_std": 73.09884907816121,
+          "laplacian_variance": 211.52531871864778,
+          "dark_fraction": 0.2612100930115636,
+          "highlight_fraction": 0.06602132038712921,
+          "three_frame_motion_mean": 0.03700521757534085
+        },
+        "pose": {
+          "status": "AVAILABLE",
+          "confidence": 0.823463499546051,
+          "face_points": 3,
+          "hand_points": 2
+        },
+        "detector": {
+          "decoded_samples": 2,
+          "samples_with_phone_box": 0,
+          "phone_box_coverage": 0.0,
+          "phone_proposals": 0,
+          "maximum_phone_confidence": null,
+          "phone_box_status": "MISSING_ALL_SAMPLED_FRAMES",
+          "occupant_id_status": "BLOCKED_NO_PHONE_BOX",
+          "geometry_status": "BLOCKED_NO_PHONE_BOX",
+          "occupant_association_values": []
+        },
+        "proposal_geometry": {
+          "status": "BLOCKED_NO_PHONE_BOX"
+        },
+        "action_probability": {
+          "T0_max": null,
+          "T1_dense_max": 0.48383933305740356,
+          "fixed_gate": 0.8,
+          "T0_reaches_gate": false,
+          "T1_reaches_gate": false
+        },
+        "root_cause": "PHONE_DETECTOR_NO_PROPOSAL",
+        "human_review_required": true
+      },
+      {
+        "case_id": "gC-14-phone-06",
+        "subject_id": "gC-14",
+        "action": "driver_actions/phonecall_left",
+        "duration_seconds": 43.6492,
+        "visual_review": "Phone clearly visible at right ear; little occlusion.",
+        "visual_review_scope": "inherited original BODY midpoint inspection, not human label approval",
+        "roi_source": "reports/ai85_upgrade/fn_original_rois/gC-14-phone-06.jpg",
+        "roi_sha256": "db87594ef3be36f541da07c981b8c2eff939b865879455727a4bece4f86e5dbe",
+        "quality": {
+          "brightness_mean": 73.59527007918552,
+          "contrast_std": 68.79567933269907,
+          "laplacian_variance": 177.97503581918713,
+          "dark_fraction": 0.2514375942684766,
+          "highlight_fraction": 0.06653194130216189,
+          "three_frame_motion_mean": 0.01710734098818009
+        },
+        "pose": {
+          "status": "AVAILABLE",
+          "confidence": 0.9009602665901184,
+          "face_points": 3,
+          "hand_points": 2
+        },
+        "detector": {
+          "decoded_samples": 5,
+          "samples_with_phone_box": 0,
+          "phone_box_coverage": 0.0,
+          "phone_proposals": 0,
+          "maximum_phone_confidence": null,
+          "phone_box_status": "MISSING_ALL_SAMPLED_FRAMES",
+          "occupant_id_status": "BLOCKED_NO_PHONE_BOX",
+          "geometry_status": "BLOCKED_NO_PHONE_BOX",
+          "occupant_association_values": []
+        },
+        "proposal_geometry": {
+          "status": "BLOCKED_NO_PHONE_BOX"
+        },
+        "action_probability": {
+          "T0_max": 0.8543280363082886,
+          "T1_dense_max": 0.8618807792663574,
+          "fixed_gate": 0.8,
+          "T0_reaches_gate": true,
+          "T1_reaches_gate": true
+        },
+        "root_cause": "PHONE_DETECTOR_NO_PROPOSAL",
+        "human_review_required": true
+      }
+    ],
+    "summary": {
+      "cases": 13,
+      "root_causes": {
+        "PHONE_DETECTOR_NO_PROPOSAL": 11,
+        "PHONE_BOX_PRESENT_ACTION_UNDER_GATE": 2
+      },
+      "decoded_detector_samples": 52,
+      "samples_with_phone_box": 7,
+      "sampled_phone_box_coverage": 0.1346153846153846,
+      "cases_with_any_phone_box": 2,
+      "cases_with_verified_occupant_id": 0,
+      "T0_cases_reaching_action_gate": 3,
+      "T1_cases_reaching_action_gate": 4,
+      "T1_cases_matched": 1
+    }
+  },
+  "representation": {
+    "frozen_embedding_subject_silhouette": 0.4095304608345032,
+    "frozen_embedding_action_silhouette": 0.04861282929778099,
+    "subject_to_action_separability_ratio": 8.424328860307599,
+    "interpretation": "Subject identity is substantially more separable than action in frozen embeddings.",
+    "dense_sampling_result": "One long event recovered; short-event matching remained 0/4.",
+    "clip_feature_comparison_status": "BLOCKED_NO_FROZEN_CLIP_ARTIFACT_IN_REPOSITORY"
+  },
+  "fusion_ablation": [
+    {
+      "candidate": "Historical V6 / T0",
+      "true_positives": 16,
+      "false_positives": 5,
+      "false_negatives": 13,
+      "precision": 0.7619,
+      "recall": 0.5517,
+      "f1": 0.64,
+      "false_alarms_per_minute": 0.2266,
+      "evaluated_minutes": 22.0632,
+      "coarse_safe_recall": 0.12574850299401197,
+      "source": "replayed frozen comparator",
+      "delta_tp": 0,
+      "delta_fp": 1,
+      "delta_fn": 0
+    },
+    {
+      "candidate": "AI85 next controlled binary",
+      "true_positives": 16,
+      "false_positives": 4,
+      "false_negatives": 13,
+      "precision": 0.8,
+      "recall": 0.5517,
+      "f1": 0.6531,
+      "false_alarms_per_minute": 0.1813,
+      "evaluated_minutes": 22.0632,
+      "coarse_safe_recall": null,
+      "source": "historical consumed development; binary SAFE not six-class SAFE",
+      "delta_tp": 0,
+      "delta_fp": 0,
+      "delta_fn": 0
+    },
+    {
+      "candidate": "AI85 next exploratory",
+      "true_positives": 16,
+      "false_positives": 2,
+      "false_negatives": 13,
+      "precision": 0.8889,
+      "recall": 0.5517,
+      "f1": 0.6809,
+      "false_alarms_per_minute": 0.0906,
+      "evaluated_minutes": 22.0632,
+      "coarse_safe_recall": null,
+      "source": "INELIGIBLE posthoc policy exploration",
+      "delta_tp": 0,
+      "delta_fp": -2,
+      "delta_fn": 0
+    },
+    {
+      "candidate": "T1",
+      "true_positives": 17,
+      "false_positives": 13,
+      "false_negatives": 12,
+      "precision": 0.5667,
+      "recall": 0.5862,
+      "f1": 0.5763,
+      "false_alarms_per_minute": 0.5892,
+      "evaluated_minutes": 22.0632,
+      "coarse_safe_recall": 0.12364620938628158,
+      "source": "consumed development; no selection",
+      "delta_tp": 1,
+      "delta_fp": 9,
+      "delta_fn": -1
+    },
+    {
+      "candidate": "T2",
+      "true_positives": 16,
+      "false_positives": 6,
+      "false_negatives": 13,
+      "precision": 0.7273,
+      "recall": 0.5517,
+      "f1": 0.6275,
+      "false_alarms_per_minute": 0.2719,
+      "evaluated_minutes": 22.0632,
+      "coarse_safe_recall": 0.12613784135240572,
+      "source": "consumed development; no selection",
+      "delta_tp": 0,
+      "delta_fp": 2,
+      "delta_fn": 0
+    },
+    {
+      "candidate": "T3",
+      "true_positives": 17,
+      "false_positives": 11,
+      "false_negatives": 12,
+      "precision": 0.6071,
+      "recall": 0.5862,
+      "f1": 0.5965,
+      "false_alarms_per_minute": 0.4986,
+      "evaluated_minutes": 22.0632,
+      "coarse_safe_recall": 0.12431077694235589,
+      "source": "consumed development; no selection",
+      "delta_tp": 1,
+      "delta_fp": 7,
+      "delta_fn": -1
+    },
+    {
+      "candidate": "T4",
+      "true_positives": 16,
+      "false_positives": 7,
+      "false_negatives": 13,
+      "precision": 0.6957,
+      "recall": 0.5517,
+      "f1": 0.6154,
+      "false_alarms_per_minute": 0.3173,
+      "evaluated_minutes": 22.0632,
+      "coarse_safe_recall": 0.11852704257767549,
+      "source": "consumed development; no selection",
+      "delta_tp": 0,
+      "delta_fp": 3,
+      "delta_fn": 0
+    },
+    {
+      "candidate": "T5",
+      "true_positives": 16,
+      "false_positives": 8,
+      "false_negatives": 13,
+      "precision": 0.6667,
+      "recall": 0.5517,
+      "f1": 0.6038,
+      "false_alarms_per_minute": 0.3626,
+      "evaluated_minutes": 22.0632,
+      "coarse_safe_recall": 0.11852704257767549,
+      "source": "consumed development; no selection",
+      "delta_tp": 0,
+      "delta_fp": 4,
+      "delta_fn": 0
+    }
+  ],
+  "seatbelt": {
+    "frozen_variants": [
+      {
+        "id": "S0_original_224",
+        "macro_f1": 0.568041,
+        "balanced_accuracy": 0.567519,
+        "uncertain_recall": 0.04,
+        "false_unfastened_rate": 0.091429,
+        "abstention_rate": 0.068643
+      },
+      {
+        "id": "S1_resolution_320",
+        "macro_f1": 0.519467,
+        "balanced_accuracy": 0.529875,
+        "uncertain_recall": 0.0,
+        "false_unfastened_rate": 0.151429,
+        "abstention_rate": 0.043682
+      },
+      {
+        "id": "S2_horizontal_flip_TTA_224",
+        "macro_f1": 0.585181,
+        "balanced_accuracy": 0.58396,
+        "uncertain_recall": 0.04,
+        "false_unfastened_rate": 0.08,
+        "abstention_rate": 0.054602
+      }
+    ],
+    "best_development_macro_f1": 0.585181,
+    "legacy_uncertain_error_queue": {
+      "samples": 25,
+      "roi_available_locally": 0,
+      "correct": 1,
+      "high_confidence_wrong_at_0_90": 18,
+      "status": "HUMAN_REVIEW_REQUIRED"
+    },
+    "pending_uncertain_review_manifest": {
+      "path": "dataset/manifests/v2_seatbelt_uncertain_ui_review.json",
+      "sha256": "db4c7823b81ddd17771729d588def580ceb1fcabb0482e6928cb20540e00148d",
+      "samples": 500,
+      "review_status": {
+        "PENDING": 500
+      },
+      "automatic_training_labels_present": 0,
+      "occupant_roles": {
+        "PENDING": 500
+      },
+      "unique_effective_groups": 273
+    },
+    "fine_tuning_status": "BLOCKED_PENDING_HUMAN_APPROVAL",
+    "reason": "No reviewed three-state training labels; invisible belt must remain uncertain."
+  },
+  "runtime": {
+    "local": {
+      "status": "MEASURED_LOCAL_CPU",
+      "generated_at_utc": "2026-10-16T10:10:57.887385+00:00",
+      "hardware": {
+        "logical_cpu_count": 12,
+        "physical_cpu_count": 6,
+        "total_ram_mb": 6005.7,
+        "cuda_available": false,
+        "vram_peak_mb": 0.0
+      },
+      "source": {
+        "path": "dataset\\external_dmd\\subjects\\gB-9\\gB_9_s2_2019-03-07T16;21;20+01;00_rgb_body.mp4",
+        "sha256": "36bc2bcd2547033424833207fa6f4694fbf29fdfad2d305c30adb77639924b23",
+        "scope": "AUTHORIZED_DMD_CABIN_BODY_VIDEO; DEVELOPMENT_SUBJECT_gB-9"
+      },
+      "video_decode": {
+        "count": 300,
+        "mean_ms": 13.4541,
+        "p50_ms": 12.9072,
+        "p95_ms": 15.9255,
+        "elapsed_seconds": 4.0616,
+        "decode_fps": 73.863
+      },
+      "detector": {
+        "count": 24,
+        "mean_ms": 760.48,
+        "p50_ms": 520.112,
+        "p95_ms": 1375.0133
+      },
+      "seatbelt_classifier_in_pipeline": {
+        "count": 0,
+        "mean_ms": null,
+        "p50_ms": null,
+        "p95_ms": null
+      },
+      "seatbelt_classifier_direct_full_frame_probe": {
+        "count": 20,
+        "mean_ms": 131.6334,
+        "p50_ms": 55.2331,
+        "p95_ms": 139.1523
+      },
+      "fusion_in_pipeline": {
+        "count": 0,
+        "mean_ms": null,
+        "p50_ms": null,
+        "p95_ms": null
+      },
+      "fusion_direct": {
+        "count": 1000,
+        "mean_ms": 0.006,
+        "p50_ms": 0.0057,
+        "p95_ms": 0.0071
+      },
+      "evidence_persist_calls": {
+        "count": 25,
+        "mean_ms": 0.0046,
+        "p50_ms": 0.0046,
+        "p95_ms": 0.0062
+      },
+      "evidence_jpeg_write": {
+        "count": 20,
+        "mean_ms": 9.5423,
+        "p50_ms": 7.8036,
+        "p95_ms": 13.8981
+      },
+      "resnet_embedding": {
+        "subject_id": "gB-9",
+        "status": "EXTRACTED",
+        "rgb_cache_path": "dataset\\external_dmd\\derivatives\\v5_rgb_cache\\v5_rgb_gB-9_64.npz",
+        "rgb_cache_sha256": "226309334f239a30f5b73195fad3f3350f401a5c151dbe437d28da5db271ede3",
+        "output_path": "D:\\temp\\roadwatch-v6-benchmark-aa1kzyxm\\resnet18_embeddings.npz",
+        "output_sha256": "39b6e61f8560c8d4f8ea64dcf52e559c41e1f43250619f28865173a97b1aacc7",
+        "backbone": "torchvision_resnet18_imagenet1k_v1",
+        "weights_path": "torch_hub/checkpoints/resnet18-f37072fd.pth",
+        "weights_sha256": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec",
+        "records": 809,
+        "embedding_dim": 512,
+        "extraction_seconds": 6.591,
+        "frames_per_second": 122.743
+      },
+      "temporal_head": {
+        "status": "MEASURED",
+        "checkpoint": "models\\candidate\\v6_action_ablation_001\\flat_unweighted_loso_gB-9.pt",
+        "checkpoint_sha256": "e01a9bf04d8b4088c2d68d2e3de22419d9218fc462058c875df1580fd9143b3e",
+        "clips": 801,
+        "clips_per_second": 2180.32,
+        "milliseconds_per_clip": 0.459,
+        "p50_latency_ms": 0.272,
+        "p95_latency_ms": 0.416
+      },
+      "full_backend_pipeline": {
+        "frames": 24,
+        "source_fps": 29.76,
+        "processing_seconds": 21.4421,
+        "processing_fps": 1.119,
+        "real_time_factor": 26.588,
+        "per_context_latency": {
+          "count": 24,
+          "mean_ms": 868.5215,
+          "p50_ms": 600.7894,
+          "p95_ms": 2050.0696
+        },
+        "database_detection_rows": 0,
+        "database_event_rows": 0,
+        "scope": "ACTUAL VideoAnalyzer + SQLite + evidence path on a cabin clip"
+      },
+      "memory": {
+        "rss_start_mb": 311.7,
+        "rss_peak_mb": 631.0,
+        "rss_end_mb": 359.5
+      },
+      "interpretation": "This is a local cabin-video benchmark, not roadside accuracy evidence. Cached temporal-head throughput is reported separately from full-pipeline FPS."
+    },
+    "kaggle_gpu": {
+      "status": "GPU_FROZEN_INFERENCE_MEASURED",
+      "training_performed": false,
+      "scope": "64 legacy consumed validation images, not independent accuracy or full-system FPS",
+      "dataset": "longngoc11/roadwatch-mc-bootstrap-6500-v1",
+      "labels_used": false,
+      "holdouts_accessed": false,
+      "weights_sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+      "source_git_head": "43b87ee3151060a9dd2b1b2d02ca26c0a45c138e",
+      "python": "3.13.15",
+      "torch": "2.11.0+cu128",
+      "ultralytics": "8.3.187",
+      "opencv": "4.14.0",
+      "gpu": "Tesla T4",
+      "cuda": "12.8",
+      "gpu_total_memory_bytes": 15636037632,
+      "peak_cuda_allocated_bytes": 208317952,
+      "input_sha256": [
+        {
+          "path": "dataset/images/val/00306703c2f45daf9586549ead092a3b.jpg",
+          "sha256": "9b69d01175278e44260205b3c9fbc32dfafc58c5e680f5188096b2a2826c4246"
+        },
+        {
+          "path": "dataset/images/val/003bee6dc8055d1d82201339c4efaca7.jpg",
+          "sha256": "12727fe7c06d223ae5cce1063a44b84e184f197bde9212beb1524863f2bfe29a"
+        },
+        {
+          "path": "dataset/images/val/003e8940e018560c9a4a7175e2a0fac3.jpg",
+          "sha256": "c8fbdbcb3314515b807e43cca5cd82e7bfbbb16da73d0e3359c583b28b0c4b09"
+        },
+        {
+          "path": "dataset/images/val/005442d2729e51c08c232e9edb2ee21f.jpg",
+          "sha256": "df967607df3cdd04b559d5a825ef28e6ef2ba19e83fe688e064ee0c5ddc6a3c7"
+        },
+        {
+          "path": "dataset/images/val/005789af038a576b868f78c747657788.jpg",
+          "sha256": "d34045de0f156b201fe12f02fc8f2c1cad6d394704107e9d8b4023a6e08b5372"
+        },
+        {
+          "path": "dataset/images/val/008b3f2a16b45a298bda3b9ecaa3ce31.jpg",
+          "sha256": "e6af41a6757ad986374fced72009264025f708db43eabb55d7da4571b14bfa35"
+        },
+        {
+          "path": "dataset/images/val/00937f495e6e56c4b233480fb0e052a1.jpg",
+          "sha256": "b69cded2cdfd979ed51d0cc9c6cb9a1f031e33336154e2cea4e0e6159a5180d5"
+        },
+        {
+          "path": "dataset/images/val/0095a53913795bd98bf9dfe9f5c17793.jpg",
+          "sha256": "3c77dd82532b8a131cc2645e526a54c1a00746ab6761432d588f6f3df8fd0bcc"
+        },
+        {
+          "path": "dataset/images/val/009d924ad01155c286c01e3163ec4ed5.jpg",
+          "sha256": "8d473710b0751929e3afb06f51f2063107bd9107ca93c3d7a14cb17dfd9e6cb8"
+        },
+        {
+          "path": "dataset/images/val/009f16eae1895772b8f81ecb97893a8c.jpg",
+          "sha256": "af5003b2bfc35b95e7df1b8773a95013d3a0e0dbf074fbfd5110e4dc7c6d4e17"
+        },
+        {
+          "path": "dataset/images/val/00b2a895419d557a8168b1ed373ebef1.jpg",
+          "sha256": "e4d4761d0896f02cf6e6f9ac3dfd049da396d1be326348982fbfbb9829906cde"
+        },
+        {
+          "path": "dataset/images/val/00fbaf6d1f1c597a84ac255891cf2111.jpg",
+          "sha256": "30617be02eb7dbbce141f5dea07eedd81bed6d2c33fdbe7fda927ad04c2c8651"
+        },
+        {
+          "path": "dataset/images/val/01412dc211665948bd3dfa1ea4c53ce8.jpg",
+          "sha256": "f64dfb435e3e6b22b2b4d3d5f3d5ec74a974198076d3a2fa4725d6dcf6de2223"
+        },
+        {
+          "path": "dataset/images/val/0156d9e77ef35e289aa3aa47e00a42e7.jpg",
+          "sha256": "b7599449567a223a7fd6b1bd285016e4a3337ffd6f8ff9fc7e3e770c4bf83d18"
+        },
+        {
+          "path": "dataset/images/val/015b6ac2cbab5abf8b5852f89abff83b.jpg",
+          "sha256": "6d3e57cde30386f481e303f07e615e307481c3581bd9aacac100063ba1a74b36"
+        },
+        {
+          "path": "dataset/images/val/01793edf012c590d9239731a02ff34f4.jpg",
+          "sha256": "fca1836fd739dded4a5df99ff3ee01ab5092946bb943c3d312409a25af4329b8"
+        },
+        {
+          "path": "dataset/images/val/018927e6c9f8552b92ebd09a5128a8e4.jpg",
+          "sha256": "ae50e9a6a3f5ab830a6d539fe71437ccc89da3e4b41b687165b9502dbbe3516f"
+        },
+        {
+          "path": "dataset/images/val/01a695d1194f59ba87a5480bdf89736a.jpg",
+          "sha256": "054441041a1a027a19c69fc1f902afdd7a69918a15e08cab09d680be6988eeec"
+        },
+        {
+          "path": "dataset/images/val/01b0b355876c5e8fae850bda430d75b5.jpg",
+          "sha256": "f51ece9845ef90c84821bc9dbaf4b0867c2ceba1ee26ae66d9aa36901364cd8a"
+        },
+        {
+          "path": "dataset/images/val/01b6c43598f6504d97fb1fbbe843059b.jpg",
+          "sha256": "e3e9afe23e29fd73c654ef016c508700f9b9e3f01846452dab4eb4c10aee8373"
+        },
+        {
+          "path": "dataset/images/val/01ed39a1f6e050908ac03a2eb85d5762.jpg",
+          "sha256": "85b9aaa4500b664e5fc9222b45bf6f8b225207555e0ec9394d71a13008a411fc"
+        },
+        {
+          "path": "dataset/images/val/01f8c50b8fe45438830e9db7f89a5090.jpg",
+          "sha256": "45d3e62f21d3add8a2ff078fa5d9077990bcd79a3f96440ba9b940e18cf2af39"
+        },
+        {
+          "path": "dataset/images/val/01fc088a141a5974a178cbcfd9779cfa.jpg",
+          "sha256": "51fe265d22bea1f82a3b1a11eacb8698fa6cd8ea9bace9ab6d839ecba7196cf2"
+        },
+        {
+          "path": "dataset/images/val/027a0d50f65c59adb0087bb0f14a7a00.jpg",
+          "sha256": "add98db622f86b5b670f13d1dd2cbccae550113ca8f41557ad32e6c8297b6239"
+        },
+        {
+          "path": "dataset/images/val/028388fa8447506085525e9c9de66bac.jpg",
+          "sha256": "40c6d18c6aebf1ab2ff568e3c4ce9e5c101f0e571a9146efb7c2ef8a855dc043"
+        },
+        {
+          "path": "dataset/images/val/029e4c83a67a51f383b10540881a0fa7.jpg",
+          "sha256": "e9b2f9b1b1cecdb95f8c039fbd82d1327e91100d32fc4517d34d583193fb4051"
+        },
+        {
+          "path": "dataset/images/val/02f9fed8e42259f49c5b3720d0af6eb0.jpg",
+          "sha256": "b475fb9b7607e7f71e64046ddedfc60685851da6858c0cae139affdd23e1c164"
+        },
+        {
+          "path": "dataset/images/val/0317ac8f2ef35a1ab6b9fe112acb87c7.jpg",
+          "sha256": "5a0b3022fb17dc78a18bc3003b4fd76827f36124277b2243d29232d206dd0982"
+        },
+        {
+          "path": "dataset/images/val/0369db84a0885fabab2d3d1826b973d7.jpg",
+          "sha256": "6fda2011fda97a69aa4dd17bb67e6dccb9ee2cfec66a88070dfce2c1e8ba8ac2"
+        },
+        {
+          "path": "dataset/images/val/0392d7de5f865dcfbde694d685e67582.jpg",
+          "sha256": "6f315dd057d263a97c8305cdf23acf8af2f9e443582d1de18b81ab7d99eb2d25"
+        },
+        {
+          "path": "dataset/images/val/03953d5c7e9755feb59a2a99288c400a.jpg",
+          "sha256": "d6a579d5411c6bd5d560dd440f4b145b920dfdefad47eb566747a0e199578e6f"
+        },
+        {
+          "path": "dataset/images/val/039858133e1c596d93ac7043202697f8.jpg",
+          "sha256": "6a4d17771f7f96e3c61f64a9d0f91cad52a27ffad3ba2cd2d0905b34247477ed"
+        },
+        {
+          "path": "dataset/images/val/03bbb3d61c0253539c55bc3fa508e5b3.jpg",
+          "sha256": "5af787907dfdc817c3fe57f6f19cc7ae9e6389a853ec2e9d4e6987bd46471fdd"
+        },
+        {
+          "path": "dataset/images/val/03ca9ab8dc445da79522c9813d9c1605.jpg",
+          "sha256": "efcaf99c54366bc4118e587adf8740f020c7a2f0a79e7d413622b71b1060cd4c"
+        },
+        {
+          "path": "dataset/images/val/03cd05f77067565faef5a577f76f410a.jpg",
+          "sha256": "87add6eeee66e5f7916911b0c4e18ce9f472b4cf9c25dc7f9dae8fbaf7e15a1e"
+        },
+        {
+          "path": "dataset/images/val/03e1ef0462105729ad1f4a7b7a38cc4b.jpg",
+          "sha256": "7498c23b5b71163eb0c371a950f487378d3139b05b1c61302b7e593a45ae9d1e"
+        },
+        {
+          "path": "dataset/images/val/03f1e812fb555260bd28d1fd2ff7230f.jpg",
+          "sha256": "3c3f872a915bcceba986a24d4c5b503c01b4fbd8afab606eeb6835edd8b58f6a"
+        },
+        {
+          "path": "dataset/images/val/04079eed5e0a557988cc68c8c5d2eb6c.jpg",
+          "sha256": "fb9eaeb0ef3bdaaa093ca0e61d3735a786782a54069c3ee19907d7abf5d9f592"
+        },
+        {
+          "path": "dataset/images/val/048518ca13b15cf898be884ee0168d5f.jpg",
+          "sha256": "09f987a4f1f349076d0817f308e0b816cd85beb547d0a242fd2eb07ce5daf43b"
+        },
+        {
+          "path": "dataset/images/val/04c4c4ab75bf5321a9eb209e42bc8d90.jpg",
+          "sha256": "257cdf6074974990fc32f2f8810a16c64bed9ccf6be5b1c77bd83d0a4c38728b"
+        },
+        {
+          "path": "dataset/images/val/0501f64b9b605d9dbd4596fcd87563f4.jpg",
+          "sha256": "17025210cc37e93bc7f85baed93de5ea3fb112d21737cb4dca375b729186385e"
+        },
+        {
+          "path": "dataset/images/val/051e2f51d3ab5402b23c7410a5673ed2.jpg",
+          "sha256": "4e52557dda798fba6d993f3af1d87c10cc52aa0108dbf87e7a9a56b0ac75498b"
+        },
+        {
+          "path": "dataset/images/val/0523ce65f19f58c7915b4279e962457e.jpg",
+          "sha256": "7677f81711273160022c390c53026cce8975feaefceec722b8807bf4bdd03ee9"
+        },
+        {
+          "path": "dataset/images/val/05358019015e51908c709f46e8bd9a49.jpg",
+          "sha256": "baec01f92f9197771ae20e1f8aee87a90b807e07568b87ba9e7cdfee616f5c81"
+        },
+        {
+          "path": "dataset/images/val/05499272ce60506a876afd1210d85671.jpg",
+          "sha256": "66bb40c66362c10b3b946c5bb99040cd702184252804056968e074ecf37bd45d"
+        },
+        {
+          "path": "dataset/images/val/05adcef2448c5e5dad5348de65fb1801.jpg",
+          "sha256": "e86255ca71c3a0bcb6ffc7c02832242fd6db5a9d3e1fcf8610d00a34b49a72d4"
+        },
+        {
+          "path": "dataset/images/val/05b1481981355ca3b4da1be85d0a1b2c.jpg",
+          "sha256": "798bcf2b65d336cb32372a81d659258a43878f6db993b8b3c8541bc78535563b"
+        },
+        {
+          "path": "dataset/images/val/05d35c57575f536bb45ba6d4bf3ee107.jpg",
+          "sha256": "e6b9b4239b6130672a99cfac386aea42fb9710453d60e8316d30b241492c624e"
+        },
+        {
+          "path": "dataset/images/val/05fb6a3974e3567aabd8f7d25b75ece6.jpg",
+          "sha256": "c0a81e3165edc96b710e200e963df8ee8f64d783e249aecb59ba17f82a247593"
+        },
+        {
+          "path": "dataset/images/val/06056eb41c0b5da0a39cdc1a71e694e6.jpg",
+          "sha256": "14f79d8c53c357830a92d29420c79fb634aa8026b77fce973da45bf0a3518061"
+        },
+        {
+          "path": "dataset/images/val/060996d9a54858b79e4af703bf3c304e.jpg",
+          "sha256": "9448b6a5571c5e5301a37ad3424e4c6606d944b1b377eac39157dde511ed45fb"
+        },
+        {
+          "path": "dataset/images/val/0618f084251d5b669ce9f57cb1be0b77.jpg",
+          "sha256": "14776a5817449502dfc978ca80e4cb33fa534d01eae71cae5cb06fb29fc25ed8"
+        },
+        {
+          "path": "dataset/images/val/061c0f0197635cd0919ad5b93c29ab0f.jpg",
+          "sha256": "d117eb96dd5379f1a1be50beb3f2e8dcf36e5c3dd03789f9e79aadc55a17b046"
+        },
+        {
+          "path": "dataset/images/val/065355ebd6e85b1a9c39830321c0ea8f.jpg",
+          "sha256": "19733111dfa055e27f4319ce2f091c05ab93e001b93e4e38e30aa07ecef6fa5a"
+        },
+        {
+          "path": "dataset/images/val/06ef50f379215cf2b3046d881fdb4f5c.jpg",
+          "sha256": "609e492832e4a5698abae7f01e6eb0191081511f7749a43d8f430a8575910769"
+        },
+        {
+          "path": "dataset/images/val/0708bb0760e454f0a543197b0a639ffe.jpg",
+          "sha256": "b2f70d89ad4eb84dac9ebf88d57f91132fb10895a16e717f613bf5aea83ef986"
+        },
+        {
+          "path": "dataset/images/val/0712ab486b26554099f8a5d026686c86.jpg",
+          "sha256": "6baa26e38def87946973310b061bffb1465e347b6fdaa528afb88d62f64751d3"
+        },
+        {
+          "path": "dataset/images/val/07262e2ed15957dd9e7a0f86658098a4.jpg",
+          "sha256": "4273a0328bf7fbc8a8a4cd4ee25ab2b504242f14f96c408c86c4a0d3298e0e30"
+        },
+        {
+          "path": "dataset/images/val/072681b193c5594e828d66124544ccdd.jpg",
+          "sha256": "ba07232976c39fd62455212d447b042c66c03dba2a5d690603f3e072e5b60471"
+        },
+        {
+          "path": "dataset/images/val/079c4f9a049d54f38ff854c26f5ffc61.jpg",
+          "sha256": "b414eefbf68c6bfd38afd8e4f5feb7317a77c5aca5fbdaffdc7cb27c1c9a0f66"
+        },
+        {
+          "path": "dataset/images/val/07ac6fe1285d55388a45893ddad32d33.jpg",
+          "sha256": "b8a7fb6673bdaff492919b9e5707c13c6c10d9c8527fbe776ba7c67167a2f514"
+        },
+        {
+          "path": "dataset/images/val/07d8e6cf631c5325bea997bc7953f395.jpg",
+          "sha256": "41c631d8cbe9f510de10f5e5a5410ab121cd8bccf008f4d7f3bd50e969285132"
+        },
+        {
+          "path": "dataset/images/val/0802f2359b8e55089df042abe330ee16.jpg",
+          "sha256": "68050a30158c1f7885ed90e6678affdb9e8fd39de218bdc65129e92457dfe885"
+        },
+        {
+          "path": "dataset/images/val/0811cda8f57454c498e3f2b5c184463c.jpg",
+          "sha256": "6ec0cf21d70a4719786a1e07dabf39bf9f79ce3b451435f6ab9917b22a975417"
+        }
+      ],
+      "variants": [
+        {
+          "id": "original_960",
+          "imgsz": 960,
+          "TTA": false,
+          "agnostic_nms": false,
+          "images": 64,
+          "warmup_images_excluded": 3,
+          "p50_ms": 34.121218499876704,
+          "p95_ms": 76.30195359993195,
+          "detector_call_fps": 21.43888712956066,
+          "prediction_seconds": [
+            0.03572572100074467,
+            0.02817905200026871,
+            0.03883332399982464,
+            0.06895244099996489,
+            0.04540595700018457,
+            0.07475028199951339,
+            0.06955259799997293,
+            0.03103528700012248,
+            0.04031246399972588,
+            0.06947670000045036,
+            0.03345026799979678,
+            0.19783665300019493,
+            0.03363383099986095,
+            0.04177156900004775,
+            0.038678854999488976,
+            0.03992924800058972,
+            0.02807998999924166,
+            0.02760184099952312,
+            0.043595169000582246,
+            0.11935215199991944,
+            0.03967135099992447,
+            0.07657577800000581,
+            0.032717833999413415,
+            0.07054393799990066,
+            0.06425444800061086,
+            0.030372537999937776,
+            0.034348911000051885,
+            0.026566508000541944,
+            0.06653436299984605,
+            0.033189710000442574,
+            0.024188663000131783,
+            0.031693680999524076,
+            0.037210031000540766,
+            0.03009052099969267,
+            0.03498652400048741,
+            0.032697407999876305,
+            0.03272804000062024,
+            0.07018061200051307,
+            0.033893525999701524,
+            0.0330216840002322,
+            0.07050590800008649,
+            0.03128531199945428,
+            0.07197978499971214,
+            0.07077558999935718,
+            0.03239641100026347,
+            0.030673092999677465,
+            0.069659030999901,
+            0.0305710660004479,
+            0.06541355499939527,
+            0.03365948999999091,
+            0.0258508549995895,
+            0.018785467000270728,
+            0.030753441999877396,
+            0.027780735000305867,
+            0.02523358999951597,
+            0.03128410299996176,
+            0.03470460500011541,
+            0.06632044800062431,
+            0.026501747999645886,
+            0.08162322199950722,
+            0.030247097999563266,
+            0.07335024500025611,
+            0.033624415999838675,
+            0.03063089300030697
+          ],
+          "records": [
+            {
+              "image": "dataset/images/val/00306703c2f45daf9586549ead092a3b.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/003bee6dc8055d1d82201339c4efaca7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/003e8940e018560c9a4a7175e2a0fac3.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/005442d2729e51c08c232e9edb2ee21f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/005789af038a576b868f78c747657788.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/008b3f2a16b45a298bda3b9ecaa3ce31.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/00937f495e6e56c4b233480fb0e052a1.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0095a53913795bd98bf9dfe9f5c17793.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/009d924ad01155c286c01e3163ec4ed5.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/009f16eae1895772b8f81ecb97893a8c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/00b2a895419d557a8168b1ed373ebef1.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/00fbaf6d1f1c597a84ac255891cf2111.jpg",
+              "boxes_original_xyxy": [
+                [
+                  119.59785461425781,
+                  47.6793212890625,
+                  301.1193542480469,
+                  584.8187255859375
+                ],
+                [
+                  291.2803039550781,
+                  48.575645446777344,
+                  527.9992065429688,
+                  586.2003173828125
+                ]
+              ],
+              "confidences": [
+                0.8951151371002197,
+                0.8784583806991577
+              ]
+            },
+            {
+              "image": "dataset/images/val/01412dc211665948bd3dfa1ea4c53ce8.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0156d9e77ef35e289aa3aa47e00a42e7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/015b6ac2cbab5abf8b5852f89abff83b.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01793edf012c590d9239731a02ff34f4.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/018927e6c9f8552b92ebd09a5128a8e4.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01a695d1194f59ba87a5480bdf89736a.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01b0b355876c5e8fae850bda430d75b5.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01b6c43598f6504d97fb1fbbe843059b.jpg",
+              "boxes_original_xyxy": [
+                [
+                  238.73239135742188,
+                  184.811767578125,
+                  276.4649658203125,
+                  285.8434753417969
+                ]
+              ],
+              "confidences": [
+                0.7035908102989197
+              ]
+            },
+            {
+              "image": "dataset/images/val/01ed39a1f6e050908ac03a2eb85d5762.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01f8c50b8fe45438830e9db7f89a5090.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01fc088a141a5974a178cbcfd9779cfa.jpg",
+              "boxes_original_xyxy": [
+                [
+                  189.93359375,
+                  193.40966796875,
+                  291.847900390625,
+                  323.0889892578125
+                ]
+              ],
+              "confidences": [
+                0.3151755928993225
+              ]
+            },
+            {
+              "image": "dataset/images/val/027a0d50f65c59adb0087bb0f14a7a00.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/028388fa8447506085525e9c9de66bac.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/029e4c83a67a51f383b10540881a0fa7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/02f9fed8e42259f49c5b3720d0af6eb0.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0317ac8f2ef35a1ab6b9fe112acb87c7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0369db84a0885fabab2d3d1826b973d7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0392d7de5f865dcfbde694d685e67582.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03953d5c7e9755feb59a2a99288c400a.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/039858133e1c596d93ac7043202697f8.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03bbb3d61c0253539c55bc3fa508e5b3.jpg",
+              "boxes_original_xyxy": [
+                [
+                  182.4898681640625,
+                  284.9080505371094,
+                  479.2720947265625,
+                  448.7464294433594
+                ]
+              ],
+              "confidences": [
+                0.8611593246459961
+              ]
+            },
+            {
+              "image": "dataset/images/val/03ca9ab8dc445da79522c9813d9c1605.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03cd05f77067565faef5a577f76f410a.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03e1ef0462105729ad1f4a7b7a38cc4b.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03f1e812fb555260bd28d1fd2ff7230f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/04079eed5e0a557988cc68c8c5d2eb6c.jpg",
+              "boxes_original_xyxy": [
+                [
+                  0.0,
+                  169.9185028076172,
+                  61.93928527832031,
+                  386.1563415527344
+                ]
+              ],
+              "confidences": [
+                0.18810933828353882
+              ]
+            },
+            {
+              "image": "dataset/images/val/048518ca13b15cf898be884ee0168d5f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/04c4c4ab75bf5321a9eb209e42bc8d90.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0501f64b9b605d9dbd4596fcd87563f4.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/051e2f51d3ab5402b23c7410a5673ed2.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0523ce65f19f58c7915b4279e962457e.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05358019015e51908c709f46e8bd9a49.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05499272ce60506a876afd1210d85671.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05adcef2448c5e5dad5348de65fb1801.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05b1481981355ca3b4da1be85d0a1b2c.jpg",
+              "boxes_original_xyxy": [
+                [
+                  137.72625732421875,
+                  128.61167907714844,
+                  214.15476989746094,
+                  167.4532928466797
+                ]
+              ],
+              "confidences": [
+                0.3612273335456848
+              ]
+            },
+            {
+              "image": "dataset/images/val/05d35c57575f536bb45ba6d4bf3ee107.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05fb6a3974e3567aabd8f7d25b75ece6.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/06056eb41c0b5da0a39cdc1a71e694e6.jpg",
+              "boxes_original_xyxy": [
+                [
+                  244.36740112304688,
+                  208.6959228515625,
+                  419.2841796875,
+                  431.8033142089844
+                ],
+                [
+                  473.7572937011719,
+                  212.6798095703125,
+                  616.8419189453125,
+                  433.21588134765625
+                ],
+                [
+                  18.63448143005371,
+                  216.135986328125,
+                  189.5128173828125,
+                  429.93798828125
+                ]
+              ],
+              "confidences": [
+                0.8807048201560974,
+                0.834121584892273,
+                0.828670859336853
+              ]
+            },
+            {
+              "image": "dataset/images/val/060996d9a54858b79e4af703bf3c304e.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0618f084251d5b669ce9f57cb1be0b77.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/061c0f0197635cd0919ad5b93c29ab0f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/065355ebd6e85b1a9c39830321c0ea8f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/06ef50f379215cf2b3046d881fdb4f5c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0708bb0760e454f0a543197b0a639ffe.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0712ab486b26554099f8a5d026686c86.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/07262e2ed15957dd9e7a0f86658098a4.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/072681b193c5594e828d66124544ccdd.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/079c4f9a049d54f38ff854c26f5ffc61.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/07ac6fe1285d55388a45893ddad32d33.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/07d8e6cf631c5325bea997bc7953f395.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0802f2359b8e55089df042abe330ee16.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0811cda8f57454c498e3f2b5c184463c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            }
+          ]
+        },
+        {
+          "id": "resolution_640",
+          "imgsz": 640,
+          "TTA": false,
+          "agnostic_nms": false,
+          "images": 64,
+          "warmup_images_excluded": 3,
+          "p50_ms": 15.289370000118652,
+          "p95_ms": 67.08179299980657,
+          "detector_call_fps": 38.46658766347708,
+          "prediction_seconds": [
+            0.018399702999886358,
+            0.01670035999995889,
+            0.017486503000327502,
+            0.06641303299966239,
+            0.01827907100050652,
+            0.06696255499991821,
+            0.06710283499978686,
+            0.01445914600026299,
+            0.01672059700013051,
+            0.0605786710002576,
+            0.014270171999669401,
+            0.015578596000523248,
+            0.01342944099997112,
+            0.014688452999507717,
+            0.014592177999475098,
+            0.014634636000664614,
+            0.012555631999930483,
+            0.013753565000115486,
+            0.014844147999610868,
+            0.013765410999440064,
+            0.014586303999749362,
+            0.06030376699982298,
+            0.013982610999846656,
+            0.0615561959994011,
+            0.02015611499973602,
+            0.014186095000695786,
+            0.016461320999951568,
+            0.013383298999542603,
+            0.06737308399988251,
+            0.014857238000331563,
+            0.015284310999959416,
+            0.014597491000131413,
+            0.015294429000277887,
+            0.015308087000448722,
+            0.014493016000415082,
+            0.013728658999752952,
+            0.013763079999989714,
+            0.01254010200045741,
+            0.01406046800002514,
+            0.01473117200021079,
+            0.06922615400071663,
+            0.022580126999855565,
+            0.07595429299999523,
+            0.06444530599947029,
+            0.01626330399994913,
+            0.013904790999731631,
+            0.06286020800052938,
+            0.016009957999813196,
+            0.05895803900057217,
+            0.01600063499972748,
+            0.01230819100055669,
+            0.01407000099970901,
+            0.016086038000139524,
+            0.012790331000360311,
+            0.012930112000503868,
+            0.015103485000508954,
+            0.015419446000123571,
+            0.062057512999672326,
+            0.014706308999848261,
+            0.015195023999694968,
+            0.014602843999455217,
+            0.06309360100021877,
+            0.016623419000097783,
+            0.016730899999856774
+          ],
+          "records": [
+            {
+              "image": "dataset/images/val/00306703c2f45daf9586549ead092a3b.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/003bee6dc8055d1d82201339c4efaca7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/003e8940e018560c9a4a7175e2a0fac3.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/005442d2729e51c08c232e9edb2ee21f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/005789af038a576b868f78c747657788.jpg",
+              "boxes_original_xyxy": [
+                [
+                  101.85633087158203,
+                  1.5633186101913452,
+                  175.6112518310547,
+                  93.01979064941406
+                ]
+              ],
+              "confidences": [
+                0.10180730372667313
+              ]
+            },
+            {
+              "image": "dataset/images/val/008b3f2a16b45a298bda3b9ecaa3ce31.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/00937f495e6e56c4b233480fb0e052a1.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0095a53913795bd98bf9dfe9f5c17793.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/009d924ad01155c286c01e3163ec4ed5.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/009f16eae1895772b8f81ecb97893a8c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/00b2a895419d557a8168b1ed373ebef1.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/00fbaf6d1f1c597a84ac255891cf2111.jpg",
+              "boxes_original_xyxy": [
+                [
+                  288.0037841796875,
+                  63.1480712890625,
+                  529.4658203125,
+                  586.43994140625
+                ],
+                [
+                  121.86541748046875,
+                  64.53656005859375,
+                  300.0911560058594,
+                  577.8739624023438
+                ]
+              ],
+              "confidences": [
+                0.8937491774559021,
+                0.8685019016265869
+              ]
+            },
+            {
+              "image": "dataset/images/val/01412dc211665948bd3dfa1ea4c53ce8.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0156d9e77ef35e289aa3aa47e00a42e7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/015b6ac2cbab5abf8b5852f89abff83b.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01793edf012c590d9239731a02ff34f4.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/018927e6c9f8552b92ebd09a5128a8e4.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01a695d1194f59ba87a5480bdf89736a.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01b0b355876c5e8fae850bda430d75b5.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01b6c43598f6504d97fb1fbbe843059b.jpg",
+              "boxes_original_xyxy": [
+                [
+                  221.41537475585938,
+                  181.6348876953125,
+                  290.5232849121094,
+                  285.3511657714844
+                ],
+                [
+                  238.76248168945312,
+                  172.50021362304688,
+                  275.5740051269531,
+                  301.0484619140625
+                ]
+              ],
+              "confidences": [
+                0.6198171377182007,
+                0.39371368288993835
+              ]
+            },
+            {
+              "image": "dataset/images/val/01ed39a1f6e050908ac03a2eb85d5762.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01f8c50b8fe45438830e9db7f89a5090.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01fc088a141a5974a178cbcfd9779cfa.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/027a0d50f65c59adb0087bb0f14a7a00.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/028388fa8447506085525e9c9de66bac.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/029e4c83a67a51f383b10540881a0fa7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/02f9fed8e42259f49c5b3720d0af6eb0.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0317ac8f2ef35a1ab6b9fe112acb87c7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0369db84a0885fabab2d3d1826b973d7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0392d7de5f865dcfbde694d685e67582.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03953d5c7e9755feb59a2a99288c400a.jpg",
+              "boxes_original_xyxy": [
+                [
+                  199.85305786132812,
+                  229.38943481445312,
+                  282.3315124511719,
+                  319.7123718261719
+                ]
+              ],
+              "confidences": [
+                0.5279838442802429
+              ]
+            },
+            {
+              "image": "dataset/images/val/039858133e1c596d93ac7043202697f8.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03bbb3d61c0253539c55bc3fa508e5b3.jpg",
+              "boxes_original_xyxy": [
+                [
+                  187.38905334472656,
+                  291.85308837890625,
+                  477.7913818359375,
+                  452.10577392578125
+                ]
+              ],
+              "confidences": [
+                0.8419350385665894
+              ]
+            },
+            {
+              "image": "dataset/images/val/03ca9ab8dc445da79522c9813d9c1605.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03cd05f77067565faef5a577f76f410a.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03e1ef0462105729ad1f4a7b7a38cc4b.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03f1e812fb555260bd28d1fd2ff7230f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/04079eed5e0a557988cc68c8c5d2eb6c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/048518ca13b15cf898be884ee0168d5f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/04c4c4ab75bf5321a9eb209e42bc8d90.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0501f64b9b605d9dbd4596fcd87563f4.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/051e2f51d3ab5402b23c7410a5673ed2.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0523ce65f19f58c7915b4279e962457e.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05358019015e51908c709f46e8bd9a49.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05499272ce60506a876afd1210d85671.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05adcef2448c5e5dad5348de65fb1801.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05b1481981355ca3b4da1be85d0a1b2c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05d35c57575f536bb45ba6d4bf3ee107.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05fb6a3974e3567aabd8f7d25b75ece6.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/06056eb41c0b5da0a39cdc1a71e694e6.jpg",
+              "boxes_original_xyxy": [
+                [
+                  245.40435791015625,
+                  209.75584411621094,
+                  424.7230224609375,
+                  434.70703125
+                ],
+                [
+                  23.183486938476562,
+                  218.27789306640625,
+                  189.7059783935547,
+                  430.8800048828125
+                ],
+                [
+                  476.9207763671875,
+                  213.09173583984375,
+                  618.785400390625,
+                  433.113037109375
+                ]
+              ],
+              "confidences": [
+                0.8298157453536987,
+                0.7208250761032104,
+                0.6790547966957092
+              ]
+            },
+            {
+              "image": "dataset/images/val/060996d9a54858b79e4af703bf3c304e.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0618f084251d5b669ce9f57cb1be0b77.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/061c0f0197635cd0919ad5b93c29ab0f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/065355ebd6e85b1a9c39830321c0ea8f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/06ef50f379215cf2b3046d881fdb4f5c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0708bb0760e454f0a543197b0a639ffe.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0712ab486b26554099f8a5d026686c86.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/07262e2ed15957dd9e7a0f86658098a4.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/072681b193c5594e828d66124544ccdd.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/079c4f9a049d54f38ff854c26f5ffc61.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/07ac6fe1285d55388a45893ddad32d33.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/07d8e6cf631c5325bea997bc7953f395.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0802f2359b8e55089df042abe330ee16.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0811cda8f57454c498e3f2b5c184463c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            }
+          ]
+        },
+        {
+          "id": "TTA_640",
+          "imgsz": 640,
+          "TTA": true,
+          "agnostic_nms": false,
+          "images": 64,
+          "warmup_images_excluded": 3,
+          "p50_ms": 35.1209135001227,
+          "p95_ms": 128.80360399985875,
+          "detector_call_fps": 19.888922042290403,
+          "prediction_seconds": [
+            0.036714375999508775,
+            0.03693775900046603,
+            0.038166930000443244,
+            0.1389390389995242,
+            0.03584856399993441,
+            0.12714948699976958,
+            0.08306005800022831,
+            0.03446419600004447,
+            0.036319856999398326,
+            0.12558105500011152,
+            0.03458514900012233,
+            0.03651682700001402,
+            0.03228705699984857,
+            0.036044291000507656,
+            0.03509327200026746,
+            0.03608531200006837,
+            0.029412061999209982,
+            0.03064440499929333,
+            0.029773657000077947,
+            0.02956486000039149,
+            0.02953506300036679,
+            0.11966367900004116,
+            0.030534183000781923,
+            0.14980958800060762,
+            0.035031449000598514,
+            0.03179021000050852,
+            0.030432823999944958,
+            0.029168272999413603,
+            0.12036201299997629,
+            0.03132346700022026,
+            0.03099603299961018,
+            0.03086976099984895,
+            0.03852948500025377,
+            0.033930122000128904,
+            0.03514855499997793,
+            0.03577597599996807,
+            0.035922027999731654,
+            0.03585622199989302,
+            0.03450385999985883,
+            0.03622601099959866,
+            0.08425480200003221,
+            0.03546464000010019,
+            0.14359006999984558,
+            0.08753053500004171,
+            0.03658239899959881,
+            0.033955351000258815,
+            0.08019069900001341,
+            0.036460514000282274,
+            0.1290955069998745,
+            0.037254157999996096,
+            0.03356182599964086,
+            0.033138637000774906,
+            0.03312861500035069,
+            0.03136009900026693,
+            0.03132607200041093,
+            0.034839086999454594,
+            0.03382221399988339,
+            0.07466454000041267,
+            0.029258275999382022,
+            0.03125820999957796,
+            0.029142386000785336,
+            0.07675116800055548,
+            0.03077661600036663,
+            0.031868295000094804
+          ],
+          "records": [
+            {
+              "image": "dataset/images/val/00306703c2f45daf9586549ead092a3b.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/003bee6dc8055d1d82201339c4efaca7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/003e8940e018560c9a4a7175e2a0fac3.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/005442d2729e51c08c232e9edb2ee21f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/005789af038a576b868f78c747657788.jpg",
+              "boxes_original_xyxy": [
+                [
+                  101.85633087158203,
+                  1.5633186101913452,
+                  175.6112518310547,
+                  93.01979064941406
+                ]
+              ],
+              "confidences": [
+                0.10180730372667313
+              ]
+            },
+            {
+              "image": "dataset/images/val/008b3f2a16b45a298bda3b9ecaa3ce31.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/00937f495e6e56c4b233480fb0e052a1.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0095a53913795bd98bf9dfe9f5c17793.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/009d924ad01155c286c01e3163ec4ed5.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/009f16eae1895772b8f81ecb97893a8c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/00b2a895419d557a8168b1ed373ebef1.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/00fbaf6d1f1c597a84ac255891cf2111.jpg",
+              "boxes_original_xyxy": [
+                [
+                  288.1454772949219,
+                  65.48397827148438,
+                  522.3853759765625,
+                  573.698974609375
+                ],
+                [
+                  111.45428466796875,
+                  61.505828857421875,
+                  527.4866943359375,
+                  598.017578125
+                ],
+                [
+                  117.77198028564453,
+                  66.39007568359375,
+                  296.57537841796875,
+                  574.7347412109375
+                ]
+              ],
+              "confidences": [
+                0.87361741065979,
+                0.8731186389923096,
+                0.8455954790115356
+              ]
+            },
+            {
+              "image": "dataset/images/val/01412dc211665948bd3dfa1ea4c53ce8.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0156d9e77ef35e289aa3aa47e00a42e7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/015b6ac2cbab5abf8b5852f89abff83b.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01793edf012c590d9239731a02ff34f4.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/018927e6c9f8552b92ebd09a5128a8e4.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01a695d1194f59ba87a5480bdf89736a.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01b0b355876c5e8fae850bda430d75b5.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01b6c43598f6504d97fb1fbbe843059b.jpg",
+              "boxes_original_xyxy": [
+                [
+                  221.41537475585938,
+                  181.6348876953125,
+                  290.5232849121094,
+                  285.3511657714844
+                ],
+                [
+                  238.76248168945312,
+                  172.50021362304688,
+                  275.5740051269531,
+                  301.0484619140625
+                ]
+              ],
+              "confidences": [
+                0.6198171377182007,
+                0.39371368288993835
+              ]
+            },
+            {
+              "image": "dataset/images/val/01ed39a1f6e050908ac03a2eb85d5762.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01f8c50b8fe45438830e9db7f89a5090.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01fc088a141a5974a178cbcfd9779cfa.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/027a0d50f65c59adb0087bb0f14a7a00.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/028388fa8447506085525e9c9de66bac.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/029e4c83a67a51f383b10540881a0fa7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/02f9fed8e42259f49c5b3720d0af6eb0.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0317ac8f2ef35a1ab6b9fe112acb87c7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0369db84a0885fabab2d3d1826b973d7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0392d7de5f865dcfbde694d685e67582.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03953d5c7e9755feb59a2a99288c400a.jpg",
+              "boxes_original_xyxy": [
+                [
+                  199.85305786132812,
+                  229.38943481445312,
+                  282.3315124511719,
+                  319.7123718261719
+                ]
+              ],
+              "confidences": [
+                0.5279838442802429
+              ]
+            },
+            {
+              "image": "dataset/images/val/039858133e1c596d93ac7043202697f8.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03bbb3d61c0253539c55bc3fa508e5b3.jpg",
+              "boxes_original_xyxy": [
+                [
+                  178.59129333496094,
+                  288.5682678222656,
+                  480.4033203125,
+                  452.8822937011719
+                ]
+              ],
+              "confidences": [
+                0.8375679850578308
+              ]
+            },
+            {
+              "image": "dataset/images/val/03ca9ab8dc445da79522c9813d9c1605.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03cd05f77067565faef5a577f76f410a.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03e1ef0462105729ad1f4a7b7a38cc4b.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03f1e812fb555260bd28d1fd2ff7230f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/04079eed5e0a557988cc68c8c5d2eb6c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/048518ca13b15cf898be884ee0168d5f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/04c4c4ab75bf5321a9eb209e42bc8d90.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0501f64b9b605d9dbd4596fcd87563f4.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/051e2f51d3ab5402b23c7410a5673ed2.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0523ce65f19f58c7915b4279e962457e.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05358019015e51908c709f46e8bd9a49.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05499272ce60506a876afd1210d85671.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05adcef2448c5e5dad5348de65fb1801.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05b1481981355ca3b4da1be85d0a1b2c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05d35c57575f536bb45ba6d4bf3ee107.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05fb6a3974e3567aabd8f7d25b75ece6.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/06056eb41c0b5da0a39cdc1a71e694e6.jpg",
+              "boxes_original_xyxy": [
+                [
+                  242.03964233398438,
+                  208.9143829345703,
+                  424.5758361816406,
+                  449.542236328125
+                ]
+              ],
+              "confidences": [
+                0.8710788488388062
+              ]
+            },
+            {
+              "image": "dataset/images/val/060996d9a54858b79e4af703bf3c304e.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0618f084251d5b669ce9f57cb1be0b77.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/061c0f0197635cd0919ad5b93c29ab0f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/065355ebd6e85b1a9c39830321c0ea8f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/06ef50f379215cf2b3046d881fdb4f5c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0708bb0760e454f0a543197b0a639ffe.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0712ab486b26554099f8a5d026686c86.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/07262e2ed15957dd9e7a0f86658098a4.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/072681b193c5594e828d66124544ccdd.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/079c4f9a049d54f38ff854c26f5ffc61.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/07ac6fe1285d55388a45893ddad32d33.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/07d8e6cf631c5325bea997bc7953f395.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0802f2359b8e55089df042abe330ee16.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0811cda8f57454c498e3f2b5c184463c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            }
+          ]
+        },
+        {
+          "id": "resolution_1024",
+          "imgsz": 1024,
+          "TTA": false,
+          "agnostic_nms": false,
+          "images": 64,
+          "warmup_images_excluded": 3,
+          "p50_ms": 27.463728999919113,
+          "p95_ms": 70.36675214972092,
+          "detector_call_fps": 28.842611985500124,
+          "prediction_seconds": [
+            0.02178747800007841,
+            0.023574888999974064,
+            0.026936387999739964,
+            0.06938083800014283,
+            0.02770967800006474,
+            0.061928712000735686,
+            0.07147026599977835,
+            0.01716410500011989,
+            0.027459189999717637,
+            0.07066365199989377,
+            0.021785448000628094,
+            0.03032089000043925,
+            0.02151900700027909,
+            0.027951175999987754,
+            0.027642474999993283,
+            0.028407280999999784,
+            0.01906784000038897,
+            0.019227965000027325,
+            0.030172591999871656,
+            0.019130501999825356,
+            0.027944209999986924,
+            0.0676009389999308,
+            0.025634687999627204,
+            0.07054073699964647,
+            0.027670639999996638,
+            0.02319001300020318,
+            0.029069850999803748,
+            0.023434192000422627,
+            0.06533216800016817,
+            0.02733061999970232,
+            0.01815667300070345,
+            0.02206360299987864,
+            0.0280171069998687,
+            0.023088001999894914,
+            0.027548459000172443,
+            0.025971208000555634,
+            0.02214090000052238,
+            0.023442487000465917,
+            0.022382371999810857,
+            0.027468268000120588,
+            0.06797465499948885,
+            0.02710738299992954,
+            0.06740779800020391,
+            0.07227970200074196,
+            0.028092548999666178,
+            0.029645444999914616,
+            0.06379952600036631,
+            0.028584681000211276,
+            0.06198392199985392,
+            0.029820987999300996,
+            0.017440794999856735,
+            0.01676085899998725,
+            0.02676685799997358,
+            0.020271119000426552,
+            0.021474537999893073,
+            0.027057940999839047,
+            0.028196879999995872,
+            0.061243199999807985,
+            0.02140186900032859,
+            0.0664761810003256,
+            0.02677559600033419,
+            0.06561059799969371,
+            0.02606150300016452,
+            0.025377022999236942
+          ],
+          "records": [
+            {
+              "image": "dataset/images/val/00306703c2f45daf9586549ead092a3b.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/003bee6dc8055d1d82201339c4efaca7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/003e8940e018560c9a4a7175e2a0fac3.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/005442d2729e51c08c232e9edb2ee21f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/005789af038a576b868f78c747657788.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/008b3f2a16b45a298bda3b9ecaa3ce31.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/00937f495e6e56c4b233480fb0e052a1.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0095a53913795bd98bf9dfe9f5c17793.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/009d924ad01155c286c01e3163ec4ed5.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/009f16eae1895772b8f81ecb97893a8c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/00b2a895419d557a8168b1ed373ebef1.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/00fbaf6d1f1c597a84ac255891cf2111.jpg",
+              "boxes_original_xyxy": [
+                [
+                  116.21014404296875,
+                  55.88987350463867,
+                  299.99005126953125,
+                  586.3204956054688
+                ],
+                [
+                  288.7173767089844,
+                  51.087188720703125,
+                  527.2032470703125,
+                  590.0938720703125
+                ]
+              ],
+              "confidences": [
+                0.8864544630050659,
+                0.8687497973442078
+              ]
+            },
+            {
+              "image": "dataset/images/val/01412dc211665948bd3dfa1ea4c53ce8.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0156d9e77ef35e289aa3aa47e00a42e7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/015b6ac2cbab5abf8b5852f89abff83b.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01793edf012c590d9239731a02ff34f4.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/018927e6c9f8552b92ebd09a5128a8e4.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01a695d1194f59ba87a5480bdf89736a.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01b0b355876c5e8fae850bda430d75b5.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01b6c43598f6504d97fb1fbbe843059b.jpg",
+              "boxes_original_xyxy": [
+                [
+                  240.34759521484375,
+                  184.70367431640625,
+                  275.1838684082031,
+                  283.7066650390625
+                ],
+                [
+                  245.70343017578125,
+                  184.6045684814453,
+                  271.71124267578125,
+                  266.3724365234375
+                ]
+              ],
+              "confidences": [
+                0.848430335521698,
+                0.27735263109207153
+              ]
+            },
+            {
+              "image": "dataset/images/val/01ed39a1f6e050908ac03a2eb85d5762.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01f8c50b8fe45438830e9db7f89a5090.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01fc088a141a5974a178cbcfd9779cfa.jpg",
+              "boxes_original_xyxy": [
+                [
+                  192.0168914794922,
+                  192.7582550048828,
+                  290.0812683105469,
+                  322.71807861328125
+                ]
+              ],
+              "confidences": [
+                0.40267857909202576
+              ]
+            },
+            {
+              "image": "dataset/images/val/027a0d50f65c59adb0087bb0f14a7a00.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/028388fa8447506085525e9c9de66bac.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/029e4c83a67a51f383b10540881a0fa7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/02f9fed8e42259f49c5b3720d0af6eb0.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0317ac8f2ef35a1ab6b9fe112acb87c7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0369db84a0885fabab2d3d1826b973d7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0392d7de5f865dcfbde694d685e67582.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03953d5c7e9755feb59a2a99288c400a.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/039858133e1c596d93ac7043202697f8.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03bbb3d61c0253539c55bc3fa508e5b3.jpg",
+              "boxes_original_xyxy": [
+                [
+                  181.4911651611328,
+                  284.56182861328125,
+                  480.80841064453125,
+                  452.31805419921875
+                ]
+              ],
+              "confidences": [
+                0.8511197566986084
+              ]
+            },
+            {
+              "image": "dataset/images/val/03ca9ab8dc445da79522c9813d9c1605.jpg",
+              "boxes_original_xyxy": [
+                [
+                  282.32769775390625,
+                  532.8435668945312,
+                  480.0,
+                  639.8809204101562
+                ]
+              ],
+              "confidences": [
+                0.13855025172233582
+              ]
+            },
+            {
+              "image": "dataset/images/val/03cd05f77067565faef5a577f76f410a.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03e1ef0462105729ad1f4a7b7a38cc4b.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03f1e812fb555260bd28d1fd2ff7230f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/04079eed5e0a557988cc68c8c5d2eb6c.jpg",
+              "boxes_original_xyxy": [
+                [
+                  65.34674835205078,
+                  327.658203125,
+                  173.01409912109375,
+                  438.22222900390625
+                ],
+                [
+                  0.0356292724609375,
+                  169.8979949951172,
+                  60.938133239746094,
+                  399.0591125488281
+                ]
+              ],
+              "confidences": [
+                0.4203810393810272,
+                0.14224882423877716
+              ]
+            },
+            {
+              "image": "dataset/images/val/048518ca13b15cf898be884ee0168d5f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/04c4c4ab75bf5321a9eb209e42bc8d90.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0501f64b9b605d9dbd4596fcd87563f4.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/051e2f51d3ab5402b23c7410a5673ed2.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0523ce65f19f58c7915b4279e962457e.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05358019015e51908c709f46e8bd9a49.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05499272ce60506a876afd1210d85671.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05adcef2448c5e5dad5348de65fb1801.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05b1481981355ca3b4da1be85d0a1b2c.jpg",
+              "boxes_original_xyxy": [
+                [
+                  138.05618286132812,
+                  132.56692504882812,
+                  213.35479736328125,
+                  163.59799194335938
+                ]
+              ],
+              "confidences": [
+                0.18389171361923218
+              ]
+            },
+            {
+              "image": "dataset/images/val/05d35c57575f536bb45ba6d4bf3ee107.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05fb6a3974e3567aabd8f7d25b75ece6.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/06056eb41c0b5da0a39cdc1a71e694e6.jpg",
+              "boxes_original_xyxy": [
+                [
+                  243.9032745361328,
+                  208.5965118408203,
+                  420.61065673828125,
+                  431.94122314453125
+                ],
+                [
+                  19.990501403808594,
+                  215.59429931640625,
+                  188.6949462890625,
+                  430.07373046875
+                ],
+                [
+                  476.94586181640625,
+                  214.64418029785156,
+                  613.42724609375,
+                  430.7478332519531
+                ],
+                [
+                  233.0175018310547,
+                  49.69734191894531,
+                  614.9835205078125,
+                  435.040283203125
+                ]
+              ],
+              "confidences": [
+                0.8748312592506409,
+                0.8439741134643555,
+                0.8340720534324646,
+                0.10547053068876266
+              ]
+            },
+            {
+              "image": "dataset/images/val/060996d9a54858b79e4af703bf3c304e.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0618f084251d5b669ce9f57cb1be0b77.jpg",
+              "boxes_original_xyxy": [
+                [
+                  65.40695190429688,
+                  48.10943603515625,
+                  592.3699951171875,
+                  264.0
+                ]
+              ],
+              "confidences": [
+                0.110620878636837
+              ]
+            },
+            {
+              "image": "dataset/images/val/061c0f0197635cd0919ad5b93c29ab0f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/065355ebd6e85b1a9c39830321c0ea8f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/06ef50f379215cf2b3046d881fdb4f5c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0708bb0760e454f0a543197b0a639ffe.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0712ab486b26554099f8a5d026686c86.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/07262e2ed15957dd9e7a0f86658098a4.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/072681b193c5594e828d66124544ccdd.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/079c4f9a049d54f38ff854c26f5ffc61.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/07ac6fe1285d55388a45893ddad32d33.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/07d8e6cf631c5325bea997bc7953f395.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0802f2359b8e55089df042abe330ee16.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0811cda8f57454c498e3f2b5c184463c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            }
+          ]
+        },
+        {
+          "id": "agnostic_640",
+          "imgsz": 640,
+          "TTA": false,
+          "agnostic_nms": true,
+          "images": 64,
+          "warmup_images_excluded": 3,
+          "p50_ms": 14.877092499773426,
+          "p95_ms": 17.023587449693878,
+          "detector_call_fps": 66.23560795195041,
+          "prediction_seconds": [
+            0.013069017999441712,
+            0.011940979000428342,
+            0.015181628999926033,
+            0.0133951950001574,
+            0.015271784000105981,
+            0.01185872800033394,
+            0.012253630000486737,
+            0.01460594400032278,
+            0.014250935999370995,
+            0.012397937999594433,
+            0.012650224999561033,
+            0.014562358999683056,
+            0.013544642999477219,
+            0.01628593500026909,
+            0.01599107600031857,
+            0.016990423000606825,
+            0.014172101000440307,
+            0.013195680000535503,
+            0.015244669999447069,
+            0.015566470000521804,
+            0.01624296099998901,
+            0.014910522999343812,
+            0.016130210000483203,
+            0.013933847999396676,
+            0.017638600000282167,
+            0.015511250999225012,
+            0.016520416000275873,
+            0.015395298999465012,
+            0.014393921000191767,
+            0.02759054600028321,
+            0.015795333999449213,
+            0.015191433999461879,
+            0.016850507000526704,
+            0.015911008000330185,
+            0.016585854000368272,
+            0.014830598000116879,
+            0.01367608799955633,
+            0.014559531000486459,
+            0.01416642900039733,
+            0.01711785899988172,
+            0.015829518999453285,
+            0.01678859699950408,
+            0.015331886999774724,
+            0.01702943999953277,
+            0.0166485220006507,
+            0.01568141799998557,
+            0.014410755999961111,
+            0.016787313000349968,
+            0.014298473000053491,
+            0.016337889000169525,
+            0.014478550000603718,
+            0.013140451999788638,
+            0.015532049000285042,
+            0.01484366200020304,
+            0.014375439999639639,
+            0.01597819000016898,
+            0.015166821999628155,
+            0.013633442999889667,
+            0.013572834999649785,
+            0.01383422300023085,
+            0.01472561999980826,
+            0.013768433000223013,
+            0.014453509999839298,
+            0.014219018999938271
+          ],
+          "records": [
+            {
+              "image": "dataset/images/val/00306703c2f45daf9586549ead092a3b.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/003bee6dc8055d1d82201339c4efaca7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/003e8940e018560c9a4a7175e2a0fac3.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/005442d2729e51c08c232e9edb2ee21f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/005789af038a576b868f78c747657788.jpg",
+              "boxes_original_xyxy": [
+                [
+                  101.85633087158203,
+                  1.5633186101913452,
+                  175.6112518310547,
+                  93.01979064941406
+                ]
+              ],
+              "confidences": [
+                0.10180730372667313
+              ]
+            },
+            {
+              "image": "dataset/images/val/008b3f2a16b45a298bda3b9ecaa3ce31.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/00937f495e6e56c4b233480fb0e052a1.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0095a53913795bd98bf9dfe9f5c17793.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/009d924ad01155c286c01e3163ec4ed5.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/009f16eae1895772b8f81ecb97893a8c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/00b2a895419d557a8168b1ed373ebef1.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/00fbaf6d1f1c597a84ac255891cf2111.jpg",
+              "boxes_original_xyxy": [
+                [
+                  288.0037841796875,
+                  63.1480712890625,
+                  529.4658203125,
+                  586.43994140625
+                ],
+                [
+                  121.86541748046875,
+                  64.53656005859375,
+                  300.0911560058594,
+                  577.8739624023438
+                ]
+              ],
+              "confidences": [
+                0.8937491774559021,
+                0.8685019016265869
+              ]
+            },
+            {
+              "image": "dataset/images/val/01412dc211665948bd3dfa1ea4c53ce8.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0156d9e77ef35e289aa3aa47e00a42e7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/015b6ac2cbab5abf8b5852f89abff83b.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01793edf012c590d9239731a02ff34f4.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/018927e6c9f8552b92ebd09a5128a8e4.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01a695d1194f59ba87a5480bdf89736a.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01b0b355876c5e8fae850bda430d75b5.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01b6c43598f6504d97fb1fbbe843059b.jpg",
+              "boxes_original_xyxy": [
+                [
+                  221.41537475585938,
+                  181.6348876953125,
+                  290.5232849121094,
+                  285.3511657714844
+                ],
+                [
+                  238.76248168945312,
+                  172.50021362304688,
+                  275.5740051269531,
+                  301.0484619140625
+                ]
+              ],
+              "confidences": [
+                0.6198171377182007,
+                0.39371368288993835
+              ]
+            },
+            {
+              "image": "dataset/images/val/01ed39a1f6e050908ac03a2eb85d5762.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01f8c50b8fe45438830e9db7f89a5090.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/01fc088a141a5974a178cbcfd9779cfa.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/027a0d50f65c59adb0087bb0f14a7a00.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/028388fa8447506085525e9c9de66bac.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/029e4c83a67a51f383b10540881a0fa7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/02f9fed8e42259f49c5b3720d0af6eb0.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0317ac8f2ef35a1ab6b9fe112acb87c7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0369db84a0885fabab2d3d1826b973d7.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0392d7de5f865dcfbde694d685e67582.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03953d5c7e9755feb59a2a99288c400a.jpg",
+              "boxes_original_xyxy": [
+                [
+                  199.85305786132812,
+                  229.38943481445312,
+                  282.3315124511719,
+                  319.7123718261719
+                ]
+              ],
+              "confidences": [
+                0.5279838442802429
+              ]
+            },
+            {
+              "image": "dataset/images/val/039858133e1c596d93ac7043202697f8.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03bbb3d61c0253539c55bc3fa508e5b3.jpg",
+              "boxes_original_xyxy": [
+                [
+                  187.38905334472656,
+                  291.85308837890625,
+                  477.7913818359375,
+                  452.10577392578125
+                ]
+              ],
+              "confidences": [
+                0.8419350385665894
+              ]
+            },
+            {
+              "image": "dataset/images/val/03ca9ab8dc445da79522c9813d9c1605.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03cd05f77067565faef5a577f76f410a.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03e1ef0462105729ad1f4a7b7a38cc4b.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/03f1e812fb555260bd28d1fd2ff7230f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/04079eed5e0a557988cc68c8c5d2eb6c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/048518ca13b15cf898be884ee0168d5f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/04c4c4ab75bf5321a9eb209e42bc8d90.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0501f64b9b605d9dbd4596fcd87563f4.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/051e2f51d3ab5402b23c7410a5673ed2.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0523ce65f19f58c7915b4279e962457e.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05358019015e51908c709f46e8bd9a49.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05499272ce60506a876afd1210d85671.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05adcef2448c5e5dad5348de65fb1801.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05b1481981355ca3b4da1be85d0a1b2c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05d35c57575f536bb45ba6d4bf3ee107.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/05fb6a3974e3567aabd8f7d25b75ece6.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/06056eb41c0b5da0a39cdc1a71e694e6.jpg",
+              "boxes_original_xyxy": [
+                [
+                  245.40435791015625,
+                  209.75584411621094,
+                  424.7230224609375,
+                  434.70703125
+                ],
+                [
+                  23.183486938476562,
+                  218.27789306640625,
+                  189.7059783935547,
+                  430.8800048828125
+                ],
+                [
+                  476.9207763671875,
+                  213.09173583984375,
+                  618.785400390625,
+                  433.113037109375
+                ]
+              ],
+              "confidences": [
+                0.8298157453536987,
+                0.7208250761032104,
+                0.6790547966957092
+              ]
+            },
+            {
+              "image": "dataset/images/val/060996d9a54858b79e4af703bf3c304e.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0618f084251d5b669ce9f57cb1be0b77.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/061c0f0197635cd0919ad5b93c29ab0f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/065355ebd6e85b1a9c39830321c0ea8f.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/06ef50f379215cf2b3046d881fdb4f5c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0708bb0760e454f0a543197b0a639ffe.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0712ab486b26554099f8a5d026686c86.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/07262e2ed15957dd9e7a0f86658098a4.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/072681b193c5594e828d66124544ccdd.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/079c4f9a049d54f38ff854c26f5ffc61.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/07ac6fe1285d55388a45893ddad32d33.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/07d8e6cf631c5325bea997bc7953f395.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0802f2359b8e55089df042abe330ee16.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            },
+            {
+              "image": "dataset/images/val/0811cda8f57454c498e3f2b5c184463c.jpg",
+              "boxes_original_xyxy": [],
+              "confidences": []
+            }
+          ]
+        }
+      ],
+      "AP50": null,
+      "AP50_95": null,
+      "production_approved": false,
+      "independent_status": "INDEPENDENT_AI85_NOT_ESTABLISHED"
+    },
+    "comparison_warning": "Different inputs and scopes; no controlled CPU/GPU speedup claim."
+  },
+  "source_artifacts": {
+    "reports/ai85_plus/evidence_diagnostics.json": "afca5ea986387e0c4cf413355b882a8da278be0564c75a09faf2a6d21d105804",
+    "reports/ai85_next/detector_trace.json": "a5ec6da65b0a3a4a5e4d16bbdb40cddfe40381324a41889557d3ba338da8090a",
+    "reports/ai85_upgrade/fn_frame_manifest.json": "155d2fad56064985077e50ad9c79605008ed9c13de8c2e446352481a35c09c0c",
+    "reports/ai85_plus/metrics_comparison.json": "13caa55c39bfbde7df2e0cbd44c46ab797bbc9444e1559e7f17327722a8135c1",
+    "reports/ai85_next/analysis.json": "f1614352dc96d1a1e71f7bde8d2159a20aa48c51d8baf74331ae2e9e98bd4768",
+    "reports/ai85_plus/runtime_benchmark.json": "213a09fae1d165628fac72e2f971b071a353934f6573469db1a04a5f07539c3f",
+    "reports/ai85_plus/kaggle_gpu/version1/gpu_frozen_results.json": "ed0ac767532b0fd32b0e6a6d09540a863c10c62f9d734e0bfba76d03d6940174"
+  },
+  "fine_tuning_performed": false,
+  "production_approved": false,
+  "independent_status": "INDEPENDENT_AI85_NOT_ESTABLISHED"
+}

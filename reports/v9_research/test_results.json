@@ -1,0 +1,98 @@
+{
+  "created_at_utc": "2026-10-16T12:15:23.513791+00:00",
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "compile",
+      "command": [
+        "C:\\Users\\TSC\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-m",
+        "compileall",
+        "-q",
+        "backend",
+        "training",
+        "tests"
+      ],
+      "returncode": 0,
+      "seconds": 0.40407170000071346,
+      "log": "reports/v9_research/compile.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ruff_critical",
+      "command": [
+        "C:\\Users\\TSC\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-m",
+        "ruff",
+        "check",
+        "--select",
+        "E9,F63,F7,F82",
+        "backend",
+        "training",
+        "tests"
+      ],
+      "returncode": 0,
+      "seconds": 0.2642237000000023,
+      "log": "reports/v9_research/ruff_critical.log",
+      "log_sha256": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0"
+    },
+    {
+      "name": "ruff_v9",
+      "command": [
+        "C:\\Users\\TSC\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-m",
+        "ruff",
+        "check",
+        "training/dmd/v9_diagnostics.py",
+        "training/dmd/render_v9_reports.py",
+        "training/dmd/verify_v9.py",
+        "tests/test_v9_research.py"
+      ],
+      "returncode": 0,
+      "seconds": 0.1422443999999814,
+      "log": "reports/v9_research/ruff_v9.log",
+      "log_sha256": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0"
+    },
+    {
+      "name": "pytest_v9",
+      "command": [
+        "C:\\Users\\TSC\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-m",
+        "pytest",
+        "tests/test_v9_research.py",
+        "-q",
+        "--junitxml=D:\\.idea\\giangdoantotnghiep\\reports\\v9_research\\pytest_v9.xml"
+      ],
+      "returncode": 0,
+      "seconds": 2.470937199999753,
+      "log": "reports/v9_research/pytest_v9.log",
+      "log_sha256": "f3434982222d8e75bd007392269fdb4bd02b11eeb586a3b6d55c07f27ba7399e"
+    },
+    {
+      "name": "pytest_full",
+      "command": [
+        "C:\\Users\\TSC\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "--junitxml=D:\\.idea\\giangdoantotnghiep\\reports\\v9_research\\pytest_full.xml"
+      ],
+      "returncode": 0,
+      "seconds": 60.43079779999971,
+      "log": "reports/v9_research/pytest_full.log",
+      "log_sha256": "eeaa081de3f6c1cf83f19b38f086f3b9b8539a92d04f7fbb34bf9f20daaf1003"
+    }
+  ],
+  "targeted_pytest": {
+    "tests": 6,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "full_pytest": {
+    "tests": 558,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  }
+}
