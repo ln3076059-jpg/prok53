@@ -139,6 +139,16 @@ def list_phone_reviews(source: Path, decisions_dir: Path) -> dict[str, Any]:
     cases = []
     for case_id, row in indexed.items():
         decision = _current_decision(decisions_dir, case_id)
+        pre_review = pre_reviews.get(case_id)
+        assistance = decision.get("review_assistance") if decision else None
+        requires_recheck = bool(
+            decision
+            and pre_review
+            and assistance
+            and assistance.get("type") == "AI_PRE_REVIEW"
+            and assistance.get("revision") != pre_review.get("revision")
+        )
+        review_status = "RECHECK" if requires_recheck else "REVIEWED" if decision else "PENDING"
         cases.append(
             {
                 "case_id": case_id,
@@ -149,16 +159,24 @@ def list_phone_reviews(source: Path, decisions_dir: Path) -> dict[str, Any]:
                 "cross_model_agreement": bool(row["cross_model_agreement"]),
                 "auxiliary_review_candidate": bool(row["auxiliary_review_candidate"]),
                 "pre_review_available": case_id in pre_reviews,
-                "review_status": "REVIEWED" if decision else "PENDING",
+                "review_status": review_status,
                 "decision": decision,
             }
         )
-    cases.sort(key=lambda item: (item["review_status"] == "REVIEWED", item["case_id"]))
+    status_order = {"RECHECK": 0, "PENDING": 1, "REVIEWED": 2}
+    cases.sort(key=lambda item: (status_order[item["review_status"]], item["case_id"]))
     reviewed = sum(item["review_status"] == "REVIEWED" for item in cases)
+    pending = sum(item["review_status"] == "PENDING" for item in cases)
+    recheck = sum(item["review_status"] == "RECHECK" for item in cases)
     return {
         "scope": payload["scope"],
         "cases": cases,
-        "summary": {"total": len(cases), "reviewed": reviewed, "pending": len(cases) - reviewed},
+        "summary": {
+            "total": len(cases),
+            "reviewed": reviewed,
+            "pending": pending,
+            "recheck": recheck,
+        },
     }
 
 
@@ -168,6 +186,15 @@ def phone_review_detail(source: Path, decisions_dir: Path, case_id: str) -> dict
         raise ResearchReviewError("Research review case not found")
     row = indexed[case_id]
     pre_review = _pre_reviews(source, indexed).get(case_id)
+    decision = _current_decision(decisions_dir, case_id)
+    assistance = decision.get("review_assistance") if decision else None
+    pre_review_changed = bool(
+        decision
+        and pre_review
+        and assistance
+        and assistance.get("type") == "AI_PRE_REVIEW"
+        and assistance.get("revision") != pre_review.get("revision")
+    )
     contact_sheet = _safe_contact_sheet(source, row)
     return {
         "case_id": case_id,
@@ -181,7 +208,8 @@ def phone_review_detail(source: Path, decisions_dir: Path, case_id: str) -> dict
         "contact_sheet_sha256": _file_sha256(contact_sheet),
         "proposals": _flatten_proposals(row),
         "pre_review": pre_review,
-        "decision": _current_decision(decisions_dir, case_id),
+        "pre_review_changed_since_decision": pre_review_changed,
+        "decision": decision,
     }
 
 

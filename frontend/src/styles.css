@@ -165,7 +165,7 @@ dd { margin: 0; overflow-wrap: anywhere; }
 .model-sheet p { color: var(--muted); }
 .settings-sheet { margin-top: 18px; max-width: 760px; display: grid; gap: 22px; }
 
-.review-progress { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 18px 0 12px; background: var(--paper); border: 1px solid var(--rule); border-radius: var(--radius); }
+.review-progress { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 18px 0 12px; background: var(--paper); border: 1px solid var(--rule); border-radius: var(--radius); }
 .review-progress > div { min-height: 84px; padding: 15px 18px; display: flex; justify-content: space-between; align-items: flex-end; border-right: 1px solid var(--rule); }
 .review-progress > div:last-child { border-right: 0; }
 .review-progress span { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
@@ -196,9 +196,12 @@ dd { margin: 0; overflow-wrap: anywhere; }
 .decision-form h3, .proposal-register h3 { margin: 0; font: 600 20px/1.1 "IBM Plex Sans Condensed", sans-serif; text-transform: uppercase; }
 .pre-review-card { padding: 14px; background: #edf5ff; border-left: 3px solid #0f62fe; }
 .pre-review-card > div { display: flex; align-items: center; gap: 10px; }
+.pre-review-card .pre-review-fields { margin-top: 10px; flex-wrap: wrap; }
+.pre-review-fields span { padding: 3px 6px; background: #fff; border: 1px solid #a6c8ff; font: 600 10px/1.2 "IBM Plex Sans Condensed", sans-serif; }
 .pre-review-card strong { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
 .pre-review-card p { margin: 10px 0 7px; color: var(--ink); font-size: 13px; line-height: 1.45; }
 .pre-review-card small { display: block; color: var(--muted); font-size: 11px; line-height: 1.45; }
+.pre-review-card button { margin-top: 11px; }
 .proposal-register > p { margin: 6px 0 14px; color: var(--muted); font-size: 12px; }
 .proposal-register > div { max-height: 465px; overflow-y: auto; border: 1px solid var(--rule); }
 .proposal-register button { width: 100%; min-height: 58px; padding: 9px 11px; display: grid; grid-template-columns: minmax(90px, 1fr) 74px 48px; gap: 8px; align-items: center; color: var(--ink); background: var(--paper); border: 0; border-bottom: 1px solid #e0e0e0; text-align: left; cursor: pointer; }

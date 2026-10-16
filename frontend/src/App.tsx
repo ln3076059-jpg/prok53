@@ -386,7 +386,7 @@ function ResearchReviewPage() {
         const available = new Set(result.cases.map((item) => item.case_id));
         const next = preferredCase && available.has(preferredCase)
           ? preferredCase
-          : result.cases.find((item) => item.review_status === "PENDING")?.case_id
+          : result.cases.find((item) => item.review_status !== "REVIEWED")?.case_id
             ?? result.cases[0]?.case_id
             ?? "";
         setSelectedCase(next);
@@ -412,7 +412,11 @@ function ResearchReviewPage() {
         setPhoneUse(startingPoint?.phone_use_assessment ?? "UNRESOLVED");
         setProposalId(startingPoint?.selected_proposal_id ?? "NO_VALID_PROPOSAL");
         setNotes(record.decision?.notes ?? record.pre_review?.rationale ?? "");
-        setPreReviewRevision(record.decision ? null : record.pre_review?.revision ?? null);
+        setPreReviewRevision(
+          !record.decision || record.pre_review_changed_since_decision
+            ? record.pre_review?.revision ?? null
+            : null,
+        );
       })
       .catch((reason) => {
         if (reason instanceof DOMException && reason.name === "AbortError") return;
@@ -437,6 +441,15 @@ function ResearchReviewPage() {
     if (value === "PHONE_USE_CONFIRMED") setVisibility("PHONE_VISIBLE");
   }
 
+  function applyPreReview() {
+    if (!detail?.pre_review) return;
+    setVisibility(detail.pre_review.phone_visibility);
+    setPhoneUse(detail.pre_review.phone_use_assessment);
+    setProposalId(detail.pre_review.selected_proposal_id);
+    setNotes(detail.pre_review.rationale);
+    setPreReviewRevision(detail.pre_review.revision);
+  }
+
   async function saveReview() {
     if (!detail) return;
     setSaving(true);
@@ -454,7 +467,7 @@ function ResearchReviewPage() {
       await api.savePhoneReview(detail.case_id, payload);
       const refreshed = await api.phoneReviews();
       setQueue(refreshed);
-      const next = refreshed.cases.find((item) => item.review_status === "PENDING")?.case_id;
+      const next = refreshed.cases.find((item) => item.review_status !== "REVIEWED")?.case_id;
       setMessage(`Decision saved for ${detail.case_id}.`);
       setSelectedCase(next ?? detail.case_id);
       if (!next) {
@@ -475,6 +488,7 @@ function ResearchReviewPage() {
     <section className="review-progress" aria-label="Review progress">
       <div><span>Reviewed</span><strong>{reviewed}</strong></div>
       <div><span>Pending</span><strong>{queue?.summary.pending ?? total}</strong></div>
+      <div><span>Recheck</span><strong>{queue?.summary.recheck ?? 0}</strong></div>
       <div><span>Completion</span><strong>{Math.round((reviewed / Math.max(1, total)) * 100)}%</strong></div>
     </section>
     {error && <InlineNotification className="readiness-alert" kind="error" title="Research review unavailable" subtitle={error} lowContrast hideCloseButton />}
@@ -484,7 +498,7 @@ function ResearchReviewPage() {
         <div className="panel-heading"><div><h2>13 false negatives</h2><p>Development-only evidence</p></div></div>
         <div className="case-list-scroll">{queue?.cases.map((item) => <button type="button" key={item.case_id} className={selectedCase === item.case_id ? "active" : ""} onClick={() => setSelectedCase(item.case_id)} aria-current={selectedCase === item.case_id ? "true" : undefined}>
           <span><strong>{item.case_id}</strong><small>{item.subject_id} · {item.sample_count} frames</small></span>
-          <Tag type={item.review_status === "REVIEWED" ? "green" : "warm-gray"}>{item.review_status}</Tag>
+          <Tag type={item.review_status === "REVIEWED" ? "green" : item.review_status === "RECHECK" ? "red" : "warm-gray"}>{item.review_status}</Tag>
         </button>)}</div>
       </aside>
       <section className="research-review-workspace">
@@ -500,10 +514,12 @@ function ResearchReviewPage() {
           <div className="review-record-grid">
             <div className="decision-form">
               <h3>Human decision</h3>
-              {detail.pre_review && !detail.decision && <div className="pre-review-card">
-                <div><Tag type="blue">AI PRE-REVIEW</Tag><strong>{detail.pre_review.confidence} confidence</strong></div>
+              {detail.pre_review && (!detail.decision || detail.pre_review_changed_since_decision) && <div className="pre-review-card">
+                <div><Tag type="blue">{detail.decision ? "AI RE-REVIEW" : "AI PRE-REVIEW"}</Tag><strong>{detail.pre_review.confidence} confidence</strong></div>
+                <div className="pre-review-fields"><span>{detail.pre_review.phone_visibility.replaceAll("_", " ")}</span><span>{detail.pre_review.phone_use_assessment.replaceAll("_", " ")}</span><span>{detail.pre_review.selected_proposal_id}</span></div>
                 <p>{detail.pre_review.rationale}</p>
                 <small>Codex filled the controls below as a suggestion. Inspect the evidence and edit anything incorrect before confirming. The final receipt records your authenticated human account and the AI assistance separately.</small>
+                {detail.decision && <Button kind="tertiary" size="sm" onClick={applyPreReview}>Apply updated suggestion</Button>}
               </div>}
               <Select id="phone-visibility" labelText="Is a phone visible?" value={visibility} onChange={(event) => changeVisibility(event.target.value as PhoneVisibility)}>
                 <SelectItem value="UNRESOLVED" text="Unresolved — needs more evidence" />
@@ -520,7 +536,7 @@ function ResearchReviewPage() {
                 {detail.proposals.map((proposal) => <SelectItem key={proposal.proposal_id} value={proposal.proposal_id} text={`${proposal.proposal_id} · ${proposal.source === "specialist" ? "Specialist" : "COCO"} · ${(proposal.confidence * 100).toFixed(1)}% · ${proposal.geometry_context.replaceAll("_", " ")}`} />)}
               </Select>
               <TextArea id="review-notes" labelText="Review rationale" helperText="Required. Describe the visible phone, occlusion, false proposal, or missing evidence." rows={4} value={notes} onChange={(event) => setNotes(event.target.value)} />
-              <Button renderIcon={Save} onClick={saveReview} disabled={saving || notes.trim().length < 12}>{saving ? "Saving decision" : detail.decision ? "Save revised decision" : detail.pre_review ? "Confirm as human reviewer" : "Record human decision"}</Button>
+              <Button renderIcon={Save} onClick={saveReview} disabled={saving || notes.trim().length < 12}>{saving ? "Saving decision" : detail.pre_review_changed_since_decision ? "Reconfirm as human reviewer" : detail.decision ? "Save revised decision" : detail.pre_review ? "Confirm as human reviewer" : "Record human decision"}</Button>
               <p className="decision-guard">Saving creates an immutable audit snapshot. It does not admit the sample into training or approve production use.</p>
             </div>
             <aside className="proposal-register">

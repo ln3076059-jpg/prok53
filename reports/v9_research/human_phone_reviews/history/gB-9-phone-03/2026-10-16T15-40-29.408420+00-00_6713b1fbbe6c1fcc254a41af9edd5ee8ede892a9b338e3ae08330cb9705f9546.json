@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "case_id": "gB-9-phone-03",
+  "reviewer_id": "68980dcda19d4dfbab8003d9adfec32c",
+  "reviewer_type": "HUMAN",
+  "reviewed_at_utc": "2026-10-16T15:40:29.408420+00:00",
+  "phone_visibility": "PHONE_VISIBLE",
+  "phone_use_assessment": "PHONE_USE_CONFIRMED",
+  "selected_proposal_id": "f4230-C5",
+  "selected_proposal": {
+    "proposal_id": "f4230-C5",
+    "frame_index": 4230,
+    "timestamp_seconds": 142.1371,
+    "source": "coco_cell_phone",
+    "confidence": 0.0738091915845871,
+    "geometry_context": "HANDHELD_USE",
+    "hand_proximity": 0.3365582408341584,
+    "face_proximity": 0.9286471135888985,
+    "nearest_cross_model_iou": 0.49912261230353144,
+    "xyxy_in_driver_roi": [
+      254.154541015625,
+      95.7363052368164,
+      332.0630187988281,
+      159.67254638671875
+    ]
+  },
+  "notes": "A phone is visible at the right ear with partial hand overlap. Proposal f4230-C5 is tighter on the device region than the surrounding hand-and-face proposals.",
+  "source": {
+    "proposal_artifact": "reports/v9_research/phone_proposal_mining.json",
+    "proposal_artifact_sha256": "9f710bfaf22c19fc143875a3832258935d6fb4d8db17dfd96e83bfee0718665e",
+    "source_case_sha256": "c6d3b10ff3d5465a83d520d3c70e6c22f898a9979f89140345e5f8e49bc8e8b6",
+    "contact_sheet_sha256": "64b53b9bbbb71fedc7cb9b85450432876df1e9d7b79a62f06e3210b3626b0e07",
+    "experiment_scope": "FN-selected development proposal mining for human review only"
+  },
+  "previous_revision": null,
+  "training_admission": "NOT_AUTOMATIC_REQUIRES_GOVERNED_MATERIALIZATION",
+  "production_approval": false,
+  "review_assistance": {
+    "type": "AI_PRE_REVIEW",
+    "reviewer_id": "openai-codex",
+    "revision": "45f2ce2a65f8a80534ed9c2b6552bdc19389cc855004e6ddf804a7b978c339a7",
+    "accepted_without_changes": true
+  },
+  "revision": "6713b1fbbe6c1fcc254a41af9edd5ee8ede892a9b338e3ae08330cb9705f9546"
+}

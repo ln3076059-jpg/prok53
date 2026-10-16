@@ -9,6 +9,9 @@ The frozen queue also includes 13 Codex AI pre-review suggestions in
 or confirm it quickly. Suggestions retain `reviewer_type: AI`; only an explicit save by an
 authenticated reviewer creates a `reviewer_type: HUMAN` receipt. The receipt records the AI
 suggestion revision and whether the human accepted its structured fields without changes.
+When a later AI visual pass changes a suggestion already confirmed by a human, the queue marks the
+case `RECHECK` and keeps the earlier human receipt immutable. The reviewer can compare, apply or
+reject the updated suggestion, then create a new human revision.
 
 The backend stores versioned human receipts in `reports/v9_research/human_phone_reviews/`. Every
 receipt records the authenticated reviewer ID, UTC timestamp, source and contact-sheet hashes,

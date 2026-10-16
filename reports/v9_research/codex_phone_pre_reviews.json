@@ -13,10 +13,11 @@
       "status": "AI_PRE_REVIEW",
       "phone_visibility": "PHONE_VISIBLE",
       "phone_use_assessment": "PHONE_USE_CONFIRMED",
-      "selected_proposal_id": "f1200-C3",
+      "selected_proposal_id": "f1200-C1",
       "confidence": "HIGH",
-      "rationale": "A phone is visible at the right ear. Proposal f1200-C3 is the tightest box around the exposed device; larger nearby boxes include the hand or face.",
-      "revision": "036eac33c708b22a999be002630b51c6e26a057397f70e344ec53c0886d8e6b7"
+      "rationale": "The original ROI clearly shows a phone at the right ear. Proposal f1200-C1 covers the complete handset; the smaller nested boxes crop away part of it.",
+      "review_pass": "SECOND_PASS_ORIGINAL_ROI_AND_PROPOSAL_CROPS",
+      "revision": "fc8deca84a4dd1f3a0cb6ee1953f69ed0454610ac35e4b35adf72648663f3f53"
     },
     {
       "case_id": "gB-9-phone-03",
@@ -25,10 +26,11 @@
       "status": "AI_PRE_REVIEW",
       "phone_visibility": "PHONE_VISIBLE",
       "phone_use_assessment": "PHONE_USE_CONFIRMED",
-      "selected_proposal_id": "f4230-C5",
-      "confidence": "MEDIUM",
-      "rationale": "A phone is visible at the right ear with partial hand overlap. Proposal f4230-C5 is tighter on the device region than the surrounding hand-and-face proposals.",
-      "revision": "45f2ce2a65f8a80534ed9c2b6552bdc19389cc855004e6ddf804a7b978c339a7"
+      "selected_proposal_id": "f3705-C2",
+      "confidence": "HIGH",
+      "rationale": "The original ROI clearly shows a phone at the right ear. Proposal f3705-C2 follows the full handset more closely than the smaller boxes, which cover only part of it.",
+      "review_pass": "SECOND_PASS_ORIGINAL_ROI_AND_PROPOSAL_CROPS",
+      "revision": "1e99ef3c0c4663c82196a06af92cd9cb755be2ad7874430629cb260105d88a5e"
     },
     {
       "case_id": "gB-9-phone-05",
@@ -37,22 +39,24 @@
       "status": "AI_PRE_REVIEW",
       "phone_visibility": "PHONE_VISIBLE",
       "phone_use_assessment": "PHONE_USE_CONFIRMED",
-      "selected_proposal_id": "f7560-C1",
+      "selected_proposal_id": "f6885-C1",
       "confidence": "HIGH",
-      "rationale": "A phone is visible at the left ear. Proposal f7560-C1 closely follows the narrow device region and excludes most of the hand.",
-      "revision": "9262c94b8ebae0b4d42ca5a5ad6572c1359caba464ce7d2f38b6b3fd7b932cf3"
+      "rationale": "The original ROI clearly shows a phone at the left ear. Proposal f6885-C1 is the cleanest complete box around the exposed handset.",
+      "review_pass": "SECOND_PASS_ORIGINAL_ROI_AND_PROPOSAL_CROPS",
+      "revision": "97a2f361c2eb77b38b357612fe994287c3ce94214fcd910e883f8f2098abcf3f"
     },
     {
       "case_id": "gB-9-phone-06",
       "reviewer_type": "AI",
       "reviewer_id": "openai-codex",
       "status": "AI_PRE_REVIEW",
-      "phone_visibility": "UNRESOLVED",
-      "phone_use_assessment": "UNRESOLVED",
+      "phone_visibility": "PHONE_VISIBLE",
+      "phone_use_assessment": "PHONE_USE_CONFIRMED",
       "selected_proposal_id": "NO_VALID_PROPOSAL",
-      "confidence": "HIGH",
-      "rationale": "The short interval shows downward gaze and hands near the lap, but the phone itself is occluded. All proposals cover the mounted cabin camera, so none is a valid phone box.",
-      "revision": "e0e49b1210b5a37a274442037dab8364233ddef68cb31b15f4f61a09a44e3768"
+      "confidence": "MEDIUM",
+      "rationale": "The original ROI and three-frame sequence show the driver handling a partly occluded phone near the lap. Phone use is visible, but every available proposal covers the mounted cabin camera, so no valid phone box exists.",
+      "review_pass": "SECOND_PASS_ORIGINAL_ROI_AND_PROPOSAL_CROPS",
+      "revision": "8ea96c32bd11efdedf45770d5e463c2e8a306d5205833504dcab4a02a42193d4"
     },
     {
       "case_id": "gB-9-phone-07",
@@ -61,10 +65,11 @@
       "status": "AI_PRE_REVIEW",
       "phone_visibility": "PHONE_VISIBLE",
       "phone_use_assessment": "PHONE_USE_CONFIRMED",
-      "selected_proposal_id": "f8610-C2",
+      "selected_proposal_id": "f8610-C1",
       "confidence": "HIGH",
-      "rationale": "A phone is clearly visible in the left hand. Proposal f8610-C2 is the tightest available box around the device screen.",
-      "revision": "accb9f34789f20d4d0f7a7f4b090cc887140080e9d014e9d35e723ac58813ee6"
+      "rationale": "The phone is clearly visible in the left hand. Proposal f8610-C1 covers the complete handset; f8610-C2 crops away its lower portion.",
+      "review_pass": "SECOND_PASS_ORIGINAL_ROI_AND_PROPOSAL_CROPS",
+      "revision": "49f813a31419e13907a9030bba257cf9719abd6ba1c230fd63f890d683bca16b"
     },
     {
       "case_id": "gB-9-phone-08",
@@ -75,8 +80,9 @@
       "phone_use_assessment": "PHONE_USE_CONFIRMED",
       "selected_proposal_id": "f9390-C1",
       "confidence": "MEDIUM",
-      "rationale": "A phone is visible at the left ear and partly hidden by the hand. Proposal f9390-C1 best covers the exposed vertical device region.",
-      "revision": "aae0bad1c8a3daa5a52451eb1231f6ee27a24364bde2b6795c63c55fa11ece05"
+      "rationale": "A phone is visible at the left ear with substantial hand occlusion. Proposal f9390-C1 is the best available box around the exposed vertical handset region.",
+      "review_pass": "SECOND_PASS_ORIGINAL_ROI_AND_PROPOSAL_CROPS",
+      "revision": "9ca46e0347852459722456ceab5e3b576ccb8a4e046ff4e2954ed9d5537c7f61"
     },
     {
       "case_id": "gB-9-phone-09",
@@ -85,10 +91,11 @@
       "status": "AI_PRE_REVIEW",
       "phone_visibility": "PHONE_VISIBLE",
       "phone_use_assessment": "PHONE_USE_CONFIRMED",
-      "selected_proposal_id": "f11040-C2",
+      "selected_proposal_id": "f11040-C1",
       "confidence": "HIGH",
-      "rationale": "A phone is clearly visible in the left hand near the torso. Proposal f11040-C2 tightly covers the device while the larger proposal includes more hand area.",
-      "revision": "fe1677701c91f360bb89fef854806a5a62e9eedcb533cba4e880ada407a0e993"
+      "rationale": "The phone is clearly visible in the left hand near the torso. Proposal f11040-C1 covers the full handset; f11040-C2 covers only part of it.",
+      "review_pass": "SECOND_PASS_ORIGINAL_ROI_AND_PROPOSAL_CROPS",
+      "revision": "7d9b519c839169fd7fbc01198029cf30e517bc54382bd051a2be8a2b23f3b397"
     },
     {
       "case_id": "gZ-36-phone-01",
@@ -97,10 +104,11 @@
       "status": "AI_PRE_REVIEW",
       "phone_visibility": "PHONE_VISIBLE",
       "phone_use_assessment": "PHONE_USE_CONFIRMED",
-      "selected_proposal_id": "f1575-C2",
+      "selected_proposal_id": "f1575-C1",
       "confidence": "MEDIUM",
-      "rationale": "A phone is visible in the right hand near the lower-right boundary. Proposal f1575-C2 covers the clipped device more completely than the narrower alternative.",
-      "revision": "20f2fa56ffcd40ac4da61b1a27a326a6fee510678b44ee8ed11954fff48c87ad"
+      "rationale": "The phone is visible in the right hand near the clipped ROI boundary. Proposal f1575-C1 is the tightest box on the visible handset portion; larger alternatives include more hand area.",
+      "review_pass": "SECOND_PASS_ORIGINAL_ROI_AND_PROPOSAL_CROPS",
+      "revision": "b135e064473d36f3039923fae1382e5afb466e3bcb61e25ff59747bda44078fc"
     },
     {
       "case_id": "gZ-36-phone-03",
@@ -111,8 +119,9 @@
       "phone_use_assessment": "PHONE_USE_CONFIRMED",
       "selected_proposal_id": "f3300-C1",
       "confidence": "HIGH",
-      "rationale": "A phone is clearly visible in the right hand near the torso. Proposal f3300-C1 is the closest available fit to the horizontal device.",
-      "revision": "108c8f82ebf21a00593f58ae139d36fe96547a4ca4da1d232b8177bdb1ae619a"
+      "rationale": "The phone is clearly visible in the right hand near the torso. Proposal f3300-C1 is the closest available fit to the visible device.",
+      "review_pass": "SECOND_PASS_ORIGINAL_ROI_AND_PROPOSAL_CROPS",
+      "revision": "5f923cfaba6dee974f43f85527de34f95ae230b3e31c67666ce6f7ec28045de1"
     },
     {
       "case_id": "gZ-36-phone-05",
@@ -123,8 +132,9 @@
       "phone_use_assessment": "PHONE_USE_CONFIRMED",
       "selected_proposal_id": "f4830-C2",
       "confidence": "MEDIUM",
-      "rationale": "A bright phone screen is visible in the right hand with glare. Proposal f4830-C2 covers the device; the other proposals cover the mounted camera.",
-      "revision": "4ebb699f59392b9c655ceb6407b795050f5c89eebb43480f3f3330dc013d5c94"
+      "rationale": "The bright phone screen is visible in the right hand with glare. Proposal f4830-C2 is the only handheld proposal and covers the device, although it also includes some hand.",
+      "review_pass": "SECOND_PASS_ORIGINAL_ROI_AND_PROPOSAL_CROPS",
+      "revision": "af006e0d0891e48aead7fff8103016454a21cef9f5befe7589edb90d0ccb2184"
     },
     {
       "case_id": "gC-14-phone-02",
@@ -133,10 +143,11 @@
       "status": "AI_PRE_REVIEW",
       "phone_visibility": "PHONE_VISIBLE",
       "phone_use_assessment": "PHONE_USE_CONFIRMED",
-      "selected_proposal_id": "f3135-C2",
-      "confidence": "LOW",
-      "rationale": "A small phone is partly clipped at the lower-right ROI boundary. Proposal f3135-C2 is the tightest candidate on that object; most other proposals cover the mounted camera or unrelated regions.",
-      "revision": "e6fb191e9a8a2a237c630f49e577b1183564ce36ad26365151805012b05b7930"
+      "selected_proposal_id": "f3135-C1",
+      "confidence": "MEDIUM",
+      "rationale": "The phone is visible but partly clipped at the lower-right ROI boundary. Proposal f3135-C1 covers the complete visible portion; f3135-C2 misses the right edge of the handset.",
+      "review_pass": "SECOND_PASS_ORIGINAL_ROI_AND_PROPOSAL_CROPS",
+      "revision": "5a0d4b4af72bf2b28f63c003521374e464eff24c0b1f587e0f0b8be06f9ea955"
     },
     {
       "case_id": "gC-14-phone-05",
@@ -145,10 +156,11 @@
       "status": "AI_PRE_REVIEW",
       "phone_visibility": "PHONE_VISIBLE",
       "phone_use_assessment": "PHONE_USE_CONFIRMED",
-      "selected_proposal_id": "f6720-C3",
+      "selected_proposal_id": "f6735-C1",
       "confidence": "MEDIUM",
-      "rationale": "A phone is visible during rapid hand motion with strong blur. Proposal f6720-C3 is tighter on the device than f6720-C1, which includes more hand area.",
-      "revision": "00ac96f96520fc9f4b0961fee2447fc4d2f6d169e8c0012913ef7c706f3094a0"
+      "rationale": "The phone is visible during rapid hand motion with substantial blur. Proposal f6735-C1 best covers the blurred handset near the face.",
+      "review_pass": "SECOND_PASS_ORIGINAL_ROI_AND_PROPOSAL_CROPS",
+      "revision": "fd690999e26ef53cf8c30554948b8eb7e6efd52527e00960c453b550d8739d63"
     },
     {
       "case_id": "gC-14-phone-06",
@@ -159,8 +171,11 @@
       "phone_use_assessment": "PHONE_USE_CONFIRMED",
       "selected_proposal_id": "f7710-C1",
       "confidence": "HIGH",
-      "rationale": "A phone is clearly visible at the right ear. Proposal f7710-C1 provides the cleanest available box around the device.",
-      "revision": "0779749c9b70dce5ad49db0db4a90acc3b2839c0939501c53562964cd05f6ef6"
+      "rationale": "The phone is clearly visible at the right ear. Proposal f7710-C1 provides a complete, close box around the handset.",
+      "review_pass": "SECOND_PASS_ORIGINAL_ROI_AND_PROPOSAL_CROPS",
+      "revision": "280fff83af159d7f0d8e618aef65ca4d6eed26afd5e9a1c88da3a16b3df97810"
     }
-  ]
+  ],
+  "last_re_reviewed_at_utc": "2026-10-16T15:47:30.114897+00:00",
+  "review_method": "Second visual pass using all 13 original ROIs, annotated contact sheets, and magnified proposal crops."
 }

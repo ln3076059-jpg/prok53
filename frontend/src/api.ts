@@ -120,20 +120,21 @@ export interface PhoneReviewCase {
   cross_model_agreement: boolean;
   auxiliary_review_candidate: boolean;
   pre_review_available: boolean;
-  review_status: "PENDING" | "REVIEWED";
+  review_status: "PENDING" | "RECHECK" | "REVIEWED";
   decision: PhoneReviewDecision | null;
 }
 
 export interface PhoneReviewQueue {
   scope: string;
   cases: PhoneReviewCase[];
-  summary: { total: number; reviewed: number; pending: number };
+  summary: { total: number; reviewed: number; pending: number; recheck: number };
 }
 
 export interface PhoneReviewDetail extends Omit<PhoneReviewCase, "review_status"> {
   contact_sheet_sha256: string;
   proposals: PhoneProposal[];
   pre_review: PhonePreReview | null;
+  pre_review_changed_since_decision: boolean;
 }
 
 export interface PhoneReviewInput {

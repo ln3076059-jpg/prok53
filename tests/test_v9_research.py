@@ -146,7 +146,7 @@ def test_research_review_writes_versioned_human_receipts(tmp_path: Path):
     assert first["selected_proposal"]["proposal_id"] == "f0-S1"
     assert first["training_admission"].startswith("NOT_AUTOMATIC")
     assert detail["decision"]["revision"] == first["revision"]
-    assert queue["summary"] == {"total": 13, "reviewed": 1, "pending": 12}
+    assert queue["summary"] == {"total": 13, "reviewed": 1, "pending": 12, "recheck": 0}
     assert len(list((decisions / "history" / "case-00").glob("*.json"))) == 1
 
     with pytest.raises(ResearchReviewConflict, match="another session"):
@@ -216,6 +216,22 @@ def test_research_review_exposes_ai_suggestion_but_receipt_remains_human(tmp_pat
         "revision": suggestion["revision"],
         "accepted_without_changes": True,
     }
+
+    suggestions[0]["rationale"] = "A second AI pass recommends that a human check this case again."
+    suggestions[0].pop("revision")
+    canonical = json.dumps(
+        suggestions[0], sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    ).encode()
+    suggestions[0]["revision"] = hashlib.sha256(canonical).hexdigest()
+    (source.parent / "codex_phone_pre_reviews.json").write_text(
+        json.dumps({"rows": suggestions}), encoding="utf-8"
+    )
+    queue = list_phone_reviews(source, decisions)
+    assert queue["summary"] == {"total": 13, "reviewed": 0, "pending": 12, "recheck": 1}
+    assert queue["cases"][0]["review_status"] == "RECHECK"
+    assert phone_review_detail(source, decisions, "case-00")[
+        "pre_review_changed_since_decision"
+    ] is True
 
 
 def test_research_review_rejects_foreign_proposal_and_inconsistent_decision(tmp_path: Path):
