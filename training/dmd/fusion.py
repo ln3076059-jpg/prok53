@@ -13,21 +13,45 @@ Adheres strictly to Fail-Closed Governance:
 - Never infers physical phone presence without physical visual detection evidence in at least one view.
 - Suppresses scratching/hair grooming via explicit non-distraction gesture scoring.
 """
+# ruff: noqa: E402, E501, I001
+
 from __future__ import annotations
 
 import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-
-import numpy as np
+from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from training.dmd.action_model import ActionProbabilities, RuleGuidedPoseClassifier, TemporalWindowAggregator
-from training.dmd.pose_features import PoseFeatureVector, extract_pose_features
+from training.dmd.action_model import RuleGuidedPoseClassifier, TemporalWindowAggregator
+from training.dmd.pose_features import PoseFeatureVector
+
+
+PHONE_USE_CONTEXTS = frozenset({"HANDHELD", "HANDHELD_USE", "HANDHELD_PHONE_USE"})
+
+
+def gate_phone_confidence(
+    confidence: float,
+    context: str | None,
+    *,
+    strict: bool,
+) -> tuple[float, str | None]:
+    """Return usable phone confidence and a rejection reason for the audit trail.
+
+    Legacy callers preserve their prior behavior unless ``strict`` is enabled. In
+    strict mode only explicit handheld-use geometry is physical phone-use evidence;
+    mounted, visible-but-not-used, possible, and unknown contexts fail closed.
+    """
+    value = max(0.0, min(1.0, float(confidence)))
+    if value == 0.0 or not strict:
+        return value, None
+    normalized = str(context or "UNKNOWN_PHONE_CONTEXT").strip().upper()
+    if normalized in PHONE_USE_CONTEXTS:
+        return value, None
+    return 0.0, normalized
 
 
 @dataclass(frozen=True)
@@ -52,7 +76,18 @@ class FusedPhoneObservation:
     face_available: bool
     hands_available: bool
 
-    def to_dict(self) -> Dict[str, Any]:
+    # Context-gate audit fields. Raw confidences preserve detector evidence while
+    # the component scores above record the values admitted into fusion.
+    raw_body_phone_conf: float = 0.0
+    raw_face_phone_conf: float = 0.0
+    raw_hands_phone_conf: float = 0.0
+    body_phone_context: str = "UNKNOWN_PHONE_CONTEXT"
+    face_phone_context: str = "UNKNOWN_PHONE_CONTEXT"
+    hands_phone_context: str = "UNKNOWN_PHONE_CONTEXT"
+    context_gate_rejections: tuple[str, ...] = ()
+    strict_phone_context: bool = False
+
+    def to_dict(self) -> dict[str, Any]:
         return asdict(self)
 
 
@@ -68,6 +103,7 @@ class MultiViewFusionEngine:
         enable_pose_fusion: bool = True,
         auxiliary_rescue_mode: bool = False,
         aux_rescue_min_conf: float = 0.35,
+        strict_phone_context: bool = False,
     ):
         self.phone_conf_threshold = phone_conf_threshold
         self.enable_face_fusion = enable_face_fusion
@@ -75,6 +111,7 @@ class MultiViewFusionEngine:
         self.enable_pose_fusion = enable_pose_fusion
         self.auxiliary_rescue_mode = auxiliary_rescue_mode
         self.aux_rescue_min_conf = aux_rescue_min_conf
+        self.strict_phone_context = strict_phone_context
 
         self.pose_classifier = RuleGuidedPoseClassifier()
         self.temporal_aggregator = TemporalWindowAggregator(window_size=temporal_window)
@@ -89,10 +126,13 @@ class MultiViewFusionEngine:
         body_phone_conf: float = 0.0,
         face_phone_conf: float = 0.0,
         hands_phone_conf: float = 0.0,
-        body_pose_features: Optional[PoseFeatureVector] = None,
+        body_pose_features: PoseFeatureVector | None = None,
         body_available: bool = True,
         face_available: bool = False,
         hands_available: bool = False,
+        body_phone_context: str | None = None,
+        face_phone_context: str | None = None,
+        hands_phone_context: str | None = None,
     ) -> FusedPhoneObservation:
         # 1. Fail-closed check: BODY is mandatory for primary cabin association
         if not body_available:
@@ -112,12 +152,45 @@ class MultiViewFusionEngine:
                 body_available=False,
                 face_available=face_available,
                 hands_available=hands_available,
+                raw_body_phone_conf=round(float(body_phone_conf), 4),
+                raw_face_phone_conf=round(float(face_phone_conf), 4),
+                raw_hands_phone_conf=round(float(hands_phone_conf), 4),
+                body_phone_context=str(body_phone_context or "UNKNOWN_PHONE_CONTEXT"),
+                face_phone_context=str(face_phone_context or "UNKNOWN_PHONE_CONTEXT"),
+                hands_phone_context=str(hands_phone_context or "UNKNOWN_PHONE_CONTEXT"),
+                strict_phone_context=self.strict_phone_context,
             )
 
         # 2. Multi-view phone detection evidence fusion
-        eff_face = face_phone_conf if (self.enable_face_fusion and face_available) else 0.0
-        eff_hands = hands_phone_conf if (self.enable_hands_fusion and hands_available) else 0.0
-        eff_body = body_phone_conf
+        raw_body = max(0.0, min(1.0, float(body_phone_conf)))
+        raw_face = (
+            max(0.0, min(1.0, float(face_phone_conf)))
+            if self.enable_face_fusion and face_available
+            else 0.0
+        )
+        raw_hands = (
+            max(0.0, min(1.0, float(hands_phone_conf)))
+            if self.enable_hands_fusion and hands_available
+            else 0.0
+        )
+        eff_body, body_rejection = gate_phone_confidence(
+            raw_body, body_phone_context, strict=self.strict_phone_context
+        )
+        eff_face, face_rejection = gate_phone_confidence(
+            raw_face, face_phone_context, strict=self.strict_phone_context
+        )
+        eff_hands, hands_rejection = gate_phone_confidence(
+            raw_hands, hands_phone_context, strict=self.strict_phone_context
+        )
+        rejections = tuple(
+            f"{view}:{reason}"
+            for view, reason in (
+                ("BODY", body_rejection),
+                ("FACE", face_rejection),
+                ("HANDS", hands_rejection),
+            )
+            if reason is not None
+        )
 
         two_view_agree = False
         if not self.auxiliary_rescue_mode:
@@ -196,7 +269,11 @@ class MultiViewFusionEngine:
         if max_view_phone_conf < 0.10:
             # Section 25: Never infer a physically invisible phone solely because system expects action
             fused_score = max_view_phone_conf * 0.5
-            governance_status = "FAIL_CLOSED_NO_PHONE"
+            governance_status = (
+                "FAIL_CLOSED_PHONE_CONTEXT"
+                if self.strict_phone_context and rejections
+                else "FAIL_CLOSED_NO_PHONE"
+            )
             phone_detected = False
             action_type = "NORMAL"
         else:
@@ -230,4 +307,12 @@ class MultiViewFusionEngine:
             body_available=body_available,
             face_available=face_available,
             hands_available=hands_available,
+            raw_body_phone_conf=round(raw_body, 4),
+            raw_face_phone_conf=round(raw_face, 4),
+            raw_hands_phone_conf=round(raw_hands, 4),
+            body_phone_context=str(body_phone_context or "UNKNOWN_PHONE_CONTEXT"),
+            face_phone_context=str(face_phone_context or "UNKNOWN_PHONE_CONTEXT"),
+            hands_phone_context=str(hands_phone_context or "UNKNOWN_PHONE_CONTEXT"),
+            context_gate_rejections=rejections,
+            strict_phone_context=self.strict_phone_context,
         )

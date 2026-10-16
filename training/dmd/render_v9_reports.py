@@ -38,6 +38,10 @@ def render(output: Path = DEFAULT_OUTPUT) -> list[Path]:
     diagnostics = _read(output / "v9_diagnostics.json")
     human_review_path = output / "human_phone_review_summary.json"
     human_review = _read(human_review_path) if human_review_path.is_file() else None
+    context_ablation_path = output / "phone_context_gate_ablation.json"
+    context_ablation = (
+        _read(context_ablation_path) if context_ablation_path.is_file() else None
+    )
     fn = diagnostics["phone_false_negatives"]
     seatbelt = diagnostics["seatbelt"]
     representation = diagnostics["representation"]
@@ -125,6 +129,8 @@ context, small-object feature pyramids, and reliability-aware fusion. Each requi
     human_review_audit = ""
     human_review_root_cause = ""
     human_review_final = ""
+    context_ablation_fusion = ""
+    context_ablation_final = ""
     if human_review:
         reviewed = human_review["summary"]
         human_review_audit = f"""
@@ -153,6 +159,26 @@ Human review is now complete for 13/13 FN cases: {reviewed['valid_phone_proposal
 {reviewed['no_valid_proposal_hard_examples']} visible-phone case without a valid box. The resulting lane is
 hash-registered and excluded from automatic training. This resolves the review prerequisite but does not
 provide an independent subject for model selection or evaluation.
+"""
+    if context_ablation:
+        floor = context_ablation["mining_floor_result"]
+        context_ablation_fusion = f"""
+
+## Strict phone-context diagnostic
+
+At the 0.02 proposal-mining floor, strict context gating removes
+{floor['removed_proposals']}/{floor['naive_proposals']} mounted/static proposals
+({100 * floor['removed_fraction']:.2f}%) and retains
+{floor['human_selected_retained_context_gated']}/{floor['human_selected_total']} human-selected handheld
+boxes. It rejects all proposals in the visible-phone hard example `gB-9-phone-06`. This is candidate
+yield on FN-selected positive development evidence, not detector accuracy or event P/R/F1.
+"""
+        context_ablation_final = f"""
+
+The strict geometry gate is now implemented with raw/admitted confidence and rejection-reason audit
+fields. Its diagnostic removes {floor['removed_proposals']} mounted/static candidates while retaining all
+{floor['human_selected_total']} selected boxes at the mining floor. It remains opt-in until callers supply
+audited context; no event metric changed in this run.
 """
 
     pending = seatbelt["pending_uncertain_review_manifest"]
@@ -260,6 +286,7 @@ the same LOSO split, reporting clip Macro-F1 separately from event F1.
 T1/T3 recover one event but add 9/7 false positives versus the controlled comparator. T2–T5 do not
 improve F1. The post-hoc row remains ineligible. Missing camera views are excluded from the denominator;
 secondary cameras, pose and negative evidence cannot create an alert without physical and driver context.
+{context_ablation_fusion}
 """
 
     seatbelt_rows = [
@@ -333,6 +360,7 @@ The next model-changing run requires new group-disjoint subjects plus a frozen r
 The reviewed three-subject error lane can guide ROI and small-object hypotheses but cannot be used to
 claim recovery on those same cases. Keep `gZ-37` and `gE-28` sealed until model, threshold and event policy
 are frozen.
+{context_ablation_final}
 """
 
     reports = {

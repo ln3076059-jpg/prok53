@@ -31,6 +31,7 @@ REPORTS = (
     "11_PHONE_PROPOSAL_MINING.md",
     "12_HUMAN_REVIEW_WEB.md",
     "13_HUMAN_PHONE_REVIEW_RESULTS.md",
+    "14_PHONE_CONTEXT_GATE_ABLATION.md",
 )
 
 
@@ -105,9 +106,12 @@ def run_checks(output: Path) -> dict[str, Any]:
                 "training/dmd/verify_v9.py",
                 "training/dmd/v9_phone_proposal_mining.py",
                 "training/dmd/v9_human_review_results.py",
+                "training/dmd/v9_phone_context_ablation.py",
+                "training/dmd/fusion.py",
                 "backend/services/research_review.py",
                 "backend/schemas.py",
                 "tests/test_v9_research.py",
+                "tests/test_v3_fusion.py",
             ],
         ),
     ]
@@ -182,6 +186,9 @@ def verify(output: Path = DEFAULT_OUTPUT) -> dict[str, Any]:
     human_review = json.loads(
         (output / "human_phone_review_summary.json").read_text(encoding="utf-8")
     )
+    context_ablation = json.loads(
+        (output / "phone_context_gate_ablation.json").read_text(encoding="utf-8")
+    )
     tests = json.loads(tests_path.read_text(encoding="utf-8"))
     _render_test_report(output, tests)
     failures = []
@@ -208,6 +215,30 @@ def verify(output: Path = DEFAULT_OUTPUT) -> dict[str, Any]:
         "DEVELOPMENT_DIAGNOSTIC_ONLY_NOT_TRAINING_READY"
     ):
         failures.append("human review lane bypasses development-only governance")
+    context_floor = context_ablation["mining_floor_result"]
+    if context_ablation["metric_semantics"] != (
+        "CANDIDATE_YIELD_NOT_ACCURACY_OR_EVENT_METRICS"
+    ):
+        failures.append("phone-context ablation overclaims metric semantics")
+    if context_ablation["proposal_summary"]["proposals"] != 226:
+        failures.append("phone-context ablation proposal set changed")
+    if context_floor["removed_proposals"] != 99:
+        failures.append("phone-context gate mounted/static removal count changed")
+    if context_floor["human_selected_retained_context_gated"] != 12:
+        failures.append("phone-context gate lost a human-selected proposal at mining floor")
+    if context_floor["hard_example_has_context_gated_candidate"]:
+        failures.append("phone-context gate admitted the mounted-camera hard example")
+    if any(
+        context_ablation["governance"][key]
+        for key in (
+            "protected_holdouts_accessed",
+            "ground_truth_changed",
+            "event_matcher_changed",
+            "fine_tuning_performed",
+            "production_approved",
+        )
+    ):
+        failures.append("phone-context ablation changed a protected scientific invariant")
     if any(
         proposals[key]
         for key in (
@@ -237,6 +268,10 @@ def verify(output: Path = DEFAULT_OUTPUT) -> dict[str, Any]:
         "reports": len([name for name in REPORTS if (output / name).is_file()]),
         "artifacts_hashed": len(manifest),
         "phone_fn_cases": summary["cases"],
+        "context_gate_removed_proposals": context_floor["removed_proposals"],
+        "context_gate_selected_retained": context_floor[
+            "human_selected_retained_context_gated"
+        ],
         "protected_holdouts_accessed": diagnostics["protected_holdouts_accessed"],
         "fine_tuning_performed": diagnostics["fine_tuning_performed"],
         "production_approved": diagnostics["production_approved"],

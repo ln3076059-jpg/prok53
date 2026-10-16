@@ -13,6 +13,8 @@ try {
     }
     py -3.11 -m training.dmd.v9_human_review_results
     if ($LASTEXITCODE -ne 0) { throw "V9 human review verification failed" }
+    py -3.11 -m training.dmd.v9_phone_context_ablation
+    if ($LASTEXITCODE -ne 0) { throw "V9 phone-context ablation failed" }
     py -3.11 -m training.dmd.render_v9_reports
     if ($LASTEXITCODE -ne 0) { throw "V9 report rendering failed" }
     py -3.11 -m training.dmd.verify_v9 --checks

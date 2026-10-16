@@ -1,7 +1,6 @@
 """Tests for V3 Multi-View Feature Fusion Engine."""
-import numpy as np
-import pytest
-from training.dmd.fusion import MultiViewFusionEngine, FusedPhoneObservation
+
+from training.dmd.fusion import MultiViewFusionEngine
 from training.dmd.pose_features import PoseFeatureVector
 
 
@@ -42,7 +41,7 @@ def test_fusion_missing_body_fail_closed():
 
 
 def test_fusion_face_view_recovers_occluded_phone():
-    """When phone is occluded in BODY (0.0) but visible in FACE (0.85), fusion recovers detection."""
+    """A FACE view can recover a phone occluded in the BODY view."""
     engine = MultiViewFusionEngine(phone_conf_threshold=0.25)
     pose = make_dummy_pose(wrist_to_ear=0.2, elbow_angle=40.0)
 
@@ -63,7 +62,7 @@ def test_fusion_face_view_recovers_occluded_phone():
 
 
 def test_fusion_never_infers_phone_without_visual_evidence():
-    """Even if driver scratches ear (call geometry), without phone detection no violation is inferred."""
+    """A scratch gesture cannot create a violation without phone evidence."""
     engine = MultiViewFusionEngine(phone_conf_threshold=0.25)
     pose = make_dummy_pose(wrist_to_ear=0.1, elbow_angle=30.0)  # hand near ear
 
@@ -81,3 +80,63 @@ def test_fusion_never_infers_phone_without_visual_evidence():
     assert not obs.phone_detected
     assert obs.governance_status == "FAIL_CLOSED_NO_PHONE"
     assert obs.fused_score < 0.20
+
+
+def test_context_gate_rejects_mounted_phone_detector_evidence():
+    """A confident mounted screen cannot become driver phone-use evidence."""
+    engine = MultiViewFusionEngine(phone_conf_threshold=0.25, strict_phone_context=True)
+    obs = engine.fuse_frame(
+        timestamp_seconds=4.0,
+        frame_index=120,
+        body_phone_conf=0.95,
+        body_phone_context="MOUNTED_OR_STATIC",
+        body_available=True,
+    )
+    assert not obs.phone_detected
+    assert obs.fused_score == 0.0
+    assert obs.body_phone_conf == 0.0
+    assert obs.raw_body_phone_conf == 0.95
+    assert obs.governance_status == "FAIL_CLOSED_PHONE_CONTEXT"
+    assert obs.context_gate_rejections == ("BODY:MOUNTED_OR_STATIC",)
+
+
+def test_context_gate_retains_explicit_handheld_use_evidence():
+    engine = MultiViewFusionEngine(phone_conf_threshold=0.25, strict_phone_context=True)
+    obs = engine.fuse_frame(
+        timestamp_seconds=5.0,
+        frame_index=150,
+        body_phone_conf=0.80,
+        body_phone_context="HANDHELD_USE",
+        body_available=True,
+    )
+    assert obs.phone_detected
+    assert obs.body_phone_conf == 0.80
+    assert obs.context_gate_rejections == ()
+    assert obs.governance_status == "CONFIRMED"
+
+
+def test_context_gate_fails_closed_when_context_is_missing():
+    engine = MultiViewFusionEngine(strict_phone_context=True)
+    obs = engine.fuse_frame(
+        timestamp_seconds=6.0,
+        frame_index=180,
+        body_phone_conf=0.90,
+        body_available=True,
+    )
+    assert not obs.phone_detected
+    assert obs.governance_status == "FAIL_CLOSED_PHONE_CONTEXT"
+    assert obs.context_gate_rejections == ("BODY:UNKNOWN_PHONE_CONTEXT",)
+
+
+def test_context_gate_is_backward_compatible_when_disabled():
+    legacy = MultiViewFusionEngine(phone_conf_threshold=0.25)
+    explicit = MultiViewFusionEngine(phone_conf_threshold=0.25, strict_phone_context=False)
+    kwargs = {
+        "timestamp_seconds": 7.0,
+        "frame_index": 210,
+        "body_phone_conf": 0.80,
+        "body_phone_context": "MOUNTED_OR_STATIC",
+        "body_available": True,
+    }
+    assert legacy.fuse_frame(**kwargs).fused_score == explicit.fuse_frame(**kwargs).fused_score
+    assert legacy.fuse_frame(**kwargs).phone_detected

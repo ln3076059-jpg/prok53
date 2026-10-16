@@ -14,3 +14,13 @@
 T1/T3 recover one event but add 9/7 false positives versus the controlled comparator. T2–T5 do not
 improve F1. The post-hoc row remains ineligible. Missing camera views are excluded from the denominator;
 secondary cameras, pose and negative evidence cannot create an alert without physical and driver context.
+
+
+## Strict phone-context diagnostic
+
+At the 0.02 proposal-mining floor, strict context gating removes
+99/226 mounted/static proposals
+(43.81%) and retains
+12/12 human-selected handheld
+boxes. It rejects all proposals in the visible-phone hard example `gB-9-phone-06`. This is candidate
+yield on FN-selected positive development evidence, not detector accuracy or event P/R/F1.

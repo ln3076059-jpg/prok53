@@ -1,5 +1,5 @@
 {
-  "created_at_utc": "2026-10-16T16:41:04.918904+00:00",
+  "created_at_utc": "2026-10-16T21:26:35.997704+00:00",
   "status": "PASS",
   "checks": [
     {
@@ -14,7 +14,7 @@
         "tests"
       ],
       "returncode": 0,
-      "seconds": 0.3939600000012433,
+      "seconds": 5.397625899997365,
       "log": "reports/v9_research/compile.log",
       "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
@@ -32,7 +32,7 @@
         "tests"
       ],
       "returncode": 0,
-      "seconds": 0.2475970999985293,
+      "seconds": 1.4814000999976997,
       "log": "reports/v9_research/ruff_critical.log",
       "log_sha256": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0"
     },
@@ -48,12 +48,15 @@
         "training/dmd/verify_v9.py",
         "training/dmd/v9_phone_proposal_mining.py",
         "training/dmd/v9_human_review_results.py",
+        "training/dmd/v9_phone_context_ablation.py",
+        "training/dmd/fusion.py",
         "backend/services/research_review.py",
         "backend/schemas.py",
-        "tests/test_v9_research.py"
+        "tests/test_v9_research.py",
+        "tests/test_v3_fusion.py"
       ],
       "returncode": 0,
-      "seconds": 0.21719740000116872,
+      "seconds": 0.2593784000055166,
       "log": "reports/v9_research/ruff_v9.log",
       "log_sha256": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0"
     },
@@ -68,9 +71,9 @@
         "--junitxml=D:\\.idea\\giangdoantotnghiep\\reports\\v9_research\\pytest_v9.xml"
       ],
       "returncode": 0,
-      "seconds": 10.192792300000292,
+      "seconds": 54.313424200001464,
       "log": "reports/v9_research/pytest_v9.log",
-      "log_sha256": "72492511f4e086bff25810e5b2e8837af29160ad0ef37198e189a5a9f69d9df8"
+      "log_sha256": "12e9c5bb8cc0f9959529213216eda077c60256b12c2b3a50c3e3ff84e1385014"
     },
     {
       "name": "pytest_full",
@@ -82,9 +85,9 @@
         "--junitxml=D:\\.idea\\giangdoantotnghiep\\reports\\v9_research\\pytest_full.xml"
       ],
       "returncode": 0,
-      "seconds": 72.42562589999943,
+      "seconds": 184.2163431000008,
       "log": "reports/v9_research/pytest_full.log",
-      "log_sha256": "56053eabd772bb4f06d6ff0e568f73fcab0032e810805fa204a34fec45aed855"
+      "log_sha256": "0c385147f99f6d81e568031ac345dc775b9725fb9ed20f58652d2e91bc9f9a91"
     },
     {
       "name": "frontend_build",
@@ -96,19 +99,19 @@
         "build"
       ],
       "returncode": 0,
-      "seconds": 22.087894500000402,
+      "seconds": 35.90650910000113,
       "log": "reports/v9_research/frontend_build.log",
-      "log_sha256": "c6ae0d87c7c953f0f2225583bede1ac14cfc5549ded5c9b83e68ef6223967dda"
+      "log_sha256": "f209ca993d408276964a2af0006d929d86936b61774e39a24df7df4ebc6fcb6a"
     }
   ],
   "targeted_pytest": {
-    "tests": 11,
+    "tests": 12,
     "failures": 0,
     "errors": 0,
     "skipped": 0
   },
   "full_pytest": {
-    "tests": 563,
+    "tests": 568,
     "failures": 0,
     "errors": 0,
     "skipped": 0

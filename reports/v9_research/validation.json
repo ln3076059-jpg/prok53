@@ -1,9 +1,11 @@
 {
   "status": "PASS",
   "failures": [],
-  "reports": 13,
-  "artifacts_hashed": 79,
+  "reports": 14,
+  "artifacts_hashed": 81,
   "phone_fn_cases": 13,
+  "context_gate_removed_proposals": 99,
+  "context_gate_selected_retained": 12,
   "protected_holdouts_accessed": false,
   "fine_tuning_performed": false,
   "production_approved": false,

@@ -26,3 +26,9 @@ The next model-changing run requires new group-disjoint subjects plus a frozen r
 The reviewed three-subject error lane can guide ROI and small-object hypotheses but cannot be used to
 claim recovery on those same cases. Keep `gZ-37` and `gE-28` sealed until model, threshold and event policy
 are frozen.
+
+
+The strict geometry gate is now implemented with raw/admitted confidence and rejection-reason audit
+fields. Its diagnostic removes 99 mounted/static candidates while retaining all
+12 selected boxes at the mining floor. It remains opt-in until callers supply
+audited context; no event metric changed in this run.

@@ -20,6 +20,7 @@ from training.dmd.v9_diagnostics import (
     summarize_detection_row,
 )
 from training.dmd.v9_human_review_results import validate_reviews
+from training.dmd.v9_phone_context_ablation import analyze as analyze_phone_context_gate
 from training.dmd.v9_phone_proposal_mining import intersection_over_union
 
 
@@ -94,6 +95,21 @@ def test_v9_completed_human_review_is_hash_valid_and_keeps_hard_example_positive
     assert [item["case_id"] for item in hard] == ["gB-9-phone-06"]
     assert hard[0]["phone_visibility"] == "PHONE_VISIBLE"
     assert result["governance"]["training_admission"].endswith("NOT_TRAINING_READY")
+
+
+def test_v9_phone_context_gate_removes_mounted_camera_without_losing_selected_boxes():
+    result = analyze_phone_context_gate(Path("reports/v9_research"))
+    floor = result["mining_floor_result"]
+
+    assert result["proposal_summary"]["geometry_contexts"] == {
+        "HANDHELD_USE": 127,
+        "MOUNTED_OR_STATIC": 99,
+    }
+    assert floor["removed_proposals"] == 99
+    assert floor["human_selected_retained_context_gated"] == 12
+    assert floor["hard_example_has_naive_candidate"] is True
+    assert floor["hard_example_has_context_gated_candidate"] is False
+    assert result["governance"]["protected_holdouts_accessed"] is False
 
 
 def _research_review_fixture(tmp_path: Path) -> tuple[Path, Path]:
