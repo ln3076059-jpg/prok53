@@ -17,6 +17,8 @@ class Settings(BaseSettings):
     model_config_path: Path = Path("models/model_config_v2.yaml")
     upload_dir: Path = Path("uploads")
     evidence_dir: Path = Path("evidence")
+    research_phone_review_source: Path = Path("reports/v9_research/phone_proposal_mining.json")
+    research_phone_review_dir: Path = Path("reports/v9_research/human_phone_reviews")
     max_upload_mb: int = 1024
     allow_camera_streams: bool = False
     cors_origins: str = "http://localhost:5173"

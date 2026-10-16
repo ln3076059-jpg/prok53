@@ -22,13 +22,26 @@ import {
   Menu,
   Phone,
   Play,
+  Review,
+  Save,
   Settings as SettingsIcon,
   Upload,
   Video,
   WarningAlt,
 } from "@carbon/icons-react";
 import { Link, Navigate, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
-import { api, type EventDetail, type ReviewStatus, type SafetyEvent, type Statistics } from "./api";
+import {
+  api,
+  type EventDetail,
+  type PhoneReviewDetail,
+  type PhoneReviewInput,
+  type PhoneReviewQueue,
+  type PhoneUseAssessment,
+  type PhoneVisibility,
+  type ReviewStatus,
+  type SafetyEvent,
+  type Statistics,
+} from "./api";
 
 const emptyStats: Statistics = {
   analyzed_videos: 0,
@@ -150,6 +163,7 @@ const navigation = [
   ["/", "Overview", Dashboard],
   ["/upload", "Upload / Analysis", Upload],
   ["/events", "Events", Events],
+  ["/research-review", "Research review", Review],
   ["/statistics", "Statistics", ChartBar],
   ["/models", "Models / About", MachineLearningModel],
   ["/settings", "Settings", SettingsIcon],
@@ -349,6 +363,172 @@ function EventDetailPage() {
     </> : null}</main></Shell>;
 }
 
+function ResearchReviewPage() {
+  const [queue, setQueue] = useState<PhoneReviewQueue | null>(null);
+  const [selectedCase, setSelectedCase] = useState("");
+  const [detail, setDetail] = useState<PhoneReviewDetail | null>(null);
+  const [imageUrl, setImageUrl] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [visibility, setVisibility] = useState<PhoneVisibility>("UNRESOLVED");
+  const [phoneUse, setPhoneUse] = useState<PhoneUseAssessment>("UNRESOLVED");
+  const [proposalId, setProposalId] = useState("NO_VALID_PROPOSAL");
+  const [notes, setNotes] = useState("");
+
+  function loadQueue(preferredCase?: string) {
+    setLoading(true);
+    return api.phoneReviews()
+      .then((result) => {
+        setQueue(result);
+        const available = new Set(result.cases.map((item) => item.case_id));
+        const next = preferredCase && available.has(preferredCase)
+          ? preferredCase
+          : result.cases.find((item) => item.review_status === "PENDING")?.case_id
+            ?? result.cases[0]?.case_id
+            ?? "";
+        setSelectedCase(next);
+      })
+      .catch((reason) => setError(reason instanceof Error ? reason.message : "Review queue could not be loaded"))
+      .finally(() => setLoading(false));
+  }
+
+  useEffect(() => { void loadQueue(); }, []);
+
+  useEffect(() => {
+    if (!selectedCase) { setDetail(null); setImageUrl(""); return; }
+    const controller = new AbortController();
+    let objectUrl = "";
+    setError("");
+    Promise.all([api.phoneReview(selectedCase), api.phoneReviewImage(selectedCase, controller.signal)])
+      .then(([record, blob]) => {
+        objectUrl = URL.createObjectURL(blob);
+        setDetail(record);
+        setImageUrl(objectUrl);
+        setVisibility(record.decision?.phone_visibility ?? "UNRESOLVED");
+        setPhoneUse(record.decision?.phone_use_assessment ?? "UNRESOLVED");
+        setProposalId(record.decision?.selected_proposal_id ?? "NO_VALID_PROPOSAL");
+        setNotes(record.decision?.notes ?? "");
+      })
+      .catch((reason) => {
+        if (reason instanceof DOMException && reason.name === "AbortError") return;
+        setError(reason instanceof Error ? reason.message : "Review evidence could not be loaded");
+      });
+    return () => { controller.abort(); if (objectUrl) URL.revokeObjectURL(objectUrl); };
+  }, [selectedCase]);
+
+  function changeVisibility(value: PhoneVisibility) {
+    setVisibility(value);
+    if (value === "NO_PHONE_VISIBLE") {
+      setPhoneUse("NOT_PHONE_USE");
+      setProposalId("NO_VALID_PROPOSAL");
+    } else if (value === "UNRESOLVED") {
+      setPhoneUse("UNRESOLVED");
+      setProposalId("NO_VALID_PROPOSAL");
+    }
+  }
+
+  function changePhoneUse(value: PhoneUseAssessment) {
+    setPhoneUse(value);
+    if (value === "PHONE_USE_CONFIRMED") setVisibility("PHONE_VISIBLE");
+  }
+
+  async function saveReview() {
+    if (!detail) return;
+    setSaving(true);
+    setError("");
+    setMessage("");
+    const payload: PhoneReviewInput = {
+      phone_visibility: visibility,
+      phone_use_assessment: phoneUse,
+      selected_proposal_id: proposalId,
+      notes: notes.trim(),
+      expected_revision: detail.decision?.revision ?? null,
+    };
+    try {
+      await api.savePhoneReview(detail.case_id, payload);
+      const refreshed = await api.phoneReviews();
+      setQueue(refreshed);
+      const next = refreshed.cases.find((item) => item.review_status === "PENDING")?.case_id;
+      setMessage(`Decision saved for ${detail.case_id}.`);
+      setSelectedCase(next ?? detail.case_id);
+      if (!next) {
+        const updated = await api.phoneReview(detail.case_id);
+        setDetail(updated);
+      }
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "Decision could not be saved");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  const reviewed = queue?.summary.reviewed ?? 0;
+  const total = queue?.summary.total ?? 13;
+  return <Shell><main>
+    <PageHeader title="Phone proposal review" description="Human verification of frozen V9 phone proposals. Decisions create audited receipts and never approve a production model." />
+    <section className="review-progress" aria-label="Review progress">
+      <div><span>Reviewed</span><strong>{reviewed}</strong></div>
+      <div><span>Pending</span><strong>{queue?.summary.pending ?? total}</strong></div>
+      <div><span>Completion</span><strong>{Math.round((reviewed / Math.max(1, total)) * 100)}%</strong></div>
+    </section>
+    {error && <InlineNotification className="readiness-alert" kind="error" title="Research review unavailable" subtitle={error} lowContrast hideCloseButton />}
+    {message && <InlineNotification className="readiness-alert" kind="success" title="Review recorded" subtitle={message} lowContrast hideCloseButton />}
+    {loading ? <InlineLoading description="Loading human review queue" /> : <div className="research-review-layout">
+      <aside className="review-case-list" aria-label="Phone review cases">
+        <div className="panel-heading"><div><h2>13 false negatives</h2><p>Development-only evidence</p></div></div>
+        <div className="case-list-scroll">{queue?.cases.map((item) => <button type="button" key={item.case_id} className={selectedCase === item.case_id ? "active" : ""} onClick={() => setSelectedCase(item.case_id)} aria-current={selectedCase === item.case_id ? "true" : undefined}>
+          <span><strong>{item.case_id}</strong><small>{item.subject_id} · {item.sample_count} frames</small></span>
+          <Tag type={item.review_status === "REVIEWED" ? "green" : "warm-gray"}>{item.review_status}</Tag>
+        </button>)}</div>
+      </aside>
+      <section className="research-review-workspace">
+        {!detail ? <div className="empty-state"><Review size={32} /><h3>Select a case</h3><p>Choose one false negative to inspect its evidence.</p></div> : <>
+          <div className="review-evidence-head">
+            <div><p className="eyebrow">Case evidence</p><h2>{detail.case_id}</h2><p>{detail.sample_count} sampled frames · {detail.specialist_proposals} specialist · {detail.auxiliary_proposals} COCO proposals</p></div>
+            <div className="review-flags"><Tag type={detail.cross_model_agreement ? "green" : "gray"}>{detail.cross_model_agreement ? "Cross-model agreement" : "No cross-model agreement"}</Tag><Tag type="warm-gray">No occupant track</Tag></div>
+          </div>
+          <div className="contact-sheet-frame">
+            {imageUrl ? <a href={imageUrl} target="_blank" rel="noreferrer" title="Open full-resolution contact sheet"><img src={imageUrl} alt={`Annotated phone proposal contact sheet for ${detail.case_id}`} /></a> : <InlineLoading description="Loading contact sheet" />}
+            <p>Scroll horizontally to inspect every frame. Select the image to open the full-resolution evidence.</p>
+          </div>
+          <div className="review-record-grid">
+            <div className="decision-form">
+              <h3>Human decision</h3>
+              <Select id="phone-visibility" labelText="Is a phone visible?" value={visibility} onChange={(event) => changeVisibility(event.target.value as PhoneVisibility)}>
+                <SelectItem value="UNRESOLVED" text="Unresolved — needs more evidence" />
+                <SelectItem value="PHONE_VISIBLE" text="Yes — phone is visible" />
+                <SelectItem value="NO_PHONE_VISIBLE" text="No — phone is not visible" />
+              </Select>
+              <Select id="phone-use" labelText="Is the driver using the phone?" value={phoneUse} onChange={(event) => changePhoneUse(event.target.value as PhoneUseAssessment)}>
+                <SelectItem value="UNRESOLVED" text="Unresolved" />
+                <SelectItem value="PHONE_USE_CONFIRMED" text="Confirmed phone use" />
+                <SelectItem value="NOT_PHONE_USE" text="Not phone use" />
+              </Select>
+              <Select id="accepted-proposal" labelText="Best valid proposal" value={proposalId} onChange={(event) => setProposalId(event.target.value)} disabled={visibility !== "PHONE_VISIBLE"}>
+                <SelectItem value="NO_VALID_PROPOSAL" text="No valid proposal — hard example" />
+                {detail.proposals.map((proposal) => <SelectItem key={proposal.proposal_id} value={proposal.proposal_id} text={`${proposal.proposal_id} · ${proposal.source === "specialist" ? "Specialist" : "COCO"} · ${(proposal.confidence * 100).toFixed(1)}% · ${proposal.geometry_context.replaceAll("_", " ")}`} />)}
+              </Select>
+              <TextArea id="review-notes" labelText="Review rationale" helperText="Required. Describe the visible phone, occlusion, false proposal, or missing evidence." rows={4} value={notes} onChange={(event) => setNotes(event.target.value)} />
+              <Button renderIcon={Save} onClick={saveReview} disabled={saving || notes.trim().length < 12}>{saving ? "Saving decision" : detail.decision ? "Save revised decision" : "Record human decision"}</Button>
+              <p className="decision-guard">Saving creates an immutable audit snapshot. It does not admit the sample into training or approve production use.</p>
+            </div>
+            <aside className="proposal-register">
+              <h3>Proposal register</h3>
+              <p>Select the ID matching the phone box in the contact sheet.</p>
+              <div>{detail.proposals.map((proposal) => <button type="button" key={proposal.proposal_id} className={proposalId === proposal.proposal_id ? "selected" : ""} onClick={() => { setVisibility("PHONE_VISIBLE"); setProposalId(proposal.proposal_id); }}>
+                <strong>{proposal.proposal_id}</strong><span>{proposal.source === "specialist" ? "Specialist" : "COCO"}</span><span>{(proposal.confidence * 100).toFixed(1)}%</span><small>Frame {proposal.frame_index} · hand {proposal.hand_proximity.toFixed(2)} · face {proposal.face_proximity.toFixed(2)}</small>
+              </button>)}</div>
+            </aside>
+          </div>
+          {detail.decision && <div className="prior-decision"><strong>Latest receipt</strong><span>{new Date(detail.decision.reviewed_at_utc).toLocaleString()}</span><span className="mono">{detail.decision.revision.slice(0, 12)}</span></div>}
+        </>}
+      </section>
+    </div>}
+  </main></Shell>;
+}
+
 function StatisticsPage() { const { stats, loading, error } = useDashboardData(); return <Shell><main><PageHeader title="Statistics" description="Operational counts are separated from scientific model and event metrics." />{error && <InlineNotification kind="error" title="Statistics unavailable" subtitle={error} lowContrast hideCloseButton />}{loading ? <InlineLoading description="Loading statistics" /> : !error && stats ? <><MetricStrip stats={stats} /><div className="statistics-grid"><section className="record-panel"><h2>Recorded events</h2><Distribution stats={stats} /></section><section className="record-panel"><h2>Metric status</h2><dl className="metric-status"><div><dt>Detection validation</dt><dd>NOT_RUN</dd></div><div><dt>Frozen test</dt><dd>NOT_RUN</dd></div><div><dt>Human event evaluation</dt><dd>{stats.event_metrics_status}</dd></div><div><dt>Fusion runtime</dt><dd>{stats.runtime.fusion.fusion_mode}{stats.runtime.fusion.fusion_fail_closed ? " / FAIL_CLOSED" : stats.runtime.fusion.fusion_available ? " / ACTIVE" : ""}</dd></div></dl><p className="scientific-note">Event counts are not accuracy. Metrics appear only after governed evaluation artifacts exist.</p></section></div></> : null}</main></Shell>; }
 
 function ModelsPage() { return <Shell><main><PageHeader title="Models and methodology" description="The immutable V1 baseline and independent fail-closed V2 pipeline." /><section className="model-sheet"><div><h2>MC_BOOTSTRAP_001 — V1 baseline</h2><p>Single YOLO11s detector retained unchanged to measure partial-label conflict.</p></div><dl><div><dt>Classes</dt><dd>phone, seatbelt_fastened, seatbelt_unfastened</dd></div><div><dt>Training</dt><dd>150 epochs; scientific baseline only</dd></div><div><dt>V2 architecture</dt><dd>Vehicle → cabin → occupant → phone/seatbelt specialists → temporal fusion</dd></div><div><dt>Current V2 state</dt><dd><Tag type="warm-gray">UNTRAINED / NOT APPROVED</Tag></dd></div></dl><InlineNotification kind="info" title="Detection is not behavior" subtitle="A candidate requires confident vehicle and cabin context, occupant association, temporal persistence, explicit fusion mode, and human review. Component AP is not event accuracy." lowContrast hideCloseButton /></section></main></Shell>; }
@@ -357,7 +537,7 @@ function SettingsPage() { return <Shell><main><PageHeader title="Settings" descr
 
 function ProtectedApp() {
   if (!sessionStorage.getItem("roadwatch-token")) return <Navigate to="/login" replace />;
-  return <Routes><Route path="/" element={<DashboardPage />} /><Route path="/upload" element={<UploadPage />} /><Route path="/events" element={<EventsPage />} /><Route path="/events/:id" element={<EventDetailPage />} /><Route path="/statistics" element={<StatisticsPage />} /><Route path="/models" element={<ModelsPage />} /><Route path="/settings" element={<SettingsPage />} /><Route path="*" element={<Navigate to="/" replace />} /></Routes>;
+  return <Routes><Route path="/" element={<DashboardPage />} /><Route path="/upload" element={<UploadPage />} /><Route path="/events" element={<EventsPage />} /><Route path="/events/:id" element={<EventDetailPage />} /><Route path="/research-review" element={<ResearchReviewPage />} /><Route path="/statistics" element={<StatisticsPage />} /><Route path="/models" element={<ModelsPage />} /><Route path="/settings" element={<SettingsPage />} /><Route path="*" element={<Navigate to="/" replace />} /></Routes>;
 }
 
 export default function App() { return <Routes><Route path="/login" element={<LoginPage />} /><Route path="/*" element={<ProtectedApp />} /></Routes>; }

@@ -86,7 +86,9 @@ def _annotate(roi: np.ndarray, proposals: list[dict[str, Any]], frame_index: int
         x1, y1, x2, y2 = (int(value) for value in proposal["xyxy_in_driver_roi"])
         color = colors[proposal["source"]]
         cv2.rectangle(canvas, (x1, y1), (x2, y2), color, 2)
-        label = f"{proposal['source']} {proposal['confidence']:.2f} {proposal['geometry_context']}"
+        label = (
+            f"{proposal['proposal_id']} {proposal['confidence']:.2f} {proposal['geometry_context']}"
+        )
         cv2.putText(
             canvas,
             label,
@@ -217,6 +219,10 @@ def run(output: Path = DEFAULT_OUTPUT) -> dict[str, Any]:
                 )[0]
                 specialist_rows = _proposals(specialist_result, "specialist", pose)
                 auxiliary_rows = _proposals(auxiliary_result, "coco_cell_phone", pose)
+                for index, proposal in enumerate(specialist_rows, start=1):
+                    proposal["proposal_id"] = f"f{frame_index}-S{index}"
+                for index, proposal in enumerate(auxiliary_rows, start=1):
+                    proposal["proposal_id"] = f"f{frame_index}-C{index}"
                 for proposal in specialist_rows:
                     proposal["nearest_cross_model_iou"] = max(
                         (

@@ -32,80 +32,88 @@
     "sha256": "5b5c63ec5bf1f2057aaf3c1b6f677824ba70ca2ed459d4d2a2cf1d4d2d08f20c"
   },
   "reports/v9_research/09_TEST_RESULTS.md": {
-    "bytes": 733,
-    "sha256": "d5d9fa8dfcaea745731007282b71651d022cb43112eead0fee5c7364bf1e159c"
+    "bytes": 812,
+    "sha256": "568aeb8897f65404ceed488373b4cc43738ba44c2b8005e7593c5cb4566f86ec"
   },
   "reports/v9_research/10_FINAL_SCIENTIFIC_REPORT.md": {
     "bytes": 1125,
     "sha256": "4cfea2ca545b84bd1c49575a27573fd4b01288d2bbe91bc4508558b6b7a6526d"
   },
   "reports/v9_research/11_PHONE_PROPOSAL_MINING.md": {
-    "bytes": 983,
-    "sha256": "418c85febb1d8b334ac90a5e493c49675ab60258651677b0a3e0c87ec481416b"
+    "bytes": 984,
+    "sha256": "de6ea3d7f6d2536b526d83c8f949b7e640ede59a7b34e8be101733ff2ece06da"
+  },
+  "reports/v9_research/12_HUMAN_REVIEW_WEB.md": {
+    "bytes": 1396,
+    "sha256": "9149eb6df329f0f98736f7fe5a06a6000b90d3f8221bb8244445d34cdc029e02"
   },
   "reports/v9_research/compile.log": {
     "bytes": 0,
     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "reports/v9_research/frontend_build.log": {
+    "bytes": 854,
+    "sha256": "98ae2f4046f513e23054b8f73ce8602a678dfbae1757afb256c7cd2deafa5952"
   },
   "reports/v9_research/phone_fn_human_review_queue.csv": {
     "bytes": 3396,
     "sha256": "cdd813ff9c8013fb721a4bacca5ca1d5ed8f30e645bbd9822a718122fd24743a"
   },
   "reports/v9_research/phone_proposal_mining.json": {
-    "bytes": 157172,
-    "sha256": "431157d1abc26574ea50aa4cbb9c51ff50cf27499bde453e1ae713c228124e46"
+    "bytes": 166696,
+    "sha256": "9f710bfaf22c19fc143875a3832258935d6fb4d8db17dfd96e83bfee0718665e"
   },
   "reports/v9_research/phone_proposal_review/gB-9-phone-01.jpg": {
-    "bytes": 308267,
-    "sha256": "a1556f38c7a1f905632e3edf7bf231f8ca15c42537b4235a2a2939208ba61c92"
+    "bytes": 305375,
+    "sha256": "8953646bc68844681b75e9546c1976efae476eaf68ee48f482a8bd3650aa939b"
   },
   "reports/v9_research/phone_proposal_review/gB-9-phone-03.jpg": {
-    "bytes": 300001,
-    "sha256": "a81efb55fa2f55defe3afe7d489969aef4081fd37085cccebf9151d1a8b16ba1"
+    "bytes": 298543,
+    "sha256": "64b53b9bbbb71fedc7cb9b85450432876df1e9d7b79a62f06e3210b3626b0e07"
   },
   "reports/v9_research/phone_proposal_review/gB-9-phone-05.jpg": {
-    "bytes": 280591,
-    "sha256": "0136597dbe108eba821d868f8ee1f313bdcf980deab9bf04aee88bbcb87595b0"
+    "bytes": 279103,
+    "sha256": "251f2b0c715d4b67ed51a34b7318b6be175ebcca824fafc6205f1664cac64878"
   },
   "reports/v9_research/phone_proposal_review/gB-9-phone-06.jpg": {
-    "bytes": 176474,
-    "sha256": "1c6ce2f19e40f737f5bfc5e7fb03d6a1904fb1802f7ac8e9e78c112bceb5399e"
+    "bytes": 176306,
+    "sha256": "f3fe18321c2655c5d5c7771e5fc2471341ae60a97f18c5289b7119029d6b765d"
   },
   "reports/v9_research/phone_proposal_review/gB-9-phone-07.jpg": {
-    "bytes": 298121,
-    "sha256": "7dc8b991ceea0d7181b31d06ce0414d07a31b342be275be3d3ba4335a77949c6"
+    "bytes": 297331,
+    "sha256": "eb2c5cca97acb38948b77305d33196d9bf9024f2c807e7353f9d3e1064915341"
   },
   "reports/v9_research/phone_proposal_review/gB-9-phone-08.jpg": {
-    "bytes": 286919,
-    "sha256": "e6b58f2a2e1994237c188b1c222b9399010c650389cead52a5e598c4bf12bdb2"
+    "bytes": 285584,
+    "sha256": "63ac070eae543ce75fcc1180f250569a4b3adde69c38219ff6130a372df5aba4"
   },
   "reports/v9_research/phone_proposal_review/gB-9-phone-09.jpg": {
-    "bytes": 289397,
-    "sha256": "af3bf9fac21686a543721c6a6e2b67479f2120d59c5f64eb6d262f10ff6f7c70"
+    "bytes": 289871,
+    "sha256": "b9d25a3b99ea0602caa150de789277721cca3b463472a99af15a8c594f307e83"
   },
   "reports/v9_research/phone_proposal_review/gC-14-phone-02.jpg": {
-    "bytes": 319878,
-    "sha256": "07d86f5706cd559dacd135ff39d82995352bc6e233b5495972fa3b8ac75e5d98"
+    "bytes": 320266,
+    "sha256": "c937ca2865e0bee291d3472896a8952f469e5f1297f014d06d4722832a66465e"
   },
   "reports/v9_research/phone_proposal_review/gC-14-phone-05.jpg": {
-    "bytes": 123016,
-    "sha256": "32598bf297033f95e16ff55625d0877a725018801bc5684973add227f3f93159"
+    "bytes": 123032,
+    "sha256": "8f1ef36ba0487a1807ee24b6ceef1c8f4ddb74e3d80f45fe3170a11ebc903958"
   },
   "reports/v9_research/phone_proposal_review/gC-14-phone-06.jpg": {
-    "bytes": 295415,
-    "sha256": "a544a93c6027e4f475121592618d3291c8cf543586553c006d262e65980adb36"
+    "bytes": 295092,
+    "sha256": "b4741e37057d1011581a37d4b295d4a6d56a3f02e7c9ab12a6a5ddd8b0aaf71e"
   },
   "reports/v9_research/phone_proposal_review/gZ-36-phone-01.jpg": {
-    "bytes": 201640,
-    "sha256": "302ab852002dace57d34e05b0175562f63a112b36793fc73d1be35db66062919"
+    "bytes": 201695,
+    "sha256": "62da3a9b77d8c1bf28337ea0204bd760c44633175e4420a8b71b824a77ff547a"
   },
   "reports/v9_research/phone_proposal_review/gZ-36-phone-03.jpg": {
-    "bytes": 135788,
-    "sha256": "188b7445ab46c916c40caced7433dc4dca0b044b06fa5601c7d7b706e35515ea"
+    "bytes": 135907,
+    "sha256": "f34339cfe85ec01192265ec4a9072e7ffa85baf1c20c7e5b2c32e880253a3adb"
   },
   "reports/v9_research/phone_proposal_review/gZ-36-phone-05.jpg": {
-    "bytes": 135390,
-    "sha256": "2133570c14b69a7e90d93ba7418c1feae90ef590a367fb20d862a8830fd26abe"
+    "bytes": 135539,
+    "sha256": "feb783936fa39282199fed7908d9ee4c1c6b5c204352756e5c3098f973cb3bd6"
   },
   "reports/v9_research/phone_proposal_review_queue.csv": {
     "bytes": 1361,
@@ -113,19 +121,19 @@
   },
   "reports/v9_research/pytest_full.log": {
     "bytes": 737,
-    "sha256": "a047b72e7d301b69b56004f48f11b5a387c3213bcdd3378adcd670bac7f30fb3"
+    "sha256": "aac46a7bb72163d3ca8f836fe211e89a087d33b3e4153f378a908d93d8c1c3bc"
   },
   "reports/v9_research/pytest_full.xml": {
-    "bytes": 72112,
-    "sha256": "0dc1f3f809c72986fce44f0f3aa653ed033b0c82b80d5ebd58c44f1b22f13b71"
+    "bytes": 72371,
+    "sha256": "dde258ac474391213da3e8617e48cde813ae2b6c5e6a5c7eab8a740d0af35851"
   },
   "reports/v9_research/pytest_v9.log": {
     "bytes": 168,
-    "sha256": "a9253090c2a66cb7c7138359b25fe6f3ad282c742532cde4e18d2edccd6b1ce7"
+    "sha256": "d5364e71b0983adc69efd68e9e36ef63e01b03d8cc32a6c6299496655f21203d"
   },
   "reports/v9_research/pytest_v9.xml": {
-    "bytes": 1106,
-    "sha256": "133a577d7784b80374519772bce58fee7acf2434022788c99ee52647fd6baf8c"
+    "bytes": 1365,
+    "sha256": "0bf7dc553693335b51812c09e106fa16e92cb8582d066e481d9fc87bf57f873d"
   },
   "reports/v9_research/reproduce.ps1": {
     "bytes": 613,
@@ -140,8 +148,16 @@
     "sha256": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0"
   },
   "reports/v9_research/test_results.json": {
-    "bytes": 2947,
-    "sha256": "4fa995d36e2a4463ce1fed64a6cbe2bbb98a1cc2d6af8e9841691a8675fc2fd4"
+    "bytes": 3433,
+    "sha256": "63258d23b7a46f6b8c782e8a9587087198f8f3f010a24cd964abb2ae27a66eb3"
+  },
+  "reports/v9_research/ui_review_desktop.png": {
+    "bytes": 315983,
+    "sha256": "b826346b1a1644dc89a824560b27edfab8f1648611d1366031adc4cf7d845101"
+  },
+  "reports/v9_research/ui_review_mobile.png": {
+    "bytes": 155117,
+    "sha256": "fca25ba56d58a57cf4031823db9a2d962fa53a873f769968f0f50ef0208d07d6"
   },
   "reports/v9_research/v9_diagnostics.json": {
     "bytes": 137306,

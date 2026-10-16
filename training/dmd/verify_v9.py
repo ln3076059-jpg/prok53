@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import subprocess
 import sys
 import time
@@ -28,6 +29,7 @@ REPORTS = (
     "09_TEST_RESULTS.md",
     "10_FINAL_SCIENTIFIC_REPORT.md",
     "11_PHONE_PROPOSAL_MINING.md",
+    "12_HUMAN_REVIEW_WEB.md",
 )
 
 
@@ -71,6 +73,7 @@ def _junit_counts(path: Path) -> dict[str, int]:
 def run_checks(output: Path) -> dict[str, Any]:
     output.mkdir(parents=True, exist_ok=True)
     python = sys.executable
+    npm = shutil.which("npm") or "npm"
     checks = [
         _run(output, "compile", [python, "-m", "compileall", "-q", "backend", "training", "tests"]),
         _run(
@@ -100,6 +103,8 @@ def run_checks(output: Path) -> dict[str, Any]:
                 "training/dmd/render_v9_reports.py",
                 "training/dmd/verify_v9.py",
                 "training/dmd/v9_phone_proposal_mining.py",
+                "backend/services/research_review.py",
+                "backend/schemas.py",
                 "tests/test_v9_research.py",
             ],
         ),
@@ -127,6 +132,7 @@ def run_checks(output: Path) -> dict[str, Any]:
             [python, "-m", "pytest", "-q", f"--junitxml={full_xml}"],
         )
     )
+    checks.append(_run(output, "frontend_build", [npm, "--prefix", "frontend", "run", "build"]))
     result = {
         "created_at_utc": datetime.now(UTC).isoformat(),
         "status": "PASS" if all(item["returncode"] == 0 for item in checks) else "FAIL",

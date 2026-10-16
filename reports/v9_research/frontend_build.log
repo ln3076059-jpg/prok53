@@ -1,0 +1,20 @@
+
+> roadwatch-frontend@0.1.0 build
+> tsc -b && vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 952 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                             1.18 kB │ gzip:   0.70 kB
+dist/assets/IBMPlexSansCondensed-Regular-CNjkQu2k.woff2    36.47 kB
+dist/assets/IBMPlexSansCondensed-SemiBold-EL3iN54-.woff2   37.42 kB
+dist/assets/index-BHgjYsMU.css                            927.51 kB │ gzip:  98.76 kB
+dist/assets/index-C0yxNEAO.js                             379.38 kB │ gzip: 118.30 kB
+✓ built in 6.72s
+npm notice
+npm notice New minor version of npm available! 11.6.2 -> 11.21.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.21.1
+npm notice To update run: npm install -g npm@11.21.1
+npm notice

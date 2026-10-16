@@ -1,7 +1,8 @@
 # V9 frozen phone proposal mining
 
 This review-only experiment ran two unchanged checkpoints over
-52 original-video frames from the registered 13 development false negatives.
+52 original-video frames from the registered 13 development
+false negatives.
 The specialist detector produced proposals on 11 frames;
 the independent COCO cell-phone class produced proposals on
 48 frames at the fixed 0.02 audit floor.

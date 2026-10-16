@@ -111,6 +111,11 @@ The operations dashboard opens at `http://localhost:5173`. Build for production 
 npm run build
 ```
 
+Authenticated reviewers can open **Research review** at
+`http://localhost:5173/research-review` to inspect the 13 V9 phone false negatives. Each saved
+decision creates a versioned receipt under `reports/v9_research/human_phone_reviews/`; it does not
+automatically change training labels or approve a production model.
+
 ---
 
 ## 8. DMD Dataset Setup (Vicomtech Driver Monitoring)

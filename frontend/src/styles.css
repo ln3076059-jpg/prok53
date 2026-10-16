@@ -165,6 +165,46 @@ dd { margin: 0; overflow-wrap: anywhere; }
 .model-sheet p { color: var(--muted); }
 .settings-sheet { margin-top: 18px; max-width: 760px; display: grid; gap: 22px; }
 
+.review-progress { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 18px 0 12px; background: var(--paper); border: 1px solid var(--rule); border-radius: var(--radius); }
+.review-progress > div { min-height: 84px; padding: 15px 18px; display: flex; justify-content: space-between; align-items: flex-end; border-right: 1px solid var(--rule); }
+.review-progress > div:last-child { border-right: 0; }
+.review-progress span { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+.review-progress strong { font: 500 32px/1 "IBM Plex Sans Condensed", sans-serif; }
+.research-review-layout { display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 12px; align-items: start; }
+.review-case-list, .research-review-workspace { background: var(--paper); border: 1px solid var(--rule); border-radius: var(--radius); min-width: 0; }
+.review-case-list { position: sticky; top: 18px; }
+.case-list-scroll { max-height: calc(100dvh - 250px); overflow-y: auto; }
+.case-list-scroll > button { width: 100%; min-height: 64px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; gap: 10px; color: var(--ink); background: var(--paper); border: 0; border-bottom: 1px solid #e0e0e0; text-align: left; cursor: pointer; }
+.case-list-scroll > button:last-child { border-bottom: 0; }
+.case-list-scroll > button:hover { background: #f7f7f7; }
+.case-list-scroll > button.active { background: #e8f4eb; box-shadow: inset 4px 0 0 var(--accent); }
+.case-list-scroll > button > span:first-child { min-width: 0; display: grid; gap: 4px; }
+.case-list-scroll strong { font-size: 13px; }
+.case-list-scroll small { color: var(--muted); font-size: 11px; }
+.review-evidence-head { min-height: 92px; padding: 17px 18px; display: flex; justify-content: space-between; gap: 18px; border-bottom: 1px solid var(--rule); }
+.review-evidence-head h2 { margin: 1px 0 4px; font: 600 26px/1 "IBM Plex Sans Condensed", sans-serif; }
+.review-evidence-head p { margin: 0; color: var(--muted); font-size: 12px; }
+.eyebrow { text-transform: uppercase; letter-spacing: .06em; }
+.review-flags { display: flex; flex-wrap: wrap; align-content: flex-start; justify-content: flex-end; gap: 6px; }
+.contact-sheet-frame { min-height: 280px; padding: 14px; display: grid; place-items: center; background: #202422; border-bottom: 1px solid var(--rule); overflow: auto; }
+.contact-sheet-frame a { display: block; min-width: 100%; }
+.contact-sheet-frame img { display: block; width: 100%; min-width: 860px; height: auto; }
+.contact-sheet-frame p { position: sticky; left: 0; justify-self: start; margin: 9px 0 0; color: #c6c6c6; font-size: 11px; }
+.review-record-grid { display: grid; grid-template-columns: minmax(330px, .85fr) minmax(360px, 1.15fr); }
+.decision-form, .proposal-register { padding: 20px; min-width: 0; }
+.decision-form { display: grid; align-content: start; gap: 17px; border-right: 1px solid var(--rule); }
+.decision-form h3, .proposal-register h3 { margin: 0; font: 600 20px/1.1 "IBM Plex Sans Condensed", sans-serif; text-transform: uppercase; }
+.proposal-register > p { margin: 6px 0 14px; color: var(--muted); font-size: 12px; }
+.proposal-register > div { max-height: 465px; overflow-y: auto; border: 1px solid var(--rule); }
+.proposal-register button { width: 100%; min-height: 58px; padding: 9px 11px; display: grid; grid-template-columns: minmax(90px, 1fr) 74px 48px; gap: 8px; align-items: center; color: var(--ink); background: var(--paper); border: 0; border-bottom: 1px solid #e0e0e0; text-align: left; cursor: pointer; }
+.proposal-register button:last-child { border-bottom: 0; }
+.proposal-register button:hover { background: #f7f7f7; }
+.proposal-register button.selected { background: #e8f4eb; box-shadow: inset 3px 0 0 var(--accent); }
+.proposal-register button span { color: var(--muted); font-size: 11px; }
+.proposal-register button small { grid-column: 1 / -1; color: var(--muted); font-size: 11px; }
+.prior-decision { padding: 12px 18px; display: flex; flex-wrap: wrap; gap: 10px 20px; color: var(--muted); background: #f4f4f4; border-top: 1px solid var(--rule); font-size: 12px; }
+.prior-decision strong { color: var(--ink); }
+
 @media (max-width: 1050px) {
   .dashboard-grid, .upload-layout, .inspection-layout, .audit-grid { grid-template-columns: 1fr; }
   .metric-strip { grid-template-columns: repeat(2, 1fr); }
@@ -172,6 +212,11 @@ dd { margin: 0; overflow-wrap: anywhere; }
   .metric-strip > div:nth-child(-n+2) { border-bottom: 1px solid var(--rule); }
   .login-page { grid-template-columns: 1fr; }
   .login-principles { min-height: 430px; }
+  .research-review-layout { grid-template-columns: 1fr; }
+  .review-case-list { position: static; }
+  .case-list-scroll { max-height: 260px; }
+  .review-record-grid { grid-template-columns: 1fr; }
+  .decision-form { border-right: 0; border-bottom: 1px solid var(--rule); }
 }
 
 @media (max-width: 760px) {
@@ -198,6 +243,14 @@ dd { margin: 0; overflow-wrap: anywhere; }
   .login-record { padding: 30px 22px 48px; }
   .login-principles { padding: 42px 22px; min-height: 380px; }
   .login-principles dl div { grid-template-columns: 100px 1fr; }
+  .review-progress { grid-template-columns: 1fr; }
+  .review-progress > div { min-height: 64px; border-right: 0; border-bottom: 1px solid var(--rule); }
+  .review-progress > div:last-child { border-bottom: 0; }
+  .review-evidence-head { flex-direction: column; }
+  .review-flags { justify-content: flex-start; }
+  .contact-sheet-frame { padding: 8px; }
+  .contact-sheet-frame img { min-width: 760px; }
+  .decision-form, .proposal-register { padding: 17px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

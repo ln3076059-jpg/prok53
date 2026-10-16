@@ -48,6 +48,7 @@
               "hand_proximity": 0.44652069580065545,
               "face_proximity": 0.9025062420127711,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1200-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -63,6 +64,7 @@
               "hand_proximity": 0.38244605935702913,
               "face_proximity": 0.9517268208970563,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1200-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -78,6 +80,7 @@
               "hand_proximity": 0.5163823301606361,
               "face_proximity": 0.8243424380230846,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1200-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -93,6 +96,7 @@
               "hand_proximity": 0.5158914708206903,
               "face_proximity": 0.829651377417894,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1200-C4",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -108,6 +112,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.46947451572442367,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1200-C5",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -123,6 +128,7 @@
               "hand_proximity": 0.405330639807543,
               "face_proximity": 0.9554531288859398,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1200-C6",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -138,6 +144,7 @@
               "hand_proximity": 0.6843590740474892,
               "face_proximity": 0.8315158046198386,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1200-C7",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -153,6 +160,7 @@
               "hand_proximity": 0.02125818318539474,
               "face_proximity": 0.40741724625233866,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1200-C8",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -168,6 +176,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.35889927072689387,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1200-C9",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -183,6 +192,7 @@
               "hand_proximity": 0.02604166774211225,
               "face_proximity": 0.2798876797988279,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1200-C10",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -211,6 +221,7 @@
               "hand_proximity": 0.6682971474287954,
               "face_proximity": 0.8287238779108033,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1410-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -226,6 +237,7 @@
               "hand_proximity": 0.38445725126335906,
               "face_proximity": 0.9659019312006184,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1410-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -241,6 +253,7 @@
               "hand_proximity": 0.6444869269689315,
               "face_proximity": 0.8215802047936223,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1410-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -256,6 +269,7 @@
               "hand_proximity": 0.5691800995118195,
               "face_proximity": 0.8292955840064364,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1410-C4",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -271,6 +285,7 @@
               "hand_proximity": 0.6212680036255043,
               "face_proximity": 0.8394032350839997,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1410-C5",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -286,6 +301,7 @@
               "hand_proximity": 0.0015002395119593226,
               "face_proximity": 0.43065182202284136,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1410-C6",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -301,6 +317,7 @@
               "hand_proximity": 0.03496574369613148,
               "face_proximity": 0.5388326289927812,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1410-C7",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -316,6 +333,7 @@
               "hand_proximity": 0.06548853692190026,
               "face_proximity": 0.4776184187061725,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1410-C8",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -331,6 +349,7 @@
               "hand_proximity": 0.5575371420308657,
               "face_proximity": 0.8313246366700457,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1410-C9",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -346,6 +365,7 @@
               "hand_proximity": 0.5245768438767328,
               "face_proximity": 0.8156885400803228,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1410-C10",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -374,6 +394,7 @@
               "hand_proximity": 0.6200856151280586,
               "face_proximity": 0.8307647498163024,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1635-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -389,6 +410,7 @@
               "hand_proximity": 0.6026386184502707,
               "face_proximity": 0.8279715015260729,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1635-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -404,6 +426,7 @@
               "hand_proximity": 0.31787542432879234,
               "face_proximity": 0.9690996062090294,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1635-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -419,6 +442,7 @@
               "hand_proximity": 0.5150795020981283,
               "face_proximity": 0.8275879207592758,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1635-C4",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -434,6 +458,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.4388788163028986,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1635-C5",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -449,6 +474,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.3564282758710635,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1635-C6",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -464,6 +490,7 @@
               "hand_proximity": 0.5692140590027657,
               "face_proximity": 0.8403105782043707,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1635-C7",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -479,6 +506,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.49130237325185455,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1635-C8",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -494,6 +522,7 @@
               "hand_proximity": 0.4584444663055002,
               "face_proximity": 0.8197928599198918,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1635-C9",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -509,6 +538,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5432001283733541,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1635-C10",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -537,6 +567,7 @@
               "hand_proximity": 0.3844401532952878,
               "face_proximity": 0.9061987820083258,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1845-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -552,6 +583,7 @@
               "hand_proximity": 0.6376089994262177,
               "face_proximity": 0.8363150828893129,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1845-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -567,6 +599,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.46938625670660716,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1845-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -582,6 +615,7 @@
               "hand_proximity": 0.01990480914722137,
               "face_proximity": 0.5154794682976067,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1845-C4",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -597,6 +631,7 @@
               "hand_proximity": 0.37341242793617235,
               "face_proximity": 0.9183944010707129,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1845-C5",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -612,6 +647,7 @@
               "hand_proximity": 0.35503165076324905,
               "face_proximity": 0.9394194016241996,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1845-C6",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -627,6 +663,7 @@
               "hand_proximity": 0.4561203085593829,
               "face_proximity": 0.8388563561141148,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1845-C7",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -642,6 +679,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5226559633369736,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1845-C8",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -657,6 +695,7 @@
               "hand_proximity": 0.0075274200362356325,
               "face_proximity": 0.36611539879230426,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1845-C9",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -685,6 +724,7 @@
               "hand_proximity": 0.7192318397124824,
               "face_proximity": 0.29076358017151493,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f2070-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -700,6 +740,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.25169098315953087,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f2070-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -715,6 +756,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.42101211595262045,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f2070-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -730,6 +772,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.31709747428627866,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f2070-C4",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -769,6 +812,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.40626743886925754,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3435-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -784,6 +828,7 @@
               "hand_proximity": 0.7338368914771615,
               "face_proximity": 0.0,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3435-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -799,6 +844,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.6193130790694581,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3435-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -814,6 +860,7 @@
               "hand_proximity": 0.8702124736962967,
               "face_proximity": 0.10343268215113932,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3435-C4",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -829,6 +876,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5064403610801277,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3435-C5",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -844,6 +892,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5508926933828404,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3435-C6",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -872,6 +921,7 @@
               "hand_proximity": 0.3478850434050669,
               "face_proximity": 0.9200102260395127,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3705-S1",
               "nearest_cross_model_iou": 0.657679375068437
             },
             {
@@ -887,6 +937,7 @@
               "hand_proximity": 0.334317115178986,
               "face_proximity": 0.9395395351667495,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3705-C1",
               "nearest_cross_model_iou": 0.657679375068437
             },
             {
@@ -902,6 +953,7 @@
               "hand_proximity": 0.40090863361594276,
               "face_proximity": 0.8726695545847559,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3705-C2",
               "nearest_cross_model_iou": 0.40159939409988876
             },
             {
@@ -917,6 +969,7 @@
               "hand_proximity": 0.32705129085088236,
               "face_proximity": 0.9301700265000361,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3705-C3",
               "nearest_cross_model_iou": 0.532216814224405
             },
             {
@@ -932,6 +985,7 @@
               "hand_proximity": 0.45575423691432027,
               "face_proximity": 0.8166489690601731,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3705-C4",
               "nearest_cross_model_iou": 0.23681711274744788
             },
             {
@@ -947,6 +1001,7 @@
               "hand_proximity": 0.4950962528027998,
               "face_proximity": 0.8080433453552247,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3705-C5",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -962,6 +1017,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.462452730080266,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3705-C6",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -977,6 +1033,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5153945401514914,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3705-C7",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -992,6 +1049,7 @@
               "hand_proximity": 0.4369885758090116,
               "face_proximity": 0.8203995109249759,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3705-C8",
               "nearest_cross_model_iou": 0.38199459934251795
             },
             {
@@ -1007,6 +1065,7 @@
               "hand_proximity": 0.4456640028145614,
               "face_proximity": 0.8165916344712197,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3705-C9",
               "nearest_cross_model_iou": 0.19199728775728855
             }
           ]
@@ -1035,6 +1094,7 @@
               "hand_proximity": 0.3190826793777035,
               "face_proximity": 0.9319968294265495,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3960-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1050,6 +1110,7 @@
               "hand_proximity": 0.3045155430133122,
               "face_proximity": 0.9434518399635239,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3960-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1065,6 +1126,7 @@
               "hand_proximity": 0.3644244269593494,
               "face_proximity": 0.8906499641365938,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3960-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1080,6 +1142,7 @@
               "hand_proximity": 0.45118955626260815,
               "face_proximity": 0.803609965618132,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3960-C4",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1095,6 +1158,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.46704562732269184,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3960-C5",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1110,6 +1174,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.511220215742702,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3960-C6",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1125,6 +1190,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5148935774335054,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3960-C7",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -1153,6 +1219,7 @@
               "hand_proximity": 0.3509622696465371,
               "face_proximity": 0.9272850605292076,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f4230-S1",
               "nearest_cross_model_iou": 0.7236732082255398
             },
             {
@@ -1168,6 +1235,7 @@
               "hand_proximity": 0.34267856609363967,
               "face_proximity": 0.9393852706876907,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f4230-C1",
               "nearest_cross_model_iou": 0.7236732082255398
             },
             {
@@ -1183,6 +1251,7 @@
               "hand_proximity": 0.4080834680213675,
               "face_proximity": 0.8739929382318317,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f4230-C2",
               "nearest_cross_model_iou": 0.44363788799721626
             },
             {
@@ -1198,6 +1267,7 @@
               "hand_proximity": 0.39177014935919396,
               "face_proximity": 0.8814185406902308,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f4230-C3",
               "nearest_cross_model_iou": 0.509308865273513
             },
             {
@@ -1213,6 +1283,7 @@
               "hand_proximity": 0.5071752005799175,
               "face_proximity": 0.8135972370662398,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f4230-C4",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1228,6 +1299,7 @@
               "hand_proximity": 0.3365582408341584,
               "face_proximity": 0.9286471135888985,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f4230-C5",
               "nearest_cross_model_iou": 0.49912261230353144
             },
             {
@@ -1243,6 +1315,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.46751387617134543,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f4230-C6",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1258,6 +1331,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5160419259732439,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f4230-C7",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1273,6 +1347,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.38576902684453684,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f4230-C8",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1288,6 +1363,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5101442240481656,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f4230-C9",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1303,6 +1379,7 @@
               "hand_proximity": 0.47080504493896225,
               "face_proximity": 0.8091406808506912,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f4230-C10",
               "nearest_cross_model_iou": 0.2494876510989457
             }
           ]
@@ -1331,6 +1408,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.0,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f4500-S1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1346,6 +1424,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5559872532558465,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f4500-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1361,6 +1440,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.3667221740730846,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f4500-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1376,6 +1456,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.4520273852685658,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f4500-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1391,6 +1472,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.4997130726626626,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f4500-C4",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -1430,6 +1512,7 @@
               "hand_proximity": 0.8367626842284132,
               "face_proximity": 0.8993883407449816,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f6540-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1445,6 +1528,7 @@
               "hand_proximity": 0.8310897133093315,
               "face_proximity": 0.91650338726345,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f6540-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1460,6 +1544,7 @@
               "hand_proximity": 0.8345173410255833,
               "face_proximity": 0.9099055412095675,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f6540-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1475,6 +1560,7 @@
               "hand_proximity": 0.8342535490149112,
               "face_proximity": 0.8907679369619319,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f6540-C4",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -1503,6 +1589,7 @@
               "hand_proximity": 0.8700881229822734,
               "face_proximity": 0.838944862615743,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f6885-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1518,6 +1605,7 @@
               "hand_proximity": 0.7917207610391463,
               "face_proximity": 0.8940157656236395,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f6885-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1533,6 +1621,7 @@
               "hand_proximity": 0.8560713045324215,
               "face_proximity": 0.8510959106043042,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f6885-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1548,6 +1637,7 @@
               "hand_proximity": 0.7779605593768786,
               "face_proximity": 0.8882582704924517,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f6885-C4",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -1576,6 +1666,7 @@
               "hand_proximity": 0.8312580943749108,
               "face_proximity": 0.850280136055194,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7215-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1591,6 +1682,7 @@
               "hand_proximity": 0.854589845521082,
               "face_proximity": 0.8435860722497546,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7215-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1606,6 +1698,7 @@
               "hand_proximity": 0.7850362236637849,
               "face_proximity": 0.8833890082941088,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7215-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1621,6 +1714,7 @@
               "hand_proximity": 0.8101147221614644,
               "face_proximity": 0.8656427340299451,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7215-C4",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1636,6 +1730,7 @@
               "hand_proximity": 0.806862752840197,
               "face_proximity": 0.8541329994673108,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7215-C5",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -1664,6 +1759,7 @@
               "hand_proximity": 0.8386520392568535,
               "face_proximity": 0.8578511894193382,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7560-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1679,6 +1775,7 @@
               "hand_proximity": 0.8200428118944738,
               "face_proximity": 0.865776218660895,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7560-C2",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -1707,6 +1804,7 @@
               "hand_proximity": 0.818082336530046,
               "face_proximity": 0.38653847632693217,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7905-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1722,6 +1820,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.297776107026673,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7905-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1737,6 +1836,7 @@
               "hand_proximity": 0.8017796142795204,
               "face_proximity": 0.40440884535544763,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7905-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1752,6 +1852,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.45801879220238373,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7905-C4",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1767,6 +1868,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.3610553636419572,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7905-C5",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1782,6 +1884,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.4145696931167271,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7905-C6",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -1821,6 +1924,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.37429148150849867,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7920-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1836,6 +1940,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5242713819826763,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7920-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1851,6 +1956,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.4318681868698293,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7920-C3",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -1879,6 +1985,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.3759582712044912,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7935-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1894,6 +2001,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5351267144292355,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7935-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1909,6 +2017,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.44096552552402957,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7935-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1924,6 +2033,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5054636991535035,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7935-C4",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1939,6 +2049,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.49589004593132746,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7935-C5",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -1967,6 +2078,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.229422774062502,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7950-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1982,6 +2094,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.38861585848302116,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7950-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -1997,6 +2110,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.2885900342129296,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7950-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2012,6 +2126,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.3635986766304664,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7950-C4",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -2051,6 +2166,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.44978716527414064,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8490-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2066,6 +2182,7 @@
               "hand_proximity": 0.7489522658283443,
               "face_proximity": 0.3193188994993491,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8490-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2081,6 +2198,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.282585163633045,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8490-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2096,6 +2214,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.4056350885496218,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8490-C4",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -2124,6 +2243,7 @@
               "hand_proximity": 0.8219802294600808,
               "face_proximity": 0.25935125711677964,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8610-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2139,6 +2259,7 @@
               "hand_proximity": 0.7688146201514507,
               "face_proximity": 0.2523776025245583,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8610-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2154,6 +2275,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.40618904416216406,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8610-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2169,6 +2291,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.32489686251937866,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8610-C4",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2184,6 +2307,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.46445905206241833,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8610-C5",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2199,6 +2323,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5019970113559887,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8610-C6",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -2227,6 +2352,7 @@
               "hand_proximity": 0.8052186701294736,
               "face_proximity": 0.2917488504267023,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8730-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2242,6 +2368,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.493423822675504,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8730-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2257,6 +2384,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.4407449969528686,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8730-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2272,6 +2400,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.3403668445903171,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8730-C4",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -2300,6 +2429,7 @@
               "hand_proximity": 0.7902866206568318,
               "face_proximity": 0.2861312562737527,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8850-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2315,6 +2445,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.329701992608465,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8850-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2330,6 +2461,7 @@
               "hand_proximity": 0.7485833420287549,
               "face_proximity": 0.2645969310849263,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8850-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2345,6 +2477,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5205188732660203,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8850-C4",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2360,6 +2493,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.4104909221569544,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8850-C5",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -2388,6 +2522,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5476530146097343,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8970-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2403,6 +2538,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5213051728211258,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8970-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2418,6 +2554,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.46675519573426816,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8970-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2433,6 +2570,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.37998874177317876,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8970-C4",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -2472,6 +2610,7 @@
               "hand_proximity": 0.7297624404507657,
               "face_proximity": 0.6562265119003874,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f9390-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2487,6 +2626,7 @@
               "hand_proximity": 0.7706092725834173,
               "face_proximity": 0.6366744822966806,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f9390-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2502,6 +2642,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5145302937990467,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f9390-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2517,6 +2658,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.39933760094035686,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f9390-C4",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2532,6 +2674,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.3153510471869436,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f9390-C5",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2547,6 +2690,7 @@
               "hand_proximity": 0.6971406677948788,
               "face_proximity": 0.6687034477500011,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f9390-C6",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2562,6 +2706,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.4601061584484233,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f9390-C7",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -2590,6 +2735,7 @@
               "hand_proximity": 0.8401349624932113,
               "face_proximity": 0.8680512275467114,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f9690-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2605,6 +2751,7 @@
               "hand_proximity": 0.8036579133558921,
               "face_proximity": 0.8673969082207137,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f9690-C2",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -2645,6 +2792,7 @@
               "hand_proximity": 0.8658331643752296,
               "face_proximity": 0.862851342262009,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f10260-C1",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -2673,6 +2821,7 @@
               "hand_proximity": 0.7893431488763792,
               "face_proximity": 0.3649554019896911,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f10545-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2688,6 +2837,7 @@
               "hand_proximity": 0.7609900198150312,
               "face_proximity": 0.38775771151491456,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f10545-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2703,6 +2853,7 @@
               "hand_proximity": 0.7342587567912682,
               "face_proximity": 0.36295064423570755,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f10545-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2718,6 +2869,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.34006564640230463,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f10545-C4",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2733,6 +2885,7 @@
               "hand_proximity": 0.711413915596223,
               "face_proximity": 0.35376029952185917,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f10545-C5",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -2772,6 +2925,7 @@
               "hand_proximity": 0.7794944401993742,
               "face_proximity": 0.32544312388355834,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11040-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2787,6 +2941,7 @@
               "hand_proximity": 0.7325534825016986,
               "face_proximity": 0.30984988915020806,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11040-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2802,6 +2957,7 @@
               "hand_proximity": 0.752027990017652,
               "face_proximity": 0.23779872382998635,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11040-C3",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -2830,6 +2986,7 @@
               "hand_proximity": 0.7829515291545143,
               "face_proximity": 0.3484268834377582,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11115-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2845,6 +3002,7 @@
               "hand_proximity": 0.7269446543049083,
               "face_proximity": 0.3311258410922422,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11115-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2860,6 +3018,7 @@
               "hand_proximity": 0.8781240615709534,
               "face_proximity": 0.3655711829146364,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11115-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2875,6 +3034,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.4742248038218706,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11115-C4",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2890,6 +3050,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.37113102053479796,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11115-C5",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2905,6 +3066,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.433727784154462,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11115-C6",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2920,6 +3082,7 @@
               "hand_proximity": 0.8496771092601267,
               "face_proximity": 0.35553269218123096,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11115-C7",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -2948,6 +3111,7 @@
               "hand_proximity": 0.8027086383151057,
               "face_proximity": 0.2710877791213482,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11205-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2963,6 +3127,7 @@
               "hand_proximity": 0.7499688721647777,
               "face_proximity": 0.25186051281744337,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11205-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2978,6 +3143,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5112110640549941,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11205-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -2993,6 +3159,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.40451725413413486,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11205-C4",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -3021,6 +3188,7 @@
               "hand_proximity": 0.8069797669995527,
               "face_proximity": 0.3357290752427904,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11295-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3036,6 +3204,7 @@
               "hand_proximity": 0.7598405621876877,
               "face_proximity": 0.32157253000873054,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11295-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3051,6 +3220,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5060331807940681,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11295-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3066,6 +3236,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.3989333507978646,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11295-C4",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3081,6 +3252,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.46381811911115134,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11295-C5",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3096,6 +3268,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.320251934286361,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11295-C6",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -3124,6 +3297,7 @@
               "hand_proximity": 0.8212905265275079,
               "face_proximity": 0.2057212695656041,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11385-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3139,6 +3313,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.3528448867795059,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f11385-C2",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -3190,6 +3365,7 @@
               "hand_proximity": 0.5939104431423108,
               "face_proximity": 0.18654961466493725,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1575-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3205,6 +3381,7 @@
               "hand_proximity": 0.6198008138425302,
               "face_proximity": 0.20988390131176782,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1575-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3220,6 +3397,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.2957882423535232,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1575-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3235,6 +3413,7 @@
               "hand_proximity": 0.6425910749045708,
               "face_proximity": 0.22839413230780126,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1575-C4",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3250,6 +3429,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.4856673849500611,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1575-C5",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3265,6 +3445,7 @@
               "hand_proximity": 0.5791799811584004,
               "face_proximity": 0.24961461231132165,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1575-C6",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3280,6 +3461,7 @@
               "hand_proximity": 0.5569811768957476,
               "face_proximity": 0.21407648009537183,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1575-C7",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3295,6 +3477,7 @@
               "hand_proximity": 0.6410632283756581,
               "face_proximity": 0.1818366882171042,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f1575-C8",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -3346,6 +3529,7 @@
               "hand_proximity": 0.6610227413797669,
               "face_proximity": 0.23437614579755683,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3300-S1",
               "nearest_cross_model_iou": 0.7244932408711636
             },
             {
@@ -3361,6 +3545,7 @@
               "hand_proximity": 0.7019707037605839,
               "face_proximity": 0.19387122581236726,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3300-C1",
               "nearest_cross_model_iou": 0.44857980669873715
             },
             {
@@ -3376,6 +3561,7 @@
               "hand_proximity": 0.6689598999073081,
               "face_proximity": 0.2214779055049969,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3300-C2",
               "nearest_cross_model_iou": 0.7244932408711636
             },
             {
@@ -3391,6 +3577,7 @@
               "hand_proximity": 0.6835551916506928,
               "face_proximity": 0.17729012623800833,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3300-C3",
               "nearest_cross_model_iou": 0.30672474208222456
             },
             {
@@ -3406,6 +3593,7 @@
               "hand_proximity": 0.696088622473366,
               "face_proximity": 0.21707151246382694,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3300-C4",
               "nearest_cross_model_iou": 0.537455934910307
             }
           ]
@@ -3457,6 +3645,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.4066028124497345,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f4830-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3472,6 +3661,7 @@
               "hand_proximity": 0.7554944342014006,
               "face_proximity": 0.19964483120439658,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f4830-C2",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -3500,6 +3690,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.40387104101734317,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f4845-C1",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -3539,6 +3730,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.0,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f2865-S1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3554,6 +3746,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.6435341254355748,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f2865-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3569,6 +3762,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5181718920615902,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f2865-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3584,6 +3778,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.6001128579976653,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f2865-C3",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -3612,6 +3807,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.0,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f2955-S1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3627,6 +3823,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5268137137904287,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f2955-C1",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -3655,6 +3852,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.0,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3045-S1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3670,6 +3868,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5450155489255397,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3045-C1",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -3698,6 +3897,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.0,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3135-S1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3713,6 +3913,7 @@
               "hand_proximity": 0.8242219125376536,
               "face_proximity": 0.0,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3135-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3728,6 +3929,7 @@
               "hand_proximity": 0.8370596024056818,
               "face_proximity": 0.0,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3135-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3743,6 +3945,7 @@
               "hand_proximity": 0.7698236834147348,
               "face_proximity": 0.0,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3135-C3",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -3771,6 +3974,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.0,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3225-S1",
               "nearest_cross_model_iou": 0.14310302544309
             },
             {
@@ -3786,6 +3990,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.0,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3225-S2",
               "nearest_cross_model_iou": 0.09760074640396621
             },
             {
@@ -3801,6 +4006,7 @@
               "hand_proximity": 0.723798267824174,
               "face_proximity": 0.055818633003426155,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3225-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3816,6 +4022,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5194073536500805,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3225-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3831,6 +4038,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.6574321722092048,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3225-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3846,6 +4054,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.2831929309628637,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f3225-C4",
               "nearest_cross_model_iou": 0.14310302544309
             }
           ]
@@ -3885,6 +4094,7 @@
               "hand_proximity": 0.8719561894745886,
               "face_proximity": 0.23942541916988547,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f6720-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3900,6 +4110,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.5489816756917363,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f6720-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3915,6 +4126,7 @@
               "hand_proximity": 0.9008883953923079,
               "face_proximity": 0.26123200094109844,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f6720-C3",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -3943,6 +4155,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.0,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f6735-S1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -3958,6 +4171,7 @@
               "hand_proximity": 0.7753726174231241,
               "face_proximity": 0.4923799660183872,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f6735-C1",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -3997,6 +4211,7 @@
               "hand_proximity": 0.0,
               "face_proximity": 0.0,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f6750-S1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -4012,6 +4227,7 @@
               "hand_proximity": 0.7391776365425098,
               "face_proximity": 0.9577806621691038,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f6750-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -4027,6 +4243,7 @@
               "hand_proximity": 0.7191789532967073,
               "face_proximity": 0.9789660636711509,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f6750-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -4042,6 +4259,7 @@
               "hand_proximity": 0.7634046137383188,
               "face_proximity": 0.9229111654595576,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f6750-C3",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -4070,6 +4288,7 @@
               "hand_proximity": 0.7499862922826599,
               "face_proximity": 0.8876272344370011,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7065-C1",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -4098,6 +4317,7 @@
               "hand_proximity": 0.7398244140526907,
               "face_proximity": 0.8909517497146738,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7380-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -4113,6 +4333,7 @@
               "hand_proximity": 0.722836799859852,
               "face_proximity": 0.9121996137854187,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7380-C2",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -4141,6 +4362,7 @@
               "hand_proximity": 0.6848512333699297,
               "face_proximity": 0.9420066102039047,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f7710-C1",
               "nearest_cross_model_iou": 0.0
             }
           ]
@@ -4169,6 +4391,7 @@
               "hand_proximity": 0.6746264907578907,
               "face_proximity": 0.5302225537786547,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8025-C1",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -4184,6 +4407,7 @@
               "hand_proximity": 0.7280078659130389,
               "face_proximity": 0.5108731456529456,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8025-C2",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -4199,6 +4423,7 @@
               "hand_proximity": 0.723070939159339,
               "face_proximity": 0.4837275925193981,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8025-C3",
               "nearest_cross_model_iou": 0.0
             },
             {
@@ -4214,6 +4439,7 @@
               "hand_proximity": 0.7057813726714297,
               "face_proximity": 0.5113921284855778,
               "occupant_association": "UNVERIFIED_DRIVER_ROI_NO_TRACK_ID",
+              "proposal_id": "f8025-C4",
               "nearest_cross_model_iou": 0.0
             }
           ]

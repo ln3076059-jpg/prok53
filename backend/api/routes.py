@@ -45,12 +45,21 @@ from backend.schemas import (
     EventResponse,
     JobResponse,
     LoginRequest,
+    PhoneResearchReviewRequest,
     ReviewRequest,
     TokenResponse,
     VideoResponse,
 )
 from backend.services.analysis_queue import BackgroundTaskAnalysisQueue, DurableAnalysisQueue
 from backend.services.analysis_worker import InferenceWorker
+from backend.services.research_review import (
+    ResearchReviewConflict,
+    ResearchReviewError,
+    list_phone_reviews,
+    phone_review_contact_sheet,
+    phone_review_detail,
+    save_phone_review,
+)
 from backend.services.uploads import safe_upload_name, save_upload
 from backend.services.video_analyzer import VideoAnalyzer
 
@@ -66,6 +75,11 @@ def _csv_safe(value):
     if value[:1] in {"=", "+", "-", "@", "\t", "\r"}:
         return "'" + value
     return value
+
+
+def _research_review_error(exc: ResearchReviewError) -> HTTPException:
+    status = 409 if isinstance(exc, ResearchReviewConflict) else 422
+    return HTTPException(status_code=status, detail=str(exc))
 
 
 def _event_evidence_root(event_id: str) -> Path:
@@ -280,6 +294,56 @@ def job_detail(job_id: str, db: Session = Depends(get_db), _: User = Depends(cur
     if not (job := db.get(AnalysisJob, job_id)):
         raise HTTPException(status_code=404, detail="Job not found")
     return job
+
+
+@router.get("/research/phone-reviews", tags=["research-review"])
+def research_phone_reviews(_: User = Depends(reviewer_user)):
+    try:
+        return list_phone_reviews(
+            settings.research_phone_review_source,
+            settings.research_phone_review_dir,
+        )
+    except ResearchReviewError as exc:
+        raise _research_review_error(exc) from exc
+
+
+@router.get("/research/phone-reviews/{case_id}", tags=["research-review"])
+def research_phone_review_detail(case_id: str, _: User = Depends(reviewer_user)):
+    try:
+        return phone_review_detail(
+            settings.research_phone_review_source,
+            settings.research_phone_review_dir,
+            case_id,
+        )
+    except ResearchReviewError as exc:
+        raise _research_review_error(exc) from exc
+
+
+@router.get("/research/phone-reviews/{case_id}/contact-sheet", tags=["research-review"])
+def research_phone_review_contact_sheet(case_id: str, _: User = Depends(reviewer_user)):
+    try:
+        path = phone_review_contact_sheet(settings.research_phone_review_source, case_id)
+    except ResearchReviewError as exc:
+        raise _research_review_error(exc) from exc
+    return FileResponse(path, media_type="image/jpeg", filename=f"{case_id}.jpg")
+
+
+@router.patch("/research/phone-reviews/{case_id}", tags=["research-review"])
+def review_research_phone_case(
+    case_id: str,
+    payload: PhoneResearchReviewRequest,
+    user: User = Depends(reviewer_user),
+):
+    try:
+        return save_phone_review(
+            settings.research_phone_review_source,
+            settings.research_phone_review_dir,
+            case_id,
+            payload.model_dump(),
+            user.id,
+        )
+    except ResearchReviewError as exc:
+        raise _research_review_error(exc) from exc
 
 
 @router.get("/events", response_model=list[EventResponse], tags=["events"])

@@ -5,6 +5,14 @@ from pathlib import Path
 
 import pytest
 
+from backend.schemas import PhoneResearchReviewRequest
+from backend.services.research_review import (
+    ResearchReviewConflict,
+    ResearchReviewError,
+    list_phone_reviews,
+    phone_review_detail,
+    save_phone_review,
+)
 from training.dmd.v9_diagnostics import (
     assert_development_subject,
     classify_fn_bottleneck,
@@ -72,3 +80,107 @@ def test_phone_proposal_iou_supports_review_without_false_overlap():
     assert intersection_over_union([0, 0, 10, 10], [5, 5, 15, 15]) == pytest.approx(25 / 175)
     assert intersection_over_union([0, 0, 10, 10], [11, 11, 20, 20]) == 0.0
     assert intersection_over_union([1, 1, 1, 1], [1, 1, 1, 1]) == 0.0
+
+
+def _research_review_fixture(tmp_path: Path) -> tuple[Path, Path]:
+    contact = tmp_path / "phone_proposal_review" / "case-00.jpg"
+    contact.parent.mkdir()
+    contact.write_bytes(b"review-image")
+    rows = []
+    for index in range(13):
+        case_id = f"case-{index:02d}"
+        sheet = contact
+        if index:
+            sheet = contact.with_name(f"{case_id}.jpg")
+            sheet.write_bytes(f"review-image-{index}".encode())
+        rows.append(
+            {
+                "case_id": case_id,
+                "subject_id": "gB-9",
+                "specialist_proposals": 1,
+                "auxiliary_proposals": 0,
+                "cross_model_agreement": False,
+                "auxiliary_review_candidate": False,
+                "contact_sheet": str(sheet),
+                "samples": [
+                    {
+                        "frame_index": index,
+                        "timestamp_seconds": float(index),
+                        "proposals": [
+                            {
+                                "proposal_id": f"f{index}-S1",
+                                "source": "specialist",
+                                "confidence": 0.5,
+                                "geometry_context": "HANDHELD_USE",
+                                "hand_proximity": 0.8,
+                                "face_proximity": 0.1,
+                                "nearest_cross_model_iou": 0.0,
+                                "xyxy_in_driver_roi": [1, 2, 3, 4],
+                            }
+                        ],
+                    }
+                ],
+            }
+        )
+    source = tmp_path / "phone_proposal_mining.json"
+    source.write_text(json.dumps({"scope": "review-only fixture", "rows": rows}), encoding="utf-8")
+    return source, tmp_path / "decisions"
+
+
+def test_research_review_writes_versioned_human_receipts(tmp_path: Path):
+    source, decisions = _research_review_fixture(tmp_path)
+    payload = {
+        "phone_visibility": "PHONE_VISIBLE",
+        "phone_use_assessment": "PHONE_USE_CONFIRMED",
+        "selected_proposal_id": "f0-S1",
+        "notes": "Phone is visible in the driver's hand.",
+        "expected_revision": None,
+    }
+
+    first = save_phone_review(source, decisions, "case-00", payload, "reviewer-1")
+    detail = phone_review_detail(source, decisions, "case-00")
+    queue = list_phone_reviews(source, decisions)
+
+    assert first["reviewer_type"] == "HUMAN"
+    assert first["selected_proposal"]["proposal_id"] == "f0-S1"
+    assert first["training_admission"].startswith("NOT_AUTOMATIC")
+    assert detail["decision"]["revision"] == first["revision"]
+    assert queue["summary"] == {"total": 13, "reviewed": 1, "pending": 12}
+    assert len(list((decisions / "history" / "case-00").glob("*.json"))) == 1
+
+    with pytest.raises(ResearchReviewConflict, match="another session"):
+        save_phone_review(source, decisions, "case-00", payload, "reviewer-2")
+
+    revised = {
+        **payload,
+        "notes": "Second human pass confirms the same visible phone box.",
+        "expected_revision": first["revision"],
+    }
+    second = save_phone_review(source, decisions, "case-00", revised, "reviewer-2")
+    assert second["previous_revision"] == first["revision"]
+    assert len(list((decisions / "history" / "case-00").glob("*.json"))) == 2
+
+
+def test_research_review_rejects_foreign_proposal_and_inconsistent_decision(tmp_path: Path):
+    source, decisions = _research_review_fixture(tmp_path)
+    with pytest.raises(ResearchReviewError, match="does not belong"):
+        save_phone_review(
+            source,
+            decisions,
+            "case-00",
+            {
+                "phone_visibility": "PHONE_VISIBLE",
+                "phone_use_assessment": "UNRESOLVED",
+                "selected_proposal_id": "f99-S1",
+                "notes": "Proposal belongs to a different review case.",
+                "expected_revision": None,
+            },
+            "reviewer-1",
+        )
+    with pytest.raises(ValueError, match="No visible phone"):
+        PhoneResearchReviewRequest(
+            phone_visibility="NO_PHONE_VISIBLE",
+            phone_use_assessment="PHONE_USE_CONFIRMED",
+            selected_proposal_id="f0-S1",
+            notes="This decision is intentionally inconsistent.",
+        )

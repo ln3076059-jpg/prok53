@@ -1,7 +1,7 @@
 from datetime import datetime
-from typing import Any
+from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from backend.models.entities import EventType, InputScope, JobStatus, ReviewStatus
 
@@ -88,3 +88,30 @@ class EventDetailResponse(EventResponse):
 class ReviewRequest(BaseModel):
     status: ReviewStatus
     notes: str | None = Field(default=None, max_length=2000)
+
+
+class PhoneResearchReviewRequest(BaseModel):
+    phone_visibility: Literal["PHONE_VISIBLE", "NO_PHONE_VISIBLE", "UNRESOLVED"]
+    phone_use_assessment: Literal["PHONE_USE_CONFIRMED", "NOT_PHONE_USE", "UNRESOLVED"]
+    selected_proposal_id: str = Field(min_length=1, max_length=128)
+    notes: str = Field(min_length=12, max_length=2000)
+    expected_revision: str | None = Field(default=None, min_length=64, max_length=64)
+
+    @model_validator(mode="after")
+    def consistent_decision(self):
+        if self.phone_visibility == "NO_PHONE_VISIBLE":
+            if self.phone_use_assessment != "NOT_PHONE_USE":
+                raise ValueError("No visible phone requires a NOT_PHONE_USE assessment")
+            if self.selected_proposal_id != "NO_VALID_PROPOSAL":
+                raise ValueError("No visible phone cannot approve a proposal")
+        if (
+            self.phone_use_assessment == "PHONE_USE_CONFIRMED"
+            and self.phone_visibility != "PHONE_VISIBLE"
+        ):
+            raise ValueError("Confirmed phone use requires visible phone evidence")
+        if (
+            self.phone_visibility == "UNRESOLVED"
+            and self.selected_proposal_id != "NO_VALID_PROPOSAL"
+        ):
+            raise ValueError("Unresolved visibility cannot approve a proposal")
+        return self
