@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "scope": "TWO_SUBJECT_DEVELOPMENT_ONLY_FROZEN_REPLAY",
+  "subjects": [
+    "gC-14",
+    "gZ-36"
+  ],
+  "excluded_development_subjects": [
+    "gB-9"
+  ],
+  "temporal_config_path": "models/temporal_config_v2.json",
+  "temporal_config_sha256": "191918e41e5715008a3a90c03aa062d86c4fe7086401f55c2fa55d5d1c189b4f",
+  "matching_policy_path": "reports/DMD_EVENT_MATCHING_POLICY_FREEZE.json",
+  "matching_policy_sha256": "43dde1904e75e080787cb82cfb68a309ed8149074285041017a867a4363168b2",
+  "matching_policy": {
+    "iou_threshold": 0.3,
+    "onset_tolerance_seconds": 2.5,
+    "offset_tolerance_seconds": 3.5
+  },
+  "comparison": "Stored context-aware observations versus the same positive observations forced to HANDHELD_USE. Only phone_context changes.",
+  "per_subject": [
+    {
+      "subject_id": "gC-14",
+      "cache_path": "reports/cache_observations_sub_14.json",
+      "cache_sha256": "dc6503ab6e5013d2e56a9e797bb003db02b38ceebebf66d7282d981ac45800e5",
+      "annotation_path": "dataset/external_dmd/subjects/gC-14/gC_14_s2_2019-03-04T11;48;02+01;00_rgb_ann_distraction.json",
+      "annotation_sha256": "25aa157587dd283e4550b9129321fa9a1fc1889cc7cc1819c7e58d74e3089089",
+      "observations": 795,
+      "stored_contexts": {
+        "HANDHELD_USE": 57,
+        "MOUNTED_OR_STATIC": 10,
+        "UNKNOWN": 728
+      },
+      "context_naive": {
+        "true_positives": 3,
+        "false_positives": 4,
+        "false_negatives": 6,
+        "total_gt_events": 9,
+        "evaluated_minutes": 6.67,
+        "precision": 0.4286,
+        "recall": 0.3333,
+        "f1": 0.375,
+        "false_alarms_per_minute": 0.599
+      },
+      "context_aware": {
+        "true_positives": 3,
+        "false_positives": 3,
+        "false_negatives": 6,
+        "total_gt_events": 9,
+        "evaluated_minutes": 6.67,
+        "precision": 0.5,
+        "recall": 0.3333,
+        "f1": 0.4,
+        "false_alarms_per_minute": 0.45
+      }
+    },
+    {
+      "subject_id": "gZ-36",
+      "cache_path": "reports/cache_observations_sub_36.json",
+      "cache_sha256": "a9387be9fe3187bc2d4bc0057a6b9c0f526259eca714d638bd1494713cdf951b",
+      "annotation_path": "dataset/external_dmd/subjects/gZ-36/gZ_36_s2_2019-04-09T10;39;38+02;00_rgb_ann_distraction.json",
+      "annotation_sha256": "45c1d8257fc4a800d52748a7615a243fc222d0a8e84766987ada65a5b08a8291",
+      "observations": 1024,
+      "stored_contexts": {
+        "HANDHELD_USE": 192,
+        "UNKNOWN": 832
+      },
+      "context_naive": {
+        "true_positives": 3,
+        "false_positives": 0,
+        "false_negatives": 8,
+        "total_gt_events": 11,
+        "evaluated_minutes": 8.6,
+        "precision": 1.0,
+        "recall": 0.2727,
+        "f1": 0.4286,
+        "false_alarms_per_minute": 0.0
+      },
+      "context_aware": {
+        "true_positives": 3,
+        "false_positives": 0,
+        "false_negatives": 8,
+        "total_gt_events": 11,
+        "evaluated_minutes": 8.6,
+        "precision": 1.0,
+        "recall": 0.2727,
+        "f1": 0.4286,
+        "false_alarms_per_minute": 0.0
+      }
+    }
+  ],
+  "aggregate": {
+    "context_naive": {
+      "true_positives": 6,
+      "false_positives": 4,
+      "false_negatives": 14,
+      "total_gt_events": 20,
+      "evaluated_minutes": 15.27,
+      "precision": 0.6,
+      "recall": 0.3,
+      "f1": 0.4,
+      "false_alarms_per_minute": 0.262
+    },
+    "context_aware": {
+      "true_positives": 6,
+      "false_positives": 3,
+      "false_negatives": 14,
+      "total_gt_events": 20,
+      "evaluated_minutes": 15.27,
+      "precision": 0.6667,
+      "recall": 0.3,
+      "f1": 0.4138,
+      "false_alarms_per_minute": 0.1965
+    },
+    "delta_context_aware_minus_naive": {
+      "true_positives": 0,
+      "false_positives": -1,
+      "false_negatives": 0,
+      "precision": 0.0667,
+      "recall": 0.0,
+      "f1": 0.0138,
+      "false_alarms_per_minute": -0.0655
+    }
+  },
+  "limitations": [
+    "Only gC-14 and gZ-36 have eligible stored observation caches.",
+    "gB-9 is absent, so this is not the 29-event controlled V9 comparator.",
+    "The same development subjects have been used repeatedly and are not independent.",
+    "The replay tests stored context policy, not the newly added multiview fusion API directly."
+  ],
+  "governance": {
+    "development_only": true,
+    "protected_holdouts_accessed": false,
+    "ground_truth_changed": false,
+    "event_matcher_changed": false,
+    "threshold_tuning_performed": false,
+    "fine_tuning_performed": false,
+    "production_approved": false
+  }
+}

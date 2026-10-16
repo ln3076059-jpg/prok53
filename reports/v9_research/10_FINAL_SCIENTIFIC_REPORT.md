@@ -32,3 +32,11 @@ The strict geometry gate is now implemented with raw/admitted confidence and rej
 fields. Its diagnostic removes 99 mounted/static candidates while retaining all
 12 selected boxes at the mining floor. It remains opt-in until callers supply
 audited context; no event metric changed in this run.
+
+
+
+A frozen two-subject replay supplies event-level support: context awareness preserves
+6 TP while removing
+1 FP. The aggregate F1 is
+41.38% and remains far below the research target. `gB-9` lacks an eligible cache, so
+this result is development-only and cannot replace the controlled comparator.

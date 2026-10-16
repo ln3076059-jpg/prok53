@@ -42,6 +42,8 @@ def render(output: Path = DEFAULT_OUTPUT) -> list[Path]:
     context_ablation = (
         _read(context_ablation_path) if context_ablation_path.is_file() else None
     )
+    context_replay_path = output / "phone_context_event_replay.json"
+    context_replay = _read(context_replay_path) if context_replay_path.is_file() else None
     fn = diagnostics["phone_false_negatives"]
     seatbelt = diagnostics["seatbelt"]
     representation = diagnostics["representation"]
@@ -131,6 +133,8 @@ context, small-object feature pyramids, and reliability-aware fusion. Each requi
     human_review_final = ""
     context_ablation_fusion = ""
     context_ablation_final = ""
+    context_replay_fusion = ""
+    context_replay_final = ""
     if human_review:
         reviewed = human_review["summary"]
         human_review_audit = f"""
@@ -179,6 +183,32 @@ The strict geometry gate is now implemented with raw/admitted confidence and rej
 fields. Its diagnostic removes {floor['removed_proposals']} mounted/static candidates while retaining all
 {floor['human_selected_total']} selected boxes at the mining floor. It remains opt-in until callers supply
 audited context; no event metric changed in this run.
+"""
+    if context_replay:
+        naive = context_replay["aggregate"]["context_naive"]
+        aware = context_replay["aggregate"]["context_aware"]
+        context_replay_fusion = f"""
+
+## Frozen two-subject event replay
+
+With identical confidence, timestamps, temporal config, ground truth and frozen matcher, preserving
+stored phone context changes aggregate TP/FP/FN from
+{naive['true_positives']}/{naive['false_positives']}/{naive['false_negatives']} to
+{aware['true_positives']}/{aware['false_positives']}/{aware['false_negatives']}. Precision changes from
+{100 * naive['precision']:.2f}% to {100 * aware['precision']:.2f}%, F1 from
+{100 * naive['f1']:.2f}% to {100 * aware['f1']:.2f}%, and FA/min from
+{naive['false_alarms_per_minute']:.4f} to {aware['false_alarms_per_minute']:.4f}.
+
+This replay covers 20 events in `gC-14` and `gZ-36` only. It is not the controlled 29-event comparator
+and does not establish independent performance.
+"""
+        context_replay_final = f"""
+
+A frozen two-subject replay supplies event-level support: context awareness preserves
+{aware['true_positives']} TP while removing
+{naive['false_positives'] - aware['false_positives']} FP. The aggregate F1 is
+{100 * aware['f1']:.2f}% and remains far below the research target. `gB-9` lacks an eligible cache, so
+this result is development-only and cannot replace the controlled comparator.
 """
 
     pending = seatbelt["pending_uncertain_review_manifest"]
@@ -287,6 +317,7 @@ T1/T3 recover one event but add 9/7 false positives versus the controlled compar
 improve F1. The post-hoc row remains ineligible. Missing camera views are excluded from the denominator;
 secondary cameras, pose and negative evidence cannot create an alert without physical and driver context.
 {context_ablation_fusion}
+{context_replay_fusion}
 """
 
     seatbelt_rows = [
@@ -361,6 +392,7 @@ The reviewed three-subject error lane can guide ROI and small-object hypotheses 
 claim recovery on those same cases. Keep `gZ-37` and `gE-28` sealed until model, threshold and event policy
 are frozen.
 {context_ablation_final}
+{context_replay_final}
 """
 
     reports = {

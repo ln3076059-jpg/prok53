@@ -16,8 +16,8 @@
     "sha256": "390427301a669bc28a0000fc87d8834551ccc036a1293c1dd1b358950396b768"
   },
   "reports/v9_research/05_FUSION_ABLATIONS.md": {
-    "bytes": 1471,
-    "sha256": "3bb2d3283393a37003ebceeb8086d327197a7a46a5ed54ea7555df65ce70f02f"
+    "bytes": 1949,
+    "sha256": "64c592b9d0cef0134ab598ba3c1daf96dadabaa52769abb6c7e4b2a9c47e8372"
   },
   "reports/v9_research/06_SEATBELT_EXPERIMENTS.md": {
     "bytes": 660,
@@ -32,12 +32,12 @@
     "sha256": "5b5c63ec5bf1f2057aaf3c1b6f677824ba70ca2ed459d4d2a2cf1d4d2d08f20c"
   },
   "reports/v9_research/09_TEST_RESULTS.md": {
-    "bytes": 814,
-    "sha256": "851cf604d72715e1f73fefdba221740a45c5b9f66d37ff5b11e290bd4c4e8893"
+    "bytes": 813,
+    "sha256": "74970e374bcc76d5850fef7b259d6b24c425f7b18b35908460db9f503247863c"
   },
   "reports/v9_research/10_FINAL_SCIENTIFIC_REPORT.md": {
-    "bytes": 1796,
-    "sha256": "90098fa29cf297b3d8657220abaec4f4a20f35ba91657ba5dfeeeb42aa0f719c"
+    "bytes": 2102,
+    "sha256": "c7f1713a6855b05ed5188d260298492f0591b5dc403967273ccc5d9d29ce0216"
   },
   "reports/v9_research/11_PHONE_PROPOSAL_MINING.md": {
     "bytes": 984,
@@ -55,6 +55,10 @@
     "bytes": 1849,
     "sha256": "8439b67351fb165acd57d5edacf0ac6937b6089c472cdc7b7040b98b817ac9c3"
   },
+  "reports/v9_research/15_PHONE_CONTEXT_EVENT_REPLAY.md": {
+    "bytes": 1636,
+    "sha256": "e23587db6587dec338153c442e8cb2e14b27e98be91dd1f9b14189f4ab1ce589"
+  },
   "reports/v9_research/codex_phone_pre_reviews.json": {
     "bytes": 9256,
     "sha256": "420013b7be96e1bfd73893db48bb1f260f2b5e8e7603b459825863d2fedd012c"
@@ -65,7 +69,7 @@
   },
   "reports/v9_research/frontend_build.log": {
     "bytes": 639,
-    "sha256": "f209ca993d408276964a2af0006d929d86936b61774e39a24df7df4ebc6fcb6a"
+    "sha256": "add0781a40a83d49b7b838fcfcc63ce55973e33c8834081ae6fbc06b9b99c2dd"
   },
   "reports/v9_research/human_phone_review_materialization.json": {
     "bytes": 15450,
@@ -195,6 +199,10 @@
     "bytes": 2007,
     "sha256": "15121a126e7d779f2a2f4ad4915d438a0f465482e04cd60120fc35b7606b2b47"
   },
+  "reports/v9_research/phone_context_event_replay.json": {
+    "bytes": 4690,
+    "sha256": "4033c8e896a8466d3b82c8777de578058bc930ccbc238ea8f58c3d94ec43eea4"
+  },
   "reports/v9_research/phone_context_gate_ablation.json": {
     "bytes": 5291,
     "sha256": "8760bbc3db72289701c7c9e39b188d3041df843df6a0537e3c08ef0a072395e6"
@@ -265,23 +273,23 @@
   },
   "reports/v9_research/pytest_full.log": {
     "bytes": 737,
-    "sha256": "0c385147f99f6d81e568031ac345dc775b9725fb9ed20f58652d2e91bc9f9a91"
+    "sha256": "acb2b4be3813f6bd88afcc79a08f427d223e168dcc272d7a6d02526b741d4866"
   },
   "reports/v9_research/pytest_full.xml": {
-    "bytes": 73284,
-    "sha256": "96c343818f9af9a0c5e1089fbc28ceb4037128be85b3978378bf3df277d805bf"
+    "bytes": 73417,
+    "sha256": "d6b3a115251d1167e5e8c32d5154641840ae9ec7feac3f580d0812c02cd05d02"
   },
   "reports/v9_research/pytest_v9.log": {
     "bytes": 168,
-    "sha256": "12e9c5bb8cc0f9959529213216eda077c60256b12c2b3a50c3e3ff84e1385014"
+    "sha256": "046665322726ef4b4ffadd5bcc9b7ba455b89001ba046260976ee2f047a77b95"
   },
   "reports/v9_research/pytest_v9.xml": {
-    "bytes": 1794,
-    "sha256": "9d20c96bb457347d3d6da684c647f433063d3d472717fde3425b78dede7bbe8c"
+    "bytes": 1928,
+    "sha256": "48223a5c9b2c53ac05d6b54cc821f3efc1439501870a96a75baab0a0c5e8ead9"
   },
   "reports/v9_research/reproduce.ps1": {
-    "bytes": 1193,
-    "sha256": "75e1655e6f111639f0867045ad9014b792b3bb534d08470e5bee5da2e20a6e5a"
+    "bytes": 1330,
+    "sha256": "d3a310a0fc4f5743e591c66749c2b983e9ae8f9a2d941d45e1fae258435d9b6d"
   },
   "reports/v9_research/ruff_critical.log": {
     "bytes": 20,
@@ -292,8 +300,8 @@
     "sha256": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0"
   },
   "reports/v9_research/test_results.json": {
-    "bytes": 3610,
-    "sha256": "670ca501a4807ae53389658e99d541198a5d74e491f84c8d835196753cc6954d"
+    "bytes": 3670,
+    "sha256": "ebf1898eea16be21aeba71024befccfb950324c3d8aa803014fea9d4d3220b99"
   },
   "reports/v9_research/ui_review_desktop.png": {
     "bytes": 315983,

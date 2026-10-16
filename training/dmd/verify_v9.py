@@ -32,6 +32,7 @@ REPORTS = (
     "12_HUMAN_REVIEW_WEB.md",
     "13_HUMAN_PHONE_REVIEW_RESULTS.md",
     "14_PHONE_CONTEXT_GATE_ABLATION.md",
+    "15_PHONE_CONTEXT_EVENT_REPLAY.md",
 )
 
 
@@ -107,6 +108,7 @@ def run_checks(output: Path) -> dict[str, Any]:
                 "training/dmd/v9_phone_proposal_mining.py",
                 "training/dmd/v9_human_review_results.py",
                 "training/dmd/v9_phone_context_ablation.py",
+                "training/dmd/v9_phone_context_event_replay.py",
                 "training/dmd/fusion.py",
                 "backend/services/research_review.py",
                 "backend/schemas.py",
@@ -189,6 +191,9 @@ def verify(output: Path = DEFAULT_OUTPUT) -> dict[str, Any]:
     context_ablation = json.loads(
         (output / "phone_context_gate_ablation.json").read_text(encoding="utf-8")
     )
+    context_replay = json.loads(
+        (output / "phone_context_event_replay.json").read_text(encoding="utf-8")
+    )
     tests = json.loads(tests_path.read_text(encoding="utf-8"))
     _render_test_report(output, tests)
     failures = []
@@ -239,6 +244,28 @@ def verify(output: Path = DEFAULT_OUTPUT) -> dict[str, Any]:
         )
     ):
         failures.append("phone-context ablation changed a protected scientific invariant")
+    replay_naive = context_replay["aggregate"]["context_naive"]
+    replay_aware = context_replay["aggregate"]["context_aware"]
+    if context_replay["subjects"] != ["gC-14", "gZ-36"]:
+        failures.append("phone-context replay subject set changed")
+    if replay_naive["total_gt_events"] != 20 or replay_aware["total_gt_events"] != 20:
+        failures.append("phone-context replay ground-truth event count changed")
+    if (replay_naive["true_positives"], replay_naive["false_positives"]) != (6, 4):
+        failures.append("phone-context naive replay changed unexpectedly")
+    if (replay_aware["true_positives"], replay_aware["false_positives"]) != (6, 3):
+        failures.append("phone-context aware replay changed unexpectedly")
+    if any(
+        context_replay["governance"][key]
+        for key in (
+            "protected_holdouts_accessed",
+            "ground_truth_changed",
+            "event_matcher_changed",
+            "threshold_tuning_performed",
+            "fine_tuning_performed",
+            "production_approved",
+        )
+    ):
+        failures.append("phone-context replay changed a protected scientific invariant")
     if any(
         proposals[key]
         for key in (
@@ -271,6 +298,11 @@ def verify(output: Path = DEFAULT_OUTPUT) -> dict[str, Any]:
         "context_gate_removed_proposals": context_floor["removed_proposals"],
         "context_gate_selected_retained": context_floor[
             "human_selected_retained_context_gated"
+        ],
+        "context_replay_tp_fp_fn": [
+            replay_aware["true_positives"],
+            replay_aware["false_positives"],
+            replay_aware["false_negatives"],
         ],
         "protected_holdouts_accessed": diagnostics["protected_holdouts_accessed"],
         "fine_tuning_performed": diagnostics["fine_tuning_performed"],

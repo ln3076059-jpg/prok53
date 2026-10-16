@@ -112,6 +112,27 @@ def test_v9_phone_context_gate_removes_mounted_camera_without_losing_selected_bo
     assert result["governance"]["protected_holdouts_accessed"] is False
 
 
+def test_v9_phone_context_event_replay_preserves_tp_and_removes_one_fp():
+    result = json.loads(
+        Path("reports/v9_research/phone_context_event_replay.json").read_text()
+    )
+    naive = result["aggregate"]["context_naive"]
+    aware = result["aggregate"]["context_aware"]
+
+    assert result["subjects"] == ["gC-14", "gZ-36"]
+    assert (naive["true_positives"], naive["false_positives"], naive["false_negatives"]) == (
+        6,
+        4,
+        14,
+    )
+    assert (aware["true_positives"], aware["false_positives"], aware["false_negatives"]) == (
+        6,
+        3,
+        14,
+    )
+    assert result["governance"]["event_matcher_changed"] is False
+
+
 def _research_review_fixture(tmp_path: Path) -> tuple[Path, Path]:
     contact = tmp_path / "phone_proposal_review" / "case-00.jpg"
     contact.parent.mkdir()

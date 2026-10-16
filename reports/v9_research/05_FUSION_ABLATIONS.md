@@ -24,3 +24,18 @@ At the 0.02 proposal-mining floor, strict context gating removes
 12/12 human-selected handheld
 boxes. It rejects all proposals in the visible-phone hard example `gB-9-phone-06`. This is candidate
 yield on FN-selected positive development evidence, not detector accuracy or event P/R/F1.
+
+
+
+## Frozen two-subject event replay
+
+With identical confidence, timestamps, temporal config, ground truth and frozen matcher, preserving
+stored phone context changes aggregate TP/FP/FN from
+6/4/14 to
+6/3/14. Precision changes from
+60.00% to 66.67%, F1 from
+40.00% to 41.38%, and FA/min from
+0.2620 to 0.1965.
+
+This replay covers 20 events in `gC-14` and `gZ-36` only. It is not the controlled 29-event comparator
+and does not establish independent performance.
