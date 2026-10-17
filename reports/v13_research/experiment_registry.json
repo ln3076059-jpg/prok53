@@ -1,0 +1,29 @@
+{
+  "head": "943c723ba031e89a4ca3d5de91e17d9d7a4e746f",
+  "level": "LEVEL_1_DIAGNOSTICS",
+  "training_performed": false,
+  "experiments": {
+    "V13-R0-R5": {
+      "decision": "KEEP_DIAGNOSTIC_PIPELINE",
+      "artifact": "high_resolution_roi.json"
+    },
+    "V13-A0": {
+      "decision": "KEEP_FROZEN_REFERENCE",
+      "source": "V12"
+    },
+    "V13-A1-A6": {
+      "decision": "BLOCKED",
+      "reason": "DMD fitting rights denied"
+    },
+    "V13-EVENT": {
+      "decision": "BLOCKED",
+      "reason": "BLOCKED_MISSING_FITTED_HEAD_SCALER_AND_VERIFIED_OCCUPANTS"
+    },
+    "V13-SEATBELT": {
+      "decision": "BLOCKED",
+      "reason": "BLOCKED_500_PENDING_LABELS"
+    }
+  },
+  "protected_holdouts_accessed": false,
+  "production_approved": false
+}

@@ -15,6 +15,7 @@ from training.dmd.causal_motion import (
     spatial_residual_standardize,
 )
 from training.dmd.driver_phone_association import DriverPhoneAssociation, OccupantTrack
+from training.dmd.high_res_roi import HighResolutionRoiPipeline, frame_sha256
 from training.dmd.online_candidate import NumericHead, OnlineConfig, OnlineE3, ResearchCandidate
 from training.dmd.research_permissions import FIT_OPERATIONS, require_operation, require_subject
 from training.dmd.v12_diagnostics import classification_metrics, event_counts
@@ -178,6 +179,23 @@ def test_dynamic_roi_uses_actual_pixels_beyond_driver_boundary():
     assert crop.image.max() == 255
     assert crop.provenance.crop_box[2] > 95
     assert crop.provenance.padding_ltrb == (0, 0, 0, 0)
+
+
+def test_high_resolution_roi_preserves_pixels_hash_and_boundary_provenance():
+    image = np.arange(80 * 120 * 3, dtype=np.uint8).reshape(80, 120, 3)
+    phone = Box(112, 65, 125, 82)
+    crop = HighResolutionRoiPipeline(padding=0.2).extract(
+        image,
+        Box(20, 10, 118, 78),
+        RoiStrategy.DYNAMIC_PADDED,
+        source_camera="BODY",
+        phone_box=phone,
+    )[0]
+    assert crop.frame_sha256 == frame_sha256(image)
+    assert crop.output_dimensions != (64, 64)
+    assert crop.provenance["scale_xy"] == (1.0, 1.0)
+    assert crop.edge_clipped
+    assert 0 < crop.phone_coverage < 1
 
 
 def test_numeric_export_reload_matches_sklearn_synthetic_only(tmp_path):

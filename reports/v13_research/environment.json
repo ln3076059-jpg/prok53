@@ -1,0 +1,10 @@
+{
+  "generated_at": "2026-10-17T23:55:18.765497+00:00",
+  "head": "943c723ba031e89a4ca3d5de91e17d9d7a4e746f",
+  "branch": "roadwatch-v4-candidate",
+  "python": "3.11.9",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "disk_total_bytes": 323389222912,
+  "disk_free_bytes": 5672796160,
+  "gpu": "NOT_AVAILABLE_NVIDIA_SMI"
+}

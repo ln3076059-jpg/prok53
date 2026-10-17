@@ -126,8 +126,8 @@ def _union(boxes: Iterable[Box]) -> Box | None:
 class BehaviorRoiExtractor:
     """Extract fixed or evidence-driven regions without inventing missing evidence."""
 
-    def __init__(self, output_size: tuple[int, int] = (64, 64), padding: float = 0.12):
-        if min(output_size) <= 0:
+    def __init__(self, output_size: tuple[int, int] | None = (64, 64), padding: float = 0.12):
+        if output_size is not None and min(output_size) <= 0:
             raise ValueError("output size must be positive")
         if not 0 <= padding <= 1:
             raise ValueError("padding must be in [0, 1]")
@@ -304,8 +304,12 @@ class BehaviorRoiExtractor:
             crop = cv2.copyMakeBorder(
                 crop, top, bottom, left, right, cv2.BORDER_REPLICATE
             )
-        output_width, output_height = self.output_size
-        resized = cv2.resize(crop, self.output_size, interpolation=cv2.INTER_AREA)
+        if self.output_size is None:
+            output_width, output_height = crop.shape[1], crop.shape[0]
+            resized = crop.copy()
+        else:
+            output_width, output_height = self.output_size
+            resized = cv2.resize(crop, self.output_size, interpolation=cv2.INTER_AREA)
         provenance = RoiProvenance(
             strategy=strategy.value,
             region_name=region_name,

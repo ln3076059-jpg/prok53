@@ -1,0 +1,6612 @@
+{
+  "cases": [
+    {
+      "case_id": "gB-9-phone-01",
+      "subject": "gB-9",
+      "frame_index": 1200,
+      "source_video": "dataset/external_dmd/subjects/gB-9/gB_9_s2_2019-03-07T16;21;20+01;00_rgb_body.mp4",
+      "source_video_sha256": "36bc2bcd2547033424833207fa6f4694fbf29fdfad2d305c30adb77639924b23",
+      "decoded_frame_sha256": "e09ede2be66d728e6c841099505c7ace8afa33fcb1b83f4c2ecb8da3b4cde91b",
+      "original_dimensions": [
+        1280,
+        720
+      ],
+      "phone_box": [
+        356.49896240234375,
+        162.95802307128906,
+        384.97503662109375,
+        234.5186767578125
+      ],
+      "driver_box_source": "V11_FN_ROOT_CAUSE",
+      "phone_size": [
+        28.47607421875,
+        71.56065368652344
+      ],
+      "R0_FROZEN_64": {
+        "output_dimensions": [
+          64,
+          64
+        ],
+        "provenance": {
+          "strategy": "C0_FULL_DRIVER",
+          "region_name": "driver",
+          "original_frame_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "requested_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "crop_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "padding_ltrb": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "scale_xy": [
+            0.07692307692307693,
+            0.10457516339869281
+          ],
+          "confidence": 1.0,
+          "source_camera": "BODY",
+          "driver_track_id": "UNKNOWN",
+          "evidence_state": "OBSERVED",
+          "reason_codes": [
+            "DRIVER_ROI"
+          ]
+        }
+      },
+      "variants": {
+        "R1_ORIGINAL_DRIVER": [
+          {
+            "strategy": "C0_FULL_DRIVER",
+            "frame_sha256": "e09ede2be66d728e6c841099505c7ace8afa33fcb1b83f4c2ecb8da3b4cde91b",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              832,
+              612
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C0_FULL_DRIVER",
+              "region_name": "driver",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "crop_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DRIVER_ROI"
+              ]
+            }
+          }
+        ],
+        "R2_PADDED_HAND_PHONE": [
+          {
+            "strategy": "C2_HAND_PHONE",
+            "frame_sha256": "e09ede2be66d728e6c841099505c7ace8afa33fcb1b83f4c2ecb8da3b4cde91b",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              36,
+              90
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C2_HAND_PHONE",
+              "region_name": "hand_phone",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                353,
+                154,
+                389,
+                244
+              ],
+              "crop_box": [
+                353,
+                154,
+                389,
+                244
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "HAND_OR_PHONE_BOX"
+              ]
+            }
+          }
+        ],
+        "R3_FACE_HAND": [
+          {
+            "strategy": "C3_FACE_HAND",
+            "frame_sha256": "e09ede2be66d728e6c841099505c7ace8afa33fcb1b83f4c2ecb8da3b4cde91b",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              784,
+              502
+            ],
+            "phone_coverage": null,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C3_FACE_HAND",
+              "region_name": "face_hand_fallback",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "crop_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "NO_FACE_OR_HAND_BOX",
+                "CAMERA_NORMALIZED_FALLBACK"
+              ]
+            }
+          }
+        ],
+        "R4_MULTI_REGION": [
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "e09ede2be66d728e6c841099505c7ace8afa33fcb1b83f4c2ecb8da3b4cde91b",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              500,
+              258
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "face",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "crop_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_FACE_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "e09ede2be66d728e6c841099505c7ace8afa33fcb1b83f4c2ecb8da3b4cde91b",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              634,
+              374
+            ],
+            "phone_coverage": 0.13301550876700685,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "torso",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "crop_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_TORSO_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "e09ede2be66d728e6c841099505c7ace8afa33fcb1b83f4c2ecb8da3b4cde91b",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "left_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "crop_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_LEFT_HAND_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "e09ede2be66d728e6c841099505c7ace8afa33fcb1b83f4c2ecb8da3b4cde91b",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "right_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "crop_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_RIGHT_HAND_ZONE"
+              ]
+            }
+          }
+        ],
+        "R5_SCALE_AWARE_DYNAMIC": [
+          {
+            "strategy": "C5_DYNAMIC_PADDED",
+            "frame_sha256": "e09ede2be66d728e6c841099505c7ace8afa33fcb1b83f4c2ecb8da3b4cde91b",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              36,
+              90
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C5_DYNAMIC_PADDED",
+              "region_name": "dynamic_evidence",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                353,
+                154,
+                389,
+                244
+              ],
+              "crop_box": [
+                353,
+                154,
+                389,
+                244
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DYNAMIC_EVIDENCE_UNION",
+                "BOUNDARY_PROTECTED"
+              ]
+            }
+          }
+        ]
+      },
+      "output_bytes": 4996836,
+      "scope": "oracle reviewed-box diagnostic; no detector AP or recovered-event claim"
+    },
+    {
+      "case_id": "gB-9-phone-03",
+      "subject": "gB-9",
+      "frame_index": 3705,
+      "source_video": "dataset/external_dmd/subjects/gB-9/gB_9_s2_2019-03-07T16;21;20+01;00_rgb_body.mp4",
+      "source_video_sha256": "36bc2bcd2547033424833207fa6f4694fbf29fdfad2d305c30adb77639924b23",
+      "decoded_frame_sha256": "3a2598a9fe6f172fa895ba551a8d456931bcbc6e5bc185e86fb6a3219dd8b775",
+      "original_dimensions": [
+        1280,
+        720
+      ],
+      "phone_box": [
+        241.97225952148438,
+        170.27901458740234,
+        390.00390625,
+        292.9855194091797
+      ],
+      "driver_box_source": "V11_FN_ROOT_CAUSE",
+      "phone_size": [
+        148.03164672851562,
+        122.70650482177734
+      ],
+      "R0_FROZEN_64": {
+        "output_dimensions": [
+          64,
+          64
+        ],
+        "provenance": {
+          "strategy": "C0_FULL_DRIVER",
+          "region_name": "driver",
+          "original_frame_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "requested_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "crop_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "padding_ltrb": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "scale_xy": [
+            0.07692307692307693,
+            0.10457516339869281
+          ],
+          "confidence": 1.0,
+          "source_camera": "BODY",
+          "driver_track_id": "UNKNOWN",
+          "evidence_state": "OBSERVED",
+          "reason_codes": [
+            "DRIVER_ROI"
+          ]
+        }
+      },
+      "variants": {
+        "R1_ORIGINAL_DRIVER": [
+          {
+            "strategy": "C0_FULL_DRIVER",
+            "frame_sha256": "3a2598a9fe6f172fa895ba551a8d456931bcbc6e5bc185e86fb6a3219dd8b775",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              832,
+              612
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C0_FULL_DRIVER",
+              "region_name": "driver",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "crop_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DRIVER_ROI"
+              ]
+            }
+          }
+        ],
+        "R2_PADDED_HAND_PHONE": [
+          {
+            "strategy": "C2_HAND_PHONE",
+            "frame_sha256": "3a2598a9fe6f172fa895ba551a8d456931bcbc6e5bc185e86fb6a3219dd8b775",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              184,
+              153
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C2_HAND_PHONE",
+              "region_name": "hand_phone",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                224,
+                155,
+                408,
+                308
+              ],
+              "crop_box": [
+                224,
+                155,
+                408,
+                308
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "HAND_OR_PHONE_BOX"
+              ]
+            }
+          }
+        ],
+        "R3_FACE_HAND": [
+          {
+            "strategy": "C3_FACE_HAND",
+            "frame_sha256": "3a2598a9fe6f172fa895ba551a8d456931bcbc6e5bc185e86fb6a3219dd8b775",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              784,
+              502
+            ],
+            "phone_coverage": null,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C3_FACE_HAND",
+              "region_name": "face_hand_fallback",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "crop_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "NO_FACE_OR_HAND_BOX",
+                "CAMERA_NORMALIZED_FALLBACK"
+              ]
+            }
+          }
+        ],
+        "R4_MULTI_REGION": [
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "3a2598a9fe6f172fa895ba551a8d456931bcbc6e5bc185e86fb6a3219dd8b775",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              500,
+              258
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "face",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "crop_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_FACE_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "3a2598a9fe6f172fa895ba551a8d456931bcbc6e5bc185e86fb6a3219dd8b775",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              634,
+              374
+            ],
+            "phone_coverage": 0.5540498403725533,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "torso",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "crop_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_TORSO_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "3a2598a9fe6f172fa895ba551a8d456931bcbc6e5bc185e86fb6a3219dd8b775",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 0.10582584377283218,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "left_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "crop_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_LEFT_HAND_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "3a2598a9fe6f172fa895ba551a8d456931bcbc6e5bc185e86fb6a3219dd8b775",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 0.029313143998502007,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "right_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "crop_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_RIGHT_HAND_ZONE"
+              ]
+            }
+          }
+        ],
+        "R5_SCALE_AWARE_DYNAMIC": [
+          {
+            "strategy": "C5_DYNAMIC_PADDED",
+            "frame_sha256": "3a2598a9fe6f172fa895ba551a8d456931bcbc6e5bc185e86fb6a3219dd8b775",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              184,
+              153
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C5_DYNAMIC_PADDED",
+              "region_name": "dynamic_evidence",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                224,
+                155,
+                408,
+                308
+              ],
+              "crop_box": [
+                224,
+                155,
+                408,
+                308
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DYNAMIC_EVIDENCE_UNION",
+                "BOUNDARY_PROTECTED"
+              ]
+            }
+          }
+        ]
+      },
+      "output_bytes": 5146308,
+      "scope": "oracle reviewed-box diagnostic; no detector AP or recovered-event claim"
+    },
+    {
+      "case_id": "gB-9-phone-05",
+      "subject": "gB-9",
+      "frame_index": 7560,
+      "source_video": "dataset/external_dmd/subjects/gB-9/gB_9_s2_2019-03-07T16;21;20+01;00_rgb_body.mp4",
+      "source_video_sha256": "36bc2bcd2547033424833207fa6f4694fbf29fdfad2d305c30adb77639924b23",
+      "decoded_frame_sha256": "b6425c1ed201c7c2b40b959e848ffe3fccf6eb712cf23620da3cb2cec365bd13",
+      "original_dimensions": [
+        1280,
+        720
+      ],
+      "phone_box": [
+        450.63763427734375,
+        177.35657501220703,
+        481.7338562011719,
+        238.07186889648438
+      ],
+      "driver_box_source": "V11_FN_ROOT_CAUSE",
+      "phone_size": [
+        31.096221923828125,
+        60.715293884277344
+      ],
+      "R0_FROZEN_64": {
+        "output_dimensions": [
+          64,
+          64
+        ],
+        "provenance": {
+          "strategy": "C0_FULL_DRIVER",
+          "region_name": "driver",
+          "original_frame_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "requested_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "crop_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "padding_ltrb": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "scale_xy": [
+            0.07692307692307693,
+            0.10457516339869281
+          ],
+          "confidence": 1.0,
+          "source_camera": "BODY",
+          "driver_track_id": "UNKNOWN",
+          "evidence_state": "OBSERVED",
+          "reason_codes": [
+            "DRIVER_ROI"
+          ]
+        }
+      },
+      "variants": {
+        "R1_ORIGINAL_DRIVER": [
+          {
+            "strategy": "C0_FULL_DRIVER",
+            "frame_sha256": "b6425c1ed201c7c2b40b959e848ffe3fccf6eb712cf23620da3cb2cec365bd13",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              832,
+              612
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C0_FULL_DRIVER",
+              "region_name": "driver",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "crop_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DRIVER_ROI"
+              ]
+            }
+          }
+        ],
+        "R2_PADDED_HAND_PHONE": [
+          {
+            "strategy": "C2_HAND_PHONE",
+            "frame_sha256": "b6425c1ed201c7c2b40b959e848ffe3fccf6eb712cf23620da3cb2cec365bd13",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              40,
+              76
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C2_HAND_PHONE",
+              "region_name": "hand_phone",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                446,
+                170,
+                486,
+                246
+              ],
+              "crop_box": [
+                446,
+                170,
+                486,
+                246
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "HAND_OR_PHONE_BOX"
+              ]
+            }
+          }
+        ],
+        "R3_FACE_HAND": [
+          {
+            "strategy": "C3_FACE_HAND",
+            "frame_sha256": "b6425c1ed201c7c2b40b959e848ffe3fccf6eb712cf23620da3cb2cec365bd13",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              784,
+              502
+            ],
+            "phone_coverage": null,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C3_FACE_HAND",
+              "region_name": "face_hand_fallback",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "crop_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "NO_FACE_OR_HAND_BOX",
+                "CAMERA_NORMALIZED_FALLBACK"
+              ]
+            }
+          }
+        ],
+        "R4_MULTI_REGION": [
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "b6425c1ed201c7c2b40b959e848ffe3fccf6eb712cf23620da3cb2cec365bd13",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              500,
+              258
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "face",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "crop_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_FACE_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "b6425c1ed201c7c2b40b959e848ffe3fccf6eb712cf23620da3cb2cec365bd13",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              634,
+              374
+            ],
+            "phone_coverage": 0.21529779500695834,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "torso",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "crop_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_TORSO_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "b6425c1ed201c7c2b40b959e848ffe3fccf6eb712cf23620da3cb2cec365bd13",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "left_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "crop_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_LEFT_HAND_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "b6425c1ed201c7c2b40b959e848ffe3fccf6eb712cf23620da3cb2cec365bd13",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "right_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "crop_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_RIGHT_HAND_ZONE"
+              ]
+            }
+          }
+        ],
+        "R5_SCALE_AWARE_DYNAMIC": [
+          {
+            "strategy": "C5_DYNAMIC_PADDED",
+            "frame_sha256": "b6425c1ed201c7c2b40b959e848ffe3fccf6eb712cf23620da3cb2cec365bd13",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              40,
+              76
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C5_DYNAMIC_PADDED",
+              "region_name": "dynamic_evidence",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                446,
+                170,
+                486,
+                246
+              ],
+              "crop_box": [
+                446,
+                170,
+                486,
+                246
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DYNAMIC_EVIDENCE_UNION",
+                "BOUNDARY_PROTECTED"
+              ]
+            }
+          }
+        ]
+      },
+      "output_bytes": 4995636,
+      "scope": "oracle reviewed-box diagnostic; no detector AP or recovered-event claim"
+    },
+    {
+      "case_id": "gB-9-phone-06",
+      "subject": "gB-9",
+      "frame_index": 7920,
+      "source_video": "dataset/external_dmd/subjects/gB-9/gB_9_s2_2019-03-07T16;21;20+01;00_rgb_body.mp4",
+      "source_video_sha256": "36bc2bcd2547033424833207fa6f4694fbf29fdfad2d305c30adb77639924b23",
+      "decoded_frame_sha256": "5a6bb966dc8168a0c8dfab603a4df8455e872c15e7507b4771ee8dedb62d2233",
+      "original_dimensions": [
+        1280,
+        720
+      ],
+      "phone_box": null,
+      "driver_box_source": "V12_VERIFIED_ROI_PROVENANCE_FALLBACK",
+      "phone_size": null,
+      "R0_FROZEN_64": {
+        "output_dimensions": [
+          64,
+          64
+        ],
+        "provenance": {
+          "strategy": "C0_FULL_DRIVER",
+          "region_name": "driver",
+          "original_frame_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "requested_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "crop_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "padding_ltrb": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "scale_xy": [
+            0.07692307692307693,
+            0.10457516339869281
+          ],
+          "confidence": 1.0,
+          "source_camera": "BODY",
+          "driver_track_id": "UNKNOWN",
+          "evidence_state": "OBSERVED",
+          "reason_codes": [
+            "DRIVER_ROI"
+          ]
+        }
+      },
+      "variants": {
+        "R1_ORIGINAL_DRIVER": [
+          {
+            "strategy": "C0_FULL_DRIVER",
+            "frame_sha256": "5a6bb966dc8168a0c8dfab603a4df8455e872c15e7507b4771ee8dedb62d2233",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              832,
+              612
+            ],
+            "phone_coverage": null,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C0_FULL_DRIVER",
+              "region_name": "driver",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "crop_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DRIVER_ROI"
+              ]
+            }
+          }
+        ],
+        "R2_PADDED_HAND_PHONE": [
+          {
+            "strategy": "C2_HAND_PHONE",
+            "frame_sha256": "5a6bb966dc8168a0c8dfab603a4df8455e872c15e7507b4771ee8dedb62d2233",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              784,
+              380
+            ],
+            "phone_coverage": null,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C2_HAND_PHONE",
+              "region_name": "hand_phone_fallback",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                24,
+                304,
+                808,
+                684
+              ],
+              "crop_box": [
+                24,
+                304,
+                808,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "NO_HAND_OR_PHONE_BOX",
+                "CAMERA_NORMALIZED_FALLBACK"
+              ]
+            }
+          }
+        ],
+        "R3_FACE_HAND": [
+          {
+            "strategy": "C3_FACE_HAND",
+            "frame_sha256": "5a6bb966dc8168a0c8dfab603a4df8455e872c15e7507b4771ee8dedb62d2233",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              784,
+              502
+            ],
+            "phone_coverage": null,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C3_FACE_HAND",
+              "region_name": "face_hand_fallback",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "crop_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "NO_FACE_OR_HAND_BOX",
+                "CAMERA_NORMALIZED_FALLBACK"
+              ]
+            }
+          }
+        ],
+        "R4_MULTI_REGION": [
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "5a6bb966dc8168a0c8dfab603a4df8455e872c15e7507b4771ee8dedb62d2233",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              500,
+              258
+            ],
+            "phone_coverage": null,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "face",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "crop_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_FACE_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "5a6bb966dc8168a0c8dfab603a4df8455e872c15e7507b4771ee8dedb62d2233",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              634,
+              374
+            ],
+            "phone_coverage": null,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "torso",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "crop_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_TORSO_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "5a6bb966dc8168a0c8dfab603a4df8455e872c15e7507b4771ee8dedb62d2233",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": null,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "left_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "crop_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_LEFT_HAND_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "5a6bb966dc8168a0c8dfab603a4df8455e872c15e7507b4771ee8dedb62d2233",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": null,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "right_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "crop_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_RIGHT_HAND_ZONE"
+              ]
+            }
+          }
+        ],
+        "R5_SCALE_AWARE_DYNAMIC": [
+          {
+            "strategy": "C5_DYNAMIC_PADDED",
+            "frame_sha256": "5a6bb966dc8168a0c8dfab603a4df8455e872c15e7507b4771ee8dedb62d2233",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              1032,
+              760
+            ],
+            "phone_coverage": null,
+            "edge_clipped": true,
+            "provenance": {
+              "strategy": "C5_DYNAMIC_PADDED",
+              "region_name": "dynamic_fallback",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                -100,
+                -2,
+                932,
+                758
+              ],
+              "crop_box": [
+                0,
+                0,
+                932,
+                720
+              ],
+              "padding_ltrb": [
+                100,
+                2,
+                0,
+                38
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "NO_DYNAMIC_EVIDENCE",
+                "PADDED_DRIVER_FALLBACK"
+              ]
+            }
+          }
+        ]
+      },
+      "output_bytes": 8224116,
+      "scope": "oracle reviewed-box diagnostic; no detector AP or recovered-event claim"
+    },
+    {
+      "case_id": "gB-9-phone-07",
+      "subject": "gB-9",
+      "frame_index": 8610,
+      "source_video": "dataset/external_dmd/subjects/gB-9/gB_9_s2_2019-03-07T16;21;20+01;00_rgb_body.mp4",
+      "source_video_sha256": "36bc2bcd2547033424833207fa6f4694fbf29fdfad2d305c30adb77639924b23",
+      "decoded_frame_sha256": "325f7a6f83d1e0fe8602505acd03c53b551a57f6121dda5df33895cd3cfef2f0",
+      "original_dimensions": [
+        1280,
+        720
+      ],
+      "phone_box": [
+        665.9033203125,
+        274.28257751464844,
+        774.8209838867188,
+        406.3108825683594
+      ],
+      "driver_box_source": "V11_FN_ROOT_CAUSE",
+      "phone_size": [
+        108.91766357421875,
+        132.02830505371094
+      ],
+      "R0_FROZEN_64": {
+        "output_dimensions": [
+          64,
+          64
+        ],
+        "provenance": {
+          "strategy": "C0_FULL_DRIVER",
+          "region_name": "driver",
+          "original_frame_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "requested_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "crop_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "padding_ltrb": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "scale_xy": [
+            0.07692307692307693,
+            0.10457516339869281
+          ],
+          "confidence": 1.0,
+          "source_camera": "BODY",
+          "driver_track_id": "UNKNOWN",
+          "evidence_state": "OBSERVED",
+          "reason_codes": [
+            "DRIVER_ROI"
+          ]
+        }
+      },
+      "variants": {
+        "R1_ORIGINAL_DRIVER": [
+          {
+            "strategy": "C0_FULL_DRIVER",
+            "frame_sha256": "325f7a6f83d1e0fe8602505acd03c53b551a57f6121dda5df33895cd3cfef2f0",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              832,
+              612
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C0_FULL_DRIVER",
+              "region_name": "driver",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "crop_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DRIVER_ROI"
+              ]
+            }
+          }
+        ],
+        "R2_PADDED_HAND_PHONE": [
+          {
+            "strategy": "C2_HAND_PHONE",
+            "frame_sha256": "325f7a6f83d1e0fe8602505acd03c53b551a57f6121dda5df33895cd3cfef2f0",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              136,
+              165
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C2_HAND_PHONE",
+              "region_name": "hand_phone",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                652,
+                258,
+                788,
+                423
+              ],
+              "crop_box": [
+                652,
+                258,
+                788,
+                423
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "HAND_OR_PHONE_BOX"
+              ]
+            }
+          }
+        ],
+        "R3_FACE_HAND": [
+          {
+            "strategy": "C3_FACE_HAND",
+            "frame_sha256": "325f7a6f83d1e0fe8602505acd03c53b551a57f6121dda5df33895cd3cfef2f0",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              784,
+              502
+            ],
+            "phone_coverage": null,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C3_FACE_HAND",
+              "region_name": "face_hand_fallback",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "crop_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "NO_FACE_OR_HAND_BOX",
+                "CAMERA_NORMALIZED_FALLBACK"
+              ]
+            }
+          }
+        ],
+        "R4_MULTI_REGION": [
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "325f7a6f83d1e0fe8602505acd03c53b551a57f6121dda5df33895cd3cfef2f0",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              500,
+              258
+            ],
+            "phone_coverage": 0.0003745940639238222,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "face",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "crop_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_FACE_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "325f7a6f83d1e0fe8602505acd03c53b551a57f6121dda5df33895cd3cfef2f0",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              634,
+              374
+            ],
+            "phone_coverage": 0.616031206378008,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "torso",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "crop_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_TORSO_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "325f7a6f83d1e0fe8602505acd03c53b551a57f6121dda5df33895cd3cfef2f0",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "left_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "crop_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_LEFT_HAND_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "325f7a6f83d1e0fe8602505acd03c53b551a57f6121dda5df33895cd3cfef2f0",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 0.9566954791775473,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "right_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "crop_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_RIGHT_HAND_ZONE"
+              ]
+            }
+          }
+        ],
+        "R5_SCALE_AWARE_DYNAMIC": [
+          {
+            "strategy": "C5_DYNAMIC_PADDED",
+            "frame_sha256": "325f7a6f83d1e0fe8602505acd03c53b551a57f6121dda5df33895cd3cfef2f0",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              136,
+              165
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C5_DYNAMIC_PADDED",
+              "region_name": "dynamic_evidence",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                652,
+                258,
+                788,
+                423
+              ],
+              "crop_box": [
+                652,
+                258,
+                788,
+                423
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DYNAMIC_EVIDENCE_UNION",
+                "BOUNDARY_PROTECTED"
+              ]
+            }
+          }
+        ]
+      },
+      "output_bytes": 5112036,
+      "scope": "oracle reviewed-box diagnostic; no detector AP or recovered-event claim"
+    },
+    {
+      "case_id": "gB-9-phone-08",
+      "subject": "gB-9",
+      "frame_index": 9390,
+      "source_video": "dataset/external_dmd/subjects/gB-9/gB_9_s2_2019-03-07T16;21;20+01;00_rgb_body.mp4",
+      "source_video_sha256": "36bc2bcd2547033424833207fa6f4694fbf29fdfad2d305c30adb77639924b23",
+      "decoded_frame_sha256": "12226c35a6c56082416dd80617bf15715d026ab9bb03583b8abeb4fa47168609",
+      "original_dimensions": [
+        1280,
+        720
+      ],
+      "phone_box": [
+        563.1622924804688,
+        161.63098907470703,
+        602.7528076171875,
+        259.94189453125
+      ],
+      "driver_box_source": "V11_FN_ROOT_CAUSE",
+      "phone_size": [
+        39.59051513671875,
+        98.31090545654297
+      ],
+      "R0_FROZEN_64": {
+        "output_dimensions": [
+          64,
+          64
+        ],
+        "provenance": {
+          "strategy": "C0_FULL_DRIVER",
+          "region_name": "driver",
+          "original_frame_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "requested_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "crop_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "padding_ltrb": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "scale_xy": [
+            0.07692307692307693,
+            0.10457516339869281
+          ],
+          "confidence": 1.0,
+          "source_camera": "BODY",
+          "driver_track_id": "UNKNOWN",
+          "evidence_state": "OBSERVED",
+          "reason_codes": [
+            "DRIVER_ROI"
+          ]
+        }
+      },
+      "variants": {
+        "R1_ORIGINAL_DRIVER": [
+          {
+            "strategy": "C0_FULL_DRIVER",
+            "frame_sha256": "12226c35a6c56082416dd80617bf15715d026ab9bb03583b8abeb4fa47168609",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              832,
+              612
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C0_FULL_DRIVER",
+              "region_name": "driver",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "crop_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DRIVER_ROI"
+              ]
+            }
+          }
+        ],
+        "R2_PADDED_HAND_PHONE": [
+          {
+            "strategy": "C2_HAND_PHONE",
+            "frame_sha256": "12226c35a6c56082416dd80617bf15715d026ab9bb03583b8abeb4fa47168609",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              50,
+              123
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C2_HAND_PHONE",
+              "region_name": "hand_phone",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                558,
+                149,
+                608,
+                272
+              ],
+              "crop_box": [
+                558,
+                149,
+                608,
+                272
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "HAND_OR_PHONE_BOX"
+              ]
+            }
+          }
+        ],
+        "R3_FACE_HAND": [
+          {
+            "strategy": "C3_FACE_HAND",
+            "frame_sha256": "12226c35a6c56082416dd80617bf15715d026ab9bb03583b8abeb4fa47168609",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              784,
+              502
+            ],
+            "phone_coverage": null,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C3_FACE_HAND",
+              "region_name": "face_hand_fallback",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "crop_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "NO_FACE_OR_HAND_BOX",
+                "CAMERA_NORMALIZED_FALLBACK"
+              ]
+            }
+          }
+        ],
+        "R4_MULTI_REGION": [
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "12226c35a6c56082416dd80617bf15715d026ab9bb03583b8abeb4fa47168609",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              500,
+              258
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "face",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "crop_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_FACE_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "12226c35a6c56082416dd80617bf15715d026ab9bb03583b8abeb4fa47168609",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              634,
+              374
+            ],
+            "phone_coverage": 0.3554223650874175,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "torso",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "crop_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_TORSO_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "12226c35a6c56082416dd80617bf15715d026ab9bb03583b8abeb4fa47168609",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "left_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "crop_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_LEFT_HAND_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "12226c35a6c56082416dd80617bf15715d026ab9bb03583b8abeb4fa47168609",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "right_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "crop_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_RIGHT_HAND_ZONE"
+              ]
+            }
+          }
+        ],
+        "R5_SCALE_AWARE_DYNAMIC": [
+          {
+            "strategy": "C5_DYNAMIC_PADDED",
+            "frame_sha256": "12226c35a6c56082416dd80617bf15715d026ab9bb03583b8abeb4fa47168609",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              50,
+              123
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C5_DYNAMIC_PADDED",
+              "region_name": "dynamic_evidence",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                558,
+                149,
+                608,
+                272
+              ],
+              "crop_box": [
+                558,
+                149,
+                608,
+                272
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DYNAMIC_EVIDENCE_UNION",
+                "BOUNDARY_PROTECTED"
+              ]
+            }
+          }
+        ]
+      },
+      "output_bytes": 5014296,
+      "scope": "oracle reviewed-box diagnostic; no detector AP or recovered-event claim"
+    },
+    {
+      "case_id": "gB-9-phone-09",
+      "subject": "gB-9",
+      "frame_index": 11040,
+      "source_video": "dataset/external_dmd/subjects/gB-9/gB_9_s2_2019-03-07T16;21;20+01;00_rgb_body.mp4",
+      "source_video_sha256": "36bc2bcd2547033424833207fa6f4694fbf29fdfad2d305c30adb77639924b23",
+      "decoded_frame_sha256": "becc25885e6d4a156c6036b074b7e85be1182a8114561fe068d90541b26277e8",
+      "original_dimensions": [
+        1280,
+        720
+      ],
+      "phone_box": [
+        667.5377197265625,
+        248.577880859375,
+        762.3348388671875,
+        369.0003967285156
+      ],
+      "driver_box_source": "V11_FN_ROOT_CAUSE",
+      "phone_size": [
+        94.797119140625,
+        120.42251586914062
+      ],
+      "R0_FROZEN_64": {
+        "output_dimensions": [
+          64,
+          64
+        ],
+        "provenance": {
+          "strategy": "C0_FULL_DRIVER",
+          "region_name": "driver",
+          "original_frame_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "requested_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "crop_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "padding_ltrb": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "scale_xy": [
+            0.07692307692307693,
+            0.10457516339869281
+          ],
+          "confidence": 1.0,
+          "source_camera": "BODY",
+          "driver_track_id": "UNKNOWN",
+          "evidence_state": "OBSERVED",
+          "reason_codes": [
+            "DRIVER_ROI"
+          ]
+        }
+      },
+      "variants": {
+        "R1_ORIGINAL_DRIVER": [
+          {
+            "strategy": "C0_FULL_DRIVER",
+            "frame_sha256": "becc25885e6d4a156c6036b074b7e85be1182a8114561fe068d90541b26277e8",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              832,
+              612
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C0_FULL_DRIVER",
+              "region_name": "driver",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "crop_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DRIVER_ROI"
+              ]
+            }
+          }
+        ],
+        "R2_PADDED_HAND_PHONE": [
+          {
+            "strategy": "C2_HAND_PHONE",
+            "frame_sha256": "becc25885e6d4a156c6036b074b7e85be1182a8114561fe068d90541b26277e8",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              118,
+              150
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C2_HAND_PHONE",
+              "region_name": "hand_phone",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                656,
+                234,
+                774,
+                384
+              ],
+              "crop_box": [
+                656,
+                234,
+                774,
+                384
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "HAND_OR_PHONE_BOX"
+              ]
+            }
+          }
+        ],
+        "R3_FACE_HAND": [
+          {
+            "strategy": "C3_FACE_HAND",
+            "frame_sha256": "becc25885e6d4a156c6036b074b7e85be1182a8114561fe068d90541b26277e8",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              784,
+              502
+            ],
+            "phone_coverage": null,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C3_FACE_HAND",
+              "region_name": "face_hand_fallback",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "crop_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "NO_FACE_OR_HAND_BOX",
+                "CAMERA_NORMALIZED_FALLBACK"
+              ]
+            }
+          }
+        ],
+        "R4_MULTI_REGION": [
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "becc25885e6d4a156c6036b074b7e85be1182a8114561fe068d90541b26277e8",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              500,
+              258
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "face",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "crop_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_FACE_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "becc25885e6d4a156c6036b074b7e85be1182a8114561fe068d90541b26277e8",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              634,
+              374
+            ],
+            "phone_coverage": 0.6905513676668666,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "torso",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "crop_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_TORSO_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "becc25885e6d4a156c6036b074b7e85be1182a8114561fe068d90541b26277e8",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "left_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "crop_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_LEFT_HAND_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "becc25885e6d4a156c6036b074b7e85be1182a8114561fe068d90541b26277e8",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 0.7390677406642921,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "right_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "crop_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_RIGHT_HAND_ZONE"
+              ]
+            }
+          }
+        ],
+        "R5_SCALE_AWARE_DYNAMIC": [
+          {
+            "strategy": "C5_DYNAMIC_PADDED",
+            "frame_sha256": "becc25885e6d4a156c6036b074b7e85be1182a8114561fe068d90541b26277e8",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              118,
+              150
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C5_DYNAMIC_PADDED",
+              "region_name": "dynamic_evidence",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                656,
+                234,
+                774,
+                384
+              ],
+              "crop_box": [
+                656,
+                234,
+                774,
+                384
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DYNAMIC_EVIDENCE_UNION",
+                "BOUNDARY_PROTECTED"
+              ]
+            }
+          }
+        ]
+      },
+      "output_bytes": 5083596,
+      "scope": "oracle reviewed-box diagnostic; no detector AP or recovered-event claim"
+    },
+    {
+      "case_id": "gC-14-phone-02",
+      "subject": "gC-14",
+      "frame_index": 3135,
+      "source_video": "dataset/external_dmd/subjects/gC-14/gC_14_s2_2019-03-04T11;48;02+01;00_rgb_body.mp4",
+      "source_video_sha256": "bb7c567eea366afba4f2b329142e181333ce62c7ac7085bccebd6daa9ec8694e",
+      "decoded_frame_sha256": "e7540a6589ec887308e55b1bc60909e5e73b3425173e65a6e5b56e811202072c",
+      "original_dimensions": [
+        1280,
+        720
+      ],
+      "phone_box": [
+        739.6477661132812,
+        591.4361572265625,
+        831.765625,
+        676.7833862304688
+      ],
+      "driver_box_source": "V11_FN_ROOT_CAUSE",
+      "phone_size": [
+        92.11785888671875,
+        85.34722900390625
+      ],
+      "R0_FROZEN_64": {
+        "output_dimensions": [
+          64,
+          64
+        ],
+        "provenance": {
+          "strategy": "C0_FULL_DRIVER",
+          "region_name": "driver",
+          "original_frame_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "requested_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "crop_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "padding_ltrb": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "scale_xy": [
+            0.07692307692307693,
+            0.10457516339869281
+          ],
+          "confidence": 1.0,
+          "source_camera": "BODY",
+          "driver_track_id": "UNKNOWN",
+          "evidence_state": "OBSERVED",
+          "reason_codes": [
+            "DRIVER_ROI"
+          ]
+        }
+      },
+      "variants": {
+        "R1_ORIGINAL_DRIVER": [
+          {
+            "strategy": "C0_FULL_DRIVER",
+            "frame_sha256": "e7540a6589ec887308e55b1bc60909e5e73b3425173e65a6e5b56e811202072c",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              832,
+              612
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C0_FULL_DRIVER",
+              "region_name": "driver",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "crop_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DRIVER_ROI"
+              ]
+            }
+          }
+        ],
+        "R2_PADDED_HAND_PHONE": [
+          {
+            "strategy": "C2_HAND_PHONE",
+            "frame_sha256": "e7540a6589ec887308e55b1bc60909e5e73b3425173e65a6e5b56e811202072c",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              115,
+              107
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C2_HAND_PHONE",
+              "region_name": "hand_phone",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                728,
+                581,
+                843,
+                688
+              ],
+              "crop_box": [
+                728,
+                581,
+                843,
+                688
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "HAND_OR_PHONE_BOX"
+              ]
+            }
+          }
+        ],
+        "R3_FACE_HAND": [
+          {
+            "strategy": "C3_FACE_HAND",
+            "frame_sha256": "e7540a6589ec887308e55b1bc60909e5e73b3425173e65a6e5b56e811202072c",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              784,
+              502
+            ],
+            "phone_coverage": null,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C3_FACE_HAND",
+              "region_name": "face_hand_fallback",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "crop_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "NO_FACE_OR_HAND_BOX",
+                "CAMERA_NORMALIZED_FALLBACK"
+              ]
+            }
+          }
+        ],
+        "R4_MULTI_REGION": [
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "e7540a6589ec887308e55b1bc60909e5e73b3425173e65a6e5b56e811202072c",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              500,
+              258
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "face",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "crop_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_FACE_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "e7540a6589ec887308e55b1bc60909e5e73b3425173e65a6e5b56e811202072c",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              634,
+              374
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "torso",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "crop_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_TORSO_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "e7540a6589ec887308e55b1bc60909e5e73b3425173e65a6e5b56e811202072c",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "left_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "crop_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_LEFT_HAND_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "e7540a6589ec887308e55b1bc60909e5e73b3425173e65a6e5b56e811202072c",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "right_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "crop_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_RIGHT_HAND_ZONE"
+              ]
+            }
+          }
+        ],
+        "R5_SCALE_AWARE_DYNAMIC": [
+          {
+            "strategy": "C5_DYNAMIC_PADDED",
+            "frame_sha256": "e7540a6589ec887308e55b1bc60909e5e73b3425173e65a6e5b56e811202072c",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              115,
+              107
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C5_DYNAMIC_PADDED",
+              "region_name": "dynamic_evidence",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                728,
+                581,
+                843,
+                688
+              ],
+              "crop_box": [
+                728,
+                581,
+                843,
+                688
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DYNAMIC_EVIDENCE_UNION",
+                "BOUNDARY_PROTECTED"
+              ]
+            }
+          }
+        ]
+      },
+      "output_bytes": 5051226,
+      "scope": "oracle reviewed-box diagnostic; no detector AP or recovered-event claim"
+    },
+    {
+      "case_id": "gC-14-phone-05",
+      "subject": "gC-14",
+      "frame_index": 6735,
+      "source_video": "dataset/external_dmd/subjects/gC-14/gC_14_s2_2019-03-04T11;48;02+01;00_rgb_body.mp4",
+      "source_video_sha256": "bb7c567eea366afba4f2b329142e181333ce62c7ac7085bccebd6daa9ec8694e",
+      "decoded_frame_sha256": "4560c2a7f304437a7aa203a2457017f5389c8d5add3e161673a516e32da969dd",
+      "original_dimensions": [
+        1280,
+        720
+      ],
+      "phone_box": [
+        601.619873046875,
+        208.0725860595703,
+        719.534912109375,
+        345.061279296875
+      ],
+      "driver_box_source": "V11_FN_ROOT_CAUSE",
+      "phone_size": [
+        117.9150390625,
+        136.9886932373047
+      ],
+      "R0_FROZEN_64": {
+        "output_dimensions": [
+          64,
+          64
+        ],
+        "provenance": {
+          "strategy": "C0_FULL_DRIVER",
+          "region_name": "driver",
+          "original_frame_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "requested_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "crop_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "padding_ltrb": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "scale_xy": [
+            0.07692307692307693,
+            0.10457516339869281
+          ],
+          "confidence": 1.0,
+          "source_camera": "BODY",
+          "driver_track_id": "UNKNOWN",
+          "evidence_state": "OBSERVED",
+          "reason_codes": [
+            "DRIVER_ROI"
+          ]
+        }
+      },
+      "variants": {
+        "R1_ORIGINAL_DRIVER": [
+          {
+            "strategy": "C0_FULL_DRIVER",
+            "frame_sha256": "4560c2a7f304437a7aa203a2457017f5389c8d5add3e161673a516e32da969dd",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              832,
+              612
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C0_FULL_DRIVER",
+              "region_name": "driver",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "crop_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DRIVER_ROI"
+              ]
+            }
+          }
+        ],
+        "R2_PADDED_HAND_PHONE": [
+          {
+            "strategy": "C2_HAND_PHONE",
+            "frame_sha256": "4560c2a7f304437a7aa203a2457017f5389c8d5add3e161673a516e32da969dd",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              147,
+              171
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C2_HAND_PHONE",
+              "region_name": "hand_phone",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                587,
+                191,
+                734,
+                362
+              ],
+              "crop_box": [
+                587,
+                191,
+                734,
+                362
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "HAND_OR_PHONE_BOX"
+              ]
+            }
+          }
+        ],
+        "R3_FACE_HAND": [
+          {
+            "strategy": "C3_FACE_HAND",
+            "frame_sha256": "4560c2a7f304437a7aa203a2457017f5389c8d5add3e161673a516e32da969dd",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              784,
+              502
+            ],
+            "phone_coverage": null,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C3_FACE_HAND",
+              "region_name": "face_hand_fallback",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "crop_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "NO_FACE_OR_HAND_BOX",
+                "CAMERA_NORMALIZED_FALLBACK"
+              ]
+            }
+          }
+        ],
+        "R4_MULTI_REGION": [
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "4560c2a7f304437a7aa203a2457017f5389c8d5add3e161673a516e32da969dd",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              500,
+              258
+            ],
+            "phone_coverage": 0.48595859668010055,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "face",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "crop_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_FACE_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "4560c2a7f304437a7aa203a2457017f5389c8d5add3e161673a516e32da969dd",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              634,
+              374
+            ],
+            "phone_coverage": 0.876432035809653,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "torso",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "crop_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_TORSO_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "4560c2a7f304437a7aa203a2457017f5389c8d5add3e161673a516e32da969dd",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "left_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "crop_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_LEFT_HAND_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "4560c2a7f304437a7aa203a2457017f5389c8d5add3e161673a516e32da969dd",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 0.4749390461311266,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "right_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "crop_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_RIGHT_HAND_ZONE"
+              ]
+            }
+          }
+        ],
+        "R5_SCALE_AWARE_DYNAMIC": [
+          {
+            "strategy": "C5_DYNAMIC_PADDED",
+            "frame_sha256": "4560c2a7f304437a7aa203a2457017f5389c8d5add3e161673a516e32da969dd",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              147,
+              171
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C5_DYNAMIC_PADDED",
+              "region_name": "dynamic_evidence",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                587,
+                191,
+                734,
+                362
+              ],
+              "crop_box": [
+                587,
+                191,
+                734,
+                362
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DYNAMIC_EVIDENCE_UNION",
+                "BOUNDARY_PROTECTED"
+              ]
+            }
+          }
+        ]
+      },
+      "output_bytes": 5128218,
+      "scope": "oracle reviewed-box diagnostic; no detector AP or recovered-event claim"
+    },
+    {
+      "case_id": "gC-14-phone-06",
+      "subject": "gC-14",
+      "frame_index": 7710,
+      "source_video": "dataset/external_dmd/subjects/gC-14/gC_14_s2_2019-03-04T11;48;02+01;00_rgb_body.mp4",
+      "source_video_sha256": "bb7c567eea366afba4f2b329142e181333ce62c7ac7085bccebd6daa9ec8694e",
+      "decoded_frame_sha256": "3bc53a7383660ece20ad4da7d38a71af665956eb698007786d5e1679da4cc4d7",
+      "original_dimensions": [
+        1280,
+        720
+      ],
+      "phone_box": [
+        437.4648742675781,
+        90.91570854187012,
+        489.6875915527344,
+        180.07337188720703
+      ],
+      "driver_box_source": "V11_FN_ROOT_CAUSE",
+      "phone_size": [
+        52.22271728515625,
+        89.15766334533691
+      ],
+      "R0_FROZEN_64": {
+        "output_dimensions": [
+          64,
+          64
+        ],
+        "provenance": {
+          "strategy": "C0_FULL_DRIVER",
+          "region_name": "driver",
+          "original_frame_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "requested_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "crop_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "padding_ltrb": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "scale_xy": [
+            0.07692307692307693,
+            0.10457516339869281
+          ],
+          "confidence": 1.0,
+          "source_camera": "BODY",
+          "driver_track_id": "UNKNOWN",
+          "evidence_state": "OBSERVED",
+          "reason_codes": [
+            "DRIVER_ROI"
+          ]
+        }
+      },
+      "variants": {
+        "R1_ORIGINAL_DRIVER": [
+          {
+            "strategy": "C0_FULL_DRIVER",
+            "frame_sha256": "3bc53a7383660ece20ad4da7d38a71af665956eb698007786d5e1679da4cc4d7",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              832,
+              612
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C0_FULL_DRIVER",
+              "region_name": "driver",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "crop_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DRIVER_ROI"
+              ]
+            }
+          }
+        ],
+        "R2_PADDED_HAND_PHONE": [
+          {
+            "strategy": "C2_HAND_PHONE",
+            "frame_sha256": "3bc53a7383660ece20ad4da7d38a71af665956eb698007786d5e1679da4cc4d7",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              65,
+              111
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C2_HAND_PHONE",
+              "region_name": "hand_phone",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                431,
+                80,
+                496,
+                191
+              ],
+              "crop_box": [
+                431,
+                80,
+                496,
+                191
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "HAND_OR_PHONE_BOX"
+              ]
+            }
+          }
+        ],
+        "R3_FACE_HAND": [
+          {
+            "strategy": "C3_FACE_HAND",
+            "frame_sha256": "3bc53a7383660ece20ad4da7d38a71af665956eb698007786d5e1679da4cc4d7",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              784,
+              502
+            ],
+            "phone_coverage": null,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C3_FACE_HAND",
+              "region_name": "face_hand_fallback",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "crop_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "NO_FACE_OR_HAND_BOX",
+                "CAMERA_NORMALIZED_FALLBACK"
+              ]
+            }
+          }
+        ],
+        "R4_MULTI_REGION": [
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "3bc53a7383660ece20ad4da7d38a71af665956eb698007786d5e1679da4cc4d7",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              500,
+              258
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "face",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "crop_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_FACE_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "3bc53a7383660ece20ad4da7d38a71af665956eb698007786d5e1679da4cc4d7",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              634,
+              374
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "torso",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "crop_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_TORSO_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "3bc53a7383660ece20ad4da7d38a71af665956eb698007786d5e1679da4cc4d7",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "left_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "crop_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_LEFT_HAND_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "3bc53a7383660ece20ad4da7d38a71af665956eb698007786d5e1679da4cc4d7",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "right_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "crop_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_RIGHT_HAND_ZONE"
+              ]
+            }
+          }
+        ],
+        "R5_SCALE_AWARE_DYNAMIC": [
+          {
+            "strategy": "C5_DYNAMIC_PADDED",
+            "frame_sha256": "3bc53a7383660ece20ad4da7d38a71af665956eb698007786d5e1679da4cc4d7",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              65,
+              111
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C5_DYNAMIC_PADDED",
+              "region_name": "dynamic_evidence",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                431,
+                80,
+                496,
+                191
+              ],
+              "crop_box": [
+                431,
+                80,
+                496,
+                191
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DYNAMIC_EVIDENCE_UNION",
+                "BOUNDARY_PROTECTED"
+              ]
+            }
+          }
+        ]
+      },
+      "output_bytes": 5020686,
+      "scope": "oracle reviewed-box diagnostic; no detector AP or recovered-event claim"
+    },
+    {
+      "case_id": "gZ-36-phone-01",
+      "subject": "gZ-36",
+      "frame_index": 1575,
+      "source_video": "dataset/external_dmd/subjects/gZ-36/gZ_36_s2_2019-04-09T10;39;38+02;00_rgb_body.mp4",
+      "source_video_sha256": "039d494e15f0f72864e815999c76aadbce84b2d58c0c011374975e4e77ec0ef4",
+      "decoded_frame_sha256": "71244ae52b8843b9230d0e73ef5d5a118089c241ba86d3c3eb52dc96137a786d",
+      "original_dimensions": [
+        1280,
+        720
+      ],
+      "phone_box": [
+        786.7926635742188,
+        336.4727783203125,
+        831.7011108398438,
+        403.3764953613281
+      ],
+      "driver_box_source": "V11_FN_ROOT_CAUSE",
+      "phone_size": [
+        44.908447265625,
+        66.90371704101562
+      ],
+      "R0_FROZEN_64": {
+        "output_dimensions": [
+          64,
+          64
+        ],
+        "provenance": {
+          "strategy": "C0_FULL_DRIVER",
+          "region_name": "driver",
+          "original_frame_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "requested_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "crop_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "padding_ltrb": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "scale_xy": [
+            0.07692307692307693,
+            0.10457516339869281
+          ],
+          "confidence": 1.0,
+          "source_camera": "BODY",
+          "driver_track_id": "UNKNOWN",
+          "evidence_state": "OBSERVED",
+          "reason_codes": [
+            "DRIVER_ROI"
+          ]
+        }
+      },
+      "variants": {
+        "R1_ORIGINAL_DRIVER": [
+          {
+            "strategy": "C0_FULL_DRIVER",
+            "frame_sha256": "71244ae52b8843b9230d0e73ef5d5a118089c241ba86d3c3eb52dc96137a786d",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              832,
+              612
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C0_FULL_DRIVER",
+              "region_name": "driver",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "crop_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DRIVER_ROI"
+              ]
+            }
+          }
+        ],
+        "R2_PADDED_HAND_PHONE": [
+          {
+            "strategy": "C2_HAND_PHONE",
+            "frame_sha256": "71244ae52b8843b9230d0e73ef5d5a118089c241ba86d3c3eb52dc96137a786d",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              57,
+              84
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C2_HAND_PHONE",
+              "region_name": "hand_phone",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                781,
+                328,
+                838,
+                412
+              ],
+              "crop_box": [
+                781,
+                328,
+                838,
+                412
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "HAND_OR_PHONE_BOX"
+              ]
+            }
+          }
+        ],
+        "R3_FACE_HAND": [
+          {
+            "strategy": "C3_FACE_HAND",
+            "frame_sha256": "71244ae52b8843b9230d0e73ef5d5a118089c241ba86d3c3eb52dc96137a786d",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              784,
+              502
+            ],
+            "phone_coverage": null,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C3_FACE_HAND",
+              "region_name": "face_hand_fallback",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "crop_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "NO_FACE_OR_HAND_BOX",
+                "CAMERA_NORMALIZED_FALLBACK"
+              ]
+            }
+          }
+        ],
+        "R4_MULTI_REGION": [
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "71244ae52b8843b9230d0e73ef5d5a118089c241ba86d3c3eb52dc96137a786d",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              500,
+              258
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "face",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "crop_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_FACE_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "71244ae52b8843b9230d0e73ef5d5a118089c241ba86d3c3eb52dc96137a786d",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              634,
+              374
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "torso",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "crop_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_TORSO_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "71244ae52b8843b9230d0e73ef5d5a118089c241ba86d3c3eb52dc96137a786d",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "left_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "crop_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_LEFT_HAND_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "71244ae52b8843b9230d0e73ef5d5a118089c241ba86d3c3eb52dc96137a786d",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "right_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "crop_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_RIGHT_HAND_ZONE"
+              ]
+            }
+          }
+        ],
+        "R5_SCALE_AWARE_DYNAMIC": [
+          {
+            "strategy": "C5_DYNAMIC_PADDED",
+            "frame_sha256": "71244ae52b8843b9230d0e73ef5d5a118089c241ba86d3c3eb52dc96137a786d",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              57,
+              84
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C5_DYNAMIC_PADDED",
+              "region_name": "dynamic_evidence",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                781,
+                328,
+                838,
+                412
+              ],
+              "crop_box": [
+                781,
+                328,
+                838,
+                412
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DYNAMIC_EVIDENCE_UNION",
+                "BOUNDARY_PROTECTED"
+              ]
+            }
+          }
+        ]
+      },
+      "output_bytes": 5006124,
+      "scope": "oracle reviewed-box diagnostic; no detector AP or recovered-event claim"
+    },
+    {
+      "case_id": "gZ-36-phone-03",
+      "subject": "gZ-36",
+      "frame_index": 3300,
+      "source_video": "dataset/external_dmd/subjects/gZ-36/gZ_36_s2_2019-04-09T10;39;38+02;00_rgb_body.mp4",
+      "source_video_sha256": "039d494e15f0f72864e815999c76aadbce84b2d58c0c011374975e4e77ec0ef4",
+      "decoded_frame_sha256": "2d3063e0ef437e3fa3f1d5f6d574e9c9e8bc2c0c59b9f6560d4098c72ea1b880",
+      "original_dimensions": [
+        1280,
+        720
+      ],
+      "phone_box": [
+        734.5238037109375,
+        342.45343017578125,
+        831.7405395507812,
+        401.5016784667969
+      ],
+      "driver_box_source": "V11_FN_ROOT_CAUSE",
+      "phone_size": [
+        97.21673583984375,
+        59.048248291015625
+      ],
+      "R0_FROZEN_64": {
+        "output_dimensions": [
+          64,
+          64
+        ],
+        "provenance": {
+          "strategy": "C0_FULL_DRIVER",
+          "region_name": "driver",
+          "original_frame_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "requested_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "crop_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "padding_ltrb": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "scale_xy": [
+            0.07692307692307693,
+            0.10457516339869281
+          ],
+          "confidence": 1.0,
+          "source_camera": "BODY",
+          "driver_track_id": "UNKNOWN",
+          "evidence_state": "OBSERVED",
+          "reason_codes": [
+            "DRIVER_ROI"
+          ]
+        }
+      },
+      "variants": {
+        "R1_ORIGINAL_DRIVER": [
+          {
+            "strategy": "C0_FULL_DRIVER",
+            "frame_sha256": "2d3063e0ef437e3fa3f1d5f6d574e9c9e8bc2c0c59b9f6560d4098c72ea1b880",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              832,
+              612
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C0_FULL_DRIVER",
+              "region_name": "driver",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "crop_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DRIVER_ROI"
+              ]
+            }
+          }
+        ],
+        "R2_PADDED_HAND_PHONE": [
+          {
+            "strategy": "C2_HAND_PHONE",
+            "frame_sha256": "2d3063e0ef437e3fa3f1d5f6d574e9c9e8bc2c0c59b9f6560d4098c72ea1b880",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              122,
+              74
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C2_HAND_PHONE",
+              "region_name": "hand_phone",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                722,
+                335,
+                844,
+                409
+              ],
+              "crop_box": [
+                722,
+                335,
+                844,
+                409
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "HAND_OR_PHONE_BOX"
+              ]
+            }
+          }
+        ],
+        "R3_FACE_HAND": [
+          {
+            "strategy": "C3_FACE_HAND",
+            "frame_sha256": "2d3063e0ef437e3fa3f1d5f6d574e9c9e8bc2c0c59b9f6560d4098c72ea1b880",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              784,
+              502
+            ],
+            "phone_coverage": null,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C3_FACE_HAND",
+              "region_name": "face_hand_fallback",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "crop_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "NO_FACE_OR_HAND_BOX",
+                "CAMERA_NORMALIZED_FALLBACK"
+              ]
+            }
+          }
+        ],
+        "R4_MULTI_REGION": [
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "2d3063e0ef437e3fa3f1d5f6d574e9c9e8bc2c0c59b9f6560d4098c72ea1b880",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              500,
+              258
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "face",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "crop_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_FACE_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "2d3063e0ef437e3fa3f1d5f6d574e9c9e8bc2c0c59b9f6560d4098c72ea1b880",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              634,
+              374
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "torso",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "crop_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_TORSO_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "2d3063e0ef437e3fa3f1d5f6d574e9c9e8bc2c0c59b9f6560d4098c72ea1b880",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "left_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "crop_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_LEFT_HAND_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "2d3063e0ef437e3fa3f1d5f6d574e9c9e8bc2c0c59b9f6560d4098c72ea1b880",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "right_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "crop_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_RIGHT_HAND_ZONE"
+              ]
+            }
+          }
+        ],
+        "R5_SCALE_AWARE_DYNAMIC": [
+          {
+            "strategy": "C5_DYNAMIC_PADDED",
+            "frame_sha256": "2d3063e0ef437e3fa3f1d5f6d574e9c9e8bc2c0c59b9f6560d4098c72ea1b880",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              122,
+              74
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C5_DYNAMIC_PADDED",
+              "region_name": "dynamic_evidence",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                722,
+                335,
+                844,
+                409
+              ],
+              "crop_box": [
+                722,
+                335,
+                844,
+                409
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DYNAMIC_EVIDENCE_UNION",
+                "BOUNDARY_PROTECTED"
+              ]
+            }
+          }
+        ]
+      },
+      "output_bytes": 5031564,
+      "scope": "oracle reviewed-box diagnostic; no detector AP or recovered-event claim"
+    },
+    {
+      "case_id": "gZ-36-phone-05",
+      "subject": "gZ-36",
+      "frame_index": 4830,
+      "source_video": "dataset/external_dmd/subjects/gZ-36/gZ_36_s2_2019-04-09T10;39;38+02;00_rgb_body.mp4",
+      "source_video_sha256": "039d494e15f0f72864e815999c76aadbce84b2d58c0c011374975e4e77ec0ef4",
+      "decoded_frame_sha256": "e401c732b41f713ab75f0aa7580a3052a0654ec93decf924088b069236fadbd1",
+      "original_dimensions": [
+        1280,
+        720
+      ],
+      "phone_box": [
+        676.9156494140625,
+        371.4471740722656,
+        829.3572998046875,
+        460.6444396972656
+      ],
+      "driver_box_source": "V11_FN_ROOT_CAUSE",
+      "phone_size": [
+        152.441650390625,
+        89.197265625
+      ],
+      "R0_FROZEN_64": {
+        "output_dimensions": [
+          64,
+          64
+        ],
+        "provenance": {
+          "strategy": "C0_FULL_DRIVER",
+          "region_name": "driver",
+          "original_frame_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "requested_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "crop_box": [
+            0,
+            72,
+            832,
+            684
+          ],
+          "padding_ltrb": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "scale_xy": [
+            0.07692307692307693,
+            0.10457516339869281
+          ],
+          "confidence": 1.0,
+          "source_camera": "BODY",
+          "driver_track_id": "UNKNOWN",
+          "evidence_state": "OBSERVED",
+          "reason_codes": [
+            "DRIVER_ROI"
+          ]
+        }
+      },
+      "variants": {
+        "R1_ORIGINAL_DRIVER": [
+          {
+            "strategy": "C0_FULL_DRIVER",
+            "frame_sha256": "e401c732b41f713ab75f0aa7580a3052a0654ec93decf924088b069236fadbd1",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              832,
+              612
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C0_FULL_DRIVER",
+              "region_name": "driver",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "crop_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DRIVER_ROI"
+              ]
+            }
+          }
+        ],
+        "R2_PADDED_HAND_PHONE": [
+          {
+            "strategy": "C2_HAND_PHONE",
+            "frame_sha256": "e401c732b41f713ab75f0aa7580a3052a0654ec93decf924088b069236fadbd1",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              190,
+              112
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C2_HAND_PHONE",
+              "region_name": "hand_phone",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                658,
+                360,
+                848,
+                472
+              ],
+              "crop_box": [
+                658,
+                360,
+                848,
+                472
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "HAND_OR_PHONE_BOX"
+              ]
+            }
+          }
+        ],
+        "R3_FACE_HAND": [
+          {
+            "strategy": "C3_FACE_HAND",
+            "frame_sha256": "e401c732b41f713ab75f0aa7580a3052a0654ec93decf924088b069236fadbd1",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              784,
+              502
+            ],
+            "phone_coverage": null,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C3_FACE_HAND",
+              "region_name": "face_hand_fallback",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "crop_box": [
+                24,
+                72,
+                808,
+                574
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "NO_FACE_OR_HAND_BOX",
+                "CAMERA_NORMALIZED_FALLBACK"
+              ]
+            }
+          }
+        ],
+        "R4_MULTI_REGION": [
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "e401c732b41f713ab75f0aa7580a3052a0654ec93decf924088b069236fadbd1",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              500,
+              258
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "face",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "crop_box": [
+                166,
+                72,
+                666,
+                330
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_FACE_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "e401c732b41f713ab75f0aa7580a3052a0654ec93decf924088b069236fadbd1",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              634,
+              374
+            ],
+            "phone_coverage": 0.36790700207078464,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "torso",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "crop_box": [
+                99,
+                225,
+                733,
+                599
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_TORSO_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "e401c732b41f713ab75f0aa7580a3052a0654ec93decf924088b069236fadbd1",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 0.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "left_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "crop_box": [
+                0,
+                280,
+                483,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_LEFT_HAND_ZONE"
+              ]
+            }
+          },
+          {
+            "strategy": "C4_MULTI_REGION",
+            "frame_sha256": "e401c732b41f713ab75f0aa7580a3052a0654ec93decf924088b069236fadbd1",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              483,
+              404
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C4_MULTI_REGION",
+              "region_name": "right_hand",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "crop_box": [
+                349,
+                280,
+                832,
+                684
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "UNKNOWN",
+              "reason_codes": [
+                "FIXED_RIGHT_HAND_ZONE"
+              ]
+            }
+          }
+        ],
+        "R5_SCALE_AWARE_DYNAMIC": [
+          {
+            "strategy": "C5_DYNAMIC_PADDED",
+            "frame_sha256": "e401c732b41f713ab75f0aa7580a3052a0654ec93decf924088b069236fadbd1",
+            "input_dimensions": [
+              1280,
+              720
+            ],
+            "output_dimensions": [
+              190,
+              112
+            ],
+            "phone_coverage": 1.0,
+            "edge_clipped": false,
+            "provenance": {
+              "strategy": "C5_DYNAMIC_PADDED",
+              "region_name": "dynamic_evidence",
+              "original_frame_box": [
+                0,
+                72,
+                832,
+                684
+              ],
+              "requested_box": [
+                658,
+                360,
+                848,
+                472
+              ],
+              "crop_box": [
+                658,
+                360,
+                848,
+                472
+              ],
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "scale_xy": [
+                1.0,
+                1.0
+              ],
+              "confidence": 1.0,
+              "source_camera": "BODY",
+              "driver_track_id": "UNKNOWN",
+              "evidence_state": "OBSERVED",
+              "reason_codes": [
+                "DYNAMIC_EVIDENCE_UNION",
+                "BOUNDARY_PROTECTED"
+              ]
+            }
+          }
+        ]
+      },
+      "output_bytes": 5105076,
+      "scope": "oracle reviewed-box diagnostic; no detector AP or recovered-event claim"
+    }
+  ],
+  "decoded_frames": 13,
+  "reviewed_boxes": 12,
+  "r5_full_phone_coverage": 12,
+  "latency_ms": {
+    "50": 25.938699996913783,
+    "95": 29.55633999954443,
+    "99": 31.172788000549186
+  },
+  "detector_rerun": false,
+  "phone_ap": null,
+  "event_recovery_claimed": false
+}
