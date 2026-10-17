@@ -1,0 +1,70 @@
+{
+  "subjects": [
+    {
+      "subject": "gB-9",
+      "source_path": "dataset/external_dmd/derivatives/v5_rgb_cache/v5_rgb_gB-9_64.npz",
+      "source_sha256": "226309334f239a30f5b73195fad3f3350f401a5c151dbe437d28da5db271ede3",
+      "samples": 809,
+      "max_absolute_error": 0.0,
+      "parity": true,
+      "reasons": {
+        "STREAM_RESET": 1,
+        "INSUFFICIENT_HISTORY": 8
+      },
+      "ready_samples": 801,
+      "latency_ms": {
+        "50": 3.3968999923672527,
+        "95": 4.419279991998336,
+        "99": 4.9101160030113515
+      },
+      "scope": "64x64 cached RGB to E3 feature only; no decode/detector/head/fusion",
+      "state_max_frames": 8,
+      "state_max_feature_rows": 120
+    },
+    {
+      "subject": "gC-14",
+      "source_path": "dataset/external_dmd/derivatives/v5_rgb_cache/v5_rgb_gC-14_64.npz",
+      "source_sha256": "fddbcb1b7087da8664482a49ad70b22079f129b4de9d7147e9d3fab0de2d5521",
+      "samples": 795,
+      "max_absolute_error": 9.313225746154785e-10,
+      "parity": true,
+      "reasons": {
+        "STREAM_RESET": 1,
+        "INSUFFICIENT_HISTORY": 8
+      },
+      "ready_samples": 787,
+      "latency_ms": {
+        "50": 3.396300002350472,
+        "95": 4.506449998007156,
+        "99": 5.354821998043917
+      },
+      "scope": "64x64 cached RGB to E3 feature only; no decode/detector/head/fusion",
+      "state_max_frames": 8,
+      "state_max_feature_rows": 120
+    },
+    {
+      "subject": "gZ-36",
+      "source_path": "dataset/external_dmd/derivatives/v5_rgb_cache/v5_rgb_gZ-36_64.npz",
+      "source_sha256": "4b53384d9304dd31147f0c6072dc055fcc94f766894754ff67a909e029efb1ed",
+      "samples": 1024,
+      "max_absolute_error": 0.0,
+      "parity": true,
+      "reasons": {
+        "STREAM_RESET": 1,
+        "INSUFFICIENT_HISTORY": 8
+      },
+      "ready_samples": 1016,
+      "latency_ms": {
+        "50": 3.3865999939735048,
+        "95": 5.094404988631139,
+        "99": 6.766556008806218
+      },
+      "scope": "64x64 cached RGB to E3 feature only; no decode/detector/head/fusion",
+      "state_max_frames": 8,
+      "state_max_feature_rows": 120
+    }
+  ],
+  "training_performed": false,
+  "e3_model_replay": "BLOCKED_MISSING_FITTED_HEAD_SCALER",
+  "elapsed_seconds": 16.325489599999855
+}

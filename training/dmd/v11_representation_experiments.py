@@ -30,6 +30,7 @@ from sklearn.preprocessing import StandardScaler, normalize
 from training.common import sha256_file
 from training.dmd.behavior_roi import BehaviorRoiExtractor, Box, RoiStrategy
 from training.dmd.causal_motion import CausalMotionConfig, CausalMotionEncoder
+from training.dmd.research_permissions import require_operation
 from training.dmd.v9_diagnostics import DEVELOPMENT_SUBJECTS, PROTECTED_HOLDOUTS
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -182,6 +183,7 @@ def _metrics(labels: np.ndarray, predictions: np.ndarray) -> dict[str, Any]:
 
 
 def _evaluate(representation_id: str, subjects: list[dict[str, Any]], output: Path) -> dict[str, Any]:
+    require_operation("linear_head")
     folds = []
     pooled_labels = []
     pooled_predictions = []
@@ -274,6 +276,7 @@ def _separability(representation_id: str, subjects: list[dict[str, Any]]) -> dic
 
 
 def run(output: Path = DEFAULT_OUTPUT) -> dict[str, Any]:
+    require_operation("linear_head")
     if set(SUBJECTS) != set(DEVELOPMENT_SUBJECTS) or set(SUBJECTS) & set(PROTECTED_HOLDOUTS):
         raise ValueError("V11 subject registry violates holdout policy")
     output.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,40 @@
+{
+  "head": "4b19c4834b9520df2f72caca6c6a3fc9606cbdde",
+  "environment": {
+    "captured_at_utc": "2026-10-17T07:11:45.450304+00:00",
+    "os": "Windows-10-10.0.26200-SP0",
+    "python": "3.11.9",
+    "cpu": "AMD Ryzen 5 5500U with Radeon Graphics",
+    "physical_cores": 6,
+    "logical_cores": 12,
+    "ram_total_bytes": 6297477120,
+    "ram_available_bytes": 740065280,
+    "disks": {
+      "C": {
+        "total_bytes": 186994651136,
+        "used_bytes": 186423840768,
+        "free_bytes": 570810368
+      },
+      "D": {
+        "total_bytes": 323389222912,
+        "used_bytes": 317036519424,
+        "free_bytes": 6352703488
+      }
+    },
+    "gpu": {
+      "nvidia_smi_path": null,
+      "cuda_gpu_available": false,
+      "status": "NO_NVIDIA_RUNTIME_DETECTED"
+    },
+    "packages": {
+      "torch": "2.13.0",
+      "torchvision": "0.28.0",
+      "ultralytics": "8.3.187",
+      "opencv-python": "4.10.0.84",
+      "scikit-learn": "1.9.1",
+      "fastapi": "0.116.1"
+    }
+  },
+  "started_at_utc": "2026-10-17T07:11:41.103048+00:00",
+  "plan_sha256": "eb4ec15845509207a9654c41385cb60fee30b84f9578bf941b8516c80d149484"
+}

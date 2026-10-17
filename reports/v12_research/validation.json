@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "reports": 9,
+  "artifacts_hashed": 45,
+  "prediction_artifacts_reconciled": 30,
+  "original_frames_decoded": 13,
+  "training_performed": false,
+  "protected_holdouts_accessed": false,
+  "production_approved": false,
+  "final_status": "RESEARCH_ONLY"
+}

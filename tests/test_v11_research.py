@@ -112,6 +112,7 @@ def test_mounted_camera_is_not_associated_with_driver():
         (),
         phone_context="MOUNTED_OR_STATIC",
         phone_confidence=0.9,
+        context_verified=True,
     )
     assert result.state == AssociationState.MOUNTED_OR_STATIC.value
     assert result.occupant_track_id == "UNKNOWN"

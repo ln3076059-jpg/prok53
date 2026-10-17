@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "compile": "PASS",
+  "ruff": "PASS",
+  "targeted": {
+    "tests": 43,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 6.629,
+    "sha256": "1fd678021e58a8c8438b531227669aa8a9302660f32d9784008a0042c7eefbf9"
+  },
+  "full": {
+    "tests": 618,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 56.805,
+    "sha256": "60d7e7efc66552babf547f3f2738c26f80162bd5be94e8b2c8e92b28d479ec11"
+  },
+  "frontend": "PASS",
+  "backend": "PASS",
+  "full_inference_smoke": "NOT_RUN_BLOCKED_MISSING_FITTED_E3_HEAD",
+  "production_approved": false
+}

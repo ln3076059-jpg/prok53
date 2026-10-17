@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 from enum import StrEnum
+from math import isfinite
 
 from training.dmd.behavior_roi import Box
 
@@ -46,10 +47,13 @@ def intersection_over_box(target: Box, container: Box) -> float:
 
 
 class DriverPhoneAssociation:
-    def __init__(self, minimum_containment: float = 0.55):
+    def __init__(self, minimum_containment: float = 0.55, ambiguity_margin: float = 0.15):
         if not 0 < minimum_containment <= 1:
             raise ValueError("minimum containment must be in (0, 1]")
         self.minimum_containment = minimum_containment
+        if not 0 <= ambiguity_margin <= 1:
+            raise ValueError("ambiguity margin must be in [0, 1]")
+        self.ambiguity_margin = ambiguity_margin
 
     def associate(
         self,
@@ -60,14 +64,27 @@ class DriverPhoneAssociation:
         phone_confidence: float,
         hand_proximity: float | None = None,
         face_proximity: float | None = None,
+        context_verified: bool = False,
     ) -> AssociationResult:
+        values = [phone_confidence, *[t.confidence for t in occupants]]
+        values.extend(v for v in (hand_proximity, face_proximity) if v is not None)
+        if any(not isfinite(v) or not 0 <= v <= 1 for v in values):
+            raise ValueError("confidences/proximity must be finite values in [0, 1]")
         if phone_context == "MOUNTED_OR_STATIC":
             return AssociationResult(
-                state=AssociationState.MOUNTED_OR_STATIC.value,
+                state=(
+                    AssociationState.MOUNTED_OR_STATIC.value
+                    if context_verified
+                    else AssociationState.UNKNOWN.value
+                ),
                 confidence=float(phone_confidence),
                 occupant_track_id="UNKNOWN",
                 source_evidence=("PHONE_CONTEXT",),
-                reason_codes=("VERIFIED_MOUNTED_OR_STATIC_CONTEXT",),
+                reason_codes=(
+                    ("VERIFIED_MOUNTED_OR_STATIC_CONTEXT",)
+                    if context_verified
+                    else ("UNVERIFIED_MOUNTED_CONTEXT",)
+                ),
             )
         verified = [track for track in occupants if track.verified]
         if not verified:
@@ -78,10 +95,21 @@ class DriverPhoneAssociation:
                 source_evidence=("PHONE_BOX",),
                 reason_codes=("NO_VERIFIED_OCCUPANT_TRACK",),
             )
-        scored = [
-            (intersection_over_box(phone_box, track.box), track) for track in verified
-        ]
+        scored = [(intersection_over_box(phone_box, track.box), track) for track in verified]
         overlap, track = max(scored, key=lambda item: item[0])
+        contenders = [
+            item
+            for score, item in scored
+            if score >= self.minimum_containment and overlap - score <= self.ambiguity_margin
+        ]
+        if len(contenders) > 1:
+            return AssociationResult(
+                state=AssociationState.UNKNOWN.value,
+                confidence=0.0,
+                occupant_track_id="UNKNOWN",
+                source_evidence=("PHONE_BOX", "VERIFIED_OCCUPANT_TRACKS"),
+                reason_codes=("AMBIGUOUS_OCCUPANT_CONTAINMENT",),
+            )
         if overlap < self.minimum_containment:
             return AssociationResult(
                 state=AssociationState.UNKNOWN.value,
@@ -101,10 +129,7 @@ class DriverPhoneAssociation:
         geometry = max(hand_proximity or 0.0, face_proximity or 0.0)
         confidence = min(
             1.0,
-            overlap
-            * track.confidence
-            * phone_confidence
-            * (0.75 + 0.25 * geometry),
+            overlap * track.confidence * phone_confidence * (0.75 + 0.25 * geometry),
         )
         state = (
             AssociationState.DRIVER_ASSOCIATED

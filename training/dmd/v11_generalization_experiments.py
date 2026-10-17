@@ -21,6 +21,7 @@ from training.dmd.causal_motion import (
     causal_running_standardize,
     spatial_residual_standardize,
 )
+from training.dmd.research_permissions import require_operation
 from training.dmd.v11_representation_experiments import (
     ROOT,
     SEED,
@@ -62,6 +63,7 @@ def _evaluate_balanced(
     subjects: list[dict[str, Any]],
     output: Path,
 ) -> dict[str, Any]:
+    require_operation("linear_head")
     folds = []
     pooled_labels = []
     pooled_predictions = []
@@ -132,6 +134,7 @@ def _evaluate_balanced(
 
 
 def run(output: Path = DEFAULT_OUTPUT) -> dict[str, Any]:
+    require_operation("linear_head")
     output.mkdir(parents=True, exist_ok=True)
     subjects = [_load_subject(subject_id) for subject_id in SUBJECTS]
     for subject in subjects:
