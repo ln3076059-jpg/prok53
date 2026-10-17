@@ -1,0 +1,3147 @@
+{
+  "schema_version": 2,
+  "evidence_level": "LEVEL_1_DIAGNOSTIC_WITH_AUTHENTICATED_HUMAN_REVIEW",
+  "scope": "FROZEN_13_REPEATED_DEVELOPMENT_FALSE_NEGATIVES",
+  "development_subjects": [
+    "gB-9",
+    "gC-14",
+    "gZ-36"
+  ],
+  "protected_holdouts": [
+    "gE-28",
+    "gZ-37"
+  ],
+  "protected_holdouts_accessed": false,
+  "source_artifacts": {
+    "reports/v9_research/v9_diagnostics.json": "17c8ba1f6f24caff917becb5cb86cd1cf8b0da7a34e2180c81fde10a9b826a10",
+    "reports/v9_research/human_phone_review_summary.json": "44d35f903ce741af2ca248f1173a8eb1db8a0d5d58eb13187c709b1936f611a7",
+    "reports/ai85_next/fn_recovery.json": "94fe1befc59eabab8c83049940280db6a618b796330ebcbec41cb7312c7b9844",
+    "reports/v9_research/phone_proposal_mining.json": "9f710bfaf22c19fc143875a3832258935d6fb4d8db17dfd96e83bfee0718665e"
+  },
+  "cases": [
+    {
+      "event_id": "gB-9-phone-01",
+      "subject_id": "gB-9",
+      "ground_truth_action": "driver_actions/phonecall_right",
+      "timestamp": {
+        "start_seconds": 39.9866,
+        "end_seconds": 69.8253,
+        "start_frame": 1190,
+        "end_frame": 2078
+      },
+      "phone_visibility": "PHONE_VISIBLE",
+      "phone_use_assessment": "PHONE_USE_CONFIRMED",
+      "object_detection": {
+        "specialist_raw_max_confidence": null,
+        "specialist_samples_with_box": 0,
+        "auxiliary_max_confidence": 0.5374587774276733,
+        "human_selected_auxiliary_confidence": 0.10236693173646927,
+        "selected_proposal_id": "f1200-C3",
+        "selected_box_in_driver_roi": [
+          356.49896240234375,
+          90.95802307128906,
+          384.97503662109375,
+          162.5186767578125
+        ],
+        "selected_box_in_original_frame": [
+          356.49896240234375,
+          162.95802307128906,
+          384.97503662109375,
+          234.5186767578125
+        ],
+        "driver_roi_in_original_frame": [
+          0,
+          72,
+          832,
+          684
+        ],
+        "candidate_count": 43,
+        "candidate_is_event_recovery": false
+      },
+      "hand_face_context": {
+        "geometry_context": "HANDHELD_USE",
+        "hand_proximity": 0.5163823301606361,
+        "face_proximity": 0.8243424380230846,
+        "visual_review": "Phone clearly visible at right ear; hand and device occupy a large region.",
+        "human_notes": "A phone is visible at the right ear. Proposal f1200-C3 is the tightest box around the exposed device; larger nearby boxes include the hand or face."
+      },
+      "driver_association": {
+        "state": "UNKNOWN",
+        "source_status": "UNVERIFIED_NO_OCCUPANT_TRACK",
+        "reason_codes": [
+          "NO_VERIFIED_OCCUPANT_TRACK"
+        ]
+      },
+      "action_evidence": {
+        "fixed_gate": 0.8,
+        "T0_max": 0.4227624535560608,
+        "T1_dense_max": 0.43777573108673096,
+        "T0_reaches_gate": false,
+        "T1_reaches_gate": false,
+        "frozen_baseline_timeline": [
+          {
+            "timestamp_seconds": 40.322601318359375,
+            "phone_probability": 0.246156245470047
+          },
+          {
+            "timestamp_seconds": 40.82659912109375,
+            "phone_probability": 0.33552485704421997
+          },
+          {
+            "timestamp_seconds": 41.33060073852539,
+            "phone_probability": 0.37072183688481647
+          },
+          {
+            "timestamp_seconds": 41.83470153808594,
+            "phone_probability": 0.282088095943133
+          },
+          {
+            "timestamp_seconds": 42.33869934082031,
+            "phone_probability": 0.18513375024000803
+          },
+          {
+            "timestamp_seconds": 42.84270095825195,
+            "phone_probability": 0.1330076406399409
+          },
+          {
+            "timestamp_seconds": 43.3468017578125,
+            "phone_probability": 0.13642793397108713
+          },
+          {
+            "timestamp_seconds": 43.850799560546875,
+            "phone_probability": 0.14307683209578195
+          },
+          {
+            "timestamp_seconds": 44.354801177978516,
+            "phone_probability": 0.14838580787181854
+          },
+          {
+            "timestamp_seconds": 44.8588981628418,
+            "phone_probability": 0.14625206092993417
+          },
+          {
+            "timestamp_seconds": 45.36289978027344,
+            "phone_probability": 0.14087332785129547
+          },
+          {
+            "timestamp_seconds": 45.86690139770508,
+            "phone_probability": 0.13595539828141529
+          },
+          {
+            "timestamp_seconds": 46.37099838256836,
+            "phone_probability": 0.13356530666351318
+          },
+          {
+            "timestamp_seconds": 46.875,
+            "phone_probability": 0.14152007301648456
+          },
+          {
+            "timestamp_seconds": 47.37900161743164,
+            "phone_probability": 0.15251019597053528
+          },
+          {
+            "timestamp_seconds": 47.88309860229492,
+            "phone_probability": 0.16376696030298868
+          },
+          {
+            "timestamp_seconds": 48.38710021972656,
+            "phone_probability": 0.16777152816454569
+          },
+          {
+            "timestamp_seconds": 48.8911018371582,
+            "phone_probability": 0.17472082376480103
+          },
+          {
+            "timestamp_seconds": 49.395198822021484,
+            "phone_probability": 0.18441087007522583
+          },
+          {
+            "timestamp_seconds": 49.899200439453125,
+            "phone_probability": 0.19430591166019437
+          },
+          {
+            "timestamp_seconds": 50.4031982421875,
+            "phone_probability": 0.19780360162258148
+          },
+          {
+            "timestamp_seconds": 50.90729904174805,
+            "phone_probability": 0.19661672413349152
+          },
+          {
+            "timestamp_seconds": 51.41130065917969,
+            "phone_probability": 0.1902373433113098
+          },
+          {
+            "timestamp_seconds": 51.91529846191406,
+            "phone_probability": 0.19432598849137622
+          },
+          {
+            "timestamp_seconds": 52.41939926147461,
+            "phone_probability": 0.19785411655902863
+          },
+          {
+            "timestamp_seconds": 52.92340087890625,
+            "phone_probability": 0.2085620711247126
+          },
+          {
+            "timestamp_seconds": 53.427398681640625,
+            "phone_probability": 0.20814947783946988
+          },
+          {
+            "timestamp_seconds": 53.93149948120117,
+            "phone_probability": 0.21207299331823984
+          },
+          {
+            "timestamp_seconds": 54.43550109863281,
+            "phone_probability": 0.22177703678607938
+          },
+          {
+            "timestamp_seconds": 54.93949890136719,
+            "phone_probability": 0.23642025887966153
+          },
+          {
+            "timestamp_seconds": 55.44350051879883,
+            "phone_probability": 0.24319285651048023
+          },
+          {
+            "timestamp_seconds": 55.947601318359375,
+            "phone_probability": 0.22784601151943207
+          },
+          {
+            "timestamp_seconds": 56.45159912109375,
+            "phone_probability": 0.23498577872912085
+          },
+          {
+            "timestamp_seconds": 56.95560073852539,
+            "phone_probability": 0.24216661850611368
+          },
+          {
+            "timestamp_seconds": 57.45970153808594,
+            "phone_probability": 0.24639345705509183
+          },
+          {
+            "timestamp_seconds": 57.96369934082031,
+            "phone_probability": 0.2353078375260035
+          },
+          {
+            "timestamp_seconds": 58.46770095825195,
+            "phone_probability": 0.22921591500441232
+          },
+          {
+            "timestamp_seconds": 58.9718017578125,
+            "phone_probability": 0.23830386996269226
+          },
+          {
+            "timestamp_seconds": 59.475799560546875,
+            "phone_probability": 0.24043055872122446
+          },
+          {
+            "timestamp_seconds": 59.979801177978516,
+            "phone_probability": 0.23460569977760315
+          },
+          {
+            "timestamp_seconds": 60.4838981628418,
+            "phone_probability": 0.22065110007921854
+          },
+          {
+            "timestamp_seconds": 60.98789978027344,
+            "phone_probability": 0.1977601001660029
+          },
+          {
+            "timestamp_seconds": 61.49190139770508,
+            "phone_probability": 0.179500808318456
+          },
+          {
+            "timestamp_seconds": 61.99599838256836,
+            "phone_probability": 0.17822577059268951
+          },
+          {
+            "timestamp_seconds": 62.5,
+            "phone_probability": 0.18059570093949634
+          },
+          {
+            "timestamp_seconds": 63.00400161743164,
+            "phone_probability": 0.1810986300309499
+          },
+          {
+            "timestamp_seconds": 63.50809860229492,
+            "phone_probability": 0.17746005455652872
+          },
+          {
+            "timestamp_seconds": 64.01210021972656,
+            "phone_probability": 0.17941981554031372
+          },
+          {
+            "timestamp_seconds": 64.51609802246094,
+            "phone_probability": 0.18883570532004038
+          },
+          {
+            "timestamp_seconds": 65.02020263671875,
+            "phone_probability": 0.19393481810887653
+          },
+          {
+            "timestamp_seconds": 65.52420043945312,
+            "phone_probability": 0.20214680830637613
+          },
+          {
+            "timestamp_seconds": 66.0281982421875,
+            "phone_probability": 0.20618268847465515
+          },
+          {
+            "timestamp_seconds": 66.53230285644531,
+            "phone_probability": 0.21905729671319324
+          },
+          {
+            "timestamp_seconds": 67.03630065917969,
+            "phone_probability": 0.22968276838461557
+          },
+          {
+            "timestamp_seconds": 67.54029846191406,
+            "phone_probability": 0.24458206196626026
+          },
+          {
+            "timestamp_seconds": 68.04440307617188,
+            "phone_probability": 0.23848342895507812
+          },
+          {
+            "timestamp_seconds": 68.54840087890625,
+            "phone_probability": 0.2361792027950287
+          },
+          {
+            "timestamp_seconds": 69.05239868164062,
+            "phone_probability": 0.21978864570458728
+          },
+          {
+            "timestamp_seconds": 69.55650329589844,
+            "phone_probability": 0.2137771447499593
+          }
+        ],
+        "timeline_summary": {
+          "samples": 59,
+          "missing_centered_samples": false,
+          "probability_min": 0.1330076406399409,
+          "probability_mean": 0.2040645122359702,
+          "probability_median": 0.19785411655902863,
+          "probability_max": 0.37072183688481647,
+          "probability_p90": 0.24347069760163623,
+          "fraction_at_or_above_threshold": 0.0,
+          "longest_activation_run": 0,
+          "first_sample_offset_seconds": 0.3360013183593722,
+          "last_sample_offset_seconds": 0.2687967041015611
+        }
+      },
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "event_creation_state": "NO_MATCHED_FINAL_EVENT",
+      "potential_missed_interval": {
+        "start_seconds": 39.9866,
+        "end_seconds": 69.8253,
+        "interpretation": "GROUND_TRUTH_INTERVAL_ONLY_NOT_A_PREDICTED_BOUNDARY"
+      },
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "ACTION_EVIDENCE_BELOW_GATE"
+      ],
+      "match_result": "FALSE_NEGATIVE",
+      "review_receipt": {
+        "path": "reports/v9_research/human_phone_reviews/gB-9-phone-01.json",
+        "sha256": "8b91ed436b0afdbe73d88c7654fa7907426cc0afffed928ac0c862a54a33b23b"
+      }
+    },
+    {
+      "event_id": "gB-9-phone-03",
+      "subject_id": "gB-9",
+      "ground_truth_action": "driver_actions/phonecall_right",
+      "timestamp": {
+        "start_seconds": 115.1546,
+        "end_seconds": 151.2769,
+        "start_frame": 3427,
+        "end_frame": 4502
+      },
+      "phone_visibility": "PHONE_VISIBLE",
+      "phone_use_assessment": "PHONE_USE_CONFIRMED",
+      "object_detection": {
+        "specialist_raw_max_confidence": null,
+        "specialist_samples_with_box": 0,
+        "auxiliary_max_confidence": 0.46247753500938416,
+        "human_selected_auxiliary_confidence": 0.2869783341884613,
+        "selected_proposal_id": "f3705-C2",
+        "selected_box_in_driver_roi": [
+          241.97225952148438,
+          98.27901458740234,
+          390.00390625,
+          220.9855194091797
+        ],
+        "selected_box_in_original_frame": [
+          241.97225952148438,
+          170.27901458740234,
+          390.00390625,
+          292.9855194091797
+        ],
+        "driver_roi_in_original_frame": [
+          0,
+          72,
+          832,
+          684
+        ],
+        "candidate_count": 39,
+        "candidate_is_event_recovery": false
+      },
+      "hand_face_context": {
+        "geometry_context": "HANDHELD_USE",
+        "hand_proximity": 0.40090863361594276,
+        "face_proximity": 0.8726695545847559,
+        "visual_review": "Phone clearly visible at right ear; little occlusion.",
+        "human_notes": "The original ROI clearly shows a phone at the right ear. Proposal f3705-C2 follows the full handset more closely than the smaller boxes, which cover only part of it."
+      },
+      "driver_association": {
+        "state": "UNKNOWN",
+        "source_status": "UNVERIFIED_NO_OCCUPANT_TRACK",
+        "reason_codes": [
+          "NO_VERIFIED_OCCUPANT_TRACK"
+        ]
+      },
+      "action_evidence": {
+        "fixed_gate": 0.8,
+        "T0_max": 0.7218237519264221,
+        "T1_dense_max": 0.7543731927871704,
+        "T0_reaches_gate": false,
+        "T1_reaches_gate": false,
+        "frozen_baseline_timeline": [
+          {
+            "timestamp_seconds": 115.42340087890625,
+            "phone_probability": 0.6420619885126749
+          },
+          {
+            "timestamp_seconds": 115.92739868164062,
+            "phone_probability": 0.7044156193733215
+          },
+          {
+            "timestamp_seconds": 116.43150329589844,
+            "phone_probability": 0.7072711984316508
+          },
+          {
+            "timestamp_seconds": 116.93550109863281,
+            "phone_probability": 0.6925717989603678
+          },
+          {
+            "timestamp_seconds": 117.43949890136719,
+            "phone_probability": 0.6564037402470906
+          },
+          {
+            "timestamp_seconds": 117.94349670410156,
+            "phone_probability": 0.5558461149533589
+          },
+          {
+            "timestamp_seconds": 118.44760131835938,
+            "phone_probability": 0.47724614540735877
+          },
+          {
+            "timestamp_seconds": 118.95159912109375,
+            "phone_probability": 0.43068311611811316
+          },
+          {
+            "timestamp_seconds": 119.45559692382812,
+            "phone_probability": 0.4390286604563395
+          },
+          {
+            "timestamp_seconds": 119.95970153808594,
+            "phone_probability": 0.422309805949529
+          },
+          {
+            "timestamp_seconds": 120.46369934082031,
+            "phone_probability": 0.40242261687914527
+          },
+          {
+            "timestamp_seconds": 120.96769714355469,
+            "phone_probability": 0.38089820742607117
+          },
+          {
+            "timestamp_seconds": 121.4718017578125,
+            "phone_probability": 0.3742399414380391
+          },
+          {
+            "timestamp_seconds": 121.97579956054688,
+            "phone_probability": 0.34934452176094055
+          },
+          {
+            "timestamp_seconds": 122.47979736328125,
+            "phone_probability": 0.32212361693382263
+          },
+          {
+            "timestamp_seconds": 122.98390197753906,
+            "phone_probability": 0.285324623187383
+          },
+          {
+            "timestamp_seconds": 123.48789978027344,
+            "phone_probability": 0.282487283150355
+          },
+          {
+            "timestamp_seconds": 123.99189758300781,
+            "phone_probability": 0.30178581674893695
+          },
+          {
+            "timestamp_seconds": 124.49600219726562,
+            "phone_probability": 0.33546050389607746
+          },
+          {
+            "timestamp_seconds": 125.0,
+            "phone_probability": 0.36495436231295264
+          },
+          {
+            "timestamp_seconds": 125.50399780273438,
+            "phone_probability": 0.37060055136680603
+          },
+          {
+            "timestamp_seconds": 126.00810241699219,
+            "phone_probability": 0.3939793805281321
+          },
+          {
+            "timestamp_seconds": 126.51210021972656,
+            "phone_probability": 0.4059782524903615
+          },
+          {
+            "timestamp_seconds": 127.01609802246094,
+            "phone_probability": 0.4327991902828216
+          },
+          {
+            "timestamp_seconds": 127.52020263671875,
+            "phone_probability": 0.4417750239372253
+          },
+          {
+            "timestamp_seconds": 128.02420043945312,
+            "phone_probability": 0.4566891988118489
+          },
+          {
+            "timestamp_seconds": 128.5281982421875,
+            "phone_probability": 0.46749875942866004
+          },
+          {
+            "timestamp_seconds": 129.0323028564453,
+            "phone_probability": 0.4586690862973531
+          },
+          {
+            "timestamp_seconds": 129.5363006591797,
+            "phone_probability": 0.4483016331990559
+          },
+          {
+            "timestamp_seconds": 130.04029846191406,
+            "phone_probability": 0.45330983400344843
+          },
+          {
+            "timestamp_seconds": 130.54440307617188,
+            "phone_probability": 0.4699729482332865
+          },
+          {
+            "timestamp_seconds": 131.04840087890625,
+            "phone_probability": 0.48449456691741943
+          },
+          {
+            "timestamp_seconds": 131.55239868164062,
+            "phone_probability": 0.47600323955217994
+          },
+          {
+            "timestamp_seconds": 132.05650329589844,
+            "phone_probability": 0.4761304358641306
+          },
+          {
+            "timestamp_seconds": 132.5605010986328,
+            "phone_probability": 0.4567450086275736
+          },
+          {
+            "timestamp_seconds": 133.0644989013672,
+            "phone_probability": 0.442276120185852
+          },
+          {
+            "timestamp_seconds": 133.56849670410156,
+            "phone_probability": 0.42460376024246216
+          },
+          {
+            "timestamp_seconds": 134.07260131835938,
+            "phone_probability": 0.40517694751421607
+          },
+          {
+            "timestamp_seconds": 134.57659912109375,
+            "phone_probability": 0.40847885608673096
+          },
+          {
+            "timestamp_seconds": 135.08059692382812,
+            "phone_probability": 0.3790889581044515
+          },
+          {
+            "timestamp_seconds": 135.58470153808594,
+            "phone_probability": 0.36826093991597486
+          },
+          {
+            "timestamp_seconds": 136.0886993408203,
+            "phone_probability": 0.3247745831807454
+          },
+          {
+            "timestamp_seconds": 136.5926971435547,
+            "phone_probability": 0.33914227286974585
+          },
+          {
+            "timestamp_seconds": 137.0968017578125,
+            "phone_probability": 0.35068079829216003
+          },
+          {
+            "timestamp_seconds": 137.60079956054688,
+            "phone_probability": 0.35160191853841144
+          },
+          {
+            "timestamp_seconds": 138.10479736328125,
+            "phone_probability": 0.315014511346817
+          },
+          {
+            "timestamp_seconds": 138.60890197753906,
+            "phone_probability": 0.28279706835746765
+          },
+          {
+            "timestamp_seconds": 139.11289978027344,
+            "phone_probability": 0.29159611463546753
+          },
+          {
+            "timestamp_seconds": 139.6168975830078,
+            "phone_probability": 0.3043762743473053
+          },
+          {
+            "timestamp_seconds": 140.12100219726562,
+            "phone_probability": 0.3132428427537282
+          },
+          {
+            "timestamp_seconds": 140.625,
+            "phone_probability": 0.30997055768966675
+          },
+          {
+            "timestamp_seconds": 141.12899780273438,
+            "phone_probability": 0.31787165999412537
+          },
+          {
+            "timestamp_seconds": 141.6331024169922,
+            "phone_probability": 0.3414789239565531
+          },
+          {
+            "timestamp_seconds": 142.13710021972656,
+            "phone_probability": 0.3854961693286896
+          },
+          {
+            "timestamp_seconds": 142.64109802246094,
+            "phone_probability": 0.4162043432394663
+          },
+          {
+            "timestamp_seconds": 143.14520263671875,
+            "phone_probability": 0.43959862987200415
+          },
+          {
+            "timestamp_seconds": 143.64920043945312,
+            "phone_probability": 0.44013537963231397
+          },
+          {
+            "timestamp_seconds": 144.1531982421875,
+            "phone_probability": 0.4580479065577189
+          },
+          {
+            "timestamp_seconds": 144.6573028564453,
+            "phone_probability": 0.45626343290011084
+          },
+          {
+            "timestamp_seconds": 145.1613006591797,
+            "phone_probability": 0.4524311423301697
+          },
+          {
+            "timestamp_seconds": 145.66529846191406,
+            "phone_probability": 0.4213847517967224
+          },
+          {
+            "timestamp_seconds": 146.16940307617188,
+            "phone_probability": 0.4126378297805786
+          },
+          {
+            "timestamp_seconds": 146.67340087890625,
+            "phone_probability": 0.37212738394737244
+          },
+          {
+            "timestamp_seconds": 147.17739868164062,
+            "phone_probability": 0.3502870996793111
+          },
+          {
+            "timestamp_seconds": 147.68150329589844,
+            "phone_probability": 0.3213343322277069
+          },
+          {
+            "timestamp_seconds": 148.1855010986328,
+            "phone_probability": 0.29220935702323914
+          },
+          {
+            "timestamp_seconds": 148.6894989013672,
+            "phone_probability": 0.26013397673765815
+          },
+          {
+            "timestamp_seconds": 149.19349670410156,
+            "phone_probability": 0.21879341701666513
+          },
+          {
+            "timestamp_seconds": 149.69760131835938,
+            "phone_probability": 0.19294371704260507
+          },
+          {
+            "timestamp_seconds": 150.20159912109375,
+            "phone_probability": 0.14773868521054584
+          },
+          {
+            "timestamp_seconds": 150.70559692382812,
+            "phone_probability": 0.16062605381011963
+          },
+          {
+            "timestamp_seconds": 151.20970153808594,
+            "phone_probability": 0.163829043507576
+          }
+        ],
+        "timeline_summary": {
+          "samples": 72,
+          "missing_centered_samples": false,
+          "probability_min": 0.14773868521054584,
+          "probability_mean": 0.3951733687685595,
+          "probability_median": 0.3982009987036387,
+          "probability_max": 0.7072711984316508,
+          "probability_p90": 0.477134574453036,
+          "fraction_at_or_above_threshold": 0.0,
+          "longest_activation_run": 0,
+          "first_sample_offset_seconds": 0.26880087890624793,
+          "last_sample_offset_seconds": 0.06719846191407441
+        }
+      },
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "event_creation_state": "NO_MATCHED_FINAL_EVENT",
+      "potential_missed_interval": {
+        "start_seconds": 115.1546,
+        "end_seconds": 151.2769,
+        "interpretation": "GROUND_TRUTH_INTERVAL_ONLY_NOT_A_PREDICTED_BOUNDARY"
+      },
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "ACTION_EVIDENCE_BELOW_GATE"
+      ],
+      "match_result": "FALSE_NEGATIVE",
+      "review_receipt": {
+        "path": "reports/v9_research/human_phone_reviews/gB-9-phone-03.json",
+        "sha256": "60ff288e81faddc3571ed0736bb1f8116bba6eb05195934c7686d6bce3367d39"
+      }
+    },
+    {
+      "event_id": "gB-9-phone-05",
+      "subject_id": "gB-9",
+      "ground_truth_action": "driver_actions/phonecall_left",
+      "timestamp": {
+        "start_seconds": 219.3884,
+        "end_seconds": 265.9946,
+        "start_frame": 6529,
+        "end_frame": 7916
+      },
+      "phone_visibility": "PHONE_VISIBLE",
+      "phone_use_assessment": "PHONE_USE_CONFIRMED",
+      "object_detection": {
+        "specialist_raw_max_confidence": null,
+        "specialist_samples_with_box": 0,
+        "auxiliary_max_confidence": 0.5435135364532471,
+        "human_selected_auxiliary_confidence": 0.5435135364532471,
+        "selected_proposal_id": "f7560-C1",
+        "selected_box_in_driver_roi": [
+          450.63763427734375,
+          105.35657501220703,
+          481.7338562011719,
+          166.07186889648438
+        ],
+        "selected_box_in_original_frame": [
+          450.63763427734375,
+          177.35657501220703,
+          481.7338562011719,
+          238.07186889648438
+        ],
+        "driver_roi_in_original_frame": [
+          0,
+          72,
+          832,
+          684
+        ],
+        "candidate_count": 21,
+        "candidate_is_event_recovery": false
+      },
+      "hand_face_context": {
+        "geometry_context": "HANDHELD_USE",
+        "hand_proximity": 0.8386520392568535,
+        "face_proximity": 0.8578511894193382,
+        "visual_review": "Phone clearly visible at left ear; strong behavior evidence.",
+        "human_notes": "A phone is visible at the left ear. Proposal f7560-C1 closely follows the narrow device region and excludes most of the hand."
+      },
+      "driver_association": {
+        "state": "UNKNOWN",
+        "source_status": "UNVERIFIED_NO_OCCUPANT_TRACK",
+        "reason_codes": [
+          "NO_VERIFIED_OCCUPANT_TRACK"
+        ]
+      },
+      "action_evidence": {
+        "fixed_gate": 0.8,
+        "T0_max": 0.6306087374687195,
+        "T1_dense_max": 0.7238595485687256,
+        "T0_reaches_gate": false,
+        "T1_reaches_gate": false,
+        "frozen_baseline_timeline": [
+          {
+            "timestamp_seconds": 219.7581024169922,
+            "phone_probability": 0.13953881710767746
+          },
+          {
+            "timestamp_seconds": 220.26210021972656,
+            "phone_probability": 0.21680677433808643
+          },
+          {
+            "timestamp_seconds": 220.76609802246094,
+            "phone_probability": 0.30510912338892615
+          },
+          {
+            "timestamp_seconds": 221.27020263671875,
+            "phone_probability": 0.368094911177953
+          },
+          {
+            "timestamp_seconds": 221.77420043945312,
+            "phone_probability": 0.41883071263631183
+          },
+          {
+            "timestamp_seconds": 222.2781982421875,
+            "phone_probability": 0.44220841924349463
+          },
+          {
+            "timestamp_seconds": 222.7823028564453,
+            "phone_probability": 0.4718929628531138
+          },
+          {
+            "timestamp_seconds": 223.2863006591797,
+            "phone_probability": 0.4475683271884918
+          },
+          {
+            "timestamp_seconds": 223.79029846191406,
+            "phone_probability": 0.4637686709562937
+          },
+          {
+            "timestamp_seconds": 224.29440307617188,
+            "phone_probability": 0.4818995694319407
+          },
+          {
+            "timestamp_seconds": 224.79840087890625,
+            "phone_probability": 0.5028363366921742
+          },
+          {
+            "timestamp_seconds": 225.30239868164062,
+            "phone_probability": 0.49782491723696387
+          },
+          {
+            "timestamp_seconds": 225.80650329589844,
+            "phone_probability": 0.5007600486278534
+          },
+          {
+            "timestamp_seconds": 226.3105010986328,
+            "phone_probability": 0.5092526872952778
+          },
+          {
+            "timestamp_seconds": 226.8144989013672,
+            "phone_probability": 0.5067773163318634
+          },
+          {
+            "timestamp_seconds": 227.31849670410156,
+            "phone_probability": 0.4897778729597727
+          },
+          {
+            "timestamp_seconds": 227.82260131835938,
+            "phone_probability": 0.4863586326440175
+          },
+          {
+            "timestamp_seconds": 228.32659912109375,
+            "phone_probability": 0.4733593960603078
+          },
+          {
+            "timestamp_seconds": 228.83059692382812,
+            "phone_probability": 0.47750713427861524
+          },
+          {
+            "timestamp_seconds": 229.33470153808594,
+            "phone_probability": 0.4812402327855428
+          },
+          {
+            "timestamp_seconds": 229.8386993408203,
+            "phone_probability": 0.5113668739795685
+          },
+          {
+            "timestamp_seconds": 230.3426971435547,
+            "phone_probability": 0.5184506773948669
+          },
+          {
+            "timestamp_seconds": 230.8468017578125,
+            "phone_probability": 0.5168180465698242
+          },
+          {
+            "timestamp_seconds": 231.35079956054688,
+            "phone_probability": 0.5024468302726746
+          },
+          {
+            "timestamp_seconds": 231.85479736328125,
+            "phone_probability": 0.5047855178515116
+          },
+          {
+            "timestamp_seconds": 232.35890197753906,
+            "phone_probability": 0.4933852950731913
+          },
+          {
+            "timestamp_seconds": 232.86289978027344,
+            "phone_probability": 0.49920894702275587
+          },
+          {
+            "timestamp_seconds": 233.3668975830078,
+            "phone_probability": 0.5019964377085367
+          },
+          {
+            "timestamp_seconds": 233.87100219726562,
+            "phone_probability": 0.4933372338612874
+          },
+          {
+            "timestamp_seconds": 234.375,
+            "phone_probability": 0.5034554600715637
+          },
+          {
+            "timestamp_seconds": 234.87899780273438,
+            "phone_probability": 0.5284239053726196
+          },
+          {
+            "timestamp_seconds": 235.3831024169922,
+            "phone_probability": 0.5562261740366617
+          },
+          {
+            "timestamp_seconds": 235.88710021972656,
+            "phone_probability": 0.5674032966295878
+          },
+          {
+            "timestamp_seconds": 236.39109802246094,
+            "phone_probability": 0.57757568359375
+          },
+          {
+            "timestamp_seconds": 236.89520263671875,
+            "phone_probability": 0.5894944270451863
+          },
+          {
+            "timestamp_seconds": 237.39920043945312,
+            "phone_probability": 0.6021856864293416
+          },
+          {
+            "timestamp_seconds": 237.9031982421875,
+            "phone_probability": 0.5975624322891235
+          },
+          {
+            "timestamp_seconds": 238.4073028564453,
+            "phone_probability": 0.5923924048741658
+          },
+          {
+            "timestamp_seconds": 238.9113006591797,
+            "phone_probability": 0.5867859323819478
+          },
+          {
+            "timestamp_seconds": 239.41529846191406,
+            "phone_probability": 0.5790235797564188
+          },
+          {
+            "timestamp_seconds": 239.91940307617188,
+            "phone_probability": 0.6047524213790894
+          },
+          {
+            "timestamp_seconds": 240.42340087890625,
+            "phone_probability": 0.6005818247795105
+          },
+          {
+            "timestamp_seconds": 240.92739868164062,
+            "phone_probability": 0.6105773448944092
+          },
+          {
+            "timestamp_seconds": 241.43150329589844,
+            "phone_probability": 0.5877142945925394
+          },
+          {
+            "timestamp_seconds": 241.9355010986328,
+            "phone_probability": 0.53324689467748
+          },
+          {
+            "timestamp_seconds": 242.4394989013672,
+            "phone_probability": 0.44922325015068054
+          },
+          {
+            "timestamp_seconds": 242.94349670410156,
+            "phone_probability": 0.38197280963261915
+          },
+          {
+            "timestamp_seconds": 243.44760131835938,
+            "phone_probability": 0.3568326234817505
+          },
+          {
+            "timestamp_seconds": 243.95159912109375,
+            "phone_probability": 0.34405508637428284
+          },
+          {
+            "timestamp_seconds": 244.45559692382812,
+            "phone_probability": 0.3330161372820536
+          },
+          {
+            "timestamp_seconds": 244.95970153808594,
+            "phone_probability": 0.3112969398498535
+          },
+          {
+            "timestamp_seconds": 245.4636993408203,
+            "phone_probability": 0.2891032894452413
+          },
+          {
+            "timestamp_seconds": 245.9676971435547,
+            "phone_probability": 0.27653739849726355
+          },
+          {
+            "timestamp_seconds": 246.4718017578125,
+            "phone_probability": 0.2593075980742772
+          },
+          {
+            "timestamp_seconds": 246.97579956054688,
+            "phone_probability": 0.28860248625278473
+          },
+          {
+            "timestamp_seconds": 247.47979736328125,
+            "phone_probability": 0.30958210925261176
+          },
+          {
+            "timestamp_seconds": 247.98390197753906,
+            "phone_probability": 0.3635351359844208
+          },
+          {
+            "timestamp_seconds": 248.48789978027344,
+            "phone_probability": 0.3515225847562154
+          },
+          {
+            "timestamp_seconds": 248.9918975830078,
+            "phone_probability": 0.3601215084393819
+          },
+          {
+            "timestamp_seconds": 249.49600219726562,
+            "phone_probability": 0.35582355658213294
+          },
+          {
+            "timestamp_seconds": 250.0,
+            "phone_probability": 0.42200959722201026
+          },
+          {
+            "timestamp_seconds": 250.50399780273438,
+            "phone_probability": 0.445139875014623
+          },
+          {
+            "timestamp_seconds": 251.0081024169922,
+            "phone_probability": 0.5116318464279175
+          },
+          {
+            "timestamp_seconds": 251.51210021972656,
+            "phone_probability": 0.5319230159123738
+          },
+          {
+            "timestamp_seconds": 252.01609802246094,
+            "phone_probability": 0.554448405901591
+          },
+          {
+            "timestamp_seconds": 252.52020263671875,
+            "phone_probability": 0.5234599510828654
+          },
+          {
+            "timestamp_seconds": 253.02420043945312,
+            "phone_probability": 0.4658198952674866
+          },
+          {
+            "timestamp_seconds": 253.5281982421875,
+            "phone_probability": 0.4742243885993957
+          },
+          {
+            "timestamp_seconds": 254.0323028564453,
+            "phone_probability": 0.46838095784187317
+          },
+          {
+            "timestamp_seconds": 254.5363006591797,
+            "phone_probability": 0.4987451632817586
+          },
+          {
+            "timestamp_seconds": 255.04029846191406,
+            "phone_probability": 0.4839776357014974
+          },
+          {
+            "timestamp_seconds": 255.54440307617188,
+            "phone_probability": 0.48524030049641925
+          },
+          {
+            "timestamp_seconds": 256.04840087890625,
+            "phone_probability": 0.4932729105154673
+          },
+          {
+            "timestamp_seconds": 256.5523986816406,
+            "phone_probability": 0.5182778139909108
+          },
+          {
+            "timestamp_seconds": 257.0564880371094,
+            "phone_probability": 0.5619914134343464
+          },
+          {
+            "timestamp_seconds": 257.56048583984375,
+            "phone_probability": 0.5644983649253845
+          },
+          {
+            "timestamp_seconds": 258.06451416015625,
+            "phone_probability": 0.5638123552004496
+          },
+          {
+            "timestamp_seconds": 258.5685119628906,
+            "phone_probability": 0.5584448973337809
+          },
+          {
+            "timestamp_seconds": 259.0726013183594,
+            "phone_probability": 0.5465136071046193
+          },
+          {
+            "timestamp_seconds": 259.57659912109375,
+            "phone_probability": 0.483996828397115
+          },
+          {
+            "timestamp_seconds": 260.0805969238281,
+            "phone_probability": 0.4485643903414408
+          },
+          {
+            "timestamp_seconds": 260.5846862792969,
+            "phone_probability": 0.4446385602156321
+          },
+          {
+            "timestamp_seconds": 261.0887145996094,
+            "phone_probability": 0.4844730695088704
+          },
+          {
+            "timestamp_seconds": 261.59271240234375,
+            "phone_probability": 0.5263712604840596
+          },
+          {
+            "timestamp_seconds": 262.0968017578125,
+            "phone_probability": 0.5456470847129822
+          },
+          {
+            "timestamp_seconds": 262.6007995605469,
+            "phone_probability": 0.5043439467748005
+          },
+          {
+            "timestamp_seconds": 263.10479736328125,
+            "phone_probability": 0.4322774310906728
+          },
+          {
+            "timestamp_seconds": 263.60888671875,
+            "phone_probability": 0.37537346283594764
+          },
+          {
+            "timestamp_seconds": 264.1129150390625,
+            "phone_probability": 0.3214623282353083
+          },
+          {
+            "timestamp_seconds": 264.6169128417969,
+            "phone_probability": 0.25531234343846637
+          },
+          {
+            "timestamp_seconds": 265.1210021972656,
+            "phone_probability": 0.1699396992723147
+          },
+          {
+            "timestamp_seconds": 265.625,
+            "phone_probability": 0.11048393944899242
+          }
+        ],
+        "timeline_summary": {
+          "samples": 92,
+          "missing_centered_samples": false,
+          "probability_min": 0.11048393944899242,
+          "probability_mean": 0.45919391021564376,
+          "probability_median": 0.48806825280189514,
+          "probability_max": 0.6105773448944092,
+          "probability_p90": 0.578878790140152,
+          "fraction_at_or_above_threshold": 0.0,
+          "longest_activation_run": 0,
+          "first_sample_offset_seconds": 0.3697024169921974,
+          "last_sample_offset_seconds": 0.36959999999999127
+        }
+      },
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "event_creation_state": "NO_MATCHED_FINAL_EVENT",
+      "potential_missed_interval": {
+        "start_seconds": 219.3884,
+        "end_seconds": 265.9946,
+        "interpretation": "GROUND_TRUTH_INTERVAL_ONLY_NOT_A_PREDICTED_BOUNDARY"
+      },
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "ACTION_EVIDENCE_BELOW_GATE"
+      ],
+      "match_result": "FALSE_NEGATIVE",
+      "review_receipt": {
+        "path": "reports/v9_research/human_phone_reviews/gB-9-phone-05.json",
+        "sha256": "cb31d415792320007dc84fcb2849fd81704f63fd948782b9ecf0810f156de723"
+      }
+    },
+    {
+      "event_id": "gB-9-phone-06",
+      "subject_id": "gB-9",
+      "ground_truth_action": "driver_actions/texting_left",
+      "timestamp": {
+        "start_seconds": 266.0282,
+        "end_seconds": 267.0363,
+        "start_frame": 7917,
+        "end_frame": 7947
+      },
+      "phone_visibility": "PHONE_VISIBLE",
+      "phone_use_assessment": "PHONE_USE_CONFIRMED",
+      "object_detection": {
+        "specialist_raw_max_confidence": null,
+        "specialist_samples_with_box": 0,
+        "auxiliary_max_confidence": 0.19500812888145447,
+        "human_selected_auxiliary_confidence": null,
+        "selected_proposal_id": "NO_VALID_PROPOSAL",
+        "selected_box_in_driver_roi": null,
+        "selected_box_in_original_frame": null,
+        "driver_roi_in_original_frame": null,
+        "candidate_count": 12,
+        "candidate_is_event_recovery": false
+      },
+      "hand_face_context": {
+        "geometry_context": null,
+        "hand_proximity": null,
+        "face_proximity": null,
+        "visual_review": "Short interval; gaze and hands move toward lap, but phone is occluded.",
+        "human_notes": "The original ROI and three-frame sequence show the driver handling a partly occluded phone near the lap. Phone use is visible, but every available proposal covers the mounted cabin camera, so no valid phone box exists."
+      },
+      "driver_association": {
+        "state": "UNKNOWN",
+        "source_status": "UNVERIFIED_NO_OCCUPANT_TRACK",
+        "reason_codes": [
+          "NO_VERIFIED_OCCUPANT_TRACK"
+        ]
+      },
+      "action_evidence": {
+        "fixed_gate": 0.8,
+        "T0_max": 0.03696706146001816,
+        "T1_dense_max": 0.13816387951374054,
+        "T0_reaches_gate": false,
+        "T1_reaches_gate": false,
+        "frozen_baseline_timeline": [
+          {
+            "timestamp_seconds": 266.1289978027344,
+            "phone_probability": 0.05358613034089406
+          },
+          {
+            "timestamp_seconds": 266.6330871582031,
+            "phone_probability": 0.03555956482887268
+          }
+        ],
+        "timeline_summary": {
+          "samples": 2,
+          "missing_centered_samples": false,
+          "probability_min": 0.03555956482887268,
+          "probability_mean": 0.04457284758488337,
+          "probability_median": 0.04457284758488337,
+          "probability_max": 0.05358613034089406,
+          "probability_p90": 0.05178347378969192,
+          "fraction_at_or_above_threshold": 0.0,
+          "longest_activation_run": 0,
+          "first_sample_offset_seconds": 0.10079780273434835,
+          "last_sample_offset_seconds": 0.4032128417968579
+        }
+      },
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "event_creation_state": "NO_MATCHED_FINAL_EVENT",
+      "potential_missed_interval": {
+        "start_seconds": 266.0282,
+        "end_seconds": 267.0363,
+        "interpretation": "GROUND_TRUTH_INTERVAL_ONLY_NOT_A_PREDICTED_BOUNDARY"
+      },
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_DETECTOR_NO_VALID_BOX",
+        "OCCLUSION_OR_LOCALIZATION_FAILURE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "ACTION_EVIDENCE_BELOW_GATE"
+      ],
+      "match_result": "FALSE_NEGATIVE",
+      "review_receipt": {
+        "path": "reports/v9_research/human_phone_reviews/gB-9-phone-06.json",
+        "sha256": "278f4c68913d3fa3e497ad053c00d5b9095b7e92740845c4d10dfff5c2c254eb"
+      }
+    },
+    {
+      "event_id": "gB-9-phone-07",
+      "subject_id": "gB-9",
+      "ground_truth_action": "driver_actions/texting_left",
+      "timestamp": {
+        "start_seconds": 284.9798,
+        "end_seconds": 301.5121,
+        "start_frame": 8481,
+        "end_frame": 8973
+      },
+      "phone_visibility": "PHONE_VISIBLE",
+      "phone_use_assessment": "PHONE_USE_CONFIRMED",
+      "object_detection": {
+        "specialist_raw_max_confidence": null,
+        "specialist_samples_with_box": 0,
+        "auxiliary_max_confidence": 0.8404515385627747,
+        "human_selected_auxiliary_confidence": 0.6290241479873657,
+        "selected_proposal_id": "f8610-C1",
+        "selected_box_in_driver_roi": [
+          665.9033203125,
+          202.28257751464844,
+          774.8209838867188,
+          334.3108825683594
+        ],
+        "selected_box_in_original_frame": [
+          665.9033203125,
+          274.28257751464844,
+          774.8209838867188,
+          406.3108825683594
+        ],
+        "driver_roi_in_original_frame": [
+          0,
+          72,
+          832,
+          684
+        ],
+        "candidate_count": 23,
+        "candidate_is_event_recovery": false
+      },
+      "hand_face_context": {
+        "geometry_context": "HANDHELD_USE",
+        "hand_proximity": 0.8219802294600808,
+        "face_proximity": 0.25935125711677964,
+        "visual_review": "Phone clearly visible in left hand near torso.",
+        "human_notes": "The phone is clearly visible in the left hand. Proposal f8610-C1 covers the complete handset; f8610-C2 crops away its lower portion."
+      },
+      "driver_association": {
+        "state": "UNKNOWN",
+        "source_status": "UNVERIFIED_NO_OCCUPANT_TRACK",
+        "reason_codes": [
+          "NO_VERIFIED_OCCUPANT_TRACK"
+        ]
+      },
+      "action_evidence": {
+        "fixed_gate": 0.8,
+        "T0_max": 0.46719834208488464,
+        "T1_dense_max": 0.5525065660476685,
+        "T0_reaches_gate": false,
+        "T1_reaches_gate": false,
+        "frozen_baseline_timeline": [
+          {
+            "timestamp_seconds": 285.28228759765625,
+            "phone_probability": 0.13414967308441797
+          },
+          {
+            "timestamp_seconds": 285.7862854003906,
+            "phone_probability": 0.18736103922128677
+          },
+          {
+            "timestamp_seconds": 286.2903137207031,
+            "phone_probability": 0.1637741650144259
+          },
+          {
+            "timestamp_seconds": 286.7944030761719,
+            "phone_probability": 0.19031458099683124
+          },
+          {
+            "timestamp_seconds": 287.29840087890625,
+            "phone_probability": 0.2114636997381846
+          },
+          {
+            "timestamp_seconds": 287.8023986816406,
+            "phone_probability": 0.28742310404777527
+          },
+          {
+            "timestamp_seconds": 288.3064880371094,
+            "phone_probability": 0.34019730488459266
+          },
+          {
+            "timestamp_seconds": 288.81048583984375,
+            "phone_probability": 0.3228700558344523
+          },
+          {
+            "timestamp_seconds": 289.31451416015625,
+            "phone_probability": 0.3564049998919169
+          },
+          {
+            "timestamp_seconds": 289.8185119628906,
+            "phone_probability": 0.34011056025822956
+          },
+          {
+            "timestamp_seconds": 290.3226013183594,
+            "phone_probability": 0.347939133644104
+          },
+          {
+            "timestamp_seconds": 290.82659912109375,
+            "phone_probability": 0.3046746949354807
+          },
+          {
+            "timestamp_seconds": 291.3305969238281,
+            "phone_probability": 0.2665698279937108
+          },
+          {
+            "timestamp_seconds": 291.8346862792969,
+            "phone_probability": 0.2070144861936569
+          },
+          {
+            "timestamp_seconds": 292.3387145996094,
+            "phone_probability": 0.1503128707408905
+          },
+          {
+            "timestamp_seconds": 292.84271240234375,
+            "phone_probability": 0.18906191488107044
+          },
+          {
+            "timestamp_seconds": 293.3468017578125,
+            "phone_probability": 0.2040058821439743
+          },
+          {
+            "timestamp_seconds": 293.8507995605469,
+            "phone_probability": 0.21502782404422757
+          },
+          {
+            "timestamp_seconds": 294.35479736328125,
+            "phone_probability": 0.24203668534755707
+          },
+          {
+            "timestamp_seconds": 294.85888671875,
+            "phone_probability": 0.2568376958370209
+          },
+          {
+            "timestamp_seconds": 295.3629150390625,
+            "phone_probability": 0.2864257345596949
+          },
+          {
+            "timestamp_seconds": 295.8669128417969,
+            "phone_probability": 0.3096742977698644
+          },
+          {
+            "timestamp_seconds": 296.3710021972656,
+            "phone_probability": 0.33402419090270996
+          },
+          {
+            "timestamp_seconds": 296.875,
+            "phone_probability": 0.3528946240743001
+          },
+          {
+            "timestamp_seconds": 297.3789978027344,
+            "phone_probability": 0.28079196314016974
+          },
+          {
+            "timestamp_seconds": 297.8830871582031,
+            "phone_probability": 0.2686013877391815
+          },
+          {
+            "timestamp_seconds": 298.3870849609375,
+            "phone_probability": 0.2633984784285227
+          },
+          {
+            "timestamp_seconds": 298.89111328125,
+            "phone_probability": 0.25322807828585303
+          },
+          {
+            "timestamp_seconds": 299.39520263671875,
+            "phone_probability": 0.18561345090468723
+          },
+          {
+            "timestamp_seconds": 299.8992004394531,
+            "phone_probability": 0.08115188280741374
+          },
+          {
+            "timestamp_seconds": 300.4031982421875,
+            "phone_probability": 0.02700382905701796
+          },
+          {
+            "timestamp_seconds": 300.90728759765625,
+            "phone_probability": 0.03139706142246723
+          },
+          {
+            "timestamp_seconds": 301.4112854003906,
+            "phone_probability": 0.0471118160833915
+          }
+        ],
+        "timeline_summary": {
+          "samples": 33,
+          "missing_centered_samples": false,
+          "probability_min": 0.02700382905701796,
+          "probability_mean": 0.23148081799724488,
+          "probability_median": 0.25322807828585303,
+          "probability_max": 0.3564049998919169,
+          "probability_p90": 0.34017995595932005,
+          "fraction_at_or_above_threshold": 0.0,
+          "longest_activation_run": 0,
+          "first_sample_offset_seconds": 0.30248759765623845,
+          "last_sample_offset_seconds": 0.10081459960935035
+        }
+      },
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "event_creation_state": "NO_MATCHED_FINAL_EVENT",
+      "potential_missed_interval": {
+        "start_seconds": 284.9798,
+        "end_seconds": 301.5121,
+        "interpretation": "GROUND_TRUTH_INTERVAL_ONLY_NOT_A_PREDICTED_BOUNDARY"
+      },
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "ACTION_EVIDENCE_BELOW_GATE"
+      ],
+      "match_result": "FALSE_NEGATIVE",
+      "review_receipt": {
+        "path": "reports/v9_research/human_phone_reviews/gB-9-phone-07.json",
+        "sha256": "22c84f2bcb88284eda35f546be47541bafae367864c75b0719dabb579052921f"
+      }
+    },
+    {
+      "event_id": "gB-9-phone-08",
+      "subject_id": "gB-9",
+      "ground_truth_action": "driver_actions/phonecall_left",
+      "timestamp": {
+        "start_seconds": 315.4906,
+        "end_seconds": 354.5027,
+        "start_frame": 9389,
+        "end_frame": 10550
+      },
+      "phone_visibility": "PHONE_VISIBLE",
+      "phone_use_assessment": "PHONE_USE_CONFIRMED",
+      "object_detection": {
+        "specialist_raw_max_confidence": 0.3239066004753113,
+        "specialist_samples_with_box": 2,
+        "auxiliary_max_confidence": 0.535801351070404,
+        "human_selected_auxiliary_confidence": 0.535801351070404,
+        "selected_proposal_id": "f9390-C1",
+        "selected_box_in_driver_roi": [
+          563.1622924804688,
+          89.63098907470703,
+          602.7528076171875,
+          187.94189453125
+        ],
+        "selected_box_in_original_frame": [
+          563.1622924804688,
+          161.63098907470703,
+          602.7528076171875,
+          259.94189453125
+        ],
+        "driver_roi_in_original_frame": [
+          0,
+          72,
+          832,
+          684
+        ],
+        "candidate_count": 15,
+        "candidate_is_event_recovery": false
+      },
+      "hand_face_context": {
+        "geometry_context": "HANDHELD_USE",
+        "hand_proximity": 0.7297624404507657,
+        "face_proximity": 0.6562265119003874,
+        "visual_review": "Phone at left ear, partly behind hand but behavior is clear.",
+        "human_notes": "A phone is visible at the left ear with substantial hand occlusion. Proposal f9390-C1 is the best available box around the exposed vertical handset region."
+      },
+      "driver_association": {
+        "state": "UNKNOWN",
+        "source_status": "UNVERIFIED_NO_OCCUPANT_TRACK",
+        "reason_codes": [
+          "NO_VERIFIED_OCCUPANT_TRACK"
+        ]
+      },
+      "action_evidence": {
+        "fixed_gate": 0.8,
+        "T0_max": 0.67585289478302,
+        "T1_dense_max": 0.6858704090118408,
+        "T0_reaches_gate": false,
+        "T1_reaches_gate": false,
+        "frozen_baseline_timeline": [
+          {
+            "timestamp_seconds": 315.5242004394531,
+            "phone_probability": 0.06892659763495126
+          },
+          {
+            "timestamp_seconds": 316.0281982421875,
+            "phone_probability": 0.08087332795063654
+          },
+          {
+            "timestamp_seconds": 316.53228759765625,
+            "phone_probability": 0.09054938703775406
+          },
+          {
+            "timestamp_seconds": 317.0362854003906,
+            "phone_probability": 0.14165670921405155
+          },
+          {
+            "timestamp_seconds": 317.5403137207031,
+            "phone_probability": 0.2916829064488411
+          },
+          {
+            "timestamp_seconds": 318.0444030761719,
+            "phone_probability": 0.43772976597150165
+          },
+          {
+            "timestamp_seconds": 318.54840087890625,
+            "phone_probability": 0.5597473382949829
+          },
+          {
+            "timestamp_seconds": 319.0523986816406,
+            "phone_probability": 0.6097647547721863
+          },
+          {
+            "timestamp_seconds": 319.5564880371094,
+            "phone_probability": 0.6473698417345682
+          },
+          {
+            "timestamp_seconds": 320.06048583984375,
+            "phone_probability": 0.6584440072377522
+          },
+          {
+            "timestamp_seconds": 320.56451416015625,
+            "phone_probability": 0.6481166680653889
+          },
+          {
+            "timestamp_seconds": 321.0685119628906,
+            "phone_probability": 0.5890428026517232
+          },
+          {
+            "timestamp_seconds": 321.5726013183594,
+            "phone_probability": 0.5322384536266327
+          },
+          {
+            "timestamp_seconds": 322.07659912109375,
+            "phone_probability": 0.4637474020322163
+          },
+          {
+            "timestamp_seconds": 322.5805969238281,
+            "phone_probability": 0.45722650488217664
+          },
+          {
+            "timestamp_seconds": 323.0846862792969,
+            "phone_probability": 0.439930776755015
+          },
+          {
+            "timestamp_seconds": 323.5887145996094,
+            "phone_probability": 0.42227221528689063
+          },
+          {
+            "timestamp_seconds": 324.09271240234375,
+            "phone_probability": 0.3990079363187154
+          },
+          {
+            "timestamp_seconds": 324.5968017578125,
+            "phone_probability": 0.3818973898887634
+          },
+          {
+            "timestamp_seconds": 325.1007995605469,
+            "phone_probability": 0.39048147201538086
+          },
+          {
+            "timestamp_seconds": 325.60479736328125,
+            "phone_probability": 0.4303577542304992
+          },
+          {
+            "timestamp_seconds": 326.10888671875,
+            "phone_probability": 0.4916601777076721
+          },
+          {
+            "timestamp_seconds": 326.6129150390625,
+            "phone_probability": 0.5478256543477376
+          },
+          {
+            "timestamp_seconds": 327.1169128417969,
+            "phone_probability": 0.564738929271698
+          },
+          {
+            "timestamp_seconds": 327.6210021972656,
+            "phone_probability": 0.577870746453603
+          },
+          {
+            "timestamp_seconds": 328.125,
+            "phone_probability": 0.5551504890124003
+          },
+          {
+            "timestamp_seconds": 328.6289978027344,
+            "phone_probability": 0.5335163772106171
+          },
+          {
+            "timestamp_seconds": 329.1330871582031,
+            "phone_probability": 0.5069462557633717
+          },
+          {
+            "timestamp_seconds": 329.6370849609375,
+            "phone_probability": 0.47994096080462134
+          },
+          {
+            "timestamp_seconds": 330.14111328125,
+            "phone_probability": 0.4783726632595062
+          },
+          {
+            "timestamp_seconds": 330.64520263671875,
+            "phone_probability": 0.44978933533032733
+          },
+          {
+            "timestamp_seconds": 331.1492004394531,
+            "phone_probability": 0.45702250798543287
+          },
+          {
+            "timestamp_seconds": 331.6531982421875,
+            "phone_probability": 0.43517994880676264
+          },
+          {
+            "timestamp_seconds": 332.15728759765625,
+            "phone_probability": 0.4220725099245707
+          },
+          {
+            "timestamp_seconds": 332.6612854003906,
+            "phone_probability": 0.4500244359175364
+          },
+          {
+            "timestamp_seconds": 333.1653137207031,
+            "phone_probability": 0.4895399808883667
+          },
+          {
+            "timestamp_seconds": 333.6694030761719,
+            "phone_probability": 0.5285093585650126
+          },
+          {
+            "timestamp_seconds": 334.17340087890625,
+            "phone_probability": 0.5206958452860514
+          },
+          {
+            "timestamp_seconds": 334.6773986816406,
+            "phone_probability": 0.5003801385561625
+          },
+          {
+            "timestamp_seconds": 335.1814880371094,
+            "phone_probability": 0.4907672107219696
+          },
+          {
+            "timestamp_seconds": 335.68548583984375,
+            "phone_probability": 0.48268798987070716
+          },
+          {
+            "timestamp_seconds": 336.18951416015625,
+            "phone_probability": 0.48130854964256287
+          },
+          {
+            "timestamp_seconds": 336.6935119628906,
+            "phone_probability": 0.493438720703125
+          },
+          {
+            "timestamp_seconds": 337.1976013183594,
+            "phone_probability": 0.5060394306977589
+          },
+          {
+            "timestamp_seconds": 337.70159912109375,
+            "phone_probability": 0.5151961048444111
+          },
+          {
+            "timestamp_seconds": 338.2055969238281,
+            "phone_probability": 0.5229536294937134
+          },
+          {
+            "timestamp_seconds": 338.7096862792969,
+            "phone_probability": 0.5072545409202576
+          },
+          {
+            "timestamp_seconds": 339.2137145996094,
+            "phone_probability": 0.4954089820384979
+          },
+          {
+            "timestamp_seconds": 339.71771240234375,
+            "phone_probability": 0.46404230594635004
+          },
+          {
+            "timestamp_seconds": 340.2218017578125,
+            "phone_probability": 0.4689353307088216
+          },
+          {
+            "timestamp_seconds": 340.7257995605469,
+            "phone_probability": 0.4688226580619812
+          },
+          {
+            "timestamp_seconds": 341.22979736328125,
+            "phone_probability": 0.4781069457530975
+          },
+          {
+            "timestamp_seconds": 341.73388671875,
+            "phone_probability": 0.48005818327267963
+          },
+          {
+            "timestamp_seconds": 342.2379150390625,
+            "phone_probability": 0.49483795960744215
+          },
+          {
+            "timestamp_seconds": 342.7419128417969,
+            "phone_probability": 0.5294129848480225
+          },
+          {
+            "timestamp_seconds": 343.2460021972656,
+            "phone_probability": 0.5555479327837626
+          },
+          {
+            "timestamp_seconds": 343.75,
+            "phone_probability": 0.5927352706591288
+          },
+          {
+            "timestamp_seconds": 344.2539978027344,
+            "phone_probability": 0.6030087471008301
+          },
+          {
+            "timestamp_seconds": 344.7580871582031,
+            "phone_probability": 0.5938995877901713
+          },
+          {
+            "timestamp_seconds": 345.2620849609375,
+            "phone_probability": 0.5575397411982218
+          },
+          {
+            "timestamp_seconds": 345.76611328125,
+            "phone_probability": 0.5417169133822123
+          },
+          {
+            "timestamp_seconds": 346.27020263671875,
+            "phone_probability": 0.545496920744578
+          },
+          {
+            "timestamp_seconds": 346.7742004394531,
+            "phone_probability": 0.5718798240025837
+          },
+          {
+            "timestamp_seconds": 347.2781982421875,
+            "phone_probability": 0.5740651885668436
+          },
+          {
+            "timestamp_seconds": 347.78228759765625,
+            "phone_probability": 0.5817031065622965
+          },
+          {
+            "timestamp_seconds": 348.2862854003906,
+            "phone_probability": 0.5669490694999695
+          },
+          {
+            "timestamp_seconds": 348.7903137207031,
+            "phone_probability": 0.5628355344136555
+          },
+          {
+            "timestamp_seconds": 349.2944030761719,
+            "phone_probability": 0.5620264410972595
+          },
+          {
+            "timestamp_seconds": 349.79840087890625,
+            "phone_probability": 0.5855419039726257
+          },
+          {
+            "timestamp_seconds": 350.3023986816406,
+            "phone_probability": 0.6057339906692505
+          },
+          {
+            "timestamp_seconds": 350.8064880371094,
+            "phone_probability": 0.6105790138244629
+          },
+          {
+            "timestamp_seconds": 351.31048583984375,
+            "phone_probability": 0.5652120610078175
+          },
+          {
+            "timestamp_seconds": 351.81451416015625,
+            "phone_probability": 0.5238615771134694
+          },
+          {
+            "timestamp_seconds": 352.3185119628906,
+            "phone_probability": 0.4607160985469818
+          },
+          {
+            "timestamp_seconds": 352.8226013183594,
+            "phone_probability": 0.400502473115921
+          },
+          {
+            "timestamp_seconds": 353.32659912109375,
+            "phone_probability": 0.31848839918772376
+          },
+          {
+            "timestamp_seconds": 353.8305969238281,
+            "phone_probability": 0.2707543571790059
+          },
+          {
+            "timestamp_seconds": 354.3346862792969,
+            "phone_probability": 0.2281889865795771
+          }
+        ],
+        "timeline_summary": {
+          "samples": 78,
+          "missing_centered_samples": false,
+          "probability_min": 0.06892659763495126,
+          "probability_mean": 0.4819045511957927,
+          "probability_median": 0.4978945602973302,
+          "probability_max": 0.6584440072377522,
+          "probability_p90": 0.5930845657984415,
+          "fraction_at_or_above_threshold": 0.0,
+          "longest_activation_run": 0,
+          "first_sample_offset_seconds": 0.03360043945315283,
+          "last_sample_offset_seconds": 0.16801372070312937
+        }
+      },
+      "gate_rejection_reason": "PHONE_BOX_PRESENT_ACTION_UNDER_GATE",
+      "event_creation_state": "NO_MATCHED_FINAL_EVENT",
+      "potential_missed_interval": {
+        "start_seconds": 315.4906,
+        "end_seconds": 354.5027,
+        "interpretation": "GROUND_TRUTH_INTERVAL_ONLY_NOT_A_PREDICTED_BOUNDARY"
+      },
+      "failure_stages": [
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "ACTION_EVIDENCE_BELOW_GATE"
+      ],
+      "match_result": "FALSE_NEGATIVE",
+      "review_receipt": {
+        "path": "reports/v9_research/human_phone_reviews/gB-9-phone-08.json",
+        "sha256": "519f09ce34f0ab43b2f063e508291b6a8515bb30660d853cdb4d82a4db41553d"
+      }
+    },
+    {
+      "event_id": "gB-9-phone-09",
+      "subject_id": "gB-9",
+      "ground_truth_action": "driver_actions/texting_left",
+      "timestamp": {
+        "start_seconds": 370.4973,
+        "end_seconds": 382.8629,
+        "start_frame": 11026,
+        "end_frame": 11394
+      },
+      "phone_visibility": "PHONE_VISIBLE",
+      "phone_use_assessment": "PHONE_USE_CONFIRMED",
+      "object_detection": {
+        "specialist_raw_max_confidence": 0.21571119129657745,
+        "specialist_samples_with_box": 5,
+        "auxiliary_max_confidence": 0.8258090615272522,
+        "human_selected_auxiliary_confidence": 0.8258090615272522,
+        "selected_proposal_id": "f11040-C1",
+        "selected_box_in_driver_roi": [
+          667.5377197265625,
+          176.577880859375,
+          762.3348388671875,
+          297.0003967285156
+        ],
+        "selected_box_in_original_frame": [
+          667.5377197265625,
+          248.577880859375,
+          762.3348388671875,
+          369.0003967285156
+        ],
+        "driver_roi_in_original_frame": [
+          0,
+          72,
+          832,
+          684
+        ],
+        "candidate_count": 22,
+        "candidate_is_event_recovery": false
+      },
+      "hand_face_context": {
+        "geometry_context": "HANDHELD_USE",
+        "hand_proximity": 0.7794944401993742,
+        "face_proximity": 0.32544312388355834,
+        "visual_review": "Phone clearly visible in left hand near torso.",
+        "human_notes": "The phone is clearly visible in the left hand near the torso. Proposal f11040-C1 covers the full handset; f11040-C2 covers only part of it."
+      },
+      "driver_association": {
+        "state": "UNKNOWN",
+        "source_status": "UNVERIFIED_NO_OCCUPANT_TRACK",
+        "reason_codes": [
+          "NO_VERIFIED_OCCUPANT_TRACK"
+        ]
+      },
+      "action_evidence": {
+        "fixed_gate": 0.8,
+        "T0_max": 0.4168599545955658,
+        "T1_dense_max": 0.45249930024147034,
+        "T0_reaches_gate": false,
+        "T1_reaches_gate": false,
+        "frozen_baseline_timeline": [
+          {
+            "timestamp_seconds": 370.96771240234375,
+            "phone_probability": 0.33467458685239154
+          },
+          {
+            "timestamp_seconds": 371.4718017578125,
+            "phone_probability": 0.31827399134635925
+          },
+          {
+            "timestamp_seconds": 371.9757995605469,
+            "phone_probability": 0.2827644795179367
+          },
+          {
+            "timestamp_seconds": 372.47979736328125,
+            "phone_probability": 0.255241851011912
+          },
+          {
+            "timestamp_seconds": 372.98388671875,
+            "phone_probability": 0.24845932920773822
+          },
+          {
+            "timestamp_seconds": 373.4879150390625,
+            "phone_probability": 0.31428721050421393
+          },
+          {
+            "timestamp_seconds": 373.9919128417969,
+            "phone_probability": 0.3374786972999573
+          },
+          {
+            "timestamp_seconds": 374.4960021972656,
+            "phone_probability": 0.360963503519694
+          },
+          {
+            "timestamp_seconds": 375.0,
+            "phone_probability": 0.32454084356625873
+          },
+          {
+            "timestamp_seconds": 375.5039978027344,
+            "phone_probability": 0.34305936098098755
+          },
+          {
+            "timestamp_seconds": 376.0080871582031,
+            "phone_probability": 0.36221839984258014
+          },
+          {
+            "timestamp_seconds": 376.5120849609375,
+            "phone_probability": 0.37576805551846815
+          },
+          {
+            "timestamp_seconds": 377.01611328125,
+            "phone_probability": 0.3906743228435516
+          },
+          {
+            "timestamp_seconds": 377.52020263671875,
+            "phone_probability": 0.36229952176411945
+          },
+          {
+            "timestamp_seconds": 378.0242004394531,
+            "phone_probability": 0.35299019018808997
+          },
+          {
+            "timestamp_seconds": 378.5281982421875,
+            "phone_probability": 0.34361088275909424
+          },
+          {
+            "timestamp_seconds": 379.03228759765625,
+            "phone_probability": 0.35226335128148395
+          },
+          {
+            "timestamp_seconds": 379.5362854003906,
+            "phone_probability": 0.33524346351623535
+          },
+          {
+            "timestamp_seconds": 380.0403137207031,
+            "phone_probability": 0.30165385206540424
+          },
+          {
+            "timestamp_seconds": 380.5444030761719,
+            "phone_probability": 0.2915376226107279
+          },
+          {
+            "timestamp_seconds": 381.04840087890625,
+            "phone_probability": 0.2885619600613912
+          },
+          {
+            "timestamp_seconds": 381.5523986816406,
+            "phone_probability": 0.26129479706287384
+          },
+          {
+            "timestamp_seconds": 382.0564880371094,
+            "phone_probability": 0.21940696239471436
+          },
+          {
+            "timestamp_seconds": 382.56048583984375,
+            "phone_probability": 0.18331484496593475
+          }
+        ],
+        "timeline_summary": {
+          "samples": 24,
+          "missing_centered_samples": false,
+          "probability_min": 0.18331484496593475,
+          "probability_mean": 0.3141909200284216,
+          "probability_median": 0.32960771520932514,
+          "probability_max": 0.3906743228435516,
+          "probability_p90": 0.36227518518765767,
+          "fraction_at_or_above_threshold": 0.0,
+          "longest_activation_run": 0,
+          "first_sample_offset_seconds": 0.47041240234375437,
+          "last_sample_offset_seconds": 0.30241416015627465
+        }
+      },
+      "gate_rejection_reason": "PHONE_BOX_PRESENT_ACTION_UNDER_GATE",
+      "event_creation_state": "NO_MATCHED_FINAL_EVENT",
+      "potential_missed_interval": {
+        "start_seconds": 370.4973,
+        "end_seconds": 382.8629,
+        "interpretation": "GROUND_TRUTH_INTERVAL_ONLY_NOT_A_PREDICTED_BOUNDARY"
+      },
+      "failure_stages": [
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "ACTION_EVIDENCE_BELOW_GATE"
+      ],
+      "match_result": "FALSE_NEGATIVE",
+      "review_receipt": {
+        "path": "reports/v9_research/human_phone_reviews/gB-9-phone-09.json",
+        "sha256": "66a1479665c533f0fae6a96bbcea8d8cf52d99c69152fddb182d0cec95f25aa9"
+      }
+    },
+    {
+      "event_id": "gZ-36-phone-01",
+      "subject_id": "gZ-36",
+      "ground_truth_action": "driver_actions/texting_right",
+      "timestamp": {
+        "start_seconds": 52.453,
+        "end_seconds": 53.2594,
+        "start_frame": 1561,
+        "end_frame": 1585
+      },
+      "phone_visibility": "PHONE_VISIBLE",
+      "phone_use_assessment": "PHONE_USE_CONFIRMED",
+      "object_detection": {
+        "specialist_raw_max_confidence": null,
+        "specialist_samples_with_box": 0,
+        "auxiliary_max_confidence": 0.3928089141845703,
+        "human_selected_auxiliary_confidence": 0.3928089141845703,
+        "selected_proposal_id": "f1575-C1",
+        "selected_box_in_driver_roi": [
+          786.7926635742188,
+          264.4727783203125,
+          831.7011108398438,
+          331.3764953613281
+        ],
+        "selected_box_in_original_frame": [
+          786.7926635742188,
+          336.4727783203125,
+          831.7011108398438,
+          403.3764953613281
+        ],
+        "driver_roi_in_original_frame": [
+          0,
+          72,
+          832,
+          684
+        ],
+        "candidate_count": 8,
+        "candidate_is_event_recovery": false
+      },
+      "hand_face_context": {
+        "geometry_context": "HANDHELD_USE",
+        "hand_proximity": 0.5939104431423108,
+        "face_proximity": 0.18654961466493725,
+        "visual_review": "Phone clearly visible in right hand near lap.",
+        "human_notes": "The phone is visible in the right hand near the clipped ROI boundary. Proposal f1575-C1 is the tightest box on the visible handset portion; larger alternatives include more hand area."
+      },
+      "driver_association": {
+        "state": "UNKNOWN",
+        "source_status": "UNVERIFIED_NO_OCCUPANT_TRACK",
+        "reason_codes": [
+          "NO_VERIFIED_OCCUPANT_TRACK"
+        ]
+      },
+      "action_evidence": {
+        "fixed_gate": 0.8,
+        "T0_max": 0.5471053719520569,
+        "T1_dense_max": 0.7452247738838196,
+        "T0_reaches_gate": false,
+        "T1_reaches_gate": false,
+        "frozen_baseline_timeline": [
+          {
+            "timestamp_seconds": 52.92340087890625,
+            "phone_probability": 0.5953760246435801
+          }
+        ],
+        "timeline_summary": {
+          "samples": 1,
+          "missing_centered_samples": false,
+          "probability_min": 0.5953760246435801,
+          "probability_mean": 0.5953760246435801,
+          "probability_median": 0.5953760246435801,
+          "probability_max": 0.5953760246435801,
+          "probability_p90": 0.5953760246435801,
+          "fraction_at_or_above_threshold": 0.0,
+          "longest_activation_run": 0,
+          "first_sample_offset_seconds": 0.47040087890624704,
+          "last_sample_offset_seconds": 0.3359991210937494
+        }
+      },
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "event_creation_state": "NO_MATCHED_FINAL_EVENT",
+      "potential_missed_interval": {
+        "start_seconds": 52.453,
+        "end_seconds": 53.2594,
+        "interpretation": "GROUND_TRUTH_INTERVAL_ONLY_NOT_A_PREDICTED_BOUNDARY"
+      },
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "ACTION_EVIDENCE_BELOW_GATE",
+        "SUBSECOND_TEMPORAL_RISK"
+      ],
+      "match_result": "FALSE_NEGATIVE",
+      "review_receipt": {
+        "path": "reports/v9_research/human_phone_reviews/gZ-36-phone-01.json",
+        "sha256": "3db58ee93b30a49f24db1e2d920179aca444477f82ae24c612f803f69fcefa3e"
+      }
+    },
+    {
+      "event_id": "gZ-36-phone-03",
+      "subject_id": "gZ-36",
+      "ground_truth_action": "driver_actions/texting_right",
+      "timestamp": {
+        "start_seconds": 110.7191,
+        "end_seconds": 111.3239,
+        "start_frame": 3295,
+        "end_frame": 3313
+      },
+      "phone_visibility": "PHONE_VISIBLE",
+      "phone_use_assessment": "PHONE_USE_CONFIRMED",
+      "object_detection": {
+        "specialist_raw_max_confidence": null,
+        "specialist_samples_with_box": 0,
+        "auxiliary_max_confidence": 0.5724798440933228,
+        "human_selected_auxiliary_confidence": 0.5724798440933228,
+        "selected_proposal_id": "f3300-C1",
+        "selected_box_in_driver_roi": [
+          734.5238037109375,
+          270.45343017578125,
+          831.7405395507812,
+          329.5016784667969
+        ],
+        "selected_box_in_original_frame": [
+          734.5238037109375,
+          342.45343017578125,
+          831.7405395507812,
+          401.5016784667969
+        ],
+        "driver_roi_in_original_frame": [
+          0,
+          72,
+          832,
+          684
+        ],
+        "candidate_count": 5,
+        "candidate_is_event_recovery": false
+      },
+      "hand_face_context": {
+        "geometry_context": "HANDHELD_USE",
+        "hand_proximity": 0.7019707037605839,
+        "face_proximity": 0.19387122581236726,
+        "visual_review": "Phone clearly visible in right hand near torso.",
+        "human_notes": "The phone is clearly visible in the right hand near the torso. Proposal f3300-C1 is the closest available fit to the visible device."
+      },
+      "driver_association": {
+        "state": "UNKNOWN",
+        "source_status": "UNVERIFIED_NO_OCCUPANT_TRACK",
+        "reason_codes": [
+          "NO_VERIFIED_OCCUPANT_TRACK"
+        ]
+      },
+      "action_evidence": {
+        "fixed_gate": 0.8,
+        "T0_max": 0.8559412956237793,
+        "T1_dense_max": 0.8854799866676331,
+        "T0_reaches_gate": true,
+        "T1_reaches_gate": true,
+        "frozen_baseline_timeline": [
+          {
+            "timestamp_seconds": 110.88710021972656,
+            "phone_probability": 0.8105003833770752
+          }
+        ],
+        "timeline_summary": {
+          "samples": 1,
+          "missing_centered_samples": false,
+          "probability_min": 0.8105003833770752,
+          "probability_mean": 0.8105003833770752,
+          "probability_median": 0.8105003833770752,
+          "probability_max": 0.8105003833770752,
+          "probability_p90": 0.8105003833770752,
+          "fraction_at_or_above_threshold": 1.0,
+          "longest_activation_run": 1,
+          "first_sample_offset_seconds": 0.1680002197265651,
+          "last_sample_offset_seconds": 0.43679978027343225
+        }
+      },
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "event_creation_state": "NO_MATCHED_FINAL_EVENT",
+      "potential_missed_interval": {
+        "start_seconds": 110.7191,
+        "end_seconds": 111.3239,
+        "interpretation": "GROUND_TRUTH_INTERVAL_ONLY_NOT_A_PREDICTED_BOUNDARY"
+      },
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "SUBSECOND_TEMPORAL_RISK"
+      ],
+      "match_result": "FALSE_NEGATIVE",
+      "review_receipt": {
+        "path": "reports/v9_research/human_phone_reviews/gZ-36-phone-03.json",
+        "sha256": "d43f031742f564e218a15c922ad7e7855d9c656c6c6def00a052ee7a19d62b37"
+      }
+    },
+    {
+      "event_id": "gZ-36-phone-05",
+      "subject_id": "gZ-36",
+      "ground_truth_action": "driver_actions/texting_right",
+      "timestamp": {
+        "start_seconds": 162.0632,
+        "end_seconds": 162.9704,
+        "start_frame": 4823,
+        "end_frame": 4850
+      },
+      "phone_visibility": "PHONE_VISIBLE",
+      "phone_use_assessment": "PHONE_USE_CONFIRMED",
+      "object_detection": {
+        "specialist_raw_max_confidence": null,
+        "specialist_samples_with_box": 0,
+        "auxiliary_max_confidence": 0.05869597941637039,
+        "human_selected_auxiliary_confidence": 0.02651839703321457,
+        "selected_proposal_id": "f4830-C2",
+        "selected_box_in_driver_roi": [
+          676.9156494140625,
+          299.4471740722656,
+          829.3572998046875,
+          388.6444396972656
+        ],
+        "selected_box_in_original_frame": [
+          676.9156494140625,
+          371.4471740722656,
+          829.3572998046875,
+          460.6444396972656
+        ],
+        "driver_roi_in_original_frame": [
+          0,
+          72,
+          832,
+          684
+        ],
+        "candidate_count": 3,
+        "candidate_is_event_recovery": false
+      },
+      "hand_face_context": {
+        "geometry_context": "HANDHELD_USE",
+        "hand_proximity": 0.7554944342014006,
+        "face_proximity": 0.19964483120439658,
+        "visual_review": "Phone clearly visible in right hand; bright screen and partial glare.",
+        "human_notes": "The bright phone screen is visible in the right hand with glare. Proposal f4830-C2 is the only handheld proposal and covers the device, although it also includes some hand."
+      },
+      "driver_association": {
+        "state": "UNKNOWN",
+        "source_status": "UNVERIFIED_NO_OCCUPANT_TRACK",
+        "reason_codes": [
+          "NO_VERIFIED_OCCUPANT_TRACK"
+        ]
+      },
+      "action_evidence": {
+        "fixed_gate": 0.8,
+        "T0_max": 0.9157363176345825,
+        "T1_dense_max": 0.9352058172225952,
+        "T0_reaches_gate": true,
+        "T1_reaches_gate": true,
+        "frozen_baseline_timeline": [
+          {
+            "timestamp_seconds": 162.29840087890625,
+            "phone_probability": 0.8307122588157653
+          },
+          {
+            "timestamp_seconds": 162.80239868164062,
+            "phone_probability": 0.9138883948326111
+          }
+        ],
+        "timeline_summary": {
+          "samples": 2,
+          "missing_centered_samples": false,
+          "probability_min": 0.8307122588157653,
+          "probability_mean": 0.8723003268241882,
+          "probability_median": 0.8723003268241882,
+          "probability_max": 0.9138883948326111,
+          "probability_p90": 0.9055707812309265,
+          "fraction_at_or_above_threshold": 1.0,
+          "longest_activation_run": 2,
+          "first_sample_offset_seconds": 0.23520087890625518,
+          "last_sample_offset_seconds": 0.16800131835938714
+        }
+      },
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "event_creation_state": "NO_MATCHED_FINAL_EVENT",
+      "potential_missed_interval": {
+        "start_seconds": 162.0632,
+        "end_seconds": 162.9704,
+        "interpretation": "GROUND_TRUTH_INTERVAL_ONLY_NOT_A_PREDICTED_BOUNDARY"
+      },
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "SUBSECOND_TEMPORAL_RISK"
+      ],
+      "match_result": "FALSE_NEGATIVE",
+      "review_receipt": {
+        "path": "reports/v9_research/human_phone_reviews/gZ-36-phone-05.json",
+        "sha256": "15121a126e7d779f2a2f4ad4915d438a0f465482e04cd60120fc35b7606b2b47"
+      }
+    },
+    {
+      "event_id": "gC-14-phone-02",
+      "subject_id": "gC-14",
+      "ground_truth_action": "driver_actions/texting_right",
+      "timestamp": {
+        "start_seconds": 96.0013,
+        "end_seconds": 108.6358,
+        "start_frame": 2857,
+        "end_frame": 3233
+      },
+      "phone_visibility": "PHONE_VISIBLE",
+      "phone_use_assessment": "PHONE_USE_CONFIRMED",
+      "object_detection": {
+        "specialist_raw_max_confidence": null,
+        "specialist_samples_with_box": 0,
+        "auxiliary_max_confidence": 0.31625133752822876,
+        "human_selected_auxiliary_confidence": 0.2404431700706482,
+        "selected_proposal_id": "f3135-C1",
+        "selected_box_in_driver_roi": [
+          739.6477661132812,
+          519.4361572265625,
+          831.765625,
+          604.7833862304688
+        ],
+        "selected_box_in_original_frame": [
+          739.6477661132812,
+          591.4361572265625,
+          831.765625,
+          676.7833862304688
+        ],
+        "driver_roi_in_original_frame": [
+          0,
+          72,
+          832,
+          684
+        ],
+        "candidate_count": 18,
+        "candidate_is_event_recovery": false
+      },
+      "hand_face_context": {
+        "geometry_context": "HANDHELD_USE",
+        "hand_proximity": 0.8242219125376536,
+        "face_proximity": 0.0,
+        "visual_review": "Phone is small and partly clipped at the lower-right ROI boundary.",
+        "human_notes": "The phone is visible but partly clipped at the lower-right ROI boundary. Proposal f3135-C1 covers the complete visible portion; f3135-C2 misses the right edge of the handset."
+      },
+      "driver_association": {
+        "state": "UNKNOWN",
+        "source_status": "UNVERIFIED_NO_OCCUPANT_TRACK",
+        "reason_codes": [
+          "NO_VERIFIED_OCCUPANT_TRACK"
+        ]
+      },
+      "action_evidence": {
+        "fixed_gate": 0.8,
+        "T0_max": 0.7713298797607422,
+        "T1_dense_max": 0.8423033356666565,
+        "T0_reaches_gate": false,
+        "T1_reaches_gate": true,
+        "frozen_baseline_timeline": [
+          {
+            "timestamp_seconds": 96.27020263671875,
+            "phone_probability": 0.5877115229765574
+          },
+          {
+            "timestamp_seconds": 96.77420043945312,
+            "phone_probability": 0.3778464049100876
+          },
+          {
+            "timestamp_seconds": 97.2781982421875,
+            "phone_probability": 0.22176045676072437
+          },
+          {
+            "timestamp_seconds": 97.78230285644531,
+            "phone_probability": 0.2041324327389399
+          },
+          {
+            "timestamp_seconds": 98.28630065917969,
+            "phone_probability": 0.2674662172794342
+          },
+          {
+            "timestamp_seconds": 98.79029846191406,
+            "phone_probability": 0.4231567283471425
+          },
+          {
+            "timestamp_seconds": 99.29440307617188,
+            "phone_probability": 0.5818500022093455
+          },
+          {
+            "timestamp_seconds": 99.79840087890625,
+            "phone_probability": 0.7142740289370219
+          },
+          {
+            "timestamp_seconds": 100.30239868164062,
+            "phone_probability": 0.6814435124397278
+          },
+          {
+            "timestamp_seconds": 100.80650329589844,
+            "phone_probability": 0.5828019777933756
+          },
+          {
+            "timestamp_seconds": 101.31050109863281,
+            "phone_probability": 0.45432655016581214
+          },
+          {
+            "timestamp_seconds": 101.81449890136719,
+            "phone_probability": 0.40674767891565955
+          },
+          {
+            "timestamp_seconds": 102.31849670410156,
+            "phone_probability": 0.3998704353968302
+          },
+          {
+            "timestamp_seconds": 102.82260131835938,
+            "phone_probability": 0.31230788926283515
+          },
+          {
+            "timestamp_seconds": 103.32659912109375,
+            "phone_probability": 0.20732309172550833
+          },
+          {
+            "timestamp_seconds": 103.83059692382812,
+            "phone_probability": 0.1472857023278872
+          },
+          {
+            "timestamp_seconds": 104.33470153808594,
+            "phone_probability": 0.19651042173306146
+          },
+          {
+            "timestamp_seconds": 104.83869934082031,
+            "phone_probability": 0.2744091600179672
+          },
+          {
+            "timestamp_seconds": 105.34269714355469,
+            "phone_probability": 0.3693446318308512
+          },
+          {
+            "timestamp_seconds": 105.8468017578125,
+            "phone_probability": 0.43595101435979206
+          },
+          {
+            "timestamp_seconds": 106.35079956054688,
+            "phone_probability": 0.5434043208758036
+          },
+          {
+            "timestamp_seconds": 106.85479736328125,
+            "phone_probability": 0.6201099356015523
+          },
+          {
+            "timestamp_seconds": 107.35890197753906,
+            "phone_probability": 0.6903084317843119
+          },
+          {
+            "timestamp_seconds": 107.86289978027344,
+            "phone_probability": 0.6271295150121052
+          },
+          {
+            "timestamp_seconds": 108.36689758300781,
+            "phone_probability": 0.4805550773938497
+          }
+        ],
+        "timeline_summary": {
+          "samples": 25,
+          "missing_centered_samples": false,
+          "probability_min": 0.1472857023278872,
+          "probability_mean": 0.4323210856318474,
+          "probability_median": 0.4231567283471425,
+          "probability_max": 0.7142740289370219,
+          "probability_p90": 0.6597179134686788,
+          "fraction_at_or_above_threshold": 0.0,
+          "longest_activation_run": 0,
+          "first_sample_offset_seconds": 0.2689026367187495,
+          "last_sample_offset_seconds": 0.26890241699219075
+        }
+      },
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "event_creation_state": "NO_MATCHED_FINAL_EVENT",
+      "potential_missed_interval": {
+        "start_seconds": 96.0013,
+        "end_seconds": 108.6358,
+        "interpretation": "GROUND_TRUTH_INTERVAL_ONLY_NOT_A_PREDICTED_BOUNDARY"
+      },
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN"
+      ],
+      "match_result": "FALSE_NEGATIVE",
+      "review_receipt": {
+        "path": "reports/v9_research/human_phone_reviews/gC-14-phone-02.json",
+        "sha256": "1fc0b17bcdb06824806553dbd804165cf5feec7f851cbc7a612ecf35504f5862"
+      }
+    },
+    {
+      "event_id": "gC-14-phone-05",
+      "subject_id": "gC-14",
+      "ground_truth_action": "driver_actions/texting_left",
+      "timestamp": {
+        "start_seconds": 225.9073,
+        "end_seconds": 226.3105,
+        "start_frame": 6723,
+        "end_frame": 6735
+      },
+      "phone_visibility": "PHONE_VISIBLE",
+      "phone_use_assessment": "PHONE_USE_CONFIRMED",
+      "object_detection": {
+        "specialist_raw_max_confidence": null,
+        "specialist_samples_with_box": 0,
+        "auxiliary_max_confidence": 0.656647264957428,
+        "human_selected_auxiliary_confidence": 0.19581378996372223,
+        "selected_proposal_id": "f6735-C1",
+        "selected_box_in_driver_roi": [
+          601.619873046875,
+          136.0725860595703,
+          719.534912109375,
+          273.061279296875
+        ],
+        "selected_box_in_original_frame": [
+          601.619873046875,
+          208.0725860595703,
+          719.534912109375,
+          345.061279296875
+        ],
+        "driver_roi_in_original_frame": [
+          0,
+          72,
+          832,
+          684
+        ],
+        "candidate_count": 5,
+        "candidate_is_event_recovery": false
+      },
+      "hand_face_context": {
+        "geometry_context": "HANDHELD_USE",
+        "hand_proximity": 0.7753726174231241,
+        "face_proximity": 0.4923799660183872,
+        "visual_review": "Phone is visible during rapid hand motion with substantial motion blur.",
+        "human_notes": "The phone is visible during rapid hand motion with substantial blur. Proposal f6735-C1 best covers the blurred handset near the face."
+      },
+      "driver_association": {
+        "state": "UNKNOWN",
+        "source_status": "UNVERIFIED_NO_OCCUPANT_TRACK",
+        "reason_codes": [
+          "NO_VERIFIED_OCCUPANT_TRACK"
+        ]
+      },
+      "action_evidence": {
+        "fixed_gate": 0.8,
+        "T0_max": null,
+        "T1_dense_max": 0.48383933305740356,
+        "T0_reaches_gate": false,
+        "T1_reaches_gate": false,
+        "frozen_baseline_timeline": [],
+        "timeline_summary": {
+          "samples": 0,
+          "missing_centered_samples": true,
+          "probability_max": null,
+          "probability_mean": null,
+          "fraction_at_or_above_threshold": 0.0,
+          "longest_activation_run": 0,
+          "first_sample_offset_seconds": null,
+          "last_sample_offset_seconds": null
+        }
+      },
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "event_creation_state": "NO_MATCHED_FINAL_EVENT",
+      "potential_missed_interval": {
+        "start_seconds": 225.9073,
+        "end_seconds": 226.3105,
+        "interpretation": "GROUND_TRUTH_INTERVAL_ONLY_NOT_A_PREDICTED_BOUNDARY"
+      },
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "ACTION_EVIDENCE_BELOW_GATE",
+        "SUBSECOND_TEMPORAL_RISK"
+      ],
+      "match_result": "FALSE_NEGATIVE",
+      "review_receipt": {
+        "path": "reports/v9_research/human_phone_reviews/gC-14-phone-05.json",
+        "sha256": "38a829612c078dbd436fdacaf04bcfaad0602935fd33185a212b08684e4dcb18"
+      }
+    },
+    {
+      "event_id": "gC-14-phone-06",
+      "subject_id": "gC-14",
+      "ground_truth_action": "driver_actions/phonecall_left",
+      "timestamp": {
+        "start_seconds": 226.3441,
+        "end_seconds": 269.9933,
+        "start_frame": 6736,
+        "end_frame": 8035
+      },
+      "phone_visibility": "PHONE_VISIBLE",
+      "phone_use_assessment": "PHONE_USE_CONFIRMED",
+      "object_detection": {
+        "specialist_raw_max_confidence": null,
+        "specialist_samples_with_box": 0,
+        "auxiliary_max_confidence": 0.7437580227851868,
+        "human_selected_auxiliary_confidence": 0.7437580227851868,
+        "selected_proposal_id": "f7710-C1",
+        "selected_box_in_driver_roi": [
+          437.4648742675781,
+          18.915708541870117,
+          489.6875915527344,
+          108.07337188720703
+        ],
+        "selected_box_in_original_frame": [
+          437.4648742675781,
+          90.91570854187012,
+          489.6875915527344,
+          180.07337188720703
+        ],
+        "driver_roi_in_original_frame": [
+          0,
+          72,
+          832,
+          684
+        ],
+        "candidate_count": 12,
+        "candidate_is_event_recovery": false
+      },
+      "hand_face_context": {
+        "geometry_context": "HANDHELD_USE",
+        "hand_proximity": 0.6848512333699297,
+        "face_proximity": 0.9420066102039047,
+        "visual_review": "Phone clearly visible at right ear; little occlusion.",
+        "human_notes": "The phone is clearly visible at the right ear. Proposal f7710-C1 provides a complete, close box around the handset."
+      },
+      "driver_association": {
+        "state": "UNKNOWN",
+        "source_status": "UNVERIFIED_NO_OCCUPANT_TRACK",
+        "reason_codes": [
+          "NO_VERIFIED_OCCUPANT_TRACK"
+        ]
+      },
+      "action_evidence": {
+        "fixed_gate": 0.8,
+        "T0_max": 0.8543280363082886,
+        "T1_dense_max": 0.8618807792663574,
+        "T0_reaches_gate": true,
+        "T1_reaches_gate": true,
+        "frozen_baseline_timeline": [
+          {
+            "timestamp_seconds": 226.8144989013672,
+            "phone_probability": 0.5614139636357625
+          },
+          {
+            "timestamp_seconds": 227.31849670410156,
+            "phone_probability": 0.5903302629788716
+          },
+          {
+            "timestamp_seconds": 227.82260131835938,
+            "phone_probability": 0.6680812835693359
+          },
+          {
+            "timestamp_seconds": 228.32659912109375,
+            "phone_probability": 0.6491215626398722
+          },
+          {
+            "timestamp_seconds": 228.83059692382812,
+            "phone_probability": 0.6555154124895731
+          },
+          {
+            "timestamp_seconds": 229.33470153808594,
+            "phone_probability": 0.6042658487955729
+          },
+          {
+            "timestamp_seconds": 229.8386993408203,
+            "phone_probability": 0.5886063774426777
+          },
+          {
+            "timestamp_seconds": 230.3426971435547,
+            "phone_probability": 0.6181175311406453
+          },
+          {
+            "timestamp_seconds": 230.8468017578125,
+            "phone_probability": 0.6140469710032145
+          },
+          {
+            "timestamp_seconds": 231.35079956054688,
+            "phone_probability": 0.6457772254943848
+          },
+          {
+            "timestamp_seconds": 231.85479736328125,
+            "phone_probability": 0.6720094084739685
+          },
+          {
+            "timestamp_seconds": 232.35890197753906,
+            "phone_probability": 0.7687644958496093
+          },
+          {
+            "timestamp_seconds": 232.86289978027344,
+            "phone_probability": 0.774526298046112
+          },
+          {
+            "timestamp_seconds": 233.3668975830078,
+            "phone_probability": 0.7700525720914204
+          },
+          {
+            "timestamp_seconds": 233.87100219726562,
+            "phone_probability": 0.6959031422932942
+          },
+          {
+            "timestamp_seconds": 234.375,
+            "phone_probability": 0.6938106218973795
+          },
+          {
+            "timestamp_seconds": 234.87899780273438,
+            "phone_probability": 0.6710385680198669
+          },
+          {
+            "timestamp_seconds": 235.3831024169922,
+            "phone_probability": 0.6924557685852051
+          },
+          {
+            "timestamp_seconds": 235.88710021972656,
+            "phone_probability": 0.7029769817988077
+          },
+          {
+            "timestamp_seconds": 236.39109802246094,
+            "phone_probability": 0.7132765849431355
+          },
+          {
+            "timestamp_seconds": 236.89520263671875,
+            "phone_probability": 0.7363590399424235
+          },
+          {
+            "timestamp_seconds": 237.39920043945312,
+            "phone_probability": 0.7507321834564209
+          },
+          {
+            "timestamp_seconds": 237.9031982421875,
+            "phone_probability": 0.7772561113039652
+          },
+          {
+            "timestamp_seconds": 238.4073028564453,
+            "phone_probability": 0.7466193834940592
+          },
+          {
+            "timestamp_seconds": 238.9113006591797,
+            "phone_probability": 0.7421558101971943
+          },
+          {
+            "timestamp_seconds": 239.41529846191406,
+            "phone_probability": 0.7269851366678873
+          },
+          {
+            "timestamp_seconds": 239.91940307617188,
+            "phone_probability": 0.7222764293352762
+          },
+          {
+            "timestamp_seconds": 240.42340087890625,
+            "phone_probability": 0.6742562055587769
+          },
+          {
+            "timestamp_seconds": 240.92739868164062,
+            "phone_probability": 0.5809125900268555
+          },
+          {
+            "timestamp_seconds": 241.43150329589844,
+            "phone_probability": 0.5423941810925801
+          },
+          {
+            "timestamp_seconds": 241.9355010986328,
+            "phone_probability": 0.48316195607185364
+          },
+          {
+            "timestamp_seconds": 242.4394989013672,
+            "phone_probability": 0.4983688096205393
+          },
+          {
+            "timestamp_seconds": 242.94349670410156,
+            "phone_probability": 0.46687824527422583
+          },
+          {
+            "timestamp_seconds": 243.44760131835938,
+            "phone_probability": 0.5125311017036438
+          },
+          {
+            "timestamp_seconds": 243.95159912109375,
+            "phone_probability": 0.5830279588699341
+          },
+          {
+            "timestamp_seconds": 244.45559692382812,
+            "phone_probability": 0.6627882122993469
+          },
+          {
+            "timestamp_seconds": 244.95970153808594,
+            "phone_probability": 0.7351443966229756
+          },
+          {
+            "timestamp_seconds": 245.4636993408203,
+            "phone_probability": 0.6572732130686442
+          },
+          {
+            "timestamp_seconds": 245.9676971435547,
+            "phone_probability": 0.6014593640963236
+          },
+          {
+            "timestamp_seconds": 246.4718017578125,
+            "phone_probability": 0.5653661886850992
+          },
+          {
+            "timestamp_seconds": 246.97579956054688,
+            "phone_probability": 0.621351401011149
+          },
+          {
+            "timestamp_seconds": 247.47979736328125,
+            "phone_probability": 0.5990702708562214
+          },
+          {
+            "timestamp_seconds": 247.98390197753906,
+            "phone_probability": 0.5681886076927185
+          },
+          {
+            "timestamp_seconds": 248.48789978027344,
+            "phone_probability": 0.5300814906756083
+          },
+          {
+            "timestamp_seconds": 248.9918975830078,
+            "phone_probability": 0.541869302590688
+          },
+          {
+            "timestamp_seconds": 249.49600219726562,
+            "phone_probability": 0.5601635575294495
+          },
+          {
+            "timestamp_seconds": 250.0,
+            "phone_probability": 0.58772208293279
+          },
+          {
+            "timestamp_seconds": 250.50399780273438,
+            "phone_probability": 0.5139601528644562
+          },
+          {
+            "timestamp_seconds": 251.0081024169922,
+            "phone_probability": 0.47693712512652076
+          },
+          {
+            "timestamp_seconds": 251.51210021972656,
+            "phone_probability": 0.4417040248711903
+          },
+          {
+            "timestamp_seconds": 252.01609802246094,
+            "phone_probability": 0.5078514218330383
+          },
+          {
+            "timestamp_seconds": 252.52020263671875,
+            "phone_probability": 0.5200755397478739
+          },
+          {
+            "timestamp_seconds": 253.02420043945312,
+            "phone_probability": 0.5262462894121805
+          },
+          {
+            "timestamp_seconds": 253.5281982421875,
+            "phone_probability": 0.47966505090395606
+          },
+          {
+            "timestamp_seconds": 254.0323028564453,
+            "phone_probability": 0.40767143170038855
+          },
+          {
+            "timestamp_seconds": 254.5363006591797,
+            "phone_probability": 0.38950833678245544
+          },
+          {
+            "timestamp_seconds": 255.04029846191406,
+            "phone_probability": 0.4074076215426127
+          },
+          {
+            "timestamp_seconds": 255.54440307617188,
+            "phone_probability": 0.44105218847592664
+          },
+          {
+            "timestamp_seconds": 256.04840087890625,
+            "phone_probability": 0.41881229480107623
+          },
+          {
+            "timestamp_seconds": 256.5523986816406,
+            "phone_probability": 0.4383151431878407
+          },
+          {
+            "timestamp_seconds": 257.0564880371094,
+            "phone_probability": 0.4107577204704284
+          },
+          {
+            "timestamp_seconds": 257.56048583984375,
+            "phone_probability": 0.40367579460144043
+          },
+          {
+            "timestamp_seconds": 258.06451416015625,
+            "phone_probability": 0.408468355735143
+          },
+          {
+            "timestamp_seconds": 258.5685119628906,
+            "phone_probability": 0.4516928990681966
+          },
+          {
+            "timestamp_seconds": 259.0726013183594,
+            "phone_probability": 0.4746960898240407
+          },
+          {
+            "timestamp_seconds": 259.57659912109375,
+            "phone_probability": 0.5082588692506154
+          },
+          {
+            "timestamp_seconds": 260.0805969238281,
+            "phone_probability": 0.5490316450595856
+          },
+          {
+            "timestamp_seconds": 260.5846862792969,
+            "phone_probability": 0.6129265427589417
+          },
+          {
+            "timestamp_seconds": 261.0887145996094,
+            "phone_probability": 0.6453686157862345
+          },
+          {
+            "timestamp_seconds": 261.59271240234375,
+            "phone_probability": 0.6514936288197835
+          },
+          {
+            "timestamp_seconds": 262.0968017578125,
+            "phone_probability": 0.6472421884536743
+          },
+          {
+            "timestamp_seconds": 262.6007995605469,
+            "phone_probability": 0.6433462103207905
+          },
+          {
+            "timestamp_seconds": 263.10479736328125,
+            "phone_probability": 0.6544652978579203
+          },
+          {
+            "timestamp_seconds": 263.60888671875,
+            "phone_probability": 0.6247520248095194
+          },
+          {
+            "timestamp_seconds": 264.1129150390625,
+            "phone_probability": 0.5863644282023112
+          },
+          {
+            "timestamp_seconds": 264.6169128417969,
+            "phone_probability": 0.5258232653141022
+          },
+          {
+            "timestamp_seconds": 265.1210021972656,
+            "phone_probability": 0.45519677797953284
+          },
+          {
+            "timestamp_seconds": 265.625,
+            "phone_probability": 0.3904146055380503
+          },
+          {
+            "timestamp_seconds": 266.1289978027344,
+            "phone_probability": 0.34928467869758606
+          },
+          {
+            "timestamp_seconds": 266.6330871582031,
+            "phone_probability": 0.35940316319465637
+          },
+          {
+            "timestamp_seconds": 267.1370849609375,
+            "phone_probability": 0.30026526252428687
+          },
+          {
+            "timestamp_seconds": 267.64111328125,
+            "phone_probability": 0.2611385683218638
+          },
+          {
+            "timestamp_seconds": 268.14520263671875,
+            "phone_probability": 0.20060226321220395
+          },
+          {
+            "timestamp_seconds": 268.6492004394531,
+            "phone_probability": 0.23177922268708545
+          },
+          {
+            "timestamp_seconds": 269.1531982421875,
+            "phone_probability": 0.2700315068165461
+          },
+          {
+            "timestamp_seconds": 269.65728759765625,
+            "phone_probability": 0.30490231017271674
+          }
+        ],
+        "timeline_summary": {
+          "samples": 86,
+          "missing_centered_samples": false,
+          "probability_min": 0.20060226321220395,
+          "probability_mean": 0.5583147984720015,
+          "probability_median": 0.5819702744483948,
+          "probability_max": 0.7772561113039652,
+          "probability_p90": 0.7310647666454315,
+          "fraction_at_or_above_threshold": 0.0,
+          "longest_activation_run": 0,
+          "first_sample_offset_seconds": 0.4703989013671901,
+          "last_sample_offset_seconds": 0.33601240234372654
+        }
+      },
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "event_creation_state": "NO_MATCHED_FINAL_EVENT",
+      "potential_missed_interval": {
+        "start_seconds": 226.3441,
+        "end_seconds": 269.9933,
+        "interpretation": "GROUND_TRUTH_INTERVAL_ONLY_NOT_A_PREDICTED_BOUNDARY"
+      },
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN"
+      ],
+      "match_result": "FALSE_NEGATIVE",
+      "review_receipt": {
+        "path": "reports/v9_research/human_phone_reviews/gC-14-phone-06.json",
+        "sha256": "bcbfb842131d7ed6006fbf3fc44ab0132dee7e7b7c050bdbd0a58dcc17519b10"
+      }
+    }
+  ],
+  "summary": {
+    "cases": 13,
+    "phone_visible": 13,
+    "valid_auxiliary_box": 12,
+    "verified_occupant_tracks": 0,
+    "T0_reaches_gate": 3,
+    "T1_reaches_gate": 4,
+    "failure_stage_counts_nonexclusive": {
+      "ACTION_EVIDENCE_BELOW_GATE": 9,
+      "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE": 12,
+      "AUXILIARY_DETECTOR_NO_VALID_BOX": 1,
+      "DRIVER_ASSOCIATION_UNKNOWN": 13,
+      "OCCLUSION_OR_LOCALIZATION_FAILURE": 1,
+      "SPECIALIST_DETECTOR_MISS": 11,
+      "SUBSECOND_TEMPORAL_RISK": 4
+    }
+  },
+  "ground_truth_changed": false,
+  "event_matching_policy_changed": false,
+  "recovered_events_claimed": 0,
+  "fine_tuning_performed": false,
+  "production_approved": false
+}

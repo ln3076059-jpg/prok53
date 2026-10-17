@@ -1,0 +1,78 @@
+{
+  "repository": {
+    "captured_at_utc": "2026-10-17T06:40:57.063027+00:00",
+    "branch": "roadwatch-v4-candidate",
+    "head": "4536fc6b3d6483d0ed6ef07f2d52a25930b0652d",
+    "upstream": "4536fc6b3d6483d0ed6ef07f2d52a25930b0652d",
+    "head_matches_upstream_at_audit": true,
+    "remote": "https://ln3076059-jpg@github.com/ln3076059-jpg/prok53.git",
+    "working_tree_changes": [
+      " M PRODUCT.md",
+      "?? reports/v11_research/",
+      "?? tests/test_v11_research.py",
+      "?? training/dmd/behavior_roi.py",
+      "?? training/dmd/causal_motion.py",
+      "?? training/dmd/driver_phone_association.py",
+      "?? training/dmd/v11_audit.py",
+      "?? training/dmd/v11_fn_audit.py",
+      "?? training/dmd/v11_generalization_experiments.py",
+      "?? training/dmd/v11_reports.py",
+      "?? training/dmd/v11_representation_experiments.py",
+      "?? training/dmd/v11_test_report.py",
+      "?? training/dmd/verify_v11.py"
+    ],
+    "user_owned_changes_preserved": [
+      " M PRODUCT.md"
+    ],
+    "recent_commits": [
+      "4536fc6b docs: update Roadwatch V10 research prompt",
+      "8a0a2d70 research: add governed V10 representation audit",
+      "01c9161c Add frozen V9 phone context event replay",
+      "f1a62d67 Add governed V9 phone context gate",
+      "9fcad725 feat: materialize governed V9 phone review results",
+      "6fdfb843 data: complete V9 human phone review",
+      "a10c46c0 data: record remaining V9 proposal rechecks",
+      "ec13fee2 data: record V9 phone case recheck",
+      "dd19f549 fix: re-audit V9 phone review suggestions",
+      "efe58a41 feat: add audited Codex pre-review workflow",
+      "53afcb45 feat: add audited V9 human review web",
+      "b966ed4c feat: add frozen phone proposal review mining"
+    ],
+    "automatic_push_or_main_merge_performed": false
+  },
+  "environment": {
+    "captured_at_utc": "2026-10-17T06:40:57.659967+00:00",
+    "os": "Windows-10-10.0.26200-SP0",
+    "python": "3.11.9",
+    "cpu": "AMD Ryzen 5 5500U with Radeon Graphics",
+    "physical_cores": 6,
+    "logical_cores": 12,
+    "ram_total_bytes": 6297477120,
+    "ram_available_bytes": 382341120,
+    "disks": {
+      "C": {
+        "total_bytes": 186994651136,
+        "used_bytes": 186441072640,
+        "free_bytes": 553578496
+      },
+      "D": {
+        "total_bytes": 323389222912,
+        "used_bytes": 317042376704,
+        "free_bytes": 6346846208
+      }
+    },
+    "gpu": {
+      "nvidia_smi_path": null,
+      "cuda_gpu_available": false,
+      "status": "NO_NVIDIA_RUNTIME_DETECTED"
+    },
+    "packages": {
+      "torch": "2.13.0",
+      "torchvision": "0.28.0",
+      "ultralytics": "8.3.187",
+      "opencv-python": "4.10.0.84",
+      "scikit-learn": "1.9.1",
+      "fastapi": "0.116.1"
+    }
+  }
+}

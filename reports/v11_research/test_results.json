@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "python_compile": {
+    "status": "PASS",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "ruff_scoped": {
+    "status": "PASS",
+    "sha256": "af352a86840ad0af3d37ea0d9197f868363a6dac6b1c2ef5d2722f6b41d2d9af"
+  },
+  "pytest_targeted": {
+    "tests": 14,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 11.5,
+    "sha256": "00e2f07d8d247246fba63c31df3390b1265d1496e980a4f209f55b869f393f16"
+  },
+  "pytest_full": {
+    "tests": 589,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 70.994,
+    "sha256": "80fe21621a51c7ccb86d942d5304cc3ccf24b5e97727380706715c6e24aecbcb"
+  },
+  "frontend_build": {
+    "status": "PASS",
+    "sha256": "ab78482027a1006845fa1ab5cb0894ebb09ad96f8a12a79cca30e9ddc4fb35de"
+  },
+  "backend_openapi_smoke": {
+    "status": "PASS",
+    "sha256": "2f896d91d7a4f1ef919ea83cea739a80a3fd9c9c858a9cc085fc503cb401ebcf"
+  },
+  "inference_smoke": {
+    "status": "NOT_RERUN_V11",
+    "reason": "No active inference pipeline changed; the measured same-host cabin benchmark remains the runtime evidence, and available RAM did not justify loading multiple YOLO models."
+  },
+  "compile_log_empty": true,
+  "ruff_log_empty": false,
+  "production_approved": false
+}

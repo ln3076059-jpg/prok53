@@ -1,0 +1,562 @@
+{
+  "schema_version": 1,
+  "evidence_level": "LEVEL_2_DEVELOPMENT",
+  "git_head_before_experiments": "4536fc6b3d6483d0ed6ef07f2d52a25930b0652d",
+  "dataset_hash": "3cddbd465f133fa83ea7d2281c79c462a0aa6abb71a7f5a138e3073e20d1d13e",
+  "rights_status": "PENDING_PROJECT_REVIEW",
+  "seed": 20261017,
+  "experiments": [
+    {
+      "id": "V11-A-E-REPRESENTATION",
+      "hypothesis": "Past-only multi-scale motion and fixed behavior regions improve action discrimination without catastrophic worst-subject SAFE collapse.",
+      "baseline": "V11-A_FROZEN_RESNET",
+      "changed_factor": "representation only",
+      "reproduction_command": "py -m training.dmd.v11_representation_experiments",
+      "prediction_artifacts": [
+        "reports/v11_research/predictions/v11-a_frozen_resnet_loso_gB-9.npz",
+        "reports/v11_research/predictions/v11-a_frozen_resnet_loso_gC-14.npz",
+        "reports/v11_research/predictions/v11-a_frozen_resnet_loso_gZ-36.npz",
+        "reports/v11_research/predictions/v11-b_causal_lag1_loso_gB-9.npz",
+        "reports/v11_research/predictions/v11-b_causal_lag1_loso_gC-14.npz",
+        "reports/v11_research/predictions/v11-b_causal_lag1_loso_gZ-36.npz",
+        "reports/v11_research/predictions/v11-c_causal_multiscale_loso_gB-9.npz",
+        "reports/v11_research/predictions/v11-c_causal_multiscale_loso_gC-14.npz",
+        "reports/v11_research/predictions/v11-c_causal_multiscale_loso_gZ-36.npz",
+        "reports/v11_research/predictions/v11-d_behavior_multi_roi_loso_gB-9.npz",
+        "reports/v11_research/predictions/v11-d_behavior_multi_roi_loso_gC-14.npz",
+        "reports/v11_research/predictions/v11-d_behavior_multi_roi_loso_gZ-36.npz",
+        "reports/v11_research/predictions/v11-e_roi_plus_causal_loso_gB-9.npz",
+        "reports/v11_research/predictions/v11-e_roi_plus_causal_loso_gC-14.npz",
+        "reports/v11_research/predictions/v11-e_roi_plus_causal_loso_gZ-36.npz"
+      ],
+      "metrics": {
+        "V11-A_FROZEN_RESNET": {
+          "samples": 2625,
+          "macro_f1": 0.1756,
+          "balanced_accuracy": 0.3235,
+          "safe_recall": 0.0682,
+          "phone_recall": 0.0653,
+          "other_recall": 0.837,
+          "confusion_matrix": [
+            [
+              47,
+              12,
+              630
+            ],
+            [
+              45,
+              94,
+              1300
+            ],
+            [
+              23,
+              58,
+              416
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.4087,
+              "recall": 0.0682,
+              "f1": 0.1169,
+              "support": 689
+            },
+            "PHONE_USE": {
+              "precision": 0.5732,
+              "recall": 0.0653,
+              "f1": 0.1173,
+              "support": 1439
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.1773,
+              "recall": 0.837,
+              "f1": 0.2926,
+              "support": 497
+            }
+          }
+        },
+        "V11-B_CAUSAL_LAG1": {
+          "samples": 2625,
+          "macro_f1": 0.4757,
+          "balanced_accuracy": 0.5121,
+          "safe_recall": 0.3774,
+          "phone_recall": 0.501,
+          "other_recall": 0.6579,
+          "confusion_matrix": [
+            [
+              260,
+              219,
+              210
+            ],
+            [
+              270,
+              721,
+              448
+            ],
+            [
+              61,
+              109,
+              327
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.4399,
+              "recall": 0.3774,
+              "f1": 0.4062,
+              "support": 689
+            },
+            "PHONE_USE": {
+              "precision": 0.6873,
+              "recall": 0.501,
+              "f1": 0.5796,
+              "support": 1439
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.332,
+              "recall": 0.6579,
+              "f1": 0.4413,
+              "support": 497
+            }
+          }
+        },
+        "V11-C_CAUSAL_MULTISCALE": {
+          "samples": 2625,
+          "macro_f1": 0.5385,
+          "balanced_accuracy": 0.5447,
+          "safe_recall": 0.3716,
+          "phone_recall": 0.6991,
+          "other_recall": 0.5634,
+          "confusion_matrix": [
+            [
+              256,
+              329,
+              104
+            ],
+            [
+              212,
+              1006,
+              221
+            ],
+            [
+              58,
+              159,
+              280
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.4867,
+              "recall": 0.3716,
+              "f1": 0.4214,
+              "support": 689
+            },
+            "PHONE_USE": {
+              "precision": 0.6734,
+              "recall": 0.6991,
+              "f1": 0.686,
+              "support": 1439
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.4628,
+              "recall": 0.5634,
+              "f1": 0.5082,
+              "support": 497
+            }
+          }
+        },
+        "V11-D_BEHAVIOR_MULTI_ROI": {
+          "samples": 2625,
+          "macro_f1": 0.4463,
+          "balanced_accuracy": 0.5287,
+          "safe_recall": 0.4935,
+          "phone_recall": 0.2314,
+          "other_recall": 0.8612,
+          "confusion_matrix": [
+            [
+              340,
+              28,
+              321
+            ],
+            [
+              74,
+              333,
+              1032
+            ],
+            [
+              28,
+              41,
+              428
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.7692,
+              "recall": 0.4935,
+              "f1": 0.6012,
+              "support": 689
+            },
+            "PHONE_USE": {
+              "precision": 0.8284,
+              "recall": 0.2314,
+              "f1": 0.3618,
+              "support": 1439
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.2403,
+              "recall": 0.8612,
+              "f1": 0.3758,
+              "support": 497
+            }
+          }
+        },
+        "V11-E_ROI_PLUS_CAUSAL": {
+          "samples": 2625,
+          "macro_f1": 0.566,
+          "balanced_accuracy": 0.62,
+          "safe_recall": 0.553,
+          "phone_recall": 0.4378,
+          "other_recall": 0.8692,
+          "confusion_matrix": [
+            [
+              381,
+              27,
+              281
+            ],
+            [
+              46,
+              630,
+              763
+            ],
+            [
+              17,
+              48,
+              432
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.8581,
+              "recall": 0.553,
+              "f1": 0.6726,
+              "support": 689
+            },
+            "PHONE_USE": {
+              "precision": 0.8936,
+              "recall": 0.4378,
+              "f1": 0.5877,
+              "support": 1439
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.2927,
+              "recall": 0.8692,
+              "f1": 0.4379,
+              "support": 497
+            }
+          }
+        }
+      },
+      "decision": "REJECT_ALL_CANDIDATES",
+      "failure_analysis": "All initial candidates failed the worst-subject stability gate."
+    },
+    {
+      "id": "V11-E0-E4-GENERALIZATION",
+      "hypothesis": "Causal online normalization or equal subject-class sampling reduces motion-domain shift and improves worst-subject recall.",
+      "baseline": "E0_RAW_CAUSAL_MULTISCALE",
+      "changed_factor": "one normalization or sampling strategy per row",
+      "reproduction_command": "py -m training.dmd.v11_generalization_experiments",
+      "prediction_artifacts": [
+        "reports/v11_research/predictions/e0_raw_causal_multiscale_loso_gB-9.npz",
+        "reports/v11_research/predictions/e0_raw_causal_multiscale_loso_gC-14.npz",
+        "reports/v11_research/predictions/e0_raw_causal_multiscale_loso_gZ-36.npz",
+        "reports/v11_research/predictions/e1_spatial_residual_norm_loso_gB-9.npz",
+        "reports/v11_research/predictions/e1_spatial_residual_norm_loso_gC-14.npz",
+        "reports/v11_research/predictions/e1_spatial_residual_norm_loso_gZ-36.npz",
+        "reports/v11_research/predictions/e2_causal_running_norm_loso_gB-9.npz",
+        "reports/v11_research/predictions/e2_causal_running_norm_loso_gC-14.npz",
+        "reports/v11_research/predictions/e2_causal_running_norm_loso_gZ-36.npz",
+        "reports/v11_research/predictions/e3_spatial_plus_running_loso_gB-9.npz",
+        "reports/v11_research/predictions/e3_spatial_plus_running_loso_gC-14.npz",
+        "reports/v11_research/predictions/e3_spatial_plus_running_loso_gZ-36.npz",
+        "reports/v11_research/predictions/e4_subject_class_balanced_loso_gB-9.npz",
+        "reports/v11_research/predictions/e4_subject_class_balanced_loso_gC-14.npz",
+        "reports/v11_research/predictions/e4_subject_class_balanced_loso_gZ-36.npz"
+      ],
+      "metrics": {
+        "E0_RAW_CAUSAL_MULTISCALE": {
+          "samples": 2625,
+          "macro_f1": 0.5385,
+          "balanced_accuracy": 0.5447,
+          "safe_recall": 0.3716,
+          "phone_recall": 0.6991,
+          "other_recall": 0.5634,
+          "confusion_matrix": [
+            [
+              256,
+              329,
+              104
+            ],
+            [
+              212,
+              1006,
+              221
+            ],
+            [
+              58,
+              159,
+              280
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.4867,
+              "recall": 0.3716,
+              "f1": 0.4214,
+              "support": 689
+            },
+            "PHONE_USE": {
+              "precision": 0.6734,
+              "recall": 0.6991,
+              "f1": 0.686,
+              "support": 1439
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.4628,
+              "recall": 0.5634,
+              "f1": 0.5082,
+              "support": 497
+            }
+          }
+        },
+        "E1_SPATIAL_RESIDUAL_NORM": {
+          "samples": 2625,
+          "macro_f1": 0.5159,
+          "balanced_accuracy": 0.543,
+          "safe_recall": 0.4078,
+          "phone_recall": 0.5691,
+          "other_recall": 0.6519,
+          "confusion_matrix": [
+            [
+              281,
+              269,
+              139
+            ],
+            [
+              280,
+              819,
+              340
+            ],
+            [
+              62,
+              111,
+              324
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.451,
+              "recall": 0.4078,
+              "f1": 0.4284,
+              "support": 689
+            },
+            "PHONE_USE": {
+              "precision": 0.6831,
+              "recall": 0.5691,
+              "f1": 0.6209,
+              "support": 1439
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.4035,
+              "recall": 0.6519,
+              "f1": 0.4985,
+              "support": 497
+            }
+          }
+        },
+        "E2_CAUSAL_RUNNING_NORM": {
+          "samples": 2625,
+          "macro_f1": 0.5524,
+          "balanced_accuracy": 0.5533,
+          "safe_recall": 0.5414,
+          "phone_recall": 0.6518,
+          "other_recall": 0.4668,
+          "confusion_matrix": [
+            [
+              373,
+              246,
+              70
+            ],
+            [
+              364,
+              938,
+              137
+            ],
+            [
+              102,
+              163,
+              232
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.4446,
+              "recall": 0.5414,
+              "f1": 0.4882,
+              "support": 689
+            },
+            "PHONE_USE": {
+              "precision": 0.6964,
+              "recall": 0.6518,
+              "f1": 0.6734,
+              "support": 1439
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.5285,
+              "recall": 0.4668,
+              "f1": 0.4957,
+              "support": 497
+            }
+          }
+        },
+        "E3_SPATIAL_PLUS_RUNNING": {
+          "samples": 2625,
+          "macro_f1": 0.5639,
+          "balanced_accuracy": 0.5681,
+          "safe_recall": 0.6038,
+          "phone_recall": 0.6678,
+          "other_recall": 0.4326,
+          "confusion_matrix": [
+            [
+              416,
+              204,
+              69
+            ],
+            [
+              322,
+              961,
+              156
+            ],
+            [
+              120,
+              162,
+              215
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.4848,
+              "recall": 0.6038,
+              "f1": 0.5378,
+              "support": 689
+            },
+            "PHONE_USE": {
+              "precision": 0.7242,
+              "recall": 0.6678,
+              "f1": 0.6949,
+              "support": 1439
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.4886,
+              "recall": 0.4326,
+              "f1": 0.4589,
+              "support": 497
+            }
+          }
+        },
+        "E4_SUBJECT_CLASS_BALANCED": {
+          "samples": 2625,
+          "macro_f1": 0.5467,
+          "balanced_accuracy": 0.5625,
+          "safe_recall": 0.389,
+          "phone_recall": 0.6727,
+          "other_recall": 0.6258,
+          "confusion_matrix": [
+            [
+              268,
+              291,
+              130
+            ],
+            [
+              208,
+              968,
+              263
+            ],
+            [
+              69,
+              117,
+              311
+            ]
+          ],
+          "per_class": {
+            "SAFE_DRIVING": {
+              "precision": 0.4917,
+              "recall": 0.389,
+              "f1": 0.4344,
+              "support": 689
+            },
+            "PHONE_USE": {
+              "precision": 0.7035,
+              "recall": 0.6727,
+              "f1": 0.6877,
+              "support": 1439
+            },
+            "OTHER_ACTIVITY": {
+              "precision": 0.4418,
+              "recall": 0.6258,
+              "f1": 0.5179,
+              "support": 497
+            }
+          }
+        }
+      },
+      "decision": "KEEP_DEVELOPMENT_HYPOTHESIS",
+      "failure_analysis": "E4 balancing regressed worst SAFE; E3 remains development-only."
+    },
+    {
+      "id": "V11-13FN-AUDIT",
+      "hypothesis": "The 13 FNs span detection, association, action, fusion, and temporal stages.",
+      "baseline": "Frozen 13-FN population",
+      "changed_factor": "none; evidence consolidation",
+      "reproduction_command": "py -m training.dmd.v11_fn_audit",
+      "metrics": {
+        "cases": 13,
+        "phone_visible": 13,
+        "valid_auxiliary_box": 12,
+        "verified_occupant_tracks": 0,
+        "T0_reaches_gate": 3,
+        "T1_reaches_gate": 4,
+        "failure_stage_counts_nonexclusive": {
+          "ACTION_EVIDENCE_BELOW_GATE": 9,
+          "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE": 12,
+          "AUXILIARY_DETECTOR_NO_VALID_BOX": 1,
+          "DRIVER_ASSOCIATION_UNKNOWN": 13,
+          "OCCLUSION_OR_LOCALIZATION_FAILURE": 1,
+          "SPECIALIST_DETECTOR_MISS": 11,
+          "SUBSECOND_TEMPORAL_RISK": 4
+        }
+      },
+      "decision": "KEEP_DIAGNOSTIC_ONLY",
+      "failure_analysis": {
+        "ACTION_EVIDENCE_BELOW_GATE": 9,
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE": 12,
+        "AUXILIARY_DETECTOR_NO_VALID_BOX": 1,
+        "DRIVER_ASSOCIATION_UNKNOWN": 13,
+        "OCCLUSION_OR_LOCALIZATION_FAILURE": 1,
+        "SPECIALIST_DETECTOR_MISS": 11,
+        "SUBSECOND_TEMPORAL_RISK": 4
+      }
+    }
+  ],
+  "source_hashes": {
+    "reports/v11_research/representation_experiments.json": "e17b92f7a1cdfea3ef6990e6dd84d7f21575c27281840fc2f34ed5127793f230",
+    "reports/v11_research/generalization_experiments.json": "6088aabf80aeb738db671e1b3650ca608974c75f1150f1d872c80ce6635ea79b",
+    "reports/v11_research/fn_root_cause.json": "c6ae6f9765ffd215244fa0216694710ff656270173ecdf3e5aa1f4a53f582adb",
+    "reports/v9_research/v9_diagnostics.json": "17c8ba1f6f24caff917becb5cb86cd1cf8b0da7a34e2180c81fde10a9b826a10",
+    "reports/v9_research/phone_context_event_replay.json": "4033c8e896a8466d3b82c8777de578058bc930ccbc238ea8f58c3d94ec43eea4",
+    "reports/ai85_plus/runtime_benchmark.json": "213a09fae1d165628fac72e2f971b071a353934f6573469db1a04a5f07539c3f"
+  },
+  "fine_tuning_performed": false,
+  "protected_holdouts_accessed": false,
+  "production_approved": false,
+  "final_status": "RESEARCH_ONLY"
+}
