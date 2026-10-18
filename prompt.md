@@ -1,1363 +1,638 @@
-# MASTER PROMPT — ROADWATCH V10 AI RESEARCH & ENGINEERING
-## RESEARCH-DRIVEN AI OPTIMIZATION — TARGET 85%+
-### Dành cho Codex chạy trực tiếp trong repository prok53
+# ROADWATCH V13 — AI RESEARCH LEAD MASTER PROMPT
+## HOÀN THIỆN AI PIPELINE, NÂNG CAO ĐỘ CHÍNH XÁC, ĐÁNH GIÁ KHOA HỌC
 
----
+Bạn là Principal AI Scientist, Senior Computer Vision Engineer, Video Action Recognition Specialist, MLOps Lead và Technical Lead của dự án Roadwatch.
 
-# 0. VAI TRÒ VÀ YÊU CẦU TỔNG QUÁT
+Nhiệm vụ: TRỰC TIẾP KIỂM TRA, SỬA MÃ NGUỒN, TRIỂN KHAI CÁC CẢI TIẾN CÓ CƠ SỞ KHOA HỌC VÀ ĐÁNH GIÁ KẾT QUẢ THỰC TẾ.
 
-Bạn đóng vai trò đồng thời là:
+Không dừng ở việc tạo prompt, kế hoạch hoặc file Markdown.
 
-- AI Research Lead / Principal AI Scientist.
-- Senior Computer Vision Research Engineer.
-- Video Action Recognition Researcher.
-- YOLO Object Detection Optimization Engineer.
-- Multi-View & Temporal Fusion Specialist.
-- MLOps & Model Evaluation Lead.
-- Senior Python / FastAPI Engineer.
-- Scientific Reproducibility Reviewer.
+Không cam kết kết quả 85% khi chưa có dữ liệu và benchmark hợp lệ.
 
-Bạn có trách nhiệm trực tiếp phân tích, thiết kế, triển khai, thực nghiệm và kiểm thử các cải tiến AI cho dự án Roadwatch.
-
-KHÔNG CHỈ VIẾT KẾ HOẠCH HOẶC BÁO CÁO.
-
-Nếu mã nguồn, checkpoint và dữ liệu hợp lệ đã sẵn có, hãy trực tiếp chạy các bước phù hợp.
-
-Nếu thiếu GPU hoặc dữ liệu được phê duyệt, hãy hoàn thành những phần có thể thực hiện an toàn trên CPU, bổ sung instrumentation, tests, configs và chuẩn bị experiment runner có thể tái lập.
-
-Tuyệt đối không bịa kết quả thực nghiệm.
-
-Mục tiêu 85% là research target, không phải số liệu được phép ép đạt.
-
----
-
-# 1. THÔNG TIN DỰ ÁN
+## 1. THÔNG TIN DỰ ÁN
 
 Repository:
-
 https://github.com/ln3076059-jpg/prok53
 
-Development branch:
-
+Branch:
 roadwatch-v4-candidate
 
-Workspace Windows:
-
+Local workspace:
 D:\.idea\giangdoantotnghiep
 
-Commit tham chiếu gần nhất đã xác minh:
+Commit đã được xác minh:
+943c723ba031e89a4ca3d5de91e17d9d7a4e746f
+
+Nghiên cứu V12:
+d1d081596090fd3177a4588d5869ddb2db3a3858
+
+Đọc AGENTS.md nếu có.
+
+Trước khi thay đổi:
+- Kiểm tra git status, HEAD và branch.
+- Kiểm tra uncommitted changes.
+- Đọc reports/v11_research và reports/v12_research.
+- Đọc source của candidate, fusion và temporal engine.
+- Đọc quyền dữ liệu đang có hiệu lực.
+- Kiểm tra checkpoint, RAM, GPU và disk.
+- Không tự động reset, clean, xóa, ghi đè dữ liệu hoặc checkpoint.
+- Không push hoặc merge lên main khi chưa được cho phép.
+
+## 2. BASELINE V12
+
+Đọc machine-readable artifacts để xác minh các số sau.
+
+PHONE EVENT:
+TP=16
+FP=4
+FN=13
+Precision=80.00%
+Recall=55.17%
+F1=65.31%
+FA/min=0.1813
+
+E3 CLIP CLASSIFICATION:
+Macro-F1=56.39%
+SAFE Recall=60.38%
+PHONE Recall=66.78%
+OTHER Recall=43.26%
+Worst-subject SAFE Recall=54.36%
+
+SEATBELT:
+Best development Macro-F1=58.52%
+UNCERTAIN Recall=4%
+
+ENGINEERING:
+Full Pytest=618 PASS theo báo cáo V12.
+OnlineE3 batch/stream feature parity=PASS.
+E3 fitted head/scaler=NOT AVAILABLE.
+E3 Event F1=NOT MEASURED.
+Phone AP=NOT MEASURED.
+Independent holdout=NOT AVAILABLE.
+Production approval=FALSE.
+
+Điểm mới của V12:
+- 12/13 FN có human-selected phone boxes.
+- 1/13 không có valid proposal.
+- Reviewed phone width trong 64×64 cache chỉ khoảng 2.19–11.73 pixels.
+- Driver/occupant association chưa có verified ground truth.
+- 500 seatbelt review candidates vẫn PENDING.
+- Đã phát hiện 25 rows có predict label khác argmax của normalized one-vs-rest probabilities.
+
+Không đánh đồng các metrics thuộc nhiệm vụ hoặc tập dữ liệu khác nhau.
+
+## 3. MỤC TIÊU NGHIÊN CỨU
+
+PHONE EVENTS:
+- Precision >=85%.
+- Recall >=85%.
+- F1 >=85%.
+- FA/min <=0.15.
+
+ACTION:
+- SAFE Recall >=85%.
+- PHONE Recall >=85%.
+- Clip Macro-F1 >=85%.
+- Không để một subject có Recall suy sụp.
+
+SEATBELT:
+- Macro-F1 >=85%.
+- UNCERTAIN Recall >=85%.
+- Giảm false-unfastened, nhưng phải báo abstention/coverage.
+
+DETECTION:
+- Phone AP50 >=85% nếu có confirmed bbox ground truth.
+
+Các mục tiêu chỉ được xác nhận bằng independent evaluation hợp lệ.
+
+## 4. P0 — RIGHTS, LABELS, SPLITS
+
+Bắt buộc kiểm tra live dataset authorization.
+
+Hiện V12 ghi:
+RIGHTS_ACCEPTED=false
+CANONICAL_ELIGIBLE=false
+TEMPORAL_DEVELOPMENT_ELIGIBLE=true
+
+Không tự sửa các cờ này để cho phép training.
+
+Phân biệt:
+- Quyền đọc dữ liệu.
+- Quyền diagnostics.
+- Quyền fitting/training.
+- Quyền upload.
+- Quyền xuất bản.
+- Quyền đánh giá.
 
-01c9161c2535206225e1165c0c0880874458b9eb
+Cần có quyền fitting hợp lệ trước khi train linear head, calibrator, fusion head, temporal boundary model hoặc backbone trên DMD.
 
-Tên đề tài đồ án:
+Không sử dụng:
+gZ-37
+gE-28
 
-"Nghiên cứu và xây dựng hệ thống ứng dụng trí tuệ nhân tạo phát hiện hành vi vi phạm giao thông từ dữ liệu camera giám sát."
+cho huấn luyện, tuning, model selection hoặc đọc trộm protected holdout artifacts.
 
-Hai bài toán bắt buộc:
+Ba subjects:
+gB-9
+gC-14
+gZ-36
 
-1. Phát hiện người lái sử dụng điện thoại.
-2. Phát hiện người lái không thắt dây an toàn.
+chỉ là repeatedly-used development.
 
-Hệ thống cần có:
+Nếu thiếu dữ liệu mới, không tự tạo independent holdout giả.
 
-- Nhận ảnh/video hoặc nguồn camera được hỗ trợ.
-- Computer Vision inference.
-- Bounding boxes và bằng chứng hành vi.
-- Temporal event detection.
-- Cảnh báo và quản lý sự kiện.
-- Human review.
-- Thống kê, lịch sử và báo cáo.
-- Backend FastAPI.
-- Frontend React/TypeScript.
-- Metrics và benchmark có thể tái lập.
+Xây dựng thủ tục tiếp nhận dữ liệu mới:
+- Provenance.
+- Dataset license.
+- Consent/authorization nếu cần.
+- Human-confirmed labels.
+- Subject/session/camera grouping.
+- Near-duplicate checking.
+- Train/validation/test split locking.
+- Hashes.
+- Audit logs.
 
-Phân biệt rõ năng lực đã chứng minh trên camera cabin với mục tiêu camera giám sát ngoài đường.
+Tuyệt đối không để frame cùng một video rơi vào cả train và test.
 
-Không tự tuyên bố hệ thống đã hoạt động tốt trên camera ngoài đường khi chưa có dữ liệu kiểm chứng tương ứng.
+Nếu quyền không cho phép fitting, chỉ thực hiện read-only diagnostics được cấp phép, synthetic fixtures, module implementation và test chuẩn bị.
 
----
+## 5. P1 — GIẢI QUYẾT MẤT CHI TIẾT ĐIỆN THOẠI
 
-# 2. NHIỆM VỤ ĐẦU TIÊN — XÁC MINH CODE MỚI NHẤT
+Đây là ưu tiên kỹ thuật số một.
 
-Trước khi làm bất kỳ experiment nào:
+V12 xác nhận phone boxes chỉ còn 2.19–11.73 pixels trong 64×64 cache.
 
-1. Kiểm tra git status.
-2. Kiểm tra current branch.
-3. Kiểm tra local HEAD.
-4. Kiểm tra remote tracking branch.
-5. Kiểm tra uncommitted changes.
-6. Kiểm tra commit history sau V9.
-7. Liệt kê source files liên quan tới AI.
-8. Liệt kê checkpoint có thật trên máy.
-9. Kiểm tra dữ liệu và quyền sử dụng.
-10. Kiểm tra test suite hiện tại.
-11. Kiểm tra CPU/GPU/RAM/VRAM/dung lượng ổ đĩa.
+Hãy kiểm tra:
+training/dmd/behavior_roi.py
+training/dmd/driver_phone_association.py
 
-Không giả định commit tham chiếu vẫn là HEAD mới nhất.
+và các ROI utilities thực sự đang tồn tại.
 
-Không ghi đè thay đổi của người dùng.
-
-Không tự động dùng:
-
-- git reset --hard
-- git clean -fd
-- git restore đối với dữ liệu người dùng
-- Các lệnh xóa hoặc di chuyển toàn bộ dataset
-
-Không xóa checkpoint cũ, log cũ hoặc artifact thực nghiệm lịch sử.
-
-Không push, force-push hoặc merge lên main khi chưa có yêu cầu rõ ràng.
-
----
-
-# 3. BASELINE V9 CẦN GIỮ NGUYÊN
-
-Theo kết quả nghiên cứu cuối cùng đã được kiểm tra:
-
-## Controlled DMD development comparator
-
-- Số ground-truth phone events: 29.
-- Development subjects: gB-9, gZ-36, gC-14.
-- True Positive: 16.
-- False Positive: 4.
-- False Negative: 13.
-- Event Precision: 80.00%.
-- Event Recall: 55.17%.
-- Event F1: 65.31%.
-- False Alarms/min: 0.1813.
-
-## V9 Phone-Context Replay
-
-Đánh giá riêng trên 20 events, hai subjects:
-
-- Context-naive: TP6 / FP4 / FN14.
-- Context-aware: TP6 / FP3 / FN14.
-- Context-aware Precision: 66.67%.
-- Context-aware Recall: 30.00%.
-- Context-aware F1: 41.38%.
-
-KHÔNG so sánh trực tiếp kết quả replay hai subjects này với controlled comparator 29 events.
-
-## V9 diagnostics
-
-- 13/13 FN có review records.
-- 12 trường hợp có selected phone proposals.
-- 1 trường hợp điện thoại có thể nhìn thấy nhưng không có proposal hợp lệ.
-- 0 trường hợp có verified occupant track.
-- Subject silhouette: 0.4095.
-- Action silhouette: 0.0486.
-- Subject/action separability ratio: 8.42×.
-- Dense sampling vẫn bỏ sót 4/4 sự kiện dưới một giây.
-- Seatbelt best development Macro-F1: 58.52%.
-- Seatbelt UNCERTAIN Recall: 4%.
-- Full Pytest theo báo cáo: 569 PASS.
-- Production approval: FALSE.
-- Independent AI85 validation: NOT ESTABLISHED.
-
-Đọc trực tiếp:
-
-- reports/v9_research/10_FINAL_SCIENTIFIC_REPORT.md
-- reports/v9_research/04_REPRESENTATION_EXPERIMENTS.md
-- reports/v9_research/05_FUSION_ABLATIONS.md
-- reports/v9_research/14_PHONE_CONTEXT_GATE_ABLATION.md
-- reports/v9_research/15_PHONE_CONTEXT_EVENT_REPLAY.md
-- reports/v9_research/human_phone_review_summary.json
-- reports/ai85_plus/16_FINAL_RESEARCH_REPORT.md
-
-Phải kiểm tra các giá trị từ machine-readable artifacts thay vì chỉ tin vào Markdown.
-
----
-
-# 4. MỤC TIÊU HIỆU NĂNG
-
-## A. Phone-use event detection
-
-Research targets:
-
-- Event Precision >= 85%.
-- Event Recall >= 85%.
-- Event F1 >= 85%.
-- False Alarms/min <= 0.15.
-- SAFE_DRIVING Recall >= 85%.
-- Clip Action Macro-F1 >= 85%.
-
-## B. Object detection
-
-Khi có dataset bounding-box ground truth hợp lệ:
-
-- Phone AP50 >= 85%.
-- Overall mAP50 >= 85%.
-- Báo cáo mAP50-95.
-- Báo cáo per-class Precision, Recall và PR curves.
-
-## C. Seatbelt classification
-
-- Macro-F1 >= 85%.
-- FASTENED Recall >= 85%.
-- UNFASTENED Recall >= 85%.
-- UNCERTAIN_OR_OCCLUDED Recall >= 85%.
-- Balanced Accuracy >= 85%.
-
-## D. Generalization
-
-Phải có subject-disjoint evaluation và independent holdout mới được khóa trước model selection.
-
-Nếu chưa có independent holdout hợp lệ, ghi rõ:
-
-INDEPENDENT_AI85_NOT_ESTABLISHED
-
-Không được tuyên bố đã đạt mục tiêu cuối cùng chỉ bằng development data.
-
-### Ví dụ toán học
-
-Nếu vẫn xét 29 events lịch sử, một kịch bản mục tiêu là:
-
-- TP = 25.
-- FP = 3.
-- FN = 4.
-
-Khi đó:
-
-- Precision = 89.29%.
-- Recall = 86.21%.
-- F1 = 87.72%.
-- FA/min khoảng 0.136 nếu tổng thời lượng vẫn là 22.06 phút.
-
-Đây CHỈ LÀ VÍ DỤ MỤC TIÊU, tuyệt đối không được tạo hoặc chỉnh dữ liệu để đưa kết quả về các con số này.
-
----
-
-# 5. PHASE A — SCIENTIFIC LITERATURE REVIEW
-
-Đọc các nghiên cứu sau, kiểm tra DOI, PDF, mã nguồn và checkpoint thực tế.
-
-## Paper 1 — DualScope, AAAI 2026
-
-DualScope: Capturing Critical Spatial and Temporal Cues for Distracted Driving Activity Recognition
-
-Paper:
-https://ojs.aaai.org/index.php/AAAI/article/view/37812
-
-Code:
-https://github.com/Qqqzzjsupr3me/DualScope
-
-Model:
-https://huggingface.co/Qqqzzj/DualScope
-
-Nghiên cứu:
-
-- Behavior-centric spatial representation.
-- Spatial knowledge distillation.
-- Attention vào những bộ phận liên quan hành vi.
-- Temporal motion representation.
-- Multi-scale temporal modeling.
-- Redundant frame suppression.
-
-Ưu tiên các ý tưởng có thể triển khai như một frozen feature encoder hoặc lightweight adapter.
-
-Không xây dựng lại toàn bộ DualScope nếu không có checkpoint, GPU và dữ liệu cần thiết.
-
-## Paper 2 — DriveCLIP
-
-Vision-Language Models Can Identify Distracted Driver Behavior from Naturalistic Videos
-
-Paper:
-https://doi.org/10.1109/TITS.2024.3381175
-
-Code:
-https://github.com/zahid-isu/DriveCLIP
-
-Nghiên cứu:
-
-- CLIP embeddings.
-- Zero-shot behavior recognition.
-- Vision-language representation.
-- SAFE vs PHONE vs OTHER discrimination.
-- Subject-invariant feature hypothesis.
-
-Thử frozen visual features trước fine-tuning.
-
-Kiểm tra xem code và pretrained checkpoints có sử dụng được cho các clips Roadwatch không.
-
-Không mặc định frame-based code đã có đầy đủ video-level implementation.
-
-## Paper 3 — Multi-Task Fusion
-
-Enhancing Driver Monitoring Systems Based on Novel Multi-Task Fusion Algorithm
-
-Paper:
-https://doi.org/10.3390/s25216799
-
-Nghiên cứu:
-
-- 3D ResNet18.
-- BiLSTM.
-- BODY/FACE/HANDS fusion.
-- Action recognition.
-- Gaze estimation.
-- Hand activity cues.
-- Task-aware attention.
-
-Áp dụng khi có đủ các camera views và data labels tương ứng.
-
-Missing view phải được mask hoặc abstain, không thay bằng chứng thiếu bằng negative evidence.
-
-## Paper 4 — DGMB-Net
-
-Towards Efficient Risky Driving Detection: A Benchmark and a Semi-Supervised Model
-
-Paper:
-https://doi.org/10.3390/s24051386
-
-Nghiên cứu:
-
-- Teacher–student learning.
-- Semi-supervised object detection.
-- Hierarchical feature pyramid.
-- Pseudo-label uncertainty.
-- Class-dependent confidence.
-- Annotation efficiency.
-
-Chỉ đưa semi-supervised learning vào training khi có dữ liệu được phép sử dụng và quy trình human review phù hợp.
-
-Không dùng pseudo-labels từ chính ground-truth evaluation subjects để chứng minh cải thiện trên các subjects đó.
-
-## Paper 5 — RST-Net / Lightweight Seatbelt
-
-Seatbelt Detection Algorithm Improved with Lightweight Approach and Attention Mechanism
-
-Paper:
-https://doi.org/10.3390/app14083346
-
-Nghiên cứu:
-
-- Torso/windshield localization.
-- Lightweight detection.
-- Triplet attention.
-- Small-object features.
-- False-positive reduction.
-
-Phân biệt detection của dải dây và classification trạng thái thắt dây.
-
-## Paper 6 — Overhead Traffic Surveillance
-
-Real-time Detection of Seat Belt Usage in Overhead Traffic Surveillance Using YOLOv7
-
-Paper:
-https://doi.org/10.35784/acs_7594
-
-Nghiên cứu:
-
-- Vehicle ROI.
-- Windshield ROI.
-- Occupant ROI.
-- Seatbelt evidence.
-- Day/night robustness.
-- Camera-domain transfer.
-
-Không coi kết quả overhead dataset là bằng chứng Roadwatch đã hoạt động tốt trên roadside videos.
-
-## Literature review deliverable
-
-Tạo bảng so sánh:
-
-- Full title.
-- Authors.
-- Venue/year.
-- DOI.
-- Code URL.
-- Checkpoint URL.
-- License.
-- Dataset.
-- Evaluation split.
-- Main metrics.
-- Metric definition.
-- Hardware.
-- Inference cost.
-- Reproducibility status.
-- Roadwatch integration feasibility.
-- Risks of domain mismatch.
-
-Nếu paper không cung cấp một số metric hoặc thông tin license, ghi NOT VERIFIED.
-
-Không tự tạo các con số 95%, 97%, 98% hoặc mức tăng 5–12%.
-
-Đặc biệt KHÔNG so sánh trực tiếp:
-
-- Classification Top-1 với Event F1.
-- YOLO mAP50 với Phone-use Event F1.
-- Frame F1 với video-event F1.
-- DMD cabin với roadside surveillance.
-- Development benchmark với independent holdout.
-
----
-
-# 6. PHASE B — ROOT-CAUSE ANALYSIS
-
-Mục tiêu là xác định chính xác vì sao 13 events bị bỏ sót.
-
-Tạo một bảng audit mỗi event gồm:
-
-- Event ID.
-- Subject.
-- Camera view.
-- Action label.
-- Start/end timestamps.
-- Event duration.
-- Phone visibility.
-- Phone proposal available?
-- Proposal confidence.
-- Phone box quality.
-- Hand proximity.
-- Face proximity.
-- Occupant association.
-- Action model probability.
-- SAFE/PHONE/OTHER prediction.
-- Temporal activation state.
-- Fusion rejection reason.
-- Match result.
-- Likely failure stage.
-
-Phân loại:
-
-1. Detector miss.
-2. Incorrect ROI.
-3. Small-object resolution loss.
-4. Occlusion.
-5. Missing phone boxes.
-6. Driver/occupant ambiguity.
-7. Action representation collapse.
-8. Domain/subject bias.
-9. Fusion suppression.
-10. Temporal-event failure.
-11. Annotation ambiguity.
-12. Insufficient visual evidence.
-
-Không tự xem toàn bộ 13 FN là detector failures.
-
-Không xem có một positive phone proposal ở một frame là đã phục hồi được một event.
-
-Phân biệt detector candidate yield với actual event recall.
-
-Xuất bằng chứng cấp frame, clip và event.
-
----
-
-# 7. PHASE C — PHONE DETECTION & DRIVER ASSOCIATION
-
-## C1. Reuse Existing Checkpoints
-
-Kiểm tra các YOLO models, bao gồm checkpoint `best.pt` thực sự có trên máy.
-
-Xác minh:
-
-- Architecture.
-- SHA-256.
-- Dataset provenance.
-- Class mapping.
-- Image size.
-- Training framework version.
-- Train/val/test split.
-- License.
-
-Không giả định checkpoint YOLO11m từ project hoặc notebook khác thuộc Roadwatch.
-
-Không tự tải checkpoint dung lượng lớn khi chưa biết dung lượng ổ đĩa.
-
-## C2. Small-Object Detection
-
-Thử nghiệm có kiểm soát:
-
-- Original full-frame inference.
-- Driver ROI inference.
-- Padded driver ROI.
-- High-resolution ROI.
-- Phone/hand interaction ROI.
-- Scale-aware cropping.
-- Context-preserving crop.
-- Camera-aware preprocessing.
-
-Bảo đảm chuyển tọa độ bbox từ ROI về ảnh gốc chính xác.
-
-Đặc biệt phân tích các trường hợp điện thoại sát rìa ROI.
-
-## C3. Negative Context
-
-Sử dụng thông tin:
-
-- HANDHELD_USE.
-- MOUNTED_OR_STATIC.
-- PHONE_VISIBLE_BUT_NOT_USED.
-- UNKNOWN.
-- POSSIBLE_USE.
-
-Không tự coi điện thoại xuất hiện là vi phạm.
-
-Không tự coi camera gắn cố định là điện thoại.
-
-Giữ raw confidence và admitted confidence riêng biệt.
-
-Lưu rejection reason.
-
-Context chưa được xác thực không được sử dụng như bằng chứng chắc chắn.
-
-## C4. Occupant Tracking
-
-Thiết kế module driver association:
-
-- Driver ROI hoặc driver seat position.
-- Occupant/person track.
-- Phone association.
-- Hand association.
-- Temporal identity consistency.
-- Unknown driver identity handling.
-
-Có thể thử ByteTrack hoặc cơ chế association nhẹ khi thích hợp.
-
-Không mặc định ByteTrack tự xác định ai là tài xế.
-
-Khi driver association chưa đủ tin cậy:
-
-- Mark UNKNOWN.
-- Không khẳng định hành khách sử dụng điện thoại là tài xế vi phạm.
-
-Thực hiện regression tests cho:
-
-- Driver holding phone.
-- Passenger holding phone.
-- Mounted phone.
-- Mounted cabin camera.
-- Hand near ear without phone.
-- Phone occluded.
-- Phone on lap.
-- Multiple occupants.
-
----
-
-# 8. PHASE D — BEHAVIOR-CENTRIC REPRESENTATION
-
-Đây là ưu tiên nghiên cứu cao nhất.
-
-V9 báo cáo subject silhouette lớn hơn action silhouette 8.42 lần.
-
-Giả thuyết: Frozen embeddings còn mang nhiều thông tin nhận diện subject/background và chưa đủ mạnh để phân biệt hành vi.
-
-Phải kiểm nghiệm giả thuyết thay vì coi nó là nguyên nhân đã được chứng minh.
-
-## Experiment D0 — Frozen Baseline
-
-Giữ toàn bộ model hiện tại.
-
-Đo:
-
-- Subject silhouette.
-- Action silhouette.
-- SAFE/PHONE/OTHER confusion matrix.
-- Clip Macro-F1.
-- Event F1.
-- Per-subject predictions.
-
-## Experiment D1 — Torso/Hand/Face Crops
+Thiết kế một original-resolution ROI pipeline.
 
 So sánh:
 
-- Full driver ROI.
-- Upper-body ROI.
-- Torso ROI.
-- Hand ROI.
-- Face ROI.
-- Full ROI + selected body-part features.
+R0 — Frozen 64×64 baseline.
+R1 — Original driver ROI.
+R2 — Padded hand/phone ROI.
+R3 — Face/hand ROI.
+R4 — Torso/hand/face multi-region.
+R5 — Scale-aware dynamic ROI.
 
-Không áp dụng một crop cố định cho mọi camera nếu crop làm mất hành vi quan trọng.
+Yêu cầu:
 
-## Experiment D2 — Motion Features
+- Decode original frame ở độ phân giải nguồn khi quyền đọc cho phép.
+- Không phóng to ảnh cache 64×64 rồi gọi là khôi phục chi tiết.
+- Bảo tồn original-frame coordinates.
+- Bảo tồn crop transform.
+- Xử lý phone sát biên ROI.
+- Xử lý phone che khuất bởi tay.
+- Xử lý phone trên đùi.
+- Xử lý mounted cabin camera.
+- Lưu provenance và input hash.
+- Không cắt vào protected subjects.
 
-Thử:
+Chỉ số chẩn đoán:
+- Phone pixel width/height.
+- Valid crop coverage.
+- Edge clipping.
+- Candidate yield.
+- Detector confidence distribution.
+- Runtime and memory.
 
-- RGB frame difference.
-- Optical-flow-inspired motion statistics.
-- Temporal residual features.
-- Multi-scale temporal pooling.
-- Hand trajectory features.
+Không gọi candidate yield là detector AP.
 
-Ưu tiên lightweight methods trước.
+Không gọi 12/13 reviewed boxes là 12 recovered events.
 
-## Experiment D3 — CLIP Frozen Features
+## 6. P2 — HOÀN THIỆN CAUSAL E3 INFERENCE
 
-Nếu code/checkpoint được phép dùng:
+V12 đã xây dựng OnlineE3 feature extractor có batch parity.
 
-- Test frozen visual encoder.
-- Extract compatible embeddings.
-- Normalize properly.
-- Train small controlled head trên development training split hợp lệ.
-- Measure subject/action separability.
+Hãy kiểm tra code hiện có trước khi tạo module mới.
 
-Không mặc định CLIP tốt hơn ResNet.
+Ưu tiên tái sử dụng:
+- causal_motion.py
+- behavior_roi.py
+- driver_phone_association.py
+- Existing temporal/fusion adapters.
 
-## Experiment D4 — ResNet18 + GRU/BiLSTM
+Nhiệm vụ:
 
-Kế thừa models có sẵn.
+A. Kiểm tra feature schema và class order.
 
-Thử:
+B. Kiểm tra logic spatial + past-running normalization.
 
-- Better input representation.
-- Balanced negatives.
-- Residual motion information.
-- Multi-ROI fusion.
-- Lightweight temporal head.
+C. Kiểm tra state reset theo:
+- Stream.
+- Session.
+- Camera.
+- Track.
+- Timestamp gap.
+- Out-of-order input.
 
-Không lặp lại thí nghiệm attention hoặc Native112 thất bại nếu không có giả thuyết mới.
+D. Kiểm tra missing-history handling.
 
-## Experiment D5 — Representation Fusion
+E. Không sử dụng future frames trong online path.
 
-Kết hợp có kiểm soát:
+F. Không nhầm uncalibrated scores với calibrated probabilities.
 
-- Frozen visual embeddings.
-- Motion embeddings.
-- Phone evidence.
-- Hand/face geometry.
-- Temporal action probabilities.
+G. Thiết lập export/load contract cho fitted head/scaler.
 
-Đánh giá ablation của từng thành phần.
+H. Không tự tạo hệ số fitted head/scaler bằng dữ liệu giả để chạy Event Replay.
 
-Không bổ sung nhiều yếu tố cùng lúc khiến không xác định được nguyên nhân tăng/giảm F1.
+Nếu đã có artifact fitted hợp lệ:
+- Verify provenance và class mapping.
+- Load bằng định dạng an toàn.
+- Reproduce frozen predictions.
+- Kiểm tra numerical parity.
 
----
+Nếu chưa có artifact:
+- Giữ trạng thái BLOCKED_MISSING_FITTED_HEAD_SCALER.
+- Viết test với synthetic numeric weights có nhãn rõ là fixtures.
+- Chuẩn bị export path để sau khi quyền training hợp lệ có thể hoàn tất.
+- Không sửa runtime active model.
 
-# 9. PHASE E — CLASS IMBALANCE AND HARD NEGATIVES
+## 7. P3 — ACTION REPRESENTATION RESEARCH
 
-Tập trung vào ba lớp:
+Nghiên cứu các phương pháp sau.
 
-- SAFE_DRIVING.
-- PHONE_USE.
-- OTHER_ACTIVITY.
+### DualScope
 
-Kiểm tra:
+https://ojs.aaai.org/index.php/AAAI/article/view/37812
 
-- Distribution.
-- Per-class recall.
-- Class collapse.
-- Label noise.
-- Duplicate clips.
-- Train/validation leakage.
-- Subject identity bias.
+Ý tưởng:
+- Critical spatial regions.
+- Fine-grained motion.
+- Temporal pyramid.
+- Spatial/temporal attention.
 
-Nghiên cứu:
+### DriveCLIP
 
-- Class-balanced sampling.
-- Class weights.
-- Focal loss.
-- Hard-negative mining.
-- Supervised contrastive loss khi labels đủ tốt.
-- Consistency regularization.
-- Margin-based classification.
-- Confidence calibration.
+https://github.com/zahid-isu/DriveCLIP
 
-Hard-negative examples nên bao gồm:
+Ý tưởng:
+- Frozen vision-language features.
+- SAFE vs PHONE vs OTHER.
+- Transfer learning.
+- Behavior semantics.
 
-- Người lái đưa tay gần tai.
-- Chỉnh gương.
-- Uống nước.
-- Điều chỉnh vô lăng.
-- Tay gần mặt.
-- Điện thoại gắn giá đỡ.
-- Camera cabin bị phát hiện nhầm.
-- Hành khách cầm điện thoại.
-- Vật thể tương tự điện thoại.
+### MixStyle
 
-Chỉ dùng labels đáng tin cậy.
+https://arxiv.org/abs/2104.02008
 
-Không lấy các FN development đã xem nhiều lần đưa thẳng vào training rồi đánh giá lại trên chính những event đó như thể là generalization.
+Ý tưởng:
+- Giảm ảnh hưởng môi trường/camera/background.
+- Feature-level style perturbation.
 
----
+### Group DRO
 
-# 10. PHASE F — TEMPORAL ACTION & EVENT RECOVERY
+https://arxiv.org/abs/1911.08731
 
-Các thí nghiệm V8 cho thấy:
+Ý tưởng:
+- Worst-group robustness.
+- Group-aware optimization.
 
-- Dense sampling phục hồi một long event.
-- Dense sampling tạo nhiều false positives.
-- 4/4 subsecond events vẫn bị bỏ sót.
+Không khẳng định đã tái hiện paper nếu chỉ dùng một ý tưởng.
 
-Do đó không lặp lại fixed dense sampling đơn thuần.
+Ưu tiên thực nghiệm ít tốn GPU.
 
-## Nghiên cứu mới
+Các experiment:
 
-- Motion-aware clip representation.
-- Event proposal generation.
-- Per-frame action evidence.
-- Short-action detection.
-- Background/transition modeling.
-- Onset and offset localization.
-- Class-aware temporal confidence.
-- Event fragmentation control.
-- Confidence hysteresis.
-- Temporal consistency without excessive delay.
+A0 — Frozen E3 reference.
+A1 — Original-resolution spatial evidence.
+A2 — Causal E3 + ROI.
+A3 — Motion + phone/hand features.
+A4 — Lightweight multi-region fusion.
+A5 — Frozen CLIP features nếu đủ điều kiện.
+A6 — Group-aware training nếu đủ subject và data rights.
 
-## Causal vs Non-causal
+Không thực hiện fitting mới nếu live permission gate không cho phép.
 
-Kiểm tra kỹ inherited BiGRU context.
+Nếu có dữ liệu huấn luyện hợp lệ:
+- Chốt split trước.
+- Thử mỗi lần một thay đổi chính.
+- Giữ baseline và seed.
+- Đo pooled và worst-subject metrics.
+- Kiểm tra calibration và class imbalance.
 
-Nếu inference sử dụng future frames, phải báo cáo thật độ trễ phát hiện.
+Dừng hoặc reject candidate nếu SAFE/PHONE Recall giảm mạnh dù pooled Macro-F1 tăng.
 
-Không gọi hệ thống real-time/causal nếu action encoder cần nhìn trước các khung hình tương lai.
+## 8. P4 — DRIVER-PHONE ASSOCIATION
 
-Có thể thiết kế riêng:
+Đọc và nâng cấp module hiện có.
 
-1. Offline high-accuracy video analysis.
-2. Online low-latency mode.
+Thiết lập các trạng thái:
+- DRIVER_ASSOCIATED
+- PASSENGER_ASSOCIATED
+- MOUNTED_OR_STATIC
+- UNKNOWN
 
-Không gộp hai chế độ khi tính latency.
+Association phải dùng bằng chứng có provenance:
+- Driver seat localization.
+- Occupant track.
+- Phone location.
+- Hand proximity.
+- Temporal consistency.
+- Camera/seat context nếu được xác minh.
 
-## Event integrity
+Không coi heuristic confidence là calibrated probability.
 
-Giữ nguyên:
+Không khẳng định occupant identity khi không có verified track.
 
-- Ground truth.
-- Event matcher.
-- Event matching IoU.
-- Frozen matching tolerance.
-- Prediction-to-event semantics.
+Kiểm thử:
+- Driver cầm điện thoại.
+- Passenger cầm điện thoại.
+- Mounted camera.
+- Mounted phone.
+- Người lái đưa tay lên tai nhưng không có điện thoại.
+- Two occupants overlap.
+- Ambiguous tracking.
+- Missing view.
+- Phone at ROI boundary.
 
-Không kéo dài predicted intervals chỉ để tăng overlap.
+Không biến UNKNOWN thành chắc chắn vi phạm hoặc chắc chắn an toàn.
 
-Không dùng ground-truth start/end để kích hoạt event proposal lúc inference.
+Theo dõi coverage, abstention, false alarms và lost TP.
 
----
+## 9. P5 — FUSION & EVENT DETECTION
 
-# 11. PHASE G — MULTI-VIEW FUSION
+Mục tiêu là biến các đặc trưng tốt hơn thành sự kiện tốt hơn.
 
-Dữ liệu DMD có BODY/FACE/HANDS, nhưng không phải subject nào cũng có đủ views.
+Không xây dựng một event engine mới trùng chức năng nếu engine hiện có đáp ứng.
 
-Thiết kế:
+Đầu vào:
+- Object detection.
+- Action scores.
+- Motion evidence.
+- Phone/hand geometry.
+- Driver association.
+- Negative context.
+- Timestamps.
 
-- BODY-primary features.
-- FACE cues cho phone call.
-- HANDS cues cho texting.
-- Confidence-calibrated fusion.
-- Reliability-aware weighting.
-- Missing-view mask.
-- Negative evidence gating.
-- Driver association evidence.
+Đầu ra:
+- Event candidate.
+- Stable event ID.
+- Start/end.
+- Real emission time.
+- Source view.
+- Evidence hashes.
+- Raw and fused confidence.
+- Rejection reasons.
+- Uncertainty state.
 
-Không cho camera phụ tự tạo event nếu không có bằng chứng người lái phù hợp.
+Giữ nguyên frozen event matching policy.
 
-Không sử dụng một view bị thiếu như bằng chứng negative.
-
-Thử ít nhất:
-
-G0 — Existing late fusion.
-
-G1 — Geometry-aware fusion.
-
-G2 — Motion + action fusion.
-
-G3 — Context-aware negative evidence.
-
-G4 — Multi-ROI behavior fusion.
-
-G5 — Selected candidate với evaluation hợp lệ.
-
-Mọi thí nghiệm phải xuất:
-
+Bắt buộc có:
+- TP IDs.
+- FP IDs.
+- FN IDs.
 - Recovered TP IDs.
 - Lost TP IDs.
 - New FP IDs.
 - Removed FP IDs.
-- FN changes.
+
+Đo:
+- Event P/R/F1.
 - FA/min.
-- Per-subject metrics.
+- Recall với events <1s.
+- Recall 1–3s.
+- Recall 3–10s.
+- Recall >10s.
+- Fragmentation.
+- Duplicate alarms.
+- Onset latency.
+- Emission latency.
 
-Không chỉ báo cáo tăng Precision mà bỏ qua Recall.
+Không dùng GT timestamps tại inference.
 
----
+Không backdate emission time để tuyên bố latency thấp.
 
-# 12. PHASE H — SEATBELT RESEARCH
+Nếu không có fitted E3 candidate, không được báo đã đo E3 Event F1.
 
-Roadwatch phải chứng minh được cả nhiệm vụ dây an toàn.
+Có thể chạy lại frozen context replay để kiểm tra metric reconciliation, nhưng không gọi đó là một thí nghiệm độ chính xác mới.
 
-Hiện tại:
+## 10. P6 — SEATBELT THREE-STATE IMPROVEMENT
 
-- Seatbelt Macro-F1 dưới 60%.
-- UNCERTAIN Recall rất thấp.
-- Một số labels đang chờ human approval.
+Kiểm tra lại 500 pending seatbelt candidates.
 
-## H1. Data Audit
+Không tự chuyển PENDING thành APPROVED.
 
-Kiểm tra:
-
+Giữ ba lớp:
 - FASTENED.
 - UNFASTENED.
 - UNCERTAIN_OR_OCCLUDED.
-- Label source.
-- Human approval.
-- Occlusion.
-- Camera angle.
-- Color/lighting.
-- False-unfastened cases.
-- Dataset subject groups.
-
-Không gộp UNCERTAIN vào UNFASTENED.
-
-Không dùng labels model-assisted pending approval làm confirmed GT.
-
-## H2. ROI Experiments
-
-- Original torso ROI.
-- Better upper-body ROI.
-- Belt-line-aware features.
-- Context-preserving crop.
-- Appropriate TTA.
-
-Không tự mặc định tăng resolution từ 224 lên 320 giúp cải thiện: thí nghiệm trước cho thấy có thể giảm Macro-F1.
-
-## H3. Architecture Research
-
-Có thể thử:
-
-- ResNet18 fine-tune.
-- Lightweight attention module.
-- Triplet Attention.
-- Two-stage seatbelt localization.
-- Multi-task belt visibility/state prediction.
-
-Thực hiện mỗi thay đổi bằng ablation.
-
-## H4. Uncertainty Handling
-
-Tách:
-
-- No belt visible.
-- Confirmed unfastened.
-- Occluded/unknown.
-
-Khi không đủ bằng chứng, trả về UNCERTAIN.
-
-Đo:
-
-- Macro-F1.
-- Per-class Precision/Recall/F1.
-- Balanced accuracy.
-- False-unfastened rate.
-- Abstention rate.
-- Calibration error.
-
-Đừng tối ưu false-unfastened rate bằng cách abstain trên mọi ảnh.
-
-Báo cáo coverage và selective risk.
-
----
-
-# 13. PHASE I — DATASET GOVERNANCE & GENERALIZATION
-
-Đây là điều kiện bắt buộc trước khi công bố mục tiêu 85%.
-
-## Protected subjects
-
-Không sử dụng cho training hoặc tuning:
-
-- gZ-37.
-- gE-28.
-
-Giữ nguyên trạng thái holdout đã khóa.
-
-## Development subjects
-
-Các subject:
-
-- gB-9.
-- gZ-36.
-- gC-14.
-
-đã bị sử dụng lặp lại qua nhiều vòng.
-
-Không tiếp tục xem chúng là independent test.
-
-## Rights & Licensing
-
-DMD intake trước đây còn ghi:
-
-- RIGHTS_ACCEPTED=false.
-- CANONICAL_ELIGIBLE=false.
-
-Phải xác minh trạng thái hiện tại trước mọi hoạt động sử dụng dữ liệu mới, tải lên dịch vụ bên ngoài, đào tạo hoặc phát hành artifact.
-
-Không tự giả định quyền sử dụng.
-
-Không tải video, dữ liệu cá nhân hoặc holdout lên Kaggle/Hugging Face nếu chưa có quyền và approval rõ ràng.
-
-## New subjects
-
-Nếu có dữ liệu mới hợp lệ:
-
-1. Verify provenance.
-2. Verify licenses.
-3. Inspect annotations.
-4. Deduplicate.
-5. Group by subject/camera.
-6. Define train/validation split.
-7. Lock independent holdout.
-8. Record dataset hash.
-9. Train/select models only on eligible training and validation.
-10. Freeze model, threshold and event policy.
-11. Evaluate independent holdout.
-
-Không được nhìn independent holdout để quyết định architecture hoặc threshold.
-
-Nếu thiếu subject mới, ghi:
-
-DATA_GENERALIZATION_BLOCKED
-
-Không tạo synthetic subject IDs để giả lập independent evaluation.
-
----
-
-# 14. PHASE J — TRAINING STRATEGY
-
-Không train from scratch nếu có checkpoint phù hợp.
 
 Ưu tiên:
+1. Human-reviewed labels.
+2. Torso crop quality.
+3. Belt visibility representation.
+4. Hard negatives.
+5. Class-aware calibration.
+6. Lightweight attention.
+7. Selective fine-tuning.
 
-1. Existing checkpoint audit.
-2. Frozen feature comparison.
-3. Light classifier/head training.
-4. Partial backbone fine-tune.
-5. Detector fine-tuning with approved labels.
-6. Larger model training only when justified.
+Nếu quyền fitting và nhãn chưa có:
+- Chuẩn bị annotation/review workflow.
+- Kiểm tra pipeline.
+- Chạy synthetic tests.
+- Báo BLOCKED.
+- Không giả lập training improvements.
 
-## CPU-only
-
-Khi không có CUDA:
-
-- Run artifact verification.
-- Build feature extraction pipeline.
-- Execute lightweight probes.
-- Verify input/output contracts.
-- Perform error analysis.
-- Train small heads if feasible.
-- Run unit tests.
-- Prepare GPU configs.
-
-Không báo GPU benchmark khi thực tế chỉ có CPU.
-
-## GPU
-
-Khi có GPU:
-
-- Verify GPU type.
-- Verify VRAM.
-- Run one controlled pilot.
-- Profile memory.
-- Set suitable batch size.
-- Record GPU hours.
-- Use early stopping.
-- Store training curves.
-- Preserve checkpoints.
-
-Không cam kết thời gian training 15–20 phút nếu chưa đo.
-
-## Warm-start
-
-Nếu checkpoint best.pt phù hợp:
-
-- Verify SHA.
-- Verify classes.
-- Load pretrained weights.
-- Use a new experiment name.
-- Fine-tune only with eligible data.
-
-Nếu cần exact resume, verify last.pt và training state.
-
-Không nhầm warm-start và resume.
-
-## Zero-retraining
-
-Chỉ thử TTA/NMS/resolution khi có giả thuyết cụ thể.
-
-Các thí nghiệm này đã từng cho kết quả không thuyết phục trong V8.
-
-Không tiếp tục quét threshold trên development subjects đã xem nhiều lần.
-
-Khi đo mAP của YOLO phải sử dụng evaluation settings phù hợp để xây dựng PR curve.
-
-Không thay đổi confidence, NMS, TTA và image size đồng thời rồi quy tất cả cải thiện cho một yếu tố.
-
----
-
-# 15. PHASE K — EXPERIMENT DESIGN
-
-Mọi experiment phải có research hypothesis.
-
-## Required fields
-
-- Experiment ID.
-- Commit SHA.
-- Hypothesis.
-- Independent variable.
-- Controlled variables.
-- Model checkpoint hash.
-- Dataset hash.
-- Split definition.
-- License status.
-- Config.
-- Training seed.
-- GPU/CPU environment.
-- Prediction files.
-- Metrics.
-- Runtime.
-- Limitations.
-- Decision: KEEP / REJECT / INCONCLUSIVE / BLOCKED.
-
-## Phân cấp mức độ bằng chứng
-
-LEVEL 1:
-Diagnostic only.
-
-LEVEL 2:
-Development ablation.
-
-LEVEL 3:
-Subject-disjoint validation.
-
-LEVEL 4:
-Independent locked holdout.
-
-LEVEL 5:
-Deployment evaluation.
-
-Không dùng LEVEL 1 kết luận LEVEL 4.
-
-## Phone Metrics
-
-- TP.
-- FP.
-- FN.
-- Precision.
-- Recall.
-- Event F1.
-- FA/min.
-- Per-subject F1.
-- Worst-subject FA/min.
-- Clip Macro-F1.
-- SAFE_DRIVING Recall.
-- Event onset latency.
-- Short-event recall.
-- Duplicate/fragmentation count.
-
-## Seatbelt Metrics
-
-- Per-class P/R/F1.
+Nếu đủ điều kiện:
+- Warm-start checkpoint cũ.
+- Group-disjoint split.
+- Ablation từng yếu tố.
+- Per-class Precision/Recall/F1.
 - Macro-F1.
 - Balanced Accuracy.
 - False-unfastened.
 - Abstention/coverage.
-- Calibration.
 
-## Object Detection Metrics
+Không coi belt bị che khuất là không thắt dây.
 
-- mAP50.
-- mAP50-95.
-- Per-class AP.
-- PR curves.
-- False positive classes.
-- Inference latency.
+## 11. P7 — RUNTIME ENGINEERING
 
-Không lẫn lộn các metric này.
+V12 E3 feature latency khoảng 3–5 ms trên cache, nhưng chưa phải full pipeline.
 
----
+Hãy phân biệt:
+- Decode time.
+- Detector inference.
+- ROI extraction.
+- Encoder.
+- Fitted head.
+- Association.
+- Fusion.
+- Event engine.
+- Database/evidence writes.
 
-# 16. PHASE L — SOFTWARE ENGINEERING AND TESTS
+Đo trên cùng thiết bị và cùng test set.
 
-Sau khi sửa code:
-
-- Run Python compile.
-- Run Ruff critical gate.
-- Run scoped Ruff checks.
-- Run targeted pytest.
-- Run full pytest.
-- Run event-metric reconciliation.
-- Run data-split guard tests.
-- Run subject-leakage tests.
-- Run bbox ROI-coordinate tests.
-- Run missing-view tests.
-- Run geometry-context tests.
-- Run seatbelt uncertainty tests.
-- Run backend smoke.
-- Run frontend build.
-- Run inference smoke if model weights available.
-
-Bổ sung regression tests cho:
-
-1. Mounted camera false detection.
-2. Phone near ROI border.
-3. Phone partially occluded.
-4. No valid phone proposal.
-5. Unknown driver association.
-6. Missing FACE/HANDS view.
-7. SAFE driving with hand near face.
-8. Short positive event.
-9. Overlapping event boundaries.
-10. False-unfastened due to occlusion.
-
-Không xóa hoặc nới lỏng test để báo PASS.
-
-Không sửa metric matcher để tăng Event F1.
-
-## Runtime
-
-Đo:
-
-- Detector latency.
-- ROI extraction latency.
-- Feature encoder latency.
-- Temporal head latency.
-- Fusion latency.
-- Seatbelt inference latency.
-- Full-pipeline FPS.
-- GPU memory.
-- CPU RAM.
+Báo:
+- Detector FPS.
+- Full-pipeline processing FPS.
 - p50/p95 latency.
+- CPU RAM.
+- GPU VRAM nếu có.
+- Cold-start latency.
+- End-to-end alert delay.
 
-Không dùng cached-feature FPS thay cho full-system FPS.
+Không gọi detector-call FPS hoặc cached-feature FPS là full-system FPS.
 
-Không gọi 21 FPS detector trên Tesla T4 là 21 FPS toàn hệ thống.
+## 12. P8 — SCIENTIFIC EXPERIMENT GATES
 
----
+Mỗi experiment cần:
+- ID.
+- Hypothesis.
+- Code SHA.
+- Dataset hash.
+- Checkpoint hash.
+- Training rights status.
+- Split definition.
+- Seed.
+- Changed factor.
+- Baseline.
+- Metrics.
+- Runtime.
+- Failure analysis.
+- Decision.
 
-# 17. PHASE M — MODEL SELECTION & PRODUCTION GATE
+Phân cấp:
+LEVEL 1 — Diagnostics.
+LEVEL 2 — Repeated development ablation.
+LEVEL 3 — Newly acquired group-disjoint validation.
+LEVEL 4 — Locked independent holdout.
 
-Một model chỉ được xem xét chọn khi:
+Không dùng LEVEL 1/2 để tuyên bố generalization đạt 85%.
 
-- Có checkpoint và provenance hợp lệ.
-- Có đủ dataset rights.
-- Có đúng evaluation protocol.
-- Có kết quả P/R/F1/FA minh bạch.
-- Không dựa trên selected FN development cases.
-- Có subject-disjoint validation đáng tin cậy.
-- Có confidence/uncertainty handling.
-- Không làm mất các TP quan trọng mà không báo cáo.
-- Có performance runtime phù hợp.
-- Không có regression nghiêm trọng.
+Không quét confidence/threshold lặp vô hạn trên ba subjects cũ.
 
-Nếu chưa đủ điều kiện:
+Không sử dụng gZ-37 và gE-28 để chọn candidate.
 
-production_approved = false
+Nếu chưa có approved independent test:
+INDEPENDENT_AI85_NOT_ESTABLISHED
 
-Không tự động chỉnh production model config.
+## 13. P9 — TESTS VÀ SOFTWARE QUALITY
 
-Không tự động merge candidate.
+Chạy:
+- Python compile.
+- Ruff.
+- Targeted Pytest.
+- Full Pytest.
+- Frontend build.
+- Backend smoke.
+- V12 artifact reconciliation.
+- Synthetic model-loading tests.
+- Data authorization gates.
+- Protected holdout guards.
+- ROI coordinate tests.
+- Batch/online parity tests.
+- Session-state reset tests.
+- Occupant association tests.
+- Temporal event reconciliation.
 
-Không báo "85% achieved" khi chỉ có development results.
+Không thay đổi test để chỉ báo PASS.
 
----
+So sánh với baseline báo cáo V12: 618 tests PASS.
 
-# 18. PHASE N — REQUIRED DELIVERABLES
+Nếu có tests mới và tổng tăng/giảm, báo số liệu thật.
+
+Nếu một smoke test không chạy, ghi NOT RUN hoặc BLOCKED, không ghi PASS.
+
+## 14. REQUIRED OUTPUTS
 
 Tạo:
+reports/v13_research/
 
-reports/v10_research/
+Bắt buộc có:
 
-Bao gồm:
+01_HEAD_AND_ENVIRONMENT_AUDIT.md
+02_DATA_RIGHTS_AND_SPLIT_AUDIT.md
+03_BASELINE_RECONCILIATION.md
+04_PHONE_HIGH_RES_ROI.md
+05_ONLINE_E3_ARTIFACT_READINESS.md
+06_BEHAVIOR_REPRESENTATION_RESULTS.md
+07_DRIVER_PHONE_ASSOCIATION.md
+08_FUSION_AND_EVENT_REPLAY.md
+09_SEATBELT_RESULTS.md
+10_RUNTIME_BENCHMARK.md
+11_TEST_RESULTS.md
+12_FINAL_AI_LEAD_REPORT.md
 
-01_REPOSITORY_AND_ENVIRONMENT_AUDIT.md
-
-02_PAPER_REVIEW_AND_REPRODUCIBILITY.md
-
-03_DATASET_AND_LICENSE_AUDIT.md
-
-04_MODEL_CHECKPOINT_INVENTORY.md
-
-05_DMD_FN_FP_ROOT_CAUSE.md
-
-06_PHONE_DETECTION_AND_ASSOCIATION.md
-
-07_BEHAVIOR_CENTRIC_REPRESENTATION.md
-
-08_MOTION_AND_VIDEO_ACTION_ABLATIONS.md
-
-09_CLASS_IMBALANCE_AND_SAFE_DRIVING.md
-
-10_MULTI_VIEW_FUSION_EXPERIMENTS.md
-
-11_TEMPORAL_EVENT_EXPERIMENTS.md
-
-12_SEATBELT_RESEARCH_RESULTS.md
-
-13_METRICS_COMPARISON.md
-
-14_GENERALIZATION_VALIDATION.md
-
-15_RUNTIME_BENCHMARK.md
-
-16_TEST_RESULTS.md
-
-17_FINAL_AI_LEAD_REVIEW.md
-
-Cùng:
-
+Cùng các file machine-readable:
 - experiment_registry.json
 - metrics_comparison.json
 - dataset_manifest.json
 - model_manifest.json
-- prediction artifacts
-- confusion matrices
-- per-subject results
-- event matching evidence
-- source hashes
-- model hashes
+- candidate_readiness.json
+- event_match_records.json khi có event replay thực
 - reproduction commands
-- failure logs
 
-Không tạo các báo cáo trống chỉ để đủ tên file.
+Không tạo file báo cáo rỗng.
 
-Không điền số liệu giả vào những experiment chưa chạy.
+Không sửa các báo cáo cũ để làm mất lịch sử thực nghiệm thất bại.
 
----
+## 15. THỰC THI NGAY VÀ TIÊU CHÍ HOÀN THÀNH
 
-# 19. PRIORITY ORDER — THỰC HIỆN THEO THỨ TỰ
+Thực hiện theo thứ tự:
 
-## P0 — REPRODUCIBILITY / SAFETY
+1. Xác minh HEAD, Git và permissions.
+2. Reconcile baseline V12.
+3. Kiểm tra và hoàn thiện original-resolution ROI pipeline.
+4. Xác minh OnlineE3 feature path.
+5. Kiểm tra fitted head/scaler availability.
+6. Hoàn thiện driver association và unknown handling.
+7. Triển khai candidate inference adapter opt-in.
+8. Chạy synthetic regression tests.
+9. Chạy những thí nghiệm thực tế được quyền thực hiện.
+10. Chạy event-level replay nếu có candidate và dữ liệu hợp lệ.
+11. Kiểm tra seatbelt review/training readiness.
+12. Chạy full tests, build, smoke và benchmarks khả thi.
+13. Tổng hợp report có đầy đủ bằng chứng.
+14. Đưa ra quyết định KEEP/REJECT/BLOCKED cho từng candidate.
 
-- Audit Git.
-- Audit rights and dataset roots.
-- Verify baseline.
-- Verify checkpoint.
-- Preserve holdouts.
+Nếu thiếu quyền, dữ liệu hoặc artifact:
+- Nêu blocker chính xác.
+- Không tự lách quyền bằng cách đổi tên hoạt động training thành diagnostics.
+- Không tự tạo model fitted giả.
+- Không hủy dữ liệu.
+- Chuyển sang hạng mục độc lập có thể hoàn thành và kiểm chứng.
 
-## P1 — DATA & REPRESENTATION
+KẾT LUẬN BẮT BUỘC TRONG FINAL REPORT:
 
-- Analyze subject bias.
-- Examine 13 FN.
-- Compare ROI/motion/frozen embeddings.
-- Improve hand-phone-face evidence.
+A. Những source files thực sự được thay đổi.
 
-## P2 — EVENT RECALL
+B. Những thí nghiệm thực sự đã chạy.
 
-- Better video action representation.
-- Short-event recognition.
-- Driver/occupant association.
-- Context-aware candidate generation.
+C. Kết quả mới so với baseline V12.
 
-## P3 — PRECISION & FUSION
+D. Phone Event TP/FP/FN/P/R/F1/FA-min.
 
-- Reduce mounted/static false positives.
-- Reliability-aware fusion.
-- Preserve recovered TP.
-- Reconcile full event metrics.
+E. SAFE/PHONE/OTHER clip metrics.
 
-## P4 — SEATBELT
+F. Worst-subject metrics.
 
-- Confirm labels.
-- Improve UNCERTAIN class.
-- ROI/attention experiments.
-- Measure false-unfastened risk.
+G. Seatbelt metrics.
 
-## P5 — TRAINING
+H. FPS/latency được đo đúng phạm vi.
 
-- Fine-tune only when lawful data and experiment design are ready.
-- Reuse existing weights.
-- Run controlled ablations.
-- Measure real improvement.
+I. Kết quả test.
 
-## P6 — VALIDATION
+J. Các dataset/license/label blockers.
 
-- New group-disjoint subjects.
-- Frozen thresholds.
-- Locked holdout.
-- Honest scientific report.
+K. Candidate nào có fitted artifacts, candidate nào chưa.
 
----
+L. Independent evaluation đã tồn tại chưa.
 
-# 20. FINAL EXECUTION CONTRACT
+M. Có đạt mục tiêu 85% một cách khoa học chưa.
 
-BẮT ĐẦU NGAY.
+N. Có đủ điều kiện production approval không.
 
-Không dừng lại ở kế hoạch.
+O. Một thí nghiệm tiếp theo có giá trị cao nhất.
 
-Thực hiện tuần tự:
+Quy tắc cuối cùng:
 
-1. Audit repository và environment.
-2. Đọc papers và lập research gap matrix.
-3. Phân tích 13 FN cùng diagnostic artifacts.
-4. Kiểm tra dataset và checkpoint provenance.
-5. Xây dựng behavior-centric ROI representation.
-6. Thử frozen feature comparison.
-7. Phát triển phone-hand-face / driver association evidence.
-8. Chạy controlled action experiments.
-9. Tối ưu event fusion có kiểm chứng.
-10. Xử lý seatbelt uncertainty.
-11. Fine-tune chỉ khi đủ điều kiện.
-12. Chạy tests và benchmark.
-13. Tổng hợp TP/FP/FN và per-subject metrics.
-14. Viết final report bằng tiếng Việt.
-15. Đề xuất model selection dựa trên đúng evidence level.
+**KHÔNG ĐƯỢC TẠO CHỈ SỐ 85% BẰNG CÁCH THAY ĐỔI GROUND TRUTH, EVENT MATCHER, TEST DATA, THRESHOLD TRÊN HOLDOUT, MẪU SỐ HOẶC PHẠM VI ĐÁNH GIÁ.**
 
-Nếu blocker xuất hiện:
+Mục tiêu là tạo ra một Roadwatch có mô hình thật sự tốt hơn, ít bỏ sót hành vi hơn, ít cảnh báo sai hơn, hoạt động ổn định trên người lái mới và có bằng chứng bảo vệ đồ án tốt nghiệp.
 
-- Ghi rõ blocker.
-- Không tự bỏ qua data rights.
-- Không dùng protected holdouts.
-- Không giả lập GPU training.
-- Tiếp tục các công việc độc lập có thể thực hiện được.
-
-Khi hoàn thành, báo cáo:
-
-A. Đã sửa những source files nào?
-
-B. Đã chạy những experiments nào?
-
-C. Những papers nào thực sự được áp dụng?
-
-D. Baseline và candidate khác nhau thế nào?
-
-E. TP/FP/FN thay đổi ra sao?
-
-F. Event Precision/Recall/F1 đạt bao nhiêu?
-
-G. SAFE_DRIVING Recall đạt bao nhiêu?
-
-H. Seatbelt Macro-F1 đạt bao nhiêu?
-
-I. FA/min đạt bao nhiêu?
-
-J. Full-system FPS là bao nhiêu?
-
-K. Có independent holdout chưa?
-
-L. Có đủ điều kiện production approval chưa?
-
-M. Những vấn đề nào cần dữ liệu hoặc GPU mới giải quyết được?
-
-N. Đề xuất nghiên cứu tiếp theo có giá trị cao nhất là gì?
-
-# NGUYÊN TẮC CUỐI CÙNG
-
-Mục tiêu không phải làm cho báo cáo xuất hiện con số 85%.
-
-Mục tiêu là xây dựng mô hình AI thật sự phát hiện được hành vi vi phạm, giảm false alarms, tổng quát hóa trên người lái chưa từng thấy và có bằng chứng khoa học để bảo vệ đồ án tốt nghiệp.
-
-HƯỚNG NGHIÊN CỨU CHÍNH:
-
-**BEHAVIOR-CENTRIC REPRESENTATION + PHONE/HAND/FACE ASSOCIATION + VIDEO ACTION LEARNING + CALIBRATED FUSION + HUMAN-APPROVED DATA + INDEPENDENT EVALUATION.**
-
-Ưu tiên cải thiện tính chất của đặc trưng và dữ liệu trước khi tăng thêm độ phức tạp thuật toán.
-
-Triển khai tối đa công việc khả thi trong phiên làm việc hiện tại. Báo cáo chính xác những gì thực sự chạy được và những gì còn bị chặn.
-
-**BẮT ĐẦU TỪ REPOSITORY AUDIT, DATA GOVERNANCE VÀ REPRESENTATION ROOT-CAUSE ANALYSIS.**
-
-dùng kaggle
-API Token is now available
-Please copy your API token now. You won't be able to view it again. You can always generate a new one if needed.
-<REDACTED_KAGGLE_API_TOKEN>
-API Token
-
-To use this token, set the KAGGLE_API_TOKEN environment variable:
-
-export KAGGLE_API_TOKEN=<YOUR_KAGGLE_API_TOKEN>
-Or save it to ~/.kaggle/access_token, where the client will read it automatically:
-
-mkdir -p ~/.kaggle && echo <YOUR_KAGGLE_API_TOKEN> > ~/.kaggle/access_token && chmod 600 ~/.kaggle/access_token
-Then you can use the client as follows:
-
-kaggle competitions list
+BẮT ĐẦU TRIỂN KHAI, KHÔNG CHỈ VIẾT KẾ HOẠCH.
