@@ -1,0 +1,76 @@
+{
+  "experiments": [
+    {
+      "baseline": "Full ROI",
+      "factor": "Overlapping tiles (384x384)",
+      "hypothesis": "SAHI tiled inference improves small phone recall",
+      "id": "V17-A",
+      "level": "LEVEL1",
+      "metric": "Phone AP50",
+      "status": "BLOCKED_NO_BBOX_BENCHMARK"
+    },
+    {
+      "baseline": "E3 slow-FM",
+      "factor": "Past differential encoder",
+      "hypothesis": "Causal frame-diff motion stabilizes action prediction",
+      "id": "V17-B",
+      "level": "LEVEL1",
+      "metric": "Action Macro-F1",
+      "status": "IMPLEMENTED_PENDING_FIT"
+    },
+    {
+      "baseline": "V17-B",
+      "factor": "Sub-crop pooling",
+      "hypothesis": "Behavior ROI (hands/face) boosts worst-subject SAFE recall",
+      "id": "V17-C",
+      "level": "LEVEL2",
+      "metric": "Worst-subject SAFE Recall",
+      "status": "DESIGNED"
+    },
+    {
+      "baseline": "V17-B",
+      "factor": "ViT-B/16 zero-shot adapter",
+      "hypothesis": "Frozen CLIP embeddings prevent cross-driver overfitting",
+      "id": "V17-D",
+      "level": "LEVEL2",
+      "metric": "SAFE Recall",
+      "status": "DESIGNED"
+    },
+    {
+      "baseline": "V17-C",
+      "factor": "DriverPhoneAssociation",
+      "hypothesis": "Driver-phone association reduces passenger FP and lap FN",
+      "id": "V17-E",
+      "level": "LEVEL2",
+      "metric": "Event Precision",
+      "status": "IMPLEMENTED_AND_TESTED"
+    },
+    {
+      "baseline": "V17-E",
+      "factor": "LogisticFusion",
+      "hypothesis": "Bayesian multi-evidence fusion prevents false alerts",
+      "id": "V17-F",
+      "level": "LEVEL2",
+      "metric": "Event F1",
+      "status": "IMPLEMENTED_AND_TESTED"
+    },
+    {
+      "baseline": "V17-F",
+      "factor": "ActionFormer localization head",
+      "hypothesis": "Sub-second temporal head recovers short phone events",
+      "id": "V17-G",
+      "level": "LEVEL3",
+      "metric": "Event Recall",
+      "status": "ANALYZED"
+    },
+    {
+      "baseline": "S2 existing",
+      "factor": "Torso diagonal attention",
+      "hypothesis": "Torso attention and triplet loss resolve UNCERTAIN belts",
+      "id": "V17-H",
+      "level": "LEVEL2",
+      "metric": "Seatbelt Macro-F1",
+      "status": "BLOCKED_500_PENDING_REVIEWS"
+    }
+  ]
+}

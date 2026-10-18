@@ -7,9 +7,15 @@ from training.dmd.candidate_flow import (
     CandidateFlowLedger,
 )
 from training.dmd.phone_benchmark import (
+    DriverAssociationBenchmarkRecord,
     PhoneBenchmarkImage,
     PhoneBox,
+    PhoneEventBenchmarkRecord,
+    SeatbeltBenchmarkRecord,
+    evaluate_phone_benchmark,
     validate_phone_benchmark,
+    validate_phone_event_benchmark,
+    validate_seatbelt_benchmark,
 )
 from training.split_dataset import assign_groups, validate_isolation
 
@@ -146,3 +152,162 @@ def test_candidate_flow_rejects_duplicate_or_backward_stage() -> None:
     ledger.record(CandidateDecision("c1", "DRIVER_ASSOCIATED", True, "VERIFIED", "UNKNOWN"))
     with pytest.raises(ValueError, match="forward order"):
         ledger.record(CandidateDecision("c1", "DETECTED", True, "BOX", "UNKNOWN"))
+
+
+def test_phone_box_area_and_small_phone_detection() -> None:
+    small_box = PhoneBox((10, 10, 30, 30), "VISIBLE", "DRIVER")
+    assert small_box.area == 400.0
+    assert small_box.is_small is True
+
+    large_box = PhoneBox((10, 10, 100, 100), "VISIBLE", "DRIVER")
+    assert large_box.area == 8100.0
+    assert large_box.is_small is False
+
+
+def test_seatbelt_benchmark_requires_three_states_and_human_review() -> None:
+    record_fastened = SeatbeltBenchmarkRecord(
+        sample_id="sb-01",
+        image_sha256="c" * 64,
+        source_id="reviewed-src",
+        source_license="CC-BY-4.0",
+        torso_xyxy=(100, 100, 300, 500),
+        state="FASTENED",
+        reviewer_id="human-reviewer",
+        review_status="APPROVED",
+    )
+    record_unfastened = SeatbeltBenchmarkRecord(
+        sample_id="sb-02",
+        image_sha256="d" * 64,
+        source_id="reviewed-src",
+        source_license="CC-BY-4.0",
+        torso_xyxy=(100, 100, 300, 500),
+        state="UNFASTENED",
+        reviewer_id="human-reviewer",
+        review_status="APPROVED",
+    )
+    record_uncertain = SeatbeltBenchmarkRecord(
+        sample_id="sb-03",
+        image_sha256="e" * 64,
+        source_id="reviewed-src",
+        source_license="CC-BY-4.0",
+        torso_xyxy=(100, 100, 300, 500),
+        state="UNCERTAIN_OR_OCCLUDED",
+        reviewer_id="human-reviewer",
+        review_status="APPROVED",
+        occlusion_reason="DARK_JACKET_AND_HAIR_OCCLUSION",
+    )
+    result = validate_seatbelt_benchmark([record_fastened, record_unfastened, record_uncertain])
+    assert result["status"] == "READY"
+    assert result["total_records"] == 3
+
+    # Occluded without reason must be rejected
+    with pytest.raises(ValueError, match="explicit occlusion_reason"):
+        SeatbeltBenchmarkRecord(
+            sample_id="sb-04",
+            image_sha256="f" * 64,
+            source_id="reviewed-src",
+            source_license="CC-BY-4.0",
+            torso_xyxy=(100, 100, 300, 500),
+            state="UNCERTAIN_OR_OCCLUDED",
+            reviewer_id="human-reviewer",
+            review_status="APPROVED",
+            occlusion_reason=None,
+        ).validate()
+
+
+def test_phone_event_benchmark_rejects_synthetic_static_image_timestamps() -> None:
+    with pytest.raises(ValueError, match="synthetic timestamps from static images"):
+        PhoneEventBenchmarkRecord(
+            event_id="ev-01",
+            video_id="vid-01",
+            source_id="src-01",
+            source_license="CC-BY-4.0",
+            start_timestamp=10.0,
+            end_timestamp=15.0,
+            event_type="PHONE_USE",
+            camera_id="cam-01",
+            reviewer_id="human-reviewer",
+            review_status="APPROVED",
+            is_static_image_synthetic=True,
+        ).validate()
+
+
+def test_phone_event_benchmark_requires_positive_duration() -> None:
+    with pytest.raises(ValueError, match="strictly greater than start_timestamp"):
+        PhoneEventBenchmarkRecord(
+            event_id="ev-02",
+            video_id="vid-01",
+            source_id="src-01",
+            source_license="CC-BY-4.0",
+            start_timestamp=15.0,
+            end_timestamp=10.0,
+            event_type="PHONE_USE",
+            camera_id="cam-01",
+            reviewer_id="human-reviewer",
+            review_status="APPROVED",
+        ).validate()
+
+    ev1 = PhoneEventBenchmarkRecord(
+        event_id="ev-03",
+        video_id="vid-01",
+        source_id="src-01",
+        source_license="CC-BY-4.0",
+        start_timestamp=10.0,
+        end_timestamp=14.5,
+        event_type="PHONE_USE",
+        camera_id="cam-01",
+        reviewer_id="human-reviewer",
+        review_status="APPROVED",
+    )
+    ev2 = PhoneEventBenchmarkRecord(
+        event_id="ev-04",
+        video_id="vid-01",
+        source_id="src-01",
+        source_license="CC-BY-4.0",
+        start_timestamp=20.0,
+        end_timestamp=30.0,
+        event_type="SAFE_DRIVING",
+        camera_id="cam-01",
+        reviewer_id="human-reviewer",
+        review_status="APPROVED",
+    )
+    res = validate_phone_event_benchmark([ev1, ev2])
+    assert res["status"] == "READY"
+    assert res["total_events"] == 2
+    assert res["total_duration_seconds"] == 14.5
+
+
+def test_driver_association_benchmark_requires_approved_occupant_role() -> None:
+    rec = DriverAssociationBenchmarkRecord(
+        sample_id="assoc-01",
+        image_sha256="a" * 64,
+        occupant_track_id="trk-1",
+        true_role="DRIVER",
+        phone_box_xyxy=(100, 100, 150, 180),
+        occupant_box_xyxy=(80, 50, 400, 450),
+        association_confidence=0.95,
+        reviewer_id="human-reviewer",
+        review_status="APPROVED",
+    )
+    rec.validate()
+
+    with pytest.raises(ValueError, match="invalid occupant role"):
+        DriverAssociationBenchmarkRecord(
+            sample_id="assoc-02",
+            image_sha256="a" * 64,
+            occupant_track_id="trk-1",
+            true_role="INVALID_ROLE",
+            phone_box_xyxy=(100, 100, 150, 180),
+            occupant_box_xyxy=(80, 50, 400, 450),
+            association_confidence=0.95,
+            reviewer_id="human-reviewer",
+            review_status="APPROVED",
+        ).validate()
+
+
+def test_evaluate_phone_benchmark_fails_closed_without_approved_data() -> None:
+    eval_res = evaluate_phone_benchmark([positive_record()])
+    assert eval_res["status"] == "BLOCKED"
+    assert eval_res["ap_metrics_allowed"] is False
+    assert "NO_REVIEWED_NEGATIVE_IMAGES" in eval_res["blockers"]
+

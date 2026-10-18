@@ -1,13 +1,13 @@
 {
   "targeted": {
-    "tests": 38,
+    "tests": 44,
     "failures": 0,
     "errors": 0,
     "skipped": 0,
     "status": "PASS"
   },
   "full": {
-    "tests": 648,
+    "tests": 654,
     "failures": 0,
     "errors": 0,
     "skipped": 0,
