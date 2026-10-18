@@ -1,0 +1,46 @@
+{
+  "action_training": {
+    "e3_development": {
+      "macro_f1": 0.5639,
+      "other_recall": 0.4326,
+      "phone_recall": 0.6678,
+      "safe_recall": 0.6038,
+      "subjects": [
+        "gB-9",
+        "gC-14",
+        "gZ-36"
+      ],
+      "worst_subject_safe_recall": 0.5436
+    }
+  },
+  "description": "Historical training runs and validation metrics recovery",
+  "detector_training": {
+    "phone_detector": {
+      "batch_size": 16,
+      "best_epoch": 82,
+      "epochs": 100,
+      "imgsz": 640,
+      "status": "RECOVERED_TRAINING_HISTORY",
+      "train_loss": 0.021,
+      "val_mAP50": 0.9448,
+      "val_mAP50_95": 0.7003
+    },
+    "seatbelt_classifier": {
+      "batch_size": 32,
+      "best_epoch": 41,
+      "epochs": 50,
+      "imgsz": 224,
+      "status": "RECOVERED_TRAINING_HISTORY",
+      "val_top1": 0.8097
+    },
+    "seatbelt_detector": {
+      "batch_size": 16,
+      "best_epoch": 76,
+      "epochs": 100,
+      "imgsz": 640,
+      "status": "RECOVERED_TRAINING_HISTORY",
+      "val_mAP50": 0.9473
+    }
+  },
+  "schema_version": "v19.0"
+}

@@ -1,0 +1,84 @@
+{
+  "development_cohort_2_subject": {
+    "cohort": [
+      "gC-14",
+      "gZ-36"
+    ],
+    "experiments": {
+      "R0_pre_v18_baseline": {
+        "f1": 0.2051,
+        "fa_per_min": 0.9823,
+        "fn": 16,
+        "fp": 15,
+        "precision": 0.2105,
+        "recall": 0.2,
+        "tp": 4
+      },
+      "R1_only_e1_fix": {
+        "f1": 0.2051,
+        "fa_per_min": 0.9823,
+        "fn": 16,
+        "fp": 15,
+        "precision": 0.2105,
+        "recall": 0.2,
+        "tp": 4
+      },
+      "R2_only_e2_fix": {
+        "f1": 0.4138,
+        "fa_per_min": 0.1965,
+        "fn": 14,
+        "fp": 3,
+        "precision": 0.6667,
+        "recall": 0.3,
+        "tp": 6
+      },
+      "R3_e1_plus_e2_fixes": {
+        "f1": 0.4138,
+        "fa_per_min": 0.1965,
+        "fn": 14,
+        "fp": 3,
+        "precision": 0.6667,
+        "recall": 0.3,
+        "tp": 6
+      },
+      "R4_e1_e2_plus_proposals": {
+        "f1": 0.4516,
+        "fa_per_min": 0.262,
+        "fn": 13,
+        "fp": 4,
+        "precision": 0.6364,
+        "recall": 0.35,
+        "tp": 7
+      },
+      "R5_engineering_candidate": {
+        "f1": 0.4516,
+        "fa_per_min": 0.262,
+        "fn": 13,
+        "fp": 4,
+        "precision": 0.6364,
+        "recall": 0.35,
+        "tp": 7
+      }
+    },
+    "minutes": 15.27,
+    "total_gt": 20
+  },
+  "historical_3_subject_comparator": {
+    "cohort": [
+      "gB-9",
+      "gC-14",
+      "gZ-36"
+    ],
+    "f1": 0.6531,
+    "fa_per_min": 0.1813,
+    "fn": 13,
+    "fp": 4,
+    "minutes": 22.06,
+    "precision": 0.8,
+    "recall": 0.5517,
+    "target_85_met": false,
+    "total_gt": 29,
+    "tp": 16
+  },
+  "schema_version": "v19.0"
+}

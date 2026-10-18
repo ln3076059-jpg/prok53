@@ -1,0 +1,14 @@
+{
+  "blockers": [
+    "Fitted OnlineE3 head/scaler artifact compatible with causal motion encoder is absent from local filesystem",
+    "Phone event recall on development cohort is 35.00% (target >85.00%)",
+    "Seatbelt Macro-F1 is 58.52% with UNCERTAIN recall at 4% (500 human review labels pending)",
+    "Single-subject DMD gA-1 has frame-level diagnostic exposure and cannot certify multi-subject generalization",
+    "Independent multi-subject test panel (>=5 subjects) required for AI85+ certification"
+  ],
+  "engineering_readiness": "READY",
+  "independent_ai85_established": false,
+  "production_approved": false,
+  "schema_version": "v19.0",
+  "scientific_accuracy_target_85_met": false
+}

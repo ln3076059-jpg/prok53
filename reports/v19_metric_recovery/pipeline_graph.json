@@ -1,0 +1,162 @@
+{
+  "description": "End-to-end inference and evaluation call graph across Roadwatch first-party modules",
+  "schema_version": "v19.0",
+  "stages": [
+    {
+      "called_by": "InferenceWorker / extract_sequence_observations",
+      "failure_modes": [
+        "dropped frames",
+        "PTS jitter",
+        "codec corruption"
+      ],
+      "function": "cv2.VideoCapture.read() / grab()",
+      "input_schema": "video stream / file URI",
+      "output_schema": "numpy.ndarray (H, W, 3) BGR uint8",
+      "runtime_cost_cpu_ms": 0.5,
+      "scope": "production & research",
+      "source_file": "backend/ai/camera.py / training/dmd/temporal_eval.py",
+      "stage_id": "DECODING"
+    },
+    {
+      "called_by": "InferenceWorker / PipelineEngine",
+      "failure_modes": [
+        "cabin boundary drift",
+        "perspective distortion"
+      ],
+      "function": "CabinLocalizer.localize()",
+      "input_schema": "full frame (1280x720 BGR)",
+      "output_schema": "VehicleRegion(context_id, confidence, xyxy)",
+      "runtime_cost_cpu_ms": 12.0,
+      "scope": "production & research",
+      "source_checkpoint": "geometric cabin ROI / YOLO cabin",
+      "source_file": "backend/ai/cabin.py",
+      "stage_id": "VEHICLE_CABIN_LOCALIZATION",
+      "threshold": 0.35
+    },
+    {
+      "called_by": "PipelineEngine / HighResolutionRoiPipeline",
+      "failure_modes": [
+        "missing driver track",
+        "passenger bounding spillover"
+      ],
+      "function": "CabinLocalizer.extract_driver_crop() / OccupantAssociator",
+      "input_schema": "full frame + cabin ROI",
+      "output_schema": "driver crop (native resolution or normalized)",
+      "runtime_cost_cpu_ms": 1.2,
+      "scope": "production & research",
+      "source_file": "backend/ai/cabin.py / backend/ai/association.py",
+      "stage_id": "OCCUPANT_DRIVER_ROI"
+    },
+    {
+      "called_by": "InferenceWorker / temporal_eval.py",
+      "failure_modes": [
+        "downscaling loss on sub-20px phones in full frame (primary root cause of 11/13 FN)",
+        "occlusion by steering wheel / hand"
+      ],
+      "function": "SafetyDetector.predict(frame, specialist_filter=['phone_detector'])",
+      "input_schema": "frame (1280x720 resized to 640x640 or driver crop)",
+      "output_schema": "list[NormalizedDetection(class_name='phone', confidence, xyxy)]",
+      "runtime_cost_cpu_ms": 480.0,
+      "scope": "production & research",
+      "source_checkpoint": "models/active/v2/phone_detector.pt (SHA256: 840a29cb...)",
+      "source_file": "backend/ai/detector.py",
+      "stage_id": "PHONE_DETECTOR",
+      "threshold": 0.18
+    },
+    {
+      "called_by": "Research candidate inference",
+      "failure_modes": [
+        "proposal duplication",
+        "edge tile artifact"
+      ],
+      "function": "AutonomousPhonePipeline.propose() / merge_phone_proposals()",
+      "input_schema": "native driver ROI crop (original resolution)",
+      "output_schema": "list[PhoneProposal(xyxy, confidence, source)]",
+      "runtime_cost_cpu_ms": 210.0,
+      "scope": "research only",
+      "source_checkpoint": "models/auxiliary/yolo11n.pt (COCO cell_phone id=67)",
+      "source_file": "training/dmd/autonomous_phone.py / sliced_phone.py",
+      "stage_id": "SOURCE_RESOLUTION_PROPOSALS"
+    },
+    {
+      "called_by": "ResearchCandidate.push()",
+      "failure_modes": [
+        "insufficient history buffer (<8 frames)",
+        "cadence gap reset"
+      ],
+      "function": "OnlineE3.push() / CausalMotionEncoder.encode_at()",
+      "input_schema": "uint8 64x64 driver upper-body crop, 8-frame buffer",
+      "output_schema": "feature vector (128-dim or standardized spatial)",
+      "runtime_cost_cpu_ms": 3.5,
+      "scope": "research only",
+      "source_file": "training/dmd/causal_motion.py / online_candidate.py",
+      "stage_id": "ACTION_FEATURE_ENCODER"
+    },
+    {
+      "called_by": "ResearchCandidate.push()",
+      "failure_modes": [
+        "unfitted head",
+        "domain shift across drivers"
+      ],
+      "function": "NumericHead.predict(feature)",
+      "output_schema": "probabilities for [SAFE_DRIVING, PHONE_USE, OTHER_ACTIVITY]",
+      "runtime_cost_cpu_ms": 0.2,
+      "scope": "research only",
+      "source_checkpoint": "V5 ResNet18-GRU / V6 LOSO weights (OnlineE3 JSON head)",
+      "source_file": "training/dmd/online_candidate.py",
+      "stage_id": "TRAINED_ACTION_HEAD"
+    },
+    {
+      "called_by": "PipelineEngine / ResearchCandidate",
+      "failure_modes": [
+        "unverified track ID -> UNKNOWN",
+        "passenger phone flagged as driver"
+      ],
+      "function": "OccupantAssociator.associate() / classify_phone_context()",
+      "output_schema": "AssociationResult(state, occupant_track_id, phone_context)",
+      "runtime_cost_cpu_ms": 1.5,
+      "scope": "production & research",
+      "source_file": "backend/ai/association.py / training/dmd/driver_phone_association.py",
+      "stage_id": "DRIVER_PHONE_ASSOCIATION"
+    },
+    {
+      "called_by": "ResearchCandidate.push()",
+      "failure_modes": [
+        "strict min() blocks valid detection if action confidence dips"
+      ],
+      "function": "min(raw_phone_score, action_score)",
+      "output_schema": "fused_score float or None (abstained)",
+      "runtime_cost_cpu_ms": 0.05,
+      "scope": "research only",
+      "source_file": "training/dmd/online_candidate.py / backend/ai/fusion.py",
+      "stage_id": "FUSION"
+    },
+    {
+      "called_by": "InferenceWorker / evaluate_temporal_engine_on_observations",
+      "failure_modes": [
+        "pre-V18 E2 bug: engine reset on unadmitted frame caused massive event fragmentation",
+        "short event drop (<1.2s default window)"
+      ],
+      "function": "TemporalEventEngine.add(observation)",
+      "output_schema": "list[EventCandidate(event_type='PHONE', start, end, confidence)]",
+      "runtime_cost_cpu_ms": 0.1,
+      "scope": "production & research",
+      "source_config": "models/temporal_config_v2.json",
+      "source_file": "backend/ai/events.py",
+      "stage_id": "TEMPORAL_EVENT_ENGINE"
+    },
+    {
+      "called_by": "v9_phone_context_event_replay / v19_bug_fix_replay",
+      "failure_modes": [
+        "IoU threshold boundary mismatches"
+      ],
+      "function": "match_temporal_events()",
+      "output_schema": "TemporalEvaluationMetrics(TP, FP, FN, P, R, F1, FA/min)",
+      "runtime_cost_cpu_ms": 0.5,
+      "scope": "research evaluation",
+      "source_file": "training/dmd/temporal_eval.py",
+      "source_policy": "reports/DMD_EVENT_MATCHING_POLICY_FREEZE.json",
+      "stage_id": "EVENT_EVALUATION"
+    }
+  ]
+}

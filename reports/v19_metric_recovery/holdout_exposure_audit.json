@@ -1,0 +1,29 @@
+{
+  "annotations_present": true,
+  "dataset_path": "dataset/dmd-dataset-distraction-gA-1/dmd/gA/1",
+  "exposure_history": {
+    "bounding_box_ear_crop_ablation": true,
+    "hyperparameter_tuning_performed": false,
+    "label_context_examined": "phonecall_right",
+    "training_fitting_performed": false,
+    "v18_frame_60_inspection": true
+  },
+  "files_count": 15,
+  "ground_truth_phone_events_in_s2": 8,
+  "holdout_classification": "DEVELOPMENT_EXPOSED_OR_PARTIALLY_CONTAMINATED",
+  "ruling": "gA-1 cannot be claimed as a blind pristine independent test set for model selection or production certification. It remains locked against training, threshold fitting, and calibration. Independent certification requires a fresh, untouched multi-subject panel (>=5 subjects).",
+  "s2_duration_seconds": 458.1,
+  "schema_version": "v19.0",
+  "sessions": [
+    "s1",
+    "s2",
+    "s3"
+  ],
+  "size_bytes": 5449767664,
+  "streams": [
+    "BODY",
+    "FACE",
+    "HANDS"
+  ],
+  "subject_id": "gA-1"
+}

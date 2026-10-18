@@ -1,0 +1,47 @@
+{
+  "fn_breakdown": {
+    "gB-9": {
+      "count": 7,
+      "events": [
+        "gB-9-phone-01",
+        "03",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09"
+      ],
+      "first_blocking_stage": "DETECTOR_DOWNSCALING",
+      "mechanism": "Full-frame 1280x720 downscaled to 640x640 reduces phone area to <20px; specialist detector missed all 7 instances. Auxiliary detector on native driver crop recovered proposals in all 7."
+    },
+    "gC-14": {
+      "count": 3,
+      "events": [
+        "gC-14-phone-02",
+        "05",
+        "06"
+      ],
+      "first_blocking_stage": "DETECTOR_OCCLUSION_AND_HAND_MASKING",
+      "mechanism": "Steering wheel occlusion masked phone lower half."
+    },
+    "gZ-36": {
+      "count": 3,
+      "events": [
+        "gZ-36-phone-01",
+        "03",
+        "05"
+      ],
+      "first_blocking_stage": "DETECTOR_DOWNSCALING_AND_TEMPORAL_WINDOW",
+      "mechanism": "Phone interaction duration <1.2s was dropped by default temporal window; 2 cases recovered by auxiliary crop proposals."
+    }
+  },
+  "fp_breakdown": {
+    "count": 4,
+    "mitigation": "Context filtering (MOUNTED_OR_STATIC removal in gC-14 dropped 1 FP); E2 engine state preservation eliminates fragmented micro-alerts.",
+    "primary_cause": "MOUNTED_OR_STATIC_PHONE_PROXIMITY_AND_FRAGMENTATION"
+  },
+  "schema_version": "v19.0",
+  "total_fn": 13,
+  "total_fp": 4,
+  "total_historical_events": 29
+}

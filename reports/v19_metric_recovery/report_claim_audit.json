@@ -1,0 +1,65 @@
+{
+  "claims_evaluated": [
+    {
+      "claim_id": "C01",
+      "classification": "VERIFIED_FROM_RAW_OUTPUT",
+      "evidence": "reports/v9_research/phone_proposal_mining.json contains exact case_ids gB-9-phone-01..09, gZ-36-phone-01..05, gC-14-phone-02..06",
+      "statement": "13 FN events have per-event prediction records and timestamps"
+    },
+    {
+      "claim_id": "C02",
+      "classification": "VERIFIED_FROM_CODE",
+      "evidence": "Full-frame YOLO resize shrinks phone bbox to <20px; native driver-crop auxiliary detector recovers proposals in 12/13 cases",
+      "statement": "11/13 FN cases were blocked by detector downscaling in full-frame 640x640"
+    },
+    {
+      "claim_id": "C03",
+      "classification": "SUPPORTED_BY_TEST",
+      "evidence": "tests/test_v18_bug_fixes.py test_e1_handheld_context_normalized passes",
+      "statement": "E1 phone_context string mismatch blocked admitted observations"
+    },
+    {
+      "claim_id": "C04",
+      "classification": "VERIFIED_FROM_RAW_OUTPUT",
+      "evidence": "R0 replay with E2 reset yields 15 FP (0.9823 FA/min); preserving engine in R2 drops FP to 3 (0.1965 FA/min)",
+      "statement": "E2 temporal engine recreation on unadmitted frame caused event fragmentation"
+    },
+    {
+      "claim_id": "C05",
+      "classification": "CONTRADICTED",
+      "evidence": "28.1 FPS was pre-extracted cached feature throughput; real full-frame YOLO CPU inference is ~1.0-2.2 FPS (~450-1000ms/frame)",
+      "statement": "28.1 FPS runtime claimed in V17 applies to live camera ingestion"
+    },
+    {
+      "claim_id": "C06",
+      "classification": "CONTRADICTED",
+      "evidence": "V18 inspected frame at 60s in gA-1 s2 for ear-crop diagnostic; gA-1 is development-exposed at frame/label level",
+      "statement": "gA-1 was a completely pristine unseen independent holdout"
+    },
+    {
+      "claim_id": "C07",
+      "classification": "UNSUPPORTED",
+      "evidence": "R3 replay on development cohort achieves F1 41.38% (6 TP, 3 FP, 14 FN); R4 achieves F1 45.16% (7 TP, 4 FP, 13 FN); neither reaches 85%",
+      "statement": "V18 bug fixes improved Event F1 to >85%"
+    },
+    {
+      "claim_id": "C08",
+      "classification": "UNSUPPORTED",
+      "evidence": "Development Macro-F1 remains 58.52% with UNCERTAIN recall at 4%; 500 review labels remain pending approval",
+      "statement": "Seatbelt classifier achieves Macro-F1 >85%"
+    },
+    {
+      "claim_id": "C09",
+      "classification": "VERIFIED_FROM_CODE",
+      "evidence": "V18 E4 bug fix changed default from PASS to NOT_PROVABLE when subject identity is unprovable",
+      "statement": "Subject isolation validation returns PASS for unprovable splits"
+    },
+    {
+      "claim_id": "C10",
+      "classification": "SUPPORTED_BY_TEST",
+      "evidence": "V18 E5 bug fix and test_v19_safe_driving_with_visible_mounted_phone pass",
+      "statement": "Safe driving is valid with visible non-handheld phone"
+    }
+  ],
+  "schema_version": "v19.0"
+}
