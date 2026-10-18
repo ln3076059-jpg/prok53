@@ -1,0 +1,16 @@
+{
+  "compile": "PASS",
+  "ruff": "PASS",
+  "targeted": {
+    "tests": 47,
+    "failures": 0,
+    "errors": 0
+  },
+  "full": {
+    "tests": 622,
+    "failures": 0,
+    "errors": 0
+  },
+  "frontend": "PASS",
+  "backend": "PASS"
+}

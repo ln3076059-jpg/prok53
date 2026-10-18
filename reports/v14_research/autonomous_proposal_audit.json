@@ -1,0 +1,44 @@
+{
+  "mode": "AUTONOMOUS_DETECTION_EVALUATION",
+  "new_v14_runtime_execution": "NOT_RUN_RESOURCE_CONSTRAINED_RECONCILED_EXISTING_RUN",
+  "source": "reports/v9_research/phone_proposal_mining.json",
+  "source_sha256": "9f710bfaf22c19fc143875a3832258935d6fb4d8db17dfd96e83bfee0718665e",
+  "input_phone_boxes": "DETECTOR_RUNTIME_ONLY",
+  "reviewed_boxes_used_as_input": false,
+  "summary": {
+    "cases": 13,
+    "sampled_frames": 52,
+    "specialist_frames_with_proposal": 11,
+    "auxiliary_frames_with_proposal": 48,
+    "cases_with_specialist_proposal": 5,
+    "cases_with_auxiliary_proposal": 13,
+    "cases_with_cross_model_agreement": 2,
+    "cases_with_auxiliary_review_candidate": 11,
+    "verified_occupant_tracks": 0
+  },
+  "confidence_floor": 0.02,
+  "models": {
+    "specialist": {
+      "path": "models/active/v2/phone_detector.pt",
+      "sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54"
+    },
+    "coco_cell_phone": {
+      "path": "models/auxiliary/yolo11n.pt",
+      "sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1",
+      "class_id": 67
+    },
+    "pose": {
+      "path": "models/auxiliary/yolo11n-pose.pt",
+      "sha256": "869e83fcdffdc7371fa4e34cd8e51c838cc729571d1635e5141e3075e9319dc0"
+    }
+  },
+  "phone_ap": null,
+  "precision": null,
+  "proposal_recall": null,
+  "limitations": [
+    "No phone bounding-box ground truth is available for these sampled frames.",
+    "Proposal counts are not precision, recall, AP, or event recovery.",
+    "The audit floor and review heuristic are not runtime operating thresholds.",
+    "All proposals require original-video human review before labeling."
+  ]
+}

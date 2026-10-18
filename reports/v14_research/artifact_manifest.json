@@ -1,0 +1,114 @@
+{
+  "reports/v14_research/01_HEAD_AND_RIGHTS_AUDIT.md": {
+    "sha256": "c035bc0dafe7aa25b462ee92fa3a847be9e0877d79ad6eebe503e76cad382f31",
+    "bytes": 653
+  },
+  "reports/v14_research/02_V13_BASELINE_RECONCILIATION.md": {
+    "sha256": "334974981b02fdbf8e384de52bfca49c191143ffca4bacb93cfd66dc2d273831",
+    "bytes": 528
+  },
+  "reports/v14_research/03_AUTONOMOUS_PHONE_PROPOSALS.md": {
+    "sha256": "4196e291844283774d8a00938d7883041f8201e3eb3c684a39d4ac9431f5e1f5",
+    "bytes": 1002
+  },
+  "reports/v14_research/04_HIGH_RES_BEHAVIOR_PIPELINE.md": {
+    "sha256": "2dee42b056c477854f48e34689b478f17feeec101987dc4135bb4affa362ae20",
+    "bytes": 811
+  },
+  "reports/v14_research/05_ONLINE_E3_MODEL_READINESS.md": {
+    "sha256": "54b69f5a769e8fbc3b5335b70c203392d3bf0f10257a639b4599020227f13f3f",
+    "bytes": 749
+  },
+  "reports/v14_research/06_DRIVER_ASSOCIATION_EVIDENCE.md": {
+    "sha256": "77fd8a3820be0547e6f0e9d40d659df12fb14e6163e1e7e2e10daf6cdd3e6d19",
+    "bytes": 762
+  },
+  "reports/v14_research/07_EVENT_REPLAY_RESULTS.md": {
+    "sha256": "07ea14499b34f2af2d9e02652f36ce7feab59ce4585f845de2301ff12ab0e030",
+    "bytes": 737
+  },
+  "reports/v14_research/08_SEATBELT_READINESS.md": {
+    "sha256": "eebe803471e7a70427f718a9cceb786f7ca3b6fb83fd2cff664cae60de5a789c",
+    "bytes": 540
+  },
+  "reports/v14_research/09_RUNTIME_AND_TESTS.md": {
+    "sha256": "002fce143c410cd7ecb9d971fec5eab70ab203b22e6744953272d204856298ce",
+    "bytes": 574
+  },
+  "reports/v14_research/10_FINAL_AI_LEAD_DECISION.md": {
+    "sha256": "036453651a5adf76fe14d70b507ccfe5a374256282d5f26b27b3b25fe46ce66a",
+    "bytes": 1026
+  },
+  "reports/v14_research/autonomous_proposal_audit.json": {
+    "sha256": "178c11d7585173e713aa363a2cb925476e7193d5125ae34f0f5b7e327ce0ab72",
+    "bytes": 1718
+  },
+  "reports/v14_research/backend_smoke.log": {
+    "sha256": "2f896d91d7a4f1ef919ea83cea739a80a3fd9c9c858a9cc085fc503cb401ebcf",
+    "bytes": 68
+  },
+  "reports/v14_research/candidate_readiness.json": {
+    "sha256": "3a3cb88768e289cd43271a947e88304bb59b67c7319eff0f42f2b1944dafe05f",
+    "bytes": 589
+  },
+  "reports/v14_research/data_manifest.json": {
+    "sha256": "6db364a1fc8aac419f4c30207a4a46f61a02dce8e864ac6f37af877623da78e7",
+    "bytes": 4457
+  },
+  "reports/v14_research/environment.json": {
+    "sha256": "94bf6515763ab5977dd4ce1d3f0c7aa5079b1cc30720a14e3371e8215d648328",
+    "bytes": 316
+  },
+  "reports/v14_research/event_match_records.json": {
+    "sha256": "e6e1c2f102279b5a4ac61054854b3d5f515204304c56f62d92723ab883101da4",
+    "bytes": 306
+  },
+  "reports/v14_research/experiment_plan.json": {
+    "sha256": "71a6b44cd6aca8f4b968697b9e32545cce09d3ccdff1197e86ea020e0a331882",
+    "bytes": 1319
+  },
+  "reports/v14_research/experiment_registry.json": {
+    "sha256": "dcdd71cd895b21f69ec626c0b02ff50ffdd0081bc6b7f78183ccdc48815c1198",
+    "bytes": 514
+  },
+  "reports/v14_research/frontend_build.log": {
+    "sha256": "6d2ac23c6f5a01292abf82adb3a7942d389e3a4514156986818249b28ec393fe",
+    "bytes": 1258
+  },
+  "reports/v14_research/metrics_comparison.json": {
+    "sha256": "e1e8e00c32b3e388f12e06014c4d597db7496735f050b609c8e50fae980aea5c",
+    "bytes": 8199
+  },
+  "reports/v14_research/model_manifest.json": {
+    "sha256": "3a90f9e295ec323249b969f8c42186eb37ce6ad112bd133477e97bbf62a2ac52",
+    "bytes": 383
+  },
+  "reports/v14_research/pytest_full.log": {
+    "sha256": "58c8193a4028b28c41c41ce560de164aea7ab469cec07fa4b1a13fd6e262e7ca",
+    "bytes": 1640
+  },
+  "reports/v14_research/pytest_full.xml": {
+    "sha256": "eb791eeea520d9d828ab76433fd8ba706ee00a5e9f7efba024a4e2fc061335ab",
+    "bytes": 80110
+  },
+  "reports/v14_research/pytest_targeted.log": {
+    "sha256": "1db3c1e34cd5823071d6c2f579d911a9d45ee1427985b3676847931c935446f8",
+    "bytes": 352
+  },
+  "reports/v14_research/pytest_targeted.xml": {
+    "sha256": "d53dad1215d284426758fce7b07318341c9031d8e753aa8c862aba67991ccb9a",
+    "bytes": 6156
+  },
+  "reports/v14_research/reproduce.ps1": {
+    "sha256": "871539b6cb3d212980e758c79c2bc7fa01eb27feb382c837f69e4b660d1d9d7b",
+    "bytes": 1398
+  },
+  "reports/v14_research/ruff.log": {
+    "sha256": "af352a86840ad0af3d37ea0d9197f868363a6dac6b1c2ef5d2722f6b41d2d9af",
+    "bytes": 42
+  },
+  "reports/v14_research/test_results.json": {
+    "sha256": "d6d5a018361831d3bc4176af4b13a93002deab080d9a761b09aaea3498cb7b6b",
+    "bytes": 244
+  }
+}

@@ -8,6 +8,13 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.preprocessing import StandardScaler
 
+from training.dmd.autonomous_phone import (
+    AutonomousPhonePipeline,
+    DriverRegion,
+    PhoneProposal,
+    local_to_original,
+    original_to_local,
+)
 from training.dmd.behavior_roi import BehaviorRoiExtractor, Box, RoiStrategy
 from training.dmd.causal_motion import (
     CausalMotionEncoder,
@@ -198,6 +205,43 @@ def test_high_resolution_roi_preserves_pixels_hash_and_boundary_provenance():
     assert 0 < crop.phone_coverage < 1
 
 
+class FakePhoneDetector:
+    model_sha256 = "fixture-detector"
+
+    def __init__(self, proposals=()):
+        self.proposals = list(proposals)
+
+    def detect(self, frame, confidence_floor):
+        assert frame.shape == (80, 120, 3)
+        assert confidence_floor == 0.02
+        return self.proposals
+
+
+def test_autonomous_phone_path_rejects_oracle_metadata_and_handles_empty_proposals():
+    frame = np.zeros((80, 120, 3), np.uint8)
+    driver = DriverRegion(Box(5, 5, 115, 78), "UNKNOWN", "UNKNOWN", 0.0, False, "NONE")
+    pipeline = AutonomousPhonePipeline(FakePhoneDetector())
+    with pytest.raises(ValueError, match="oracle"):
+        pipeline.process(frame, {"reviewed_box": [1, 2, 3, 4]}, driver)
+    result = pipeline.process(frame, {"camera": "BODY", "frame_index": 4}, driver)
+    assert result["status"] == "NO_PHONE_PROPOSAL"
+    assert result["driver_role_state"] == "UNKNOWN"
+    assert result["outputs"][0]["proposal"] is None
+
+
+def test_autonomous_phone_proposal_preserves_boundary_and_coordinate_round_trip():
+    frame = np.zeros((80, 120, 3), np.uint8)
+    box = Box(112, 65, 125, 82)
+    detector = FakePhoneDetector([PhoneProposal(box, 0.08, "FIXTURE", "fixture-detector")])
+    driver = DriverRegion(Box(10, 5, 118, 78), "p1", "front_passenger", 0.9, True, "FIXTURE")
+    result = AutonomousPhonePipeline(detector).process(frame, {"camera": "BODY"}, driver)
+    crop = result["outputs"][0]["crop"]
+    assert result["mode"] == "AUTONOMOUS_DETECTION_EVALUATION"
+    assert crop["edge_clipped"] and 0 < crop["phone_coverage"] < 1
+    local = original_to_local(Box(20, 30, 40, 50), (10, 12))
+    assert local_to_original(local, (10, 12)) == Box(20, 30, 40, 50)
+
+
 def test_numeric_export_reload_matches_sklearn_synthetic_only(tmp_path):
     rng = np.random.default_rng(85)
     x = rng.normal(size=(90, 6))
@@ -228,6 +272,25 @@ def test_numeric_export_reload_matches_sklearn_synthetic_only(tmp_path):
     payload["classes"] = payload["classes"][::-1]
     with pytest.raises(ValueError, match="class mapping"):
         NumericHead(payload)
+
+
+def test_numeric_head_v2_requires_complete_provenance_and_verifies_file_hash(tmp_path):
+    payload = synthetic_head().payload | {
+        "schema": 2,
+        "calibration": "UNCALIBRATED_OVR_SIGMOID",
+    }
+    with pytest.raises(ValueError, match="checkpoint_hash"):
+        NumericHead(payload)
+    payload["provenance"] = payload["provenance"] | {
+        "checkpoint_hash": "synthetic",
+        "config_hash": "synthetic",
+        "library_versions": {"numpy": np.__version__},
+    }
+    head = NumericHead(payload)
+    path = tmp_path / "head-v2.json"
+    head.save(path)
+    with pytest.raises(ValueError, match="hash mismatch"):
+        NumericHead.load(path, "0" * 64)
 
 
 def synthetic_head():

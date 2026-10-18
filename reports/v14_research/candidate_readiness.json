@@ -1,0 +1,12 @@
+{
+  "autonomous_adapter": "READY_ENGINEERING",
+  "specialist_detector_artifact": "HASH_VERIFIED_RESEARCH_ONLY",
+  "autonomous_accuracy_evaluation": "BLOCKED_NO_BBOX_NEGATIVE_GROUND_TRUTH",
+  "online_e3_artifact_contract_v2": "READY_SYNTHETICALLY_TESTED",
+  "fitted_e3_head_scaler": "BLOCKED_MISSING",
+  "verified_driver_association": "BLOCKED_MISSING_GROUND_TRUTH",
+  "real_event_replay": "BLOCKED_MISSING_FITTED_HEAD_AND_VERIFIED_ASSOCIATION",
+  "seatbelt": "BLOCKED_500_PENDING_LABELS",
+  "independent_evaluation": "BLOCKED_NO_NEW_LOCKED_HOLDOUT",
+  "production": "REJECT"
+}

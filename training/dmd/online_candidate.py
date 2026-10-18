@@ -114,7 +114,8 @@ class NumericHead:
     """
 
     def __init__(self, payload: dict[str, Any]):
-        if payload.get("schema") != 1 or tuple(payload.get("classes", [])) != CLASSES:
+        schema = payload.get("schema")
+        if schema not in {1, 2} or tuple(payload.get("classes", [])) != CLASSES:
             raise ValueError("unsupported head schema/class mapping")
         self.mean = np.asarray(payload["mean"], dtype=np.float64)
         self.scale = np.asarray(payload["scale"], dtype=np.float64)
@@ -135,6 +136,15 @@ class NumericHead:
         for key in ("dataset_hash", "split_hash", "feature_version", "seed", "training_subjects"):
             if key not in provenance:
                 raise ValueError(f"missing model provenance: {key}")
+        if schema == 2:
+            for key in ("checkpoint_hash", "config_hash", "library_versions"):
+                if key not in provenance:
+                    raise ValueError(f"missing model provenance: {key}")
+            if payload.get("calibration") not in {
+                "UNCALIBRATED_OVR_SIGMOID",
+                "CALIBRATED_ON_LOCKED_VALIDATION",
+            }:
+                raise ValueError("invalid calibration status")
         self.payload = payload
         self.sha256 = hashlib.sha256(
             json.dumps(payload, sort_keys=True, allow_nan=False).encode()
@@ -157,8 +167,12 @@ class NumericHead:
         )
 
     @classmethod
-    def load(cls, path: Path) -> NumericHead:
-        return cls(json.loads(path.read_text(encoding="utf-8")))
+    def load(cls, path: Path, expected_sha256: str | None = None) -> NumericHead:
+        payload = path.read_bytes()
+        actual = hashlib.sha256(payload).hexdigest()
+        if expected_sha256 is not None and actual != expected_sha256:
+            raise ValueError("model artifact hash mismatch")
+        return cls(json.loads(payload.decode("utf-8")))
 
     @classmethod
     def from_fitted(cls, scaler: Any, classifier: Any, provenance: dict) -> NumericHead:

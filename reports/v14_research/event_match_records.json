@@ -1,0 +1,7 @@
+{
+  "source": "reports/v13_research/event_match_records.json",
+  "source_sha256": "614944b3dcbf11eaa5680b674a5471bb440a0dc62f33ee4029bc7e1316f3ccd0",
+  "v14_real_candidate_replay": "BLOCKED_MISSING_FITTED_HEAD_AND_VERIFIED_ASSOCIATION",
+  "ground_truth_changed": false,
+  "matcher_changed": false
+}
