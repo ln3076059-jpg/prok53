@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Protocol
@@ -31,6 +32,19 @@ class DriverRegion:
     confidence: float
     verified: bool
     source: str
+
+
+@dataclass(frozen=True)
+class PhoneContextEvidence:
+    state: str = "UNKNOWN"
+    verified: bool = False
+    source: str = "NONE"
+
+    def __post_init__(self) -> None:
+        if self.state not in {"UNKNOWN", "HANDHELD", "MOUNTED_PHONE", "MOUNTED_CAMERA"}:
+            raise ValueError("unsupported phone context")
+        if self.state == "UNKNOWN" and self.verified:
+            raise ValueError("UNKNOWN context cannot be verified")
 
 
 class PhoneDetector(Protocol):
@@ -89,6 +103,16 @@ class AutonomousPhonePipeline:
         self.detector = detector
         self.confidence_floor = confidence_floor
         self.roi = HighResolutionRoiPipeline()
+        self.config_sha256 = hashlib.sha256(
+            json.dumps(
+                {
+                    "confidence_floor": confidence_floor,
+                    "detector_sha256": detector.model_sha256,
+                    "roi": "HIGH_RES_DYNAMIC_PADDED_V1",
+                },
+                sort_keys=True,
+            ).encode()
+        ).hexdigest()
 
     def process(
         self,
@@ -98,6 +122,7 @@ class AutonomousPhonePipeline:
         *,
         hand_boxes: tuple[Box, ...] = (),
         face_box: Box | None = None,
+        context: PhoneContextEvidence | None = None,
     ) -> dict:
         forbidden = FORBIDDEN_METADATA.intersection(metadata)
         if forbidden:
@@ -105,7 +130,16 @@ class AutonomousPhonePipeline:
         if frame.ndim != 3 or frame.shape[2] != 3:
             raise ValueError("expected HxWx3 source frame")
         height, width = frame.shape[:2]
-        proposals = self.detector.detect(frame, self.confidence_floor)
+        context = context or PhoneContextEvidence()
+        raw_proposals = self.detector.detect(frame, self.confidence_floor)
+        proposals, rejected = [], []
+        for proposal in raw_proposals:
+            if proposal.confidence < self.confidence_floor:
+                rejected.append(
+                    {"proposal": asdict(proposal), "reason": "BELOW_CONFIDENCE_FLOOR"}
+                )
+            else:
+                proposals.append(proposal)
         for proposal in proposals:
             proposal.box.clamp(width, height)
             if not np.isfinite(proposal.confidence) or not 0 <= proposal.confidence <= 1:
@@ -122,7 +156,31 @@ class AutonomousPhonePipeline:
                     phone_box=proposal.box, hand_boxes=hand_boxes, face_box=face_box,
                     driver_track_id=driver.track_id, confidence=proposal.confidence,
                 )[0]
-                outputs.append({"proposal": asdict(proposal), "crop": crop.record()})
+                mounted = context.verified and context.state in {
+                    "MOUNTED_PHONE",
+                    "MOUNTED_CAMERA",
+                }
+                reasons = []
+                if mounted:
+                    reasons.append("VERIFIED_MOUNTED_CONTEXT")
+                if not driver.verified or driver.role != "driver":
+                    reasons.append("NO_VERIFIED_DRIVER_ROLE")
+                if not (context.verified and context.state == "HANDHELD"):
+                    reasons.append("NO_VERIFIED_HANDHELD_CONTEXT")
+                outputs.append(
+                    {
+                        "proposal": asdict(proposal),
+                        "crop": crop.record(),
+                        "observation": {
+                            "detector_confidence": proposal.confidence,
+                            "phone_context": asdict(context),
+                            "driver_track_id": driver.track_id,
+                            "driver_role": driver.role if driver.verified else "UNKNOWN",
+                            "admissible_for_driver_fusion": not reasons,
+                            "reason_codes": reasons,
+                        },
+                    }
+                )
             status = "PHONE_PROPOSALS"
         else:
             strategy = RoiStrategy.FACE_HAND if hand_boxes or face_box else RoiStrategy.UPPER_BODY
@@ -142,6 +200,9 @@ class AutonomousPhonePipeline:
             "driver_role_state": "VERIFIED" if driver.verified else "UNKNOWN",
             "status": status,
             "outputs": outputs,
+            "rejected_proposals": rejected,
+            "model_sha256": self.detector.model_sha256,
+            "config_sha256": self.config_sha256,
             "phone_ap": None,
             "event_recovery_claimed": False,
         }

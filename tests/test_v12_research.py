@@ -11,6 +11,7 @@ from sklearn.preprocessing import StandardScaler
 from training.dmd.autonomous_phone import (
     AutonomousPhonePipeline,
     DriverRegion,
+    PhoneContextEvidence,
     PhoneProposal,
     local_to_original,
     original_to_local,
@@ -240,6 +241,24 @@ def test_autonomous_phone_proposal_preserves_boundary_and_coordinate_round_trip(
     assert crop["edge_clipped"] and 0 < crop["phone_coverage"] < 1
     local = original_to_local(Box(20, 30, 40, 50), (10, 12))
     assert local_to_original(local, (10, 12)) == Box(20, 30, 40, 50)
+
+
+def test_autonomous_mounted_context_and_low_confidence_proposals_fail_closed():
+    frame = np.zeros((80, 120, 3), np.uint8)
+    low = PhoneProposal(Box(5, 5, 15, 15), 0.01, "FIXTURE", "fixture-detector")
+    high = PhoneProposal(Box(20, 20, 30, 35), 0.4, "FIXTURE", "fixture-detector")
+    driver = DriverRegion(Box(0, 0, 100, 80), "d", "driver", 1.0, True, "FIXTURE")
+    result = AutonomousPhonePipeline(FakePhoneDetector([low, high])).process(
+        frame,
+        {"camera": "BODY"},
+        driver,
+        context=PhoneContextEvidence("MOUNTED_CAMERA", True, "RUNTIME_CONTEXT"),
+    )
+    assert result["rejected_proposals"][0]["reason"] == "BELOW_CONFIDENCE_FLOOR"
+    observation = result["outputs"][0]["observation"]
+    assert not observation["admissible_for_driver_fusion"]
+    assert "VERIFIED_MOUNTED_CONTEXT" in observation["reason_codes"]
+    assert len(result["config_sha256"]) == 64
 
 
 def test_numeric_export_reload_matches_sklearn_synthetic_only(tmp_path):
