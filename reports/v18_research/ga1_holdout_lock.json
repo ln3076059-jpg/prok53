@@ -1,0 +1,44 @@
+{
+  "annotations": [
+    "s1/gA_1_s1_2019-03-08T09;31;15+01;00_rgb_ann_distraction.json",
+    "s2/gA_1_s2_2019-03-08T09;21;03+01;00_rgb_ann_distraction.json",
+    "s3/gA_1_s3_2019-03-14T14;31;08+01;00_rgb_ann_distraction.json"
+  ],
+  "archive_provenance": "dmd-dataset-distraction-gA-1.tar.gz",
+  "contamination_check": {
+    "appeared_in_ai85_upgrade": false,
+    "appeared_in_v2_training": false,
+    "appeared_in_v5_v7_tuning": false,
+    "is_uncontaminated": true
+  },
+  "dataset": "DMD_DISTRACTION_RGB",
+  "dataset_role": "LOCKED_INDEPENDENT_HOLDOUT",
+  "license": "CC BY-NC-ND 4.0 (Vicomtech 2026 Academic Research Agreement)",
+  "local_path": "dataset/dmd-dataset-distraction-gA-1/dmd/gA/1",
+  "protection_status": {
+    "in_protected_subjects": true,
+    "independent_evaluation_eligible": true,
+    "model_selection_eligible": false,
+    "threshold_tuning_eligible": false,
+    "training_eligible": false
+  },
+  "sessions": [
+    "s1",
+    "s2",
+    "s3"
+  ],
+  "source_participant_id": "1",
+  "subject_id": "gA-1",
+  "total_size_bytes": 5448386348,
+  "video_files": [
+    "s1/gA_1_s1_2019-03-08T09;31;15+01;00_rgb_body.mp4",
+    "s1/gA_1_s1_2019-03-08T09;31;15+01;00_rgb_face.mp4",
+    "s1/gA_1_s1_2019-03-08T09;31;15+01;00_rgb_hands.mp4",
+    "s2/gA_1_s2_2019-03-08T09;21;03+01;00_rgb_body.mp4",
+    "s2/gA_1_s2_2019-03-08T09;21;03+01;00_rgb_face.mp4",
+    "s2/gA_1_s2_2019-03-08T09;21;03+01;00_rgb_hands.mp4",
+    "s3/gA_1_s3_2019-03-14T14;31;08+01;00_rgb_body.mp4",
+    "s3/gA_1_s3_2019-03-14T14;31;08+01;00_rgb_face.mp4",
+    "s3/gA_1_s3_2019-03-14T14;31;08+01;00_rgb_hands.mp4"
+  ]
+}

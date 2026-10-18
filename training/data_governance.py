@@ -45,7 +45,7 @@ PHONE_CONTEXT = {
 }
 OCCUPANT_ROLES = {"DRIVER", "FRONT_PASSENGER", "REAR_PASSENGER", "UNKNOWN"}
 SEATBELT = {"FASTENED", "UNFASTENED", "UNCERTAIN_OR_OCCLUDED"}
-PROTECTED_SUBJECTS = frozenset({"gZ-37", "gE-28"})
+PROTECTED_SUBJECTS = frozenset({"gZ-37", "gE-28", "gA-1", "gA_1", "1"})
 
 
 def require_download_authorized(source: dict) -> None:
@@ -130,13 +130,13 @@ class UnifiedAnnotation:
                 raise ValueError("invalid event interval")
         if self.review_status == "APPROVED" and not self.reviewer_id:
             raise ValueError("approved annotations require an authenticated reviewer")
-        if self.phone_action == "SAFE_DRIVING" and self.phone_visibility in {
-            "PHONE_VISIBLE",
-            "PHONE_OCCLUDED",
-            "PHONE_BOX",
-        }:
+        if (
+            self.phone_action == "SAFE_DRIVING"
+            and self.phone_visibility in {"PHONE_VISIBLE", "PHONE_OCCLUDED", "PHONE_BOX"}
+            and self.phone_context in {"HANDHELD", "HANDHELD_USE"}
+        ):
             raise ValueError(
-                "visible phone evidence cannot be automatically mapped to SAFE_DRIVING"
+                "visible handheld phone evidence cannot be automatically mapped to SAFE_DRIVING"
             )
 
 

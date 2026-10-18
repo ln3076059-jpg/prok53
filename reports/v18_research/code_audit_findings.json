@@ -1,0 +1,40 @@
+{
+  "hypotheses_verified": {
+    "E1_HANDHELD_LABEL_MISMATCH": {
+      "finding": "online_candidate.py required strict string 'HANDHELD_USE' while autonomous_phone.py and events.py used 'HANDHELD'. Normalizing to PHONE_USE_CONTEXTS resolved dropped observations.",
+      "status": "CONFIRMED_AND_FIXED",
+      "verified_by_test": "tests/test_v18_bug_fixes.py::test_e1_handheld_context_normalized"
+    },
+    "E2_TEMPORAL_STATE_RESET": {
+      "finding": "ResearchCandidate.push() called self.engine = TemporalEventEngine() on every single unadmitted frame, wiping prior temporal accumulation. Preserving the engine instance restored multi-frame bridging.",
+      "status": "CONFIRMED_AND_FIXED",
+      "verified_by_test": "tests/test_v18_bug_fixes.py::test_e2_temporal_state_not_reset_on_single_unadmitted_frame"
+    },
+    "E3_TEMPORAL_CONFIG_INCONSISTENCY": {
+      "finding": "TemporalEventEngine defaults (1.2s / 3 obs / 0.55 threshold) differ from calibrated v2 policy in models/temporal_config_v2.json (0.5s / 2 obs / 0.25 threshold).",
+      "status": "CONFIRMED"
+    },
+    "E4_SUBJECT_SPLIT_FALSE_PASS": {
+      "finding": "validate_isolation() returned 'PASS' when subject_status == 'NOT_PROVABLE' due to 'subject_status != FAIL' logic. Corrected to return NOT_PROVABLE/FAIL.",
+      "status": "CONFIRMED_AND_FIXED",
+      "verified_by_test": "tests/test_v18_bug_fixes.py::test_e4_validate_isolation_not_provable_cannot_pass"
+    },
+    "E5_SAFE_DRIVING_SEMANTICS": {
+      "finding": "UnifiedAnnotation.validate() rejected SAFE_DRIVING whenever phone was visible, even if mounted GPS or passenger phone. Allowed SAFE_DRIVING when phone is non-handheld.",
+      "status": "CONFIRMED_AND_FIXED",
+      "verified_by_test": "tests/test_v18_bug_fixes.py::test_e5_safe_driving_with_mounted_phone"
+    },
+    "E6_MISSING_E3_FITTED_MODEL": {
+      "finding": "e3_head_scaler was reported as null because no calibrated StandardScaler + OvR logistic head weights were exported into models/active/ or models/candidate/.",
+      "status": "CONFIRMED"
+    },
+    "E7_MODEL_OUTPUT_SEMANTICS": {
+      "finding": "NumericHead uses uncalibrated OvR sigmoid scores normalized via logaddexp; correctly labeled as UNCALIBRATED.",
+      "status": "CONFIRMED"
+    },
+    "E8_SAHI_TILED_DETECTOR": {
+      "finding": "On gA-1 s2 frame at 60s, full-frame 640x640 specialist yielded 0 detections, while driver crop auxiliary detected phone at [406.5, 91.9, 446.8, 146.3] near ear.",
+      "status": "CONFIRMED_BY_EXPERIMENT"
+    }
+  }
+}

@@ -164,11 +164,14 @@ def validate_isolation(manifest: list[dict]) -> dict:
             if item.get("trusted_subject_id") in PROTECTED_SUBJECTS
         }
     )
-    status = (
-        "PASS"
-        if not any(overlaps.values()) and subject_status != "FAIL" and not protected
-        else "FAIL"
-    )
+    if any(overlaps.values()) or protected:
+        status = "FAIL"
+    elif subject_status == "NOT_PROVABLE":
+        status = "NOT_PROVABLE"
+    elif subject_status == "PASS":
+        status = "PASS"
+    else:
+        status = "FAIL"
     return {
         "overlaps": overlaps,
         "subject_isolation": subject_status,

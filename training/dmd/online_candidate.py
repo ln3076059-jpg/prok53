@@ -225,16 +225,17 @@ class ResearchCandidate:
             _, probabilities = self.head.predict(result.feature[None, :])
             scores = dict(zip(CLASSES, probabilities[0].tolist(), strict=True))
         reasons = list(result.reasons)
+        HANDHELD_CONTEXTS = frozenset({"HANDHELD", "HANDHELD_USE", "HANDHELD_PHONE_USE"})
         admitted = (
             result.ready
             and association.state == AssociationState.DRIVER_ASSOCIATED.value
-            and phone_context == "HANDHELD_USE"
+            and phone_context in HANDHELD_CONTEXTS
             and raw_phone_score > 0
         )
         if not admitted:
             reasons.append("NEEDS_REVIEW_OR_NO_VERIFIED_DRIVER_EVIDENCE")
-            # Unknown evidence cannot bridge a prior verified event in this candidate.
-            self.engine = TemporalEventEngine(**self.temporal_config)
+            # Do not recreate self.engine on a single unadmitted frame;
+            # temporal bridging/decay handles momentary occlusions.
         fused = min(raw_phone_score, scores["PHONE_USE"]) if admitted and scores else None
         events = []
         if fused is not None:

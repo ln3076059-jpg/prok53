@@ -1,0 +1,98 @@
+{
+  "historical_research_series": {
+    "ai85_upgrade": [
+      "attention_finetune",
+      "mean_finetune",
+      "native112_finetune"
+    ],
+    "v5_resnet18_gru": [
+      "loso_gB-9.pt",
+      "loso_gC-14.pt",
+      "loso_gZ-36.pt"
+    ],
+    "v5_tiny_temporal_cnn": [
+      "loso_gB-9.pt",
+      "loso_gC-14.pt",
+      "loso_gZ-36.pt"
+    ],
+    "v6_action_ablation": [
+      "flat_loss",
+      "flat_sampler",
+      "flat_unweighted",
+      "hierarchical_loss"
+    ],
+    "v7_research": [
+      "coarse_objective",
+      "hard_negatives",
+      "binary_gate",
+      "longer_context"
+    ]
+  },
+  "recovered_trained_models": {
+    "auxiliary_yolo11n": {
+      "architecture": "YOLO11n-COCO",
+      "path": "models/auxiliary/yolo11n.pt",
+      "sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1",
+      "size_bytes": 5613813,
+      "status": "AUXILIARY_FROZEN"
+    },
+    "auxiliary_yolo11n_pose": {
+      "architecture": "YOLO11n-Pose",
+      "path": "models/auxiliary/yolo11n-pose.pt",
+      "sha256": "b1828fb563c6c19f561ee6dfbf1d3c90710609ea3998b58498f4df21ef61ce58",
+      "size_bytes": 6255653,
+      "status": "AUXILIARY_FROZEN"
+    },
+    "phone_detector": {
+      "architecture": "YOLO11s",
+      "eligibility_for_inference": true,
+      "eligibility_for_warm_start": true,
+      "path": "models/active/v2/phone_detector.pt",
+      "reported_metrics": {
+        "mAP50": 0.9448,
+        "mAP50_95": 0.7003,
+        "precision": 0.9713,
+        "recall": 0.8273
+      },
+      "sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+      "size_bytes": 19209623,
+      "status": "ACTIVE_FROZEN",
+      "training_dataset": "DMD + Roboflow Cabin + Internal Review",
+      "training_subjects": [
+        "gB-9",
+        "gC-14",
+        "gZ-36"
+      ]
+    },
+    "seatbelt_classifier": {
+      "architecture": "YOLO11s-cls",
+      "eligibility_for_inference": true,
+      "eligibility_for_warm_start": true,
+      "path": "models/active/v2/seatbelt_classifier.pt",
+      "reported_metrics": {
+        "top1_accuracy": 0.8097,
+        "top5_accuracy": 1.0
+      },
+      "sha256": "e55158e3f152922e710ad260295da16488ffc2c6a145b8dfdc5c4ce323392bd4",
+      "size_bytes": 11028163,
+      "status": "ACTIVE_FROZEN"
+    },
+    "seatbelt_detector": {
+      "architecture": "YOLO11s",
+      "eligibility_for_inference": true,
+      "eligibility_for_warm_start": true,
+      "path": "models/active/v2/seatbelt_detector.pt",
+      "reported_metrics": {
+        "mAP50": 0.9473,
+        "mAP50_95": 0.537,
+        "precision": 0.9257,
+        "recall": 0.8785
+      },
+      "sha256": "361436ab073c8fcc17a041f098285efdd0cf6775a8970be2ffada4e45c6bc500",
+      "size_bytes": 19345293,
+      "status": "ACTIVE_FROZEN"
+    }
+  },
+  "schema_version": "v18.0",
+  "total_checkpoints_found": 59
+}
