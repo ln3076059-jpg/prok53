@@ -1,0 +1,138 @@
+{
+  "reports/v15_research/01_FULL_REPOSITORY_AI_AUDIT.md": {
+    "sha256": "05a05c06a0efc632c4bbf9de39181f011b76d47a93786c93a3e613ec3c9f65d7",
+    "bytes": 3284
+  },
+  "reports/v15_research/02_VERIFIED_SCIENTIFIC_LITERATURE.md": {
+    "sha256": "294ada671f1e7712eb172fdcd2f30b422f7dedd05d7c86eddd9610fba899858f",
+    "bytes": 2840
+  },
+  "reports/v15_research/03_RESEARCH_GAP_AND_METHOD_SELECTION.md": {
+    "sha256": "471808c227b1388f48804542567e9c1014a5a8c74dc0b65712f5324370fa84ce",
+    "bytes": 1242
+  },
+  "reports/v15_research/04_DATA_RIGHTS_AND_SPLIT_AUDIT.md": {
+    "sha256": "43c19ca952e19bd8ecd966eac0976d0b250028ba6a6fc4862cac7d7b94283b8b",
+    "bytes": 938
+  },
+  "reports/v15_research/05_ERROR_ROOT_CAUSE_MATRIX.md": {
+    "sha256": "d949c2bd3e72a71b2cfe0dd6fcfba3c5311052009ab872981b69125d99b55660",
+    "bytes": 788
+  },
+  "reports/v15_research/06_SMALL_PHONE_DETECTION_STUDY.md": {
+    "sha256": "cc420f4255578350fb2108cd8076d57db98c7f59e91a3e3c0172477de1203717",
+    "bytes": 965
+  },
+  "reports/v15_research/07_ACTION_REPRESENTATION_STUDY.md": {
+    "sha256": "e7b40c1dce37af0741688803c6fcab6125294cbbf5eab4f75f6cd03ae7aad65d",
+    "bytes": 774
+  },
+  "reports/v15_research/08_ASSOCIATION_AND_FUSION_STUDY.md": {
+    "sha256": "f69ea182bf3324e22999d7378e1c3d4f4e3e884d1c470c65604b8e93caf7fa09",
+    "bytes": 963
+  },
+  "reports/v15_research/09_EVENT_LEVEL_VALIDATION.md": {
+    "sha256": "0a6cdb74f99c43f9fd7747e6e795f36da9197ce1c9afec59f7fc9fb16d235a63",
+    "bytes": 702
+  },
+  "reports/v15_research/10_SEATBELT_STUDY.md": {
+    "sha256": "505d21c8a2b20ca06cd339a95dcdef2ecfc08b3c3a6053f7ce26d1cfdbed42c7",
+    "bytes": 846
+  },
+  "reports/v15_research/11_RUNTIME_AND_TEST_RESULTS.md": {
+    "sha256": "a204caa3681b8f233d4cf566e100de7f7b89ee0f3f484b3467a29edc44597ce2",
+    "bytes": 651
+  },
+  "reports/v15_research/12_FINAL_AI_LEAD_REVIEW.md": {
+    "sha256": "b57b4693bdbdb813bef162c79dd7cb0b016ee7e2442b720613d2ac0251ec9163",
+    "bytes": 1359
+  },
+  "reports/v15_research/backend_smoke.log": {
+    "sha256": "2f896d91d7a4f1ef919ea83cea739a80a3fd9c9c858a9cc085fc503cb401ebcf",
+    "bytes": 68
+  },
+  "reports/v15_research/compile.log": {
+    "sha256": "b8b4738b66525392ba7d8e8eb6ae4008fb5bbd960c061463fc8bec9558adb237",
+    "bytes": 12
+  },
+  "reports/v15_research/confusion_matrices.json": {
+    "sha256": "3133b808e8527d8d9282b9b442dc48b752a33bba220a51129dd40a7abd7143ad",
+    "bytes": 275
+  },
+  "reports/v15_research/dataset_manifest.json": {
+    "sha256": "b2a307582c36b15d98626f2e90995728c81de6a2f93722cb27b0e7a302776002",
+    "bytes": 1391
+  },
+  "reports/v15_research/environment.json": {
+    "sha256": "8bc8e19058dbd411acbdd4133c8f92ecdb7e54382733961d88d2813b5bd20bd4",
+    "bytes": 247
+  },
+  "reports/v15_research/event_match_records.json": {
+    "sha256": "7d3c817786db946df88b6d6b36b26a4d855e3b953851eec4478b1e874989f6d3",
+    "bytes": 303
+  },
+  "reports/v15_research/experiment_plan.json": {
+    "sha256": "e8874aaa06b009271a622e413dc1b2ee9a455d531ddd6f914b678a0e1a8f8d53",
+    "bytes": 2670
+  },
+  "reports/v15_research/experiment_registry.json": {
+    "sha256": "ab13ec0768f1553ea4bb1f47e90ab3d79d5bd095daf41f6ead756d84c660b3f0",
+    "bytes": 451
+  },
+  "reports/v15_research/fn_gate_ledger.json": {
+    "sha256": "fe6167e4714f25422d055fe91ac364361e0c6057746315c8ae6a3e5d44331254",
+    "bytes": 9034
+  },
+  "reports/v15_research/frontend_build.log": {
+    "sha256": "fef41bccb2e6e0b4010a6a7c7fb6c5571129c97140279941e9e77b5ce16de132",
+    "bytes": 1260
+  },
+  "reports/v15_research/literature_matrix.json": {
+    "sha256": "ccb23ac1b2910e53313e3d1ddc7d445eb133dca10cc21ffbecbe46d8bd289021",
+    "bytes": 14343
+  },
+  "reports/v15_research/metrics_comparison.json": {
+    "sha256": "e0430d3ab163f319d5a236a950d951fad6604cd5c13a8439d1a072856600014d",
+    "bytes": 8306
+  },
+  "reports/v15_research/model_manifest.json": {
+    "sha256": "d0df4a77da340acbce7e90bcf46a5f1d635cbe04b4be6e7bd0a3d8d528d21e96",
+    "bytes": 455
+  },
+  "reports/v15_research/pytest_full.log": {
+    "sha256": "120f83ab88aeb82bc3fb77254439f945245c4d2d2c28f3d9e393e4a3bd038361",
+    "bytes": 1640
+  },
+  "reports/v15_research/pytest_full.xml": {
+    "sha256": "5a0e6a7f0deae99338c8be2d3142ec7e56d48939b1e84597ef40e9abe54ba729",
+    "bytes": 80975
+  },
+  "reports/v15_research/pytest_targeted.log": {
+    "sha256": "e109f547020ae7ee12f9f033488c786fa6eebbc85d13dbb457deedcd639395b7",
+    "bytes": 352
+  },
+  "reports/v15_research/pytest_targeted.xml": {
+    "sha256": "0490e9a67de06a9cd4eba82d9c052d6108ede466f5414ab4bd7dea4e60a726cb",
+    "bytes": 5322
+  },
+  "reports/v15_research/reproduce.ps1": {
+    "sha256": "1333d05b7b4a8216bb086a826f0c01bb3140974dec8c2d96a2325c229daa3a16",
+    "bytes": 1447
+  },
+  "reports/v15_research/ruff.log": {
+    "sha256": "af352a86840ad0af3d37ea0d9197f868363a6dac6b1c2ef5d2722f6b41d2d9af",
+    "bytes": 42
+  },
+  "reports/v15_research/sliced_phone_diagnostic.json": {
+    "sha256": "c84a1ac5d23465c186cf3d71a603b4fbe6b390895f387e406a18b641df37c81a",
+    "bytes": 640
+  },
+  "reports/v15_research/test_results.json": {
+    "sha256": "2b858392b1cde3ef4ca1e8df0efba9ca984e7871bce44216b91d5a53e62d3655",
+    "bytes": 328
+  },
+  "reports/v15_research/verification.log": {
+    "sha256": "6dea7f122a6f2dd190000d9538aee6a024e40fb20e3e4a9e2d38153218412c5c",
+    "bytes": 70
+  }
+}

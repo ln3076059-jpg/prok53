@@ -1,0 +1,39 @@
+{
+  "source": "reports/v14_research/data_manifest.json",
+  "source_sha256": "bbeb6b37edd5f358b2ab500b4eedb8e66bb4262c733b3e3aada0d64aebfa8e0a",
+  "development_subjects": [
+    "gB-9",
+    "gC-14",
+    "gZ-36"
+  ],
+  "protected_holdouts": [
+    "gZ-37",
+    "gE-28"
+  ],
+  "protected_holdouts_accessed": false,
+  "permissions": {
+    "RIGHTS_STATUS": "PENDING_PROJECT_REVIEW",
+    "RIGHTS_ACCEPTED": "false",
+    "CANONICAL_ELIGIBLE": "false",
+    "TEMPORAL_DEVELOPMENT_ELIGIBLE": "true",
+    "UNTOUCHED_HOLDOUT_ELIGIBLE": "false"
+  },
+  "denied_operations": {
+    "linear_head": "linear_head: RIGHTS_ACCEPTED is not true; no fitting/upload",
+    "calibration": "calibration: RIGHTS_ACCEPTED is not true; no fitting/upload",
+    "fusion": "fusion: RIGHTS_ACCEPTED is not true; no fitting/upload",
+    "boundary": "boundary: RIGHTS_ACCEPTED is not true; no fitting/upload",
+    "backbone": "backbone: RIGHTS_ACCEPTED is not true; no fitting/upload",
+    "upload": "upload: RIGHTS_ACCEPTED is not true; no fitting/upload"
+  },
+  "independent_holdout": null,
+  "seatbelt_pending_labels": {
+    "source": "dataset/manifests/v2_seatbelt_uncertain_ui_review.json",
+    "sha256": "db4c7823b81ddd17771729d588def580ceb1fcabb0482e6928cb20540e00148d",
+    "samples": 500,
+    "status_counts": {
+      "PENDING": 500
+    },
+    "automatic_training_labels": 0
+  }
+}

@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "evidence_level": "LEVEL_1_DIAGNOSTIC",
+  "scope": "FROZEN_13_REPEATED_DEVELOPMENT_FALSE_NEGATIVES",
+  "source": "reports/v11_research/fn_root_cause.json",
+  "source_sha256": "c6ae6f9765ffd215244fa0216694710ff656270173ecdf3e5aa1f4a53f582adb",
+  "case_count": 13,
+  "nonexclusive_failure_stage_counts": {
+    "SPECIALIST_DETECTOR_MISS": 11,
+    "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE": 12,
+    "DRIVER_ASSOCIATION_UNKNOWN": 13,
+    "ACTION_EVIDENCE_BELOW_GATE": 9,
+    "AUXILIARY_DETECTOR_NO_VALID_BOX": 1,
+    "OCCLUSION_OR_LOCALIZATION_FAILURE": 1,
+    "SUBSECOND_TEMPORAL_RISK": 4
+  },
+  "primary_gate_rejection_counts": {
+    "PHONE_DETECTOR_NO_PROPOSAL": 11,
+    "PHONE_BOX_PRESENT_ACTION_UNDER_GATE": 2
+  },
+  "input_candidates": 13,
+  "admitted_events": 0,
+  "rejected_events": 13,
+  "rejected_true_phone_use_cases": 13,
+  "potential_recovered_tp": null,
+  "potential_new_fp": null,
+  "limitation": "FN-selected cases have no negative denominator; proposal yield is not event recovery.",
+  "cases": [
+    {
+      "event_id": "gB-9-phone-01",
+      "subject_id": "gB-9",
+      "phone_visibility": "PHONE_VISIBLE",
+      "specialist_samples_with_box": 0,
+      "auxiliary_candidate_count": 43,
+      "driver_association": "UNKNOWN",
+      "action_t0_max": 0.4227624535560608,
+      "action_t1_dense_max": 0.43777573108673096,
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "ACTION_EVIDENCE_BELOW_GATE"
+      ]
+    },
+    {
+      "event_id": "gB-9-phone-03",
+      "subject_id": "gB-9",
+      "phone_visibility": "PHONE_VISIBLE",
+      "specialist_samples_with_box": 0,
+      "auxiliary_candidate_count": 39,
+      "driver_association": "UNKNOWN",
+      "action_t0_max": 0.7218237519264221,
+      "action_t1_dense_max": 0.7543731927871704,
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "ACTION_EVIDENCE_BELOW_GATE"
+      ]
+    },
+    {
+      "event_id": "gB-9-phone-05",
+      "subject_id": "gB-9",
+      "phone_visibility": "PHONE_VISIBLE",
+      "specialist_samples_with_box": 0,
+      "auxiliary_candidate_count": 21,
+      "driver_association": "UNKNOWN",
+      "action_t0_max": 0.6306087374687195,
+      "action_t1_dense_max": 0.7238595485687256,
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "ACTION_EVIDENCE_BELOW_GATE"
+      ]
+    },
+    {
+      "event_id": "gB-9-phone-06",
+      "subject_id": "gB-9",
+      "phone_visibility": "PHONE_VISIBLE",
+      "specialist_samples_with_box": 0,
+      "auxiliary_candidate_count": 12,
+      "driver_association": "UNKNOWN",
+      "action_t0_max": 0.03696706146001816,
+      "action_t1_dense_max": 0.13816387951374054,
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_DETECTOR_NO_VALID_BOX",
+        "OCCLUSION_OR_LOCALIZATION_FAILURE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "ACTION_EVIDENCE_BELOW_GATE"
+      ]
+    },
+    {
+      "event_id": "gB-9-phone-07",
+      "subject_id": "gB-9",
+      "phone_visibility": "PHONE_VISIBLE",
+      "specialist_samples_with_box": 0,
+      "auxiliary_candidate_count": 23,
+      "driver_association": "UNKNOWN",
+      "action_t0_max": 0.46719834208488464,
+      "action_t1_dense_max": 0.5525065660476685,
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "ACTION_EVIDENCE_BELOW_GATE"
+      ]
+    },
+    {
+      "event_id": "gB-9-phone-08",
+      "subject_id": "gB-9",
+      "phone_visibility": "PHONE_VISIBLE",
+      "specialist_samples_with_box": 2,
+      "auxiliary_candidate_count": 15,
+      "driver_association": "UNKNOWN",
+      "action_t0_max": 0.67585289478302,
+      "action_t1_dense_max": 0.6858704090118408,
+      "gate_rejection_reason": "PHONE_BOX_PRESENT_ACTION_UNDER_GATE",
+      "failure_stages": [
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "ACTION_EVIDENCE_BELOW_GATE"
+      ]
+    },
+    {
+      "event_id": "gB-9-phone-09",
+      "subject_id": "gB-9",
+      "phone_visibility": "PHONE_VISIBLE",
+      "specialist_samples_with_box": 5,
+      "auxiliary_candidate_count": 22,
+      "driver_association": "UNKNOWN",
+      "action_t0_max": 0.4168599545955658,
+      "action_t1_dense_max": 0.45249930024147034,
+      "gate_rejection_reason": "PHONE_BOX_PRESENT_ACTION_UNDER_GATE",
+      "failure_stages": [
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "ACTION_EVIDENCE_BELOW_GATE"
+      ]
+    },
+    {
+      "event_id": "gZ-36-phone-01",
+      "subject_id": "gZ-36",
+      "phone_visibility": "PHONE_VISIBLE",
+      "specialist_samples_with_box": 0,
+      "auxiliary_candidate_count": 8,
+      "driver_association": "UNKNOWN",
+      "action_t0_max": 0.5471053719520569,
+      "action_t1_dense_max": 0.7452247738838196,
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "ACTION_EVIDENCE_BELOW_GATE",
+        "SUBSECOND_TEMPORAL_RISK"
+      ]
+    },
+    {
+      "event_id": "gZ-36-phone-03",
+      "subject_id": "gZ-36",
+      "phone_visibility": "PHONE_VISIBLE",
+      "specialist_samples_with_box": 0,
+      "auxiliary_candidate_count": 5,
+      "driver_association": "UNKNOWN",
+      "action_t0_max": 0.8559412956237793,
+      "action_t1_dense_max": 0.8854799866676331,
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "SUBSECOND_TEMPORAL_RISK"
+      ]
+    },
+    {
+      "event_id": "gZ-36-phone-05",
+      "subject_id": "gZ-36",
+      "phone_visibility": "PHONE_VISIBLE",
+      "specialist_samples_with_box": 0,
+      "auxiliary_candidate_count": 3,
+      "driver_association": "UNKNOWN",
+      "action_t0_max": 0.9157363176345825,
+      "action_t1_dense_max": 0.9352058172225952,
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "SUBSECOND_TEMPORAL_RISK"
+      ]
+    },
+    {
+      "event_id": "gC-14-phone-02",
+      "subject_id": "gC-14",
+      "phone_visibility": "PHONE_VISIBLE",
+      "specialist_samples_with_box": 0,
+      "auxiliary_candidate_count": 18,
+      "driver_association": "UNKNOWN",
+      "action_t0_max": 0.7713298797607422,
+      "action_t1_dense_max": 0.8423033356666565,
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN"
+      ]
+    },
+    {
+      "event_id": "gC-14-phone-05",
+      "subject_id": "gC-14",
+      "phone_visibility": "PHONE_VISIBLE",
+      "specialist_samples_with_box": 0,
+      "auxiliary_candidate_count": 5,
+      "driver_association": "UNKNOWN",
+      "action_t0_max": null,
+      "action_t1_dense_max": 0.48383933305740356,
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN",
+        "ACTION_EVIDENCE_BELOW_GATE",
+        "SUBSECOND_TEMPORAL_RISK"
+      ]
+    },
+    {
+      "event_id": "gC-14-phone-06",
+      "subject_id": "gC-14",
+      "phone_visibility": "PHONE_VISIBLE",
+      "specialist_samples_with_box": 0,
+      "auxiliary_candidate_count": 12,
+      "driver_association": "UNKNOWN",
+      "action_t0_max": 0.8543280363082886,
+      "action_t1_dense_max": 0.8618807792663574,
+      "gate_rejection_reason": "PHONE_DETECTOR_NO_PROPOSAL",
+      "failure_stages": [
+        "SPECIALIST_DETECTOR_MISS",
+        "AUXILIARY_CANDIDATE_NOT_ADMITTED_BY_FROZEN_PIPELINE",
+        "DRIVER_ASSOCIATION_UNKNOWN"
+      ]
+    }
+  ]
+}

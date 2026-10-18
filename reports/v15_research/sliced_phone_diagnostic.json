@@ -1,0 +1,30 @@
+{
+  "experiment_id": "V15-A-SLICED-PHONE",
+  "evidence_level": "LEVEL_1_SYNTHETIC_ENGINEERING",
+  "input_resolution": [
+    1280,
+    720
+  ],
+  "roi": [
+    0,
+    72,
+    832,
+    684
+  ],
+  "tile_size": [
+    384,
+    384
+  ],
+  "overlap": 0.25,
+  "tile_count": 6,
+  "raw_proposal_count": 6,
+  "merged_proposal_count": 6,
+  "latency_ms": {
+    "p50": 0.18584999634185806,
+    "p95": 0.3080999886151403,
+    "p99": 0.4638999962480739
+  },
+  "model_inference_included": false,
+  "accuracy_metrics": null,
+  "interpretation": "Measures adapter geometry/overhead only; not detector or full-pipeline latency."
+}

@@ -131,7 +131,21 @@ class AutonomousPhonePipeline:
             raise ValueError("expected HxWx3 source frame")
         height, width = frame.shape[:2]
         context = context or PhoneContextEvidence()
-        raw_proposals = self.detector.detect(frame, self.confidence_floor)
+        driver_box = driver.box or Box(0, 0, width, height)
+        detector_diagnostics = None
+        detect_roi = getattr(self.detector, "detect_roi", None)
+        if callable(detect_roi):
+            sliced = detect_roi(frame, driver_box, self.confidence_floor)
+            raw_proposals = list(sliced.proposals)
+            detector_diagnostics = {
+                "mode": "SLICED_DRIVER_ROI",
+                "tile_count": len(sliced.tiles),
+                "raw_proposal_count": sliced.raw_proposal_count,
+                "merged_proposal_count": sliced.merged_proposal_count,
+                "latency_ms": sliced.latency_ms,
+            }
+        else:
+            raw_proposals = self.detector.detect(frame, self.confidence_floor)
         proposals, rejected = [], []
         for proposal in raw_proposals:
             if proposal.confidence < self.confidence_floor:
@@ -146,7 +160,6 @@ class AutonomousPhonePipeline:
                 raise ValueError("invalid detector confidence")
             if proposal.model_sha256 != self.detector.model_sha256:
                 raise ValueError("proposal model hash mismatch")
-        driver_box = driver.box or Box(0, 0, width, height)
         outputs = []
         if proposals:
             for proposal in proposals:
@@ -201,6 +214,7 @@ class AutonomousPhonePipeline:
             "status": status,
             "outputs": outputs,
             "rejected_proposals": rejected,
+            "detector_diagnostics": detector_diagnostics,
             "model_sha256": self.detector.model_sha256,
             "config_sha256": self.config_sha256,
             "phone_ap": None,
