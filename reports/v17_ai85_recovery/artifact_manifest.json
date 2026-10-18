@@ -1,0 +1,129 @@
+{
+  "files": {
+    "01_DATA_ACCESS_ACTION_PLAN.md": {
+      "bytes": 2231,
+      "sha256": "ee07e23360753e8eb6c81a4810c3c661e520080aa02ff60ac471b9d0bd10659e"
+    },
+    "02_ANNOTATION_BENCHMARK_AND_SPLIT.md": {
+      "bytes": 936,
+      "sha256": "03e9cd5fd04c5e82994415103e4f2ae8a46d2c110de0dd3ba948dc442d907be8"
+    },
+    "03_SAHI_AND_ACTION_RESULTS.md": {
+      "bytes": 650,
+      "sha256": "88afeb291c0d621652b01ab5280af83478b035d28e99763a49c585d45bb3921b"
+    },
+    "04_ASSOCIATION_TEMPORAL_AND_SEATBELT.md": {
+      "bytes": 829,
+      "sha256": "6f6c0d4c23355299a8281ea483af1a7f66be69b0c260a345fe88c7c014832860"
+    },
+    "05_METRICS_AND_TESTS.md": {
+      "bytes": 426,
+      "sha256": "7004ac55add1b5d19a05d879432a52c81f9c9cdda95e14123214be952d653fac"
+    },
+    "06_FINAL_SCIENTIFIC_DECISION.md": {
+      "bytes": 1106,
+      "sha256": "2432cb07f77845daed3226a3569708fdc7ba90539fba4a2a2169b43c4ebd9096"
+    },
+    "action_experiments.json": {
+      "bytes": 306,
+      "sha256": "358d8c49025cbe80a1777a6c77b9ba09207b4900f945428e34e363d17245bc60"
+    },
+    "annotation_qa.json": {
+      "bytes": 272,
+      "sha256": "d0eebc93661301d6ddfd133b8f202a4c8d766939a477e208b35c8e1dc240a820"
+    },
+    "approved_data_inventory.json": {
+      "bytes": 3920,
+      "sha256": "e6786ba47504c7abab4b6c2394a9a915377d599f26a2068051f6fd744e0954b9"
+    },
+    "association_fusion_analysis.json": {
+      "bytes": 305,
+      "sha256": "e116ed5297948404d7cf98d1a58af1f499dadd446edfdfec2578d7f2b3af9da2"
+    },
+    "backend_smoke.log": {
+      "bytes": 68,
+      "sha256": "2f896d91d7a4f1ef919ea83cea739a80a3fd9c9c858a9cc085fc503cb401ebcf"
+    },
+    "compile.log": {
+      "bytes": 6,
+      "sha256": "d938fa189912f8776c3deb31a6bec42f403f57b9c8e3ed936bdb076caf6bd61c"
+    },
+    "dataset_access_action_plan.json": {
+      "bytes": 7060,
+      "sha256": "dd0aebc066e40dc30af58353491c360ce4d90e9d546e7091251fb181a6d36606"
+    },
+    "environment.json": {
+      "bytes": 299,
+      "sha256": "8eb30cf699fc7a6b22526a94c0536dffd0ee645db314141a3274f7d7a6fb3fe2"
+    },
+    "event_metrics.json": {
+      "bytes": 286,
+      "sha256": "1c817a62e87df418430e8ef5b14be7ee61aefcbb094b18b83f987cdd421dca80"
+    },
+    "experiment_registry.json": {
+      "bytes": 889,
+      "sha256": "22ef2ecc392ed1f12e7c3dcc2da2d17876fd3f2742677ddb67c635bc5faf6575"
+    },
+    "frontend_build.log": {
+      "bytes": 1258,
+      "sha256": "cd252c42fc7dd66504669678c7b1445f46e1265faf244d085f5608e6cbdfd98e"
+    },
+    "group_split_manifest.json": {
+      "bytes": 399,
+      "sha256": "86615c7f35247e30d81292e2e8ce306aee90f34d73bcb271c585a13544128a2e"
+    },
+    "model_manifest.json": {
+      "bytes": 511,
+      "sha256": "9d5916ac98e61140d94e56b42c4e454bd24f1b8e0b021bc1a5dc3bc4f89d879f"
+    },
+    "phone_benchmark_protocol.json": {
+      "bytes": 754,
+      "sha256": "3860f07a23ed55dfa6f1100f8d89c9e58e835851b08ca712dd472df1f27dc0b2"
+    },
+    "pytest_full.log": {
+      "bytes": 1650,
+      "sha256": "b64f56ecc8f4290a34175ba4cd48861f274b59662d4333f488b37d368bfee1ad"
+    },
+    "pytest_full.xml": {
+      "bytes": 83364,
+      "sha256": "bea7e4031fda80fa5963fa3f987e82acb82f52ad23ce779f7e05c17a55340de5"
+    },
+    "pytest_targeted.log": {
+      "bytes": 362,
+      "sha256": "b0106253c29c8c74b281e0aaa74ddeb9d71cdcee2d6c7888d52e0c7aa456e51c"
+    },
+    "pytest_targeted.xml": {
+      "bytes": 5021,
+      "sha256": "4eb28e55584f7dce95febf97f33c5dfb8eba296da134c511187fc52a8bb8c35e"
+    },
+    "reproduce.ps1": {
+      "bytes": 1677,
+      "sha256": "a048c6a7eb7137d55ab19dcda32ad06d14a67b7977cf54db355c63ec735f54df"
+    },
+    "ruff.log": {
+      "bytes": 42,
+      "sha256": "af352a86840ad0af3d37ea0d9197f868363a6dac6b1c2ef5d2722f6b41d2d9af"
+    },
+    "sahi_ablation.json": {
+      "bytes": 1071,
+      "sha256": "350991b3cdcf17b44fbbc02b8cdc534107c2a49747ceeca56784c9191545cd19"
+    },
+    "seatbelt_review_status.json": {
+      "bytes": 208,
+      "sha256": "5007d9518f9086df64d0b12ae30240092fc2905d190140b19b234be3c612e1f1"
+    },
+    "temporal_event_analysis.json": {
+      "bytes": 714,
+      "sha256": "11a2d10e8dcf4a2bb98270d41df3098f41c7e3b32d00f26ba81a8282e9edaf39"
+    },
+    "test_results.json": {
+      "bytes": 328,
+      "sha256": "c9c5b9c2ba1c49e8674b5b3c605c7a0401f18e3cc4a326e2651c6da2335a30a3"
+    },
+    "validation.json": {
+      "bytes": 378,
+      "sha256": "048f87cbfc58d5a097e9d5538b601e2f0cdcf589a403850c5b60c2a200b81053"
+    }
+  },
+  "schema_version": 1
+}

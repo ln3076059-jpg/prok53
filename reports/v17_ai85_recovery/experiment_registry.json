@@ -1,0 +1,25 @@
+{
+  "source_head": "ecb9e0081dc17292b2e95172a701f906c6a27f71",
+  "experiments": [
+    {
+      "id": "V17-E1-SPLIT-HARDENING",
+      "hypothesis": "component grouping prevents subject/video/original leakage",
+      "decision": "INCONCLUSIVE",
+      "reason": "engineering tests pass; no approved real split exists"
+    },
+    {
+      "id": "V17-E2-PHONE-BENCHMARK-CONTRACT",
+      "hypothesis": "explicit reviewed negatives prevent false background truth",
+      "decision": "INCONCLUSIVE",
+      "reason": "contract tests pass; zero approved benchmark records"
+    },
+    {
+      "id": "V17-E3-CANDIDATE-FLOW-LEDGER",
+      "hypothesis": "stage reason codes expose recall loss",
+      "decision": "INCONCLUSIVE",
+      "reason": "instrumentation tests pass; no role/object/event GT cohort"
+    }
+  ],
+  "training_performed": false,
+  "production_changed": false
+}

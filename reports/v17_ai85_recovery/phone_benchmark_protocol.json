@@ -1,0 +1,30 @@
+{
+  "schema_implementation": "training/dmd/phone_benchmark.py",
+  "status": "BLOCKED_ZERO_APPROVED_RECORDS",
+  "required_truth": {
+    "positive": "Every visible phone has a human-approved pixel xyxy box",
+    "negative": "Human confirms ALL_VISIBLE_PHONES scope and zero boxes",
+    "association": [
+      "DRIVER",
+      "PASSENGER",
+      "UNKNOWN"
+    ]
+  },
+  "required_contexts": [
+    "HANDHELD",
+    "NEAR_EAR",
+    "IN_LAP",
+    "MOUNTED_PHONE",
+    "MOUNTED_CAMERA",
+    "PASSENGER_PHONE",
+    "PHONE_LIKE_OBJECT",
+    "PARTIAL_OCCLUSION",
+    "LIGHTING_AND_CAMERA_DOMAINS"
+  ],
+  "current_counts": {
+    "positive_images": 0,
+    "reviewed_negative_images": 0,
+    "boxes": 0
+  },
+  "ap_metrics_allowed": false
+}

@@ -1,0 +1,38 @@
+{
+  "status": "BLOCKED_NO_APPROVED_POSITIVE_NEGATIVE_BENCHMARK",
+  "code": "training/dmd/sliced_phone.py",
+  "code_sha256": "80188c39dcd0081906dc7fc36e1a98575468013f07b88ac64ae92a85175e18b7",
+  "engineering_diagnostic": {
+    "experiment_id": "V15-A-SLICED-PHONE",
+    "evidence_level": "LEVEL_1_SYNTHETIC_ENGINEERING",
+    "input_resolution": [
+      1280,
+      720
+    ],
+    "roi": [
+      0,
+      72,
+      832,
+      684
+    ],
+    "tile_size": [
+      384,
+      384
+    ],
+    "overlap": 0.25,
+    "tile_count": 6,
+    "raw_proposal_count": 6,
+    "merged_proposal_count": 6,
+    "latency_ms": {
+      "p50": 0.18584999634185806,
+      "p95": 0.3080999886151403,
+      "p99": 0.4638999962480739
+    },
+    "model_inference_included": false,
+    "accuracy_metrics": null,
+    "interpretation": "Measures adapter geometry/overhead only; not detector or full-pipeline latency."
+  },
+  "D0_D4_accuracy_metrics": null,
+  "phone_ap_improved": null,
+  "interpretation": "geometry and overhead verified; accuracy not established"
+}

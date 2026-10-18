@@ -1,0 +1,193 @@
+{
+  "source_head": "ecb9e0081dc17292b2e95172a701f906c6a27f71",
+  "generated_at": "2026-10-18T11:17:15.303076+00:00",
+  "datasets": [
+    {
+      "dataset_id": "DMD_2026",
+      "official_source": "https://github.com/Vicomtech/DMD-Driver-Monitoring-Dataset",
+      "status": "BLOCKED",
+      "blockers": [
+        "RIGHTS_TO_FIT_DENIED",
+        "DOWNLOAD_AUTHORIZATION_DENIED",
+        "NO_APPROVED_BBOX_BENCHMARK",
+        "NO_NEW_INDEPENDENT_HOLDOUT"
+      ]
+    },
+    {
+      "dataset_id": "100_DRIVER",
+      "official_source": "https://100-driver.github.io/",
+      "status": "ACCESS_REQUEST_REQUIRED",
+      "blockers": [
+        "ACCESS_AGREEMENT_MISSING",
+        "DOWNLOAD_AUTHORIZATION_DENIED",
+        "HUMAN_LABEL_MAPPING_REVIEW_MISSING",
+        "SPLIT_VERIFICATION_MISSING"
+      ]
+    },
+    {
+      "dataset_id": "STATE_FARM_DISTRACTED_DRIVER",
+      "official_source": "https://www.kaggle.com/competitions/state-farm-distracted-driver-detection/data",
+      "status": "ACCESS_REQUEST_REQUIRED",
+      "blockers": [
+        "COMPETITION_RULE_ACCEPTANCE_MISSING",
+        "DOWNLOAD_AUTHORIZATION_DENIED",
+        "SUBJECT_MANIFEST_UNAVAILABLE_BEFORE_ACCESS",
+        "STATIC_IMAGES_HAVE_NO_EVENT_TIMESTAMPS"
+      ]
+    },
+    {
+      "dataset_id": "DRIVE_AND_ACT",
+      "official_source": "https://www.driveandact.com/",
+      "status": "DISCOVERED",
+      "blockers": [
+        "PHONE_LABEL_EQUIVALENCE_UNVERIFIED",
+        "DOWNLOAD_AUTHORIZATION_DENIED",
+        "DOMAIN_RELEVANCE_UNVERIFIED"
+      ]
+    },
+    {
+      "dataset_id": "COCO_2017",
+      "official_source": "https://cocodataset.org/",
+      "status": "LICENSE_UNVERIFIED",
+      "blockers": [
+        "IMAGE_LEVEL_LICENSE_REVIEW_MISSING",
+        "SUBSET_NOT_SELECTED",
+        "NEGATIVE_ANNOTATION_SCOPE_UNVERIFIED",
+        "DOMAIN_MISMATCH"
+      ]
+    },
+    {
+      "dataset_id": "OPEN_IMAGES_V7",
+      "official_source": "https://storage.googleapis.com/openimages/web/download_v7.html",
+      "status": "DISCOVERED",
+      "blockers": [
+        "PER_IMAGE_LICENSE_REVIEW_MISSING",
+        "DOWNLOAD_AUTHORIZATION_DENIED",
+        "VERIFIED_NEGATIVE_SUBSET_NOT_SELECTED",
+        "IN_CABIN_DOMAIN_MISMATCH"
+      ]
+    },
+    {
+      "dataset_id": "ROBOFLOW_SEATBELT_MOBILE",
+      "official_source": "https://universe.roboflow.com/naina-iucjd/seatbelt_and_mobile_detection-1qojv",
+      "status": "QUARANTINED_FOR_REVIEW",
+      "blockers": [
+        "ORIGINAL_ASSET_PROVENANCE_MISSING",
+        "AUGMENTATION_LINEAGE_MISSING",
+        "HUMAN_LABEL_QA_MISSING",
+        "SUBJECT_GROUPING_MISSING"
+      ]
+    },
+    {
+      "dataset_id": "ROBOFLOW_SEATBELT_V4",
+      "official_source": "https://universe.roboflow.com/seatbelttraining-7yh0f/seatbelt-detection-lb1ec",
+      "status": "ANNOTATION_PENDING",
+      "blockers": [
+        "ORIGINAL_ASSET_PROVENANCE_INCOMPLETE",
+        "8371_LABELS_PENDING",
+        "AUGMENTATION_GROUP_LEAKAGE_RISK",
+        "SUBJECT_GROUPING_MISSING"
+      ]
+    },
+    {
+      "dataset_id": "ROBOFLOW_SEATBELT_THREE_STATE_CANDIDATE",
+      "official_source": "https://universe.roboflow.com/eco3cc/seat-belt-detection-uhqwa-0tqd0",
+      "status": "QUARANTINED_FOR_REVIEW",
+      "blockers": [
+        "ORIGINAL_ASSET_PROVENANCE_MISSING",
+        "EXPORTED_CLASS_MAPPING_AMBIGUOUS",
+        "UNCERTAIN_CLASS_NOT_VERIFIED",
+        "HUMAN_LABEL_QA_MISSING"
+      ]
+    }
+  ],
+  "user_actions": {
+    "DMD_2026": {
+      "permission_needed": "Authorized project record with RIGHTS_ACCEPTED, TRAINING_ALLOWED, LABELS_APPROVED and GROUP_SPLIT_VERIFIED",
+      "action_url": "https://github.com/Vicomtech/DMD-Driver-Monitoring-Dataset",
+      "allowed_after_approval": [
+        "local fitting expressly covered by the grant"
+      ],
+      "verification_evidence": [
+        "written grant/reference",
+        "updated authoritative permission record",
+        "approved labels",
+        "split receipt"
+      ],
+      "expected_contribution": "temporal phone-event truth"
+    },
+    "100_DRIVER": {
+      "permission_needed": "Signed research license and written prior consent from PIC Lab",
+      "action_url": "https://100-driver.github.io/img/100_Driver_Licensing.pdf",
+      "allowed_after_approval": [
+        "download",
+        "research action fitting subject to written terms"
+      ],
+      "verification_evidence": [
+        "signed form",
+        "approval email/reference",
+        "archive hash",
+        "subject manifest"
+      ],
+      "expected_contribution": "cross-driver SAFE/PHONE/OTHER representation"
+    },
+    "STATE_FARM_DISTRACTED_DRIVER": {
+      "permission_needed": "User acceptance of Kaggle competition rules in the user's account",
+      "action_url": "https://www.kaggle.com/competitions/state-farm-distracted-driver-detection/rules",
+      "allowed_after_approval": [
+        "download and research use only as allowed by accepted rules"
+      ],
+      "verification_evidence": [
+        "rules acceptance receipt",
+        "rules/version snapshot",
+        "driver_imgs_list.csv hash"
+      ],
+      "expected_contribution": "subject-disjoint still-image action pretraining"
+    },
+    "COCO_2017": {
+      "permission_needed": "Per-image/source-license review for a minimal cell-phone subset",
+      "action_url": "https://cocodataset.org/#download",
+      "allowed_after_approval": [
+        "approved subset acquisition",
+        "generic phone detector pretraining"
+      ],
+      "verification_evidence": [
+        "selected image IDs",
+        "license/provenance table",
+        "annotation hash"
+      ],
+      "expected_contribution": "generic phone bounding boxes"
+    },
+    "OPEN_IMAGES_V7": {
+      "permission_needed": "Per-image license and attribution review for Mobile phone positives and verified negatives",
+      "action_url": "https://storage.googleapis.com/openimages/web/download_v7.html",
+      "allowed_after_approval": [
+        "approved subset acquisition",
+        "phone detector validation/pretraining by declared split"
+      ],
+      "verification_evidence": [
+        "image IDs",
+        "license metadata",
+        "box/negative-label hashes",
+        "attribution manifest"
+      ],
+      "expected_contribution": "small-phone positives and reviewed hard negatives"
+    },
+    "ROBOFLOW_CANDIDATES": {
+      "permission_needed": "Original-image provenance, exact export classes and human QA approval",
+      "action_url": "https://universe.roboflow.com/",
+      "allowed_after_approval": [
+        "quarantined review first",
+        "training only after source-level approval"
+      ],
+      "verification_evidence": [
+        "original asset lineage",
+        "license evidence",
+        "duplicate clusters",
+        "human review receipts"
+      ],
+      "expected_contribution": "seatbelt and mixed phone candidates"
+    }
+  },
+  "automatic_permission_changes": 0
+}
