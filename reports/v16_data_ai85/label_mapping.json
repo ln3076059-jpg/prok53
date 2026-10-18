@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "mapping_version": "ROADWATCH_UNIFIED_V16_1",
+  "unified_labels": {
+    "phone_visibility": [
+      "PHONE_BOX",
+      "PHONE_VISIBLE",
+      "PHONE_OCCLUDED",
+      "PHONE_ABSENT",
+      "UNKNOWN_PHONE_VISIBILITY"
+    ],
+    "phone_action": [
+      "SAFE_DRIVING",
+      "TEXTING",
+      "HANDHELD_CALL",
+      "OTHER_PHONE_USE",
+      "OTHER_ACTIVITY",
+      "UNKNOWN_ACTION"
+    ],
+    "phone_context": [
+      "HANDHELD",
+      "MOUNTED",
+      "STATIC_CAMERA",
+      "PASSENGER_PHONE",
+      "UNKNOWN_CONTEXT"
+    ],
+    "occupant_role": [
+      "DRIVER",
+      "FRONT_PASSENGER",
+      "REAR_PASSENGER",
+      "UNKNOWN"
+    ],
+    "seatbelt": [
+      "FASTENED",
+      "UNFASTENED",
+      "UNCERTAIN_OR_OCCLUDED"
+    ]
+  },
+  "state_farm_proposed": {
+    "c0": "SAFE_DRIVING",
+    "c1": "TEXTING",
+    "c2": "HANDHELD_CALL",
+    "c3": "TEXTING",
+    "c4": "HANDHELD_CALL",
+    "c5-c9": "OTHER_ACTIVITY"
+  },
+  "rules": [
+    "retain original label",
+    "static images have no event interval",
+    "UNKNOWN is never SAFE",
+    "visible phone is not phone use",
+    "invisible belt is not UNFASTENED"
+  ]
+}

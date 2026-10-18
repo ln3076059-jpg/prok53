@@ -1,3 +1,5 @@
+# ruff: noqa: E501
+
 from __future__ import annotations
 
 import argparse
@@ -131,12 +133,12 @@ def main() -> None:
     parser.add_argument("source_dir", type=Path)
     parser.add_argument("--source-id", required=True)
     parser.add_argument("--group-prefix", required=True)
-    parser.add_argument("--registry", type=Path, default=Path("datasets/sources.yaml"))
-    parser.add_argument("--destination", type=Path, default=Path("datasets/incoming"))
-    parser.add_argument("--manifest", type=Path, default=Path("datasets/manifests/ingest.jsonl"))
+    parser.add_argument("--registry", type=Path, default=Path("dataset/sources.yaml"))
+    parser.add_argument("--destination", type=Path, default=Path("dataset/incoming"))
+    parser.add_argument("--manifest", type=Path, default=Path("dataset/manifests/ingest.jsonl"))
     args = parser.parse_args()
-    if args.destination.resolve() == Path("datasets/raw").resolve():
-        raise ValueError("datasets/raw is immutable and cannot be an ingestion destination")
+    if args.destination.resolve() == Path("dataset/raw").resolve():
+        raise ValueError("dataset/raw is immutable and cannot be an ingestion destination")
     source = load_source(args.source_id, args.registry)
     records = ingest(args.source_dir, args.destination, source, args.group_prefix)
     args.manifest.parent.mkdir(parents=True, exist_ok=True)

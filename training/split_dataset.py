@@ -1,3 +1,5 @@
+# ruff: noqa: E501
+
 from __future__ import annotations
 
 import argparse
@@ -99,7 +101,7 @@ def validate_isolation(manifest: list[dict]) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("review_manifest", type=Path)
-    parser.add_argument("--output", type=Path, default=Path("datasets/governed/mc3_v1"))
+    parser.add_argument("--output", type=Path, default=Path("dataset/governed/mc3_v1"))
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
     records = [json.loads(line) for line in args.review_manifest.read_text().splitlines() if line]

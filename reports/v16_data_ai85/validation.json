@@ -1,0 +1,21 @@
+{
+  "checks": {
+    "all_executed_checks_pass": true,
+    "model_hash:models/active/v2/phone_detector.pt": true,
+    "model_hash:models/auxiliary/yolo11n.pt": true,
+    "nine_dataset_candidates": true,
+    "no_active_model_change": true,
+    "no_independent_split_claim": true,
+    "no_production_approval": true,
+    "no_training": true,
+    "protected_holdouts_not_accessed": true,
+    "zero_approved_training_records": true,
+    "zero_v16_downloads": true
+  },
+  "datasets_audited": 9,
+  "independent_ai85_established": false,
+  "production_approved": false,
+  "reports": 13,
+  "status": "PASS",
+  "training_performed": false
+}

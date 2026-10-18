@@ -1,0 +1,20 @@
+{
+  "targeted": {
+    "tests": 29,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "status": "PASS"
+  },
+  "full": {
+    "tests": 639,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "status": "PASS"
+  },
+  "compile": "PASS",
+  "ruff": "PASS",
+  "frontend": "PASS",
+  "backend": "PASS"
+}

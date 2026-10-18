@@ -1,0 +1,108 @@
+{
+  "verified_on": "2026-10-18",
+  "sources": [
+    {
+      "dataset_id": "DMD_2026",
+      "license": "CC BY-NC-ND 4.0",
+      "access_status": "BLOCKED",
+      "allowed_operations": [
+        "local_temporal_diagnostics_on_existing_development_media"
+      ],
+      "source_url": "https://github.com/Vicomtech/DMD-Driver-Monitoring-Dataset"
+    },
+    {
+      "dataset_id": "100_DRIVER",
+      "license": "research-only custom license; prior consent required",
+      "access_status": "ACCESS_REQUEST_REQUIRED",
+      "allowed_operations": [],
+      "source_url": "https://100-driver.github.io/"
+    },
+    {
+      "dataset_id": "STATE_FARM_DISTRACTED_DRIVER",
+      "license": "SUBJECT_TO_COMPETITION_RULES",
+      "access_status": "ACCESS_REQUEST_REQUIRED",
+      "allowed_operations": [],
+      "source_url": "https://www.kaggle.com/competitions/state-farm-distracted-driver-detection/data"
+    },
+    {
+      "dataset_id": "DRIVE_AND_ACT",
+      "license": "research use only",
+      "access_status": "DISCOVERED",
+      "allowed_operations": [
+        "metadata_research"
+      ],
+      "source_url": "https://www.driveandact.com/"
+    },
+    {
+      "dataset_id": "COCO_2017",
+      "license": "annotations and per-image terms require separate verification",
+      "access_status": "LICENSE_UNVERIFIED",
+      "allowed_operations": [
+        "metadata_research"
+      ],
+      "source_url": "https://cocodataset.org/"
+    },
+    {
+      "dataset_id": "OPEN_IMAGES_V7",
+      "license": "per-image license in image metadata; annotation terms require attribution review",
+      "access_status": "DISCOVERED",
+      "allowed_operations": [
+        "metadata_research"
+      ],
+      "source_url": "https://storage.googleapis.com/openimages/web/download_v7.html"
+    },
+    {
+      "dataset_id": "ROBOFLOW_SEATBELT_MOBILE",
+      "license": "CC BY 4.0 shown on project page; original-image provenance unverified",
+      "access_status": "QUARANTINED_FOR_REVIEW",
+      "allowed_operations": [
+        "metadata_research"
+      ],
+      "source_url": "https://universe.roboflow.com/naina-iucjd/seatbelt_and_mobile_detection-1qojv"
+    },
+    {
+      "dataset_id": "ROBOFLOW_SEATBELT_V4",
+      "license": "CC BY 4.0 shown on project page; original-image provenance under review",
+      "access_status": "ANNOTATION_PENDING",
+      "allowed_operations": [
+        "local_quarantine_review"
+      ],
+      "source_url": "https://universe.roboflow.com/seatbelttraining-7yh0f/seatbelt-detection-lb1ec"
+    },
+    {
+      "dataset_id": "ROBOFLOW_SEATBELT_THREE_STATE_CANDIDATE",
+      "license": "CC BY 4.0 shown on project page; original-image provenance unverified",
+      "access_status": "QUARANTINED_FOR_REVIEW",
+      "allowed_operations": [
+        "metadata_research"
+      ],
+      "source_url": "https://universe.roboflow.com/eco3cc/seat-belt-detection-uhqwa-0tqd0"
+    }
+  ],
+  "dmd_live_permissions": {
+    "ROLE": "EXTERNAL_DMD_TEMPORAL_DEVELOPMENT_CANDIDATE",
+    "SOURCE_ID": "EXTERNAL_DMD_VICOMTECH",
+    "DOWNLOAD_STATUS": "BLOCKED_PENDING_AUTHORIZED_LINK_AND_SIZE_METADATA",
+    "DMD_PORTAL_STATUS": "GATED_FORM_ONLY",
+    "DMD_PER_FILE_SIZE_METADATA": "NOT_EXPOSED_PUBLICLY",
+    "EXACT_FILES_UNDER_1GB": "NOT_YET_VERIFIED",
+    "DOWNLOAD_NOW": "NO",
+    "TARGET_STREAM": "BODY",
+    "TARGET_CHANNEL": "RGB",
+    "TARGET_SESSION": "s2",
+    "TARGET_BEHAVIORS": "texting_right, phonecall_right, texting_left, phonecall_left",
+    "BODY_CAMERA_MODULE": "Intel RealSense D435",
+    "SCENARIO": "REAL_CAR_RGB",
+    "VIDEO_CONTAINER": "MP4",
+    "PROJECT_LINEAGE_ASSESSMENT": "PARTIALLY_SOURCE_PROVEN",
+    "PROJECT_GATE3_PASS": "false",
+    "RIGHTS_STATUS": "PENDING_PROJECT_REVIEW",
+    "RIGHTS_ACCEPTED": "false",
+    "CANONICAL_ELIGIBLE": "false",
+    "UNTOUCHED_HOLDOUT_ELIGIBLE": "false",
+    "TEMPORAL_DEVELOPMENT_ELIGIBLE": "true"
+  },
+  "local_registry_source": "dataset/sources.yaml",
+  "local_registry_sha256": "6c89011d12eacf900dd80c2607ccdf8f6aadb53d637a3673a863b1aeac394d3b",
+  "legacy_registry_entries": 14
+}

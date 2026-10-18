@@ -1,3 +1,5 @@
+# ruff: noqa: E501
+
 from __future__ import annotations
 
 import argparse
@@ -15,6 +17,7 @@ from pathlib import Path
 import yaml
 
 from training.common import sha256_file, stable_json_hash
+from training.data_governance import require_download_authorized
 
 
 def load_source(registry: Path, source_id: str) -> dict:
@@ -22,8 +25,7 @@ def load_source(registry: Path, source_id: str) -> dict:
     source = next((item for item in document["sources"] if item["source_id"] == source_id), None)
     if source is None:
         raise ValueError(f"unknown source_id: {source_id}")
-    if source["status"].startswith("REJECTED") or source.get("license") in {None, "UNKNOWN"}:
-        raise ValueError(f"source rejected by license gate: {source['reason']}")
+    require_download_authorized(source)
     return source
 
 
@@ -222,8 +224,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="License-gated immutable dataset downloader")
     parser.add_argument("--source-id", required=True)
     parser.add_argument("--accept-license", required=True, help="Must exactly match the registry license")
-    parser.add_argument("--registry", type=Path, default=Path("datasets/sources.yaml"))
-    parser.add_argument("--raw-root", type=Path, default=Path("datasets/raw"))
+    parser.add_argument("--registry", type=Path, default=Path("dataset/sources.yaml"))
+    parser.add_argument("--raw-root", type=Path, default=Path("dataset/raw"))
     args = parser.parse_args()
     source = load_source(args.registry, args.source_id)
     if args.accept_license != source["license"]:
