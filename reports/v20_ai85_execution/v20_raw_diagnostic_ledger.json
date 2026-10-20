@@ -1,0 +1,555 @@
+{
+  "gC-14": {
+    "tp": 2,
+    "fp": 8,
+    "fn": 7,
+    "precision": 0.2,
+    "recall": 0.2222,
+    "f1": 0.2105,
+    "matched_events": [
+      {
+        "prediction": {
+          "event_type": "PHONE",
+          "start_seconds": 40.82661290322581,
+          "end_seconds": 42.33870967741935,
+          "confidence": 0.25266651809215546,
+          "duration": 1.51
+        },
+        "ground_truth": {
+          "source_id": "EXTERNAL_DMD_VICOMTECH",
+          "source_group": "gC",
+          "source_participant_id": "14",
+          "source_session_id": "s2",
+          "source_action": "driver_actions/phonecall_right",
+          "development_phone_state": "PHONE_USE",
+          "start_frame": 1234,
+          "end_frame": 2412,
+          "start_seconds": 41.4651,
+          "end_seconds": 81.0484,
+          "duration_seconds": 39.5833,
+          "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gC-14/gC_14_s2_2019-03-04T11;48;02+01;00_rgb_ann_distraction.json",
+          "annotation_sha256": "25aa157587dd283e4550b9129321fa9a1fc1889cc7cc1819c7e58d74e3089089",
+          "mapping_version": "v1"
+        },
+        "iou": 0.022,
+        "start_latency": -0.638,
+        "end_latency": -38.71
+      },
+      {
+        "prediction": {
+          "event_type": "PHONE",
+          "start_seconds": 121.9758064516129,
+          "end_seconds": 123.48790322580645,
+          "confidence": 0.23906851559877396,
+          "duration": 1.51
+        },
+        "ground_truth": {
+          "source_id": "EXTERNAL_DMD_VICOMTECH",
+          "source_group": "gC",
+          "source_participant_id": "14",
+          "source_session_id": "s2",
+          "source_action": "driver_actions/phonecall_right",
+          "development_phone_state": "PHONE_USE",
+          "start_frame": 3647,
+          "end_frame": 4939,
+          "start_seconds": 122.547,
+          "end_seconds": 165.961,
+          "duration_seconds": 43.414,
+          "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gC-14/gC_14_s2_2019-03-04T11;48;02+01;00_rgb_ann_distraction.json",
+          "annotation_sha256": "25aa157587dd283e4550b9129321fa9a1fc1889cc7cc1819c7e58d74e3089089",
+          "mapping_version": "v1"
+        },
+        "iou": 0.021,
+        "start_latency": -0.571,
+        "end_latency": -42.473
+      }
+    ],
+    "unmatched_predictions": [
+      {
+        "event_type": "PHONE",
+        "start_seconds": 70.56451612903226,
+        "end_seconds": 71.06854838709677,
+        "confidence": 0.5895451009273529,
+        "duration": 0.5
+      },
+      {
+        "event_type": "PHONE",
+        "start_seconds": 177.41935483870967,
+        "end_seconds": 178.9314516129032,
+        "confidence": 0.25184549588818517,
+        "duration": 1.51
+      },
+      {
+        "event_type": "PHONE",
+        "start_seconds": 212.7016129032258,
+        "end_seconds": 214.21370967741933,
+        "confidence": 0.2048483496219694,
+        "duration": 1.51
+      },
+      {
+        "event_type": "PHONE",
+        "start_seconds": 224.79838709677418,
+        "end_seconds": 226.31048387096774,
+        "confidence": 0.21311526373028755,
+        "duration": 1.51
+      },
+      {
+        "event_type": "PHONE",
+        "start_seconds": 236.89516129032256,
+        "end_seconds": 237.39919354838707,
+        "confidence": 0.47931024881210227,
+        "duration": 0.5
+      },
+      {
+        "event_type": "PHONE",
+        "start_seconds": 276.2096774193548,
+        "end_seconds": 277.72177419354836,
+        "confidence": 0.2070547491312027,
+        "duration": 1.51
+      },
+      {
+        "event_type": "PHONE",
+        "start_seconds": 299.8991935483871,
+        "end_seconds": 301.4112903225806,
+        "confidence": 0.21473879367113113,
+        "duration": 1.51
+      },
+      {
+        "event_type": "PHONE",
+        "start_seconds": 346.27016129032256,
+        "end_seconds": 347.7822580645161,
+        "confidence": 0.3772013932466507,
+        "duration": 1.51
+      }
+    ],
+    "unmatched_gt": [
+      {
+        "source_id": "EXTERNAL_DMD_VICOMTECH",
+        "source_group": "gC",
+        "source_participant_id": "14",
+        "source_session_id": "s2",
+        "source_action": "driver_actions/texting_right",
+        "development_phone_state": "PHONE_USE",
+        "start_frame": 2857,
+        "end_frame": 3233,
+        "start_seconds": 96.0013,
+        "end_seconds": 108.6358,
+        "duration_seconds": 12.6345,
+        "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gC-14/gC_14_s2_2019-03-04T11;48;02+01;00_rgb_ann_distraction.json",
+        "annotation_sha256": "25aa157587dd283e4550b9129321fa9a1fc1889cc7cc1819c7e58d74e3089089",
+        "mapping_version": "v1"
+      },
+      {
+        "source_id": "EXTERNAL_DMD_VICOMTECH",
+        "source_group": "gC",
+        "source_participant_id": "14",
+        "source_session_id": "s2",
+        "source_action": "driver_actions/texting_right",
+        "development_phone_state": "PHONE_USE",
+        "start_frame": 5313,
+        "end_frame": 5736,
+        "start_seconds": 178.5282,
+        "end_seconds": 192.7419,
+        "duration_seconds": 14.2137,
+        "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gC-14/gC_14_s2_2019-03-04T11;48;02+01;00_rgb_ann_distraction.json",
+        "annotation_sha256": "25aa157587dd283e4550b9129321fa9a1fc1889cc7cc1819c7e58d74e3089089",
+        "mapping_version": "v1"
+      },
+      {
+        "source_id": "EXTERNAL_DMD_VICOMTECH",
+        "source_group": "gC",
+        "source_participant_id": "14",
+        "source_session_id": "s2",
+        "source_action": "driver_actions/texting_left",
+        "development_phone_state": "PHONE_USE",
+        "start_frame": 6723,
+        "end_frame": 6735,
+        "start_seconds": 225.9073,
+        "end_seconds": 226.3105,
+        "duration_seconds": 0.4032,
+        "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gC-14/gC_14_s2_2019-03-04T11;48;02+01;00_rgb_ann_distraction.json",
+        "annotation_sha256": "25aa157587dd283e4550b9129321fa9a1fc1889cc7cc1819c7e58d74e3089089",
+        "mapping_version": "v1"
+      },
+      {
+        "source_id": "EXTERNAL_DMD_VICOMTECH",
+        "source_group": "gC",
+        "source_participant_id": "14",
+        "source_session_id": "s2",
+        "source_action": "driver_actions/phonecall_left",
+        "development_phone_state": "PHONE_USE",
+        "start_frame": 6736,
+        "end_frame": 8035,
+        "start_seconds": 226.3441,
+        "end_seconds": 269.9933,
+        "duration_seconds": 43.6492,
+        "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gC-14/gC_14_s2_2019-03-04T11;48;02+01;00_rgb_ann_distraction.json",
+        "annotation_sha256": "25aa157587dd283e4550b9129321fa9a1fc1889cc7cc1819c7e58d74e3089089",
+        "mapping_version": "v1"
+      },
+      {
+        "source_id": "EXTERNAL_DMD_VICOMTECH",
+        "source_group": "gC",
+        "source_participant_id": "14",
+        "source_session_id": "s2",
+        "source_action": "driver_actions/texting_left",
+        "development_phone_state": "PHONE_USE",
+        "start_frame": 8470,
+        "end_frame": 8722,
+        "start_seconds": 284.6102,
+        "end_seconds": 293.078,
+        "duration_seconds": 8.4678,
+        "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gC-14/gC_14_s2_2019-03-04T11;48;02+01;00_rgb_ann_distraction.json",
+        "annotation_sha256": "25aa157587dd283e4550b9129321fa9a1fc1889cc7cc1819c7e58d74e3089089",
+        "mapping_version": "v1"
+      },
+      {
+        "source_id": "EXTERNAL_DMD_VICOMTECH",
+        "source_group": "gC",
+        "source_participant_id": "14",
+        "source_session_id": "s2",
+        "source_action": "driver_actions/phonecall_left",
+        "development_phone_state": "PHONE_USE",
+        "start_frame": 8990,
+        "end_frame": 9950,
+        "start_seconds": 302.0833,
+        "end_seconds": 334.3414,
+        "duration_seconds": 32.2581,
+        "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gC-14/gC_14_s2_2019-03-04T11;48;02+01;00_rgb_ann_distraction.json",
+        "annotation_sha256": "25aa157587dd283e4550b9129321fa9a1fc1889cc7cc1819c7e58d74e3089089",
+        "mapping_version": "v1"
+      },
+      {
+        "source_id": "EXTERNAL_DMD_VICOMTECH",
+        "source_group": "gC",
+        "source_participant_id": "14",
+        "source_session_id": "s2",
+        "source_action": "driver_actions/texting_left",
+        "development_phone_state": "PHONE_USE",
+        "start_frame": 10350,
+        "end_frame": 10805,
+        "start_seconds": 347.7823,
+        "end_seconds": 363.0712,
+        "duration_seconds": 15.2889,
+        "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gC-14/gC_14_s2_2019-03-04T11;48;02+01;00_rgb_ann_distraction.json",
+        "annotation_sha256": "25aa157587dd283e4550b9129321fa9a1fc1889cc7cc1819c7e58d74e3089089",
+        "mapping_version": "v1"
+      }
+    ]
+  },
+  "gZ-36": {
+    "tp": 4,
+    "fp": 8,
+    "fn": 7,
+    "precision": 0.3333,
+    "recall": 0.3636,
+    "f1": 0.3478,
+    "matched_events": [
+      {
+        "prediction": {
+          "event_type": "PHONE",
+          "start_seconds": 51.91532258064516,
+          "end_seconds": 53.427419354838705,
+          "confidence": 0.19157547260437496,
+          "duration": 1.51
+        },
+        "ground_truth": {
+          "source_id": "EXTERNAL_DMD_VICOMTECH",
+          "source_group": "gZ",
+          "source_participant_id": "36",
+          "source_session_id": "s2",
+          "source_action": "driver_actions/texting_right",
+          "development_phone_state": "PHONE_USE",
+          "start_frame": 1561,
+          "end_frame": 1585,
+          "start_seconds": 52.453,
+          "end_seconds": 53.2594,
+          "duration_seconds": 0.8064,
+          "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gZ-36/gZ_36_s2_2019-04-09T10;39;38+02;00_rgb_ann_distraction.json",
+          "annotation_sha256": "45c1d8257fc4a800d52748a7615a243fc222d0a8e84766987ada65a5b08a8291",
+          "mapping_version": "v1"
+        },
+        "iou": 0.533,
+        "start_latency": -0.538,
+        "end_latency": 0.168
+      },
+      {
+        "prediction": {
+          "event_type": "PHONE",
+          "start_seconds": 128.0241935483871,
+          "end_seconds": 129.53629032258064,
+          "confidence": 0.23680536475334463,
+          "duration": 1.51
+        },
+        "ground_truth": {
+          "source_id": "EXTERNAL_DMD_VICOMTECH",
+          "source_group": "gZ",
+          "source_participant_id": "36",
+          "source_session_id": "s2",
+          "source_action": "driver_actions/texting_right",
+          "development_phone_state": "PHONE_USE",
+          "start_frame": 3803,
+          "end_frame": 4442,
+          "start_seconds": 127.789,
+          "end_seconds": 149.2608,
+          "duration_seconds": 21.4718,
+          "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gZ-36/gZ_36_s2_2019-04-09T10;39;38+02;00_rgb_ann_distraction.json",
+          "annotation_sha256": "45c1d8257fc4a800d52748a7615a243fc222d0a8e84766987ada65a5b08a8291",
+          "mapping_version": "v1"
+        },
+        "iou": 0.07,
+        "start_latency": 0.235,
+        "end_latency": -19.725
+      },
+      {
+        "prediction": {
+          "event_type": "PHONE",
+          "start_seconds": 162.8024193548387,
+          "end_seconds": 164.31451612903226,
+          "confidence": 0.19872166588902473,
+          "duration": 1.51
+        },
+        "ground_truth": {
+          "source_id": "EXTERNAL_DMD_VICOMTECH",
+          "source_group": "gZ",
+          "source_participant_id": "36",
+          "source_session_id": "s2",
+          "source_action": "driver_actions/phonecall_right",
+          "development_phone_state": "PHONE_USE",
+          "start_frame": 4851,
+          "end_frame": 6394,
+          "start_seconds": 163.004,
+          "end_seconds": 214.8522,
+          "duration_seconds": 51.8482,
+          "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gZ-36/gZ_36_s2_2019-04-09T10;39;38+02;00_rgb_ann_distraction.json",
+          "annotation_sha256": "45c1d8257fc4a800d52748a7615a243fc222d0a8e84766987ada65a5b08a8291",
+          "mapping_version": "v1"
+        },
+        "iou": 0.025,
+        "start_latency": -0.202,
+        "end_latency": -50.538
+      },
+      {
+        "prediction": {
+          "event_type": "PHONE",
+          "start_seconds": 322.0766129032258,
+          "end_seconds": 323.58870967741933,
+          "confidence": 0.19746419144054278,
+          "duration": 1.51
+        },
+        "ground_truth": {
+          "source_id": "EXTERNAL_DMD_VICOMTECH",
+          "source_group": "gZ",
+          "source_participant_id": "36",
+          "source_session_id": "s2",
+          "source_action": "driver_actions/phonecall_left",
+          "development_phone_state": "PHONE_USE",
+          "start_frame": 8818,
+          "end_frame": 10316,
+          "start_seconds": 296.3038,
+          "end_seconds": 346.6398,
+          "duration_seconds": 50.336,
+          "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gZ-36/gZ_36_s2_2019-04-09T10;39;38+02;00_rgb_ann_distraction.json",
+          "annotation_sha256": "45c1d8257fc4a800d52748a7615a243fc222d0a8e84766987ada65a5b08a8291",
+          "mapping_version": "v1"
+        },
+        "iou": 0.03,
+        "start_latency": 25.773,
+        "end_latency": -23.051
+      },
+      {
+        "prediction": {
+          "event_type": "PHONE",
+          "start_seconds": 345.76612903225805,
+          "end_seconds": 347.2782258064516,
+          "confidence": 0.2431917515334935,
+          "duration": 1.51
+        },
+        "ground_truth": {
+          "source_id": "EXTERNAL_DMD_VICOMTECH",
+          "source_group": "gZ",
+          "source_participant_id": "36",
+          "source_session_id": "s2",
+          "source_action": "driver_actions/phonecall_left",
+          "development_phone_state": "PHONE_USE",
+          "start_frame": 8818,
+          "end_frame": 10316,
+          "start_seconds": 296.3038,
+          "end_seconds": 346.6398,
+          "duration_seconds": 50.336,
+          "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gZ-36/gZ_36_s2_2019-04-09T10;39;38+02;00_rgb_ann_distraction.json",
+          "annotation_sha256": "45c1d8257fc4a800d52748a7615a243fc222d0a8e84766987ada65a5b08a8291",
+          "mapping_version": "v1"
+        },
+        "iou": 0.017,
+        "start_latency": 49.462,
+        "end_latency": 0.638
+      }
+    ],
+    "unmatched_predictions": [
+      {
+        "event_type": "PHONE",
+        "start_seconds": 22.681451612903224,
+        "end_seconds": 24.193548387096772,
+        "confidence": 0.22530344640946032,
+        "duration": 1.51
+      },
+      {
+        "event_type": "PHONE",
+        "start_seconds": 225.8064516129032,
+        "end_seconds": 227.31854838709677,
+        "confidence": 0.2949386237410464,
+        "duration": 1.51
+      },
+      {
+        "event_type": "PHONE",
+        "start_seconds": 294.8588709677419,
+        "end_seconds": 296.3709677419355,
+        "confidence": 0.28949229419231415,
+        "duration": 1.51
+      },
+      {
+        "event_type": "PHONE",
+        "start_seconds": 354.83870967741933,
+        "end_seconds": 356.35080645161287,
+        "confidence": 0.4230199381709099,
+        "duration": 1.51
+      },
+      {
+        "event_type": "PHONE",
+        "start_seconds": 395.1612903225806,
+        "end_seconds": 396.67338709677415,
+        "confidence": 0.21979544560896147,
+        "duration": 1.51
+      },
+      {
+        "event_type": "PHONE",
+        "start_seconds": 467.7419354838709,
+        "end_seconds": 469.2540322580645,
+        "confidence": 0.19927354156970978,
+        "duration": 1.51
+      },
+      {
+        "event_type": "PHONE",
+        "start_seconds": 508.56854838709677,
+        "end_seconds": 510.0806451612903,
+        "confidence": 0.18625688872041432,
+        "duration": 1.51
+      }
+    ],
+    "unmatched_gt": [
+      {
+        "source_id": "EXTERNAL_DMD_VICOMTECH",
+        "source_group": "gZ",
+        "source_participant_id": "36",
+        "source_session_id": "s2",
+        "source_action": "driver_actions/phonecall_right",
+        "development_phone_state": "PHONE_USE",
+        "start_frame": 1586,
+        "end_frame": 3294,
+        "start_seconds": 53.293,
+        "end_seconds": 110.6855,
+        "duration_seconds": 57.3925,
+        "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gZ-36/gZ_36_s2_2019-04-09T10;39;38+02;00_rgb_ann_distraction.json",
+        "annotation_sha256": "45c1d8257fc4a800d52748a7615a243fc222d0a8e84766987ada65a5b08a8291",
+        "mapping_version": "v1"
+      },
+      {
+        "source_id": "EXTERNAL_DMD_VICOMTECH",
+        "source_group": "gZ",
+        "source_participant_id": "36",
+        "source_session_id": "s2",
+        "source_action": "driver_actions/texting_right",
+        "development_phone_state": "PHONE_USE",
+        "start_frame": 3295,
+        "end_frame": 3313,
+        "start_seconds": 110.7191,
+        "end_seconds": 111.3239,
+        "duration_seconds": 0.6048,
+        "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gZ-36/gZ_36_s2_2019-04-09T10;39;38+02;00_rgb_ann_distraction.json",
+        "annotation_sha256": "45c1d8257fc4a800d52748a7615a243fc222d0a8e84766987ada65a5b08a8291",
+        "mapping_version": "v1"
+      },
+      {
+        "source_id": "EXTERNAL_DMD_VICOMTECH",
+        "source_group": "gZ",
+        "source_participant_id": "36",
+        "source_session_id": "s2",
+        "source_action": "driver_actions/texting_right",
+        "development_phone_state": "PHONE_USE",
+        "start_frame": 4823,
+        "end_frame": 4850,
+        "start_seconds": 162.0632,
+        "end_seconds": 162.9704,
+        "duration_seconds": 0.9072,
+        "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gZ-36/gZ_36_s2_2019-04-09T10;39;38+02;00_rgb_ann_distraction.json",
+        "annotation_sha256": "45c1d8257fc4a800d52748a7615a243fc222d0a8e84766987ada65a5b08a8291",
+        "mapping_version": "v1"
+      },
+      {
+        "source_id": "EXTERNAL_DMD_VICOMTECH",
+        "source_group": "gZ",
+        "source_participant_id": "36",
+        "source_session_id": "s2",
+        "source_action": "driver_actions/texting_right",
+        "development_phone_state": "PHONE_USE",
+        "start_frame": 6757,
+        "end_frame": 7407,
+        "start_seconds": 227.0497,
+        "end_seconds": 248.8911,
+        "duration_seconds": 21.8414,
+        "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gZ-36/gZ_36_s2_2019-04-09T10;39;38+02;00_rgb_ann_distraction.json",
+        "annotation_sha256": "45c1d8257fc4a800d52748a7615a243fc222d0a8e84766987ada65a5b08a8291",
+        "mapping_version": "v1"
+      },
+      {
+        "source_id": "EXTERNAL_DMD_VICOMTECH",
+        "source_group": "gZ",
+        "source_participant_id": "36",
+        "source_session_id": "s2",
+        "source_action": "driver_actions/texting_left",
+        "development_phone_state": "PHONE_USE",
+        "start_frame": 10606,
+        "end_frame": 11309,
+        "start_seconds": 356.3844,
+        "end_seconds": 380.0067,
+        "duration_seconds": 23.6223,
+        "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gZ-36/gZ_36_s2_2019-04-09T10;39;38+02;00_rgb_ann_distraction.json",
+        "annotation_sha256": "45c1d8257fc4a800d52748a7615a243fc222d0a8e84766987ada65a5b08a8291",
+        "mapping_version": "v1"
+      },
+      {
+        "source_id": "EXTERNAL_DMD_VICOMTECH",
+        "source_group": "gZ",
+        "source_participant_id": "36",
+        "source_session_id": "s2",
+        "source_action": "driver_actions/phonecall_left",
+        "development_phone_state": "PHONE_USE",
+        "start_frame": 11910,
+        "end_frame": 13690,
+        "start_seconds": 400.2016,
+        "end_seconds": 460.0134,
+        "duration_seconds": 59.8118,
+        "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gZ-36/gZ_36_s2_2019-04-09T10;39;38+02;00_rgb_ann_distraction.json",
+        "annotation_sha256": "45c1d8257fc4a800d52748a7615a243fc222d0a8e84766987ada65a5b08a8291",
+        "mapping_version": "v1"
+      },
+      {
+        "source_id": "EXTERNAL_DMD_VICOMTECH",
+        "source_group": "gZ",
+        "source_participant_id": "36",
+        "source_session_id": "s2",
+        "source_action": "driver_actions/texting_left",
+        "development_phone_state": "PHONE_USE",
+        "start_frame": 13971,
+        "end_frame": 14492,
+        "start_seconds": 469.4556,
+        "end_seconds": 486.9624,
+        "duration_seconds": 17.5068,
+        "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gZ-36/gZ_36_s2_2019-04-09T10;39;38+02;00_rgb_ann_distraction.json",
+        "annotation_sha256": "45c1d8257fc4a800d52748a7615a243fc222d0a8e84766987ada65a5b08a8291",
+        "mapping_version": "v1"
+      }
+    ]
+  }
+}

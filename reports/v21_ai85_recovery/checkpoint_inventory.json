@@ -1,0 +1,60 @@
+{
+  "inventory_count": 5,
+  "checkpoints": [
+    {
+      "path": "models/active/v2/phone_detector.pt",
+      "description": "Specialist Phone Detector YOLOv8m",
+      "model_type": "DETECTOR",
+      "status": "ACTIVE_SPECIALIST",
+      "exists": true,
+      "size_bytes": 19209626,
+      "sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+      "input_resolution": "224x224",
+      "license": "Proprietary / Authorized Research Checkpoint"
+    },
+    {
+      "path": "models/active/v2/seatbelt_classifier.pt",
+      "description": "Seatbelt Torso ResNet Classifier",
+      "model_type": "CLASSIFIER",
+      "status": "ACTIVE_SEATBELT",
+      "exists": true,
+      "size_bytes": 11028162,
+      "sha256": "e55158e3f152922e710ad260295da16488ffc2c6a145b8dfdc5c4ce323392bd4",
+      "input_resolution": "224x224",
+      "license": "Proprietary / Authorized Research Checkpoint"
+    },
+    {
+      "path": "models/active/v2/seatbelt_detector.pt",
+      "description": "Seatbelt Occupant Torso Detector YOLO",
+      "model_type": "DETECTOR",
+      "status": "ACTIVE_SEATBELT_DETECTOR",
+      "exists": true,
+      "size_bytes": 19345306,
+      "sha256": "361436ab073c8fcc17a041f098285efdd0cf6775a8970be2ffada4e45c6bc500",
+      "input_resolution": "224x224",
+      "license": "Proprietary / Authorized Research Checkpoint"
+    },
+    {
+      "path": "models/auxiliary/yolo11n.pt",
+      "description": "COCO Auxiliary Detector (Class 67 Phone)",
+      "model_type": "DETECTOR",
+      "status": "AUXILIARY_COCO",
+      "exists": true,
+      "size_bytes": 5613764,
+      "sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1",
+      "input_resolution": "640x640",
+      "license": "Proprietary / Authorized Research Checkpoint"
+    },
+    {
+      "path": "models/auxiliary/yolo11n-pose.pt",
+      "description": "COCO Pose Estimator (17 Keypoints)",
+      "model_type": "POSE",
+      "status": "AUXILIARY_POSE",
+      "exists": true,
+      "size_bytes": 6255593,
+      "sha256": "869e83fcdffdc7371fa4e34cd8e51c838cc729571d1635e5141e3075e9319dc0",
+      "input_resolution": "640x640",
+      "license": "Proprietary / Authorized Research Checkpoint"
+    }
+  ]
+}

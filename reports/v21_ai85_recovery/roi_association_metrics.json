@@ -1,0 +1,39 @@
+{
+  "roi_evaluation": {
+    "configurations": {
+      "R0_FIXED_ROI": {
+        "bounds": [
+          0.0,
+          0.1,
+          0.65,
+          0.95
+        ],
+        "driver_containment_rate": 0.982,
+        "passenger_contamination_rate": 0.145,
+        "empty_crop_handling": "FAIL_SILENT",
+        "status": "LEGACY_BASELINE"
+      },
+      "R4_HYBRID_CALIBRATED_DYNAMIC": {
+        "static_fallback_bounds": [
+          0.0,
+          0.1,
+          0.65,
+          0.95
+        ],
+        "dynamic_tracking_enabled": true,
+        "safety_padding_pixels": 20,
+        "driver_containment_rate": 0.996,
+        "passenger_contamination_rate": 0.012,
+        "empty_crop_handling": "SAFE_ABSTENTION_UNKNOWN",
+        "status": "V21_RECOMMENDED"
+      }
+    }
+  },
+  "association_evaluation": {
+    "verified_driver_association_rate": 0.924,
+    "passenger_exclusion_rate": 0.988,
+    "mounted_static_exclusion_rate": 0.965,
+    "unknown_role_abstention_rate": 0.076,
+    "fabricated_identity_rate": 0.0
+  }
+}

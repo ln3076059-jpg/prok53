@@ -218,8 +218,8 @@ class PoseEstimator:
     FACE_INDICES = (0, 1, 2, 3, 4)
     HAND_INDICES = (9, 10)
 
-    def __init__(self, weights: Path | None, confidence: float = 0.25):
-        self.weights = weights
+    def __init__(self, weights: Path | str | None, confidence: float = 0.25):
+        self.weights = Path(weights) if weights else None
         self.confidence = confidence
         self._model = None
 

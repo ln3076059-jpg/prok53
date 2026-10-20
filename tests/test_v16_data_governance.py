@@ -120,6 +120,7 @@ def test_visible_phone_is_not_automatically_safe() -> None:
         review_status="PENDING",
         phone_visibility="PHONE_VISIBLE",
         phone_action="SAFE_DRIVING",
+        phone_context="HANDHELD",
     )
     with pytest.raises(ValueError, match="SAFE_DRIVING"):
         annotation.validate()

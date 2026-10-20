@@ -1,0 +1,74 @@
+[
+  {
+    "subject_id": "gC-14",
+    "frame_idx": 390,
+    "timestamp": 13.105,
+    "reason": "PHONE_VISIBLE_WITHOUT_HANDHELD_USE",
+    "detector_conf": 0.1924,
+    "safe_driving_score": 0.5153,
+    "phone_use_score": 0.0544
+  },
+  {
+    "subject_id": "gC-14",
+    "frame_idx": 405,
+    "timestamp": 13.609,
+    "reason": "PHONE_VISIBLE_WITHOUT_HANDHELD_USE",
+    "detector_conf": 0.3193,
+    "safe_driving_score": 0.3259,
+    "phone_use_score": 0.0443
+  },
+  {
+    "subject_id": "gC-14",
+    "frame_idx": 525,
+    "timestamp": 17.641,
+    "reason": "PHONE_VISIBLE_WITHOUT_HANDHELD_USE",
+    "detector_conf": 0.2802,
+    "safe_driving_score": 0.2547,
+    "phone_use_score": 0.447
+  },
+  {
+    "subject_id": "gC-14",
+    "frame_idx": 540,
+    "timestamp": 18.145,
+    "reason": "PHONE_VISIBLE_WITHOUT_HANDHELD_USE",
+    "detector_conf": 0.2428,
+    "safe_driving_score": 0.2769,
+    "phone_use_score": 0.4159
+  },
+  {
+    "subject_id": "gC-14",
+    "frame_idx": 735,
+    "timestamp": 24.698,
+    "reason": "PHONE_VISIBLE_WITHOUT_HANDHELD_USE",
+    "detector_conf": 0.1506,
+    "safe_driving_score": 0.2617,
+    "phone_use_score": 0.0399
+  },
+  {
+    "subject_id": "gC-14",
+    "frame_idx": 750,
+    "timestamp": 25.202,
+    "reason": "PHONE_VISIBLE_WITHOUT_HANDHELD_USE",
+    "detector_conf": 0.2006,
+    "safe_driving_score": 0.2612,
+    "phone_use_score": 0.0341
+  },
+  {
+    "subject_id": "gC-14",
+    "frame_idx": 765,
+    "timestamp": 25.706,
+    "reason": "PHONE_VISIBLE_WITHOUT_HANDHELD_USE",
+    "detector_conf": 0.2388,
+    "safe_driving_score": 0.2575,
+    "phone_use_score": 0.03
+  },
+  {
+    "subject_id": "gZ-36",
+    "frame_idx": 705,
+    "timestamp": 23.69,
+    "reason": "PHONE_VISIBLE_WITHOUT_HANDHELD_USE",
+    "detector_conf": 0.462,
+    "safe_driving_score": 0.0205,
+    "phone_use_score": 0.4606
+  }
+]
