@@ -1,0 +1,10 @@
+{
+  "source": "reports\\v27_ai85_execution\\junit_report.xml",
+  "sha256": "c5061d5951bf5d431ca140bc1d823fe2b82dec50d0db357ddc6908c18d91e128",
+  "tests": 103,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time_seconds": 32.547,
+  "pass": true
+}

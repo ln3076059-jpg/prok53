@@ -1,0 +1,58 @@
+{
+  "protocol_id": "ROADWATCH_V24_EVALUATION_PROTOCOL",
+  "version": "1.0.0",
+  "created_at": "2026-10-20T21:32:00+07:00",
+  "matching_policy": {
+    "name": "FROZEN_V22_TEMPORAL_MATCHING_POLICY",
+    "iou_threshold": 0.3,
+    "onset_tolerance_seconds": 2.5,
+    "offset_tolerance_seconds": 2.5,
+    "matching_strategy": "GREEDY_ONE_TO_ONE_TEMPORAL_IOU",
+    "sha256": "POLICY_FROZEN_STAGE2"
+  },
+  "cohort": {
+    "cohort_id": "DMD_DEVELOPMENT_BENCHMARK_COHORT",
+    "subjects": ["gC-14", "gZ-36"],
+    "total_duration_seconds": 916.2298387096773,
+    "total_duration_minutes": 15.270497311827956,
+    "total_gt_events": 20,
+    "sessions": [
+      {
+        "subject_id": "gC-14",
+        "session_id": "s2",
+        "camera_id": "BODY",
+        "fps": 29.76,
+        "source_frames": 11916,
+        "source_seconds": 400.4032258064516,
+        "stride": 15,
+        "sampled_frames": 795,
+        "gt_event_count": 9,
+        "annotation_file": "dataset/external_dmd/annotations/gC-14_s2_annotation.json"
+      },
+      {
+        "subject_id": "gZ-36",
+        "session_id": "s2",
+        "camera_id": "BODY",
+        "fps": 29.76,
+        "source_frames": 15351,
+        "source_seconds": 515.8266129032257,
+        "stride": 15,
+        "sampled_frames": 1024,
+        "gt_event_count": 11,
+        "annotation_file": "dataset/external_dmd/annotations/gZ-36_s2_annotation.json"
+      }
+    ]
+  },
+  "gates": {
+    "unrounded_threshold": 0.850000000000,
+    "rule": "STRICT_GREATER_THAN",
+    "mandatory_branches": [
+      "phone_detector",
+      "seatbelt_detector",
+      "action_3_class",
+      "seatbelt_classifier_3_class",
+      "phone_event_end_to_end",
+      "driver_association"
+    ]
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "generated_at": "2026-10-21T06:39:18.803543+07:00",
+  "permissions": {
+    "ROLE": "EXTERNAL_DMD_TEMPORAL_DEVELOPMENT_CANDIDATE",
+    "SOURCE_ID": "EXTERNAL_DMD_VICOMTECH",
+    "DOWNLOAD_STATUS": "BLOCKED_PENDING_AUTHORIZED_LINK_AND_SIZE_METADATA",
+    "DMD_PORTAL_STATUS": "GATED_FORM_ONLY",
+    "DMD_PER_FILE_SIZE_METADATA": "NOT_EXPOSED_PUBLICLY",
+    "EXACT_FILES_UNDER_1GB": "NOT_YET_VERIFIED",
+    "DOWNLOAD_NOW": "NO",
+    "TARGET_STREAM": "BODY",
+    "TARGET_CHANNEL": "RGB",
+    "TARGET_SESSION": "s2",
+    "TARGET_BEHAVIORS": "texting_right, phonecall_right, texting_left, phonecall_left",
+    "BODY_CAMERA_MODULE": "Intel RealSense D435",
+    "SCENARIO": "REAL_CAR_RGB",
+    "VIDEO_CONTAINER": "MP4",
+    "PROJECT_LINEAGE_ASSESSMENT": "PARTIALLY_SOURCE_PROVEN",
+    "PROJECT_GATE3_PASS": "false",
+    "RIGHTS_STATUS": "ACCEPTED_FOR_CODE_ONLY_EXTERNAL_UPLOAD",
+    "RIGHTS_ACCEPTED": "true",
+    "EXTERNAL_UPLOAD_ALLOWED": "true",
+    "CANONICAL_ELIGIBLE": "false",
+    "UNTOUCHED_HOLDOUT_ELIGIBLE": "false",
+    "TEMPORAL_DEVELOPMENT_ELIGIBLE": "true"
+  },
+  "operations": {
+    "diagnostics": {
+      "allowed": true,
+      "reason": "PERMITTED"
+    },
+    "linear_head": {
+      "allowed": false,
+      "reason": "linear_head: explicit TRAINING_ALLOWED=true is required"
+    },
+    "calibration": {
+      "allowed": false,
+      "reason": "calibration: explicit TRAINING_ALLOWED=true is required"
+    },
+    "fusion": {
+      "allowed": false,
+      "reason": "fusion: explicit TRAINING_ALLOWED=true is required"
+    },
+    "boundary": {
+      "allowed": false,
+      "reason": "boundary: explicit TRAINING_ALLOWED=true is required"
+    },
+    "backbone": {
+      "allowed": false,
+      "reason": "backbone: explicit TRAINING_ALLOWED=true is required"
+    },
+    "upload": {
+      "allowed": true,
+      "reason": "PERMITTED"
+    }
+  },
+  "fitting_performed_v26": false,
+  "holdout_accessed_v26": false
+}

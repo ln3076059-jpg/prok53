@@ -1,0 +1,108 @@
+{
+  "generated_at": "2026-10-21T02:49:13.830609+00:00",
+  "kernel": {
+    "ref": "longngoc11/roadwatch-v27-phone-component-eval",
+    "url": "https://www.kaggle.com/code/longngoc11/roadwatch-v27-phone-component-eval",
+    "version": 2,
+    "status": "COMPLETE"
+  },
+  "inputs": {
+    "checkpoint_dataset": "longngoc11/roadwatch-ai85-plus-frozen-checkpoints-v8",
+    "bootstrap_dataset": "longngoc11/roadwatch-mc-bootstrap-6500-v1",
+    "checkpoint_sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+    "bootstrap_manifest_sha256": "94b7e47b9ddc39ce580572b9a316ecaba035b509dd44119257c77fecfc36ebd4",
+    "label_status": "PROPOSAL_MODEL_ONLY_NOT_GOVERNED_FINAL_DATA"
+  },
+  "downloaded_artifacts": {
+    "result": "reports\\v27_ai85_execution\\kaggle_phone_component_v2\\v27_phone_component_eval.json",
+    "result_sha256": "ad2813db70e4b72c236fcd3cdf26d70a1a59e35d4fe8e693f4d440b0795893e7",
+    "log": "reports\\v27_ai85_execution\\kaggle_phone_component_v2\\roadwatch-v27-phone-component-eval.log",
+    "log_sha256": "f0d360c5877045ecce8c900912f6f416b0790e5cbb5ac0f5fb16aad789ae152f"
+  },
+  "verified_result": {
+    "status": "PROVISIONAL_PHONE_COMPONENT_DIAGNOSTIC_COMPLETE",
+    "scope": "Frozen checkpoint on existing bootstrap validation split only",
+    "gpu": "Tesla T4",
+    "validation_counts": {
+      "images": 1782,
+      "phone_positive_images": 181,
+      "phone_instances": 229
+    },
+    "variants": [
+      {
+        "resolution": 640,
+        "precision": 0.8808593582965508,
+        "recall": 0.8209606986899564,
+        "map50": 0.8974483343532023,
+        "map50_95": 0.643289986261325,
+        "f1_from_reported_precision_recall": 0.8498559072282181,
+        "validator_speed_ms": {
+          "preprocess": 0.1662139517395402,
+          "inference": 7.993102419191869,
+          "loss": 0.0003627188550083576,
+          "postprocess": 0.6893007890008417
+        },
+        "wall_time_seconds": 197.46083592099995,
+        "peak_cuda_allocated_bytes": 1637980672,
+        "device": "cuda:0"
+      },
+      {
+        "resolution": 960,
+        "precision": 0.9395088851021023,
+        "recall": 0.9039301310043668,
+        "map50": 0.9455872647512469,
+        "map50_95": 0.749730228631748,
+        "f1_from_reported_precision_recall": 0.9213761693986636,
+        "validator_speed_ms": {
+          "preprocess": 0.3667046919193205,
+          "inference": 19.829532080246885,
+          "loss": 0.00026578507307835483,
+          "postprocess": 0.4369986386081488
+        },
+        "wall_time_seconds": 39.26720513400005,
+        "peak_cuda_allocated_bytes": 3473445376,
+        "device": "cuda:0"
+      },
+      {
+        "resolution": 1280,
+        "precision": 0.8256816950401561,
+        "recall": 0.7816593886462883,
+        "map50": 0.8527460753779919,
+        "map50_95": 0.6189370093132236,
+        "f1_from_reported_precision_recall": 0.8030676942336187,
+        "validator_speed_ms": {
+          "preprocess": 0.6754864848483998,
+          "inference": 38.90236677160479,
+          "loss": 0.0003244416384644636,
+          "postprocess": 0.4558614102129483
+        },
+        "wall_time_seconds": 74.187775665,
+        "peak_cuda_allocated_bytes": 6021664768,
+        "device": "cuda:0"
+      }
+    ],
+    "best_by_f1": {
+      "resolution": 960,
+      "precision": 0.9395088851021023,
+      "recall": 0.9039301310043668,
+      "map50": 0.9455872647512469,
+      "map50_95": 0.749730228631748,
+      "f1_from_reported_precision_recall": 0.9213761693986636,
+      "validator_speed_ms": {
+        "preprocess": 0.3667046919193205,
+        "inference": 19.829532080246885,
+        "loss": 0.00026578507307835483,
+        "postprocess": 0.4369986386081488
+      },
+      "wall_time_seconds": 39.26720513400005,
+      "peak_cuda_allocated_bytes": 3473445376,
+      "device": "cuda:0"
+    },
+    "event_metric_status": "NOT_MEASURED_DIFFERENT_TASK_AND_DATASET",
+    "development_ai85_status": "DEVELOPMENT_TARGET_NOT_MET",
+    "selection_eligible": false,
+    "production_claim_allowed": false,
+    "training_performed": false,
+    "test_split_accessed": false
+  }
+}

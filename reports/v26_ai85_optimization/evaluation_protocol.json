@@ -1,0 +1,26 @@
+{
+  "generated_at": "2026-10-21T06:39:18.496177+07:00",
+  "scope": "CACHED_REPLAY_DEVELOPMENT_DIAGNOSTIC",
+  "subjects": [
+    "gC-14",
+    "gZ-36"
+  ],
+  "ground_truth_events": 20,
+  "ground_truth_normalization": false,
+  "policy": {
+    "policy_id": "DMD_TEMPORAL_MATCHING_POLICY_V2",
+    "status": "FROZEN_BEFORE_BENCHMARK_002",
+    "iou_threshold": 0.3,
+    "onset_tolerance_seconds": 2.5,
+    "offset_tolerance_seconds": 3.5,
+    "containment_overlap_threshold": 0.4,
+    "containment_min_duration_seconds": 0.8,
+    "cooldown_merge_seconds": 3.0,
+    "duplicate_prediction_policy": "COUNT_AS_FALSE_POSITIVE",
+    "governance_rule": "Frozen prior to final held evaluation. Policy must not be altered post-evaluation.",
+    "policy_sha256": "a6e743b41e912ff962bbb7495d284f98b1d9b07f8064131ac20ceae6621420fe"
+  },
+  "policy_sha256": "43dde1904e75e080787cb82cfb68a309ed8149074285041017a867a4363168b2",
+  "matcher_sha256": "438f6e321df37f045aa89fc8972828f9e6bd2fd1e600f89f707b76fcc37f8db6",
+  "selection_warning": "Same development cohort has been inspected repeatedly; not holdout evidence."
+}

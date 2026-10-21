@@ -28,20 +28,16 @@ Solves V20 Architectural and Scientific Deficiencies:
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import time
-from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
 import cv2
-import numpy as np
 import torch
 from ultralytics import YOLO
 
 from backend.ai.auxiliary import PoseEstimator, PoseEvidence
-from backend.ai.detector import NormalizedDetection
 from backend.ai.events import Observation, TemporalEventEngine
 from training.dmd.action_adapter import ActionInferenceAdapter, ActionScores
 from training.dmd.adapter import parse_dmd_openlabel
@@ -52,6 +48,7 @@ from training.dmd.driver_phone_association import (
     DriverPhoneAssociation,
     OccupantTrack,
 )
+from training.dmd.research_permissions import require_operation
 from training.dmd.temporal_eval import (
     TemporalMatchingPolicy,
     match_temporal_events,
@@ -66,6 +63,7 @@ AUXILIARY_PATH = MODELS_DIR / "auxiliary" / "yolo11n.pt"
 POSE_PATH = MODELS_DIR / "auxiliary" / "yolo11n-pose.pt"
 CONFIG_PATH = MODELS_DIR / "temporal_config_v2.json"
 POLICY_PATH = ROOT / "reports" / "DMD_EVENT_MATCHING_POLICY_FREEZE.json"
+CALIBRATION_PATH = ROOT / "reports" / "v23_ai85_execution" / "camera_seat_calibration.json"
 
 
 def box_iou(left: list[float], right: list[float]) -> float:
@@ -113,26 +111,210 @@ def compute_calibrated_proximity(
     return max(0.0, 1.0 - min_dist / radius_pixels)
 
 
+def load_verified_driver_seat(path: Path = CALIBRATION_PATH) -> dict[str, Any]:
+    calibration = json.loads(path.read_text(encoding="utf-8"))
+    if calibration.get("status") != "VERIFIED_STATIC_CALIBRATION":
+        raise ValueError("Driver-seat calibration is not verified")
+    if calibration.get("camera_id") != "BODY":
+        raise ValueError("Driver-seat calibration is not for the BODY camera")
+    seats = [seat for seat in calibration.get("seats", []) if seat.get("role") == "driver"]
+    if len(seats) != 1 or len(seats[0].get("normalized_xyxy", [])) != 4:
+        raise ValueError("Driver-seat calibration must contain exactly one normalized driver ROI")
+    return seats[0]
+
+
+def verified_driver_track(
+    pose: PoseEvidence | None,
+    crop_width: int,
+    crop_height: int,
+    *,
+    minimum_pose_confidence: float = 0.25,
+) -> OccupantTrack | None:
+    """Bind detected geometry to the configured seat; not independent role validation."""
+    if pose is None or pose.xyxy is None or pose.confidence < minimum_pose_confidence:
+        return None
+    raw = pose.xyxy
+    x1 = min(max(float(raw[0]), 0.0), float(crop_width))
+    y1 = min(max(float(raw[1]), 0.0), float(crop_height))
+    x2 = min(max(float(raw[2]), 0.0), float(crop_width))
+    y2 = min(max(float(raw[3]), 0.0), float(crop_height))
+    if x2 <= x1 or y2 <= y1:
+        return None
+    return OccupantTrack(
+        track_id="driver_seat_pose_0",
+        role="driver",
+        box=Box(x1, y1, x2, y2),
+        verified=True,
+        confidence=float(pose.confidence),
+    )
+
+
+def evaluate_phone_candidates(
+    detections: list[dict[str, Any]],
+    driver_pose: PoseEvidence | None,
+    occupant_tracks: tuple[OccupantTrack, ...],
+    association_engine: DriverPhoneAssociation,
+    *,
+    verified_association: bool,
+    force_handheld_context: bool = False,
+) -> list[dict[str, Any]]:
+    """Evaluate every proposal before choosing the action/event candidate."""
+    evaluated: list[dict[str, Any]] = []
+    for det in detections:
+        local_box = det["local_box"]
+        phone_box = Box(*local_box)
+        hand_proximity = (
+            compute_calibrated_proximity(driver_pose.hand_points, local_box)
+            if driver_pose
+            else 0.0
+        )
+        face_proximity = (
+            compute_calibrated_proximity(driver_pose.face_points, local_box)
+            if driver_pose
+            else 0.0
+        )
+        context = "UNKNOWN"
+        if force_handheld_context:
+            context = "HANDHELD_USE"
+        elif hand_proximity >= 0.40 or face_proximity >= 0.40:
+            context = "HANDHELD_USE"
+        elif det["confidence"] >= 0.30:
+            context = "MOUNTED_OR_STATIC"
+
+        if verified_association:
+            association = association_engine.associate(
+                phone_box,
+                occupant_tracks,
+                phone_context=context,
+                phone_confidence=det["confidence"],
+                hand_proximity=hand_proximity,
+                face_proximity=face_proximity,
+                context_verified=(context == "HANDHELD_USE"),
+            )
+        else:
+            association = AssociationResult(
+                state=AssociationState.DRIVER_ASSOCIATED.value,
+                confidence=det["confidence"],
+                occupant_track_id="driver_0",
+                source_evidence=("LEGACY",),
+                reason_codes=(),
+            )
+        evaluated.append(
+            {
+                "det": det,
+                "hand_prox": hand_proximity,
+                "face_prox": face_proximity,
+                "context": context,
+                "association": association,
+            }
+        )
+    return evaluated
+
+
+def select_best_phone_candidate(
+    evaluated_candidates: list[dict[str, Any]],
+) -> dict[str, Any] | None:
+    """Select one identity for action, fusion, and event generation."""
+    if not evaluated_candidates:
+        return None
+
+    def priority(item: dict[str, Any]) -> float:
+        association = item["association"]
+        is_driver = (
+            1.0
+            if association.state == AssociationState.DRIVER_ASSOCIATED.value
+            else 0.0
+        )
+        is_handheld = 1.0 if item["context"] == "HANDHELD_USE" else 0.0
+        geometry = max(item["hand_prox"], item["face_prox"])
+        return (
+            is_driver * 2.0
+            + is_handheld * 1.5
+            + geometry
+            + item["det"]["confidence"]
+        )
+
+    return max(evaluated_candidates, key=priority)
+
+
+def add_with_expiry(
+    engine: TemporalEventEngine, observation: Observation
+) -> list[Any]:
+    """Expire stale state before adding an observation, as in the cached reporter."""
+    engine.expire(observation.timestamp)
+    return engine.add(observation)
+
+
+class RawVideoBoundaryCollector:
+    """Persist emitted event starts and extend them while the engine remains active."""
+
+    def __init__(self, engine: TemporalEventEngine) -> None:
+        self.engine = engine
+        self.intervals: list[dict[str, Any]] = []
+        self.active: dict[tuple[Any, ...], dict[str, Any]] = {}
+
+    def add(self, observation: Observation) -> list[Any]:
+        emitted = add_with_expiry(self.engine, observation)
+        for key in list(self.active):
+            if key not in self.engine.active_events:
+                del self.active[key]
+        for event in emitted:
+            if event.event_type != "PHONE":
+                continue
+            interval = {
+                "event_type": event.event_type,
+                "start_seconds": event.start_timestamp,
+                "end_seconds": event.end_timestamp,
+                "confidence": event.confidence,
+                "duration": round(event.end_timestamp - event.start_timestamp, 2),
+            }
+            self.intervals.append(interval)
+            self.active[self.engine._candidate_key(event)] = interval
+
+        observation_key = (
+            "PHONE",
+            observation.vehicle_context_id,
+            observation.track_id if not observation.occupant_id else None,
+            observation.occupant_id or observation.occupant_role,
+        )
+        interval = self.active.get(observation_key)
+        if interval is not None and observation_key in self.engine.active_events:
+            interval["end_seconds"] = observation.timestamp
+            interval["duration"] = round(
+                interval["end_seconds"] - interval["start_seconds"], 2
+            )
+        return emitted
+
+
 class AutonomousVideoInferenceEngineV21:
     def __init__(
         self,
         mode: str = "D5",  # D0, D2, D3, D5
-        action_mode: str = "HYBRID_RULE_V6",  # "HYBRID_RULE_V6", "RULE_ONLY", "V6_HIERARCHICAL", "V7_BINARY_GATE", "NONE"
+        action_mode: str = "RULE_ONLY",  # centered deep checkpoints require an aligned session runner
         confidence_floor: float = 0.15,
         sample_stride: int = 15,
         enable_dynamic_roi: bool = True,
         enable_verified_association: bool = True,
         enable_action_gating: bool = True,
         heldout_subject: str = "gC-14",
+        action_causal_mode: str = "STRICT_CAUSAL_ONLINE",
+        missing_checkpoint_policy: str = "ERROR",
+        device: str = "cpu",
+        force_handheld_context: bool = False,
     ):
         self.mode = mode
         self.action_mode = action_mode
         self.confidence_floor = confidence_floor
         self.sample_stride = sample_stride
+        if sample_stride < 1:
+            raise ValueError("sample_stride must be positive")
         self.enable_dynamic_roi = enable_dynamic_roi
         self.enable_verified_association = enable_verified_association
         self.enable_action_gating = enable_action_gating
         self.heldout_subject = heldout_subject
+        self.device = device
+        self.force_handheld_context = force_handheld_context
+        self.driver_seat = load_verified_driver_seat()
 
         torch.set_num_threads(4)
 
@@ -141,11 +323,34 @@ class AutonomousVideoInferenceEngineV21:
         self._auxiliary = None
         self._pose_estimator = None
         self.association_engine = DriverPhoneAssociation(minimum_containment=0.35, ambiguity_margin=0.15)
+        if (
+            action_mode in {"V6_HIERARCHICAL", "V7_BINARY_GATE", "HYBRID_RULE_V6"}
+            and action_causal_mode == "DECLARED_LATENCY_CENTERED"
+        ):
+            raise ValueError(
+                "CENTERED_ACTION_REQUIRES_TARGET_ALIGNED_SESSION_REPLAY"
+            )
         self.action_adapter = (
-            ActionInferenceAdapter(mode=action_mode, heldout_subject=heldout_subject)
+            ActionInferenceAdapter(
+                mode=action_mode,
+                heldout_subject=heldout_subject,
+                device=device,
+                causal_mode=action_causal_mode,
+                missing_checkpoint_policy=missing_checkpoint_policy,
+            )
             if action_mode != "NONE"
             else None
         )
+        if (
+            self.action_adapter is not None
+            and action_mode != "RULE_ONLY"
+            and self.action_adapter.actual_mode != action_mode
+        ):
+            raise RuntimeError(
+                f"ACTION_MODE_FALLBACK_FORBIDDEN: requested={action_mode} "
+                f"actual={self.action_adapter.actual_mode} "
+                f"reason={self.action_adapter.fallback_reason}"
+            )
 
     def _get_specialist(self) -> YOLO:
         if self._specialist is None:
@@ -159,7 +364,7 @@ class AutonomousVideoInferenceEngineV21:
 
     def _get_pose(self) -> PoseEstimator:
         if self._pose_estimator is None:
-            self._pose_estimator = PoseEstimator(POSE_PATH)
+            self._pose_estimator = PoseEstimator(POSE_PATH, device=self.device)
         return self._pose_estimator
 
     def run_session_inference(
@@ -175,9 +380,12 @@ class AutonomousVideoInferenceEngineV21:
 
         fps = cap.get(cv2.CAP_PROP_FPS) or 29.76
         full_video_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        total_seconds = full_video_frames / fps
+        if self.action_adapter:
+            self.action_adapter.reset()
 
-        # Default static calibrated seat geometry for DMD body view (left seat)
-        static_roi_norm = (0.0, 0.10, 0.65, 0.95)
+        # Verified static seat geometry for the DMD BODY camera.
+        static_roi_norm = tuple(float(value) for value in self.driver_seat["normalized_xyxy"])
 
         engine_supported = {
             "window_seconds",
@@ -195,10 +403,11 @@ class AutonomousVideoInferenceEngineV21:
         }
         engine_kwargs = {k: v for k, v in temporal_config.items() if k in engine_supported}
         engine = TemporalEventEngine(**engine_kwargs)
+        boundary_collector = RawVideoBoundaryCollector(engine)
 
         frame_idx = 0
         processed_count = 0
-        generated_candidates = []
+        generated_candidates = boundary_collector.intervals
         all_prediction_logs = []
         all_candidate_records = []
         all_action_logs = []
@@ -230,20 +439,12 @@ class AutonomousVideoInferenceEngineV21:
             occupant_tracks: list[OccupantTrack] = []
 
             if poses:
-                # Primary occupant in driver seat crop
+                # The pose is inferred inside the independently recorded driver-seat crop.
                 best_pose = max(poses, key=lambda p: p.confidence)
-                if best_pose.confidence >= 0.25:
+                driver_track = verified_driver_track(best_pose, rx2 - rx1, ry2 - ry1)
+                if driver_track is not None:
                     driver_pose = best_pose
-                    pbox = best_pose.xyxy or (0.0, 0.0, float(rx2 - rx1), float(ry2 - ry1))
-                    occupant_tracks.append(
-                        OccupantTrack(
-                            track_id="driver_0",
-                            role="driver",
-                            box=Box(pbox[0], pbox[1], pbox[2], pbox[3]),
-                            verified=True,
-                            confidence=float(best_pose.confidence),
-                        )
-                    )
+                    occupant_tracks.append(driver_track)
             elif not self.enable_verified_association:
                 # Legacy fallback if association disabled for ablation
                 occupant_tracks.append(
@@ -261,7 +462,7 @@ class AutonomousVideoInferenceEngineV21:
 
             if self.mode == "D0":
                 spec = self._get_specialist()
-                res = spec.predict(frame, imgsz=640, conf=self.confidence_floor, device="cpu", verbose=False)[0]
+                res = spec.predict(frame, imgsz=640, conf=self.confidence_floor, device=self.device, verbose=False)[0]
                 for box in res.boxes:
                     conf = float(box.conf.item())
                     xyxy = [float(v) for v in box.xyxy[0].cpu().tolist()]
@@ -274,7 +475,7 @@ class AutonomousVideoInferenceEngineV21:
 
             elif self.mode in ("D2", "D5"):
                 spec = self._get_specialist()
-                res = spec.predict(driver_crop, imgsz=640, conf=self.confidence_floor, device="cpu", verbose=False)[0]
+                res = spec.predict(driver_crop, imgsz=640, conf=self.confidence_floor, device=self.device, verbose=False)[0]
                 for box in res.boxes:
                     conf = float(box.conf.item())
                     local_xyxy = [float(v) for v in box.xyxy[0].cpu().tolist()]
@@ -288,7 +489,7 @@ class AutonomousVideoInferenceEngineV21:
 
             if self.mode in ("D3", "D5"):
                 aux = self._get_auxiliary()
-                res = aux.predict(driver_crop, imgsz=640, conf=self.confidence_floor, classes=[67], device="cpu", verbose=False)[0]
+                res = aux.predict(driver_crop, imgsz=640, conf=self.confidence_floor, classes=[67], device=self.device, verbose=False)[0]
                 for box in res.boxes:
                     conf = float(box.conf.item())
                     local_xyxy = [float(v) for v in box.xyxy[0].cpu().tolist()]
@@ -300,30 +501,74 @@ class AutonomousVideoInferenceEngineV21:
                         "local_box": local_xyxy,
                     })
 
+            for proposal_index, detection in enumerate(raw_detections):
+                detection["candidate_id"] = (
+                    f"{frame_idx}:{proposal_index}:{detection['source']}"
+                )
             merged_detections = merge_detections(raw_detections, iou_threshold=0.50) if len(raw_detections) > 1 else raw_detections
 
-            # 4. Action Recognition Inference
+            # 4. Multi-Candidate Evaluation & Association.  Candidate identity is
+            # selected before any phone-conditioned action features are computed.
+            evaluated_candidates = evaluate_phone_candidates(
+                merged_detections,
+                driver_pose,
+                tuple(occupant_tracks),
+                self.association_engine,
+                verified_association=self.enable_verified_association,
+                force_handheld_context=self.force_handheld_context,
+            )
+            best_cand = select_best_phone_candidate(evaluated_candidates)
+            for candidate in evaluated_candidates:
+                det = candidate["det"]
+                association = candidate["association"]
+                all_candidate_records.append({
+                    "timestamp": round(timestamp, 3),
+                    "frame_idx": frame_idx,
+                    "candidate_id": det["candidate_id"],
+                    "box": [round(v, 1) for v in det["box"]],
+                    "confidence": round(det["confidence"], 4),
+                    "source": det["source"],
+                    "hand_prox": round(candidate["hand_prox"], 3),
+                    "face_prox": round(candidate["face_prox"], 3),
+                    "assoc_state": association.state,
+                    "reasons": list(association.reason_codes),
+                })
+
+            # 5. Action inference uses exactly the candidate selected for fusion
+            # and event generation.  Temporal state is updated once per tick.
             action_scores: ActionScores | None = None
+            selected_candidate_id = (
+                best_cand["det"]["candidate_id"] if best_cand is not None else None
+            )
             if self.action_adapter is not None:
-                primary_phone_box = merged_detections[0]["local_box"] if merged_detections else None
-                primary_phone_conf = merged_detections[0]["confidence"] if merged_detections else 0.0
+                selected_box = (
+                    best_cand["det"]["local_box"] if best_cand is not None else None
+                )
+                selected_confidence = (
+                    best_cand["det"]["confidence"] if best_cand is not None else 0.0
+                )
                 action_scores = self.action_adapter.predict(
                     driver_crop=driver_crop,
                     pose=driver_pose,
-                    phone_conf=primary_phone_conf,
-                    phone_box_local=primary_phone_box,
+                    phone_conf=selected_confidence,
+                    phone_box_local=selected_box,
+                    session_id=str(video_path.resolve()),
+                    camera_id="BODY",
+                    occupant_track_id=(occupant_tracks[0].track_id if occupant_tracks else "UNKNOWN"),
+                    timestamp=timestamp,
                 )
                 all_action_logs.append({
                     "timestamp": round(timestamp, 3),
                     "frame_idx": frame_idx,
+                    "candidate_id": selected_candidate_id,
                     **action_scores.to_dict(),
                 })
 
-            # 5. Multi-Candidate Evaluation & Association
+            # 6. Synthesize one observation from the same selected identity.
             selected_observation: Observation | None = None
             rejection_reason = "NO_PHONE_DETECTED"
 
-            if not merged_detections:
+            if best_cand is None:
                 selected_observation = Observation(
                     timestamp=timestamp,
                     class_name="phone",
@@ -336,72 +581,6 @@ class AutonomousVideoInferenceEngineV21:
                     evidence_source="AUTONOMOUS_V21",
                 )
             else:
-                # Evaluate each phone candidate individually
-                evaluated_candidates = []
-                for det in merged_detections:
-                    local_box = det["local_box"]
-                    p_box = Box(local_box[0], local_box[1], local_box[2], local_box[3])
-
-                    # Calibrated Proximities
-                    h_prox = compute_calibrated_proximity(driver_pose.hand_points, local_box) if driver_pose else 0.0
-                    f_prox = compute_calibrated_proximity(driver_pose.face_points, local_box) if driver_pose else 0.0
-
-                    # Preliminary context
-                    p_context = "UNKNOWN"
-                    if h_prox >= 0.40 or f_prox >= 0.40:
-                        p_context = "HANDHELD_USE"
-                    elif det["confidence"] >= 0.30:
-                        p_context = "MOUNTED_OR_STATIC"
-
-                    # Occupant Association
-                    if self.enable_verified_association and occupant_tracks:
-                        assoc_res = self.association_engine.associate(
-                            p_box,
-                            tuple(occupant_tracks),
-                            phone_context=p_context,
-                            phone_confidence=det["confidence"],
-                            hand_proximity=h_prox,
-                            face_proximity=f_prox,
-                            context_verified=(p_context == "HANDHELD_USE"),
-                        )
-                    else:
-                        assoc_res = AssociationResult(
-                            state=AssociationState.DRIVER_ASSOCIATED.value,
-                            confidence=det["confidence"],
-                            occupant_track_id="driver_0",
-                            source_evidence=("LEGACY",),
-                            reason_codes=(),
-                        )
-
-                    evaluated_candidates.append({
-                        "det": det,
-                        "hand_prox": h_prox,
-                        "face_prox": f_prox,
-                        "context": p_context,
-                        "association": assoc_res,
-                    })
-
-                    all_candidate_records.append({
-                        "timestamp": round(timestamp, 3),
-                        "frame_idx": frame_idx,
-                        "box": [round(v, 1) for v in det["box"]],
-                        "confidence": round(det["confidence"], 4),
-                        "source": det["source"],
-                        "hand_prox": round(h_prox, 3),
-                        "face_prox": round(f_prox, 3),
-                        "assoc_state": assoc_res.state,
-                        "reasons": list(assoc_res.reason_codes),
-                    })
-
-                # Rank candidates by driver-handheld viability rather than just raw detector confidence
-                def candidate_priority(item: dict[str, Any]) -> float:
-                    assoc = item["association"]
-                    is_driver = 1.0 if assoc.state == AssociationState.DRIVER_ASSOCIATED.value else 0.0
-                    is_handheld = 1.0 if item["context"] == "HANDHELD_USE" else 0.0
-                    geom = max(item["hand_prox"], item["face_prox"])
-                    return is_driver * 2.0 + is_handheld * 1.5 + geom * 1.0 + item["det"]["confidence"]
-
-                best_cand = max(evaluated_candidates, key=candidate_priority)
                 top_det = best_cand["det"]
                 hand_prox = best_cand["hand_prox"]
                 face_prox = best_cand["face_prox"]
@@ -457,20 +636,16 @@ class AutonomousVideoInferenceEngineV21:
                 )
 
             # 7. Stream Observation into Temporal Event Engine
-            evs = engine.add(selected_observation)
-            for ev in evs:
-                if ev.event_type == "PHONE":
-                    generated_candidates.append({
-                        "event_type": ev.event_type,
-                        "start_seconds": ev.start_timestamp,
-                        "end_seconds": ev.end_timestamp,
-                        "confidence": ev.confidence,
-                        "duration": round(ev.end_timestamp - ev.start_timestamp, 2),
-                    })
+            # Match the production VideoAnalyzer lifecycle: stale verified-driver
+            # state must expire even when the current observation is UNKNOWN.
+            evs = boundary_collector.add(selected_observation)
 
             all_prediction_logs.append({
                 "timestamp": round(timestamp, 3),
                 "frame_idx": frame_idx,
+                "candidate_id": selected_candidate_id,
+                "action_candidate_id": selected_candidate_id if action_scores is not None else None,
+                "event_candidate_id": selected_candidate_id if selected_observation.confidence > 0 else None,
                 "confidence": round(selected_observation.confidence, 4),
                 "context": selected_observation.phone_context,
                 "occupant_role": selected_observation.occupant_role,
@@ -507,11 +682,17 @@ class AutonomousVideoInferenceEngineV21:
                 else:
                     deduped_preds.append(dict(cand))
 
-        actual_frames = frame_idx if max_frames else full_video_frames
+        actual_frames = min(full_video_frames, frame_idx + 1) if max_frames else frame_idx
+        if max_frames is None and actual_frames != full_video_frames:
+            raise RuntimeError(f"INCOMPLETE_VIDEO_DECODE: {actual_frames}/{full_video_frames}")
         total_seconds = actual_frames / fps if fps else 0.0
 
         return {
             "mode": self.mode,
+            "scope": "SHORT_SMOKE_TEST" if max_frames else "FULL_COHORT_AUTONOMOUS_EXPERIMENT",
+            "fps": fps,
+            "action_provenance": self.action_adapter.provenance() if self.action_adapter else None,
+            "roi_mode": "STATIC_UNVERIFIED_GEOMETRY",
             "action_mode": self.action_mode,
             "video_path": str(video_path),
             "total_frames": actual_frames,
@@ -579,15 +760,21 @@ def evaluate_predictions_stage2(
 
 def run_v21_full_autonomous_pipeline(
     mode: str = "D5",
-    action_mode: str = "HYBRID_RULE_V6",
+    action_mode: str = "RULE_ONLY",
     cohort: str = "two-subject",
     max_frames: int | None = None,
     sample_stride: int = 15,
     enable_dynamic_roi: bool = True,
     enable_verified_association: bool = True,
     enable_action_gating: bool = True,
+    action_causal_mode: str = "STRICT_CAUSAL_ONLINE",
+    missing_checkpoint_policy: str = "ERROR",
+    device: str = "cpu",
+    force_handheld_context: bool = False,
+    output_dir: Path = REPORTS_DIR,
 ) -> dict[str, Any]:
-    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+    require_operation("diagnostics")
+    output_dir.mkdir(parents=True, exist_ok=True)
     temporal_cfg = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
     policy_data = json.loads(POLICY_PATH.read_text(encoding="utf-8"))
     policy = TemporalMatchingPolicy(
@@ -602,8 +789,18 @@ def run_v21_full_autonomous_pipeline(
         "gB-9": (ROOT / "dataset/external_dmd/subjects/gB-9/gB_9_s2_2019-02-27T11;57;51+01;00_rgb_body.mp4", ROOT / "dataset/external_dmd/subjects/gB-9/gB_9_s2_2019-02-27T11;57;51+01;00_rgb_ann_distraction.json"),
     }
 
-    active_cohort = ["gB-9", "gC-14", "gZ-36"] if cohort == "three-subject" else ["gC-14", "gZ-36"]
-    targets = [(sub, targets_dict[sub][0], targets_dict[sub][1]) for sub in active_cohort if targets_dict[sub][0].exists()]
+    if cohort == "three-subject":
+        active_cohort = ["gB-9", "gC-14", "gZ-36"]
+    elif cohort == "gc14-only":
+        active_cohort = ["gC-14"]
+    elif cohort == "gz36-only":
+        active_cohort = ["gZ-36"]
+    else:
+        active_cohort = ["gC-14", "gZ-36"]
+    missing = [str(path) for sub in active_cohort for path in targets_dict[sub] if not path.is_file()]
+    if missing:
+        raise FileNotFoundError(f"BLOCKED_MISSING_DATA: {missing}")
+    targets = [(sub, *targets_dict[sub]) for sub in active_cohort]
 
     subject_eval_results = {}
     all_raw_predictions = []
@@ -612,7 +809,7 @@ def run_v21_full_autonomous_pipeline(
     all_event_preds = []
 
     for sub_id, vid_path, ann_path in targets:
-        print(f"\n==========================================", flush=True)
+        print("\n==========================================", flush=True)
         print(f"Running V21 Autonomous Pipeline on {sub_id}...", flush=True)
         print(f"  Mode={mode}, Action={action_mode}, Association={enable_verified_association}, Stride={sample_stride}", flush=True)
 
@@ -625,6 +822,10 @@ def run_v21_full_autonomous_pipeline(
             enable_verified_association=enable_verified_association,
             enable_action_gating=enable_action_gating,
             heldout_subject=sub_id,
+            action_causal_mode=action_causal_mode,
+            missing_checkpoint_policy=missing_checkpoint_policy,
+            device=device,
+            force_handheld_context=force_handheld_context,
         )
 
         # STAGE 1: Inference
@@ -655,7 +856,7 @@ def run_v21_full_autonomous_pipeline(
         eval_res = evaluate_predictions_stage2(
             predicted_events=inf_res["predicted_events"],
             annotation_path=ann_path,
-            fps=29.76,
+            fps=inf_res["fps"],
             total_frames=inf_res["total_frames"],
             total_seconds=inf_res["total_seconds"],
             matching_policy=policy,
@@ -667,7 +868,25 @@ def run_v21_full_autonomous_pipeline(
             "wall_time_seconds": inf_res["wall_time_seconds"],
             "effective_fps": inf_res["effective_fps"],
             "predicted_events_count": len(inf_res["predicted_events"]),
+            "action_provenance": inf_res["action_provenance"],
         }
+
+        # Persist each completed subject immediately. A long raw-video benchmark
+        # must retain finished evidence if a later session is interrupted.
+        subject_dir = output_dir / "subjects" / sub_id
+        subject_dir.mkdir(parents=True, exist_ok=True)
+        (subject_dir / "metrics.json").write_text(
+            json.dumps(subject_eval_results[sub_id], indent=2) + "\n", encoding="utf-8"
+        )
+        for filename, records in (
+            ("autonomous_predictions.jsonl", inf_res["prediction_logs"]),
+            ("phone_candidate_records.jsonl", inf_res["candidate_records"]),
+            ("action_predictions.jsonl", inf_res["action_logs"]),
+            ("event_predictions.jsonl", inf_res["predicted_events"]),
+        ):
+            with (subject_dir / filename).open("w", encoding="utf-8") as subject_handle:
+                for record in records:
+                    subject_handle.write(json.dumps(record) + "\n")
 
         print(f"  Results {sub_id} -> TP={eval_res['true_positives']}, FP={eval_res['false_positives']}, FN={eval_res['false_negatives']}, Precision={eval_res['precision']}, Recall={eval_res['recall']}, F1={eval_res['f1']}, FA/min={eval_res['false_alarms_per_minute']}", flush=True)
 
@@ -689,6 +908,10 @@ def run_v21_full_autonomous_pipeline(
         "cohort": active_cohort,
         "detector_mode": mode,
         "action_mode": action_mode,
+        "action_causal_mode": action_causal_mode,
+        "missing_checkpoint_policy": missing_checkpoint_policy,
+        "device": device,
+        "force_handheld_context": force_handheld_context,
         "verified_association": enable_verified_association,
         "action_gating": enable_action_gating,
         "total_gt_events": gt_sum,
@@ -710,28 +933,31 @@ def run_v21_full_autonomous_pipeline(
                 "f1": subject_eval_results[s]["f1"],
                 "fa_per_min": subject_eval_results[s]["false_alarms_per_minute"],
                 "effective_fps": subject_eval_results[s]["effective_fps"],
+                "action_provenance": subject_eval_results[s]["action_provenance"],
             }
             for s in subject_eval_results
         },
     }
 
     # Save deliverables in JSONL and JSON
-    (REPORTS_DIR / "event_matches.json").write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8")
+    (output_dir / "event_matches.json").write_text(
+        json.dumps(out, indent=2) + "\n", encoding="utf-8"
+    )
 
     # Complete Prediction Persistence (every single frame, no [:100] truncation!)
-    with (REPORTS_DIR / "autonomous_predictions.jsonl").open("w", encoding="utf-8") as handle:
+    with (output_dir / "autonomous_predictions.jsonl").open("w", encoding="utf-8") as handle:
         for row in all_raw_predictions:
             handle.write(json.dumps(row) + "\n")
 
-    with (REPORTS_DIR / "phone_candidate_records.jsonl").open("w", encoding="utf-8") as handle:
+    with (output_dir / "phone_candidate_records.jsonl").open("w", encoding="utf-8") as handle:
         for row in all_candidates:
             handle.write(json.dumps(row) + "\n")
 
-    with (REPORTS_DIR / "action_predictions.jsonl").open("w", encoding="utf-8") as handle:
+    with (output_dir / "action_predictions.jsonl").open("w", encoding="utf-8") as handle:
         for row in all_actions:
             handle.write(json.dumps(row) + "\n")
 
-    with (REPORTS_DIR / "event_predictions.jsonl").open("w", encoding="utf-8") as handle:
+    with (output_dir / "event_predictions.jsonl").open("w", encoding="utf-8") as handle:
         for row in all_event_preds:
             handle.write(json.dumps(row) + "\n")
 
@@ -742,12 +968,24 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--test-run", action="store_true", help="Quick test run on 100 frames")
     parser.add_argument("--mode", default="D5", choices=["D0", "D2", "D3", "D5"], help="Detection ablation mode")
-    parser.add_argument("--action-mode", default="HYBRID_RULE_V6", choices=["HYBRID_RULE_V6", "RULE_ONLY", "V6_HIERARCHICAL", "V7_BINARY_GATE", "NONE"], help="Action mode")
-    parser.add_argument("--cohort", default="two-subject", choices=["two-subject", "three-subject"], help="Cohort")
+    parser.add_argument("--action-mode", default="RULE_ONLY", choices=["HYBRID_RULE_V6", "RULE_ONLY", "V6_HIERARCHICAL", "V7_BINARY_GATE", "NONE"], help="Action mode")
+    parser.add_argument("--device", default="cpu", help="Ultralytics/Torch device, for example cpu or 0")
+    parser.add_argument(
+        "--cohort",
+        default="two-subject",
+        choices=["two-subject", "three-subject", "gc14-only", "gz36-only"],
+        help="Cohort",
+    )
     parser.add_argument("--max-frames", type=int, default=None, help="Max frames to process per session")
     parser.add_argument("--sample-stride", type=int, default=15, help="Frame sample stride")
     parser.add_argument("--disable-association", action="store_true", help="Ablation: disable verified driver association")
     parser.add_argument("--disable-action-gating", action="store_true", help="Ablation: disable action gating")
+    parser.add_argument(
+        "--force-handheld-context",
+        action="store_true",
+        help="Diagnostic upper bound: treat every phone proposal as HANDHELD_USE",
+    )
+    parser.add_argument("--output", type=Path, default=REPORTS_DIR, help="Artifact directory")
     args = parser.parse_args()
 
     max_f = 100 if args.test_run else args.max_frames
@@ -759,6 +997,9 @@ if __name__ == "__main__":
         sample_stride=args.sample_stride,
         enable_verified_association=not args.disable_association,
         enable_action_gating=not args.disable_action_gating,
+        device=args.device,
+        force_handheld_context=args.force_handheld_context,
+        output_dir=args.output,
     )
     print("\n==========================================")
     print("V21 AUTONOMOUS EVALUATION SUMMARY:")

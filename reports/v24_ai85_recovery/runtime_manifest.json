@@ -1,0 +1,14 @@
+{
+  "manifest_id": "ROADWATCH_V24_RUNTIME_MANIFEST",
+  "python_executable": "C:\\Users\\TSC\\AppData\Local\\Programs\\Python\\Python311\\python.exe",
+  "python_version": "3.11.9",
+  "torch_version": "2.13.0+cpu",
+  "pytest_version": "9.1.1",
+  "git_branch": "roadwatch-v4-candidate",
+  "git_head_sha": "98502a4ab740d3ede3df18a6e217fb1861c009e9",
+  "execution_scopes": {
+    "CACHED_REPLAY_DIAGNOSTIC": "Evaluates candidate policies, temporal aggregation, and feature fusion over precomputed frozen traces and embeddings.",
+    "FULL_VIDEO_AUTONOMOUS": "Decodes raw video frames, executes YOLO behavior detection, MediaPipe/YOLO pose, feature extraction, and temporal engine end-to-end.",
+    "GOVERNANCE_GATE_EVALUATION": "Tests compliance with dataset research permissions, rights approval, and holdout protection."
+  }
+}

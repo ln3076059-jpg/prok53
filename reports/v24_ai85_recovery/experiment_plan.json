@@ -1,0 +1,96 @@
+{
+  "plan_id": "ROADWATCH_V24_EXPERIMENT_PLAN",
+  "version": "1.0.0",
+  "created_at": "2026-10-20T21:32:00+07:00",
+  "governance_status": "STRICT_GOVERNANCE_HONORED",
+  "experiments": [
+    {
+      "run_id": "E0",
+      "name": "RECONCILE_AND_REPRODUCE_R0_R1",
+      "purpose": "Verify exact reproduction of baseline R0 (alert windows) and R1 (boundary reporter on R0), establish cache cryptographic parity.",
+      "scope": "CACHED_REPLAY_DIAGNOSTIC",
+      "factors_changed": "None (exact frozen baseline reproduction)",
+      "target_action_mode": "NONE",
+      "target_association_mode": "LEGACY_ROLE_ASSUMPTION",
+      "target_lifecycle_mode": "ACTIVE_BOUNDARY_TRACKING"
+    },
+    {
+      "run_id": "E1",
+      "name": "VERIFIED_GEOMETRY_ASSOCIATION_ISOLATED",
+      "purpose": "Isolate driver association using verified camera seat geometry, coordinate transforms, and multi-occupant tracking (fixes P0-A).",
+      "scope": "CACHED_REPLAY_DIAGNOSTIC",
+      "factors_changed": "Association mode: VERIFIED_SEAT_GEOMETRY_V24",
+      "target_action_mode": "NONE",
+      "target_association_mode": "VERIFIED_SEAT_GEOMETRY_V24",
+      "target_lifecycle_mode": "ALERT_WINDOW_ONLY"
+    },
+    {
+      "run_id": "E2",
+      "name": "VERIFIED_ASSOCIATION_PLUS_EVENT_LIFECYCLE",
+      "purpose": "Combine verified geometry driver association with ActiveBoundaryReporter interval tracking (fixes P1-A).",
+      "scope": "CACHED_REPLAY_DIAGNOSTIC",
+      "factors_changed": "Lifecycle mode: ACTIVE_BOUNDARY_TRACKING",
+      "target_action_mode": "NONE",
+      "target_association_mode": "VERIFIED_SEAT_GEOMETRY_V24",
+      "target_lifecycle_mode": "ACTIVE_BOUNDARY_TRACKING"
+    },
+    {
+      "run_id": "E3",
+      "name": "E2_PLUS_RULE_ONLY_PRIOR",
+      "purpose": "Evaluate geometric RuleGuidedPoseClassifier action prior on top of E2.",
+      "scope": "CACHED_REPLAY_DIAGNOSTIC",
+      "factors_changed": "Action mode: RULE_ONLY",
+      "target_action_mode": "RULE_ONLY",
+      "target_association_mode": "VERIFIED_SEAT_GEOMETRY_V24",
+      "target_lifecycle_mode": "ACTIVE_BOUNDARY_TRACKING"
+    },
+    {
+      "run_id": "E4",
+      "name": "E2_PLUS_DEEP_ACTION_CONTINUOUS_HISTORY",
+      "purpose": "Evaluate V6 Hierarchical ResNet-GRU deep action model with continuous temporal history and delayed-centered queue alignment (fixes P0-B and P0-C).",
+      "scope": "CACHED_REPLAY_DIAGNOSTIC",
+      "factors_changed": "Action mode: V6_HIERARCHICAL, continuous 9-frame buffer, delayed-centered fusion queue",
+      "target_action_mode": "V6_HIERARCHICAL",
+      "target_association_mode": "VERIFIED_SEAT_GEOMETRY_V24",
+      "target_lifecycle_mode": "ACTIVE_BOUNDARY_TRACKING"
+    },
+    {
+      "run_id": "E5",
+      "name": "E2_PLUS_HYBRID_ACTION_UNIFIED_API",
+      "purpose": "Evaluate Hybrid Rule + V6 action fusion using unified public ActionInferenceAdapter API and matching occupant identity (fixes P0-D).",
+      "scope": "CACHED_REPLAY_DIAGNOSTIC",
+      "factors_changed": "Action mode: HYBRID_RULE_V6 via public API",
+      "target_action_mode": "HYBRID_RULE_V6",
+      "target_association_mode": "VERIFIED_SEAT_GEOMETRY_V24",
+      "target_lifecycle_mode": "ACTIVE_BOUNDARY_TRACKING"
+    },
+    {
+      "run_id": "E6",
+      "name": "VALIDATION_CANDIDATE_PLUS_DETECTOR_SENSITIVITY",
+      "purpose": "Assess candidate under varied detector proposal confidence floors and threshold sweeps.",
+      "scope": "CACHED_REPLAY_DIAGNOSTIC",
+      "factors_changed": "Detector proposal floor and temporal suppression margins",
+      "target_action_mode": "HYBRID_RULE_V6",
+      "target_association_mode": "VERIFIED_SEAT_GEOMETRY_V24",
+      "target_lifecycle_mode": "ACTIVE_BOUNDARY_TRACKING"
+    },
+    {
+      "run_id": "E7",
+      "name": "WARM_START_FITTING_GOVERNANCE_CHECK",
+      "purpose": "Formal check against research_permissions.py; report status BLOCKED as RIGHTS_ACCEPTED is false.",
+      "scope": "GOVERNANCE_GATE_EVALUATION",
+      "factors_changed": "Formal governance gate execution",
+      "status": "BLOCKED_BY_DATA_GOVERNANCE"
+    },
+    {
+      "run_id": "E8",
+      "name": "FULL_VIDEO_AUTONOMOUS_PIPELINE_BENCHMARK",
+      "purpose": "Execute candidate through shared backend VideoAnalyzer interface on raw decoded video frames, benchmarking actual FPS, latency, and memory.",
+      "scope": "FULL_VIDEO_AUTONOMOUS",
+      "factors_changed": "Execution backend: end-to-end decode + detection + pose + action",
+      "target_action_mode": "HYBRID_RULE_V6",
+      "target_association_mode": "VERIFIED_SEAT_GEOMETRY_V24",
+      "target_lifecycle_mode": "ACTIVE_BOUNDARY_TRACKING"
+    }
+  ]
+}

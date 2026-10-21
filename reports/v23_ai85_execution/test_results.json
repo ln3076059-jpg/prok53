@@ -1,0 +1,21 @@
+{
+  "status": "ALL_TESTS_PASSED",
+  "exit_code": 0,
+  "test_suites": [
+    {
+      "suite": "tests/test_v23_execution.py",
+      "test_count": 6,
+      "status": "PASSED"
+    },
+    {
+      "suite": "tests/test_v22_recovery.py",
+      "test_count": 30,
+      "status": "PASSED"
+    }
+  ],
+  "total_tests": 36,
+  "passed_tests": 36,
+  "failed_tests": 0,
+  "skipped_tests": 0,
+  "wall_time_seconds": 33.52437210083008
+}

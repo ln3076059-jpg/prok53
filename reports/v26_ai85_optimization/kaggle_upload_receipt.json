@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.1.0",
+  "dataset_ref": "longngoc11/roadwatch-v26-gz36-processing",
+  "url": "https://www.kaggle.com/datasets/longngoc11/roadwatch-v26-gz36-processing",
+  "visibility": "private",
+  "status": "ready",
+  "verified_at_utc": "2026-10-20T23:46:18.2843797Z",
+  "version_notes": "V26 corrected package layout: root-cause audit, D2/D5 protocol warning, pose and boundary regressions",
+  "local_manifest_entries": 23,
+  "metadata_control_file": "dataset-metadata.json",
+  "metadata_control_file_uploaded_as_data": false,
+  "expected_remote_file_count": 23,
+  "remote_file_count": 23,
+  "remote_total_bytes": 277050,
+  "missing_remote": [],
+  "unexpected_remote": [],
+  "size_mismatches": [],
+  "remote_files": [
+    {
+      "name": "README.md",
+      "bytes": 1334
+    },
+    {
+      "name": "package-manifest.json",
+      "bytes": 6064
+    },
+    {
+      "name": "package/backend/ai/association.py",
+      "bytes": 8539
+    },
+    {
+      "name": "package/backend/ai/auxiliary.py",
+      "bytes": 13158
+    },
+    {
+      "name": "package/backend/ai/events.py",
+      "bytes": 19171
+    },
+    {
+      "name": "package/backend/ai/fusion.py",
+      "bytes": 3841
+    },
+    {
+      "name": "package/models/temporal_config_v2.json",
+      "bytes": 357
+    },
+    {
+      "name": "package/reports/DMD_EVENT_MATCHING_POLICY_FREEZE.json",
+      "bytes": 570
+    },
+    {
+      "name": "package/reports/v26_ai85_optimization/fn_waterfall.json",
+      "bytes": 534
+    },
+    {
+      "name": "package/reports/v26_ai85_optimization/metric_contract.json",
+      "bytes": 1045
+    },
+    {
+      "name": "package/reports/v26_ai85_optimization/metrics_comparison.json",
+      "bytes": 1627
+    },
+    {
+      "name": "package/reports/v26_ai85_optimization/test_results.json",
+      "bytes": 255
+    },
+    {
+      "name": "package/tests/test_event_evaluation_governance.py",
+      "bytes": 40031
+    },
+    {
+      "name": "package/tests/test_temporal_business_rules.py",
+      "bytes": 3421
+    },
+    {
+      "name": "package/tests/test_v25_recovery.py",
+      "bytes": 12552
+    },
+    {
+      "name": "package/tests/test_v26_diagnosis.py",
+      "bytes": 881
+    },
+    {
+      "name": "package/training/dmd/action_adapter.py",
+      "bytes": 23321
+    },
+    {
+      "name": "package/training/dmd/action_checkpoint.py",
+      "bytes": 3696
+    },
+    {
+      "name": "package/training/dmd/audit_v26_optimization.py",
+      "bytes": 28250
+    },
+    {
+      "name": "package/training/dmd/driver_phone_association.py",
+      "bytes": 5457
+    },
+    {
+      "name": "package/training/dmd/run_autonomous_v21.py",
+      "bytes": 39756
+    },
+    {
+      "name": "package/training/dmd/run_verified_v24.py",
+      "bytes": 49292
+    },
+    {
+      "name": "package/training/dmd/temporal_eval.py",
+      "bytes": 13898
+    }
+  ],
+  "credentials_included": false,
+  "raw_media_included": false
+}

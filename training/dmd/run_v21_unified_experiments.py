@@ -87,7 +87,10 @@ def run_unified_v21_experiments(
     }
 
     active_cohort = ["gB-9", "gC-14", "gZ-36"] if cohort == "three-subject" else ["gC-14", "gZ-36"]
-    targets = [(sub, targets_dict[sub][0], targets_dict[sub][1]) for sub in active_cohort if targets_dict[sub][0].exists()]
+    missing = [str(path) for sub in active_cohort for path in targets_dict[sub] if not path.is_file()]
+    if missing:
+        raise FileNotFoundError(f"BLOCKED_MISSING_DATA: {missing}")
+    targets = [(sub, *targets_dict[sub]) for sub in active_cohort]
 
     # Load shared detection and pose models
     print("[INIT] Loading Specialist, Auxiliary, Pose and Action models...", flush=True)
@@ -184,10 +187,10 @@ def run_unified_v21_experiments(
                     pbox = best_pose.xyxy or (0.0, 0.0, float(rx2 - rx1), float(ry2 - ry1))
                     occupant_tracks.append(
                         OccupantTrack(
-                            track_id="driver_0",
-                            role="driver",
+                            track_id="occupant_unverified",
+                            role="UNKNOWN",
                             box=Box(pbox[0], pbox[1], pbox[2], pbox[3]),
-                            verified=True,
+                            verified=False,
                             confidence=float(best_pose.confidence),
                         )
                     )

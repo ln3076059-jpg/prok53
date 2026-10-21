@@ -1,0 +1,14 @@
+{
+  "threshold": 0.85,
+  "rule": "STRICT_GREATER_THAN_UNROUNDED",
+  "branches": {
+    "phone_detector": "NOT_ESTABLISHED_MISSING_EXHAUSTIVE_BBOX_EVIDENCE",
+    "seatbelt_detector": "NOT_ESTABLISHED_MISSING_EXHAUSTIVE_BBOX_EVIDENCE",
+    "action_three_class": "TARGET_NOT_MET_HISTORICAL_LOSO_MACRO_F1_BELOW_0.85",
+    "seatbelt_three_class": "TARGET_NOT_MET_VALIDATION_MACRO_F1_0.572753",
+    "phone_events": "TARGET_NOT_MET_BEST_V25_F1_0.65",
+    "driver_association": "NOT_ESTABLISHED_MISSING_INDEPENDENT_ROLE_GT"
+  },
+  "no_cross_branch_blending": true,
+  "missing_metric_policy": "NOT_ESTABLISHED"
+}

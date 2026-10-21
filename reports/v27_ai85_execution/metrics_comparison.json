@@ -1,0 +1,166 @@
+{
+  "generated_at": "2026-10-21T02:18:31.840496+00:00",
+  "scope": "CACHED_REPLAY_CORRECTNESS_ABLATION_NOT_INDEPENDENT_HOLDOUT",
+  "fitting_performed": false,
+  "comparisons": {
+    "E2": {
+      "before_v26": {
+        "tp": 12,
+        "fp": 13,
+        "fn": 8,
+        "precision": 0.48,
+        "recall": 0.6,
+        "f1": 0.5333333333333333,
+        "fa_per_minute": 0.8513147761029817
+      },
+      "after_v27": {
+        "tp": 12,
+        "fp": 13,
+        "fn": 8,
+        "precision": 0.48,
+        "recall": 0.6,
+        "f1": 0.5333333333333333,
+        "fa_per_minute": 0.8513147761029817
+      },
+      "delta": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "fa_per_minute": 0.0
+      },
+      "per_subject_after": {
+        "gC-14": {
+          "tp": 7,
+          "fp": 3,
+          "fn": 2
+        },
+        "gZ-36": {
+          "tp": 5,
+          "fp": 10,
+          "fn": 6
+        }
+      }
+    },
+    "E4": {
+      "before_v26": {
+        "tp": 12,
+        "fp": 14,
+        "fn": 8,
+        "precision": 0.46153846153846156,
+        "recall": 0.6,
+        "f1": 0.5217391304347826,
+        "fa_per_minute": 0.9168005281109033
+      },
+      "after_v27": {
+        "tp": 12,
+        "fp": 13,
+        "fn": 8,
+        "precision": 0.48,
+        "recall": 0.6,
+        "f1": 0.5333333333333333,
+        "fa_per_minute": 0.8513147761029817
+      },
+      "delta": {
+        "tp": 0,
+        "fp": -1,
+        "fn": 0,
+        "precision": 0.018461538461538418,
+        "recall": 0.0,
+        "f1": 0.011594202898550732,
+        "fa_per_minute": -0.06548575200792162
+      },
+      "per_subject_after": {
+        "gC-14": {
+          "tp": 7,
+          "fp": 3,
+          "fn": 2
+        },
+        "gZ-36": {
+          "tp": 5,
+          "fp": 10,
+          "fn": 6
+        }
+      }
+    },
+    "E5": {
+      "before_v26": {
+        "tp": 12,
+        "fp": 14,
+        "fn": 8,
+        "precision": 0.46153846153846156,
+        "recall": 0.6,
+        "f1": 0.5217391304347826,
+        "fa_per_minute": 0.9168005281109033
+      },
+      "after_v27": {
+        "tp": 12,
+        "fp": 14,
+        "fn": 8,
+        "precision": 0.46153846153846156,
+        "recall": 0.6,
+        "f1": 0.5217391304347826,
+        "fa_per_minute": 0.9168005281109033
+      },
+      "delta": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "fa_per_minute": 0.0
+      },
+      "per_subject_after": {
+        "gC-14": {
+          "tp": 7,
+          "fp": 4,
+          "fn": 2
+        },
+        "gZ-36": {
+          "tp": 5,
+          "fp": 10,
+          "fn": 6
+        }
+      }
+    }
+  },
+  "timing_and_identity_invariants": {
+    "E4": {
+      "run_id": "E4",
+      "raw_prediction_sha256": "9e0cffda73c5352ad1783568e387f7f275ca45cc65eb7fd74135e9cc092044da",
+      "valid_centered_scores": 1803,
+      "target_frame_mismatches": 0,
+      "target_timestamp_mismatches_over_1ms": 0,
+      "scores_available_before_target": 0,
+      "candidate_scored_count": 563,
+      "candidate_identity_mismatches": 0,
+      "latency_seconds": {
+        "minimum": 2.016082763671875,
+        "maximum": 2.016601318359392
+      }
+    },
+    "E5": {
+      "run_id": "E5",
+      "raw_prediction_sha256": "3d4d83cd88377226db5cdea7a65e81514b7e094af45e61a481a8357b8ba4758f",
+      "valid_centered_scores": 1803,
+      "target_frame_mismatches": 0,
+      "target_timestamp_mismatches_over_1ms": 0,
+      "scores_available_before_target": 0,
+      "candidate_scored_count": 563,
+      "candidate_identity_mismatches": 0,
+      "latency_seconds": {
+        "minimum": 2.016082763671875,
+        "maximum": 2.016601318359392
+      }
+    }
+  },
+  "strict_gate": {
+    "threshold": 0.85,
+    "requires": "precision > 0.85 AND recall > 0.85 AND f1 > 0.85",
+    "pass": false,
+    "status": "NOT_MET"
+  }
+}

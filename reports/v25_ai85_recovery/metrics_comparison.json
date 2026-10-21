@@ -1,0 +1,158 @@
+{
+  "E0": {
+    "run_id": "E0",
+    "name": "RECONCILE_AND_REPRODUCE_R0_R1",
+    "description": "Baseline exact reproduction and parity check",
+    "status": "COMPLETE",
+    "scope": "CACHED_REPLAY_DIAGNOSTIC",
+    "action_mode": "NONE",
+    "association_mode": "LEGACY_ROLE_ASSUMPTION",
+    "lifecycle_mode": "ACTIVE_BOUNDARY_TRACKING",
+    "subject_count": 2,
+    "total_gt": 20,
+    "tp": 13,
+    "fp": 7,
+    "fn": 7,
+    "precision": 0.65,
+    "recall": 0.65,
+    "f1": 0.65,
+    "fa_per_minute": 0.45840026405545165,
+    "evaluated_minutes": 15.270497311827956,
+    "wall_time_seconds": 2.694866699999693,
+    "raw_prediction_sha256": "ee962f680e4a54fba57cf12eeb2ab3999cef2a4bbcc0e0acfde17acd0528fff3"
+  },
+  "E2": {
+    "run_id": "E2",
+    "name": "VERIFIED_ASSOCIATION_PLUS_EVENT_LIFECYCLE",
+    "description": "Verified geometry driver association + active boundary lifecycle",
+    "status": "COMPLETE",
+    "scope": "CACHED_REPLAY_DIAGNOSTIC",
+    "action_mode": "NONE",
+    "association_mode": "VERIFIED_SEAT_GEOMETRY_V24",
+    "lifecycle_mode": "ACTIVE_BOUNDARY_TRACKING",
+    "subject_count": 2,
+    "total_gt": 20,
+    "tp": 5,
+    "fp": 0,
+    "fn": 15,
+    "precision": 1.0,
+    "recall": 0.25,
+    "f1": 0.4,
+    "fa_per_minute": 0.0,
+    "evaluated_minutes": 15.270497311827956,
+    "wall_time_seconds": 2.9505188999992242,
+    "raw_prediction_sha256": "79b0109b9ad3368e5a45aee80eab4f2f20dc655990ebd70772bf4fae3aad680e"
+  },
+  "E3": {
+    "run_id": "E3",
+    "name": "E2_PLUS_RULE_ONLY_PRIOR",
+    "description": "E2 + RuleGuidedPoseClassifier geometric action prior",
+    "status": "COMPLETE",
+    "scope": "CACHED_REPLAY_DIAGNOSTIC",
+    "action_mode": "RULE_ONLY",
+    "association_mode": "VERIFIED_SEAT_GEOMETRY_V24",
+    "lifecycle_mode": "ACTIVE_BOUNDARY_TRACKING",
+    "subject_count": 2,
+    "total_gt": 20,
+    "tp": 6,
+    "fp": 1,
+    "fn": 14,
+    "precision": 0.8571428571428571,
+    "recall": 0.3,
+    "f1": 0.4444444444444444,
+    "fa_per_minute": 0.06548575200792167,
+    "evaluated_minutes": 15.270497311827956,
+    "wall_time_seconds": 3.1293911999991906,
+    "raw_prediction_sha256": "6d77ea4f6effc54d488e070d86384418fbd7884280317170548c556f9c5847e7"
+  },
+  "E4": {
+    "run_id": "E4",
+    "name": "E2_PLUS_DEEP_ACTION_CONTINUOUS_HISTORY",
+    "description": "E2 + V6 Hierarchical ResNet-GRU with continuous 9-frame buffer and delayed-centered queue",
+    "status": "COMPLETE",
+    "scope": "CACHED_REPLAY_DIAGNOSTIC",
+    "action_mode": "V6_HIERARCHICAL",
+    "association_mode": "VERIFIED_SEAT_GEOMETRY_V24",
+    "lifecycle_mode": "ACTIVE_BOUNDARY_TRACKING",
+    "subject_count": 2,
+    "total_gt": 20,
+    "tp": 5,
+    "fp": 1,
+    "fn": 15,
+    "precision": 0.8333333333333334,
+    "recall": 0.25,
+    "f1": 0.38461538461538464,
+    "fa_per_minute": 0.06548575200792167,
+    "evaluated_minutes": 15.270497311827956,
+    "wall_time_seconds": 7.869727799999964,
+    "raw_prediction_sha256": "806eebe2cb00973828a4033846e4a146a53af0986cf3d8b258c5e98f7507fb00"
+  },
+  "E5": {
+    "run_id": "E5",
+    "name": "E2_PLUS_HYBRID_ACTION_UNIFIED_API",
+    "description": "E2 + Hybrid Rule & V6 Action Model via unified public API and occupant alignment",
+    "status": "COMPLETE",
+    "scope": "CACHED_REPLAY_DIAGNOSTIC",
+    "action_mode": "HYBRID_RULE_V6",
+    "association_mode": "VERIFIED_SEAT_GEOMETRY_V24",
+    "lifecycle_mode": "ACTIVE_BOUNDARY_TRACKING",
+    "subject_count": 2,
+    "total_gt": 20,
+    "tp": 6,
+    "fp": 0,
+    "fn": 14,
+    "precision": 1.0,
+    "recall": 0.3,
+    "f1": 0.46153846153846156,
+    "fa_per_minute": 0.0,
+    "evaluated_minutes": 15.270497311827956,
+    "wall_time_seconds": 8.001746500000081,
+    "raw_prediction_sha256": "1f66b91f8ec904e59dbf10b26b6c01cbf60807609f14ab7a1f6e10eb6aa8515b"
+  },
+  "forward_execution": {
+    "E4": {
+      "raw_prediction_sha256": "806eebe2cb00973828a4033846e4a146a53af0986cf3d8b258c5e98f7507fb00",
+      "raw_counts": {
+        "gC-14": {
+          "rows": 795,
+          "valid_scores": 787,
+          "scores_used_with_phone": 356,
+          "max_forward": 787
+        },
+        "gZ-36": {
+          "rows": 1024,
+          "valid_scores": 1016,
+          "scores_used_with_phone": 207,
+          "max_forward": 1016
+        }
+      },
+      "metrics_forward_counts": {
+        "gC-14": 787,
+        "gZ-36": 1016
+      },
+      "reconciled": true
+    },
+    "E5": {
+      "raw_prediction_sha256": "1f66b91f8ec904e59dbf10b26b6c01cbf60807609f14ab7a1f6e10eb6aa8515b",
+      "raw_counts": {
+        "gC-14": {
+          "rows": 795,
+          "valid_scores": 787,
+          "scores_used_with_phone": 351,
+          "max_forward": 787
+        },
+        "gZ-36": {
+          "rows": 1024,
+          "valid_scores": 1016,
+          "scores_used_with_phone": 202,
+          "max_forward": 1016
+        }
+      },
+      "metrics_forward_counts": {
+        "gC-14": 787,
+        "gZ-36": 1016
+      },
+      "reconciled": true
+    }
+  }
+}

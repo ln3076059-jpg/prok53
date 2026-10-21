@@ -1,0 +1,21 @@
+{
+  "generated_at": "2026-10-21T06:39:18.496177+07:00",
+  "completed": {
+    "V26-B0": "V25 E5 immutable reference",
+    "V26-DIAG": "20-event FN ledger and FP ledger generated",
+    "V26-E2": "Corrected expiry, no action",
+    "V26-E3": "Corrected expiry, rule action",
+    "V26-E4": "Corrected expiry, deep action",
+    "V26-E5": "Corrected expiry, hybrid action",
+    "V26-GOV": "Live permission check"
+  },
+  "blocked": {
+    "threshold_or_fusion_fit": "fusion: explicit TRAINING_ALLOWED=true is required",
+    "detector_training": "backbone: explicit TRAINING_ALLOWED=true is required",
+    "independent_holdout": "No authorized fresh holdout candidate freeze"
+  },
+  "not_completed": {
+    "V26-FULL": "Raw-video subjects completed: ['gZ-36']",
+    "V26-SEAT": "Required approved labels/provenance are absent"
+  }
+}

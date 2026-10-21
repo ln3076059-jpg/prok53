@@ -28,7 +28,7 @@ import argparse
 import json
 import time
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 import cv2
 import torch
@@ -105,13 +105,12 @@ class AutonomousVideoInferenceEngine:
             self._pose_estimator = PoseEstimator(POSE_PATH)
         return self._pose_estimator
 
-    def run_session(
+    def run_session_inference(
         self,
         video_path: Path,
-        annotation_path: Path,
         temporal_config: dict[str, Any],
-        matching_policy: TemporalMatchingPolicy,
         max_frames: int | None = None,
+        record_sink: Callable[[dict[str, Any]], None] | None = None,
     ) -> dict[str, Any]:
         """Runs true end-to-end autonomous inference over the full video stream."""
         cap = cv2.VideoCapture(str(video_path))
@@ -120,9 +119,10 @@ class AutonomousVideoInferenceEngine:
 
         fps = cap.get(cv2.CAP_PROP_FPS) or 29.76
         total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-        if max_frames:
-            total_frames = min(total_frames, max_frames)
         total_seconds = total_frames / fps
+        if self.sample_stride < 1 or (max_frames is not None and max_frames < 1):
+            cap.release()
+            raise ValueError("stride and sample limit must be positive")
 
         # Driver ROI geometry in DMD body camera (left cabin seat)
         # Bounded to [0, 72, 832, 684] on 1280x720 video
@@ -205,6 +205,8 @@ class AutonomousVideoInferenceEngine:
             final_detections = merge_detections(raw_detections, iou_threshold=0.50) if len(raw_detections) > 1 else raw_detections
 
             # 2. Context & Pose Verification
+            pose_item = None
+            poses = []
             if not final_detections:
                 obs = Observation(
                     timestamp=timestamp,
@@ -264,6 +266,18 @@ class AutonomousVideoInferenceEngine:
                 "context": obs.phone_context,
                 "emitted_events": len(evs),
             })
+            if record_sink is not None:
+                from dataclasses import asdict
+
+                record_sink({
+                    **prediction_logs[-1],
+                    "observation": asdict(obs),
+                    "raw_detections": raw_detections,
+                    "candidates": final_detections,
+                    "poses": [asdict(pose) for pose in poses],
+                    "roi_xyxy": [rx1, ry1, rx2, ry2],
+                    "candidate_events": [asdict(ev) for ev in evs],
+                })
 
             if max_frames and processed_count >= max_frames:
                 break
@@ -294,6 +308,41 @@ class AutonomousVideoInferenceEngine:
                 else:
                     deduped_preds.append(dict(cand))
 
+        observed_frames = min(total_frames, frame_idx + 1) if processed_count else 0
+        if max_frames and processed_count >= max_frames:
+            observed_frames = min(total_frames, frame_idx + 1)
+        else:
+            observed_frames = min(total_frames, frame_idx)
+        if max_frames is None and observed_frames != total_frames:
+            raise RuntimeError(f"INCOMPLETE_VIDEO_DECODE: {observed_frames}/{total_frames}")
+        return {
+            "mode": self.mode,
+            "video_path": str(video_path),
+            "total_frames": observed_frames,
+            "source_frames": total_frames,
+            "processed_frames": processed_count,
+            "fps": fps,
+            "total_seconds": observed_frames / fps,
+            "wall_time_seconds": total_wall_time,
+            "predicted_events": deduped_preds,
+            "prediction_logs": prediction_logs,
+        }
+
+    def run_session(
+        self,
+        video_path: Path,
+        annotation_path: Path,
+        temporal_config: dict[str, Any],
+        matching_policy: TemporalMatchingPolicy,
+        max_frames: int | None = None,
+    ) -> dict[str, Any]:
+        inference = self.run_session_inference(video_path, temporal_config, max_frames)
+        fps = inference["fps"]
+        total_frames = inference["total_frames"]
+        total_seconds = inference["total_seconds"]
+        processed_count = inference["processed_frames"]
+        total_wall_time = inference["wall_time_seconds"]
+        deduped_preds = inference["predicted_events"]
         # 5. POST-INFERENCE Scoring Against OpenLABEL GT (Frozen Matcher)
         ann = parse_dmd_openlabel(annotation_path, fps=fps, total_frames=total_frames)
         gt_intervals = [i.to_dict() for i in ann.phone_intervals]
@@ -341,7 +390,7 @@ class AutonomousVideoInferenceEngine:
             "matched_events": matched,
             "unmatched_predictions": unmatched_preds,
             "unmatched_gt": unmatched_gts,
-            "predictions_summary": prediction_logs[:100],  # sample for jsonl
+            "predictions_summary": inference["prediction_logs"],
         }
 
 

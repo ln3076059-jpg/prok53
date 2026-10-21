@@ -1,0 +1,381 @@
+{
+  "generated_at": "2026-10-21T01:42:51.536712+00:00",
+  "scope": "RESEARCH_DIAGNOSTIC_NO_NEW_INFERENCE_NO_TRAINING",
+  "source_snapshots": [
+    {
+      "path": "reports/v26_ai85_optimization/experiments/E2/metrics.json",
+      "sha256": "d5c98b578a470ed6380be80c22f13183e6b5061b8a4733c3d32e969ad380c276"
+    },
+    {
+      "path": "reports/v26_ai85_optimization/diagnosis/evidence.json",
+      "sha256": "a1e049c27ddf01ff2158d8252e4aee27ba1f04a131c4338c697177cbd4589039"
+    },
+    {
+      "path": "reports/v27_ai85_research/analyze_fix_feasibility.py",
+      "sha256": "9aec1305282b9af74ab3ef5e901db02c4c92e4a1ba3bee2f98687485cfe2627a"
+    },
+    {
+      "path": "training/dmd/run_autonomous_v21.py",
+      "sha256": "e9d5b2dae9e033ee601fcd1269a3c332d2d834c00e75308981cc94d06cde7ada"
+    },
+    {
+      "path": "training/dmd/run_verified_v24.py",
+      "sha256": "ebdb48daf7f24e481f2066ee8eb2c59068be9e35bc84893b7e1922e042e6d5a4"
+    },
+    {
+      "path": "training/dmd/action_adapter.py",
+      "sha256": "759097588e77f4577158d34855053ef0849bbf66fc8aee9ceb2e01fc368f6f6b"
+    },
+    {
+      "path": "training/dmd/action_checkpoint.py",
+      "sha256": "67c8db093db8c4c033c19bbf0eedf9bd61247ab6cde5e53b1529781630f6a2d9"
+    },
+    {
+      "path": "training/dmd/research_permissions.py",
+      "sha256": "018e4521197bcebf79cebede762f4ac6815feb35d73190a28549a4fefa89bc28"
+    },
+    {
+      "path": "backend/ai/events.py",
+      "sha256": "c65423c820f4f5b412cf662b88fea966ed6f1a7bd904f13577b1e6d6a7eab338"
+    },
+    {
+      "path": "reports/v26_ai85_optimization/experiments/E4/raw_predictions.jsonl",
+      "sha256": "a5ba67d7f650ccbcbacfec54f85659d3b9c916731772c60cdb760addb5ab89cf"
+    },
+    {
+      "path": "reports/v26_ai85_optimization/experiments/E5/raw_predictions.jsonl",
+      "sha256": "9c4bb32ee68fa1bb7fa67539e6d049487ea754321ae1927efd4758d854b9ef32"
+    }
+  ],
+  "baseline": {
+    "run": "E2",
+    "action_mode": "NONE",
+    "tp": 12,
+    "fp": 13,
+    "fn": 8,
+    "precision": 0.48,
+    "recall": 0.6,
+    "f1": 0.5333333333333333,
+    "all_event_gates_gt_085": false
+  },
+  "fn_root_cause_counts": {
+    "DRIVER_ASSOCIATION_OR_CONTEXT_REJECTED": 1,
+    "TEMPORAL_SUPPORT_BELOW_ENGINE_MINIMUM": 3,
+    "NO_PHONE_PROPOSAL_IN_CACHED_TRACE": 2,
+    "SPARSE_ASSOCIATED_EVIDENCE": 2
+  },
+  "cached_action_timing_audit": [
+    {
+      "run": "E4",
+      "valid_centered_scores": 1803,
+      "score_target_differs_from_observation": 1803,
+      "positive_fusion_with_different_target": 563,
+      "delta_seconds_min": 2.0160773492628437,
+      "delta_seconds_max": 2.0161807152532703,
+      "examples": [
+        {
+          "subject_id": "gC-14",
+          "frame_idx": 390,
+          "observation_timestamp": 13.104838709677418,
+          "score_timestamp": 11.088700294494629,
+          "available_at_timestamp": 13.105,
+          "delta_seconds": 2.0161384151827892,
+          "phone_use": 0.1826,
+          "fusion_score": 0.1889624990260601
+        },
+        {
+          "subject_id": "gC-14",
+          "frame_idx": 405,
+          "observation_timestamp": 13.608870967741934,
+          "score_timestamp": 11.592700004577637,
+          "available_at_timestamp": 13.609,
+          "delta_seconds": 2.0161709631642974,
+          "phone_use": 0.4341,
+          "fusion_score": 0.3594533227658272
+        }
+      ],
+      "interpretation": "Observed timestamp mismatch. Metric impact requires an aligned replay; these counts are not proof of how many events were harmed."
+    },
+    {
+      "run": "E5",
+      "valid_centered_scores": 1803,
+      "score_target_differs_from_observation": 1803,
+      "positive_fusion_with_different_target": 553,
+      "delta_seconds_min": 2.0160773492628437,
+      "delta_seconds_max": 2.0161807152532703,
+      "examples": [
+        {
+          "subject_id": "gC-14",
+          "frame_idx": 390,
+          "observation_timestamp": 13.104838709677418,
+          "score_timestamp": 11.088700294494629,
+          "available_at_timestamp": 13.105,
+          "delta_seconds": 2.0161384151827892,
+          "phone_use": 0.1163,
+          "fusion_score": 0.1657574990260601
+        },
+        {
+          "subject_id": "gC-14",
+          "frame_idx": 405,
+          "observation_timestamp": 13.608870967741934,
+          "score_timestamp": 11.592700004577637,
+          "available_at_timestamp": 13.609,
+          "delta_seconds": 2.0161709631642974,
+          "phone_use": 0.2421,
+          "fusion_score": 0.29225332276582716
+        }
+      ],
+      "interpretation": "Observed timestamp mismatch. Metric impact requires an aligned replay; these counts are not proof of how many events were harmed."
+    }
+  ],
+  "hypothetical_count_scenarios": [
+    {
+      "name": "REMOVE_SIX_DUPLICATE_FP_ONLY",
+      "status": "HYPOTHETICAL_NOT_MEASURED",
+      "tp": 12,
+      "fp": 7,
+      "fn": 8,
+      "precision": 0.631578947368421,
+      "recall": 0.6,
+      "f1": 0.6153846153846154,
+      "all_event_gates_gt_085": false
+    },
+    {
+      "name": "REMOVE_ALL_FP_ONLY",
+      "status": "HYPOTHETICAL_NOT_MEASURED",
+      "tp": 12,
+      "fp": 0,
+      "fn": 8,
+      "precision": 1.0,
+      "recall": 0.6,
+      "f1": 0.75,
+      "all_event_gates_gt_085": false
+    },
+    {
+      "name": "RECOVER_ALL_FN_ONLY",
+      "status": "HYPOTHETICAL_NOT_MEASURED",
+      "tp": 20,
+      "fp": 13,
+      "fn": 0,
+      "precision": 0.6060606060606061,
+      "recall": 1.0,
+      "f1": 0.7547169811320755,
+      "all_event_gates_gt_085": false
+    },
+    {
+      "name": "RECOVER_THREE_FN_AND_REMOVE_SIX_FP",
+      "status": "HYPOTHETICAL_NOT_MEASURED",
+      "tp": 15,
+      "fp": 7,
+      "fn": 5,
+      "precision": 0.6818181818181818,
+      "recall": 0.75,
+      "f1": 0.7142857142857143,
+      "all_event_gates_gt_085": false
+    },
+    {
+      "name": "MINIMUM_TP_WITH_LARGEST_PERMITTED_FP",
+      "status": "HYPOTHETICAL_NOT_MEASURED",
+      "tp": 18,
+      "fp": 3,
+      "fn": 2,
+      "precision": 0.8571428571428571,
+      "recall": 0.9,
+      "f1": 0.8780487804878049,
+      "all_event_gates_gt_085": true
+    },
+    {
+      "name": "F1_ALONE_IS_NOT_ALL_GATES",
+      "status": "HYPOTHETICAL_NOT_MEASURED",
+      "tp": 15,
+      "fp": 0,
+      "fn": 5,
+      "precision": 1.0,
+      "recall": 0.75,
+      "f1": 0.8571428571428571,
+      "all_event_gates_gt_085": false
+    }
+  ],
+  "feasible_counts_for_all_event_gates_gt_085": [
+    {
+      "tp": 18,
+      "fn": 2,
+      "max_fp": 3
+    },
+    {
+      "tp": 19,
+      "fn": 1,
+      "max_fp": 3
+    },
+    {
+      "tp": 20,
+      "fn": 0,
+      "max_fp": 3
+    }
+  ],
+  "temporal_support_note": "Analytic grid from source FPS and GT intervals, starting at frame 0; no detector/pose/action was run. Inside-interval sample support is not event recall and does not model outside evidence or matching.",
+  "short_fn_sampling_support": [
+    {
+      "event_id": "GT_05",
+      "duration_seconds": 0.4031999999999982,
+      "current_primary_root_cause": "TEMPORAL_SUPPORT_BELOW_ENGINE_MINIMUM",
+      "variants": [
+        {
+          "stride": 15,
+          "sample_period_seconds": 0.5040322580645161,
+          "sampled_frames_inside_gt": 1,
+          "sample_span_inside_gt_seconds": 0.0,
+          "two_observations_with_050_second_span": false,
+          "two_observations_with_020_second_span": false
+        },
+        {
+          "stride": 10,
+          "sample_period_seconds": 0.33602150537634407,
+          "sampled_frames_inside_gt": 1,
+          "sample_span_inside_gt_seconds": 0.0,
+          "two_observations_with_050_second_span": false,
+          "two_observations_with_020_second_span": false
+        },
+        {
+          "stride": 5,
+          "sample_period_seconds": 0.16801075268817203,
+          "sampled_frames_inside_gt": 3,
+          "sample_span_inside_gt_seconds": 0.3360215053763511,
+          "two_observations_with_050_second_span": false,
+          "two_observations_with_020_second_span": true
+        },
+        {
+          "stride": 3,
+          "sample_period_seconds": 0.10080645161290322,
+          "sampled_frames_inside_gt": 4,
+          "sample_span_inside_gt_seconds": 0.30241935483871885,
+          "two_observations_with_050_second_span": false,
+          "two_observations_with_020_second_span": true
+        }
+      ]
+    },
+    {
+      "event_id": "GT_10",
+      "duration_seconds": 0.8063999999999965,
+      "current_primary_root_cause": "TEMPORAL_SUPPORT_BELOW_ENGINE_MINIMUM",
+      "variants": [
+        {
+          "stride": 15,
+          "sample_period_seconds": 0.5040322580645161,
+          "sampled_frames_inside_gt": 1,
+          "sample_span_inside_gt_seconds": 0.0,
+          "two_observations_with_050_second_span": false,
+          "two_observations_with_020_second_span": false
+        },
+        {
+          "stride": 10,
+          "sample_period_seconds": 0.33602150537634407,
+          "sampled_frames_inside_gt": 2,
+          "sample_span_inside_gt_seconds": 0.336021505376344,
+          "two_observations_with_050_second_span": false,
+          "two_observations_with_020_second_span": true
+        },
+        {
+          "stride": 5,
+          "sample_period_seconds": 0.16801075268817203,
+          "sampled_frames_inside_gt": 4,
+          "sample_span_inside_gt_seconds": 0.5040322580645125,
+          "two_observations_with_050_second_span": true,
+          "two_observations_with_020_second_span": true
+        },
+        {
+          "stride": 3,
+          "sample_period_seconds": 0.10080645161290322,
+          "sampled_frames_inside_gt": 8,
+          "sample_span_inside_gt_seconds": 0.7056451612903274,
+          "two_observations_with_050_second_span": true,
+          "two_observations_with_020_second_span": true
+        }
+      ]
+    },
+    {
+      "event_id": "GT_12",
+      "duration_seconds": 0.6047999999999973,
+      "current_primary_root_cause": "TEMPORAL_SUPPORT_BELOW_ENGINE_MINIMUM",
+      "variants": [
+        {
+          "stride": 15,
+          "sample_period_seconds": 0.5040322580645161,
+          "sampled_frames_inside_gt": 1,
+          "sample_span_inside_gt_seconds": 0.0,
+          "two_observations_with_050_second_span": false,
+          "two_observations_with_020_second_span": false
+        },
+        {
+          "stride": 10,
+          "sample_period_seconds": 0.33602150537634407,
+          "sampled_frames_inside_gt": 2,
+          "sample_span_inside_gt_seconds": 0.3360215053763511,
+          "two_observations_with_050_second_span": false,
+          "two_observations_with_020_second_span": true
+        },
+        {
+          "stride": 5,
+          "sample_period_seconds": 0.16801075268817203,
+          "sampled_frames_inside_gt": 3,
+          "sample_span_inside_gt_seconds": 0.3360215053763511,
+          "two_observations_with_050_second_span": false,
+          "two_observations_with_020_second_span": true
+        },
+        {
+          "stride": 3,
+          "sample_period_seconds": 0.10080645161290322,
+          "sampled_frames_inside_gt": 6,
+          "sample_span_inside_gt_seconds": 0.5040322580645125,
+          "two_observations_with_050_second_span": true,
+          "two_observations_with_020_second_span": true
+        }
+      ]
+    },
+    {
+      "event_id": "GT_14",
+      "duration_seconds": 0.9072000000000173,
+      "current_primary_root_cause": "NO_PHONE_PROPOSAL_IN_CACHED_TRACE",
+      "variants": [
+        {
+          "stride": 15,
+          "sample_period_seconds": 0.5040322580645161,
+          "sampled_frames_inside_gt": 2,
+          "sample_span_inside_gt_seconds": 0.5040322580645125,
+          "two_observations_with_050_second_span": true,
+          "two_observations_with_020_second_span": true
+        },
+        {
+          "stride": 10,
+          "sample_period_seconds": 0.33602150537634407,
+          "sampled_frames_inside_gt": 2,
+          "sample_span_inside_gt_seconds": 0.3360215053763511,
+          "two_observations_with_050_second_span": false,
+          "two_observations_with_020_second_span": true
+        },
+        {
+          "stride": 5,
+          "sample_period_seconds": 0.16801075268817203,
+          "sampled_frames_inside_gt": 5,
+          "sample_span_inside_gt_seconds": 0.6720430107526738,
+          "two_observations_with_050_second_span": true,
+          "two_observations_with_020_second_span": true
+        },
+        {
+          "stride": 3,
+          "sample_period_seconds": 0.10080645161290322,
+          "sampled_frames_inside_gt": 9,
+          "sample_span_inside_gt_seconds": 0.8064516129032313,
+          "two_observations_with_050_second_span": true,
+          "two_observations_with_020_second_span": true
+        }
+      ]
+    }
+  ],
+  "four_stage_conditional_retention_example": {
+    "each_stage_retention": 0.85,
+    "combined_retention": 0.5220062499999999,
+    "equal_retention_for_combined_085": 0.9601845894041878,
+    "note": "Chain of conditional survival rates for the same GT population; not standalone AP or classification accuracy."
+  }
+}

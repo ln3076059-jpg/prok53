@@ -1,0 +1,79 @@
+{
+  "generated_at": "2026-10-21T14:24:40.144867+00:00",
+  "status": "RAW_D5_FULL_DEVELOPMENT_COMPLETE",
+  "selection_eligible": false,
+  "independent_test_claim": false,
+  "cohort": [
+    "gC-14",
+    "gZ-36"
+  ],
+  "config": {
+    "detector_mode": "D5",
+    "action_mode": "NONE",
+    "action_gating": false,
+    "verified_association": true,
+    "sample_stride": 15,
+    "device": "cpu"
+  },
+  "per_subject": {
+    "gC-14": {
+      "source_frames": 11916,
+      "source_fps": 29.76,
+      "source_seconds": 400.4032258064516,
+      "processed_frames": 795,
+      "wall_time_seconds": 334.46,
+      "effective_sampled_fps": 2.38,
+      "predicted_events": 8,
+      "tp": 7,
+      "fp": 1,
+      "fn": 2,
+      "gt": 9,
+      "precision": 0.875,
+      "recall": 0.7778,
+      "f1": 0.8235,
+      "fa_per_min": 0.1499
+    },
+    "gZ-36": {
+      "source_frames": 15351,
+      "source_fps": 29.76,
+      "source_seconds": 515.8266129032257,
+      "processed_frames": 1024,
+      "wall_time_seconds": 425.63,
+      "effective_sampled_fps": 2.41,
+      "predicted_events": 9,
+      "tp": 7,
+      "fp": 2,
+      "fn": 4,
+      "gt": 11,
+      "precision": 0.7778,
+      "recall": 0.6364,
+      "f1": 0.7,
+      "fa_per_min": 0.2326
+    }
+  },
+  "micro": {
+    "tp": 14,
+    "fp": 3,
+    "fn": 6,
+    "gt": 20,
+    "evaluated_minutes": 15.2705,
+    "precision": 0.8235294117647058,
+    "recall": 0.7,
+    "f1": 0.7567567567567567,
+    "false_alarms_per_minute": 0.19645725602376501
+  },
+  "gate": {
+    "threshold": "precision > 0.85 AND recall > 0.85 AND f1 > 0.85",
+    "status": "DEVELOPMENT_TARGET_NOT_MET",
+    "minimum_feasible_counts_on_20_gt": {
+      "tp": 18,
+      "max_fp": 3,
+      "max_fn": 2
+    },
+    "current_gap": {
+      "additional_tp_needed": 4,
+      "additional_fp_allowed": 0
+    }
+  },
+  "comparison_warning": "Cached E2 and raw D5 differ in execution path; their delta is not a single-variable causal estimate."
+}

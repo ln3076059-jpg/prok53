@@ -1,0 +1,38 @@
+{
+  "experiment_id": "V27-RAW-D5-ASSOCIATION-BYPASS-UPPER-BOUND",
+  "registered_at": "2026-10-21T14:26:36+00:00",
+  "status": "PRE_REGISTERED_BEFORE_RESULT",
+  "purpose": "Measure the maximum event recovery attributable to removing the current verified-association rejection path.",
+  "cohort": [
+    "gC-14",
+    "gZ-36"
+  ],
+  "fixed_config": {
+    "detector_mode": "D5",
+    "specialist_imgsz": 640,
+    "auxiliary_imgsz": 640,
+    "confidence_floor": 0.15,
+    "sample_stride": 15,
+    "action_mode": "NONE",
+    "action_gating": false,
+    "temporal_config": "models/temporal_config_v2.json",
+    "matching_policy": "reports/DMD_EVENT_MATCHING_POLICY_FREEZE.json",
+    "device": "cpu"
+  },
+  "single_changed_variable": {
+    "name": "verified_association",
+    "baseline": true,
+    "candidate": false
+  },
+  "selection_eligible": false,
+  "production_eligible": false,
+  "reason_not_production_eligible": "Bypassing association removes passenger/unknown safeguards and is diagnostic only.",
+  "comparison_order": [
+    "additional_true_positives",
+    "new_false_positives",
+    "precision",
+    "recall",
+    "f1"
+  ],
+  "mandatory_system_gate": "precision > 0.85 AND recall > 0.85 AND f1 > 0.85"
+}

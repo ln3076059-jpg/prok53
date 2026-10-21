@@ -1,0 +1,92 @@
+{
+  "status": "PROVISIONAL_COMPONENT_METRICS_ONLY",
+  "phone_detector": {
+    "label_status": "PROPOSAL_MODEL_ONLY_NOT_GOVERNED_FINAL_DATA",
+    "selection_eligible": false,
+    "validation_counts": {
+      "images": 1782,
+      "phone_positive_images": 181,
+      "phone_instances": 229
+    },
+    "variants": [
+      {
+        "resolution": 640,
+        "precision": 0.8808593582965508,
+        "recall": 0.8209606986899564,
+        "map50": 0.8974483343532023,
+        "map50_95": 0.643289986261325,
+        "f1_from_reported_precision_recall": 0.8498559072282181,
+        "validator_speed_ms": {
+          "preprocess": 0.1662139517395402,
+          "inference": 7.993102419191869,
+          "loss": 0.0003627188550083576,
+          "postprocess": 0.6893007890008417
+        },
+        "wall_time_seconds": 197.46083592099995,
+        "peak_cuda_allocated_bytes": 1637980672,
+        "device": "cuda:0"
+      },
+      {
+        "resolution": 960,
+        "precision": 0.9395088851021023,
+        "recall": 0.9039301310043668,
+        "map50": 0.9455872647512469,
+        "map50_95": 0.749730228631748,
+        "f1_from_reported_precision_recall": 0.9213761693986636,
+        "validator_speed_ms": {
+          "preprocess": 0.3667046919193205,
+          "inference": 19.829532080246885,
+          "loss": 0.00026578507307835483,
+          "postprocess": 0.4369986386081488
+        },
+        "wall_time_seconds": 39.26720513400005,
+        "peak_cuda_allocated_bytes": 3473445376,
+        "device": "cuda:0"
+      },
+      {
+        "resolution": 1280,
+        "precision": 0.8256816950401561,
+        "recall": 0.7816593886462883,
+        "map50": 0.8527460753779919,
+        "map50_95": 0.6189370093132236,
+        "f1_from_reported_precision_recall": 0.8030676942336187,
+        "validator_speed_ms": {
+          "preprocess": 0.6754864848483998,
+          "inference": 38.90236677160479,
+          "loss": 0.0003244416384644636,
+          "postprocess": 0.4558614102129483
+        },
+        "wall_time_seconds": 74.187775665,
+        "peak_cuda_allocated_bytes": 6021664768,
+        "device": "cuda:0"
+      }
+    ],
+    "best_observed_by_f1": {
+      "resolution": 960,
+      "precision": 0.9395088851021023,
+      "recall": 0.9039301310043668,
+      "map50": 0.9455872647512469,
+      "map50_95": 0.749730228631748,
+      "f1_from_reported_precision_recall": 0.9213761693986636,
+      "validator_speed_ms": {
+        "preprocess": 0.3667046919193205,
+        "inference": 19.829532080246885,
+        "loss": 0.00026578507307835483,
+        "postprocess": 0.4369986386081488
+      },
+      "wall_time_seconds": 39.26720513400005,
+      "peak_cuda_allocated_bytes": 3473445376,
+      "device": "cuda:0"
+    }
+  },
+  "driver_role_association": {
+    "status": "NOT_ESTABLISHED"
+  },
+  "action_classifier": {
+    "status": "NOT_ESTABLISHED"
+  },
+  "event_pipeline": {
+    "status": "MEASURED_SEPARATELY",
+    "result": "reports/v27_ai85_execution/metrics_comparison.json"
+  }
+}

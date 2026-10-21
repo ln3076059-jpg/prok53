@@ -1,0 +1,29 @@
+{
+  "manifest_id": "ROADWATCH_V23_RUNTIME_MANIFEST",
+  "version": "1.0.0",
+  "python_version": "3.11.9",
+  "torch_threads": 4,
+  "inference_schedule": {
+    "stride": 15,
+    "source_fps": 29.76,
+    "sample_cadence_seconds": 0.5040322580645161,
+    "roi_geometry": [0, 72, 832, 684],
+    "roi_norm": [0.0, 0.10, 0.65, 0.95]
+  },
+  "pipeline_stages": [
+    "VIDEO_DECODING",
+    "DRIVER_CABIN_ROI_LOCALIZATION",
+    "PHONE_DETECTION_SPECIALIST_AUXILIARY_NMS",
+    "POSE_ESTIMATION_DRIVER_CROP",
+    "OCCUPANT_SEAT_ASSOCIATION",
+    "ACTION_RECOGNITION_ADAPTER",
+    "TEMPORAL_EVENT_ENGINE",
+    "ACTIVE_BOUNDARY_LIFECYCLE_TRACKER"
+  ],
+  "frozen_matcher": {
+    "policy_path": "reports/DMD_EVENT_MATCHING_POLICY_FREEZE.json",
+    "matcher_path": "training/dmd/temporal_eval.py",
+    "iou_threshold": 0.3,
+    "onset_tolerance_seconds": 2.5
+  }
+}

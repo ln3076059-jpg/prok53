@@ -55,3 +55,24 @@ reports/ai85_plus*/temporal/*_dense.npz
 reports/ai85_plus/evidence_images/
 reports/ai85_plus/kaggle_remote/
 kaggle/ai85_plus_private_bundle/*.pt
+
+# V22 local inference traces and label-derived event records stay local.
+reports/v22_verified_ai85/**/private/
+reports/v22_verified_ai85/**/full_predictions_*.jsonl
+reports/v22_verified_ai85/**/full_event_matches.json
+reports/v22_verified_ai85/**/event_matches.json
+reports/v22_verified_ai85/fp_fn_ledger.json
+reports/v22_verified_ai85/action_diagnostics_private/
+
+# V23+ raw inference traces, label-derived records, and remote runtime downloads stay local.
+reports/v2[3-9]_*/**/raw_predictions.jsonl
+reports/v2[3-9]_*/**/autonomous_predictions.jsonl
+reports/v2[3-9]_*/**/phone_candidate_records.jsonl
+reports/v2[3-9]_*/**/action_predictions.jsonl
+reports/v2[3-9]_*/**/event_predictions.jsonl
+reports/v2[3-9]_*/**/event_matches.json
+reports/v2[3-9]_*/**/launcher_stdout.log
+reports/v2[3-9]_*/**/launcher_stderr.log
+reports/v2[3-9]_*/**/run.log
+reports/v27_ai85_execution/kaggle_gpu_preflight_v*/
+reports/v27_ai85_execution/kaggle_phone_component_v*/

@@ -14,9 +14,8 @@ Strict Compliance:
 
 from __future__ import annotations
 
-import hashlib
 from collections import deque
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from pathlib import Path
 from typing import Any
 
@@ -26,10 +25,14 @@ import torch
 from torchvision.models import ResNet18_Weights, resnet18
 
 from backend.ai.auxiliary import PoseEvidence
+from training.dmd.action_checkpoint import (
+    CheckpointSafetyError,
+    sha256_file,
+    validate_checkpoint_manifest,
+)
 from training.dmd.action_model import RuleGuidedPoseClassifier
 from training.dmd.v6_action_hierarchy import (
     HierarchicalResNetGRUClassifier,
-    hierarchical_probabilities,
 )
 from training.dmd.v7_action_models import (
     BinaryGateResNetGRUClassifier,
@@ -61,8 +64,28 @@ class ActionInferenceAdapter:
         mode: str = "HYBRID_RULE_V6",  # "RULE_ONLY", "V6_HIERARCHICAL", "V7_BINARY_GATE", "HYBRID_RULE_V6"
         heldout_subject: str = "gC-14",
         device: str = "cpu",
+        missing_checkpoint_policy: str = "RULE_ONLY",
+        manifest_path: Path | None = None,
+        causal_mode: str = "STRICT_CAUSAL_ONLINE",
     ):
+        if mode not in {"RULE_ONLY", "V6_HIERARCHICAL", "V7_BINARY_GATE", "HYBRID_RULE_V6"}:
+            raise ValueError(f"Unsupported action mode: {mode}")
+        if missing_checkpoint_policy not in {"RULE_ONLY", "ERROR"}:
+            raise ValueError("missing_checkpoint_policy must be RULE_ONLY or ERROR")
+        if causal_mode not in {"STRICT_CAUSAL_ONLINE", "DECLARED_LATENCY_CENTERED"}:
+            raise ValueError(f"Unsupported causal mode: {causal_mode}")
         self.mode = mode
+        self.requested_mode = mode
+        self.actual_mode = "RULE_ONLY"
+        self.causal_mode = causal_mode
+        self.declared_latency_seconds = 0.0
+        self.forward_count = 0
+        self.fallback_reason = None
+        self.checkpoint_path: Path | None = None
+        self.manifest_path = manifest_path
+        self.contract: dict[str, Any] = {}
+        self._stream_key = None
+        self._last_timestamp = None
         self.heldout_subject = heldout_subject
         self.device = device
 
@@ -74,15 +97,26 @@ class ActionInferenceAdapter:
 
         # Temporal embedding buffer for deep temporal models (seq_len=9)
         self.embedding_buffer: deque[np.ndarray] = deque(maxlen=9)
+        self.timestamp_buffer: deque[float] = deque(maxlen=9)
 
-        if mode in ("V6_HIERARCHICAL", "HYBRID_RULE_V6"):
-            self._init_v6_model()
-        elif mode == "V7_BINARY_GATE":
-            self._init_v7_model()
+        try:
+            if mode in ("V6_HIERARCHICAL", "HYBRID_RULE_V6"):
+                self._init_v6_model()
+            elif mode == "V7_BINARY_GATE":
+                self._init_v7_model()
+        except CheckpointSafetyError as exc:
+            self.fallback_reason = str(exc)
+            if missing_checkpoint_policy == "ERROR":
+                raise
 
     def _get_backbone(self) -> torch.nn.Module:
         if self._resnet_backbone is None:
             weights = ResNet18_Weights.DEFAULT
+            weights_path = Path(torch.hub.get_dir()) / "checkpoints" / Path(weights.url).name
+            if not weights_path.is_file() or sha256_file(weights_path) != self.contract.get(
+                "backbone_sha256"
+            ):
+                raise CheckpointSafetyError("FEATURE_EXTRACTOR_SHA_MISMATCH")
             model = resnet18(weights=weights)
             model.fc = torch.nn.Identity()
             model.eval()
@@ -92,57 +126,106 @@ class ActionInferenceAdapter:
         return self._resnet_backbone
 
     def _init_v6_model(self) -> None:
-        ckpt_path = (
+        self._load_verified_model(
             MODELS_DIR
             / "candidate"
             / "v6_action_ablation_001"
-            / f"hierarchical_loss_only_loso_{self.heldout_subject}.pt"
+            / f"hierarchical_loss_only_loso_{self.heldout_subject}.pt",
+            HierarchicalResNetGRUClassifier,
         )
-        if not ckpt_path.is_file():
-            # Fallback to general available fold if exact heldout subject not present
-            ckpt_path = (
-                MODELS_DIR
-                / "candidate"
-                / "v6_action_ablation_001"
-                / "hierarchical_loss_only_loso_gZ-36.pt"
-            )
-
-        if ckpt_path.is_file():
-            data = torch.load(str(ckpt_path), map_location=self.device)
-            model = HierarchicalResNetGRUClassifier()
-            model.load_state_dict(data["model_state_dict"])
-            model.eval()
-            for p in model.parameters():
-                p.requires_grad_(False)
-            self._deep_model = model.to(self.device)
-            self._deep_model_sha = hashlib.sha256(ckpt_path.read_bytes()).hexdigest()
-            self._deep_model_name = ckpt_path.name
 
     def _init_v7_model(self) -> None:
-        ckpt_path = (
+        self._load_verified_model(
             MODELS_DIR
             / "candidate"
             / "v7_research"
-            / f"v7_d_binary_gate_loso_{self.heldout_subject}.pt"
+            / f"v7_d_binary_gate_loso_{self.heldout_subject}.pt",
+            BinaryGateResNetGRUClassifier,
         )
-        if not ckpt_path.is_file():
-            ckpt_path = (
-                MODELS_DIR
-                / "candidate"
-                / "v7_research"
-                / "v7_d_binary_gate_loso_gZ-36.pt"
-            )
 
-        if ckpt_path.is_file():
-            data = torch.load(str(ckpt_path), map_location=self.device)
-            model = BinaryGateResNetGRUClassifier()
-            model.load_state_dict(data["model_state_dict"])
-            model.eval()
-            for p in model.parameters():
-                p.requires_grad_(False)
-            self._deep_model = model.to(self.device)
-            self._deep_model_sha = hashlib.sha256(ckpt_path.read_bytes()).hexdigest()
-            self._deep_model_name = ckpt_path.name
+    def _load_verified_model(self, ckpt_path: Path, model_class: type) -> None:
+        self.checkpoint_path = ckpt_path
+        self.contract = validate_checkpoint_manifest(
+            ckpt_path,
+            self.manifest_path or ckpt_path.with_suffix(".manifest.json"),
+            self.heldout_subject,
+            model_class.__name__,
+        )
+        data = torch.load(ckpt_path, map_location=self.device, weights_only=True)
+        if data.get("heldout_subject") != self.heldout_subject or set(
+            data.get("training_subjects", [])
+        ) != set(self.contract["training_subject_ids"]):
+            raise CheckpointSafetyError("CHECKPOINT_EMBEDDED_SPLIT_MISMATCH")
+        model = model_class()
+        try:
+            model.load_state_dict(data["model_state_dict"], strict=True)
+        except (RuntimeError, KeyError) as exc:
+            raise CheckpointSafetyError("INCOMPATIBLE_CHECKPOINT_ARCHITECTURE") from exc
+        # A centered training label cannot be presented as a causal current-frame score.
+        # Offline head diagnostics or declared-latency inference remain possible.
+        if (
+            self.contract["feature_preprocessing"]["label_position"] == "CENTER"
+            and self.causal_mode != "DECLARED_LATENCY_CENTERED"
+        ):
+            raise CheckpointSafetyError("CENTERED_TRAINING_NOT_VALIDATED_FOR_CAUSAL_GATING")
+        if self.causal_mode == "DECLARED_LATENCY_CENTERED":
+            seq_len = int(self.contract["feature_preprocessing"].get("sequence_length", 9))
+            period = float(self.contract.get("sample_period_seconds", 0.5))
+            self.declared_latency_seconds = (seq_len // 2) * period
+        model.eval()
+        for parameter in model.parameters():
+            parameter.requires_grad_(False)
+        self._deep_model = model.to(self.device)
+        self._deep_model_sha = self.contract["sha256"]
+        self._deep_model_name = ckpt_path.name
+        self.actual_mode = self.requested_mode
+
+    def reset(self) -> None:
+        self.embedding_buffer.clear()
+        self.timestamp_buffer.clear()
+        self._stream_key = None
+        self._last_timestamp = None
+
+    def observe_embedding(
+        self, embedding: np.ndarray, stream_key: tuple, timestamp: float
+    ) -> np.ndarray | None:
+        if embedding.shape != (512,) or not np.isfinite(embedding).all():
+            raise ValueError("GRU requires a finite 512-dimensional embedding")
+        period = float(self.contract.get("sample_period_seconds", 0.5))
+        if stream_key == self._stream_key and self._last_timestamp is not None:
+            if timestamp == self._last_timestamp:
+                # Idempotent duplicate delivery: never append or forward twice.
+                return None
+            if timestamp < self._last_timestamp:
+                raise CheckpointSafetyError("OUT_OF_ORDER_TEMPORAL_FEATURE")
+        if stream_key != self._stream_key or (
+            self._last_timestamp is not None
+            and timestamp - self._last_timestamp > 1.5 * period
+        ):
+            self.reset()
+        self._stream_key = stream_key
+        self._last_timestamp = timestamp
+        self.embedding_buffer.append(embedding)
+        self.timestamp_buffer.append(float(timestamp))
+        return np.stack(self.embedding_buffer) if len(self.embedding_buffer) == 9 else None
+
+    def current_sequence_timestamps(self) -> tuple[float, ...]:
+        """Return timestamps for the current complete temporal window."""
+        return tuple(self.timestamp_buffer) if len(self.timestamp_buffer) == 9 else ()
+
+    def provenance(self) -> dict[str, Any]:
+        return {
+            "requested_mode": self.requested_mode,
+            "actual_mode": self.actual_mode,
+            "causal_mode": self.causal_mode,
+            "declared_latency_seconds": self.declared_latency_seconds,
+            "forward_count": self.forward_count,
+            "checkpoint_path": str(self.checkpoint_path) if self.checkpoint_path else None,
+            "checkpoint_sha": self._deep_model_sha if self._deep_model is not None else None,
+            "model_loaded": self._deep_model is not None,
+            "fallback_reason": self.fallback_reason,
+            "calibration_status": "UNCALIBRATED_SCORES",
+        }
 
     def extract_crop_embedding(self, driver_crop: np.ndarray) -> np.ndarray:
         """Extract frozen ResNet-18 512-dim embedding from driver crop."""
@@ -151,15 +234,20 @@ class ActionInferenceAdapter:
         std = torch.tensor([0.229, 0.224, 0.225], device=self.device).view(1, 3, 1, 1)
 
         # Preprocess to 112x112 RGB
-        resized = cv2.resize(driver_crop, (112, 112), interpolation=cv2.INTER_AREA)
+        resized = cv2.resize(driver_crop, (64, 64), interpolation=cv2.INTER_AREA)
         # Convert BGR to RGB
         rgb = cv2.cvtColor(resized, cv2.COLOR_BGR2RGB)
-        tensor = torch.from_numpy(rgb).permute(2, 0, 1).unsqueeze(0).float().div_(255.0).to(self.device)
+        tensor = (
+            torch.from_numpy(rgb).permute(2, 0, 1).unsqueeze(0).float().div_(255.0).to(self.device)
+        )
+        tensor = torch.nn.functional.interpolate(
+            tensor, size=(112, 112), mode="bilinear", align_corners=False
+        )
         normed = (tensor - mean) / std
 
         with torch.inference_mode():
             emb = backbone(normed).cpu().numpy()[0]
-        return emb
+        return emb.astype(np.float16).astype(np.float32)
 
     def _extract_pose_feature_vector(
         self, pose: PoseEvidence | None, phone_det_box: list[float] | None
@@ -198,7 +286,10 @@ class ActionInferenceAdapter:
 
         # Phone distance to wrists and face
         if phone_det_box:
-            ph_center = ((phone_det_box[0] + phone_det_box[2]) / 2, (phone_det_box[1] + phone_det_box[3]) / 2)
+            ph_center = (
+                (phone_det_box[0] + phone_det_box[2]) / 2,
+                (phone_det_box[1] + phone_det_box[3]) / 2,
+            )
             ph_lw = norm_dist(ph_center, l_wrist)
             ph_rw = norm_dist(ph_center, r_wrist)
             ph_face = norm_dist(ph_center, nose)
@@ -207,30 +298,49 @@ class ActionInferenceAdapter:
             ph_rw = 2.0
             ph_face = 2.0
 
-        feat = np.array([
-            lw_le, lw_re, rw_re, rw_le,
-            lw_nose, rw_nose,
-            0.5, 0.5,  # lw_ls, rw_rs placeholder
-            60.0 if min(lw_le, lw_nose) < 0.3 else 120.0,  # l_elbow estimate
-            60.0 if min(rw_re, rw_nose) < 0.3 else 120.0,  # r_elbow estimate
-            ph_lw, ph_rw, ph_face,
-            len(face_pts) + len(hand_pts),
-            pose.confidence,
-            diag,
-        ], dtype=np.float32)
+        feat = np.array(
+            [
+                lw_le,
+                lw_re,
+                rw_re,
+                rw_le,
+                lw_nose,
+                rw_nose,
+                0.5,
+                0.5,  # lw_ls, rw_rs placeholder
+                60.0 if min(lw_le, lw_nose) < 0.3 else 120.0,  # l_elbow estimate
+                60.0 if min(rw_re, rw_nose) < 0.3 else 120.0,  # r_elbow estimate
+                ph_lw,
+                ph_rw,
+                ph_face,
+                len(face_pts) + len(hand_pts),
+                pose.confidence,
+                diag,
+            ],
+            dtype=np.float32,
+        )
         return feat
 
     def predict(
         self,
-        driver_crop: np.ndarray,
+        driver_crop: np.ndarray | None,
         pose: PoseEvidence | None,
         phone_conf: float = 0.0,
         phone_box_local: list[float] | None = None,
+        *,
+        session_id: str = "UNSPECIFIED",
+        camera_id: str = "UNSPECIFIED",
+        occupant_track_id: str = "UNKNOWN",
+        timestamp: float | None = None,
+        embedding: np.ndarray | None = None,
+        sequence: np.ndarray | None = None,
     ) -> ActionScores:
         """Computes comprehensive action scores."""
         # 1. Rule-guided pose classification
         pose_feat = self._extract_pose_feature_vector(pose, phone_box_local)
-        rule_probs = self.rule_classifier.predict_probabilities(pose_feat, phone_detector_conf=phone_conf)
+        rule_probs = self.rule_classifier.predict_probabilities(
+            pose_feat, phone_detector_conf=phone_conf
+        )
 
         rule_safe = float(rule_probs.normal)
         rule_phone = float(rule_probs.phonecall + rule_probs.texting)
@@ -239,7 +349,11 @@ class ActionInferenceAdapter:
         # If only rule-based mode requested or deep model absent
         if self.mode == "RULE_ONLY" or self._deep_model is None:
             uncertainty = 1.0 - max(rule_safe, rule_phone, rule_other)
-            best_action = "SAFE_DRIVING" if rule_safe >= max(rule_phone, rule_other) else ("PHONE_USE" if rule_phone >= rule_other else "OTHER_ACTIVITY")
+            best_action = (
+                "SAFE_DRIVING"
+                if rule_safe >= max(rule_phone, rule_other)
+                else ("PHONE_USE" if rule_phone >= rule_other else "OTHER_ACTIVITY")
+            )
             return ActionScores(
                 safe_driving=rule_safe,
                 phone_use=rule_phone,
@@ -247,27 +361,56 @@ class ActionInferenceAdapter:
                 uncertainty=round(uncertainty, 4),
                 predicted_action=best_action,
                 provenance={
+                    **self.provenance(),
                     "model_type": "RuleGuidedPoseClassifier",
                     "checkpoint_sha256": "DETERMINISTIC_PRIOR",
                     "calibration": "RULE_GUIDED_PRIOR",
+                    "rule_phonecall": float(rule_probs.phonecall),
+                    "rule_texting": float(rule_probs.texting),
+                    "rule_predicted_class": rule_probs.predicted_class,
                 },
             )
 
         # 2. Deep temporal sequence classification
-        emb = self.extract_crop_embedding(driver_crop)
-        self.embedding_buffer.append(emb)
+        if sequence is not None:
+            seq_array = np.asarray(sequence, dtype=np.float32)
+            if seq_array.shape != (9, 512) or not np.isfinite(seq_array).all():
+                raise ValueError("sequence must be a finite [9, 512] array")
+        else:
+            if embedding is not None:
+                emb = embedding
+            elif driver_crop is not None:
+                emb = self.extract_crop_embedding(driver_crop)
+            else:
+                raise ValueError("Either driver_crop, embedding, or sequence must be provided")
 
-        # Pad sequence if buffer not full
-        seq_array = np.array(list(self.embedding_buffer))
-        if len(seq_array) < 9:
-            # Repeat first embedding to reach length 9
-            pad_len = 9 - len(seq_array)
-            pad = np.repeat(seq_array[:1], pad_len, axis=0)
-            seq_array = np.concatenate([pad, seq_array], axis=0)
+            if (
+                timestamp is None
+                or session_id == "UNSPECIFIED"
+                or camera_id == "UNSPECIFIED"
+                or occupant_track_id == "UNKNOWN"
+            ):
+                raise CheckpointSafetyError("SEQUENCE_IDENTITY_AND_TIMING_REQUIRED")
+            seq_array = self.observe_embedding(
+                emb, (self.heldout_subject, session_id, camera_id, occupant_track_id), timestamp
+            )
+        if seq_array is None:
+            return ActionScores(
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                "UNKNOWN",
+                {
+                    **self.provenance(),
+                    "reason": "INSUFFICIENT_SEQUENCE_HISTORY",
+                },
+            )
 
         seq_tensor = torch.from_numpy(seq_array).unsqueeze(0).float().to(self.device)
 
         with torch.inference_mode():
+            self.forward_count += 1
             if isinstance(self._deep_model, HierarchicalResNetGRUClassifier):
                 coarse_logits, phone_logits = self._deep_model(seq_tensor)
                 coarse_probs = torch.softmax(coarse_logits, dim=1).cpu().numpy()[0]
@@ -308,7 +451,11 @@ class ActionInferenceAdapter:
             fused_safe, fused_phone, fused_other = deep_safe, deep_phone, deep_other
 
         uncertainty = 1.0 - max(fused_safe, fused_phone, fused_other)
-        best_action = "SAFE_DRIVING" if fused_safe >= max(fused_phone, fused_other) else ("PHONE_USE" if fused_phone >= fused_other else "OTHER_ACTIVITY")
+        best_action = (
+            "SAFE_DRIVING"
+            if fused_safe >= max(fused_phone, fused_other)
+            else ("PHONE_USE" if fused_phone >= fused_other else "OTHER_ACTIVITY")
+        )
 
         return ActionScores(
             safe_driving=round(fused_safe, 4),
@@ -317,9 +464,92 @@ class ActionInferenceAdapter:
             uncertainty=round(uncertainty, 4),
             predicted_action=best_action,
             provenance={
+                **self.provenance(),
                 "model_type": f"{self.mode}:{self._deep_model_name}",
                 "checkpoint_sha256": self._deep_model_sha,
                 "heldout_subject": self.heldout_subject,
-                "calibration": "UNCALIBRATED_OVR_SIGMOID",
+                "calibration": "UNCALIBRATED_SOFTMAX_SCORES",
+                "rule_phonecall": float(rule_probs.phonecall),
+                "rule_texting": float(rule_probs.texting),
+                "rule_predicted_class": rule_probs.predicted_class,
             },
         )
+
+    def predict_from_embedding(
+        self,
+        embedding: np.ndarray,
+        pose: PoseEvidence | None,
+        phone_conf: float = 0.0,
+        phone_box_local: list[float] | None = None,
+        *,
+        session_id: str = "UNSPECIFIED",
+        camera_id: str = "UNSPECIFIED",
+        occupant_track_id: str = "UNKNOWN",
+        timestamp: float | None = None,
+    ) -> ActionScores:
+        """Public API to evaluate action from precomputed/cached embedding."""
+        return self.predict(
+            driver_crop=None,
+            pose=pose,
+            phone_conf=phone_conf,
+            phone_box_local=phone_box_local,
+            session_id=session_id,
+            camera_id=camera_id,
+            occupant_track_id=occupant_track_id,
+            timestamp=timestamp,
+            embedding=embedding,
+        )
+
+    def predict_from_sequence(
+        self,
+        sequence: np.ndarray,
+        pose: PoseEvidence | None,
+        phone_conf: float = 0.0,
+        phone_box_local: list[float] | None = None,
+        *,
+        session_id: str,
+        camera_id: str,
+        occupant_track_id: str,
+        sequence_timestamps: tuple[float, ...],
+        available_at_timestamp: float,
+    ) -> ActionScores:
+        """Score an already-observed window without mutating temporal state again.
+
+        Center-labelled checkpoints target the middle element of the window.  The
+        score is only available after the last element has arrived, so both times
+        are recorded and must not be presented as an early causal decision.
+        """
+        if len(sequence_timestamps) != 9:
+            raise ValueError("sequence_timestamps must contain 9 entries")
+        if any(
+            right <= left
+            for left, right in zip(sequence_timestamps, sequence_timestamps[1:], strict=False)
+        ):
+            raise ValueError("sequence timestamps must be strictly increasing")
+        # Stored feature timestamps retain full FPS precision while legacy traces
+        # round query timestamps to milliseconds.  One millisecond is treated as
+        # the same source frame only after frame identity has been validated.
+        if available_at_timestamp + 1e-3 < sequence_timestamps[-1]:
+            raise ValueError("score cannot be available before the final feature")
+        scores = self.predict(
+            driver_crop=None,
+            pose=pose,
+            phone_conf=phone_conf,
+            phone_box_local=phone_box_local,
+            session_id=session_id,
+            camera_id=camera_id,
+            occupant_track_id=occupant_track_id,
+            timestamp=available_at_timestamp,
+            sequence=sequence,
+        )
+        score_timestamp = sequence_timestamps[len(sequence_timestamps) // 2]
+        timing = {
+            "sequence_timestamps": list(sequence_timestamps),
+            "score_timestamp": score_timestamp,
+            "available_at_timestamp": float(max(available_at_timestamp, sequence_timestamps[-1])),
+            "emission_latency_seconds": float(
+                max(available_at_timestamp, sequence_timestamps[-1]) - score_timestamp
+            ),
+            "state_updated_by_call": False,
+        }
+        return replace(scores, provenance={**scores.provenance, **timing})

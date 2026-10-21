@@ -1,0 +1,13 @@
+{
+  "scope": "FULL_COHORT_AUTONOMOUS_OBSERVATION_REPLAY_LEGACY_DRIVER_ROLE",
+  "changed_factor": "activation-window output versus last physically positive timestamp while active",
+  "baseline_prediction_sha256": "c5828e9c7d8953af4b563669f68098a83017903e2c9d7893f8733c39c61b9bcc",
+  "config_sha256": "191918e41e5715008a3a90c03aa062d86c4fe7086401f55c2fa55d5d1c189b4f",
+  "matcher_sha256": "438f6e321df37f045aa89fc8972828f9e6bd2fd1e600f89f707b76fcc37f8db6",
+  "policy_sha256": "43dde1904e75e080787cb82cfb68a309ed8149074285041017a867a4363168b2",
+  "source_sha256": "71f5209a362c27ecd1d0ea01576b083568a67ea9f6372980c37a4fc6ef1b53c9",
+  "role_verification": false,
+  "model_refitting": false,
+  "threshold_tuning": false,
+  "full_detector_rerun": false
+}

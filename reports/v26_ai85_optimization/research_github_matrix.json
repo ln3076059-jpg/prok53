@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.0.0",
+  "review_date": "2026-10-21",
+  "scope": "Papers and official code relevant to ROADWATCH phone-use, driver-action, temporal localization, small-object and seatbelt branches",
+  "roadwatch_reference": {
+    "event_run": "V26 E2 cached D5 development diagnostic",
+    "tp": 12,
+    "fp": 13,
+    "fn": 8,
+    "precision": 0.48,
+    "recall": 0.6,
+    "f1": 0.5333333333333333,
+    "warning": "Twenty events from two repeatedly inspected development subjects; not independent holdout evidence."
+  },
+  "studies": [
+    {
+      "id": "DMD_2020",
+      "paper": "DMD: A Large-Scale Multi-Modal Driver Monitoring Dataset for Attention and Alertness Analysis",
+      "paper_url": "https://arxiv.org/pdf/2008.12085",
+      "official_code_url": "https://github.com/Vicomtech/DMD-Driver-Monitoring-Dataset",
+      "reviewed_head": "151b44b79d2de32a70d6e40c3fce553ef81c17d8",
+      "code_status": "AVAILABLE_DATASET_AND_ANNOTATION_TOOLS; TRAINING_BASELINE_NOT_PACKAGED_AS_ROADWATCH_REPLACEMENT",
+      "reported_metric": "92.0% test Top-1, RGB MobileNetV2 MaxP-MLP, four segments",
+      "split": "approximately 24/7/6 drivers for train/validation/test",
+      "task": "curated clip action classification",
+      "comparability": "LOW_TO_MEDIUM",
+      "reason": "Same source domain and action semantics, but no untrimmed event P/R/F1 or phone association."
+    },
+    {
+      "id": "DRIVECLIP_2024",
+      "paper": "Vision-Language Models can Identify Distracted Driver Behavior from Naturalistic Videos",
+      "paper_url": "https://arxiv.org/pdf/2306.10159",
+      "official_code_url": "https://github.com/zahid-isu/DriveCLIP",
+      "reviewed_head": "782ae3b2de532e1c5aa2f0a0b54e7b8eaff771ba",
+      "code_status": "AVAILABLE_BUT_README_DESCRIBES_FRAME_BASED_FRAMEWORK; HIGH_VIDEOCLIP_PATH_NOT_FULLY_DOCUMENTED",
+      "reported_metric": "98.44% DMD VideoCLIP Top-1 at 1 FPS with held-out driver sets; 93.39% Multi-frameCLIP; 82.65% Single-frameCLIP; 48.12% zero-shot",
+      "task": "frame/clip action classification",
+      "comparability": "MEDIUM_FOR_ACTION_HEAD_LOW_FOR_EVENT_BOUNDARIES",
+      "reason": "Strong candidate representation, but headline score is not zero-shot and not event F1."
+    },
+    {
+      "id": "DUALSCOPE_2026",
+      "paper": "DualScope: Capturing Critical Spatial and Temporal Cues for Distracted Driving Activity Recognition",
+      "paper_url": "https://ojs.aaai.org/index.php/AAAI/article/view/37812",
+      "checkpoint_url": "https://huggingface.co/Qqqzzj/DualScope",
+      "claimed_code_url": "https://github.com/Qqqzzjsupr3me/DualScope",
+      "reviewed_head": null,
+      "code_status": "CLAIMED_GITHUB_RETURNS_404_AT_REVIEW_DATE; CHECKPOINTS_AVAILABLE",
+      "reported_metric": "98.63% DMD Top-1",
+      "task": "video action classification with behavior-centric spatial and multi-scale temporal modeling",
+      "comparability": "MEDIUM_FOR_ARCHITECTURE_LOW_FOR_REPRODUCIBILITY_AND_EVENT_METRIC",
+      "reason": "Architecture addresses lost local detail and redundant frames, but source code link is unavailable and metric is Top-1."
+    },
+    {
+      "id": "M2DAR_2023",
+      "paper": "M2DAR: Multi-View Multi-Scale Driver Action Recognition with Vision Transformer",
+      "paper_url": "https://arxiv.org/pdf/2305.08877",
+      "official_code_url": "https://github.com/PurdueDigitalTwin/M2DAR",
+      "reviewed_head": "8fc6a3f76fc47207c4fa072dff7259f0debb5472",
+      "code_status": "AVAILABLE_WITH_CONFIGS_AND_CHECKPOINT_LINK",
+      "reported_metric": "0.5921 average activity overlap on AI City A2 test",
+      "task": "multi-view action recognition and localization in untrimmed video",
+      "protocol_note": "class match plus start/end each within 10 seconds, then temporal overlap",
+      "comparability": "HIGHER_TASK_SIMILARITY_BUT_DIFFERENT_DATA_AND_METRIC",
+      "reason": "Closest pipeline shape to ROADWATCH; also shows untrimmed localization is much harder than clip accuracy."
+    },
+    {
+      "id": "ACTIONFORMER_2022",
+      "paper": "ActionFormer: Localizing Moments of Actions with Transformers",
+      "paper_url": "https://arxiv.org/abs/2202.07925",
+      "official_code_url": "https://github.com/happyharrycn/actionformer_release",
+      "reviewed_head": "61ea7eb9308a568b0cf45e3804830836e30061de",
+      "code_status": "AVAILABLE_WITH_CONFIGS_PRETRAINED_MODELS_AND_EVALUATOR",
+      "reported_metric": "71.0% mAP at tIoU 0.5 on THUMOS14; 36.56% average mAP on ActivityNet 1.3",
+      "task": "generic temporal action localization",
+      "comparability": "HIGH_FOR_BOUNDARY_METHOD_LOW_FOR_NUMERIC_SCORE",
+      "reason": "Useful replacement for hand-built boundary logic after feature/label preparation; published score is not a driver-phone F1."
+    },
+    {
+      "id": "SAHI_2022",
+      "paper": "Slicing Aided Hyper Inference and Fine-tuning for Small Object Detection",
+      "paper_url": "https://arxiv.org/abs/2202.06934",
+      "official_code_url": "https://github.com/obss/sahi",
+      "reviewed_head": "b5a153ee7bcb1fd84a7b868575ff14131e7423ce",
+      "benchmark_code_url": "https://github.com/fcakyon/small-object-detection-benchmark",
+      "code_status": "AVAILABLE",
+      "reported_metric": "inference-only AP gains of 6.8/5.1/5.3 points for FCOS/VFNet/TOOD; cumulative 12.7/13.4/14.5 with sliced fine-tuning",
+      "task": "small-object detection on VisDrone/xView",
+      "comparability": "MEDIUM_FOR_PHONE_PROPOSAL_RECALL",
+      "reason": "Phone is small in cabin frames, but gains must be remeasured on phone bbox GT and may increase latency/duplicate boxes."
+    },
+    {
+      "id": "ZVL_DDD_2026",
+      "paper": "Zero-Shot Distracted Driver Detection via Vision Language Models with Double Decoupling",
+      "official_code_url": "https://github.com/mtakamichi/ZVL-DDD",
+      "reviewed_head": "a04a743a4162289bbf53f7255bd58e6057e8263c",
+      "code_status": "AVAILABLE_WITH_METRIC_EXPORTS_AND_ABLATION_SCRIPT",
+      "reported_metric": "76.0% SAM-DD multiclass Top-1 for full method; binary safe-vs-distracted AUPRC 95.8%",
+      "task": "zero-shot image classification",
+      "comparability": "LOW_FOR_EVENT_F1_USEFUL_FOR_EVALUATION_DESIGN",
+      "reason": "Demonstrates that a >95 binary AUPRC can coexist with <85 multiclass Top-1; exports classwise metrics and predictions."
+    },
+    {
+      "id": "RST_NET_SEATBELT_2024",
+      "paper": "Seatbelt Detection Algorithm Improved with Lightweight Approach and Attention Mechanism",
+      "paper_url": "https://www.mdpi.com/2076-3417/14/8/3346",
+      "official_code_url": null,
+      "code_status": "NO_AUTHOR_CODE_VERIFIED_IN_THIS_REVIEW",
+      "reported_metric": "98.25% reported binary seatbelt accuracy/F1 on a self-built dataset",
+      "task": "windshield localization followed by binary seatbelt classification",
+      "comparability": "LOW_FOR_ROADWATCH_THREE_CLASS_MACRO_F1",
+      "reason": "ROADWATCH includes uncertain_or_occluded and an in-cabin domain; binary headline cannot replace its three-class gate."
+    }
+  ]
+}

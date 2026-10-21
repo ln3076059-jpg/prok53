@@ -1,0 +1,90 @@
+{
+  "scope": "FULL_COHORT_AUTONOMOUS_EXPERIMENT",
+  "sample_stride": 15,
+  "max_sampled_frames": null,
+  "models": {
+    "models\\active\\v2\\phone_detector.pt": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+    "models\\auxiliary\\yolo11n.pt": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1",
+    "models\\auxiliary\\yolo11n-pose.pt": "869e83fcdffdc7371fa4e34cd8e51c838cc729571d1635e5141e3075e9319dc0"
+  },
+  "config_sha256": "191918e41e5715008a3a90c03aa062d86c4fe7086401f55c2fa55d5d1c189b4f",
+  "matcher_sha256": "438f6e321df37f045aa89fc8972828f9e6bd2fd1e600f89f707b76fcc37f8db6",
+  "policy_sha256": "43dde1904e75e080787cb82cfb68a309ed8149074285041017a867a4363168b2",
+  "frozen_policy": {
+    "policy_id": "DMD_TEMPORAL_MATCHING_POLICY_V2",
+    "status": "FROZEN_BEFORE_BENCHMARK_002",
+    "iou_threshold": 0.3,
+    "onset_tolerance_seconds": 2.5,
+    "offset_tolerance_seconds": 3.5,
+    "containment_overlap_threshold": 0.4,
+    "containment_min_duration_seconds": 0.8,
+    "cooldown_merge_seconds": 3.0,
+    "duplicate_prediction_policy": "COUNT_AS_FALSE_POSITIVE",
+    "governance_rule": "Frozen prior to final held evaluation. Policy must not be altered post-evaluation.",
+    "policy_sha256": "a6e743b41e912ff962bbb7495d284f98b1d9b07f8064131ac20ceae6621420fe"
+  },
+  "cohort": {
+    "status": "VERIFIED_LOCAL_FILES",
+    "subjects": [
+      "gC-14",
+      "gZ-36"
+    ],
+    "sessions": [
+      {
+        "subject_id": "gC-14",
+        "session_id": "gC_14_s2_2019-03-04T11;48;02+01;00_rgb_body",
+        "camera_id": "BODY",
+        "video_path": "D:\\.idea\\giangdoantotnghiep\\dataset\\external_dmd\\subjects\\gC-14\\gC_14_s2_2019-03-04T11;48;02+01;00_rgb_body.mp4",
+        "annotation_path": "D:\\.idea\\giangdoantotnghiep\\dataset\\external_dmd\\subjects\\gC-14\\gC_14_s2_2019-03-04T11;48;02+01;00_rgb_ann_distraction.json",
+        "video_sha256": "bb7c567eea366afba4f2b329142e181333ce62c7ac7085bccebd6daa9ec8694e",
+        "annotation_sha256": "25aa157587dd283e4550b9129321fa9a1fc1889cc7cc1819c7e58d74e3089089",
+        "fps": 29.76,
+        "source_frames": 11916,
+        "width": 1280,
+        "height": 720,
+        "source_seconds": 400.4032258064516,
+        "gt_count": 9,
+        "role_calibration_status": "MISSING_VERIFIED_SEAT_CALIBRATION"
+      },
+      {
+        "subject_id": "gZ-36",
+        "session_id": "gZ_36_s2_2019-04-09T10;39;38+02;00_rgb_body",
+        "camera_id": "BODY",
+        "video_path": "D:\\.idea\\giangdoantotnghiep\\dataset\\external_dmd\\subjects\\gZ-36\\gZ_36_s2_2019-04-09T10;39;38+02;00_rgb_body.mp4",
+        "annotation_path": "D:\\.idea\\giangdoantotnghiep\\dataset\\external_dmd\\subjects\\gZ-36\\gZ_36_s2_2019-04-09T10;39;38+02;00_rgb_ann_distraction.json",
+        "video_sha256": "039d494e15f0f72864e815999c76aadbce84b2d58c0c011374975e4e77ec0ef4",
+        "annotation_sha256": "45c1d8257fc4a800d52748a7615a243fc222d0a8e84766987ada65a5b08a8291",
+        "fps": 29.76,
+        "source_frames": 15351,
+        "width": 1280,
+        "height": 720,
+        "source_seconds": 515.8266129032257,
+        "gt_count": 11,
+        "role_calibration_status": "MISSING_VERIFIED_SEAT_CALIBRATION"
+      }
+    ],
+    "total_gt_events": 20,
+    "source_minutes": 15.270497311827956,
+    "scope": "DEVELOPMENT_ONLY",
+    "fitting_performed": false
+  },
+  "code_sha256": {
+    "training\\dmd\\run_autonomous_v20.py": "829ba5db3d0dd6041197781efaa6b80a43eb3568afd050fa484f5c33bb6a7f1d",
+    "training\\dmd\\run_verified_v22.py": "c227a7dc0b2d418446c81ef402b25acd1de078b676fdeee4fda493fa00a97981",
+    "training\\dmd\\action_adapter.py": "48eba21ac2fa329acede14169f9dc5cc8cce113e7f372791bc376646d006f01b",
+    "backend\\ai\\auxiliary.py": "51a092a629f1b8714d349f63d652cc3f26d41ec306e3d47e1ad779f464d7c315",
+    "backend\\ai\\events.py": "c65423c820f4f5b412cf662b88fea966ed6f1a7bd904f13577b1e6d6a7eab338",
+    "training\\dmd\\driver_phone_association.py": "45c832eedf9e025cecb56892a0a9ef879df223c1f20c50f97de8bd8b91b0e1b8"
+  },
+  "stage1_signature": "(self, video_path: 'Path', temporal_config: 'dict[str, Any]', max_frames: 'int | None' = None, record_sink: 'Callable[[dict[str, Any]], None] | None' = None) -> 'dict[str, Any]'",
+  "B0": "Original V20 D5 implementation; legacy role/pose-first semantics retained",
+  "B1": "D5 + conservative association, no verified seat calibration available; UNKNOWN",
+  "B2": "B1 + explicitly RULE_ONLY; identical candidate-frame pose exposure",
+  "B3": "B1 + verified V6; fail closed on provenance/causal timing",
+  "B4": "B1 + HYBRID_RULE_V6; fail closed on provenance/causal timing",
+  "changed_factor_warning": "B1 includes V21 100px/85px geometry; association-only effect cannot be isolated",
+  "temporal_output_semantics": "ACTIVATION_ALERT_WINDOW; no finalized duration tracking or EOF tail extrapolation",
+  "exposure_definition": "decoded source frames / container fps; sampled indices must exactly match stride grid",
+  "resume_policy": "completed sessions only; interrupted trace preserved and session restarted",
+  "data_rights": "local temporal development diagnostics only; no fitting, upload, approval or holdout access"
+}

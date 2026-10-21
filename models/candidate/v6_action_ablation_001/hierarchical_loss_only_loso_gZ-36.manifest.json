@@ -1,0 +1,40 @@
+{
+  "training_subject_ids": [
+    "gB-9",
+    "gC-14"
+  ],
+  "validation_subject_ids": [],
+  "intended_heldout_subject": "gZ-36",
+  "architecture": "HierarchicalResNetGRUClassifier",
+  "feature_preprocessing": {
+    "backbone": "torchvision_resnet18_imagenet1k_v1",
+    "embedding_dim": 512,
+    "crop_roi_normalized": [
+      0.0,
+      0.1,
+      0.65,
+      0.95
+    ],
+    "resize": "opencv_area_64_then_torch_bilinear_112_align_corners_false",
+    "color": "RGB",
+    "normalization": "IMAGENET_MEAN_STD",
+    "embedding_storage": "float16_then_float32",
+    "sequence_length": 9,
+    "padding": "NONE_FULL_WINDOWS_ONLY",
+    "label_position": "CENTER"
+  },
+  "class_mapping": [
+    "SAFE_DRIVING",
+    "PHONE_USE",
+    "OTHER_ACTIVITY"
+  ],
+  "sha256": "ebb0835a3bec116377e27b5bf8881a4efe43ce7bca4c0b912ab2544e416b78c3",
+  "backbone_sha256": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec",
+  "sample_period_seconds": 0.5,
+  "training_dataset_provenance": [
+    {
+      "path": "reports/v6_completion/folds/hierarchical_loss_only_loso_gZ-36.json",
+      "sha256": "f0d1ebc6decc680cefe2d0545eec18bc4f49b0381b7ce7941d3d54c3137a9dfb"
+    }
+  ]
+}

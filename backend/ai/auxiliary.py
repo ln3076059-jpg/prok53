@@ -218,9 +218,15 @@ class PoseEstimator:
     FACE_INDICES = (0, 1, 2, 3, 4)
     HAND_INDICES = (9, 10)
 
-    def __init__(self, weights: Path | str | None, confidence: float = 0.25):
+    def __init__(
+        self,
+        weights: Path | str | None,
+        confidence: float = 0.25,
+        device: str | int | None = None,
+    ):
         self.weights = Path(weights) if weights else None
         self.confidence = confidence
+        self.device = device
         self._model = None
 
     @property
@@ -239,7 +245,14 @@ class PoseEstimator:
         self._load()
         if self._model is None:
             return []
-        result = self._model.predict(frame, conf=self.confidence, imgsz=480, verbose=False)[0]
+        predict_kwargs = {
+            "conf": self.confidence,
+            "imgsz": 480,
+            "verbose": False,
+        }
+        if self.device is not None:
+            predict_kwargs["device"] = self.device
+        result = self._model.predict(frame, **predict_kwargs)[0]
         keypoints = getattr(result, "keypoints", None)
         if keypoints is None or keypoints.xy is None:
             return []
@@ -291,7 +304,14 @@ class PoseEstimator:
         self._load()
         if self._model is None:
             return []
-        result = self._model.predict(frame, conf=self.confidence, imgsz=480, verbose=False)[0]
+        predict_kwargs = {
+            "conf": self.confidence,
+            "imgsz": 480,
+            "verbose": False,
+        }
+        if self.device is not None:
+            predict_kwargs["device"] = self.device
+        result = self._model.predict(frame, **predict_kwargs)[0]
         keypoints = getattr(result, "keypoints", None)
         if keypoints is None or keypoints.xy is None:
             return []
