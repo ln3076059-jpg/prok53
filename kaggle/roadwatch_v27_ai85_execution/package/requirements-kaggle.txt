@@ -1,3 +1,0 @@
-ultralytics==8.3.187
-PyYAML==6.0.2
-Pillow==11.3.0
