@@ -1,7 +1,0 @@
-{
-  "title": "Roadwatch AI85 Plus Frozen Checkpoints V8",
-  "id": "longngoc11/roadwatch-ai85-plus-frozen-checkpoints-v8",
-  "licenses": [{"name": "other"}],
-  "isPrivate": true,
-  "description": "Private frozen project checkpoint for exploratory GPU inference only. No DMD media, human labels, protected holdouts, credentials or production approval included."
-}

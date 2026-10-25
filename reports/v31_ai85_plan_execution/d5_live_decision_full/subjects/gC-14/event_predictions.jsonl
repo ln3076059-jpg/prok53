@@ -1,8 +1,0 @@
-{"event_type": "PHONE", "start_seconds": 41.83467741935484, "end_seconds": 86.18951612903226, "confidence": 0.5053330361843109, "duration": 44.35, "subject_id": "gC-14"}
-{"event_type": "PHONE", "start_seconds": 122.98387096774194, "end_seconds": 168.8508064516129, "confidence": 0.4781370311975479, "duration": 45.87, "subject_id": "gC-14"}
-{"event_type": "PHONE", "start_seconds": 185.48387096774192, "end_seconds": 189.01209677419354, "confidence": 0.5133571158493719, "duration": 3.53, "subject_id": "gC-14"}
-{"event_type": "PHONE", "start_seconds": 213.70967741935482, "end_seconds": 217.74193548387095, "confidence": 0.4096966992439388, "duration": 4.03, "subject_id": "gC-14"}
-{"event_type": "PHONE", "start_seconds": 225.8064516129032, "end_seconds": 272.68145161290323, "confidence": 0.4262305274605751, "duration": 46.88, "subject_id": "gC-14"}
-{"event_type": "PHONE", "start_seconds": 276.71370967741933, "end_seconds": 295.36290322580646, "confidence": 0.2502707242965698, "duration": 18.65, "subject_id": "gC-14"}
-{"event_type": "PHONE", "start_seconds": 300.9072580645161, "end_seconds": 337.7016129032258, "confidence": 0.42947758734226227, "duration": 36.79, "subject_id": "gC-14"}
-{"event_type": "PHONE", "start_seconds": 347.2782258064516, "end_seconds": 365.9274193548387, "confidence": 0.7544027864933014, "duration": 18.65, "subject_id": "gC-14"}

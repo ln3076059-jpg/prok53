@@ -1,5 +1,0 @@
-# Preserve recorded artifact hashes across platforms.
-** -text whitespace=cr-at-eol
-# Preserve captured test output verbatim.
-*.log -whitespace
-*.xml -whitespace

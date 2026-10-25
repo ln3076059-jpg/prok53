@@ -1,5 +1,0 @@
-# Preserve recorded artifact hashes across platforms.
-** -text whitespace=cr-at-eol
-# Keep captured test output verbatim, including pytest whitespace.
-*.log -whitespace
-*.xml -whitespace

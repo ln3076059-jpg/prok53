@@ -1,7 +1,0 @@
-{
-  "state": "MONITOR_TIMEOUT_REMOTE_STATUS_RETAINED",
-  "pid": 23328,
-  "updated_at_utc": "2026-10-16T11:13:44.145454+00:00",
-  "elapsed_seconds": 1832.4069999999992,
-  "maximum_monitor_seconds": 1800
-}
