@@ -1,0 +1,389 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+from enum import StrEnum
+from pathlib import Path
+
+import numpy as np
+
+from backend.ai.detector import NormalizedDetection
+
+
+@dataclass(frozen=True)
+class VehicleRegion:
+    context_id: str
+    confidence: float
+    xyxy: tuple[float, float, float, float]
+    track_id: int | None
+    vehicle_class_id: int = -1
+    vehicle_class: str = "unknown"
+
+    @property
+    def vehicle_class_name(self) -> str:
+        return self.vehicle_class
+
+
+@dataclass(frozen=True)
+class PoseEvidence:
+    confidence: float
+    face_points: tuple[tuple[float, float], ...]
+    hand_points: tuple[tuple[float, float], ...]
+    xyxy: tuple[float, float, float, float] | None = None
+
+
+@dataclass(frozen=True)
+class SeatbeltEvidence:
+    fastened: float
+    unfastened: float
+    uncertain_or_occluded: float
+    source: str
+
+
+class PhoneContext(StrEnum):
+    NO_PHONE = "NO_PHONE"
+    PHONE_VISIBLE_NOT_USED = "PHONE_VISIBLE_NOT_USED"
+    MOUNTED_PHONE = "MOUNTED_PHONE"
+    HANDHELD_PHONE_USE = "HANDHELD_PHONE_USE"
+    POSSIBLE_PHONE_USE = "POSSIBLE_PHONE_USE"
+    UNKNOWN_CONTEXT = "UNKNOWN_CONTEXT"
+
+
+@dataclass(frozen=True)
+class PhoneContextEvidence:
+    context: PhoneContext
+    hand_proximity: float
+    face_proximity: float
+    physical_phone_confidence: float
+    reason: str
+
+
+def _point_box_proximity(
+    points: tuple[tuple[float, float], ...],
+    box: tuple[float, float, float, float],
+    reference_box: tuple[float, float, float, float] | None = None,
+) -> float:
+    if not points:
+        return 0.0
+    x1, y1, x2, y2 = box
+    scale_box = reference_box or box
+    diagonal = max(
+        ((scale_box[2] - scale_box[0]) ** 2 + (scale_box[3] - scale_box[1]) ** 2) ** 0.5,
+        1.0,
+    )
+    center_x, center_y = (x1 + x2) / 2, (y1 + y2) / 2
+    distance = min(((x - center_x) ** 2 + (y - center_y) ** 2) ** 0.5 for x, y in points)
+    return max(0.0, min(1.0, 1.0 - distance / (0.50 * diagonal)))
+
+
+def classify_phone_context(
+    detection: NormalizedDetection,
+    pose: PoseEvidence | None,
+    hand_threshold: float = 0.55,
+    face_threshold: float = 0.55,
+) -> tuple[str, float, float]:
+    """Classify phone geometry without equating phone detection with phone use."""
+    if not pose or (not pose.hand_points and not pose.face_points):
+        return "UNKNOWN_PHONE_CONTEXT", 0.0, 0.0
+    hand = _point_box_proximity(pose.hand_points, detection.xyxy, pose.xyxy)
+    face = _point_box_proximity(pose.face_points, detection.xyxy, pose.xyxy)
+    if hand >= hand_threshold or face >= face_threshold:
+        return "HANDHELD_USE", hand, face
+    return "MOUNTED_OR_STATIC", hand, face
+
+
+def reason_phone_context(
+    detection: NormalizedDetection | None,
+    pose: PoseEvidence | None,
+    *,
+    occupant_confidence: float,
+    mounted_evidence: bool = False,
+    hand_threshold: float = 0.55,
+    face_threshold: float = 0.55,
+) -> PhoneContextEvidence:
+    """Classify phone-use context while keeping visibility separate from use."""
+    if detection is None or detection.confidence < 0.10:
+        return PhoneContextEvidence(PhoneContext.NO_PHONE, 0.0, 0.0, 0.0, "NO_PHYSICAL_PHONE")
+    if occupant_confidence < 0.55:
+        return PhoneContextEvidence(
+            PhoneContext.UNKNOWN_CONTEXT,
+            0.0,
+            0.0,
+            detection.confidence,
+            "OCCUPANT_ASSOCIATION_UNCERTAIN",
+        )
+    if not pose or (not pose.hand_points and not pose.face_points):
+        return PhoneContextEvidence(
+            PhoneContext.UNKNOWN_CONTEXT,
+            0.0,
+            0.0,
+            detection.confidence,
+            "POSE_UNAVAILABLE",
+        )
+    hand = _point_box_proximity(pose.hand_points, detection.xyxy, pose.xyxy)
+    face = _point_box_proximity(pose.face_points, detection.xyxy, pose.xyxy)
+    if mounted_evidence:
+        context, reason = PhoneContext.MOUNTED_PHONE, "EXPLICIT_MOUNTED_EVIDENCE"
+    elif hand >= hand_threshold or face >= face_threshold:
+        context, reason = PhoneContext.HANDHELD_PHONE_USE, "PHONE_NEAR_HAND_OR_FACE"
+    elif max(hand, face) >= min(hand_threshold, face_threshold) * 0.70:
+        context, reason = PhoneContext.POSSIBLE_PHONE_USE, "BORDERLINE_PHONE_BODY_PROXIMITY"
+    else:
+        context, reason = PhoneContext.PHONE_VISIBLE_NOT_USED, "PHONE_VISIBLE_WITHOUT_USE_GEOMETRY"
+    return PhoneContextEvidence(context, hand, face, detection.confidence, reason)
+
+
+def phone_context(
+    detection: NormalizedDetection,
+    pose: PoseEvidence | None,
+    hand_threshold: float = 0.55,
+    face_threshold: float = 0.55,
+) -> tuple[str, float, float]:
+    """Backward-compatible adapter for the V1/V2 bootstrap tests and stored traces."""
+    context, hand, face = classify_phone_context(detection, pose, hand_threshold, face_threshold)
+    legacy = {
+        "HANDHELD_USE": "HANDHELD",
+        "UNKNOWN_PHONE_CONTEXT": "UNKNOWN",
+    }
+    return legacy.get(context, context), hand, face
+
+
+class VehicleDetector:
+    COCO_VEHICLE_CLASSES = {2, 3, 5, 7}
+    COCO_CLASS_NAMES = {2: "car", 3: "motorcycle", 5: "bus", 7: "truck"}
+
+    def __init__(self, weights: Path | None, confidence: float = 0.35):
+        self.weights = weights
+        self.confidence = confidence
+        self._model = None
+
+    @property
+    def available(self) -> bool:
+        return bool(self.weights and self.weights.is_file())
+
+    def _load(self) -> None:
+        if not self.available:
+            raise FileNotFoundError(f"vehicle weights are not installed: {self.weights}")
+        if self._model is None:
+            from ultralytics import YOLO
+
+            self._model = YOLO(str(self.weights))
+
+    def predict(self, frame: np.ndarray) -> list[VehicleRegion]:
+        self._load()
+        result = self._model.track(
+            frame,
+            persist=True,
+            classes=sorted(self.COCO_VEHICLE_CLASSES),
+            conf=self.confidence,
+            tracker="bytetrack.yaml",
+            verbose=False,
+        )[0]
+        boxes = getattr(result, "boxes", None)
+        if boxes is None:
+            return []
+        ids = boxes.id.cpu().tolist() if boxes.id is not None else [None] * len(boxes)
+        regions = []
+        for index, (xyxy, confidence, class_id, track_id) in enumerate(
+            zip(
+                boxes.xyxy.cpu().tolist(),
+                boxes.conf.cpu().tolist(),
+                boxes.cls.cpu().tolist(),
+                ids,
+                strict=True,
+            )
+        ):
+            normalized_id = int(track_id) if track_id is not None else None
+            normalized_class_id = int(class_id)
+            vehicle_class = self.COCO_CLASS_NAMES.get(normalized_class_id, "unknown")
+            context_id = (
+                f"vehicle:{normalized_id}"
+                if normalized_id is not None
+                else f"vehicle:untracked:{vehicle_class}:{index}"
+            )
+            regions.append(
+                VehicleRegion(
+                    context_id,
+                    float(confidence),
+                    tuple(float(value) for value in xyxy),
+                    normalized_id,
+                    normalized_class_id,
+                    vehicle_class,
+                )
+            )
+        return regions
+
+
+class PoseEstimator:
+    # COCO pose indices: nose/eyes/ears, then left/right wrist.
+    FACE_INDICES = (0, 1, 2, 3, 4)
+    HAND_INDICES = (9, 10)
+
+    def __init__(
+        self,
+        weights: Path | str | None,
+        confidence: float = 0.25,
+        device: str | int | None = None,
+    ):
+        self.weights = Path(weights) if weights else None
+        self.confidence = confidence
+        self.device = device
+        self._model = None
+
+    @property
+    def available(self) -> bool:
+        return bool(self.weights and self.weights.is_file())
+
+    def _load(self) -> None:
+        if not self.available:
+            return
+        if self._model is None:
+            from ultralytics import YOLO
+
+            self._model = YOLO(str(self.weights))
+
+    def predict(self, frame: np.ndarray) -> list[PoseEvidence]:
+        self._load()
+        if self._model is None:
+            return []
+        predict_kwargs = {
+            "conf": self.confidence,
+            "imgsz": 480,
+            "verbose": False,
+        }
+        if self.device is not None:
+            predict_kwargs["device"] = self.device
+        result = self._model.predict(frame, **predict_kwargs)[0]
+        keypoints = getattr(result, "keypoints", None)
+        if keypoints is None or keypoints.xy is None:
+            return []
+        xy_rows = keypoints.xy.cpu().tolist()
+        pose_boxes = (
+            result.boxes.xyxy.cpu().tolist()
+            if getattr(result, "boxes", None) is not None
+            else [None] * len(xy_rows)
+        )
+        confidence_rows = (
+            keypoints.conf.cpu().tolist()
+            if keypoints.conf is not None
+            else [[1.0] * len(row) for row in xy_rows]
+        )
+        evidence = []
+        for points, confidences, pose_box in zip(xy_rows, confidence_rows, pose_boxes, strict=True):
+
+            def selected(
+                indices: tuple[int, ...],
+                row_points=points,
+                row_confidences=confidences,
+            ) -> tuple[tuple[float, float], ...]:
+                return tuple(
+                    (float(row_points[index][0]), float(row_points[index][1]))
+                    for index in indices
+                    if index < len(row_points) and float(row_confidences[index]) >= self.confidence
+                )
+
+            valid = [float(value) for value in confidences if float(value) >= self.confidence]
+            evidence.append(
+                PoseEvidence(
+                    confidence=sum(valid) / len(valid) if valid else 0.0,
+                    face_points=selected(self.FACE_INDICES),
+                    hand_points=selected(self.HAND_INDICES),
+                    xyxy=(tuple(float(value) for value in pose_box) if pose_box else None),
+                )
+            )
+        del result
+        if hasattr(self._model, "predictor") and self._model.predictor is not None:
+            self._model.predictor.results = None
+        return evidence
+
+    def predict_raw_keypoints(
+        self, frame: np.ndarray
+    ) -> list[
+        tuple[list[tuple[float, float]], list[float], tuple[float, float, float, float] | None]
+    ]:
+        """Return raw 17 COCO keypoints (x, y), confidences, and bounding box for V3 pose analysis."""
+        self._load()
+        if self._model is None:
+            return []
+        predict_kwargs = {
+            "conf": self.confidence,
+            "imgsz": 480,
+            "verbose": False,
+        }
+        if self.device is not None:
+            predict_kwargs["device"] = self.device
+        result = self._model.predict(frame, **predict_kwargs)[0]
+        keypoints = getattr(result, "keypoints", None)
+        if keypoints is None or keypoints.xy is None:
+            return []
+        xy_rows = keypoints.xy.cpu().tolist()
+        pose_boxes = (
+            result.boxes.xyxy.cpu().tolist()
+            if getattr(result, "boxes", None) is not None
+            else [None] * len(xy_rows)
+        )
+        confidence_rows = (
+            keypoints.conf.cpu().tolist()
+            if keypoints.conf is not None
+            else [[1.0] * len(row) for row in xy_rows]
+        )
+        output = []
+        for points, confs, box in zip(xy_rows, confidence_rows, pose_boxes):
+            pts = [(float(pt[0]), float(pt[1])) for pt in points]
+            c_list = [float(c) for c in confs]
+            b_tuple = tuple(float(v) for v in box) if box else None
+            output.append((pts, c_list, b_tuple))
+        del result
+        if hasattr(self._model, "predictor") and self._model.predictor is not None:
+            self._model.predictor.results = None
+        return output
+
+
+class SeatbeltClassifier:
+    CLASS_NAMES = ("seatbelt_fastened", "seatbelt_unfastened", "uncertain_or_occluded")
+
+    def __init__(self, weights: Path | None):
+        self.weights = weights
+        self._model = None
+
+    @property
+    def available(self) -> bool:
+        return bool(self.weights and self.weights.is_file())
+
+    def _load(self) -> None:
+        if not self.available:
+            return
+        if self._model is None:
+            from ultralytics import YOLO
+
+            self._model = YOLO(str(self.weights))
+
+    def predict(self, crop: np.ndarray) -> SeatbeltEvidence | None:
+        self._load()
+        if self._model is None or crop.size == 0:
+            return None
+        result = self._model.predict(crop, imgsz=224, verbose=False)[0]
+        probabilities = getattr(result, "probs", None)
+        if probabilities is None:
+            return None
+        values = probabilities.data.cpu().tolist()
+        names = result.names
+        by_name = {str(names[index]): float(value) for index, value in enumerate(values)}
+        return SeatbeltEvidence(
+            fastened=by_name.get("seatbelt_fastened", 0.0),
+            unfastened=by_name.get("seatbelt_unfastened", 0.0),
+            uncertain_or_occluded=by_name.get("uncertain_or_occluded", 0.0),
+            source="SEATBELT_CLASSIFIER",
+        )
+
+
+def crop_box(
+    frame: np.ndarray, xyxy: tuple[float, float, float, float], padding: float = 0.08
+) -> np.ndarray:
+    height, width = frame.shape[:2]
+    x1, y1, x2, y2 = xyxy
+    pad_x, pad_y = (x2 - x1) * padding, (y2 - y1) * padding
+    left = max(0, int(x1 - pad_x))
+    top = max(0, int(y1 - pad_y))
+    right = min(width, int(x2 + pad_x))
+    bottom = min(height, int(y2 + pad_y))
+    return frame[top:bottom, left:right]

@@ -1,0 +1,11 @@
+{
+  "title": "Roadwatch V27 AI85 Execution",
+  "id": "longngoc11/roadwatch-v27-ai85-execution",
+  "licenses": [
+    {
+      "name": "other"
+    }
+  ],
+  "isPrivate": true,
+  "description": "Private code-only V27 correctness package; no raw DMD media, labels, embeddings, checkpoints, credentials, or raw predictions."
+}

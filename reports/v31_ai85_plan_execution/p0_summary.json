@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "created_at": "2026-10-23T08:50:00.801618+00:00",
+  "phase": "P0_MEASUREMENT_ALIGNMENT_CAUSAL_AUDIT",
+  "artifacts": {
+    "metric_protocol_matrix.json": {
+      "path": "reports\\v31_ai85_plan_execution\\metric_protocol_matrix.json",
+      "sha256": "461a055f4b2d846428440d8a7b041467482f1f0a277ff271e5a223e8026eb0d5",
+      "status": "PASS"
+    },
+    "alignment_audit.json": {
+      "path": "reports\\v31_ai85_plan_execution\\alignment_audit.json",
+      "sha256": "f7693fb6f1f0a0f4341b82133590097c525de9d2014fd1f232e1304dd2f02e78",
+      "status": "PASS_WITH_BOUNDARY_QUANTIZATION"
+    },
+    "causal_contract_audit.json": {
+      "path": "reports\\v31_ai85_plan_execution\\causal_contract_audit.json",
+      "sha256": "954f4f9920043d9f6c7fc61e334e2545023553c3d9dac74b409a072e81d0b3d5",
+      "status": "BLOCKED_OFFLINE_FUSION"
+    }
+  },
+  "overall_status": "BLOCKED_CAUSAL_FUSION",
+  "input_set_sha256": "b7f5ef6676e8fbd3ce3cb1db36372393638abe53eb9575920dd3690820645e3c"
+}

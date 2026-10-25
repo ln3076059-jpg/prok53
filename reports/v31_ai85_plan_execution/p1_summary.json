@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0.0",
+  "created_at": "2026-10-23T15:50:00+07:00",
+  "phase": "P1_CAUSAL_OBSERVABILITY_AND_FEATURE_CANDIDATES",
+  "status": "COMPLETED_NO_PROMOTABLE_CANDIDATE",
+  "baseline": {
+    "configuration": "D5_640_STRIDE15_ACTION_NONE",
+    "true_positives": 14,
+    "false_positives": 3,
+    "false_negatives": 6,
+    "precision": 0.8235,
+    "recall": 0.7,
+    "f1": 0.7568,
+    "retained": true
+  },
+  "causal_observability": {
+    "live_object_decisions": "PASS",
+    "exact_metric_reproduction": true,
+    "action_stream_connected": false,
+    "status": "OBJECT_READY_ACTION_FUSION_BLOCKED"
+  },
+  "candidates": {
+    "direct112_six_class_weighted": "REJECTED_DOMAIN_GENERALIZATION_AND_FP",
+    "direct112_six_class_unweighted": "REJECTED_DOMAIN_GENERALIZATION_AND_FP",
+    "direct112_coarse_weighted": "REJECTED_SAFE_COLLAPSE_AND_FP",
+    "direct112_coarse_unweighted": "REJECTED_SAFE_COLLAPSE_AND_FP",
+    "detector_imgsz960": "REJECTED_RECALL_REGRESSION",
+    "specialist_only_640": "REJECTED_METRIC_REGRESSION",
+    "auxiliary_only_640": "DIAGNOSTIC_ONLY_SAME_AGGREGATE_DIFFERENT_FRAGMENTATION"
+  },
+  "next_gate": {
+    "artifact": "reports/v31_ai85_plan_execution/component_truth_manifest.json",
+    "status": "PENDING_HUMAN_REVIEW",
+    "case_count": 9,
+    "reviewed_cases": 0,
+    "training_eligible": false
+  },
+  "claim": {
+    "ai85_achieved": false,
+    "minimum_development_target": "18 TP / <=3 FP / <=2 FN",
+    "independent_holdout_required": true
+  }
+}

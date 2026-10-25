@@ -1,0 +1,62 @@
+{
+  "generated_at": "2026-10-23T12:18:57.223772+00:00",
+  "dataset": {
+    "ref": "longngoc11/roadwatch-v27-ai85-execution",
+    "url": "https://www.kaggle.com/datasets/longngoc11/roadwatch-v27-ai85-execution",
+    "visibility": "private",
+    "code_manifest_sha256": "e2f3917a11974822f006b26c9cfcc4712c073c2f0202e172fe790de313d5c187",
+    "contains_dmd_media": false,
+    "contains_credentials": false
+  },
+  "kernel": {
+    "ref": "longngoc11/roadwatch-v27-gpu-preflight",
+    "url": "https://www.kaggle.com/code/longngoc11/roadwatch-v27-gpu-preflight",
+    "version": 10,
+    "status": "COMPLETE"
+  },
+  "downloaded_artifacts": {
+    "result": "reports\\v32_ai85_execution\\kaggle_gpu_preflight_v10\\v27_gpu_preflight.json",
+    "result_sha256": "6ba6c41cece62acb2a1e7c7ccd5c3234f43e677e4168c34a5b456eee884f895a",
+    "log": "reports\\v32_ai85_execution\\kaggle_gpu_preflight_v10\\roadwatch-v27-gpu-preflight.log",
+    "log_sha256": "917c9bf25eefd0d1982a9ec4a51024347b364c30583f73373ff633890af774c0"
+  },
+  "verified_result": {
+    "status": "V27_GPU_PREFLIGHT_PASSED",
+    "scope": "32 consumed private validation images; device/runtime check only",
+    "training_performed": false,
+    "dmd_media_used": false,
+    "event_metrics_computed": false,
+    "candidate_identity_test": "PASSED",
+    "v32_normalized_proximity_test": "PASSED",
+    "v32_aspect_ratio_clutter_filter_test": "PASSED",
+    "gpu": "Tesla T4",
+    "device_provenance": {
+      "specialist": "cuda:0",
+      "auxiliary": "cuda:0",
+      "pose": "cuda:0"
+    },
+    "stage_runtime": {
+      "specialist": {
+        "calls": 32,
+        "p50_ms": 19.296052000001396,
+        "p95_ms": 57.54955454998765,
+        "mean_ms": 25.973286750000213
+      },
+      "auxiliary": {
+        "calls": 32,
+        "p50_ms": 11.801442000020756,
+        "p95_ms": 40.930466749993855,
+        "mean_ms": 17.648700999997935
+      },
+      "pose": {
+        "calls": 32,
+        "p50_ms": 12.081297499989319,
+        "p95_ms": 60.91186360000478,
+        "mean_ms": 21.16656440624798
+      }
+    },
+    "peak_cuda_allocated_bytes": 114899456,
+    "raw_d5_status": "BLOCKED_NO_AUTHORIZED_DMD_MEDIA_ON_KAGGLE",
+    "development_ai85_status": "V32_LOCAL_DEVELOPMENT_TARGET_EXCEEDED_0_9744_F1"
+  }
+}

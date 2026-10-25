@@ -1,0 +1,242 @@
+{
+  "schema_version": "2.0.0",
+  "generated_at_utc": "2026-10-23T12:18:42.289517+00:00",
+  "dataset": "dataset/derived/v2_pretrain_pending_approval/seatbelt_classifier",
+  "train_reference_count": 3653,
+  "val_evaluation_count": 641,
+  "test_split_accessed": false,
+  "dmd_data_used": false,
+  "binary_fastened_vs_unfastened_616_val": {
+    "sample_count": 616,
+    "accuracy": 0.866883,
+    "macro_f1": 0.864361,
+    "seatbelt_fastened": {
+      "support": 350,
+      "precision": 0.882857,
+      "recall": 0.882857,
+      "f1": 0.882857
+    },
+    "seatbelt_unfastened": {
+      "support": 266,
+      "precision": 0.845865,
+      "recall": 0.845865,
+      "f1": 0.845865
+    }
+  },
+  "three_class_s2_baseline_641_val": {
+    "sample_count": 641,
+    "threshold_policy": {
+      "fastened_min_confidence": 0.5,
+      "unfastened_min_confidence": 0.6
+    },
+    "raw": {
+      "confusion_matrix": {
+        "seatbelt_fastened": {
+          "seatbelt_fastened": 311,
+          "seatbelt_unfastened": 39,
+          "uncertain_or_occluded": 0
+        },
+        "seatbelt_unfastened": {
+          "seatbelt_fastened": 45,
+          "seatbelt_unfastened": 219,
+          "uncertain_or_occluded": 2
+        },
+        "uncertain_or_occluded": {
+          "seatbelt_fastened": 14,
+          "seatbelt_unfastened": 10,
+          "uncertain_or_occluded": 1
+        }
+      },
+      "per_class": {
+        "seatbelt_fastened": {
+          "precision": 0.840541,
+          "recall": 0.888571,
+          "f1": 0.863889,
+          "support": 350
+        },
+        "seatbelt_unfastened": {
+          "precision": 0.817164,
+          "recall": 0.823308,
+          "f1": 0.820225,
+          "support": 266
+        },
+        "uncertain_or_occluded": {
+          "precision": 0.333333,
+          "recall": 0.04,
+          "f1": 0.071429,
+          "support": 25
+        }
+      },
+      "accuracy": 0.828393,
+      "balanced_accuracy": 0.58396,
+      "macro_f1": 0.585181
+    },
+    "post_policy": {
+      "confusion_matrix": {
+        "seatbelt_fastened": {
+          "seatbelt_fastened": 310,
+          "seatbelt_unfastened": 28,
+          "uncertain_or_occluded": 12
+        },
+        "seatbelt_unfastened": {
+          "seatbelt_fastened": 45,
+          "seatbelt_unfastened": 200,
+          "uncertain_or_occluded": 21
+        },
+        "uncertain_or_occluded": {
+          "seatbelt_fastened": 14,
+          "seatbelt_unfastened": 9,
+          "uncertain_or_occluded": 2
+        }
+      },
+      "per_class": {
+        "seatbelt_fastened": {
+          "precision": 0.840108,
+          "recall": 0.885714,
+          "f1": 0.862309,
+          "support": 350
+        },
+        "seatbelt_unfastened": {
+          "precision": 0.843882,
+          "recall": 0.75188,
+          "f1": 0.795229,
+          "support": 266
+        },
+        "uncertain_or_occluded": {
+          "precision": 0.057143,
+          "recall": 0.08,
+          "f1": 0.066667,
+          "support": 25
+        }
+      },
+      "accuracy": 0.798752,
+      "balanced_accuracy": 0.572531,
+      "macro_f1": 0.574735
+    },
+    "top1_ece_10_bin": 0.053272,
+    "false_unfastened": {
+      "count": 28,
+      "rate_among_true_fastened": 0.08
+    },
+    "abstention": {
+      "output_uncertain_count": 35,
+      "output_uncertain_rate": 0.054602,
+      "threshold_forced_count": 32,
+      "threshold_forced_rate": 0.049922
+    },
+    "limitations": [
+      "The source is the existing validation prediction file, not an independent holdout.",
+      "The uncertain_or_occluded class has only 25 samples.",
+      "ECE is descriptive because the same validation split informed the threshold policy."
+    ]
+  },
+  "three_class_s3_v32_calibrated_641_val": {
+    "sample_count": 641,
+    "threshold_policy": {
+      "fastened_min_confidence": 0.5,
+      "unfastened_min_confidence": 0.6
+    },
+    "raw": {
+      "confusion_matrix": {
+        "seatbelt_fastened": {
+          "seatbelt_fastened": 289,
+          "seatbelt_unfastened": 38,
+          "uncertain_or_occluded": 23
+        },
+        "seatbelt_unfastened": {
+          "seatbelt_fastened": 31,
+          "seatbelt_unfastened": 213,
+          "uncertain_or_occluded": 22
+        },
+        "uncertain_or_occluded": {
+          "seatbelt_fastened": 7,
+          "seatbelt_unfastened": 3,
+          "uncertain_or_occluded": 15
+        }
+      },
+      "per_class": {
+        "seatbelt_fastened": {
+          "precision": 0.883792,
+          "recall": 0.825714,
+          "f1": 0.853767,
+          "support": 350
+        },
+        "seatbelt_unfastened": {
+          "precision": 0.838583,
+          "recall": 0.800752,
+          "f1": 0.819231,
+          "support": 266
+        },
+        "uncertain_or_occluded": {
+          "precision": 0.25,
+          "recall": 0.6,
+          "f1": 0.352941,
+          "support": 25
+        }
+      },
+      "accuracy": 0.806552,
+      "balanced_accuracy": 0.742155,
+      "macro_f1": 0.675313
+    },
+    "post_policy": {
+      "confusion_matrix": {
+        "seatbelt_fastened": {
+          "seatbelt_fastened": 289,
+          "seatbelt_unfastened": 28,
+          "uncertain_or_occluded": 33
+        },
+        "seatbelt_unfastened": {
+          "seatbelt_fastened": 31,
+          "seatbelt_unfastened": 197,
+          "uncertain_or_occluded": 38
+        },
+        "uncertain_or_occluded": {
+          "seatbelt_fastened": 7,
+          "seatbelt_unfastened": 2,
+          "uncertain_or_occluded": 16
+        }
+      },
+      "per_class": {
+        "seatbelt_fastened": {
+          "precision": 0.883792,
+          "recall": 0.825714,
+          "f1": 0.853767,
+          "support": 350
+        },
+        "seatbelt_unfastened": {
+          "precision": 0.867841,
+          "recall": 0.740602,
+          "f1": 0.799189,
+          "support": 266
+        },
+        "uncertain_or_occluded": {
+          "precision": 0.183908,
+          "recall": 0.64,
+          "f1": 0.285714,
+          "support": 25
+        }
+      },
+      "accuracy": 0.783151,
+      "balanced_accuracy": 0.735439,
+      "macro_f1": 0.646223
+    },
+    "top1_ece_10_bin": 0.047626,
+    "false_unfastened": {
+      "count": 28,
+      "rate_among_true_fastened": 0.08
+    },
+    "abstention": {
+      "output_uncertain_count": 87,
+      "output_uncertain_rate": 0.135725,
+      "threshold_forced_count": 27,
+      "threshold_forced_rate": 0.042122
+    },
+    "limitations": [
+      "The source is the existing validation prediction file, not an independent holdout.",
+      "The uncertain_or_occluded class has only 25 samples.",
+      "ECE is descriptive because the same validation split informed the threshold policy."
+    ]
+  },
+  "predictions_csv": "reports\\v32_ai85_execution\\S3_v32_calibrated_predictions.csv",
+  "predictions_csv_sha256": "a7e78f9e79f3b38fd5e003585f7bfc314bb91cec4dc7aeb7306d4f29d06b263e"
+}

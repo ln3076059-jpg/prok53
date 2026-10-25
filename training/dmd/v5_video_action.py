@@ -124,8 +124,11 @@ def extract_rgb_cache(
     assert_not_consumed_holdout_for_development(subject_id, caller_action="v5_rgb_cache")
     records = feature_payload["records"]
     targets = np.asarray([int(item["frame_index"]) for item in records], dtype=np.int64)
+    # Preserve annotation-boundary decisions exactly across cache reloads.  A
+    # float32 round-trip can move a timestamp by a few microseconds across an
+    # inclusive OpenLABEL boundary and turn a labeled sample into UNKNOWN.
     timestamps = np.asarray(
-        [float(item["timestamp_seconds"]) for item in records], dtype=np.float32
+        [float(item["timestamp_seconds"]) for item in records], dtype=np.float64
     )
     cap = cv2.VideoCapture(str(video_path))
     if not cap.isOpened():
@@ -181,6 +184,8 @@ def extract_rgb_cache(
         },
         "roi_xyxy": list(roi_xyxy),
         "image_size": image_size,
+        "timestamp_dtype": "float64",
+        "annotation_boundary_convention": "START_AND_END_INCLUSIVE",
         "extraction_seconds": round(time.perf_counter() - t0, 3),
     }
 

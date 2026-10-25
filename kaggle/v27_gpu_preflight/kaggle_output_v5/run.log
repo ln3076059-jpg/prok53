@@ -1,0 +1,33 @@
+[{"stream_name":"stdout","time":5.85662962,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.1/1.1 MB 18.3 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":16.776710126,"data":"Creating new Ultralytics Settings v0.0.6 file ✅ \n"}
+,{"stream_name":"stdout","time":16.77673882,"data":"View Ultralytics Settings with 'yolo settings' or at '/root/.config/Ultralytics/settings.json'\n"}
+,{"stream_name":"stdout","time":16.776744474,"data":"Update Settings with 'yolo settings key=value', i.e. 'yolo settings runs_dir=path/to/dir'. For help see https://docs.ultralytics.com/quickstart/#ultralytics-settings.\n"}
+,{"stream_name":"stderr","time":35.336523319,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":35.337420671,"data":"  File \"/kaggle/src/script.py\", line 247, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":35.337434937,"data":"    main()\n"}
+,{"stream_name":"stderr","time":35.337439749,"data":"    ~~~~^^\n"}
+,{"stream_name":"stderr","time":35.337443629,"data":"  File \"/kaggle/src/script.py\", line 62, in main\n"}
+,{"stream_name":"stderr","time":35.337447689,"data":"    default_engine = AutonomousVideoInferenceEngineV21()\n"}
+,{"stream_name":"stderr","time":35.337451266,"data":"  File \"/kaggle/input/datasets/longngoc11/roadwatch-v27-ai85-execution/package/training/dmd/run_autonomous_v21.py\", line 321, in __init__\n"}
+,{"stream_name":"stderr","time":35.337455205,"data":"    self.driver_seat = load_verified_driver_seat()\n"}
+,{"stream_name":"stderr","time":35.337458912,"data":"                       ~~~~~~~~~~~~~~~~~~~~~~~~~^^\n"}
+,{"stream_name":"stderr","time":35.337462536,"data":"  File \"/kaggle/input/datasets/longngoc11/roadwatch-v27-ai85-execution/package/training/dmd/run_autonomous_v21.py\", line 115, in load_verified_driver_seat\n"}
+,{"stream_name":"stderr","time":35.337467086,"data":"    calibration = json.loads(path.read_text(encoding=\"utf-8\"))\n"}
+,{"stream_name":"stderr","time":35.337470645,"data":"                             ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":35.337474296,"data":"  File \"/usr/lib/python3.13/pathlib/_local.py\", line 546, in read_text\n"}
+,{"stream_name":"stderr","time":35.337478367,"data":"    return PathBase.read_text(self, encoding, errors, newline)\n"}
+,{"stream_name":"stderr","time":35.337482405,"data":"           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":35.337485747,"data":"  File \"/usr/lib/python3.13/pathlib/_abc.py\", line 632, in read_text\n"}
+,{"stream_name":"stderr","time":35.337489343,"data":"    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:\n"}
+,{"stream_name":"stderr","time":35.337493004,"data":"         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":35.337496529,"data":"  File \"/usr/lib/python3.13/pathlib/_local.py\", line 537, in open\n"}
+,{"stream_name":"stderr","time":35.337500061,"data":"    return io.open(self, mode, buffering, encoding, errors, newline)\n"}
+,{"stream_name":"stderr","time":35.337503429,"data":"           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":35.337508272,"data":"FileNotFoundError: [Errno 2] No such file or directory: '/kaggle/input/datasets/longngoc11/roadwatch-v27-ai85-execution/package/reports/v23_ai85_execution/camera_seat_calibration.json'\n"}
+,{"stream_name":"stderr","time":40.814459045,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":40.814486639,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":41.12165571,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":41.121680112,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":41.940230235,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":43.003498512,"data":"[NbConvertApp] Writing 315040 bytes to __results__.html\n"}
+]

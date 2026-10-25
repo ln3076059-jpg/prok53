@@ -1,0 +1,260 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_id": "longngoc11/roadwatch-v27-ai85-execution",
+  "file_count": 49,
+  "files": [
+    {
+      "path": "package/backend/ai/association.py",
+      "bytes": 8539,
+      "sha256": "bcd7bc9d60798cdb4e842d04935d4edef7b68e77f18240302d98173948c3d030"
+    },
+    {
+      "path": "package/backend/ai/auxiliary.py",
+      "bytes": 13633,
+      "sha256": "276dc3042fe37aec809206ed18cb46af3d2e04755b7592820beca0c3df7a5ef7"
+    },
+    {
+      "path": "package/backend/ai/cabin.py",
+      "bytes": 5858,
+      "sha256": "1ed7e4159d911b5ee43a70d835039ad09137ea7daaaa56fa23f54f172273ab48"
+    },
+    {
+      "path": "package/backend/ai/detector.py",
+      "bytes": 21324,
+      "sha256": "f86bbaceb0a42fab6635b1a71df85061dec6c2495ee8ee6825f0a1842d4ef00e"
+    },
+    {
+      "path": "package/backend/ai/events.py",
+      "bytes": 19796,
+      "sha256": "9d336a9b758bc1e458061af052202447873fddb0238fd6ffc6cfa8f29c1e5f24"
+    },
+    {
+      "path": "package/backend/ai/fusion.py",
+      "bytes": 3841,
+      "sha256": "fa5ded1c7146657e0032199533fde0f3bc2c65c7a4ce46ea33eb30d1064de857"
+    },
+    {
+      "path": "package/models/temporal_config_v2.json",
+      "bytes": 357,
+      "sha256": "191918e41e5715008a3a90c03aa062d86c4fe7086401f55c2fa55d5d1c189b4f"
+    },
+    {
+      "path": "package/models/model_config_v30_causal_action.yaml",
+      "bytes": 917,
+      "sha256": "eec53fe16e9bfc2c7de2fc80032fdafdf39c91d6ea8b669ece168f84d764b42c"
+    },
+    {
+      "path": "package/models/model_config_v30_causal_action_unweighted.yaml",
+      "bytes": 916,
+      "sha256": "541555e5a2e2cd87badfdbc375a3481478bd94f7bf68d5f10da75548ae0558ea"
+    },
+    {
+      "path": "package/reports/DMD_EVENT_MATCHING_POLICY_FREEZE.json",
+      "bytes": 570,
+      "sha256": "43dde1904e75e080787cb82cfb68a309ed8149074285041017a867a4363168b2"
+    },
+    {
+      "path": "package/reports/v27_ai85_execution/EXECUTION_REPORT.md",
+      "bytes": 6088,
+      "sha256": "5c078f7ed039ae4e49165708c282347b4b3889c0004310690e6c1c51a38865ee"
+    },
+    {
+      "path": "package/reports/v27_ai85_execution/FINAL_AI_LEAD_DECISION.md",
+      "bytes": 4762,
+      "sha256": "f3c25a2dd3ee10a10233a4c0fbf1a47feee5ce7dfff8ea55f4dda63182f18cfa"
+    },
+    {
+      "path": "package/reports/v27_ai85_execution/RAW_D5_REPORT.md",
+      "bytes": 4302,
+      "sha256": "b41868eae3ffb558a089ff35f0ab8a7a5ac8da8d93bdd83130f1a18dd40c08d9"
+    },
+    {
+      "path": "package/reports/v27_ai85_execution/component_metrics.json",
+      "bytes": 3076,
+      "sha256": "c3ba06a6ec9f950fe273f5a2c066e27e8708d9358598d066f961c9048d8f8514"
+    },
+    {
+      "path": "package/reports/v27_ai85_execution/kaggle_phone_component_receipt.json",
+      "bytes": 4223,
+      "sha256": "50c793922bb4aab4d2c76a59d93285cf4bf4c663e08e38070cfeb1ca41e101ce"
+    },
+    {
+      "path": "package/reports/v27_ai85_execution/kaggle_phone_component_v2/v27_phone_component_eval.json",
+      "bytes": 2801,
+      "sha256": "ad2813db70e4b72c236fcd3cdf26d70a1a59e35d4fe8e693f4d440b0795893e7"
+    },
+    {
+      "path": "package/reports/v27_ai85_execution/metrics_comparison.json",
+      "bytes": 4109,
+      "sha256": "99f03268f2b15b11f5415b5f3dadf51d01d8a1282e65b730a4bd7bc18bf58223"
+    },
+    {
+      "path": "package/reports/v27_ai85_execution/raw_d5_full_none/aggregate_metrics.json",
+      "bytes": 2015,
+      "sha256": "608bbc24e87aa89d87c53eb3b8e45b56cb26f3aa96b8fe254f67dd45804ba221"
+    },
+    {
+      "path": "package/reports/v27_ai85_execution/runtime_manifest.json",
+      "bytes": 1529,
+      "sha256": "94dda81990c7226ea467cbebf4379a7e416cb03b7d9920a73d96975466da9742"
+    },
+    {
+      "path": "package/reports/v27_ai85_execution/test_results.json",
+      "bytes": 260,
+      "sha256": "3efe1362cec8997f22869e1a8caeec3fd88f375549316a943063d16f62b9e460"
+    },
+    {
+      "path": "package/kaggle/v27_gpu_preflight/kernel-metadata.json",
+      "bytes": 519,
+      "sha256": "69e71ab86509681ffa3044767caa64c3d2511a40b7987224259932d5b06ed1cf"
+    },
+    {
+      "path": "package/kaggle/v27_gpu_preflight/run_v27_gpu_preflight.py",
+      "bytes": 11485,
+      "sha256": "aa7012236f2296af158c96d1e81d34d860006f067e8a6a7919b87f3d09422428"
+    },
+    {
+      "path": "package/kaggle/v27_phone_component_eval/kernel-metadata.json",
+      "bytes": 489,
+      "sha256": "b9b098a14419debe0d03cac911b1c57cc66409fb44c723d336429ac3067b2ff9"
+    },
+    {
+      "path": "package/kaggle/v27_phone_component_eval/run_phone_component_eval.py",
+      "bytes": 7466,
+      "sha256": "5c4f5763b62838aaf2a6a22c1aab77b7fd30c317f83024a6fe6a6358509021f4"
+    },
+    {
+      "path": "package/requirements-kaggle.txt",
+      "bytes": 50,
+      "sha256": "0f0fc2880f8224869371eeef84e87acdd1820033c7c67f679d326018d8c2af81"
+    },
+    {
+      "path": "package/training/common.py",
+      "bytes": 3186,
+      "sha256": "d80bd0a827752a3185a0cab2a17f48e9c65785892decb4ac4595defb447c8e5b"
+    },
+    {
+      "path": "package/training/dmd/action_adapter.py",
+      "bytes": 23321,
+      "sha256": "759097588e77f4577158d34855053ef0849bbf66fc8aee9ceb2e01fc368f6f6b"
+    },
+    {
+      "path": "package/training/dmd/action_checkpoint.py",
+      "bytes": 3696,
+      "sha256": "67c8db093db8c4c033c19bbf0eedf9bd61247ab6cde5e53b1529781630f6a2d9"
+    },
+    {
+      "path": "package/training/dmd/action_model.py",
+      "bytes": 8007,
+      "sha256": "8a3ac80af80a667a4c49f5b3f9479761186b9453f066b615cb22aab9069f9ad3"
+    },
+    {
+      "path": "package/training/dmd/adaptive_sampling.py",
+      "bytes": 8188,
+      "sha256": "778fe781b3b58562cca80f4538f59a1007d7ee1d645f0d6eb57bae6ae62de8d0"
+    },
+    {
+      "path": "package/training/dmd/adapter.py",
+      "bytes": 5564,
+      "sha256": "d5b4dc35cf72dff87c505303ba49d600c5793ee73c278a73b0c718d942f2565b"
+    },
+    {
+      "path": "package/training/dmd/audit_v27_execution.py",
+      "bytes": 9926,
+      "sha256": "c9c052975828249b8cd460dd95ee85616e06d2258a928709fec2290b0761820b"
+    },
+    {
+      "path": "package/training/dmd/audit_v27_assoc_bypass.py",
+      "bytes": 5770,
+      "sha256": "a0ecef88b069ee6302592e23d51a916ab61232570a97cc9c9ccb909f43c2b98d"
+    },
+    {
+      "path": "package/training/dmd/audit_v27_handheld_upper_bound.py",
+      "bytes": 8000,
+      "sha256": "64ecead3baee9f5c5450c1e88536c5b58331c169990863b4319e9ffb6bada63c"
+    },
+    {
+      "path": "package/training/dmd/audit_v27_phone_component_kaggle.py",
+      "bytes": 5938,
+      "sha256": "53f3b14027c547a3012685f44bb3146598e4cd75fc1005c34bc5dcbf70c46652"
+    },
+    {
+      "path": "package/training/dmd/audit_v27_raw_d5.py",
+      "bytes": 14594,
+      "sha256": "625af1790065d02613e09ff282bf6fc977f99135a1bd3266d7d91bc5636eff5e"
+    },
+    {
+      "path": "package/training/dmd/behavior_roi.py",
+      "bytes": 10958,
+      "sha256": "3b29aade6d6a45ca100d65520a577411dd29f6c86223702f2a81944d398c1586"
+    },
+    {
+      "path": "package/training/dmd/driver_phone_association.py",
+      "bytes": 5457,
+      "sha256": "45c832eedf9e025cecb56892a0a9ef879df223c1f20c50f97de8bd8b91b0e1b8"
+    },
+    {
+      "path": "package/training/dmd/holdout_guard.py",
+      "bytes": 4491,
+      "sha256": "9b3e8a4aba681261d31cdb8d35fd9cdc004524710fe3dc75150fb9027d04c549"
+    },
+    {
+      "path": "package/training/dmd/research_permissions.py",
+      "bytes": 2883,
+      "sha256": "5c0b47836ff1996a9e9aeb24f5a737fe30bd47d70560db137f74a0d067e81f40"
+    },
+    {
+      "path": "package/training/dmd/run_autonomous_v21.py",
+      "bytes": 64986,
+      "sha256": "7a3d8ce7ea513924c90acd5757f762b0f7b4b02b8778db46ef6c6567831144f9"
+    },
+    {
+      "path": "package/training/dmd/run_v30_causal_action.py",
+      "bytes": 17789,
+      "sha256": "163128af6dc90ba93e8965a842612e443bbd0969730a512a8712124f6606e793"
+    },
+    {
+      "path": "package/training/dmd/run_verified_v24.py",
+      "bytes": 56625,
+      "sha256": "ad2370438365047a172f476331b02dfd3e12d3ddd7ac9e2f72e6bf4590d1fb8d"
+    },
+    {
+      "path": "package/training/dmd/temporal_eval.py",
+      "bytes": 13898,
+      "sha256": "438f6e321df37f045aa89fc8972828f9e6bd2fd1e600f89f707b76fcc37f8db6"
+    },
+    {
+      "path": "package/training/dmd/v5_resnet_gru.py",
+      "bytes": 12439,
+      "sha256": "f34ccdd2a7cf2261f35ec3e9923b363d00d85497a297ea737f628bc4fc959c0f"
+    },
+    {
+      "path": "package/training/dmd/v5_video_action.py",
+      "bytes": 22825,
+      "sha256": "cc7631fba39a7b40ba8162da11533d9da4ff2ee1250b735cc5fa6fe2db82ebf8"
+    },
+    {
+      "path": "package/training/dmd/v6_action_hierarchy.py",
+      "bytes": 7725,
+      "sha256": "ed748b4e7c14ff29be60a11f2eb4941ade6c100446e832952e1e6eb7a126ab73"
+    },
+    {
+      "path": "package/training/dmd/v7_action_models.py",
+      "bytes": 12208,
+      "sha256": "90f0f4c4ef381746a68a08ddccf2892bb9d865a255d5e71f8130cef7727ae590"
+    },
+    {
+      "path": "package/training/dmd/v30_causal_action.py",
+      "bytes": 14059,
+      "sha256": "8eec5e197bfa95c1e3fc80bc01963cff91b91b5703334bd2d4710a10ef9747d3"
+    }
+  ],
+  "exclusions": {
+    "credentials": true,
+    "raw_media": true,
+    "annotations": true,
+    "embeddings": true,
+    "model_checkpoints": true,
+    "raw_predictions": true
+  }
+}

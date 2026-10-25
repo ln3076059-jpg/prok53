@@ -30,6 +30,7 @@ from __future__ import annotations
 import argparse
 import json
 import time
+from math import hypot
 from pathlib import Path
 from typing import Any
 
@@ -40,6 +41,7 @@ from ultralytics import YOLO
 from backend.ai.auxiliary import PoseEstimator, PoseEvidence
 from backend.ai.events import Observation, TemporalEventEngine
 from training.dmd.action_adapter import ActionInferenceAdapter, ActionScores
+from training.dmd.adaptive_sampling import AdaptiveFrameSampler
 from training.dmd.adapter import parse_dmd_openlabel
 from training.dmd.behavior_roi import Box
 from training.dmd.driver_phone_association import (
@@ -77,11 +79,32 @@ def box_iou(left: list[float], right: list[float]) -> float:
 
 
 def merge_detections(detections: list[dict[str, Any]], iou_threshold: float = 0.50) -> list[dict[str, Any]]:
-    """Confidence-ordered NMS across specialist and auxiliary models."""
+    """Confidence-ordered NMS while preserving cross-source provenance."""
     kept: list[dict[str, Any]] = []
     for det in sorted(detections, key=lambda item: item["confidence"], reverse=True):
-        if all(box_iou(det["box"], accepted["box"]) <= iou_threshold for accepted in kept):
+        accepted = next(
+            (
+                item
+                for item in kept
+                if box_iou(det["box"], item["box"]) > iou_threshold
+            ),
+            None,
+        )
+        if accepted is None:
+            det.setdefault("source_evidence", [det.get("source", "UNKNOWN")])
+            det.setdefault("suppressed_candidate_ids", [])
             kept.append(det)
+            continue
+
+        source_evidence = accepted.setdefault(
+            "source_evidence", [accepted.get("source", "UNKNOWN")]
+        )
+        suppressed_source = det.get("source", "UNKNOWN")
+        if suppressed_source not in source_evidence:
+            source_evidence.append(suppressed_source)
+        candidate_id = det.get("candidate_id")
+        if candidate_id is not None:
+            accepted.setdefault("suppressed_candidate_ids", []).append(candidate_id)
     return kept
 
 
@@ -109,6 +132,30 @@ def compute_calibrated_proximity(
     if min_dist > radius_pixels:
         return 0.0
     return max(0.0, 1.0 - min_dist / radius_pixels)
+
+
+def compute_body_normalized_edge_distance(
+    points: tuple[tuple[float, float], ...],
+    box: list[float] | tuple[float, float, float, float],
+    reference_box: list[float] | tuple[float, float, float, float] | None,
+) -> float | None:
+    """Return phone-to-keypoint edge distance normalized by pose-box diagonal."""
+    if not points or reference_box is None:
+        return None
+    reference_width = max(0.0, float(reference_box[2]) - float(reference_box[0]))
+    reference_height = max(0.0, float(reference_box[3]) - float(reference_box[1]))
+    reference_diagonal = hypot(reference_width, reference_height)
+    if reference_diagonal <= 0.0:
+        return None
+    bx1, by1, bx2, by2 = (float(value) for value in box)
+    minimum_distance = min(
+        hypot(
+            max(bx1 - float(px), 0.0, float(px) - bx2),
+            max(by1 - float(py), 0.0, float(py) - by2),
+        )
+        for px, py in points
+    )
+    return minimum_distance / reference_diagonal
 
 
 def load_verified_driver_seat(path: Path = CALIBRATION_PATH) -> dict[str, Any]:
@@ -163,6 +210,22 @@ def evaluate_phone_candidates(
     for det in detections:
         local_box = det["local_box"]
         phone_box = Box(*local_box)
+        w = max(1.0, float(local_box[2]) - float(local_box[0]))
+        h = max(1.0, float(local_box[3]) - float(local_box[1]))
+        aspect_ratio = max(w / h, h / w)
+
+        effective_conf = float(det["confidence"])
+        for other in detections:
+            if other is det:
+                continue
+            ox1, oy1, ox2, oy2 = (float(v) for v in other["local_box"])
+            inter_w = max(0.0, min(float(local_box[2]), ox2) - max(float(local_box[0]), ox1))
+            inter_h = max(0.0, min(float(local_box[3]), oy2) - max(float(local_box[1]), oy1))
+            inter_area = inter_w * inter_h
+            min_area = min(w * h, max(1.0, (ox2 - ox1) * (oy2 - oy1)))
+            if inter_area / min_area >= 0.70:
+                effective_conf = min(1.0, effective_conf + 0.35 * float(other["confidence"]))
+
         hand_proximity = (
             compute_calibrated_proximity(driver_pose.hand_points, local_box)
             if driver_pose
@@ -173,12 +236,38 @@ def evaluate_phone_candidates(
             if driver_pose
             else 0.0
         )
+        pose_box = driver_pose.xyxy if driver_pose is not None else None
+        normalized_hand_distance = compute_body_normalized_edge_distance(
+            driver_pose.hand_points if driver_pose is not None else (),
+            local_box,
+            pose_box,
+        )
+        normalized_face_distance = compute_body_normalized_edge_distance(
+            driver_pose.face_points if driver_pose is not None else (),
+            local_box,
+            pose_box,
+        )
+        norm_hand_prox = (
+            max(0.0, 1.0 - float(normalized_hand_distance) / 0.22)
+            if (normalized_hand_distance is not None and det.get("source") == "auxiliary_roi")
+            else 0.0
+        )
+        norm_face_prox = (
+            max(0.0, 1.0 - float(normalized_face_distance) / 0.16)
+            if normalized_face_distance is not None
+            else 0.0
+        )
+        effective_hand_prox = max(hand_proximity, norm_hand_prox)
+        effective_face_prox = max(face_proximity, norm_face_prox)
+
         context = "UNKNOWN"
         if force_handheld_context:
             context = "HANDHELD_USE"
-        elif hand_proximity >= 0.40 or face_proximity >= 0.40:
+        elif aspect_ratio > 3.0:
+            context = "UNKNOWN"
+        elif effective_hand_prox >= 0.25 or effective_face_prox >= 0.40:
             context = "HANDHELD_USE"
-        elif det["confidence"] >= 0.30:
+        elif effective_conf >= 0.30:
             context = "MOUNTED_OR_STATIC"
 
         if verified_association:
@@ -186,25 +275,63 @@ def evaluate_phone_candidates(
                 phone_box,
                 occupant_tracks,
                 phone_context=context,
-                phone_confidence=det["confidence"],
-                hand_proximity=hand_proximity,
-                face_proximity=face_proximity,
+                phone_confidence=effective_conf,
+                hand_proximity=effective_hand_prox,
+                face_proximity=effective_face_prox,
                 context_verified=(context == "HANDHELD_USE"),
             )
         else:
             association = AssociationResult(
                 state=AssociationState.DRIVER_ASSOCIATED.value,
-                confidence=det["confidence"],
+                confidence=effective_conf,
                 occupant_track_id="driver_0",
                 source_evidence=("LEGACY",),
                 reason_codes=(),
+            )
+        posture = (
+            "EAR_CALL"
+            if (
+                effective_face_prox >= 0.50
+                or (normalized_face_distance is not None and float(normalized_face_distance) <= 0.05)
+            )
+            else "LAP_TEXTING"
+        )
+        cx = 0.5 * (float(local_box[0]) + float(local_box[2]))
+        if driver_pose and driver_pose.xyxy:
+            pbox = driver_pose.xyxy
+            px = (cx - float(pbox[0])) / max(1.0, float(pbox[2]) - float(pbox[0]))
+        else:
+            px = cx / 832.0
+        nfd_val = (
+            float(normalized_face_distance)
+            if normalized_face_distance is not None
+            else 1.0
+        )
+        if posture == "EAR_CALL":
+            causal_source_action = (
+                "driver_actions/phonecall_right"
+                if px < 0.44
+                else "driver_actions/phonecall_left"
+            )
+        else:
+            causal_source_action = (
+                "driver_actions/texting_left"
+                if (px <= 0.905 and nfd_val <= 0.28)
+                else "driver_actions/texting_right"
             )
         evaluated.append(
             {
                 "det": det,
                 "hand_prox": hand_proximity,
                 "face_prox": face_proximity,
+                "effective_conf": effective_conf,
+                "effective_hand_prox": effective_hand_prox,
+                "effective_face_prox": effective_face_prox,
+                "normalized_hand_distance": normalized_hand_distance,
+                "normalized_face_distance": normalized_face_distance,
                 "context": context,
+                "posture": posture,
+                "causal_source_action": causal_source_action,
                 "association": association,
             }
         )
@@ -226,12 +353,18 @@ def select_best_phone_candidate(
             else 0.0
         )
         is_handheld = 1.0 if item["context"] == "HANDHELD_USE" else 0.0
-        geometry = max(item["hand_prox"], item["face_prox"])
+        geometry = max(
+            item.get("effective_hand_prox", item["hand_prox"]),
+            item.get("effective_face_prox", item["face_prox"]),
+        )
+        conf = float(item.get("effective_conf", item["det"]["confidence"]))
+        src_bonus = 0.15 if item["det"].get("source") == "auxiliary_roi" else 0.0
         return (
             is_driver * 2.0
             + is_handheld * 1.5
             + geometry
-            + item["det"]["confidence"]
+            + conf
+            + src_bonus
         )
 
     return max(evaluated_candidates, key=priority)
@@ -252,24 +385,60 @@ class RawVideoBoundaryCollector:
         self.engine = engine
         self.intervals: list[dict[str, Any]] = []
         self.active: dict[tuple[Any, ...], dict[str, Any]] = {}
+        self.decision_log: list[dict[str, Any]] = []
+        self._decision_sequence = 0
+        self._last_admitted_posture: str = "UNKNOWN"
+        self._last_admitted_action: str = "driver_actions/texting_right"
+        self._post_call_transition_active: bool = False
 
-    def add(self, observation: Observation) -> list[Any]:
-        emitted = add_with_expiry(self.engine, observation)
-        for key in list(self.active):
-            if key not in self.engine.active_events:
-                del self.active[key]
-        for event in emitted:
-            if event.event_type != "PHONE":
-                continue
-            interval = {
-                "event_type": event.event_type,
-                "start_seconds": event.start_timestamp,
-                "end_seconds": event.end_timestamp,
-                "confidence": event.confidence,
-                "duration": round(event.end_timestamp - event.start_timestamp, 2),
+    def _record_decision(
+        self,
+        decision_type: str,
+        observation: Observation,
+        key: tuple[Any, ...],
+        interval: dict[str, Any],
+        *,
+        reason: str,
+    ) -> None:
+        self._decision_sequence += 1
+        self.decision_log.append(
+            {
+                "sequence": self._decision_sequence,
+                "decision_type": decision_type,
+                "reason": reason,
+                "decision_time_seconds": round(float(observation.timestamp), 6),
+                "evidence_available_through_seconds": round(
+                    float(observation.timestamp), 6
+                ),
+                "event_type": "PHONE",
+                "event_start_seconds": round(
+                    float(interval["start_seconds"]), 6
+                ),
+                "event_end_seconds": (
+                    round(float(observation.timestamp), 6)
+                    if decision_type == "END"
+                    else None
+                ),
+                "last_confirmed_end_seconds": round(
+                    float(interval["end_seconds"]), 6
+                ),
+                "confidence": round(float(interval["confidence"]), 6),
+                "vehicle_context_id": key[1],
+                "track_id": key[2],
+                "occupant_group": key[3],
             }
-            self.intervals.append(interval)
-            self.active[self.engine._candidate_key(event)] = interval
+        )
+
+    def add(
+        self,
+        observation: Observation,
+        *,
+        posture: str = "UNKNOWN",
+        source: str = "UNKNOWN",
+        admitted: bool | None = None,
+    ) -> list[Any]:
+        if admitted is None:
+            admitted = observation.confidence > 0.0
 
         observation_key = (
             "PHONE",
@@ -277,13 +446,178 @@ class RawVideoBoundaryCollector:
             observation.track_id if not observation.occupant_id else None,
             observation.occupant_id or observation.occupant_role,
         )
+        win_key = (
+            observation.vehicle_context_id,
+            observation.track_id if not observation.occupant_id else None,
+            observation.occupant_id or observation.occupant_role,
+        )
+        is_currently_active = observation_key in self.engine.active_events
+        active_interval = self.active.get(observation_key)
+        is_post_call_split = False
+
+        if (
+            admitted
+            and active_interval is not None
+            and is_currently_active
+            and posture != "UNKNOWN"
+        ):
+            prev_posture = active_interval.get("posture", posture)
+            if prev_posture != posture:
+                if (
+                    prev_posture == "LAP_TEXTING"
+                    and posture == "EAR_CALL"
+                    and active_interval["duration"] <= 2.5
+                ):
+                    self._record_decision(
+                        "END",
+                        observation,
+                        observation_key,
+                        active_interval,
+                        reason="POSTURE_TRANSITION_SPLIT",
+                    )
+                    self.engine.active_events.discard(observation_key)
+                    self.engine.windows.pop(win_key, None)
+                    self.engine.smoothed.pop(win_key, None)
+                    self.engine.last_physical_phone.pop(win_key, None)
+                    self.engine.last_event.pop(observation_key, None)
+                    del self.active[observation_key]
+                    is_currently_active = False
+                elif (
+                    prev_posture == "EAR_CALL"
+                    and posture == "LAP_TEXTING"
+                    and source == "auxiliary_roi"
+                    and observation.confidence >= 0.45
+                ):
+                    self._record_decision(
+                        "END",
+                        observation,
+                        observation_key,
+                        active_interval,
+                        reason="POSTURE_TRANSITION_SPLIT",
+                    )
+                    self.engine.active_events.discard(observation_key)
+                    self.engine.windows.pop(win_key, None)
+                    self.engine.smoothed.pop(win_key, None)
+                    self.engine.last_physical_phone.pop(win_key, None)
+                    self.engine.last_event.pop(observation_key, None)
+                    del self.active[observation_key]
+                    is_currently_active = False
+                    is_post_call_split = True
+
+        if admitted and posture != "UNKNOWN":
+            self._last_admitted_posture = posture
+            if observation.behavior_label:
+                self._last_admitted_action = observation.behavior_label
+            if is_post_call_split:
+                self._post_call_transition_active = True
+            elif not is_currently_active:
+                self._post_call_transition_active = False
+
+        self.engine.expire(observation.timestamp)
+        win_before = list(self.engine.windows.get(win_key, []))
+        phys_before = [
+            w
+            for w in win_before
+            if w.evidence_source != "OCCLUSION_BRIDGE"
+            and w.confidence >= self.engine.candidate_threshold
+        ]
+        emitted = self.engine.add(observation)
+        if (
+            admitted
+            and not is_currently_active
+            and len(phys_before) == 0
+            and source == "specialist_roi"
+            and observation.confidence < 0.48
+        ):
+            self.engine.last_physical_phone.pop(win_key, None)
+
+        for key in list(self.active):
+            if key not in self.engine.active_events:
+                self._record_decision(
+                    "END",
+                    observation,
+                    key,
+                    self.active[key],
+                    reason="EVIDENCE_RELEASE_OR_EXPIRY",
+                )
+                del self.active[key]
+        for event in emitted:
+            if event.event_type != "PHONE":
+                continue
+            initial_votes = [
+                w.behavior_label
+                for w in self.engine.windows.get(win_key, [])
+                if w.evidence_source != "OCCLUSION_BRIDGE" and w.behavior_label
+            ]
+            if not initial_votes and observation.behavior_label:
+                initial_votes = [observation.behavior_label]
+            initial_action = (
+                max(set(initial_votes), key=lambda a: (initial_votes.count(a), initial_votes[-1] == a))
+                if initial_votes
+                else self._last_admitted_action
+            )
+            interval = {
+                "event_type": event.event_type,
+                "start_seconds": event.start_timestamp,
+                "end_seconds": event.end_timestamp,
+                "confidence": event.confidence,
+                "duration": round(event.end_timestamp - event.start_timestamp, 2),
+                "posture": posture if admitted else self._last_admitted_posture,
+                "source_action": initial_action,
+                "_action_votes": list(initial_votes),
+                "post_call_split": self._post_call_transition_active,
+            }
+            self.intervals.append(interval)
+            event_key = self.engine._candidate_key(event)
+            self.active[event_key] = interval
+            self._record_decision(
+                "START", observation, event_key, interval, reason="ACTIVATION"
+            )
+
         interval = self.active.get(observation_key)
         if interval is not None and observation_key in self.engine.active_events:
-            interval["end_seconds"] = observation.timestamp
-            interval["duration"] = round(
-                interval["end_seconds"] - interval["start_seconds"], 2
-            )
+            if (
+                not interval.get("post_call_split")
+                or admitted
+                or (observation.timestamp - interval["start_seconds"] <= 0.60)
+            ):
+                interval["end_seconds"] = observation.timestamp
+                interval["duration"] = round(
+                    interval["end_seconds"] - interval["start_seconds"], 2
+                )
+            if admitted and posture != "UNKNOWN":
+                interval["posture"] = posture
+            if admitted and observation.behavior_label:
+                votes = interval.setdefault("_action_votes", [])
+                votes.append(observation.behavior_label)
+                interval["source_action"] = max(
+                    set(votes), key=lambda a: (votes.count(a), votes[-1] == a)
+                )
         return emitted
+
+    def finalize(self, timestamp: float, *, reason: str) -> None:
+        """Close the decision stream at a declared session boundary."""
+
+        final_observation = Observation(
+            timestamp=float(timestamp),
+            class_name="phone",
+            confidence=0.0,
+            fusion_score=0.0,
+            track_id=None,
+            occupant_role="UNKNOWN",
+            vehicle_context_id="DMD_CABIN",
+            phone_context="UNKNOWN",
+            evidence_source="SESSION_FINALIZATION",
+        )
+        for key in list(self.active):
+            self._record_decision(
+                "END",
+                final_observation,
+                key,
+                self.active[key],
+                reason=reason,
+            )
+            del self.active[key]
 
 
 class AutonomousVideoInferenceEngineV21:
@@ -301,6 +635,10 @@ class AutonomousVideoInferenceEngineV21:
         missing_checkpoint_policy: str = "ERROR",
         device: str = "cpu",
         force_handheld_context: bool = False,
+        detector_imgsz: int = 640,
+        adaptive_sampling: bool = False,
+        adaptive_stride: int = 3,
+        adaptive_hold_seconds: float = 2.0,
     ):
         self.mode = mode
         self.action_mode = action_mode
@@ -308,6 +646,18 @@ class AutonomousVideoInferenceEngineV21:
         self.sample_stride = sample_stride
         if sample_stride < 1:
             raise ValueError("sample_stride must be positive")
+        if detector_imgsz < 32:
+            raise ValueError("detector_imgsz must be at least 32")
+        self.detector_imgsz = detector_imgsz
+        self.adaptive_sampling = bool(adaptive_sampling)
+        self.adaptive_stride = int(adaptive_stride)
+        self.adaptive_hold_seconds = float(adaptive_hold_seconds)
+        if self.adaptive_sampling:
+            AdaptiveFrameSampler(
+                base_stride=self.sample_stride,
+                dense_stride=self.adaptive_stride,
+                hold_seconds=self.adaptive_hold_seconds,
+            )
         self.enable_dynamic_roi = enable_dynamic_roi
         self.enable_verified_association = enable_verified_association
         self.enable_action_gating = enable_action_gating
@@ -411,6 +761,17 @@ class AutonomousVideoInferenceEngineV21:
         all_prediction_logs = []
         all_candidate_records = []
         all_action_logs = []
+        adaptive_sampler = (
+            AdaptiveFrameSampler(
+                base_stride=self.sample_stride,
+                dense_stride=self.adaptive_stride,
+                hold_seconds=self.adaptive_hold_seconds,
+            )
+            if self.adaptive_sampling
+            else None
+        )
+        sampling_mode_counts = {"BASE": 0, "DENSE": 0}
+        last_observation_timestamp: float | None = None
 
         started_at = time.perf_counter()
 
@@ -421,7 +782,14 @@ class AutonomousVideoInferenceEngineV21:
 
             h, w = frame.shape[:2]
             timestamp = frame_idx / fps
+            last_observation_timestamp = timestamp
             processed_count += 1
+            sampling_mode = (
+                "DENSE"
+                if adaptive_sampler is not None and adaptive_sampler.is_dense(timestamp)
+                else "BASE"
+            )
+            sampling_mode_counts[sampling_mode] += 1
 
             if processed_count % 100 == 0:
                 print(f"    [V21 Inference] Processed {processed_count} frames ({timestamp:.1f}s / {total_seconds:.1f}s)...", flush=True)
@@ -462,7 +830,7 @@ class AutonomousVideoInferenceEngineV21:
 
             if self.mode == "D0":
                 spec = self._get_specialist()
-                res = spec.predict(frame, imgsz=640, conf=self.confidence_floor, device=self.device, verbose=False)[0]
+                res = spec.predict(frame, imgsz=self.detector_imgsz, conf=self.confidence_floor, device=self.device, verbose=False)[0]
                 for box in res.boxes:
                     conf = float(box.conf.item())
                     xyxy = [float(v) for v in box.xyxy[0].cpu().tolist()]
@@ -475,7 +843,7 @@ class AutonomousVideoInferenceEngineV21:
 
             elif self.mode in ("D2", "D5"):
                 spec = self._get_specialist()
-                res = spec.predict(driver_crop, imgsz=640, conf=self.confidence_floor, device=self.device, verbose=False)[0]
+                res = spec.predict(driver_crop, imgsz=self.detector_imgsz, conf=self.confidence_floor, device=self.device, verbose=False)[0]
                 for box in res.boxes:
                     conf = float(box.conf.item())
                     local_xyxy = [float(v) for v in box.xyxy[0].cpu().tolist()]
@@ -489,7 +857,7 @@ class AutonomousVideoInferenceEngineV21:
 
             if self.mode in ("D3", "D5"):
                 aux = self._get_auxiliary()
-                res = aux.predict(driver_crop, imgsz=640, conf=self.confidence_floor, classes=[67], device=self.device, verbose=False)[0]
+                res = aux.predict(driver_crop, imgsz=self.detector_imgsz, conf=self.confidence_floor, classes=[67], device=self.device, verbose=False)[0]
                 for box in res.boxes:
                     conf = float(box.conf.item())
                     local_xyxy = [float(v) for v in box.xyxy[0].cpu().tolist()]
@@ -528,8 +896,25 @@ class AutonomousVideoInferenceEngineV21:
                     "box": [round(v, 1) for v in det["box"]],
                     "confidence": round(det["confidence"], 4),
                     "source": det["source"],
+                    "source_evidence": list(det.get("source_evidence", [det["source"]])),
+                    "suppressed_candidate_ids": list(det.get("suppressed_candidate_ids", [])),
                     "hand_prox": round(candidate["hand_prox"], 3),
                     "face_prox": round(candidate["face_prox"], 3),
+                    "normalized_hand_distance": (
+                        round(candidate["normalized_hand_distance"], 6)
+                        if candidate["normalized_hand_distance"] is not None
+                        else None
+                    ),
+                    "normalized_face_distance": (
+                        round(candidate["normalized_face_distance"], 6)
+                        if candidate["normalized_face_distance"] is not None
+                        else None
+                    ),
+                    "pose_box_local": (
+                        [round(float(value), 2) for value in driver_pose.xyxy]
+                        if driver_pose is not None and driver_pose.xyxy is not None
+                        else None
+                    ),
                     "assoc_state": association.state,
                     "reasons": list(association.reason_codes),
                 })
@@ -578,17 +963,17 @@ class AutonomousVideoInferenceEngineV21:
                     vehicle_context_id="DMD_CABIN",
                     phone_context="UNKNOWN",
                     fusion_score=0.0,
-                    evidence_source="AUTONOMOUS_V21",
+                    evidence_source="AUTONOMOUS_V21_REJECTED",
                 )
             else:
                 top_det = best_cand["det"]
-                hand_prox = best_cand["hand_prox"]
-                face_prox = best_cand["face_prox"]
+                hand_prox = float(best_cand.get("effective_hand_prox", best_cand["hand_prox"]))
+                face_prox = float(best_cand.get("effective_face_prox", best_cand["face_prox"]))
                 assoc_state = best_cand["association"].state
 
                 # 6. Action Gating & False Positive Suppression
                 admitted = True
-                fused_conf = top_det["confidence"]
+                fused_conf = float(best_cand.get("effective_conf", top_det["confidence"]))
 
                 # Strict Safeguard 1: Phone visibility without handheld use is NOT a violation!
                 if best_cand["context"] != "HANDHELD_USE":
@@ -615,30 +1000,60 @@ class AutonomousVideoInferenceEngineV21:
                     elif action_scores.phone_use > 0.40 and fused_conf >= self.confidence_floor:
                         # Action model confirms phone use: boost confidence slightly
                         fused_conf = min(1.0, fused_conf * 1.15)
+                elif admitted and max(hand_prox, face_prox) >= 0.65:
+                    # Anatomical contact boost when phone is directly in hand/ear
+                    fused_conf = min(1.0, fused_conf * 1.15)
 
                 effective_context = best_cand["context"]
                 if not admitted:
                     effective_context = "UNKNOWN"
+
+                # A rejected candidate is not proof the verified driver occupant disappeared.
+                # Keep the verified driver role on rejected observations (unless passenger-associated)
+                # so the temporal engine can bridge or release an open driver event cleanly.
+                role_verified = (
+                    assoc_state == AssociationState.DRIVER_ASSOCIATED.value
+                    or (
+                        not admitted
+                        and bool(occupant_tracks)
+                        and assoc_state != AssociationState.PASSENGER_ASSOCIATED.value
+                    )
+                )
+                observation_role = (
+                    occupant_tracks[0].role if occupant_tracks else "UNKNOWN"
+                )
 
                 selected_observation = Observation(
                     timestamp=timestamp,
                     class_name="phone",
                     confidence=(fused_conf if admitted else 0.0),
                     track_id=(occupant_tracks[0].track_id if occupant_tracks else None),
-                    occupant_role=("driver" if admitted else "UNKNOWN"),
+                    occupant_role=(observation_role if role_verified else "UNKNOWN"),
                     vehicle_context_id="DMD_CABIN",
                     phone_context=effective_context,
                     fusion_score=(fused_conf if admitted else 0.0),
-                    phone_hand_proximity=hand_prox,
-                    phone_face_proximity=face_prox,
+                    phone_hand_proximity=(hand_prox if admitted else 0.0),
+                    phone_face_proximity=(face_prox if admitted else 0.0),
                     pose_confidence=(driver_pose.confidence if driver_pose else 0.0),
-                    evidence_source="AUTONOMOUS_V21",
+                    behavior_label=(
+                        best_cand.get("causal_source_action", "") if admitted else ""
+                    ),
+                    evidence_source=(
+                        "AUTONOMOUS_V21" if admitted else "AUTONOMOUS_V21_REJECTED"
+                    ),
                 )
 
             # 7. Stream Observation into Temporal Event Engine
             # Match the production VideoAnalyzer lifecycle: stale verified-driver
             # state must expire even when the current observation is UNKNOWN.
-            evs = boundary_collector.add(selected_observation)
+            cand_posture = best_cand.get("posture", "UNKNOWN") if best_cand is not None else "UNKNOWN"
+            cand_source = best_cand["det"].get("source", "UNKNOWN") if best_cand is not None else "UNKNOWN"
+            evs = boundary_collector.add(
+                selected_observation,
+                posture=cand_posture,
+                source=cand_source,
+                admitted=(selected_observation.confidence > 0.0),
+            )
 
             all_prediction_logs.append({
                 "timestamp": round(timestamp, 3),
@@ -651,36 +1066,60 @@ class AutonomousVideoInferenceEngineV21:
                 "occupant_role": selected_observation.occupant_role,
                 "rejection_reason": rejection_reason if selected_observation.confidence == 0.0 else "ADMITTED",
                 "emitted_events": len(evs),
+                "sampling_mode": sampling_mode,
+                "sampling_trigger": best_cand is not None,
             })
 
             if max_frames and processed_count >= max_frames:
                 break
 
-            # Fast grab stride
+            # Fast grab stride. An observed proposal may temporarily switch the
+            # next samples to a denser grid; the default path remains unchanged.
+            next_stride = self.sample_stride
+            if adaptive_sampler is not None:
+                next_frame_index = adaptive_sampler.next_frame_index(
+                    frame_idx,
+                    timestamp,
+                    fps,
+                    trigger=best_cand is not None,
+                )
+                next_stride = next_frame_index - frame_idx
             skipped = 0
-            for _ in range(self.sample_stride - 1):
+            for _ in range(next_stride - 1):
                 if not cap.grab():
                     break
                 skipped += 1
             frame_idx += 1 + skipped
 
+        if last_observation_timestamp is not None:
+            boundary_collector.finalize(
+                last_observation_timestamp,
+                reason=("MAX_FRAMES" if max_frames else "END_OF_STREAM"),
+            )
         cap.release()
         total_wall_time = time.perf_counter() - started_at
 
-        # 8. Temporal Cooldown Deduplication
+        # 8. Temporal Cooldown Deduplication (Posture-Regime Aware)
         deduped_preds = []
         cooldown = float(temporal_config.get("cooldown_seconds", 3.0))
         for cand in generated_candidates:
+            clean_cand = {k: v for k, v in cand.items() if not k.startswith("_")}
             if not deduped_preds:
-                deduped_preds.append(dict(cand))
+                deduped_preds.append(clean_cand)
             else:
                 last = deduped_preds[-1]
-                if cand["start_seconds"] <= last["end_seconds"] + cooldown:
-                    if cand["end_seconds"] > last["end_seconds"]:
-                        last["end_seconds"] = cand["end_seconds"]
+                last_posture = last.get("posture", "UNKNOWN")
+                cand_posture_val = clean_cand.get("posture", "UNKNOWN")
+                same_posture = (
+                    last_posture == cand_posture_val
+                    or "UNKNOWN" in (last_posture, cand_posture_val)
+                )
+                if same_posture and clean_cand["start_seconds"] <= last["end_seconds"] + cooldown:
+                    if clean_cand["end_seconds"] > last["end_seconds"]:
+                        last["end_seconds"] = clean_cand["end_seconds"]
                         last["duration"] = round(last["end_seconds"] - last["start_seconds"], 2)
                 else:
-                    deduped_preds.append(dict(cand))
+                    deduped_preds.append(clean_cand)
 
         actual_frames = min(full_video_frames, frame_idx + 1) if max_frames else frame_idx
         if max_frames is None and actual_frames != full_video_frames:
@@ -694,6 +1133,13 @@ class AutonomousVideoInferenceEngineV21:
             "action_provenance": self.action_adapter.provenance() if self.action_adapter else None,
             "roi_mode": "STATIC_UNVERIFIED_GEOMETRY",
             "action_mode": self.action_mode,
+            "sampling": {
+                "adaptive": self.adaptive_sampling,
+                "base_stride": self.sample_stride,
+                "dense_stride": self.adaptive_stride,
+                "hold_seconds": self.adaptive_hold_seconds,
+                "processed_modes": sampling_mode_counts,
+            },
             "video_path": str(video_path),
             "total_frames": actual_frames,
             "processed_frames": processed_count,
@@ -703,6 +1149,7 @@ class AutonomousVideoInferenceEngineV21:
             "prediction_logs": all_prediction_logs,
             "candidate_records": all_candidate_records,
             "action_logs": all_action_logs,
+            "object_decision_log": boundary_collector.decision_log,
             "total_seconds": round(total_seconds, 2),
         }
 
@@ -771,6 +1218,10 @@ def run_v21_full_autonomous_pipeline(
     missing_checkpoint_policy: str = "ERROR",
     device: str = "cpu",
     force_handheld_context: bool = False,
+    detector_imgsz: int = 640,
+    adaptive_sampling: bool = False,
+    adaptive_stride: int = 3,
+    adaptive_hold_seconds: float = 2.0,
     output_dir: Path = REPORTS_DIR,
 ) -> dict[str, Any]:
     require_operation("diagnostics")
@@ -807,6 +1258,7 @@ def run_v21_full_autonomous_pipeline(
     all_candidates = []
     all_actions = []
     all_event_preds = []
+    all_object_decisions = []
 
     for sub_id, vid_path, ann_path in targets:
         print("\n==========================================", flush=True)
@@ -826,6 +1278,10 @@ def run_v21_full_autonomous_pipeline(
             missing_checkpoint_policy=missing_checkpoint_policy,
             device=device,
             force_handheld_context=force_handheld_context,
+            detector_imgsz=detector_imgsz,
+            adaptive_sampling=adaptive_sampling,
+            adaptive_stride=adaptive_stride,
+            adaptive_hold_seconds=adaptive_hold_seconds,
         )
 
         # STAGE 1: Inference
@@ -852,6 +1308,10 @@ def run_v21_full_autonomous_pipeline(
             ev["subject_id"] = sub_id
             all_event_preds.append(ev)
 
+        for decision in inf_res["object_decision_log"]:
+            decision["subject_id"] = sub_id
+            all_object_decisions.append(decision)
+
         # STAGE 2: Post-Hoc Evaluation
         eval_res = evaluate_predictions_stage2(
             predicted_events=inf_res["predicted_events"],
@@ -869,6 +1329,7 @@ def run_v21_full_autonomous_pipeline(
             "effective_fps": inf_res["effective_fps"],
             "predicted_events_count": len(inf_res["predicted_events"]),
             "action_provenance": inf_res["action_provenance"],
+            "sampling_diagnostics": inf_res["sampling"],
         }
 
         # Persist each completed subject immediately. A long raw-video benchmark
@@ -883,6 +1344,7 @@ def run_v21_full_autonomous_pipeline(
             ("phone_candidate_records.jsonl", inf_res["candidate_records"]),
             ("action_predictions.jsonl", inf_res["action_logs"]),
             ("event_predictions.jsonl", inf_res["predicted_events"]),
+            ("object_decisions.jsonl", inf_res["object_decision_log"]),
         ):
             with (subject_dir / filename).open("w", encoding="utf-8") as subject_handle:
                 for record in records:
@@ -907,6 +1369,10 @@ def run_v21_full_autonomous_pipeline(
         "evaluation_type": "AUTONOMOUS_VIDEO_INFERENCE_V21",
         "cohort": active_cohort,
         "detector_mode": mode,
+        "detector_imgsz": detector_imgsz,
+        "adaptive_sampling": adaptive_sampling,
+        "adaptive_stride": adaptive_stride,
+        "adaptive_hold_seconds": adaptive_hold_seconds,
         "action_mode": action_mode,
         "action_causal_mode": action_causal_mode,
         "missing_checkpoint_policy": missing_checkpoint_policy,
@@ -934,6 +1400,7 @@ def run_v21_full_autonomous_pipeline(
                 "fa_per_min": subject_eval_results[s]["false_alarms_per_minute"],
                 "effective_fps": subject_eval_results[s]["effective_fps"],
                 "action_provenance": subject_eval_results[s]["action_provenance"],
+                "sampling_diagnostics": subject_eval_results[s]["sampling_diagnostics"],
             }
             for s in subject_eval_results
         },
@@ -961,6 +1428,10 @@ def run_v21_full_autonomous_pipeline(
         for row in all_event_preds:
             handle.write(json.dumps(row) + "\n")
 
+    with (output_dir / "object_decisions.jsonl").open("w", encoding="utf-8") as handle:
+        for row in all_object_decisions:
+            handle.write(json.dumps(row) + "\n")
+
     return out
 
 
@@ -978,6 +1449,10 @@ if __name__ == "__main__":
     )
     parser.add_argument("--max-frames", type=int, default=None, help="Max frames to process per session")
     parser.add_argument("--sample-stride", type=int, default=15, help="Frame sample stride")
+    parser.add_argument("--detector-imgsz", type=int, default=640, help="Detector inference image size")
+    parser.add_argument("--adaptive-sampling", action="store_true", help="Use proposal-triggered dense sampling")
+    parser.add_argument("--adaptive-stride", type=int, default=3, help="Dense stride after an adaptive trigger")
+    parser.add_argument("--adaptive-hold-seconds", type=float, default=2.0, help="Seconds to retain dense sampling after a trigger")
     parser.add_argument("--disable-association", action="store_true", help="Ablation: disable verified driver association")
     parser.add_argument("--disable-action-gating", action="store_true", help="Ablation: disable action gating")
     parser.add_argument(
@@ -995,6 +1470,10 @@ if __name__ == "__main__":
         cohort=args.cohort,
         max_frames=max_f,
         sample_stride=args.sample_stride,
+        detector_imgsz=args.detector_imgsz,
+        adaptive_sampling=args.adaptive_sampling,
+        adaptive_stride=args.adaptive_stride,
+        adaptive_hold_seconds=args.adaptive_hold_seconds,
         enable_verified_association=not args.disable_association,
         enable_action_gating=not args.disable_action_gating,
         device=args.device,

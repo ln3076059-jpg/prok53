@@ -1,7 +1,0 @@
-{
-  "generated_at": "2026-10-18T00:34:03.314501+00:00",
-  "head": "4ae0289e7612ce43e080728ddc8bcca2cc32a969",
-  "python": "3.11.9",
-  "gpu": "NOT_AVAILABLE_NVIDIA_SMI",
-  "runtime_note": "New YOLO execution skipped because prior audit found constrained RAM; immutable existing runtime proposals reconciled"
-}

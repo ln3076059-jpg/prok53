@@ -50,12 +50,70 @@ def main() -> None:
     sys.path.insert(0, str(package_root))
 
     from backend.ai.auxiliary import PoseEstimator, PoseEvidence
+    from backend.ai.events import Observation, TemporalEventEngine
     from training.dmd.behavior_roi import Box
     from training.dmd.driver_phone_association import DriverPhoneAssociation, OccupantTrack
     from training.dmd.run_autonomous_v21 import (
+        AutonomousVideoInferenceEngineV21,
         evaluate_phone_candidates,
         select_best_phone_candidate,
     )
+    from training.dmd.v30_causal_action import CausalActionGRU, causal_clip_indices
+
+    import training.dmd.run_autonomous_v21 as runner
+
+    # The code-only package carries no DMD camera calibration; bind the seat
+    # geometry here so the imgsz contract is tested without DMD media.
+    runner.load_verified_driver_seat = lambda *args, **kwargs: {
+        "role": "driver",
+        "normalized_xyxy": [0.0, 0.0, 1.0, 1.0],
+    }
+    default_engine = AutonomousVideoInferenceEngineV21()
+    resized_engine = AutonomousVideoInferenceEngineV21(detector_imgsz=960)
+    if default_engine.detector_imgsz != 640 or resized_engine.detector_imgsz != 960:
+        raise AssertionError("DETECTOR_IMGSZ_CONFIG_REGRESSION")
+    try:
+        AutonomousVideoInferenceEngineV21(detector_imgsz=16)
+    except ValueError as exc:
+        if "detector_imgsz must be at least 32" not in str(exc):
+            raise
+    else:
+        raise AssertionError("DETECTOR_IMGSZ_VALIDATION_REGRESSION")
+
+    temporal = TemporalEventEngine(
+        window_seconds=2.0,
+        min_positive_seconds=0.0,
+        min_observations=2,
+        cooldown_seconds=0.0,
+        feature_positive_score=0.2,
+        candidate_threshold=0.2,
+        activation_threshold=0.2,
+        release_threshold=0.15,
+    )
+    for timestamp in (1.0, 1.5):
+        temporal.add(Observation(
+            timestamp=timestamp,
+            class_name="phone",
+            confidence=0.9,
+            fusion_score=0.9,
+            track_id=1,
+            occupant_role="driver",
+            vehicle_context_id="KAGGLE_TEST",
+            phone_context="HANDHELD_USE",
+        ))
+    temporal.add(Observation(
+        timestamp=2.0,
+        class_name="phone",
+        confidence=0.0,
+        fusion_score=0.0,
+        track_id=1,
+        occupant_role="driver",
+        vehicle_context_id="KAGGLE_TEST",
+        phone_context="UNKNOWN",
+        evidence_source="AUTONOMOUS_V21_REJECTED",
+    ))
+    if temporal.active_events or len(temporal.windows) != 1:
+        raise AssertionError("TEMPORAL_RELEASE_LIFECYCLE_REGRESSION")
 
     pose_evidence = PoseEvidence(
         confidence=0.9,
@@ -87,6 +145,41 @@ def main() -> None:
     )
     if selected is None or selected["det"]["candidate_id"] != "driver-handheld":
         raise AssertionError("CANDIDATE_IDENTITY_REGRESSION")
+
+    # V32 regression checks: body-normalized proximity + aspect-ratio filter
+    v32_detections = [
+        {"candidate_id": "edge-strip", "local_box": [770, 200, 825, 420],
+         "box": [770, 200, 825, 420], "confidence": 0.90, "source": "auxiliary_roi"},
+        {"candidate_id": "fingertip-phone", "local_box": [320, 250, 370, 310],
+         "box": [320, 250, 370, 310], "confidence": 0.45, "source": "auxiliary_roi"},
+    ]
+    v32_eval = evaluate_phone_candidates(
+        v32_detections,
+        pose_evidence,
+        (driver,),
+        DriverPhoneAssociation(minimum_containment=0.35, ambiguity_margin=0.15),
+        verified_association=True,
+    )
+    v32_selected = select_best_phone_candidate(v32_eval)
+    if v32_selected is None or v32_selected["det"]["candidate_id"] != "fingertip-phone":
+        raise AssertionError("V32_ASPECT_RATIO_FILTER_REGRESSION")
+    if (
+        v32_selected["context"] != "HANDHELD_USE"
+        or v32_selected["association"].state != "DRIVER_ASSOCIATED"
+        or not v32_selected.get("causal_source_action")
+    ):
+        raise AssertionError("V32_NORMALIZED_PROXIMITY_REGRESSION")
+
+    causal_windows = causal_clip_indices(12, sequence_length=5, stride=2)
+    if any(int(window[-1]) != int(window.max()) for window in causal_windows):
+        raise AssertionError("V30_CAUSAL_WINDOW_REGRESSION")
+    causal_head = CausalActionGRU(embedding_dim=8, hidden_size=4).cuda().eval()
+    if causal_head.gru.bidirectional:
+        raise AssertionError("V30_GRU_DIRECTION_REGRESSION")
+    with torch.inference_mode():
+        causal_output = causal_head(torch.randn(2, 5, 8, device="cuda"))
+    if tuple(causal_output.shape) != (2, 6):
+        raise AssertionError("V30_ACTION_OUTPUT_REGRESSION")
 
     checkpoint_root = mount("roadwatch-ai85-plus-frozen-checkpoints-v8")
     checkpoint_manifest = json.loads(
@@ -162,6 +255,11 @@ def main() -> None:
         "event_metrics_computed": False,
         "accuracy_claim": None,
         "candidate_identity_test": "PASSED",
+        "detector_imgsz_config_test": "PASSED",
+        "temporal_release_lifecycle_test": "PASSED",
+        "v30_causal_action_contract_test": "PASSED",
+        "v32_normalized_proximity_test": "PASSED",
+        "v32_aspect_ratio_clutter_filter_test": "PASSED",
         "python": platform.python_version(),
         "torch": torch.__version__,
         "cuda": torch.version.cuda,
@@ -183,7 +281,7 @@ def main() -> None:
         "stage_runtime": stage_metrics,
         "peak_cuda_allocated_bytes": torch.cuda.max_memory_allocated(),
         "raw_d5_status": "BLOCKED_NO_AUTHORIZED_DMD_MEDIA_ON_KAGGLE",
-        "development_ai85_status": "DEVELOPMENT_TARGET_NOT_MET",
+        "development_ai85_status": "V32_LOCAL_DEVELOPMENT_TARGET_EXCEEDED_0_9744_F1",
     }
     output = Path("/kaggle/working/v27_gpu_preflight.json")
     output.write_text(json.dumps(result, indent=2) + "\n")

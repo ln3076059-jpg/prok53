@@ -1,0 +1,89 @@
+{
+  "status": "V27_GPU_PREFLIGHT_PASSED",
+  "scope": "32 consumed private validation images; device/runtime check only",
+  "training_performed": false,
+  "dmd_media_used": false,
+  "event_metrics_computed": false,
+  "accuracy_claim": null,
+  "candidate_identity_test": "PASSED",
+  "detector_imgsz_config_test": "PASSED",
+  "temporal_release_lifecycle_test": "PASSED",
+  "python": "3.13.15",
+  "torch": "2.11.0+cu128",
+  "cuda": "12.8",
+  "gpu": "Tesla T4",
+  "ultralytics": "8.3.187",
+  "opencv": "4.14.0",
+  "device_provenance": {
+    "specialist": "cuda:0",
+    "auxiliary": "cuda:0",
+    "pose": "cuda:0"
+  },
+  "specialist_sha256": "840a29cb2151b881279cdabe25b03b28c5dcf40a43464edd6b672c8851f77d54",
+  "auxiliary_sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1",
+  "pose_sha256": "869e83fcdffdc7371fa4e34cd8e51c838cc729571d1635e5141e3075e9319dc0",
+  "code_manifest_sha256": "2454eb24af31e8eef03c496cdd5b5d6583d338cc95a4b88bb8ec4e2241ec6953",
+  "images": 32,
+  "input_sha256": [
+    "9b69d01175278e44260205b3c9fbc32dfafc58c5e680f5188096b2a2826c4246",
+    "12727fe7c06d223ae5cce1063a44b84e184f197bde9212beb1524863f2bfe29a",
+    "c8fbdbcb3314515b807e43cca5cd82e7bfbbb16da73d0e3359c583b28b0c4b09",
+    "df967607df3cdd04b559d5a825ef28e6ef2ba19e83fe688e064ee0c5ddc6a3c7",
+    "d34045de0f156b201fe12f02fc8f2c1cad6d394704107e9d8b4023a6e08b5372",
+    "e6af41a6757ad986374fced72009264025f708db43eabb55d7da4571b14bfa35",
+    "b69cded2cdfd979ed51d0cc9c6cb9a1f031e33336154e2cea4e0e6159a5180d5",
+    "3c77dd82532b8a131cc2645e526a54c1a00746ab6761432d588f6f3df8fd0bcc",
+    "8d473710b0751929e3afb06f51f2063107bd9107ca93c3d7a14cb17dfd9e6cb8",
+    "af5003b2bfc35b95e7df1b8773a95013d3a0e0dbf074fbfd5110e4dc7c6d4e17",
+    "e4d4761d0896f02cf6e6f9ac3dfd049da396d1be326348982fbfbb9829906cde",
+    "30617be02eb7dbbce141f5dea07eedd81bed6d2c33fdbe7fda927ad04c2c8651",
+    "f64dfb435e3e6b22b2b4d3d5f3d5ec74a974198076d3a2fa4725d6dcf6de2223",
+    "b7599449567a223a7fd6b1bd285016e4a3337ffd6f8ff9fc7e3e770c4bf83d18",
+    "6d3e57cde30386f481e303f07e615e307481c3581bd9aacac100063ba1a74b36",
+    "fca1836fd739dded4a5df99ff3ee01ab5092946bb943c3d312409a25af4329b8",
+    "ae50e9a6a3f5ab830a6d539fe71437ccc89da3e4b41b687165b9502dbbe3516f",
+    "054441041a1a027a19c69fc1f902afdd7a69918a15e08cab09d680be6988eeec",
+    "f51ece9845ef90c84821bc9dbaf4b0867c2ceba1ee26ae66d9aa36901364cd8a",
+    "e3e9afe23e29fd73c654ef016c508700f9b9e3f01846452dab4eb4c10aee8373",
+    "85b9aaa4500b664e5fc9222b45bf6f8b225207555e0ec9394d71a13008a411fc",
+    "45d3e62f21d3add8a2ff078fa5d9077990bcd79a3f96440ba9b940e18cf2af39",
+    "51fe265d22bea1f82a3b1a11eacb8698fa6cd8ea9bace9ab6d839ecba7196cf2",
+    "add98db622f86b5b670f13d1dd2cbccae550113ca8f41557ad32e6c8297b6239",
+    "40c6d18c6aebf1ab2ff568e3c4ce9e5c101f0e571a9146efb7c2ef8a855dc043",
+    "e9b2f9b1b1cecdb95f8c039fbd82d1327e91100d32fc4517d34d583193fb4051",
+    "b475fb9b7607e7f71e64046ddedfc60685851da6858c0cae139affdd23e1c164",
+    "5a0b3022fb17dc78a18bc3003b4fd76827f36124277b2243d29232d206dd0982",
+    "6fda2011fda97a69aa4dd17bb67e6dccb9ee2cfec66a88070dfce2c1e8ba8ac2",
+    "6f315dd057d263a97c8305cdf23acf8af2f9e443582d1de18b81ab7d99eb2d25",
+    "d6a579d5411c6bd5d560dd440f4b145b920dfdefad47eb566747a0e199578e6f",
+    "6a4d17771f7f96e3c61f64a9d0f91cad52a27ffad3ba2cd2d0905b34247477ed"
+  ],
+  "proposal_counts": {
+    "specialist": 5,
+    "auxiliary": 2,
+    "pose": 29
+  },
+  "stage_runtime": {
+    "specialist": {
+      "calls": 32,
+      "p50_ms": 19.643653000002814,
+      "p95_ms": 57.46441569999945,
+      "mean_ms": 26.137454187499465
+    },
+    "auxiliary": {
+      "calls": 32,
+      "p50_ms": 12.020505000009507,
+      "p95_ms": 41.494427749995566,
+      "mean_ms": 17.666610124998705
+    },
+    "pose": {
+      "calls": 32,
+      "p50_ms": 12.053884500005552,
+      "p95_ms": 61.678758049998805,
+      "mean_ms": 21.19080075000035
+    }
+  },
+  "peak_cuda_allocated_bytes": 137690112,
+  "raw_d5_status": "BLOCKED_NO_AUTHORIZED_DMD_MEDIA_ON_KAGGLE",
+  "development_ai85_status": "DEVELOPMENT_TARGET_NOT_MET"
+}

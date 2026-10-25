@@ -1,8 +1,0 @@
-{
-  "status": "BLOCKED_500_PENDING_HUMAN_REVIEWS",
-  "pending": 500,
-  "automatic_approvals": 0,
-  "best_inherited_development_macro_f1": 0.585181,
-  "uncertain_recall": 0.04,
-  "new_metrics": null
-}

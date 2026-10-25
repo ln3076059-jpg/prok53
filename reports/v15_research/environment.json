@@ -1,7 +1,0 @@
-{
-  "head_before_v15_changes": "f881dbb056d615f8c615da5d016b27f9de4054d9",
-  "python": "3.11.9",
-  "platform": "Windows-10-10.0.26200-SP0",
-  "gpu": "NOT_QUERIED_BY_MODEL_BENCHMARK",
-  "benchmark_scope": "SYNTHETIC_ADAPTER_GEOMETRY_ONLY"
-}

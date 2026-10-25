@@ -1,0 +1,430 @@
+{
+  "schema_version": "1.0.0",
+  "evaluation_type": "SECONDARY_GENERIC_PHONE_EPISODE_DIAGNOSTIC",
+  "primary_v2_metric_replacement": false,
+  "claim_status": "DIAGNOSTIC_ONLY_NOT_A_NEW_FROZEN_BENCHMARK",
+  "source_run": "reports\\v32_ai85_execution\\d5_live_decision_full",
+  "gap_seconds": 3.0,
+  "matching_policy": {
+    "iou_threshold": 0.3,
+    "onset_tolerance_seconds": 2.5,
+    "offset_tolerance_seconds": 3.5
+  },
+  "true_positives": 16,
+  "false_positives": 0,
+  "false_negatives": 0,
+  "total_gt_events": 16,
+  "evaluated_minutes": 15.27,
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0,
+  "false_alarms_per_minute": 0.0,
+  "per_subject": {
+    "gC-14": {
+      "subject_id": "gC-14",
+      "true_positives": 8,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "total_gt_events": 8,
+      "evaluated_minutes": 6.67,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "false_alarms_per_minute": 0.0,
+      "matched_events": [
+        {
+          "prediction": {
+            "event_type": "PHONE",
+            "start_seconds": 41.83467741935484,
+            "end_seconds": 86.69354838709677,
+            "duration": 44.86,
+            "confidence": 0.5811329916119575,
+            "member_prediction_count": 1
+          },
+          "ground_truth": {
+            "start_seconds": 41.4651,
+            "end_seconds": 81.0484,
+            "duration_seconds": 39.5833,
+            "source_action": "GENERIC_PHONE_USE_EPISODE",
+            "member_actions": [
+              "driver_actions/phonecall_right"
+            ],
+            "member_action_count": 1
+          },
+          "iou": 0.867,
+          "start_latency": 0.37,
+          "end_latency": 5.645
+        },
+        {
+          "prediction": {
+            "event_type": "PHONE",
+            "start_seconds": 105.34274193548387,
+            "end_seconds": 108.87096774193547,
+            "duration": 3.53,
+            "confidence": 0.3345277625307468,
+            "member_prediction_count": 1
+          },
+          "ground_truth": {
+            "start_seconds": 96.0013,
+            "end_seconds": 108.6358,
+            "duration_seconds": 12.634500000000003,
+            "source_action": "GENERIC_PHONE_USE_EPISODE",
+            "member_actions": [
+              "driver_actions/texting_right"
+            ],
+            "member_action_count": 1
+          },
+          "iou": 0.256,
+          "start_latency": 9.341,
+          "end_latency": 0.235
+        },
+        {
+          "prediction": {
+            "event_type": "PHONE",
+            "start_seconds": 122.98387096774194,
+            "end_seconds": 168.8508064516129,
+            "duration": 45.87,
+            "confidence": 0.54985758587718,
+            "member_prediction_count": 1
+          },
+          "ground_truth": {
+            "start_seconds": 122.547,
+            "end_seconds": 165.961,
+            "duration_seconds": 43.414000000000016,
+            "source_action": "GENERIC_PHONE_USE_EPISODE",
+            "member_actions": [
+              "driver_actions/phonecall_right"
+            ],
+            "member_action_count": 1
+          },
+          "iou": 0.928,
+          "start_latency": 0.437,
+          "end_latency": 2.89
+        },
+        {
+          "prediction": {
+            "event_type": "PHONE",
+            "start_seconds": 177.92338709677418,
+            "end_seconds": 193.04435483870967,
+            "duration": 15.12,
+            "confidence": 0.3173554018139839,
+            "member_prediction_count": 1
+          },
+          "ground_truth": {
+            "start_seconds": 178.5282,
+            "end_seconds": 192.7419,
+            "duration_seconds": 14.213699999999989,
+            "source_action": "GENERIC_PHONE_USE_EPISODE",
+            "member_actions": [
+              "driver_actions/texting_right"
+            ],
+            "member_action_count": 1
+          },
+          "iou": 0.94,
+          "start_latency": -0.605,
+          "end_latency": 0.302
+        },
+        {
+          "prediction": {
+            "event_type": "PHONE",
+            "start_seconds": 225.8064516129032,
+            "end_seconds": 272.68145161290323,
+            "duration": 46.88,
+            "confidence": 0.7496511995792388,
+            "member_prediction_count": 2
+          },
+          "ground_truth": {
+            "start_seconds": 225.9073,
+            "end_seconds": 269.9933,
+            "duration_seconds": 44.085999999999984,
+            "source_action": "GENERIC_PHONE_USE_EPISODE",
+            "member_actions": [
+              "driver_actions/texting_left",
+              "driver_actions/phonecall_left"
+            ],
+            "member_action_count": 2
+          },
+          "iou": 0.941,
+          "start_latency": -0.101,
+          "end_latency": 2.688
+        },
+        {
+          "prediction": {
+            "event_type": "PHONE",
+            "start_seconds": 276.71370967741933,
+            "end_seconds": 296.875,
+            "duration": 20.16,
+            "confidence": 0.31939210688695313,
+            "member_prediction_count": 1
+          },
+          "ground_truth": {
+            "start_seconds": 284.6102,
+            "end_seconds": 293.078,
+            "duration_seconds": 8.467799999999954,
+            "source_action": "GENERIC_PHONE_USE_EPISODE",
+            "member_actions": [
+              "driver_actions/texting_left"
+            ],
+            "member_action_count": 1
+          },
+          "iou": 0.42,
+          "start_latency": -7.896,
+          "end_latency": 3.797
+        },
+        {
+          "prediction": {
+            "event_type": "PHONE",
+            "start_seconds": 300.9072580645161,
+            "end_seconds": 337.7016129032258,
+            "duration": 36.79,
+            "confidence": 0.49389922544360154,
+            "member_prediction_count": 1
+          },
+          "ground_truth": {
+            "start_seconds": 302.0833,
+            "end_seconds": 334.3414,
+            "duration_seconds": 32.25810000000001,
+            "source_action": "GENERIC_PHONE_USE_EPISODE",
+            "member_actions": [
+              "driver_actions/phonecall_left"
+            ],
+            "member_action_count": 1
+          },
+          "iou": 0.877,
+          "start_latency": -1.176,
+          "end_latency": 3.36
+        },
+        {
+          "prediction": {
+            "event_type": "PHONE",
+            "start_seconds": 347.2782258064516,
+            "end_seconds": 365.9274193548387,
+            "duration": 18.65,
+            "confidence": 0.8675632044672965,
+            "member_prediction_count": 1
+          },
+          "ground_truth": {
+            "start_seconds": 347.7823,
+            "end_seconds": 363.0712,
+            "duration_seconds": 15.288899999999956,
+            "source_action": "GENERIC_PHONE_USE_EPISODE",
+            "member_actions": [
+              "driver_actions/texting_left"
+            ],
+            "member_action_count": 1
+          },
+          "iou": 0.82,
+          "start_latency": -0.504,
+          "end_latency": 2.856
+        }
+      ],
+      "unmatched_predictions": [],
+      "unmatched_gt": [],
+      "duplicate_predictions": 0
+    },
+    "gZ-36": {
+      "subject_id": "gZ-36",
+      "true_positives": 8,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "total_gt_events": 8,
+      "evaluated_minutes": 8.6,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "false_alarms_per_minute": 0.0,
+      "matched_events": [
+        {
+          "prediction": {
+            "event_type": "PHONE",
+            "start_seconds": 52.92338709677419,
+            "end_seconds": 111.39112903225806,
+            "duration": 58.47,
+            "confidence": 0.5584043168486991,
+            "member_prediction_count": 3
+          },
+          "ground_truth": {
+            "start_seconds": 52.453,
+            "end_seconds": 111.3239,
+            "duration_seconds": 58.87089999999999,
+            "source_action": "GENERIC_PHONE_USE_EPISODE",
+            "member_actions": [
+              "driver_actions/texting_right",
+              "driver_actions/phonecall_right",
+              "driver_actions/texting_right"
+            ],
+            "member_action_count": 3
+          },
+          "iou": 0.991,
+          "start_latency": 0.47,
+          "end_latency": 0.067
+        },
+        {
+          "prediction": {
+            "event_type": "PHONE",
+            "start_seconds": 128.52822580645162,
+            "end_seconds": 139.11290322580643,
+            "duration": 10.58,
+            "confidence": 0.3422902524471283,
+            "member_prediction_count": 1
+          },
+          "ground_truth": {
+            "start_seconds": 127.789,
+            "end_seconds": 149.2608,
+            "duration_seconds": 21.471799999999988,
+            "source_action": "GENERIC_PHONE_USE_EPISODE",
+            "member_actions": [
+              "driver_actions/texting_right"
+            ],
+            "member_action_count": 1
+          },
+          "iou": 0.493,
+          "start_latency": 0.739,
+          "end_latency": -10.148
+        },
+        {
+          "prediction": {
+            "event_type": "PHONE",
+            "start_seconds": 163.81048387096774,
+            "end_seconds": 220.76612903225805,
+            "duration": 56.96,
+            "confidence": 0.4570598315447569,
+            "member_prediction_count": 1
+          },
+          "ground_truth": {
+            "start_seconds": 162.0632,
+            "end_seconds": 214.8522,
+            "duration_seconds": 52.789000000000016,
+            "source_action": "GENERIC_PHONE_USE_EPISODE",
+            "member_actions": [
+              "driver_actions/texting_right",
+              "driver_actions/phonecall_right"
+            ],
+            "member_action_count": 2
+          },
+          "iou": 0.869,
+          "start_latency": 1.747,
+          "end_latency": 5.914
+        },
+        {
+          "prediction": {
+            "event_type": "PHONE",
+            "start_seconds": 226.81451612903226,
+            "end_seconds": 230.34274193548387,
+            "duration": 3.53,
+            "confidence": 0.6783588346044067,
+            "member_prediction_count": 1
+          },
+          "ground_truth": {
+            "start_seconds": 227.0497,
+            "end_seconds": 248.8911,
+            "duration_seconds": 21.841399999999993,
+            "source_action": "GENERIC_PHONE_USE_EPISODE",
+            "member_actions": [
+              "driver_actions/texting_right"
+            ],
+            "member_action_count": 1
+          },
+          "iou": 0.149,
+          "start_latency": -0.235,
+          "end_latency": -18.548
+        },
+        {
+          "prediction": {
+            "event_type": "PHONE",
+            "start_seconds": 295.866935483871,
+            "end_seconds": 299.8991935483871,
+            "duration": 4.03,
+            "confidence": 0.6194757923483849,
+            "member_prediction_count": 1
+          },
+          "ground_truth": {
+            "start_seconds": 296.3038,
+            "end_seconds": 346.6398,
+            "duration_seconds": 50.335999999999956,
+            "source_action": "GENERIC_PHONE_USE_EPISODE",
+            "member_actions": [
+              "driver_actions/phonecall_left"
+            ],
+            "member_action_count": 1
+          },
+          "iou": 0.071,
+          "start_latency": -0.437,
+          "end_latency": -46.741
+        },
+        {
+          "prediction": {
+            "event_type": "PHONE",
+            "start_seconds": 355.34274193548384,
+            "end_seconds": 380.0403225806451,
+            "duration": 24.7,
+            "confidence": 0.4670682899653912,
+            "member_prediction_count": 1
+          },
+          "ground_truth": {
+            "start_seconds": 356.3844,
+            "end_seconds": 380.0067,
+            "duration_seconds": 23.622299999999996,
+            "source_action": "GENERIC_PHONE_USE_EPISODE",
+            "member_actions": [
+              "driver_actions/texting_left"
+            ],
+            "member_action_count": 1
+          },
+          "iou": 0.956,
+          "start_latency": -1.042,
+          "end_latency": 0.034
+        },
+        {
+          "prediction": {
+            "event_type": "PHONE",
+            "start_seconds": 399.6975806451613,
+            "end_seconds": 403.7298387096774,
+            "duration": 4.03,
+            "confidence": 0.29928567744791507,
+            "member_prediction_count": 1
+          },
+          "ground_truth": {
+            "start_seconds": 400.2016,
+            "end_seconds": 460.0134,
+            "duration_seconds": 59.811800000000005,
+            "source_action": "GENERIC_PHONE_USE_EPISODE",
+            "member_actions": [
+              "driver_actions/phonecall_left"
+            ],
+            "member_action_count": 1
+          },
+          "iou": 0.058,
+          "start_latency": -0.504,
+          "end_latency": -56.284
+        },
+        {
+          "prediction": {
+            "event_type": "PHONE",
+            "start_seconds": 468.75,
+            "end_seconds": 489.91935483870964,
+            "duration": 21.17,
+            "confidence": 0.45832914561033244,
+            "member_prediction_count": 1
+          },
+          "ground_truth": {
+            "start_seconds": 469.4556,
+            "end_seconds": 486.9624,
+            "duration_seconds": 17.5068,
+            "source_action": "GENERIC_PHONE_USE_EPISODE",
+            "member_actions": [
+              "driver_actions/texting_left"
+            ],
+            "member_action_count": 1
+          },
+          "iou": 0.827,
+          "start_latency": -0.706,
+          "end_latency": 2.957
+        }
+      ],
+      "unmatched_predictions": [],
+      "unmatched_gt": [],
+      "duplicate_predictions": 0
+    }
+  }
+}

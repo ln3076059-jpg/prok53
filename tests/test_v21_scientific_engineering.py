@@ -43,6 +43,7 @@ from training.dmd.driver_phone_association import (
 from training.dmd.run_autonomous_v21 import (
     box_iou,
     compute_calibrated_proximity,
+    compute_body_normalized_edge_distance,
     evaluate_predictions_stage2,
     merge_detections,
 )
@@ -102,6 +103,53 @@ def test_v21_mounted_phone_is_not_handheld_violation():
         context_verified=True,
     )
     assert res.state == AssociationState.MOUNTED_OR_STATIC.value
+
+
+def test_v21_nms_preserves_cross_source_provenance():
+    specialist = {
+        "box": [10.0, 10.0, 30.0, 30.0],
+        "local_box": [10.0, 10.0, 30.0, 30.0],
+        "confidence": 0.8,
+        "source": "specialist_roi",
+        "candidate_id": "1:0:specialist_roi",
+    }
+    auxiliary = {
+        "box": [10.0, 10.0, 30.0, 30.0],
+        "local_box": [10.0, 10.0, 30.0, 30.0],
+        "confidence": 0.7,
+        "source": "auxiliary_roi",
+        "candidate_id": "1:1:auxiliary_roi",
+    }
+
+    merged = merge_detections([auxiliary, specialist])
+
+    assert len(merged) == 1
+    assert merged[0]["candidate_id"] == "1:0:specialist_roi"
+    assert merged[0]["source_evidence"] == ["specialist_roi", "auxiliary_roi"]
+    assert merged[0]["suppressed_candidate_ids"] == ["1:1:auxiliary_roi"]
+
+
+def test_v21_body_normalized_distance_is_scale_invariant():
+    small = compute_body_normalized_edge_distance(
+        ((40.0, 20.0),),
+        (20.0, 10.0, 30.0, 20.0),
+        (0.0, 0.0, 100.0, 100.0),
+    )
+    large = compute_body_normalized_edge_distance(
+        ((80.0, 40.0),),
+        (40.0, 20.0, 60.0, 40.0),
+        (0.0, 0.0, 200.0, 200.0),
+    )
+
+    assert small == pytest.approx(large)
+
+
+def test_v21_body_normalized_distance_abstains_without_reference_geometry():
+    assert compute_body_normalized_edge_distance(
+        ((10.0, 10.0),),
+        (0.0, 0.0, 5.0, 5.0),
+        None,
+    ) is None
 
 
 def test_v21_calibrated_proximity_radius_enforces_anatomical_bounds():

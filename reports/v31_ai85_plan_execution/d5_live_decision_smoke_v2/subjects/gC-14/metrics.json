@@ -1,0 +1,59 @@
+{
+  "true_positives": 1,
+  "false_positives": 0,
+  "false_negatives": 0,
+  "total_gt_events": 1,
+  "evaluated_minutes": 0.83,
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0,
+  "false_alarms_per_minute": 0.0,
+  "matched_events": [
+    {
+      "prediction": {
+        "event_type": "PHONE",
+        "start_seconds": 41.83467741935484,
+        "end_seconds": 49.899193548387096,
+        "confidence": 0.5053330361843109,
+        "duration": 8.06,
+        "subject_id": "gC-14"
+      },
+      "ground_truth": {
+        "source_id": "EXTERNAL_DMD_VICOMTECH",
+        "source_group": "gC",
+        "source_participant_id": "14",
+        "source_session_id": "s2",
+        "source_action": "driver_actions/phonecall_right",
+        "development_phone_state": "PHONE_USE",
+        "start_frame": 1234,
+        "end_frame": 1485,
+        "start_seconds": 41.4651,
+        "end_seconds": 49.8992,
+        "duration_seconds": 8.4341,
+        "annotation_path": "D:/.idea/giangdoantotnghiep/dataset/external_dmd/subjects/gC-14/gC_14_s2_2019-03-04T11;48;02+01;00_rgb_ann_distraction.json",
+        "annotation_sha256": "25aa157587dd283e4550b9129321fa9a1fc1889cc7cc1819c7e58d74e3089089",
+        "mapping_version": "v1"
+      },
+      "iou": 0.956,
+      "start_latency": 0.37,
+      "end_latency": -0.0
+    }
+  ],
+  "unmatched_predictions": [],
+  "unmatched_gt": [],
+  "processed_frames": 100,
+  "wall_time_seconds": 33.71,
+  "effective_fps": 2.97,
+  "predicted_events_count": 1,
+  "action_provenance": null,
+  "sampling_diagnostics": {
+    "adaptive": false,
+    "base_stride": 15,
+    "dense_stride": 3,
+    "hold_seconds": 2.0,
+    "processed_modes": {
+      "BASE": 100,
+      "DENSE": 0
+    }
+  }
+}

@@ -1,8 +1,4 @@
-"""Research-only, causal visual sampling and evidence-bounded confirmation.
-
-Sampling sees only the current frame and past motion. The inherited BiGRU has a
-separately declared two-second lookahead; it is not a causal action classifier.
-"""
+"""Causal visual sampling and timestamp-based dense inference policies."""
 
 from __future__ import annotations
 
@@ -42,7 +38,11 @@ class VisualSampler:
         self.last_frame = frame_index
         gray = cv2.resize(cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY), (64, 64))
         gray = gray.astype(np.float32) / 255.0
-        motion = float(np.abs(gray - self.previous).mean()) if self.previous is not None else 0.0
+        motion = (
+            float(np.abs(gray - self.previous).mean())
+            if self.previous is not None
+            else 0.0
+        )
         self.previous = gray
         triggered = motion >= self.config.motion_threshold
         if triggered:
@@ -62,7 +62,9 @@ class VisualSampler:
         }
 
 
-def padded_roi(shape: tuple, xyxy: tuple[float, ...], padding: float = 0.0) -> tuple[int, ...]:
+def padded_roi(
+    shape: tuple, xyxy: tuple[float, ...], padding: float = 0.0
+) -> tuple[int, ...]:
     """Clip a normalized ROI to the image; padding is a fraction of ROI extent."""
     h, w = shape[:2]
     x1, y1, x2, y2 = xyxy
@@ -78,7 +80,7 @@ def padded_roi(shape: tuple, xyxy: tuple[float, ...], padding: float = 0.0) -> t
 
 
 def restore_boxes(boxes: np.ndarray, roi: tuple[int, ...], shape: tuple) -> np.ndarray:
-    """Ultralytics returns boxes in source-crop pixels, without letterbox scale."""
+    """Restore source-crop boxes to full-frame pixel coordinates."""
     boxes = np.asarray(boxes, dtype=np.float32).reshape(-1, 4).copy()
     boxes += np.asarray([roi[0], roi[1], roi[0], roi[1]], dtype=np.float32)
     boxes[:, [0, 2]] = np.clip(boxes[:, [0, 2]], 0, shape[1])
@@ -94,17 +96,14 @@ def confirmed_events(
     release: float = 0.52,
     maximum_gap: float = 0.6,
 ) -> list[dict]:
-    """Require two distinct positive samples; never extrapolate event endpoints.
-
-    No centered smoothing, future frames, gap merging, or duration extension.
-    Confirmation timestamp is distinct from the first positive observation.
-    """
+    """Require two distinct positive samples and preserve evidence endpoints."""
     if len(timestamps) != len(scores) or np.any(np.diff(timestamps) <= 0):
         raise ValueError("aligned, strictly increasing timestamps required")
     if not np.isfinite(timestamps).all() or not np.isfinite(scores).all():
         raise ValueError("non-finite evidence")
-    events, run = [], []
-    confirmed = None
+    events: list[dict] = []
+    run: list[tuple[float, float]] = []
+    confirmed: float | None = None
 
     def finish() -> None:
         nonlocal run, confirmed
@@ -116,7 +115,7 @@ def confirmed_events(
                     "end_seconds": float(run[-1][0]),
                     "duration": float(run[-1][0] - run[0][0]),
                     "confirmed_at_seconds": float(confirmed),
-                    "confidence": float(max(v for _, v in run)),
+                    "confidence": float(max(value for _, value in run)),
                     "source": "ADAPTIVE_ACTION",
                     "review_status": "NEEDS_REVIEW",
                 }
@@ -150,6 +149,70 @@ def fuse_available_views(
     ]
     if not available:
         return None
-    if any(not np.isfinite(s) or not 0 <= s <= 1 for s, _ in available):
+    if any(not np.isfinite(score) or not 0 <= score <= 1 for score, _ in available):
         raise ValueError("view scores must be finite probabilities")
-    return sum(s * w for s, w in available) / sum(w for _, w in available)
+    return sum(score * weight for score, weight in available) / sum(
+        weight for _, weight in available
+    )
+
+
+class AdaptiveFrameSampler:
+    """Switch from a base stride to a dense stride after an evidence trigger."""
+
+    def __init__(
+        self,
+        *,
+        base_stride: int,
+        dense_stride: int,
+        hold_seconds: float,
+    ) -> None:
+        if base_stride < 1 or dense_stride < 1:
+            raise ValueError("sampling strides must be positive")
+        if dense_stride > base_stride:
+            raise ValueError("dense_stride must not exceed base_stride")
+        if hold_seconds <= 0.0:
+            raise ValueError("hold_seconds must be positive")
+        self.base_stride = int(base_stride)
+        self.dense_stride = int(dense_stride)
+        self.hold_seconds = float(hold_seconds)
+        self._dense_until = float("-inf")
+
+    def observe(self, timestamp: float, *, trigger: bool) -> None:
+        if trigger:
+            self._dense_until = max(self._dense_until, timestamp + self.hold_seconds)
+
+    def is_dense(self, timestamp: float) -> bool:
+        return timestamp <= self._dense_until
+
+    def next_stride(self, timestamp: float, *, trigger: bool) -> int:
+        self.observe(timestamp, trigger=trigger)
+        return self.dense_stride if self.is_dense(timestamp) else self.base_stride
+
+    def next_frame_index(
+        self,
+        frame_index: int,
+        timestamp: float,
+        fps: float,
+        *,
+        trigger: bool,
+    ) -> int:
+        """Return the next absolute sample while preserving the base grid.
+
+        Variable relative strides drift away from frames ``0, base_stride, ...``
+        after a dense burst.  Scheduling on absolute grids guarantees adaptive
+        sampling is a strict superset of the baseline samples.
+        """
+        if frame_index < 0:
+            raise ValueError("frame_index must be non-negative")
+        if fps <= 0.0:
+            raise ValueError("fps must be positive")
+        self.observe(timestamp, trigger=trigger)
+        next_base = ((frame_index // self.base_stride) + 1) * self.base_stride
+        next_dense = ((frame_index // self.dense_stride) + 1) * self.dense_stride
+        next_dense_timestamp = next_dense / fps
+        if next_dense_timestamp <= self._dense_until + 1e-9:
+            return min(next_base, next_dense)
+        return next_base
+
+    def reset(self) -> None:
+        self._dense_until = float("-inf")

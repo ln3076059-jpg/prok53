@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     research_phone_review_dir: Path = Path("reports/v9_research/human_phone_reviews")
     max_upload_mb: int = 1024
     allow_camera_streams: bool = False
-    cors_origins: str = "http://localhost:5173"
+    cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://127.0.0.1:5174"
     access_token_minutes: int = 480
     analysis_queue_backend: str = "background"
 

@@ -1,7 +1,0 @@
-{
-  "source": "reports/v14_research/event_match_records.json",
-  "source_sha256": "e6e1c2f102279b5a4ac61054854b3d5f515204304c56f62d92723ab883101da4",
-  "ground_truth_changed": false,
-  "matcher_changed": false,
-  "v15_real_event_replay": "NOT_RUN_NO_NEW_ACCURACY_MODEL_OR_VERIFIED_ASSOCIATION"
-}

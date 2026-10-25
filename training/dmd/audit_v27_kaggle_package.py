@@ -33,6 +33,14 @@ def main() -> None:
 
     api = KaggleApi()
     api.authenticate()
+    dataset_rows = [
+        row
+        for row in api.dataset_list(search="roadwatch-v27-ai85-execution", user="longngoc11")
+        if row.ref == DATASET_REF
+    ]
+    if len(dataset_rows) != 1:
+        raise ValueError(f"KAGGLE_DATASET_LOOKUP_FAILED:{len(dataset_rows)}")
+    dataset_version = int(dataset_rows[0].current_version_number)
     response = api.dataset_list_files(DATASET_REF, page_size=200)
     remote = {item.name: item.total_bytes for item in response.dataset_files}
     if remote != expected:
@@ -59,7 +67,7 @@ def main() -> None:
             "ref": DATASET_REF,
             "url": "https://www.kaggle.com/datasets/longngoc11/roadwatch-v27-ai85-execution",
             "visibility": "private",
-            "version": 6,
+            "version": dataset_version,
             "status": "ready",
         },
         "verification": {
@@ -72,7 +80,7 @@ def main() -> None:
             "exclusions": manifest["exclusions"],
         },
     }
-    target = REPORT / "kaggle_package_v6_receipt.json"
+    target = REPORT / f"kaggle_package_v{dataset_version}_receipt.json"
     target.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(receipt, indent=2))
 

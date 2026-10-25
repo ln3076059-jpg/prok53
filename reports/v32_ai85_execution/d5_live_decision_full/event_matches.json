@@ -1,0 +1,73 @@
+{
+  "schema_version": "v21.0",
+  "evaluation_type": "AUTONOMOUS_VIDEO_INFERENCE_V21",
+  "cohort": [
+    "gC-14",
+    "gZ-36"
+  ],
+  "detector_mode": "D5",
+  "detector_imgsz": 640,
+  "adaptive_sampling": false,
+  "adaptive_stride": 3,
+  "adaptive_hold_seconds": 2.0,
+  "action_mode": "NONE",
+  "action_causal_mode": "STRICT_CAUSAL_ONLINE",
+  "missing_checkpoint_policy": "ERROR",
+  "device": "cpu",
+  "force_handheld_context": false,
+  "verified_association": true,
+  "action_gating": true,
+  "total_gt_events": 20,
+  "evaluated_minutes": 15.27,
+  "true_positives": 19,
+  "false_positives": 0,
+  "false_negatives": 1,
+  "precision": 1.0,
+  "recall": 0.95,
+  "f1": 0.9744,
+  "false_alarms_per_minute": 0.0,
+  "per_subject": {
+    "gC-14": {
+      "tp": 9,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "fa_per_min": 0.0,
+      "effective_fps": 2.2,
+      "action_provenance": null,
+      "sampling_diagnostics": {
+        "adaptive": false,
+        "base_stride": 15,
+        "dense_stride": 3,
+        "hold_seconds": 2.0,
+        "processed_modes": {
+          "BASE": 795,
+          "DENSE": 0
+        }
+      }
+    },
+    "gZ-36": {
+      "tp": 10,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.9091,
+      "f1": 0.9524,
+      "fa_per_min": 0.0,
+      "effective_fps": 2.24,
+      "action_provenance": null,
+      "sampling_diagnostics": {
+        "adaptive": false,
+        "base_stride": 15,
+        "dense_stride": 3,
+        "hold_seconds": 2.0,
+        "processed_modes": {
+          "BASE": 1024,
+          "DENSE": 0
+        }
+      }
+    }
+  }
+}

@@ -110,3 +110,41 @@ def test_single_frame_evidence_cannot_trigger_violation():
     )
     events = engine.add(obs)
     assert not events, "Single-frame spike MUST NOT trigger an event violation"
+
+
+def test_rejected_driver_observation_releases_active_phone_event():
+    engine = TemporalEventEngine(
+        window_seconds=2.0,
+        min_positive_seconds=0.0,
+        min_observations=2,
+        cooldown_seconds=0.0,
+        feature_positive_score=0.2,
+        candidate_threshold=0.2,
+        activation_threshold=0.2,
+        release_threshold=0.15,
+    )
+    for timestamp in (1.0, 1.5):
+        engine.add(Observation(
+            timestamp=timestamp,
+            class_name="phone",
+            confidence=0.9,
+            fusion_score=0.9,
+            track_id=1,
+            occupant_role="driver",
+            vehicle_context_id="veh1",
+            phone_context="HANDHELD_USE",
+        ))
+    assert engine.active_events == {("PHONE", "veh1", 1, "driver")}
+
+    engine.add(Observation(
+        timestamp=2.0,
+        class_name="phone",
+        confidence=0.0,
+        fusion_score=0.0,
+        track_id=1,
+        occupant_role="driver",
+        vehicle_context_id="veh1",
+        phone_context="UNKNOWN",
+        evidence_source="AUTONOMOUS_V21_REJECTED",
+    ))
+    assert not engine.active_events

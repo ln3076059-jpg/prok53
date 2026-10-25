@@ -64,13 +64,13 @@ occupant_rois:
   calibration_status: APPROVED_CALIBRATED_DMD_V2
   regions:
     - role: driver
-      normalized_xyxy: [0.0, 0.05, 0.60, 1.0]
+      normalized_xyxy: [0.0, 0.05, 0.58, 1.0]
       enabled: true
       min_overlap: 0.35
     - role: front_passenger
-      normalized_xyxy: [0.44, 0.15, 1.0, 1.0]
+      normalized_xyxy: [0.46, 0.05, 1.0, 1.0]
       enabled: true
-      min_overlap: 0.5
+      min_overlap: 0.35
     - role: rear_left
       normalized_xyxy: [0.0, 0.2, 0.38, 1.0]
       enabled: false

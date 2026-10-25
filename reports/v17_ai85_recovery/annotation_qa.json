@@ -1,9 +1,0 @@
-{
-  "phone_schema": "IMPLEMENTED_AND_TESTED",
-  "candidate_flow_ledger": "IMPLEMENTED_AND_TESTED",
-  "human_approved_phone_records": 0,
-  "inter_annotator_agreement": "NOT_RUN",
-  "adjudication": "NOT_RUN",
-  "seatbelt_pending": 500,
-  "automatic_approvals": 0
-}

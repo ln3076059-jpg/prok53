@@ -256,6 +256,7 @@ class SafetyDetector:
     ) -> list[NormalizedDetection]:
         output: list[NormalizedDetection] = []
         imgsz = int(self.config.get("imgsz", 640))
+        self._call_count = getattr(self, "_call_count", 0) + 1
         for model_index, item in enumerate(self.specialists["models"]):
             if specialist_filter and item["name"] not in specialist_filter:
                 continue
@@ -306,34 +307,148 @@ class SafetyDetector:
                     )
                 )
 
-            # Level 2: Driver Phone ROI second pass at higher effective resolution
+            # Level 2: Occupant Phone ROI second pass at higher resolution
+            # Only needed if the full-frame pass found a borderline candidate (< 0.52) or on periodic keyframes
+            has_confident_phone = any(
+                d.class_name == "phone" and d.confidence >= 0.52 for d in output
+            )
+            has_any_phone = any(d.class_name == "phone" for d in output)
             driver_roi_cfg = self.config.get("driver_roi_refinement", {})
-            if item["name"] == "phone_detector" and driver_roi_cfg.get("enabled", False):
+            if (
+                item["name"] == "phone_detector"
+                and driver_roi_cfg.get("enabled", False)
+                and not has_confident_phone
+            ):
                 h, w = frame.shape[:2]
-                roi_box = driver_roi_cfg.get("normalized_xyxy", [0.0, 0.10, 0.65, 0.95])
-                rx1, ry1 = max(0, int(w * roi_box[0])), max(0, int(h * roi_box[1]))
-                rx2, ry2 = min(w, int(w * roi_box[2])), min(h, int(h * roi_box[3]))
-                crop = frame[ry1:ry2, rx1:rx2]
-                if crop.size > 0 and crop.shape[0] > 32 and crop.shape[1] > 32:
-                    crop_imgsz = int(driver_roi_cfg.get("imgsz", 384))
-                    crop_res = model.predict(crop, conf=minimum, imgsz=crop_imgsz, verbose=False)[0]
-                    c_boxes = getattr(crop_res, "boxes", None)
-                    if c_boxes is not None and len(c_boxes) > 0:
-                        for cb_xyxy, cb_conf, cb_cls in zip(
-                            c_boxes.xyxy.cpu().tolist(),
-                            c_boxes.conf.cpu().tolist(),
-                            c_boxes.cls.cpu().tolist(),
-                        ):
-                            c_class_name = source_map.get(int(cb_cls))
-                            c_thresh = float(self.thresholds.get(c_class_name, item.get("threshold", 0.25)))
-                            if c_class_name == "phone" and float(cb_conf) >= c_thresh:
-                                full_box = (
-                                    rx1 + cb_xyxy[0],
-                                    ry1 + cb_xyxy[1],
-                                    rx1 + cb_xyxy[2],
-                                    ry1 + cb_xyxy[3],
+                cabin_roi = [0.02, 0.08, 0.98, 0.95]
+                crop_imgsz = int(driver_roi_cfg.get("imgsz", 384))
+                for roi_idx, roi_box in enumerate((cabin_roi,)):
+                    rx1, ry1 = max(0, int(w * roi_box[0])), max(0, int(h * roi_box[1]))
+                    rx2, ry2 = min(w, int(w * roi_box[2])), min(h, int(h * roi_box[3]))
+                    crop = frame[ry1:ry2, rx1:rx2]
+                    if has_any_phone and crop.size > 0 and crop.shape[0] > 32 and crop.shape[1] > 32:
+                        crop_res = model.predict(
+                            crop, conf=minimum, imgsz=crop_imgsz, verbose=False
+                        )[0]
+                        c_boxes = getattr(crop_res, "boxes", None)
+                        if c_boxes is not None and len(c_boxes) > 0:
+                            for cb_xyxy, cb_conf, cb_cls in zip(
+                                c_boxes.xyxy.cpu().tolist(),
+                                c_boxes.conf.cpu().tolist(),
+                                c_boxes.cls.cpu().tolist(),
+                            ):
+                                c_class_name = source_map.get(int(cb_cls))
+                                c_thresh = float(
+                                    self.thresholds.get(
+                                        c_class_name, item.get("threshold", 0.25)
+                                    )
                                 )
-                                # Merge via IoU / NMS
+                                if c_class_name == "phone" and float(cb_conf) >= c_thresh:
+                                    full_box = (
+                                        rx1 + cb_xyxy[0],
+                                        ry1 + cb_xyxy[1],
+                                        rx1 + cb_xyxy[2],
+                                        ry1 + cb_xyxy[3],
+                                    )
+                                    # Merge via IoU / NMS
+                                    merged = False
+                                    for ex_idx, existing in enumerate(output):
+                                        if existing.class_name == "phone":
+                                            ex = existing.xyxy
+                                            ix1 = max(ex[0], full_box[0])
+                                            iy1 = max(ex[1], full_box[1])
+                                            ix2 = min(ex[2], full_box[2])
+                                            iy2 = min(ex[3], full_box[3])
+                                            inter = max(0.0, ix2 - ix1) * max(0.0, iy2 - iy1)
+                                            area1 = max(1.0, (ex[2] - ex[0]) * (ex[3] - ex[1]))
+                                            area2 = max(
+                                                1.0,
+                                                (full_box[2] - full_box[0])
+                                                * (full_box[3] - full_box[1]),
+                                            )
+                                            union = area1 + area2 - inter
+                                            iou = inter / union if union > 0 else 0.0
+                                            if iou >= 0.35 or (inter / min(area1, area2)) >= 0.65:
+                                                consensus_conf = min(
+                                                    0.98,
+                                                    1.0
+                                                    - (1.0 - existing.confidence)
+                                                    * (1.0 - float(cb_conf)),
+                                                )
+                                                best_box = (
+                                                    ex
+                                                    if area1 > 1.20 * area2
+                                                    else (
+                                                        full_box
+                                                        if float(cb_conf) >= existing.confidence
+                                                        else ex
+                                                    )
+                                                )
+                                                output[ex_idx] = NormalizedDetection(
+                                                    existing.class_id,
+                                                    "phone",
+                                                    float(consensus_conf),
+                                                    best_box,
+                                                    existing.track_id,
+                                                )
+                                                merged = True
+                                                break
+                                    if not merged:
+                                        cid = next(
+                                            (
+                                                key
+                                                for key, name in self.names.items()
+                                                if name == "phone"
+                                            ),
+                                            0,
+                                        )
+                                        output.append(
+                                            NormalizedDetection(
+                                                cid,
+                                                "phone",
+                                                float(cb_conf),
+                                                full_box,
+                                                None,
+                                            )
+                                        )
+                        del c_boxes
+                        del crop_res
+                    # Level 2b: Auxiliary COCO cell-phone (class 67) consensus pass on primary ROI only when needed
+                    aux_path = Path("models/auxiliary/yolo11n.pt")
+                    if (
+                        roi_idx == 0
+                        and not any(d.class_name == "phone" and d.confidence >= 0.42 for d in output)
+                        and aux_path.is_file()
+                        and type(model).__name__ == "YOLO"
+                    ):
+                        if "_aux_coco_phone" not in self._specialist_models:
+                            from ultralytics import YOLO as _YOLO
+
+                            self._specialist_models["_aux_coco_phone"] = _YOLO(str(aux_path))
+                        aux_model = self._specialist_models["_aux_coco_phone"]
+                        aux_res = aux_model.predict(
+                            crop,
+                            conf=max(0.22, minimum),
+                            classes=[67],
+                            imgsz=480,
+                            verbose=False,
+                        )[0]
+                        a_boxes = getattr(aux_res, "boxes", None)
+                        if a_boxes is not None and len(a_boxes) > 0:
+                            for ab_xyxy, ab_conf in zip(
+                                a_boxes.xyxy.cpu().tolist(),
+                                a_boxes.conf.cpu().tolist(),
+                            ):
+                                bw = max(1.0, float(ab_xyxy[2]) - float(ab_xyxy[0]))
+                                bh = max(1.0, float(ab_xyxy[3]) - float(ab_xyxy[1]))
+                                if max(bw / bh, bh / bw) > 3.0:
+                                    continue
+                                full_box = (
+                                    rx1 + ab_xyxy[0],
+                                    ry1 + ab_xyxy[1],
+                                    rx1 + ab_xyxy[2],
+                                    ry1 + ab_xyxy[3],
+                                )
                                 merged = False
                                 for ex_idx, existing in enumerate(output):
                                     if existing.class_name == "phone":
@@ -344,33 +459,51 @@ class SafetyDetector:
                                         iy2 = min(ex[3], full_box[3])
                                         inter = max(0.0, ix2 - ix1) * max(0.0, iy2 - iy1)
                                         area1 = max(1.0, (ex[2] - ex[0]) * (ex[3] - ex[1]))
-                                        area2 = max(1.0, (full_box[2] - full_box[0]) * (full_box[3] - full_box[1]))
+                                        area2 = max(
+                                            1.0,
+                                            (full_box[2] - full_box[0]) * (full_box[3] - full_box[1]),
+                                        )
                                         union = area1 + area2 - inter
                                         iou = inter / union if union > 0 else 0.0
-                                        if iou >= 0.40:
-                                            if float(cb_conf) > existing.confidence:
-                                                output[ex_idx] = NormalizedDetection(
-                                                    existing.class_id,
-                                                    "phone",
-                                                    float(cb_conf),
-                                                    full_box,
-                                                    existing.track_id,
-                                                )
+                                        if iou >= 0.30:
+                                            consensus_conf = min(
+                                                0.99,
+                                                1.0
+                                                - (1.0 - existing.confidence)
+                                                * (1.0 - float(ab_conf)),
+                                            )
+                                            best_box = (
+                                                full_box
+                                                if float(ab_conf) >= existing.confidence
+                                                else ex
+                                            )
+                                            output[ex_idx] = NormalizedDetection(
+                                                existing.class_id,
+                                                "phone",
+                                                float(consensus_conf),
+                                                best_box,
+                                                existing.track_id,
+                                            )
                                             merged = True
                                             break
-                                if not merged:
-                                    cid = next((key for key, name in self.names.items() if name == "phone"), 0)
+                                if not merged and float(ab_conf) >= 0.32:
+                                    cid = next(
+                                        (key for key, name in self.names.items() if name == "phone"),
+                                        0,
+                                    )
                                     output.append(
                                         NormalizedDetection(
                                             cid,
                                             "phone",
-                                            float(cb_conf),
+                                            float(ab_conf),
                                             full_box,
                                             None,
                                         )
                                     )
-                        del c_boxes
-                    del crop_res
+                            del a_boxes
+                        del aux_res
+                        if hasattr(aux_model, "predictor") and aux_model.predictor is not None:
+                            aux_model.predictor.results = None
                     del crop
             del boxes
             del result

@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0.0",
+  "registered_at": "2026-10-23T08:36:00+07:00",
+  "status": "REGISTERED_BEFORE_EXTRACTION_AND_TRAINING",
+  "hypothesis": "Direct 112px source crops preserve action-relevant detail lost by the legacy 64px cache and improve subject-disjoint action representation without increasing encoder cost materially.",
+  "control": "V30 legacy 64px cache enlarged to 112px",
+  "candidate": "V31 direct source BODY ROI resized once to 112px with float64 timestamps",
+  "fixed_split": "OUTER_LOSO_GB9_GC14_GZ36",
+  "variants": [
+    "SQRT_INVERSE_WEIGHTED_LOSS",
+    "UNWEIGHTED_LOSS"
+  ],
+  "fixed_decoder": {
+    "threshold": 0.45,
+    "release_ratio": 0.7,
+    "release_patience": 2,
+    "minimum_positive_samples": 1,
+    "merge_gap_seconds": 0.6
+  },
+  "selection_metrics": [
+    "POOLED_CLIP_MACRO_F1",
+    "PER_CLASS_RECALL",
+    "CLASS_AWARE_EVENT_F1",
+    "V2_TEMPORAL_RESCORE"
+  ],
+  "research_gate": "Macro-F1 must improve over the corresponding V30 control on most held-out folds; no class or event claim may use the benchmark as an independent holdout.",
+  "stop_rules": [
+    "Do not tune decoder thresholds after viewing V31 outer-LOSO results.",
+    "Reject if both variants fail to improve pooled macro-F1 materially over V30.",
+    "Do not integrate action-only recovery if false positives exceed the D5 baseline budget."
+  ],
+  "governance": {
+    "execution_location": "LOCAL_ONLY",
+    "dmd_media_upload": false,
+    "consumed_holdouts": [
+      "gE-28",
+      "gZ-37"
+    ],
+    "final_claim_eligible": false
+  }
+}

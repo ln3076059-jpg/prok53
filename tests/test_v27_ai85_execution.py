@@ -107,6 +107,17 @@ def test_force_handheld_context_is_explicit_diagnostic_override() -> None:
     assert forced["association"].state == "DRIVER_ASSOCIATED"
 
 
+def test_raw_runner_detector_imgsz_is_configurable() -> None:
+    default_engine = AutonomousVideoInferenceEngineV21()
+    assert default_engine.detector_imgsz == 640
+
+    resized_engine = AutonomousVideoInferenceEngineV21(detector_imgsz=960)
+    assert resized_engine.detector_imgsz == 960
+
+    with pytest.raises(ValueError, match="detector_imgsz must be at least 32"):
+        AutonomousVideoInferenceEngineV21(detector_imgsz=16)
+
+
 def test_raw_runner_rejects_unaligned_centered_checkpoint() -> None:
     with pytest.raises(
         ValueError, match="CENTERED_ACTION_REQUIRES_TARGET_ALIGNED_SESSION_REPLAY"

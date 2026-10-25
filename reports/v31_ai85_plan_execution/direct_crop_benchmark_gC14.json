@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0.0",
+  "created_at": "2026-10-23T08:35:08.988637+00:00",
+  "status": "COMPLETED_DIAGNOSTIC_ONLY",
+  "subject": "gC-14",
+  "samples": 120,
+  "timing_repeats_after_warmup": 3,
+  "sample_stride": 15,
+  "covered_seconds": 59.9798,
+  "roi_xyxy": [
+    0.0,
+    0.1,
+    0.65,
+    0.95
+  ],
+  "encoder": "TORCHVISION_RESNET18_IMAGENET1K_V1_FROZEN",
+  "encoder_weights_sha256": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec",
+  "measurements": {
+    "LEGACY_64_TO_112": {
+      "input_shape": [
+        120,
+        112,
+        112,
+        3
+      ],
+      "sharpness": {
+        "mean_laplacian_variance": 241.1222,
+        "median_laplacian_variance": 239.3564
+      },
+      "encode_repeats_seconds": [
+        0.7823,
+        0.7353,
+        0.7689
+      ],
+      "encode_median_seconds": 0.7689,
+      "encode_median_frames_per_second": 156.0679,
+      "maximum_process_rss_bytes_across_repeats": 454578176,
+      "decode_seconds": 4.2553
+    },
+    "DIRECT_112": {
+      "input_shape": [
+        120,
+        112,
+        112,
+        3
+      ],
+      "sharpness": {
+        "mean_laplacian_variance": 1545.2853,
+        "median_laplacian_variance": 1560.7782
+      },
+      "encode_repeats_seconds": [
+        0.7883,
+        0.7675,
+        0.7481
+      ],
+      "encode_median_seconds": 0.7675,
+      "encode_median_frames_per_second": 156.3423,
+      "maximum_process_rss_bytes_across_repeats": 456544256,
+      "decode_seconds": 4.231
+    },
+    "DIRECT_160": {
+      "input_shape": [
+        120,
+        160,
+        160,
+        3
+      ],
+      "sharpness": {
+        "mean_laplacian_variance": 1029.1546,
+        "median_laplacian_variance": 1036.7061
+      },
+      "encode_repeats_seconds": [
+        1.4774,
+        1.4968,
+        1.5087
+      ],
+      "encode_median_seconds": 1.4968,
+      "encode_median_frames_per_second": 80.1713,
+      "maximum_process_rss_bytes_across_repeats": 469540864,
+      "decode_seconds": 4.2251
+    }
+  },
+  "embedding_cosine": {
+    "legacy_vs_direct112": {
+      "mean": 0.92584,
+      "median": 0.928285,
+      "minimum": 0.868328
+    },
+    "direct112_vs_direct160": {
+      "mean": 0.86716,
+      "median": 0.867079,
+      "minimum": 0.817524
+    }
+  },
+  "interpretation_guard": "Sharpness, cosine distance, and throughput are preprocessing/runtime diagnostics only; model selection requires subject-disjoint task metrics. Laplacian variance is only directly comparable at the same output size.",
+  "governance": {
+    "execution_location": "LOCAL_ONLY",
+    "dmd_media_uploaded": false,
+    "training_performed": false
+  }
+}

@@ -38,7 +38,25 @@ class OpenCVVideoSource(VideoSource):
         return int(self.capture.get(cv2.CAP_PROP_FRAME_COUNT)) or 1
 
     def read(self):
-        return self.capture.read()
+        try:
+            ok, frame = self.capture.read()
+        except (SystemError, MemoryError):
+            import gc
+
+            gc.collect()
+            try:
+                ok, frame = self.capture.read()
+            except Exception:
+                return False, None
+        if not ok or frame is None:
+            return False, None
+        return True, frame
+
+    def grab(self) -> bool:
+        try:
+            return bool(self.capture.grab())
+        except Exception:
+            return False
 
     def close(self) -> None:
         self.capture.release()

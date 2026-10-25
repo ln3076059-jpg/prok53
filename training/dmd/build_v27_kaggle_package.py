@@ -22,6 +22,8 @@ FILES = (
     "backend/ai/events.py",
     "backend/ai/fusion.py",
     "models/temporal_config_v2.json",
+    "models/model_config_v30_causal_action.yaml",
+    "models/model_config_v30_causal_action_unweighted.yaml",
     "reports/DMD_EVENT_MATCHING_POLICY_FREEZE.json",
     "reports/v27_ai85_execution/EXECUTION_REPORT.md",
     "reports/v27_ai85_execution/FINAL_AI_LEAD_DECISION.md",
@@ -33,6 +35,8 @@ FILES = (
     "reports/v27_ai85_execution/raw_d5_full_none/aggregate_metrics.json",
     "reports/v27_ai85_execution/runtime_manifest.json",
     "reports/v27_ai85_execution/test_results.json",
+    "kaggle/v27_gpu_preflight/kernel-metadata.json",
+    "kaggle/v27_gpu_preflight/run_v27_gpu_preflight.py",
     "kaggle/v27_phone_component_eval/kernel-metadata.json",
     "kaggle/v27_phone_component_eval/run_phone_component_eval.py",
     "requirements-kaggle.txt",
@@ -40,6 +44,7 @@ FILES = (
     "training/dmd/action_adapter.py",
     "training/dmd/action_checkpoint.py",
     "training/dmd/action_model.py",
+    "training/dmd/adaptive_sampling.py",
     "training/dmd/adapter.py",
     "training/dmd/audit_v27_execution.py",
     "training/dmd/audit_v27_assoc_bypass.py",
@@ -51,12 +56,14 @@ FILES = (
     "training/dmd/holdout_guard.py",
     "training/dmd/research_permissions.py",
     "training/dmd/run_autonomous_v21.py",
+    "training/dmd/run_v30_causal_action.py",
     "training/dmd/run_verified_v24.py",
     "training/dmd/temporal_eval.py",
     "training/dmd/v5_resnet_gru.py",
     "training/dmd/v5_video_action.py",
     "training/dmd/v6_action_hierarchy.py",
     "training/dmd/v7_action_models.py",
+    "training/dmd/v30_causal_action.py",
 )
 
 
@@ -131,8 +138,8 @@ def main() -> None:
     )
     readme = """# Roadwatch V27 AI85 execution package
 
-Private code-only package for the V27 candidate-identity, fail-fast model-mode,
-centered-score alignment, shared-device fixes, and Kaggle phone-component audit.
+Private code-only package for V27 regression checks and the V30 causal-action
+contracts. V30 model fitting remains local-only because DMD artifacts are excluded.
 
 No DMD video, frame, annotation, embedding, action checkpoint, raw prediction,
 or credential is included. The cached-development reference is TP/FP/FN = 12/13/8,

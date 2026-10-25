@@ -1,0 +1,69 @@
+{
+  "schema_version": "2.0.0",
+  "created_at": "2026-10-23T12:18:57.214829+00:00",
+  "status": "PASS",
+  "source_run": "reports\\v32_ai85_execution\\d5_live_decision_full",
+  "source_event_matches_sha256": "ea9f306ab83ffa1e4dfa7fb5ee1a252df7e2057a5ca94a0fc207da7e9a9f064b",
+  "event_metrics": {
+    "true_positives": 19,
+    "false_positives": 0,
+    "false_negatives": 1,
+    "total_gt_events": 20,
+    "precision": 1.0,
+    "recall": 0.95,
+    "f1": 0.9744,
+    "false_alarms_per_minute": 0.0,
+    "evaluated_minutes": 15.2705
+  },
+  "baseline_v31_event_metrics": {
+    "true_positives": 14,
+    "false_positives": 3,
+    "false_negatives": 6,
+    "precision": 0.8235,
+    "recall": 0.7,
+    "f1": 0.7568
+  },
+  "per_subject": {
+    "gC-14": {
+      "status": "PASS",
+      "decisions": 22,
+      "starts": 11,
+      "ends": 11,
+      "session_finalizations": 0,
+      "activation_latency_seconds": {
+        "mean": 0.504032,
+        "median": 0.504032,
+        "maximum": 0.504033
+      },
+      "decision_duration_seconds": {
+        "mean": 21.260997,
+        "median": 15.625,
+        "maximum": 46.370968
+      },
+      "errors": [],
+      "path": "reports\\v32_ai85_execution\\d5_live_decision_full\\subjects\\gC-14\\object_decisions.jsonl",
+      "sha256": "c08f0144b99c738775b70cc03d1c5d36a5a65c1d5a3cf2fef2830f6a446c8940"
+    },
+    "gZ-36": {
+      "status": "PASS",
+      "decisions": 20,
+      "starts": 10,
+      "ends": 10,
+      "session_finalizations": 0,
+      "activation_latency_seconds": {
+        "mean": 0.504032,
+        "median": 0.504032,
+        "maximum": 0.504033
+      },
+      "decision_duration_seconds": {
+        "mean": 18.90121,
+        "median": 7.8125,
+        "maximum": 57.459677
+      },
+      "errors": [],
+      "path": "reports\\v32_ai85_execution\\d5_live_decision_full\\subjects\\gZ-36\\object_decisions.jsonl",
+      "sha256": "a79692cce3e68e0588ebb4c8b4d25fe9cdd00ac7bc0123354e08265cce9c41cd"
+    }
+  },
+  "input_set_sha256": "1b0e2bd95bd8d157ce2022eca6dd033207927c25c9a53fc5eaf56450e268f701"
+}

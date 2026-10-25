@@ -1,0 +1,11 @@
+{
+  "title": "Roadwatch V26 gZ-36 Processing",
+  "id": "longngoc11/roadwatch-v26-gz36-processing",
+  "licenses": [
+    {
+      "name": "other"
+    }
+  ],
+  "isPrivate": true,
+  "description": "Private code-only processing package; no raw DMD media, labels, embeddings, checkpoints, or predictions."
+}

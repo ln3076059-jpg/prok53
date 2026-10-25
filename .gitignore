@@ -19,6 +19,10 @@ models/candidates/*.pt
 experiments/MC_001/run/
 evidence/
 uploads/
+outputs/
+data/
+runs/
+*.tsbuildinfo
 .impeccable/
 *.zip
 *.rar

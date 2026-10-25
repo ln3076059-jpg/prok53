@@ -1,0 +1,192 @@
+{
+  "schema_version": "2.0.0",
+  "created_at": "2026-10-23T12:18:57.210813+00:00",
+  "status": "PASS_AI85_DEVELOPMENT_GATE_EXCEEDED",
+  "frozen_policy": {
+    "path": "reports\\DMD_EVENT_MATCHING_POLICY_FREEZE.json",
+    "sha256": "43dde1904e75e080787cb82cfb68a309ed8149074285041017a867a4363168b2",
+    "declared_policy_sha256": "a6e743b41e912ff962bbb7495d284f98b1d9b07f8064131ac20ceae6621420fe",
+    "parameters": {
+      "iou_threshold": 0.3,
+      "onset_tolerance_seconds": 2.5,
+      "offset_tolerance_seconds": 3.5,
+      "containment_overlap_threshold": 0.4,
+      "containment_min_duration_seconds": 0.8
+    }
+  },
+  "v31_baseline": {
+    "source": "reports\\v31_ai85_plan_execution\\d5_live_decision_full",
+    "metrics": {
+      "true_positives": 14,
+      "false_positives": 3,
+      "false_negatives": 6,
+      "precision": 0.8235,
+      "recall": 0.7,
+      "f1": 0.7568
+    }
+  },
+  "v32_results": {
+    "source_run": "reports\\v32_ai85_execution\\d5_live_decision_full",
+    "event_matches_sha256": "ea9f306ab83ffa1e4dfa7fb5ee1a252df7e2057a5ca94a0fc207da7e9a9f064b",
+    "recomputed_matches_reported": true,
+    "ai85_development_gate_met": true,
+    "track_a_v2_temporal_frozen": {
+      "aggregate": {
+        "true_positives": 19,
+        "false_positives": 0,
+        "false_negatives": 1,
+        "total_gt_events": 20,
+        "precision": 1.0,
+        "recall": 0.95,
+        "f1": 0.9744,
+        "false_alarms_per_minute": 0.0,
+        "evaluated_minutes": 15.2705
+      },
+      "per_subject": {
+        "gC-14": {
+          "true_positives": 9,
+          "false_positives": 0,
+          "false_negatives": 0,
+          "total_gt_events": 9,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "false_alarms_per_minute": 0.0
+        },
+        "gZ-36": {
+          "true_positives": 10,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "total_gt_events": 11,
+          "precision": 1.0,
+          "recall": 0.9091,
+          "f1": 0.9524,
+          "false_alarms_per_minute": 0.0
+        }
+      }
+    },
+    "track_b_class_aware_exact_4class": {
+      "aggregate": {
+        "true_positives": 19,
+        "false_positives": 0,
+        "false_negatives": 1,
+        "total_gt_events": 20,
+        "precision": 1.0,
+        "recall": 0.95,
+        "f1": 0.9744,
+        "false_alarms_per_minute": 0.0,
+        "evaluated_minutes": 15.2705
+      },
+      "per_subject": {
+        "gC-14": {
+          "true_positives": 9,
+          "false_positives": 0,
+          "false_negatives": 0,
+          "total_gt_events": 9,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "false_alarms_per_minute": 0.0
+        },
+        "gZ-36": {
+          "true_positives": 10,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "total_gt_events": 11,
+          "precision": 1.0,
+          "recall": 0.9091,
+          "f1": 0.9524,
+          "false_alarms_per_minute": 0.0
+        }
+      }
+    },
+    "track_c_generic_phone_episode_gap3s": {
+      "aggregate": {
+        "true_positives": 16,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "total_gt_events": 16,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "false_alarms_per_minute": 0.0,
+        "evaluated_minutes": 15.27
+      },
+      "per_subject": {
+        "gC-14": {
+          "true_positives": 8,
+          "false_positives": 0,
+          "false_negatives": 0,
+          "total_gt_events": 8,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "false_alarms_per_minute": 0.0,
+          "evaluated_minutes": 6.67
+        },
+        "gZ-36": {
+          "true_positives": 8,
+          "false_positives": 0,
+          "false_negatives": 0,
+          "total_gt_events": 8,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "false_alarms_per_minute": 0.0,
+          "evaluated_minutes": 8.6
+        }
+      }
+    }
+  },
+  "live_decision_causality_audit": {
+    "status": "PASS",
+    "per_subject": {
+      "gC-14": {
+        "status": "PASS",
+        "decisions": 22,
+        "starts": 11,
+        "ends": 11,
+        "session_finalizations": 0,
+        "activation_latency_seconds": {
+          "mean": 0.504032,
+          "median": 0.504032,
+          "maximum": 0.504033
+        },
+        "decision_duration_seconds": {
+          "mean": 21.260997,
+          "median": 15.625,
+          "maximum": 46.370968
+        },
+        "errors": [],
+        "path": "reports\\v32_ai85_execution\\d5_live_decision_full\\subjects\\gC-14\\object_decisions.jsonl",
+        "sha256": "c08f0144b99c738775b70cc03d1c5d36a5a65c1d5a3cf2fef2830f6a446c8940"
+      },
+      "gZ-36": {
+        "status": "PASS",
+        "decisions": 20,
+        "starts": 10,
+        "ends": 10,
+        "session_finalizations": 0,
+        "activation_latency_seconds": {
+          "mean": 0.504032,
+          "median": 0.504032,
+          "maximum": 0.504033
+        },
+        "decision_duration_seconds": {
+          "mean": 18.90121,
+          "median": 7.8125,
+          "maximum": 57.459677
+        },
+        "errors": [],
+        "path": "reports\\v32_ai85_execution\\d5_live_decision_full\\subjects\\gZ-36\\object_decisions.jsonl",
+        "sha256": "a79692cce3e68e0588ebb4c8b4d25fe9cdd00ac7bc0123354e08265cce9c41cd"
+      }
+    }
+  },
+  "governance": {
+    "dmd_execution_environment": "LOCAL_MACHINE_ONLY",
+    "dmd_media_uploaded_to_kaggle": false,
+    "consumed_holdouts_accessed": [],
+    "holdout_note": "Development cohort (gC-14, gZ-36) exceeds 85% across all three tracks (Precision=100.0%, Recall=95.0%, F1=97.44%). Independent subject-disjoint holdout claim remains gated on unconsumed holdout subjects."
+  }
+}

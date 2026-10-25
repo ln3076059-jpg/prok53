@@ -100,6 +100,7 @@ class TemporalEventEngine:
         self.active_events: set[tuple[str, str, int | None, str]] = set()
         self.last_physical_phone: dict[tuple[str, int | None, str], tuple[float, float, float]] = {}
         self.states: dict[tuple[str, int | None, str], TemporalState] = {}
+        self.released_at: dict[tuple[str, int | None, str], float] = {}
 
     def add(self, observation: Observation) -> list[EventCandidate]:
         if observation.vehicle_context_id is None:
@@ -204,6 +205,8 @@ class TemporalEventEngine:
         if score <= self.release_threshold:
             event_type = "PHONE" if observation.class_name == "phone" else "NO_SEATBELT"
             self._release(event_type, observation)
+            if observation.class_name == "phone":
+                self.released_at[phone_key] = observation.timestamp
         # Belt classes describe the same occupant ROI but a class flip can receive a new
         # tracker ID. Group belt evidence by vehicle+seat so contradictions remain visible.
         window_track_id = (
@@ -213,7 +216,15 @@ class TemporalEventEngine:
         )
         occupant_group = observation.occupant_id if observation.occupant_id else role
         window = self.windows[(observation.vehicle_context_id, window_track_id, occupant_group)]
+        if observation.class_name == "phone":
+            released_at = self.released_at.get(phone_key)
+            if released_at is not None and observation.timestamp > released_at:
+                window.clear()
+                self.smoothed.pop(phone_key, None)
+                self.released_at.pop(phone_key, None)
         window.append(observation)
+        if observation.class_name == "phone" and score <= self.release_threshold:
+            return []
         if self.states.get(phone_key) not in {TemporalState.ACTIVE, TemporalState.OCCLUDED}:
             self.states[phone_key] = TemporalState.CANDIDATE
         while window and observation.timestamp - window[0].timestamp > self.window_seconds:
@@ -225,7 +236,7 @@ class TemporalEventEngine:
         unfastened = [item for item in window if item.class_name == "seatbelt_unfastened"]
         phone = [item for item in window if item.class_name == "phone"]
         candidates: list[EventCandidate] = []
-        if self._persistent(phone):
+        if current.class_name == 'phone' and self._persistent(phone):
             role = current.occupant_role or "unknown"
             phone_status = (
                 "PENDING"
@@ -238,7 +249,7 @@ class TemporalEventEngine:
                 else "NEEDS_REVIEW"
             )
             candidates.append(self._candidate("PHONE", phone, current, phone_status))
-        if self._persistent(unfastened):
+        if current.class_name == 'seatbelt_unfastened' and self._persistent(unfastened):
             conflicting = self._persistent(fastened)
             rejected = any(
                 item.evidence_source in {"FUSION_REJECTED", "DETECTOR_CLASSIFIER_CONFLICT"}
@@ -252,7 +263,7 @@ class TemporalEventEngine:
                     "NEEDS_REVIEW" if conflicting or rejected else "PENDING",
                 )
             )
-        if self._persistent(fastened):
+        if current.class_name == 'seatbelt_fastened' and self._persistent(fastened):
             self._release("NO_SEATBELT", current)
         return [item for item in candidates if self._activation_allows(item)]
 

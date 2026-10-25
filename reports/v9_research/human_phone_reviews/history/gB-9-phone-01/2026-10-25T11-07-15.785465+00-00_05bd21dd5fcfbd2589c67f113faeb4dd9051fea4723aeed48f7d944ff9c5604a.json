@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "case_id": "gB-9-phone-01",
+  "reviewer_id": "c147f6188f464781b41bfb6bfa699e35",
+  "reviewer_type": "HUMAN",
+  "reviewed_at_utc": "2026-10-25T11:07:15.785465+00:00",
+  "phone_visibility": "PHONE_VISIBLE",
+  "phone_use_assessment": "PHONE_USE_CONFIRMED",
+  "selected_proposal_id": "f1200-C3",
+  "selected_proposal": {
+    "proposal_id": "f1200-C3",
+    "frame_index": 1200,
+    "timestamp_seconds": 40.3226,
+    "source": "coco_cell_phone",
+    "confidence": 0.10236693173646927,
+    "geometry_context": "HANDHELD_USE",
+    "hand_proximity": 0.5163823301606361,
+    "face_proximity": 0.8243424380230846,
+    "nearest_cross_model_iou": 0.0,
+    "xyxy_in_driver_roi": [
+      356.49896240234375,
+      90.95802307128906,
+      384.97503662109375,
+      162.5186767578125
+    ]
+  },
+  "notes": "A phone is visible at the right ear. Proposal f1200-C3 is the tightest box around the exposed device; larger nearby boxes include the hand or face.",
+  "source": {
+    "proposal_artifact": "reports/v9_research/phone_proposal_mining.json",
+    "proposal_artifact_sha256": "9f710bfaf22c19fc143875a3832258935d6fb4d8db17dfd96e83bfee0718665e",
+    "source_case_sha256": "b87b997d0840f35dd079101ef0f957871effb4f4ea66984583ec0402dc8210d5",
+    "contact_sheet_sha256": "8953646bc68844681b75e9546c1976efae476eaf68ee48f482a8bd3650aa939b",
+    "experiment_scope": "FN-selected development proposal mining for human review only"
+  },
+  "previous_revision": "bd8ed3cef5d52696829bf41ad00b13f420d5705005c40b0c942c66b4d1abcf1b",
+  "training_admission": "NOT_AUTOMATIC_REQUIRES_GOVERNED_MATERIALIZATION",
+  "production_approval": false,
+  "revision": "05bd21dd5fcfbd2589c67f113faeb4dd9051fea4723aeed48f7d944ff9c5604a"
+}
